@@ -162,7 +162,7 @@ if [ ! -f "$SETTINGS_LOCAL" ] || ! python3 -c "import json; d=json.load(open('$S
 import json, os
 p = '$SETTINGS_LOCAL'
 d = json.load(open(p)) if os.path.exists(p) else {}
-d['enabledMcpjsonServers'] = ['corvia', 'playwright']
+d['enabledMcpjsonServers'] = ['corvia', 'playwright', 'davinci-resolve-mcp']
 json.dump(d, open(p, 'w'), indent=2)
 "
 else
@@ -173,6 +173,12 @@ fi
 printf "    superpowers plugin: "
 install_claude_plugin "https://github.com/obra/superpowers.git" superpowers claude-plugins-official \
     || fail_msg "git clone failed — check network connectivity"
+
+# Activate dorea Python venv for all shells
+if [ -d /opt/dorea-venv ]; then
+    grep -q 'dorea-venv' /root/.bashrc 2>/dev/null || \
+        echo 'source /opt/dorea-venv/bin/activate' >> /root/.bashrc
+fi
 
 # ── 5/5 ───────────────────────────────────────────────────────────────
 step "Optional services"

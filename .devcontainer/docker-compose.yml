@@ -3,16 +3,14 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    stdin_open: true  # keep container alive (docker run -i)
-    tty: true         # allocate pseudo-TTY (docker run -t)
+    stdin_open: true
+    tty: true
     volumes:
-      - ..:/workspaces/corvia-workspace:cached
-      - corvia-cargo-registry:/usr/local/cargo/registry
-      - corvia-cargo-git:/usr/local/cargo/git
-      # Docker-outside-of-Docker: expose host daemon so 'docker build' works inside.
-      # Image builds go into the host's registry. The host socket path must exist.
+      - ..:/workspaces/dorea-workspace:cached
+      - dorea-pip-cache:/root/.cache/pip
       - /var/run/docker.sock:/var/run/docker.sock
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
 volumes:
-  corvia-cargo-registry:
-  corvia-cargo-git:
+  dorea-pip-cache:

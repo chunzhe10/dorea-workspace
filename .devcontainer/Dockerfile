@@ -147,3 +147,24 @@ ENV CARGO_HOME="/usr/local/cargo"
 RUN rustup component add rust-analyzer
 
 WORKDIR /workspaces
+
+# === Dorea Pipeline Python Environment ===
+# Isolated venv prevents CUDA runtime conflicts with corvia's ONNX inference
+
+RUN python3 -m venv /opt/dorea-venv
+
+# Install pipeline dependencies with CUDA 12.1 wheels
+RUN /opt/dorea-venv/bin/pip install --no-cache-dir \
+    anthropic colour-science numpy Pillow opencv-python pyyaml \
+    transformers
+
+RUN /opt/dorea-venv/bin/pip install --no-cache-dir \
+    torch torchvision --index-url https://download.pytorch.org/whl/cu121
+
+# SAM2 — canonical install from GitHub (not on PyPI)
+RUN /opt/dorea-venv/bin/pip install --no-cache-dir \
+    git+https://github.com/facebookresearch/sam2.git
+
+# ffmpeg for frame extraction (Phase 1)
+RUN apt-get update && apt-get install -y --no-install-recommends ffmpeg \
+    && rm -rf /var/lib/apt/lists/*
