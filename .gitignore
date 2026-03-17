@@ -1,5 +1,10 @@
 # Cloned repos (created by corvia workspace init)
-repos/corvia/
+repos/dorea/
+
+# Dorea data directories (large binary, not version controlled)
+footage/
+working/
+models/
 
 # Derived data (rebuilt at runtime)
 .corvia/hnsw/

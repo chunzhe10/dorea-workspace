@@ -1,0 +1,2 @@
+# Prevent upstream (corvia-workspace) merges from overwriting dorea-specific config
+corvia.toml merge=ours

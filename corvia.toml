@@ -1,6 +1,6 @@
 [project]
-name = "corvia-demo"
-scope_id = "corvia"
+name = "dorea"
+scope_id = "dorea"
 
 [storage]
 store_type = "lite"
@@ -34,9 +34,9 @@ max_retries = 3
 repos_dir = "repos"
 
 [[workspace.repos]]
-name = "corvia"
-url = "https://github.com/chunzhe10/corvia"
-namespace = "kernel"
+name = "dorea"
+url = "https://github.com/chunzhe10/dorea"
+namespace = "pipeline"
 
 [rag]
 default_limit = 10
@@ -56,7 +56,7 @@ reserve_for_skills = 0.15000000596046448
 [workspace.docs]
 memory_dir = ".memory"
 workspace_docs = "docs"
-allowed_workspace_subdirs = ["decisions", "learnings", "marketing", "plans"]
+allowed_workspace_subdirs = ["decisions", "learnings", "plans"]
 
 [workspace.docs.rules]
 blocked_paths = ["docs/superpowers/*"]
@@ -72,12 +72,12 @@ strategy = "auto"
 exporter = "stdout"
 otlp_endpoint = ""
 otlp_protocol = "grpc"
-service_name = "corvia"
+service_name = "dorea"
 log_format = "json"
 metrics_enabled = true
 
 [inference]
-device = "gpu"
+device = "cpu"
 kv_quant = "q8"
 flash_attention = true
 

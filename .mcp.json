@@ -4,6 +4,10 @@
       "type": "http",
       "url": "http://127.0.0.1:8020/mcp"
     },
+    "davinci-resolve-mcp": {
+      "type": "http",
+      "url": "http://host.docker.internal:9090/mcp"
+    },
     "playwright": {
       "type": "http",
       "url": "http://127.0.0.1:8050/mcp"
