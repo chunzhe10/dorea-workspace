@@ -17,7 +17,7 @@
       {
         "hooks": [
           {
-            "command": "echo 'REMINDER: Have you called corvia_search or corvia_ask first? Per CLAUDE.md, you MUST query corvia MCP tools before using Grep/Glob for any new task or question. If you already called corvia this session, proceed.'",
+            "command": "echo 'REMINDER: Have you called corvia_search or corvia_ask first? Per CLAUDE.md, you MUST query corvia MCP tools (scope_id: dorea) before using Grep/Glob for any new task or question. If you already called corvia this session, proceed.'",
             "type": "command"
           }
         ],
@@ -35,7 +35,7 @@
     ],
     "SessionEnd": [
       {
-        "_comment": "WORKAROUND: Claude Code leaks memory via orphaned node processes in WSL. Kills orphans on session exit. Remove when upstream fix lands: https://github.com/anthropics/claude-code/issues",
+        "_comment": "WORKAROUND: Claude Code leaks memory via orphaned node processes in WSL. Kills orphans on session exit. Remove when upstream fix lands.",
         "hooks": [
           {
             "command": "bash \"$CORVIA_WORKSPACE/.devcontainer/scripts/cleanup-orphans.sh\" --quiet 2>/dev/null || true",
@@ -46,7 +46,7 @@
     ],
     "SessionStart": [
       {
-        "_comment": "Display-only reminder for agent identity selection. Does not block or require input.",
+        "_comment": "Display-only reminder for agent identity selection.",
         "hooks": [
           {
             "command": "bash .claude/hooks/agent-check.sh",
