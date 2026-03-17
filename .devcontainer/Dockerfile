@@ -151,6 +151,9 @@ WORKDIR /workspaces
 # === Dorea Pipeline Python Environment ===
 # Isolated venv prevents CUDA runtime conflicts with corvia's ONNX inference
 
+RUN apt-get update && apt-get install -y --no-install-recommends python3.13-venv \
+    && rm -rf /var/lib/apt/lists/*
+
 RUN python3 -m venv /opt/dorea-venv
 
 # Install pipeline dependencies with CUDA 12.1 wheels
