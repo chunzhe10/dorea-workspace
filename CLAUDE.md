@@ -1,4 +1,4 @@
-# corvia-workspace — Claude Code
+# dorea-workspace — Claude Code
 
 ## STOP — Read this FIRST before doing ANYTHING
 
@@ -29,6 +29,28 @@ go straight to code search, you are violating this project's workflow.
 re-discovering things that were already decided. Always check corvia first, then
 use native tools (file read, grep, bash) for code-level details.
 
+## Dorea-Specific Context
+
+### Project
+Dorea is an automated underwater video AI editing pipeline. See
+`repos/dorea/README.md` for the full overview.
+
+### Architecture Document
+The pipeline architecture is defined in `underwater_pipeline_architecture.docx`.
+Always consult this document (via corvia — it should be ingested) before making
+pipeline design decisions.
+
+### GPU Constraint
+This workstation has an RTX 3060 with **6GB VRAM**. Only one AI model may be loaded
+at a time. Pipeline scripts enforce sequential GPU scheduling. Corvia inference runs
+on CPU (`inference.device = "cpu"` in corvia.toml) to avoid VRAM contention.
+
+### DaVinci Resolve
+Resolve runs on the **host machine**, not in the devcontainer. The
+`davinci-resolve-mcp` server bridges Claude Desktop to Resolve via
+`host.docker.internal:9090`. Script `05_resolve_setup.py` must run on the host
+(it imports `fusionscript` which requires a running Resolve instance).
+
 ## Known workarounds (Claude Code specific)
 
 ### WSL memory leak from orphaned processes
@@ -37,24 +59,20 @@ Claude Code leaks memory in WSL via orphaned node processes that persist after
 sessions close. A `SessionEnd` hook in `.claude/settings.json` auto-runs
 `.devcontainer/scripts/cleanup-orphans.sh` to kill these orphans on exit.
 
-- **Scope**: Claude Code on WSL only — not a corvia product concern
+- **Scope**: Claude Code on WSL only — not a dorea concern
 - **Script**: `.devcontainer/scripts/cleanup-orphans.sh` (throttled to once per 10min)
-- **Manual run**: `bash .devcontainer/scripts/cleanup-orphans.sh`
-- **Upstream**: https://github.com/anthropics/claude-code/issues
 - **Remove when**: upstream fix lands in Claude Code
 
 ## Documentation Save Locations
 
-- Product-specific designs and RFCs → `repos/corvia/docs/rfcs/`
-- Workspace-level decisions → `docs/decisions/`
-- Implementation plans → alongside their design doc in the repo
+- Pipeline designs and decisions → `docs/decisions/`
+- Implementation plans → `docs/plans/`
 - Learnings → `docs/learnings/`
-- Marketing content → `docs/marketing/`
 
 Do NOT create `docs/superpowers/` — that path is blocked by enforcement hooks.
 
 ## Recording Decisions
 
 Use `corvia_write` with `content_role` and `source_origin` params:
-- corvia product decisions: `source_origin = "repo:corvia"`
+- Pipeline decisions: `source_origin = "repo:dorea"`
 - Workspace decisions: `source_origin = "workspace"`

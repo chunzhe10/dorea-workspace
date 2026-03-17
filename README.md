@@ -1,24 +1,16 @@
-<p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="docs/assets/corvia-logo-light.png">
-    <source media="(prefers-color-scheme: light)" srcset="docs/assets/corvia-logo.png">
-    <img src="docs/assets/corvia-logo.png" alt="corvia" width="200">
-  </picture>
-</p>
+# dorea development workspace
 
-# corvia development workspace
-
-Multi-repo workspace for developing [corvia](repos/corvia) — organizational memory
-for AI agents. This workspace dogfoods corvia's own MCP server and knowledge store
-on its own source code.
+Corvia-powered workspace for developing [dorea](repos/dorea) — an automated
+underwater video AI editing pipeline. This workspace uses corvia's MCP server
+and knowledge store for organizational memory during development.
 
 ## Services
 
 | Service | URL | Description |
 |---------|-----|-------------|
-| **API server** | `http://localhost:8020` | REST + MCP protocol server |
-| **Dashboard** | `http://localhost:8021` | Knowledge browser and system health |
-| **Inference** | `http://localhost:8030` | gRPC embedding + chat (ONNX Runtime) |
+| **API server** | `http://localhost:8120` | REST + MCP protocol server (host port) |
+| **Dashboard** | `http://localhost:8121` | Knowledge browser and system health |
+| **Inference** | `http://localhost:8130` | gRPC embedding + chat (CPU mode) |
 
 All services start automatically in the devcontainer via `post-start.sh`.
 
@@ -26,43 +18,40 @@ All services start automatically in the devcontainer via `post-start.sh`.
 
 ### Option 1: Devcontainer (recommended)
 
-Open in GitHub Codespaces, VS Code Dev Containers, or DevPod. Everything is
-pre-configured — services start automatically.
+Open in VS Code Dev Containers or DevPod. Everything is pre-configured — services
+start automatically.
 
 ### Option 2: Local
 
 ```bash
-git clone https://github.com/chunzhe10/corvia-workspace
-cd corvia-workspace
+git clone https://github.com/chunzhe10/dorea-workspace
+cd dorea-workspace
 corvia workspace init          # clones repos, sets up config
-corvia workspace ingest        # indexes all repos
+corvia workspace ingest        # indexes dorea repo
 corvia serve &                 # start API + MCP server
-corvia search "how does chunking work"
 ```
 
 ## What's inside
 
-- **[corvia](repos/corvia)** (namespace: `kernel`) — core knowledge store, agent
-  coordination, embedding pipeline, inference server, adapters, dashboard, and CLI
+- **[dorea](repos/dorea)** (namespace: `pipeline`) — underwater video AI editing
+  pipeline using SAM2, Depth Anything V2, Claude API, and DaVinci Resolve
 
-## MCP server
+## Pipeline
 
-The workspace MCP server at `http://localhost:8020/mcp` provides 18 tools for
-knowledge operations. Any MCP-compatible AI tool (Claude Code, Codex CLI, etc.)
-can connect. Default embedding uses `corvia-inference` with ONNX Runtime —
-no Ollama required.
+Dorea automates underwater video post-production:
 
-## Try these searches
+1. **Frame extraction** — ffmpeg pulls keyframes from dive footage
+2. **Scene analysis** — Claude API identifies subjects (fish, divers, coral)
+3. **Subject tracking** — SAM2 generates per-subject mask sequences
+4. **Depth estimation** — Depth Anything V2 creates depth maps
+5. **Resolve setup** — Python API imports footage, deploys DRX template, attaches mattes
+6. **Creative grading** — Human editor grades in Resolve with Claude Desktop for consultation
 
-```bash
-corvia search "IngestionAdapter"          # finds trait + implementation
-corvia search "how does embedding work"   # surfaces pipeline from kernel
-corvia search "tree-sitter chunking"      # finds adapter's AST parsing
-corvia workspace status                   # see workspace + service health
-```
+## Upstream sync
 
-## Fresh ingest
+This workspace was created from the [corvia-workspace](https://github.com/chunzhe10/corvia-workspace) template. To pull upstream updates:
 
 ```bash
-corvia workspace ingest --fresh
+git fetch upstream
+git merge upstream/main
 ```
