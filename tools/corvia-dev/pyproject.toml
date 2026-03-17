@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "corvia-dev"
+version = "0.1.0"
+description = "Dev environment orchestration for corvia-workspace"
+requires-python = ">=3.11"
+dependencies = [
+    "click>=8.1",
+    "pydantic>=2.0",
+    "tomli_w>=1.0",
+]
+
+[project.scripts]
+corvia-dev = "corvia_dev.cli:main"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

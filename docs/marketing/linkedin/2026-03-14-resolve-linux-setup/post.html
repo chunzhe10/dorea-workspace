@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>LinkedIn Post - DaVinci Resolve on Linux</title>
+<style>
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    max-width: 680px;
+    margin: 40px auto;
+    padding: 24px;
+    font-size: 16px;
+    line-height: 1.6;
+    color: #1a1a1a;
+    background: #fff;
+  }
+  p { margin: 0 0 1em 0; }
+  .instructions {
+    background: #f0f4ff;
+    border: 1px solid #c0d0ff;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 24px;
+    font-size: 14px;
+    color: #445;
+  }
+  hr { border: none; border-top: 1px solid #ddd; margin: 24px 0; }
+  #post { cursor: text; }
+</style>
+</head>
+<body>
+
+<div class="instructions">
+  <strong>How to use:</strong> Select all text below the line, copy (Ctrl+C), and paste directly into LinkedIn's post editor. Line breaks will be preserved.
+</div>
+
+<hr>
+
+<div id="post">
+<p>A few days ago I moved my desktop to Linux. Lower RAM baseline, native Docker, GPU assignment with DRI_PRIME. The engineering benefits were clear. But the real test was creative work.</p>
+
+<p>So I installed DaVinci Resolve on Ubuntu 24.04 for the first time.</p>
+
+<p>It didn't go smoothly. Dependency conflicts, library mismatches, things that should just work on a fresh Ubuntu install but don't. Most of the issues traced back to the same root causes: Wayland and Ubuntu 24.04 specifics that Resolve doesn't expect.</p>
+
+<p>I would have given up. But I had Claude.</p>
+
+<p>Every wall I hit, Claude read the error, searched for known issues, and wrote the fix. Each fix revealed the next issue. Wayland kept being the common thread.</p>
+
+<p>Then came the one that almost beat us both.</p>
+
+<p>Resolve threw "GPU memory is full" with black playback. Claude initially diagnosed it as an out-of-memory issue and we started building a proxy pipeline to work around it. But something didn't add up. I dug deeper and steered us back to the debug logs.</p>
+
+<p>Turns out it wasn't a memory problem at all. It was a Wayland compatibility issue. Together we landed on three environment variables to force Resolve onto X11 instead. Full 4K playback. No proxies needed.</p>
+
+<p>That's the part people miss about working with AI. It's not "ask and receive." It's a collaboration. Claude brings speed and breadth. You bring judgment and direction. Neither of us would have solved that one alone.</p>
+
+<p>And now I'm thinking bigger. I have a diving trip coming up. Hours of underwater footage from the DJI Action 4 and Insta360 X5. I love editing, but the repetitive parts eat time I'd rather spend diving. I recently found a DaVinci Resolve MCP, and I'm starting to imagine what's possible when an AI can actually interact with your editing timeline. Still brainstorming, but the pieces are coming together.</p>
+
+<p>The stack I built for engineering is now running a full creative workflow. No new hardware. Just the right tools.</p>
+
+<p>Anyone else using AI to streamline their video editing workflow? Curious what people have landed on.</p>
+</div>
+
+</body>
+</html>

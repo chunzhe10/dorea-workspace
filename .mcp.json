@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "corvia": {
+      "type": "http",
+      "url": "http://127.0.0.1:8020/mcp"
+    },
+    "playwright": {
+      "type": "http",
+      "url": "http://127.0.0.1:8050/mcp"
+    }
+  }
+}

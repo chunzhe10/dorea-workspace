@@ -1,0 +1,44 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Build VS Code extension
+        run: |
+          npm install -g @vscode/vsce
+          cd .devcontainer/extensions/corvia-services
+          vsce package --no-dependencies
+          cp *.vsix "$GITHUB_WORKSPACE/"
+          ls -la "$GITHUB_WORKSPACE"/*.vsix
+
+      - name: Build dashboard
+        run: |
+          cd tools/corvia-dashboard
+          npm ci
+          npm run build
+          tar -czf "$GITHUB_WORKSPACE/corvia-dashboard-dist.tar.gz" -C dist .
+          ls -la "$GITHUB_WORKSPACE/corvia-dashboard-dist.tar.gz"
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            corvia-services-*.vsix
+            corvia-dashboard-dist.tar.gz
+          generate_release_notes: true

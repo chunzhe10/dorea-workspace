@@ -1,0 +1,43 @@
+# Cloned repos (created by corvia workspace init)
+repos/corvia/
+
+# Derived data (rebuilt at runtime)
+.corvia/hnsw/
+.corvia/hnsw_index/
+.corvia/lite_store.redb
+.corvia/coordination.redb
+.corvia/coordination.redb.lock
+.corvia/staging/
+
+# Knowledge files are tracked — no source to re-ingest from
+# .corvia/knowledge/ is NOT ignored
+
+# Local working files (per-user, not shared)
+.local/
+.devcontainer/.corvia-workspace-flags
+.devcontainer/docker-compose.override.yml
+
+# Claude Code local settings (session-specific permissions)
+.claude/settings.local.json
+
+# Editor / IDE state (per-user)
+.vscode/
+.continue/
+
+# Built VS Code extension artifacts (built from source by post-start.sh or CI)
+*.vsix
+
+# Python build artifacts
+__pycache__/
+*.egg-info/
+
+# Node dependencies (install via package.json)
+node_modules/
+
+# Playwright MCP runtime logs
+.playwright-mcp/
+
+# Model caches (large, downloaded on demand)
+.fastembed_cache/
+.worktrees/
+.superpowers/

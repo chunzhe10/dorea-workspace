@@ -1,0 +1,6 @@
+hnsw/
+lite_store.redb
+lite_store.redb.tmp
+coordination.redb
+coordination.redb.tmp
+staging/

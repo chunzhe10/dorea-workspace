@@ -1,0 +1,8 @@
+{
+  "name": "carousel-render",
+  "private": true,
+  "description": "Render and validate LinkedIn carousel slides from HTML",
+  "dependencies": {
+    "playwright": "^1.58.2"
+  }
+}

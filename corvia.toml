@@ -1,0 +1,94 @@
+[project]
+name = "corvia-demo"
+scope_id = "corvia"
+
+[storage]
+store_type = "lite"
+data_dir = ".corvia"
+
+[embedding]
+provider = "corvia"
+model = "nomic-embed-text-v1.5"
+url = "http://127.0.0.1:8030"
+dimensions = 768
+
+[server]
+host = "127.0.0.1"
+port = 8020
+
+[agent_lifecycle]
+heartbeat_interval_secs = 30
+stale_timeout_secs = 300
+orphan_grace_secs = 1200
+gc_orphan_after_secs = 86400
+gc_closed_session_after_secs = 604800
+gc_inactive_agent_after_secs = 2592000
+
+[merge]
+provider = "corvia"
+model = "qwen3"
+similarity_threshold = 0.8500000238418579
+max_retries = 3
+
+[workspace]
+repos_dir = "repos"
+
+[[workspace.repos]]
+name = "corvia"
+url = "https://github.com/chunzhe10/corvia"
+namespace = "kernel"
+
+[rag]
+default_limit = 10
+graph_expand = true
+graph_depth = 2
+graph_alpha = 0.30000001192092896
+reserve_for_answer = 0.20000000298023224
+max_context_tokens = 0
+system_prompt = ""
+graph_oversample_factor = 3
+skills_enabled = false
+skills_dirs = ["skills"]
+max_skills = 3
+skill_threshold = 0.30000001192092896
+reserve_for_skills = 0.15000000596046448
+
+[workspace.docs]
+memory_dir = ".memory"
+workspace_docs = "docs"
+allowed_workspace_subdirs = ["decisions", "learnings", "marketing", "plans"]
+
+[workspace.docs.rules]
+blocked_paths = ["docs/superpowers/*"]
+repo_docs_pattern = "docs/"
+
+[chunking]
+max_tokens = 512
+min_tokens = 32
+overlap_tokens = 64
+strategy = "auto"
+
+[telemetry]
+exporter = "stdout"
+otlp_endpoint = ""
+otlp_protocol = "grpc"
+service_name = "corvia"
+log_format = "json"
+metrics_enabled = true
+
+[inference]
+device = "gpu"
+kv_quant = "q8"
+flash_attention = true
+
+[inference.chat_models."llama3.2"]
+repo = "bartowski/Llama-3.2-3B-Instruct-GGUF"
+filename = "Llama-3.2-3B-Instruct-Q4_K_M.gguf"
+
+[inference.chat_models.qwen3]
+repo = "bartowski/Qwen_Qwen3-8B-GGUF"
+filename = "Qwen_Qwen3-8B-Q4_K_M.gguf"
+
+[inference.chat_models."llama3.2:1b"]
+repo = "bartowski/Llama-3.2-1B-Instruct-GGUF"
+filename = "Llama-3.2-1B-Instruct-Q4_K_M.gguf"

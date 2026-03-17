@@ -1,0 +1,328 @@
+{
+  "version": "2.0",
+  "description": "Design system for personal content (Lim Chun Zhe). Shares structural patterns with corvia brand but uses its own color palette.",
+
+  "brands": {
+    "personal": {
+      "name": "Lim Chun Zhe",
+      "description": "Developer journal, discovery-style content. Dark theme with multi-color accents.",
+      "colors": {
+        "bgDark":        "#0f172a",
+        "bgCard":        "#1e293b",
+        "bgCardAlt":     "#334155",
+        "accentBlue":    "#3b82f6",
+        "accentCyan":    "#06b6d4",
+        "accentGreen":   "#10b981",
+        "accentAmber":   "#f59e0b",
+        "accentRed":     "#ef4444",
+        "accentPurple":  "#8b5cf6",
+        "textPrimary":   "#f1f5f9",
+        "textSecondary": "#94a3b8",
+        "textMuted":     "#64748b",
+        "border":        "#334155"
+      },
+      "gradients": {
+        "coverSlide": "linear-gradient(160deg, #0f172a 0%, #1a1a3e 50%, #0f172a 100%)",
+        "closingSlide": "linear-gradient(160deg, #0f172a 0%, #1a2332 50%, #0f172a 100%)"
+      }
+    },
+    "corvia": {
+      "name": "corvia",
+      "description": "Product brand. Professional, restrained. Navy + gold. See repos/corvia/docs/brand/ for full guide.",
+      "colors": {
+        "navy":         "#0f1b33",
+        "gold":         "#D4A832",
+        "goldBright":   "#E8C44E",
+        "white":        "#ffffff",
+        "lightGray":    "#f5f5f7",
+        "midGray":      "#86868b",
+        "darkSurface":  "#0d1117"
+      },
+      "brandFont": "'Poppins', sans-serif",
+      "brandFontWeights": [700, 800],
+      "designGuide": "repos/corvia/docs/brand/corvia-brand-guide.html"
+    }
+  },
+
+  "shared": {
+    "description": "Structural patterns shared across both brands. Same layout rules, typography scale, and component patterns — only colors differ.",
+
+    "formats": {
+      "linkedin-carousel": {
+        "width": 1080,
+        "height": 1350,
+        "aspectRatio": "4:5",
+        "deviceScaleFactor": 2,
+        "padding": { "top": 72, "right": 72, "bottom": 72, "left": 72 },
+        "safeArea": { "width": 936, "height": 1110 },
+        "footer": {
+          "authorTag": { "bottom": 48, "left": 72, "fontSize": 18 },
+          "slideNumber": { "bottom": 48, "right": 72, "fontSize": 18 }
+        }
+      }
+    },
+
+    "typography": {
+      "bodyFont": "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+      "monoFont": "'JetBrains Mono', monospace",
+      "googleFontsImport": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap",
+      "scale": {
+        "coverTitle":  { "size": 68, "weight": 800, "lineHeight": 1.12 },
+        "slideTitle":  { "size": 58, "weight": 800, "lineHeight": 1.15, "letterSpacing": -1 },
+        "subtitle":    { "size": 28, "weight": 500, "lineHeight": 1.5 },
+        "body":        { "sizeRange": [20, 24], "weight": 500, "lineHeight": 1.5 },
+        "cardHeader":  { "size": 18, "weight": 700, "letterSpacing": 2, "textTransform": "uppercase" },
+        "secondary":   { "size": 18, "weight": 500 },
+        "metadata":    { "sizeRange": [15, 16] },
+        "statValue":   { "size": 48, "weight": 800 },
+        "statLabel":   { "size": 18, "weight": 500 },
+        "tag":         { "size": 20, "weight": 600 },
+        "insightBox":  { "size": 22, "weight": 500 },
+        "takeaway":    { "size": 24, "weight": 500 }
+      },
+      "minimumReadable": 15,
+      "phoneScaleFactor": 0.35,
+      "hierarchyRule": "Maintain >= 1.3x ratio between adjacent levels. Never adjust all sizes at once."
+    },
+
+    "components": {
+      "card": { "borderRadius": 16, "padding": 32 },
+      "insightBox": { "borderRadius": 16, "padding": "24px 28px", "bgOpacity": 0.08, "borderOpacity": 0.25 },
+      "terminal": { "background": "#0d1117", "borderRadius": 12, "padding": 24, "fontSize": 20, "lineHeight": 1.7 },
+      "statBox": { "borderRadius": 16, "padding": 28, "textAlign": "center" }
+    },
+
+    "slideTemplates": {
+      "_description": "Canonical slide types for LinkedIn carousels. AI should compose slides from these templates rather than generating arbitrary layouts. Each template defines its structure, content constraints, and height budget within the 936x1110px safe area.",
+
+      "cover": {
+        "description": "First slide. Hook the reader. Large title, subtitle, topic tags.",
+        "background": "Use brand gradient (gradients.coverSlide or gradients.closingSlide)",
+        "structure": [
+          { "element": "slide-label", "content": "Category label (e.g. 'A Developer\\'s Discovery')" },
+          { "element": "emoji", "size": 80, "purpose": "Visual anchor" },
+          { "element": "title", "font": "coverTitle (68px)", "maxLines": 4, "heightBudget": 320 },
+          { "element": "subtitle", "font": "subtitle (28px)", "maxLines": 2, "heightBudget": 90 },
+          { "element": "tags", "font": "tag (20px)", "maxItems": 5, "layout": "flex-wrap row", "heightBudget": 50 }
+        ],
+        "rules": [
+          "Title should be max 8-12 words, split across 3-4 lines for impact",
+          "Use highlight class on the key phrase (1 color only)",
+          "Subtitle is 1-2 sentences, secondary color",
+          "Tags are pill-shaped, accent background at 15% opacity",
+          "No cards, no stat boxes, no diagrams — keep it clean"
+        ]
+      },
+
+      "setup": {
+        "description": "Context slide. What was being built, what tools were used. Establishes credibility.",
+        "structure": [
+          { "element": "slide-label", "content": "Section label (e.g. 'The Setup')" },
+          { "element": "title", "font": "slideTitle (58px)", "maxLines": 3, "heightBudget": 210 },
+          { "element": "subtitle", "font": "subtitle (28px)", "maxLines": 2, "heightBudget": 90 },
+          { "element": "card-row", "layout": "flex row, equal width", "maxItems": 3, "heightBudget": 200 },
+          { "element": "info-cards", "layout": "stacked, border-left accent", "maxItems": 2, "heightBudget": 280 }
+        ],
+        "rules": [
+          "Card row: icon (36px) + heading (22px) + description (18px, 2 lines max)",
+          "Each card has a distinct accent color on top border",
+          "Info cards use card-header (18px uppercase) + body (24px)",
+          "Total content must fit within ~780px after title+subtitle"
+        ]
+      },
+
+      "comparison": {
+        "description": "Side-by-side broken vs correct. Show the problem visually.",
+        "structure": [
+          { "element": "slide-label" },
+          { "element": "title", "font": "slideTitle (58px)", "maxLines": 2, "heightBudget": 140 },
+          { "element": "subtitle", "font": "subtitle (28px)", "maxLines": 1, "heightBudget": 45 },
+          { "element": "comparison-pair", "layout": "flex row, gap 24px", "heightBudget": 320, "repeat": "1-2 pairs" },
+          { "element": "insight-box", "heightBudget": 100 }
+        ],
+        "rules": [
+          "Left side: red border, cross emoji label, shows the broken version",
+          "Right side: green border, check emoji label, shows the correct version",
+          "Mock labels use mock-label class (16px uppercase)",
+          "Keep mockup content simple — just enough to show the problem",
+          "Max 2 comparison pairs per slide. If more, split into multiple slides",
+          "Flex children MUST have min-width: 0 to prevent overflow",
+          "Insight box at bottom ties the comparison together"
+        ]
+      },
+
+      "category-grid": {
+        "description": "Show 4 categories/types in a 2x2 grid with supporting stats.",
+        "structure": [
+          { "element": "slide-label" },
+          { "element": "title", "font": "slideTitle (58px)", "maxLines": 2, "heightBudget": 140 },
+          { "element": "subtitle", "font": "subtitle (28px)", "maxLines": 2, "heightBudget": 90 },
+          { "element": "card-grid", "layout": "2x2 grid, gap 20px", "heightBudget": 340 },
+          { "element": "quote-card", "optional": true, "heightBudget": 100 },
+          { "element": "stat-row", "layout": "grid 3 columns", "optional": true, "heightBudget": 120 }
+        ],
+        "rules": [
+          "Cards: emoji (36px) + heading (22px bold) + description (18px secondary, 2 lines)",
+          "Each card has a distinct accent color on left border",
+          "Stat row: stat-value (48px bold, colored) + stat-label (18px secondary)",
+          "Use grid-template-columns, NOT flex, for stat row",
+          "If including both quote-card and stat-row, reduce card padding to 24px"
+        ]
+      },
+
+      "diagram": {
+        "description": "Visual explanation with flow diagrams or process comparisons.",
+        "structure": [
+          { "element": "slide-label" },
+          { "element": "title", "font": "slideTitle (58px)", "maxLines": 3, "heightBudget": 210 },
+          { "element": "subtitle", "font": "subtitle (28px)", "maxLines": 1, "heightBudget": 45 },
+          { "element": "diagram-area", "layout": "flex row, 2 columns with 'vs' divider", "heightBudget": 450 },
+          { "element": "insight-box", "heightBudget": 100 }
+        ],
+        "rules": [
+          "Flow steps: colored pill boxes (20px) connected by arrows (28px)",
+          "Use flex-direction: column for vertical flows within each column",
+          "Gap between steps: 14px",
+          "Step pills: accent bg at 15% opacity, 1px accent border, border-radius 12px, padding 16px 28px",
+          "Width: 90% of column to leave breathing room",
+          "Label below flow (24px, colored) summarizes the outcome",
+          "Never use absolute positioning for flow steps"
+        ]
+      },
+
+      "solution": {
+        "description": "Present the fix. Pipeline diagram + code snippet + summary.",
+        "structure": [
+          { "element": "slide-label" },
+          { "element": "title", "font": "slideTitle (58px)", "maxLines": 2, "heightBudget": 140 },
+          { "element": "subtitle", "font": "subtitle (28px)", "maxLines": 2, "heightBudget": 90 },
+          { "element": "pipeline", "layout": "2 rows of 3 steps with arrows", "heightBudget": 180 },
+          { "element": "terminal", "maxLines": 10, "heightBudget": 280 },
+          { "element": "summary-card", "heightBudget": 100 }
+        ],
+        "rules": [
+          "Pipeline steps: icon + label (20px bold) in accent-colored pills",
+          "Arrows between steps: 32px, accent-green",
+          "Terminal/code block: JetBrains Mono (20px), dark background (#0d1117)",
+          "Keep code to essential config only — no boilerplate",
+          "Summary card: border-left accent-green, body at 24px"
+        ]
+      },
+
+      "before-after": {
+        "description": "Two-column comparison of workflow/results before and after the solution.",
+        "structure": [
+          { "element": "slide-label" },
+          { "element": "title", "font": "slideTitle (58px)", "maxLines": 2, "heightBudget": 140 },
+          { "element": "subtitle", "font": "subtitle (28px)", "maxLines": 1, "heightBudget": 45 },
+          { "element": "comparison-cards", "layout": "flex row, 2 equal cards", "heightBudget": 380 },
+          { "element": "divider" },
+          { "element": "related-topics", "layout": "flex row, 3 items", "optional": true, "heightBudget": 100 },
+          { "element": "insight-box", "heightBudget": 100 }
+        ],
+        "rules": [
+          "Left card: red top border, icon (36px), red heading (22px), bullet list (20px, 5 items max)",
+          "Right card: green top border, icon (36px), green heading (22px), bullet list (20px, 5 items max)",
+          "Bullet lists use secondary color, line-height 1.8",
+          "Related topics: small colored cards with label (20px bold) + description (18px)",
+          "Insight box ties together the 'so what' message"
+        ]
+      },
+
+      "takeaway": {
+        "description": "Final slide. Key lessons + CTA. Use closing gradient background.",
+        "background": "Use brand gradient (gradients.closingSlide)",
+        "structure": [
+          { "element": "slide-label", "content": "'Key Takeaways'" },
+          { "element": "title", "font": "slideTitle (58px)", "maxLines": 2, "heightBudget": 140 },
+          { "element": "takeaway-list", "maxItems": 4, "heightBudget": 500 },
+          { "element": "divider" },
+          { "element": "cta", "heightBudget": 80 }
+        ],
+        "rules": [
+          "Each takeaway: emoji icon (32px) + bold heading + secondary description (2 lines)",
+          "Takeaway text: 24px primary weight for heading, 24px secondary color for description",
+          "Max 4 takeaways — if more, the slide gets too dense",
+          "CTA: question (24px semibold secondary) + invitation (20px muted)",
+          "End with engagement hook — open question, not a statement"
+        ]
+      },
+
+      "stat-highlight": {
+        "description": "Big numbers that tell a story. 2-4 stats with context.",
+        "structure": [
+          { "element": "slide-label" },
+          { "element": "title", "font": "slideTitle (58px)", "maxLines": 2, "heightBudget": 140 },
+          { "element": "subtitle", "font": "subtitle (28px)", "maxLines": 2, "heightBudget": 90 },
+          { "element": "stat-grid", "layout": "grid, 2 columns", "maxItems": 4, "heightBudget": 350 },
+          { "element": "context-card", "optional": true, "heightBudget": 120 },
+          { "element": "insight-box", "optional": true, "heightBudget": 100 }
+        ],
+        "rules": [
+          "Stat boxes: value (48px bold colored) + label (18px secondary)",
+          "Use grid-template-columns: 1fr 1fr — never flex for stat layout",
+          "Each stat a different accent color for visual variety",
+          "2 stats = 1 row, 3-4 stats = 2 rows. Never 3 columns (too cramped at 936px)",
+          "Stat values should be short: numbers, percentages, or 1-2 word labels",
+          "Context card explains what the numbers mean"
+        ]
+      }
+    },
+
+    "narrativeArc": {
+      "_description": "Recommended slide sequence for a discovery-style LinkedIn carousel (6-10 slides).",
+      "structure": [
+        { "position": 1, "template": "cover", "purpose": "Hook — stop the scroll" },
+        { "position": 2, "template": "setup", "purpose": "Context — what you were building" },
+        { "position": "3-4", "template": "comparison OR category-grid", "purpose": "The problem — show don't tell" },
+        { "position": "4-5", "template": "diagram OR stat-highlight", "purpose": "The pattern — why it keeps happening" },
+        { "position": "5-6", "template": "solution", "purpose": "The fix — what you discovered" },
+        { "position": "6-7", "template": "before-after", "purpose": "The difference — tangible improvement" },
+        { "position": "last", "template": "takeaway", "purpose": "Key lessons + engagement CTA" }
+      ],
+      "guidelines": [
+        "6-8 slides is the sweet spot. Under 5 feels thin, over 10 loses attention.",
+        "Every slide must earn its place — if it doesn't add new information, cut it.",
+        "Alternate between text-heavy and visual slides for rhythm.",
+        "The 'discovery journey' tone: honest about failures, specific about what you tried, generous with what you learned."
+      ]
+    },
+
+    "contentStrategy": {
+      "_description": "How slides and post description work together. Slides are the primary content vehicle; the post guides readers through the arc.",
+
+      "slides": {
+        "role": "primary",
+        "principles": [
+          "Slides MUST tell the complete story standalone. Many readers never read the post description.",
+          "Each slide must have enough context to be understood without the previous slide or the post text.",
+          "Include 'what is this project?' context on the cover slide — don't assume the reader knows.",
+          "Use subtitles and insight boxes to add the context that would otherwise be in the post.",
+          "Jargon must be explained on the slide where it first appears (e.g., 'OpenVINO EP' → 'hardware backend').",
+          "Diagrams and visuals carry better than paragraphs. Prefer flow charts, split layouts, and stat boxes over blocks of text.",
+          "Slides should have a visual:text ratio that favors visual. If a slide looks like a wall of text, redesign it."
+        ]
+      },
+
+      "postDescription": {
+        "role": "guide",
+        "principles": [
+          "The post description is a SHORT narrative arc that guides people through the slides, not a standalone essay.",
+          "Target 6-8 short paragraphs. Each paragraph maps roughly to 1-2 slides.",
+          "Hook → Problem → Solution → Key insight → Messy part (1 sentence, 'slide N has the breakdown') → Proud moment → Dogfooding/meta → CTA.",
+          "Reference specific slides when detail lives there: '(Slide 5 has the full breakdown.)'",
+          "Keep technical detail light — enough to intrigue, not enough to explain. The slides do the explaining.",
+          "Tone: down to earth, developer journey, honest. Not a press release, not a tutorial."
+        ],
+        "maxParagraphs": 8,
+        "targetWordCount": "250-350"
+      },
+
+      "tone": {
+        "voice": "Developer journal — first person, honest, specific",
+        "do": ["Share failures and messes", "Be specific about what went wrong", "Credit tools and approaches fairly", "Acknowledge what's still early/incomplete"],
+        "dont": ["Sound like a press release", "Overclaim ('game-changer', 'revolutionary')", "Hide behind jargon", "Present everything as polished/easy"]
+      }
+    }
+  }
+}

@@ -1,0 +1,49 @@
+{
+    "name": "Corvia Demo Workspace",
+    "dockerComposeFile": ["docker-compose.yml", "docker-compose.override.yml"],
+    "service": "app",
+    "workspaceFolder": "/workspaces/corvia-workspace",
+    // GPU passthrough is auto-detected by init-host.sh which generates
+    // docker-compose.override.yml with the right device mappings.
+    "initializeCommand": ".devcontainer/scripts/init-host.sh",
+    "postCreateCommand": ".devcontainer/scripts/post-create.sh",
+    "postStartCommand": ".devcontainer/scripts/post-start.sh",
+    // 8020: corvia REST+MCP, 8021: dashboard, 8030: inference gRPC, 11434: ollama
+    // 8050 (playwright-mcp) is container-internal only — not forwarded.
+    "forwardPorts": [8020, 8021, 8030, 11434],
+    "mounts": [
+        "source=${localEnv:HOME}${localEnv:USERPROFILE}/.config/gh,target=/root/.config/gh-host,type=bind,consistency=cached,readonly",
+        "source=${localEnv:HOME}${localEnv:USERPROFILE}/.claude,target=/root/.claude,type=bind,consistency=cached"
+    ],
+    "remoteUser": "root",
+    "containerEnv": {
+        "CORVIA_WORKSPACE": "${containerWorkspaceFolder}"
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "rust-lang.rust-analyzer",
+                "tamasfe.even-better-toml",
+                "Continue.continue",
+                "ms-vscode.live-server"
+            ],
+            "settings": {
+                "corvia.serverUrl": "http://localhost:8020",
+                "rust-analyzer.server.extraEnv": {
+                    "RUST_ANALYZER_MAX_MEMORY": "2048"
+                },
+                "rust-analyzer.files.excludeDirs": [
+                    "target",
+                    ".corvia",
+                    ".git",
+                    "node_modules"
+                ],
+                "files.watcherExclude": {
+                    "**/target/**": true,
+                    "**/.corvia/**": true,
+                    "**/node_modules/**": true
+                }
+            }
+        }
+    }
+}
