@@ -408,10 +408,16 @@ for r in cfg.get('workspace', {}).get('repos', []):
 }
 
 # Initialize the corvia workspace.
+# Always fixes perms and pre-clones repos (both are idempotent).
+# Only runs `corvia workspace init` if the store does not yet exist.
 init_workspace() {
     fix_workspace_perms
     pre_clone_repos
-    spin "Initializing workspace..." corvia workspace init
+    if [ ! -f "$WORKSPACE_ROOT/.corvia/lite_store.redb" ]; then
+        spin "Initializing workspace..." corvia workspace init
+    else
+        echo "    workspace already initialized"
+    fi
 }
 
 # Install a Python package in editable mode using uv.

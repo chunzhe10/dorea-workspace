@@ -37,6 +37,10 @@ retry 3 install_binaries
 step "Initializing workspace"
 init_workspace
 
+step "Ingesting workspace into knowledge base"
+spin "Ingesting repos..." corvia workspace ingest \
+    || echo "    ingest failed — run 'corvia workspace ingest' manually to populate knowledge base"
+
 step "Ensuring tooling"
 ensure_tooling
 
