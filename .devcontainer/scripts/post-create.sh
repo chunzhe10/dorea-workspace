@@ -37,6 +37,9 @@ retry 3 install_binaries
 step "Initializing workspace"
 init_workspace
 
+step "Ingesting workspace into knowledge base"
+spin "Ingesting repos..." corvia workspace ingest
+
 step "Ensuring tooling"
 ensure_tooling
 
