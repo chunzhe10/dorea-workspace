@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1c15ac27957e",
+  "content": ":\n            content_blocks.append({\n                \"type\": \"text\",\n                \"text\": f\"Frame {frame_num}:\",\n            })\n            with open(frame_path, \"rb\") as f:\n                img_data = base64.standard_b64encode(f.read()).decode(\"ascii\")\n            content_blocks.append({\n                \"type\": \"image\",\n                \"source\": {\n                    \"type\": \"base64\",\n                    \"media_type\": \"image/jpeg\",\n                    \"data\": img_data,\n                },\n            })\n\n        try:\n            response = client.messages.create(\n                model=model,\n                max_tokens=256,\n                system=prompt,\n                messages=[{\"role\": \"user\", \"content\": content_blocks}],\n            )\n        except Exception as e:\n            logger.error(\"  Pass 2 API call failed for '%s': %s\", label, e)\n            return subject\n\n        # Parse response\n        response_text = \"\"\n        for block in response.content:\n            if hasattr(block, \"text\"):\n                response_text += block.text\n\n        try:\n            text = response_text.strip()\n            if text.startswith(\"```\"):\n                text = re.sub(r\"^```[a-zA-Z]*\\n?\", \"\", text)\n                text = re.sub(r\"\\n?```\\s*$\", \"\", text)\n                text = text.strip()\n            result = json.loads(text)\n            refined_frame = result.get(\"first_appearance_frame\")\n        except (json.JSONDecodeError, AttributeError):\n            logger.warning(\"  Pass 2: failed to parse response for '%s'\", label)\n            return subject\n\n        if refined_frame is not None and isinstance(refined_frame, int):\n            logger.info(\n                \"  Pass 2: '%s' refined frame %d -> %d\",\n                label, subject[\"first_appearance_frame\"], refined_frame,\n            )\n            subject[\"first_appearance_frame\"] = refined_frame\n            subject[\"pass2_refined\"] = True\n        else:\n            logger.info(\"  Pass 2: '%s' — subject not found in window\", label)\n\n    return subject",
+  "source_version": "scripts/02_claude_scene_analysis.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112198150Z",
+  "valid_from": "2026-04-01T03:19:15.112198150Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/02_claude_scene_analysis.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 587,
+    "end_line": 635,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

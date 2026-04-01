@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-732bdc686c15",
+  "content": "                # Process exited\n\n                # Reset backoff after stable running\n                if mp.uptime_s is not None and mp.uptime_s > BACKOFF_RESET_AFTER:\n                    mp.reset_backoff()\n            elif result.healthy is False and mp.state == ServiceState.HEALTHY:\n                mp.state = ServiceState.UNHEALTHY\n                self._log(f\"{name}: health check failed\")\n            elif result.healthy is None:\n                pass  # indeterminate (no port), keep current state\n\n    async def restart_crashed(self) -> None:\n        \"\"\"Restart any crashed services with backoff.\"\"\"\n        for name, mp in self.processes.items():\n            if mp.state != ServiceState.CRASHED:\n                continue\n            if mp.service.tier == 2:\n                self._log(f\"{name}: tier 2 service crashed, skipping restart\")\n                mp.state = ServiceState.STOPPED\n                continue\n\n            mp.restart_count += 1\n            self._log(f\"{name}: restarting (attempt {mp.restart_count}, backoff {mp.backoff_s}s)\")\n            await asyncio.sleep(mp.backoff_s)\n            mp.escalate_backoff()\n            await self.start_service(name)\n\n    def write_state(self) -> None:\n        \"\"\"Write current state to the state file as JSON.\"\"\"\n        resp = StatusResponse(\n            manager=ManagerStatus(\n                pid=os.getpid(),\n                uptime_s=round(time.time() - self._started_at, 1),\n                state=\"running\" if self._running else \"stopped\",\n            ),\n            services=[mp.to_status() for mp in self.processes.values()],\n            config=self.config_summary,\n            enabled_services=self.enabled_services,\n            logs=self._log_lines[-20:],\n        )\n        self.state_path.write_text(resp.model_dump_json(indent=2))\n\n    async def run(self) -> None:\n        \"\"\"Main supervision loop. Runs until cancelled or SIGTERM.\"\"\"\n        self._running = True\n        loop = asyncio.get_event_loop()\n",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-cli.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007699902Z",
+  "valid_from": "2026-04-01T03:19:54.007699902Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-cli.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1184,
+    "end_line": 1228,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

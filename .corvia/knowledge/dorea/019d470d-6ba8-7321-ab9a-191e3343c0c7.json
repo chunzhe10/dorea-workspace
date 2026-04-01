@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-191e3343c0c7",
+  "content": "3) in linear light, range [0, 1].\n    \"\"\"\n    img = Image.open(path).convert(\"RGB\")\n    # Normalise to 0-1 float\n    data = np.asarray(img, dtype=np.float64) / 255.0\n    # Convert sRGB encoding to linear light\n    linear = eotf_sRGB(data)\n    return linear\ndef compute_luminance(linear_rgb: np.ndarray) -> np.ndarray:\n    \"\"\"Compute relative luminance from linear RGB using Rec. 709 coefficients.\"\"\"\n    return 0.2126 * linear_rgb[..., 0] + 0.7152 * linear_rgb[..., 1] + 0.0722 * linear_rgb[..., 2]",
+  "source_version": "scripts/00_generate_lut.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112155382Z",
+  "valid_from": "2026-04-01T03:19:15.112155382Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/00_generate_lut.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 166,
+    "end_line": 168,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1e98d4de56be",
+  "content": "            logger.warning(\n                \"  SetLUT returned False for Node %d\", node_index\n            )\n            return False\n    except Exception as e:\n        logger.warning(\"  Failed to set LUT on Node %d: %s\", node_index, e)\n        return False\ndef import_image_sequence(media_pool, sequence_dir: Path):\n    \"\"\"Import an image sequence directory into the Media Pool.\n\n    Resolve treats a directory of sequentially-named images as an image sequence\n    when imported via ImportMedia with the directory path.\n\n    Returns the imported MediaPoolItem, or None on failure.\n    \"\"\"\n    try:\n        result = media_pool.ImportMedia([str(sequence_dir)])\n    except Exception as e:\n        logger.warning(\"  Failed to import image sequence from %s: %s\", sequence_dir, e)\n        return None\n\n    if result is None:\n        return None\n\n    # Extract the single imported item\n    if isinstance(result, list) and len(result) > 0:\n        return result[0]\n    if isinstance(result, dict):\n        values = list(result.values())\n        return values[0] if values else None\n    return result",
+  "source_version": "scripts/05_resolve_setup.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112230591Z",
+  "valid_from": "2026-04-01T03:19:15.112230591Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/05_resolve_setup.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 478,
+    "end_line": 501,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

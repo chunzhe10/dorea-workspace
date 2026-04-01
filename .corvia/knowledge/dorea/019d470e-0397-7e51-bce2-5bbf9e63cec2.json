@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-5bbf9e63cec2",
+  "content": "## Decision\n## Context\n\n## Consequences\n\n- `AgentCoordinator` manages the full session lifecycle: Created -> Active (heartbeat) ->\n  Committing -> Merging -> Closed, with Stale (5min) -> Orphaned (20min) -> Recoverable\n  recovery path.\n- Staging hybrid architecture: each agent writes to `.corvia/staging/{agent-id}/` with a\n  dedicated git branch `{agent-id}/session-{uuid}`. HNSW index and Redb remain shared\n  (no per-agent duplication). Disk overhead ~10KB per session vs ~50-100MB for full\n  git worktrees.\n- Merge worker with conflict detection (semantic similarity) and LLM-assisted resolution.\n  Non-conflicting writes merge automatically. Failed LLM merges retry with exponential\n  backoff (max 3), then stay in queue for human intervention.\n- Garbage collection: orphaned sessions > 24h auto-rollback, closed sessions > 7d\n  cleaned from Redb, inactive agents > 30d suspended. All thresholds configurable via\n  `[agent_lifecycle]` in `corvia.toml`.\n- OpenTelemetry spans and structured metrics designed in at lifecycle definition time,\n  not bolted on later.\n- Key files: `agent_coordinator.rs`, `staging.rs`, `process_adapter.rs`.\n\n**Source:** `repos/corvia/docs/rfcs/2026-02-27-corvia-v0.2.0-brainstorm.md` (D43-D45)",
+  "source_version": "decisions/d45-multi-agent-lifecycle.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007322635Z",
+  "valid_from": "2026-04-01T03:19:54.007322635Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/d45-multi-agent-lifecycle.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 23,
+    "end_line": 42,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-19e9348843a3",
+  "content": "def find_workspace_root() -> Path:\n    \"\"\"Resolve the workspace root directory.\n\n    Uses $CORVIA_WORKSPACE if set, otherwise walks up from the script location\n    to find the directory containing repos/dorea.\n    \"\"\"\n    env_root = os.environ.get(\"CORVIA_WORKSPACE\")\n    if env_root:\n        return Path(env_root)\n\n    # Walk up from script location: scripts/ -> dorea/ -> repos/ -> workspace root\n    candidate = Path(__file__).resolve().parent.parent.parent.parent\n    if (candidate / \"repos\" / \"dorea\").is_dir():\n        return candidate\n\n    # Fallback: hardcoded devcontainer path\n    return Path(\"/workspaces/dorea-workspace\")",
+  "source_version": "scripts/pipeline_utils.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112168433Z",
+  "valid_from": "2026-04-01T03:19:15.112168433Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/pipeline_utils.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 27,
+    "end_line": 43,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

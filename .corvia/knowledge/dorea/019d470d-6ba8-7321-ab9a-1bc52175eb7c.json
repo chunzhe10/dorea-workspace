@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1bc52175eb7c",
+  "content": ":\n                continue\n            # Check frame number is in this batch\n            if subject[\"first_appearance_frame\"] not in batch_frame_nums:\n                nearest = min(batch_frame_nums, key=lambda n: abs(n - subject[\"first_appearance_frame\"]))\n                logger.warning(\n                    \"    Subject '%s' references frame %d not in batch; clamping to %d\",\n                    subject[\"label\"], subject[\"first_appearance_frame\"], nearest,\n                )\n                subject[\"first_appearance_frame\"] = nearest\n            all_subjects.append(subject)\n            valid_count += 1\n            logger.info(\n                \"    Found: %s (frame %d, confidence: %s)\",\n                subject[\"label\"],\n                subject[\"first_appearance_frame\"],\n                subject[\"confidence\"],\n            )\n\n        if valid_count == 0 and new_subjects:\n            logger.warning(\n                \"    %d subject(s) returned but none passed validation\",\n                len(new_subjects),\n            )\n        elif valid_count == 0:\n            logger.debug(\"    No new subjects in this batch\")\n\n    # Log token totals for this clip\n    if not dry_run and total_input_tokens > 0:\n        est_cost = (total_input_tokens * INPUT_COST_PER_MTOK + total_output_tokens * OUTPUT_COST_PER_MTOK) / 1_000_000\n        logger.info(\n            \"Clip %s: %d subject(s) found | Tokens: %d in, %d out (~$%.4f)\",\n            clip_id, len(all_subjects),\n            total_input_tokens, total_output_tokens, est_cost,\n        )\n\n    return {\"clip_id\": clip_id, \"subjects\": all_subjects}",
+  "source_version": "scripts/02_claude_scene_analysis.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112193989Z",
+  "valid_from": "2026-04-01T03:19:15.112193989Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/02_claude_scene_analysis.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 382,
+    "end_line": 413,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

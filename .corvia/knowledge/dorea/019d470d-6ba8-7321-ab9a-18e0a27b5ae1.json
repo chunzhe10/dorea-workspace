@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-18e0a27b5ae1",
+  "content": "def dlog_m_to_linear(x: np.ndarray) -> np.ndarray:\n    \"\"\"Convert D-Log M encoded values to scene-linear light.\n\n    D-Log M is DJI's log gamma curve used in Action 4 and other cameras.\n    It has a linear segment in deep shadows and a logarithmic curve above.\n\n    The transfer function is an approximation based on published D-Log M\n    characteristics:\n        - Middle grey (18%) maps to ~0.39 in D-Log M\n        - Very flat contrast curve designed to maximise dynamic range\n\n    The encoding function (linear -> D-Log M) is:\n        For linear >= cut_linear:  encoded = c * log10(a * linear + b) + d\n        For linear < cut_linear:   encoded = slope * linear + intercept\n\n    This function is the inverse (D-Log M -> linear).\n    \"\"\"\n    x = np.asarray(x, dtype=np.float64)\n\n    # D-Log M curve parameters (DJI published curve)\n    a = 0.9892\n    b = 0.0108\n    c = 0.256663\n    d = 0.584555\n\n    # Cut point in encoded space — below this, the encoding is linear\n    # The linear segment ensures continuity at the boundary.\n    # Compute the cut point values for proper continuity:\n    cut_encoded = 0.14\n\n    # Log segment decode: linear = (10^((encoded - d) / c) - b) / a\n    cut_linear = (10.0 ** ((cut_encoded - d) / c) - b) / a\n\n    # Slope of the encoding function at the cut point (derivative of log segment):\n    # d/d(linear) [c * log10(a*linear + b) + d] = c * a / ((a*linear + b) * ln(10))\n    slope = c * a / ((a * cut_linear + b) * np.log(10.0))\n\n    # Linear segment encoding: encoded = slope * linear + intercept\n    # At cut: cut_encoded = slope * cut_linear + intercept\n    intercept = cut_encoded - slope * cut_linear\n\n    linear = np.where(\n        x <= cut_encoded,\n        # Linear segment inverse: linear = (encoded - intercept) / slope\n        (x - intercept) / slope,\n        # Log segment inverse: linear = (10^((encoded - d) / c) - b) / a\n        (np.power(10.0, (x - d) / c) - b) / a,\n    )\n\n    return np.clip(linear, 0.0, None)",
+  "source_version": "scripts/00_generate_lut.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112153196Z",
+  "valid_from": "2026-04-01T03:19:15.112153196Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/00_generate_lut.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 65,
+    "end_line": 114,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

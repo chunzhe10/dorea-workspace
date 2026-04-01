@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1dce187a15a4",
+  "content": "def discover_footage(raw_dir: Path, flat_dir: Path) -> list[Path]:\n    \"\"\"Find all video files in raw and flat footage directories.\n\n    Returns a sorted list of video file paths.\n    \"\"\"\n    clips = []\n    for footage_dir in [raw_dir, flat_dir]:\n        if not footage_dir.is_dir():\n            continue\n        for entry in sorted(footage_dir.iterdir()):\n            if entry.is_file() and entry.suffix in VIDEO_EXTENSIONS:\n                clips.append(entry)\n    return sorted(clips, key=lambda p: p.name)",
+  "source_version": "scripts/05_resolve_setup.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112220257Z",
+  "valid_from": "2026-04-01T03:19:15.112220257Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/05_resolve_setup.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 86,
+    "end_line": 98,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

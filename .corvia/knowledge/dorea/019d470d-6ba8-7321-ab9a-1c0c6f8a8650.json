@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1c0c6f8a8650",
+  "content": "\n            subprocess.run(cmd, capture_output=True, text=True, check=True)\n            if output_path.is_file():\n                frames.append((frame_num, output_path))\n        except subprocess.CalledProcessError:\n            continue\n\n    return frames\ndef run_pass2_for_subject(\n    subject: dict,\n    video_path: Path,\n    source_fps: float,\n    sample_rate: int,\n    client,\n    model: str,\n) -> dict:\n    \"\"\"Run Pass 2 refinement for a single subject.\n\n    Updates the subject dict in-place with refined first_appearance_frame\n    and adds pass2_refined flag.\n    \"\"\"\n    label = subject[\"label\"]\n    keyframe_num = subject[\"first_appearance_frame\"]\n    bbox = subject[\"bbox_normalised\"]\n\n    # Approximate the source frame from the keyframe number\n    # keyframe_num is the keyframe index (1-based), sample_rate is seconds between keyframes\n    approx_source_frame = int(keyframe_num * sample_rate * source_fps)\n\n    logger.info(\n        \"  Pass 2: subject '%s', approx source frame %d (from keyframe %d)\",\n        label, approx_source_frame, keyframe_num,\n    )\n\n    with tempfile.TemporaryDirectory(prefix=f\"pass2_{label}_\") as tmp_dir:\n        tmp_path = Path(tmp_dir)\n        frames = extract_pass2_frames(\n            video_path, approx_source_frame, source_fps, tmp_path\n        )\n\n        if not frames:\n            logger.warning(\"  Pass 2: no frames extracted for '%s', skipping\", label)\n            return subject\n\n        # Build Pass 2 API call\n        prompt = PASS2_SYSTEM_PROMPT.format(label=label, bbox=bbox)\n        content_blocks = [\n            {\"type\": \"text\", \"text\": \"Find the exact first appearance frame:\"}\n        ]\n\n        for frame_num, frame_path in frames:\n            content_blocks.append({\n                \"type\": \"text\",\n                \"text\": f\"Frame {frame_num}:\",\n            })\n            with open(frame_path, \"rb\") as f:\n                img_data = base64.standard_b64encode(f.read()).decode(\"ascii\")",
+  "source_version": "scripts/02_claude_scene_analysis.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112196667Z",
+  "valid_from": "2026-04-01T03:19:15.112196667Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/02_claude_scene_analysis.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 538,
+    "end_line": 586,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

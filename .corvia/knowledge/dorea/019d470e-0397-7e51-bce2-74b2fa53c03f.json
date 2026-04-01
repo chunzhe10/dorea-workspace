@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-74b2fa53c03f",
+  "content": "# corvia-dev rebuild + Staleness Detection\n\n> **Status:** Superseded — rebuild functionality moved to Rust CLI\n> **Date**: 2026-03-09\n> **Scope**: corvia-dev CLI (Python, `tools/corvia-dev/`)\n",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-rebuild-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007725331Z",
+  "valid_from": "2026-04-01T03:19:54.007725331Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-rebuild-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1,
+    "end_line": 6,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

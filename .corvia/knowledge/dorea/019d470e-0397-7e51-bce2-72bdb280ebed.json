@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-72bdb280ebed",
+  "content": "### Task 6: Process Manager (Core Supervision)\n\n\ndef test_managed_process_backoff_reset() -> None:\n    svc = ServiceDefinition(name=\"test\", tier=0, port=9999, start_cmd=[\"echo\", \"hi\"])\n    mp = ManagedProcess(service=svc)\n    mp.backoff_s = 32.0\n    mp.reset_backoff()\n    assert mp.backoff_s == 1.0\n\n\ndef test_process_manager_write_state(tmp_path: Path) -> None:\n    state_path = tmp_path / \"state.json\"\n    svc = ServiceDefinition(name=\"test-svc\", tier=0, port=8020, start_cmd=[\"echo\"])\n    mgr = ProcessManager(\n        services=[svc],\n        workspace_root=tmp_path,\n        state_path=state_path,\n    )\n    mgr.write_state()\n    data = json.loads(state_path.read_text())\n    assert data[\"manager\"][\"pid\"] > 0\n    assert len(data[\"services\"]) == 1\n    assert data[\"services\"][0][\"name\"] == \"test-svc\"\n    assert data[\"services\"][0][\"state\"] == \"stopped\"\n```\n\n**Step 2: Run test to verify it fails**\n\nRun: `cd /workspaces/corvia-workspace && python3 -m pytest tools/corvia-dev/tests/test_manager.py -v`\nExpected: FAIL with `ModuleNotFoundError`\n\n**Step 3: Write the implementation**\n\n```python\n\"\"\"Process manager for service supervision.\"\"\"\n\nfrom __future__ import annotations\n\nimport asyncio\nimport json\nimport logging\nimport os\nimport signal\nimport time",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-cli.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007692617Z",
+  "valid_from": "2026-04-01T03:19:54.007692617Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-cli.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 973,
+    "end_line": 1015,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

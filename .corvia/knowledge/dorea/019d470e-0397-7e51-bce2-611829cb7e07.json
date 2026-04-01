@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-611829cb7e07",
+  "content": "## Overview\n## Summary\n\n## RAM implications\n\n- `search` and `context` only need the embedding model (for vector similarity)\n- `ask` additionally needs a chat/generation model loaded, which is the main RAM cost\n- The GenerationEngine is optional in `RagPipeline::new()` — passing `None` disables\n  `ask()` gracefully (returns config error) while `context()` and search still work\n\n\n## Resolution\n\nThe `generation_enabled` config flag was not added as a separate toggle. Instead,\nthe inference architecture naturally supports this: corvia-inference loads embedding\nand chat models independently. If no chat model is configured in `[inference.chat_models]`,\nthe server starts with embedding-only capability. The `ask()` pipeline returns a config\nerror when no GenerationEngine is available, while `search()` and `context()` work\nnormally. This makes the single-flag approach unnecessary — the model configuration\nitself is the toggle.",
+  "source_version": "learnings/rag-modes-search-context-ask.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007400711Z",
+  "valid_from": "2026-04-01T03:19:54.007400711Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "learnings/rag-modes-search-context-ask.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 24,
+    "end_line": 39,
+    "content_role": "learning",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

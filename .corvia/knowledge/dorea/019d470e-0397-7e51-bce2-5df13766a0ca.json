@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-5df13766a0ca",
+  "content": "## 4. Athens Research\n\n### Status\n\nAthens is **no longer maintained**. It was a YC W21-backed open-source clone of Roam Research\nbuilt in Clojure/ClojureScript. The project has been archived on GitHub.\n\n\n### What It Was\n\n- Outliner with bidirectional links and block references (identical model to Roam)\n- Built on a graph database backend\n- Open-source and local-first (addressing Roam's cloud-only limitation)\n- Collaborative editing features\n",
+  "source_version": "decisions/graph-document-ux-research.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007357915Z",
+  "valid_from": "2026-04-01T03:19:54.007357915Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/graph-document-ux-research.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 169,
+    "end_line": 180,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

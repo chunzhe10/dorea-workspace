@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1e3c0f27a6ec",
+  "content": ":\n        logger.error(\n            \"DaVinci Resolve is not running or not responding. \"\n            \"Please start Resolve Studio before running this script.\"\n        )\n        return None\n\n    logger.info(\"Connected to DaVinci Resolve\")\n    return resolve\ndef get_or_create_project(resolve, project_name: str):\n    \"\"\"Open an existing project or create a new one.\n\n    Returns the Project object, or None on failure.\n    \"\"\"\n    try:\n        project_manager = resolve.GetProjectManager()\n    except Exception as e:\n        logger.error(\"Failed to get ProjectManager: %s\", e)\n        return None\n\n    if project_manager is None:\n        logger.error(\"ProjectManager is None — Resolve may not be fully loaded\")\n        return None\n\n    # Try to load existing project first\n    try:\n        current = project_manager.GetCurrentProject()\n        if current is not None and current.GetName() == project_name:\n            logger.info(\"Using current project: %s\", project_name)\n            return current\n    except Exception:\n        pass\n\n    # Try loading the project by name\n    try:\n        project = project_manager.LoadProject(project_name)\n        if project is not None:\n            logger.info(\"Opened existing project: %s\", project_name)\n            return project\n    except Exception as e:\n        logger.debug(\"Could not load project '%s': %s\", project_name, e)\n\n    # Create new project\n    try:\n        project = project_manager.CreateProject(project_name)\n        if project is not None:\n            logger.info(\"Created new project: %s\", project_name)\n            return project\n    except Exception as e:\n        logger.error(\"Failed to create project '%s': %s\", project_name, e)\n        return None\n\n    logger.error(\"Failed to create or open project '%s'\", project_name)\n    return None",
+  "source_version": "scripts/05_resolve_setup.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112225168Z",
+  "valid_from": "2026-04-01T03:19:15.112225168Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/05_resolve_setup.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 270,
+    "end_line": 314,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

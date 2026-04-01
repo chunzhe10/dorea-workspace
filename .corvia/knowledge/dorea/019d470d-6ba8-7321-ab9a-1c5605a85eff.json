@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1c5605a85eff",
+  "content": "ce_video_for_clip(\n                clip_id, workspace_root, config, args.date\n            )\n            if video_path is None:\n                logger.warning(\n                    \"Pass 2: no source video found for '%s', skipping\", clip_id\n                )\n                pass2_failed += len(subjects)\n                continue\n\n            source_fps = get_source_fps(video_path)\n            if source_fps is None or source_fps <= 0:\n                logger.warning(\n                    \"Pass 2: could not determine FPS for '%s', skipping\", clip_id\n                )\n                pass2_failed += len(subjects)\n                continue\n\n            logger.info(\"--- Pass 2: %s (%.1f fps) ---\", clip_id, source_fps)\n\n            for subject in subjects:\n                try:\n                    run_pass2_for_subject(\n                        subject, video_path, source_fps,\n                        sample_rate, client, model,\n                    )\n                    if subject.get(\"pass2_refined\"):\n                        pass2_refined += 1\n                except Exception as e:\n                    logger.error(\n                        \"  Pass 2 failed for '%s': %s\",\n                        subject.get(\"label\", \"?\"), e,\n                    )\n                    pass2_failed += 1\n\n            # Re-write the JSON with refined data\n            try:\n                with open(output_path, \"w\") as f:\n                    json.dump(clip_data, f, indent=2)\n                logger.info(\"Pass 2: updated %s\", output_path)\n            except OSError as e:\n                logger.error(\"Pass 2: failed to update %s: %s\", output_path, e)\n\n        logger.info(\n            \"Pass 2: %d subject(s) refined, %d failed/skipped\",\n            pass2_refined, pass2_failed,\n        )\n    elif args.skip_pass2:\n        logger.info(\"Pass 2 skipped (--skip-pass2 flag)\")\n\n    if failed_clips > 0 and successful_clips == 0:\n        logger.error(\"All clips failed. Check errors above.\")\n        sys.exit(1)\n\n    if failed_clips > 0:\n        logger.warning(\"%d clip(s) failed. Check errors above.\", failed_clips)",
+  "source_version": "scripts/02_claude_scene_analysis.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112201184Z",
+  "valid_from": "2026-04-01T03:19:15.112201184Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/02_claude_scene_analysis.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 785,
+    "end_line": 833,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

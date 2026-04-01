@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-6828a0f47f55",
+  "content": "### Task 3: Update corvia.toml\n\nmax_skills = 3\nskill_threshold = 0.30000001192092896\nreserve_for_skills = 0.15000000596046448\n\n[workspace.docs]\nmemory_dir = \".memory\"\nworkspace_docs = \"docs\"\nallowed_workspace_subdirs = [\"decisions\", \"learnings\", \"plans\"]\n\n[workspace.docs.rules]\nblocked_paths = [\"docs/superpowers/*\"]\nrepo_docs_pattern = \"docs/\"\n\n[chunking]\nmax_tokens = 512\nmin_tokens = 32\noverlap_tokens = 64\nstrategy = \"auto\"\n\n[telemetry]\nexporter = \"stdout\"\notlp_endpoint = \"\"\notlp_protocol = \"grpc\"\nservice_name = \"dorea\"\nlog_format = \"json\"\nmetrics_enabled = true\n\n[inference]\ndevice = \"cpu\"\nkv_quant = \"q8\"\nflash_attention = true\n\n[inference.chat_models.\"llama3.2\"]\nrepo = \"bartowski/Llama-3.2-3B-Instruct-GGUF\"\nfilename = \"Llama-3.2-3B-Instruct-Q4_K_M.gguf\"\n\n[inference.chat_models.qwen3]\nrepo = \"bartowski/Qwen_Qwen3-8B-GGUF\"\nfilename = \"Qwen_Qwen3-8B-Q4_K_M.gguf\"\n\n[inference.chat_models.\"llama3.2:1b\"]\nrepo = \"bartowski/Llama-3.2-1B-Instruct-GGUF\"\nfilename = \"Llama-3.2-1B-Instruct-Q4_K_M.gguf\"\n```\n\nKey changes from template:\n- `project.name` → `\"dorea\"`\n- `scope_id` → `\"dorea\"`\n- `workspace.repos` → dorea URL, namespace `\"pipeline\"`\n- `telemetry.service_name` → `\"dorea\"`\n- `inference.device` → `\"cpu\"` (frees 6GB VRAM for SAM2/Depth Anything)\n- Removed `\"marketing\"` from `allowed_workspace_subdirs` (not needed for dorea)\n\n- [ ] **Step 2: Verify TOML is valid**\n\n```bash\ncd /home/chunzhe/corvia-project/dorea-workspace\npython3 -c \"import tomllib; tomllib.load(open('corvia.toml','rb')); print('valid')\"\n```\n\nExpected: `valid`\n",
+  "source_version": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007517415Z",
+  "valid_from": "2026-04-01T03:19:54.007517415Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 226,
+    "end_line": 287,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

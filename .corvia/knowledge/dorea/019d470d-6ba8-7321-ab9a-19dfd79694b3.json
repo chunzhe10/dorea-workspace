@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-19dfd79694b3",
+  "content": "\"No valid image files found in %s. \"\n            \"Supported formats: %s\",\n            references_dir, \", \".join(sorted(IMAGE_EXTENSIONS)),\n        )\n        sys.exit(1)\n\n    logger.info(\"Found %d reference image(s) in %s\", len(image_paths), references_dir)\n    for p in image_paths:\n        logger.debug(\"  %s\", p.name)\n\n    # --- Analyse reference images ---\n    logger.info(\"Analysing colour characteristics...\")\n    analysis = analyse_images(image_paths)\n\n    logger.info(\"Reference colour analysis:\")\n    logger.info(\n        \"  Shadows  (R,G,B): %.4f, %.4f, %.4f\",\n        *analysis[\"shadows_mean_rgb\"],\n    )\n    logger.info(\n        \"  Midtones (R,G,B): %.4f, %.4f, %.4f\",\n        *analysis[\"midtones_mean_rgb\"],\n    )\n    logger.info(\n        \"  Highlights (R,G,B): %.4f, %.4f, %.4f\",\n        *analysis[\"highlights_mean_rgb\"],\n    )\n    logger.info(\n        \"  Overall  (R,G,B): %.4f, %.4f, %.4f\",\n        *analysis[\"overall_mean_rgb\"],\n    )\n    logger.info(\"  Mean saturation: %.3f\", analysis[\"saturation_mean\"])\n\n    # Log dominant hue\n    hue_hist = analysis[\"hue_histogram\"]\n    dominant_bin = int(np.argmax(hue_hist))\n    dominant_hue_deg = dominant_bin * 10\n    logger.info(\n        \"  Dominant hue: ~%d degrees (%.1f%% of pixels)\",\n        dominant_hue_deg, hue_hist[dominant_bin] * 100,\n    )\n\n    # --- Compute correction parameters ---\n    logger.info(\"Computing colour correction parameters...\")\n    params = compute_correction_params(analysis)\n\n    # --- Generate LUT ---\n    lut = generate_lut(params)\n\n    # --- Derive look name from references directory ---\n    look_name = references_dir.name\n    if look_name in (\".\", \"\"):\n        look_name = \"underwater_base\"\n\n    # --- Write output ---\n    write_cube_file(lut, output_path, look_name)\n\n    # --- Summary ---\n    logger.info(\"--- LUT generation complete ---\")\n    logger.info(\"  Reference images: %d\", len(image_paths))\n    logger.info(\"  LUT size: %dx%dx%d\", LUT_SIZE, LUT_SIZE, LUT_SIZE)\n    logger.info(\"  Output: %s\", output_path)",
+  "source_version": "scripts/00_generate_lut.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112166458Z",
+  "valid_from": "2026-04-01T03:19:15.112166458Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/00_generate_lut.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 573,
+    "end_line": 627,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

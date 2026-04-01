@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-623e876c8a61",
+  "content": "erver`\nExpected: Compiles.\n\n- [ ] **Step 5: Commit**\n\n```bash\ncd /workspaces/corvia-workspace/repos/corvia\ngit add crates/corvia-server/src/rest.rs\ngit commit -m \"feat(server): extend SearchResultDto and SearchRequest with metadata filter fields\"\n```\n\n---\n\n### Task 1.6: Update MCP tool schemas and handlers\n\n**Files:**\n- Modify: `repos/corvia/crates/corvia-server/src/mcp.rs`\n\n- [ ] **Step 1: Add filter params to `corvia_search` tool schema**\n\nIn `tool_definitions()`, update the `corvia_search` entry (mcp.rs ~line 117):\n\n```rust\njson!({\n    \"name\": \"corvia_search\",\n    \"description\": \"Search organizational knowledge entries by semantic similarity\",\n    \"inputSchema\": {\n        \"type\": \"object\",\n        \"properties\": {\n            \"query\": { \"type\": \"string\", \"description\": \"The search query\" },\n            \"scope_id\": { \"type\": \"string\", \"description\": \"Scope to search within (defaults to workspace scope if omitted)\" },\n            \"limit\": { \"type\": \"integer\", \"description\": \"Maximum results (default 10)\" },\n            \"content_role\": { \"type\": \"string\", \"description\": \"Filter by content role: design, decision, plan, code, memory, finding, instruction, learning\" },\n            \"source_origin\": { \"type\": \"string\", \"description\": \"Filter by source origin: repo:<name>, workspace, memory\" }\n        },\n        \"required\": [\"query\"]\n    }\n}),\n```\n\n- [ ] **Step 2: Add `content_role`/`source_origin` params to `corvia_write` tool schema**\n\nUpdate the `corvia_write` entry (mcp.rs ~line 130):\n\n```rust",
+  "source_version": "plans/2026-03-13-docs-workflow-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007419944Z",
+  "valid_from": "2026-04-01T03:19:54.007419944Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-13-docs-workflow-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 591,
+    "end_line": 622,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

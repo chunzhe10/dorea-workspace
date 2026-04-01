@@ -1,0 +1,31 @@
+{
+  "id": "019d483d-a152-7d03-b986-253ea217e228",
+  "content": "# LUT Preview Script — Implementation Decision (2026-04-01)\n\n## What\nNew script `preview_lut.py` applies .cube LUT to Phase 1 keyframes and generates side-by-side RAW|GRADED comparison images via ffmpeg. Enables visual evaluation of colour correction without opening DaVinci Resolve.\n\n## CLI\n`python preview_lut.py --date YYYY-MM-DD [--clip CLIP_ID] [--lut PATH] [--force] [-v]`\n\n## Key decisions\n- **format=rgb24 before lut3d**: Ensures LUT operates on full-resolution RGB data, matching how Resolve applies the same LUT. Without this, ffmpeg processes YUV 4:2:0 which loses chroma resolution.\n- **Skip-existing by default**: Re-runs skip already-generated previews for fast iteration. `--force` flag regenerates.\n- **Font fallback**: Uses `font='monospace'` for labels via fontconfig; falls back to unlabeled hstack if drawtext fails on minimal systems.\n- **ffmpeg path escaping**: `_escape_ffmpeg_filter_value()` escapes `:`, `;`, `'`, `\\`, `[`, `]` for safe filter option values.\n- **Video loops deferred**: Issue #7 mentioned \"consider 2-3 second video loops\" — deferred to a follow-up issue.\n\n## Output\n`working/previews/{date}/{clip_id}/{graded,comparison}/frame_NNNNNN.jpg`\n\n## PR\nchunzhe10/dorea#4",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-01T08:51:31.794774574Z",
+  "valid_from": "2026-04-01T08:51:31.794774574Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "decision",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

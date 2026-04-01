@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1a962c512169",
+  "content": "       reserved_mb = torch.cuda.memory_reserved() / (1024 * 1024)\n        logger.info(\n            \"Depth model loaded on %s | VRAM: %.0f MB allocated, %.0f MB reserved\",\n            device, allocated_mb, reserved_mb,\n        )\n\n    return processor, model\ndef unload_depth_model(model, device: str) -> None:\n    \"\"\"Explicitly unload the depth model and free GPU memory.\"\"\"\n    del model\n    if device.startswith(\"cuda\"):\n        torch.cuda.empty_cache()\n        allocated_mb = torch.cuda.memory_allocated() / (1024 * 1024)\n        logger.info(\n            \"Depth model unloaded | VRAM after cleanup: %.0f MB allocated\",\n            allocated_mb,\n        )\n    else:\n        logger.info(\"Depth model unloaded\")",
+  "source_version": "scripts/04_run_depth.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112177191Z",
+  "valid_from": "2026-04-01T03:19:15.112177191Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/04_run_depth.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 117,
+    "end_line": 128,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

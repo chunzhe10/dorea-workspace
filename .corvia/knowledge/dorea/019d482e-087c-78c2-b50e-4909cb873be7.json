@@ -1,0 +1,31 @@
+{
+  "id": "019d482e-087c-78c2-b50e-4909cb873be7",
+  "content": "# DRX Template Creation & Phase 5 Testing — Decision Record (2026-04-01)\n\n## What\nAdded `scripts/create_drx_template.py` to programmatically create the 8-node DRX grade template via the DaVinci Resolve scripting API, plus 32 unit tests for Phase 5 pipeline logic.\n\n## Key Design Decisions\n\n1. **Scripted DRX creation over manual-only**: The issue assumed DRX must be created manually, but the Resolve scripting API supports `AddSerialNode()`, `LabelNode()`, and `ExportGradeAsDRX()`. The script automates the full flow with `--export-only` as a fallback for older Resolve versions or manual node setup.\n\n2. **Lazy numpy import in pipeline_utils**: Moved `import numpy` from module-level to inside `dlog_m_to_linear()` and `linear_to_dlog_m()` functions. Host-side scripts (`create_drx_template.py`, `05_resolve_setup.py`) import from `pipeline_utils` but don't need numpy — the top-level import would crash on host environments without numpy installed.\n\n3. **Node constants shared via import**: `create_drx_template.py` imports `NODE_NAMES` from `05_resolve_setup` rather than duplicating the dict, preventing drift between the two files.\n\n4. **Temp project safety**: The script creates a `_DRX_Template_Generator` temp project, verifies it's closing the right project during cleanup (not the user's), and restores the user's original project after completion.\n\n## Review Findings Worth Remembering\n- `classify_subject()` type hint claimed `int | None` but never returned `None` — dead code in caller. Fixed to `-> int`.\n- `--export-only` modes need individual null checks at each API step, not a single try/except chain — Resolve API returns `None` liberally.\n- Host scripts that import `pipeline_utils` will break if it has heavy imports (numpy) at module level.\n\n## What Blocked / Surprised\n- The Resolve MCP bridge (`host.docker.internal:9090`) was unreachable during development, so the DRX script could only be verified via compile check and `--help`, not against a live Resolve instance.\n- The `gh` CLI in the workspace defaults to `corvia-workspace` remote, not `dorea-workspace` — must use `--repo` flag for dorea-workspace issues.\n",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-01T08:34:29.628710430Z",
+  "valid_from": "2026-04-01T08:34:29.628710430Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "decision",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-69d3d74337a8",
+  "content": "## MCP Servers\n\n## Hybrid Tool Usage (corvia MCP + native tools)\n\n**IMPORTANT: Always call corvia MCP tools FIRST before using native tools for any\ndevelopment task or question.** corvia is the project's knowledge base — skipping it\nmeans you risk re-discovering decisions that were already made or contradicting\nestablished patterns. This applies to ALL agents (Claude Code, Codex, etc.).\n",
+  "source_version": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007542266Z",
+  "valid_from": "2026-04-01T03:19:54.007542266Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 581,
+    "end_line": 587,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

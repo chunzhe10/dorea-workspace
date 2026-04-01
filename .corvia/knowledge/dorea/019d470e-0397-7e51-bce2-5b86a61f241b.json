@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-5b86a61f241b",
+  "content": "## Decision\n## Context\n\n## Consequences\n\n- Three-tier storage behind `QueryableStore` trait: LiteStore (default, zero Docker) ->\n  SurrealStore (opt-in, Docker) -> PostgresStore (opt-in, feature-gated).\n- LiteStore is the default for `corvia init`. FullStore requires `corvia init --full`.\n- Knowledge files stored as individual JSON in `.corvia/knowledge/`, Git-trackable.\n  Embeddings included in JSON to avoid re-embedding on rebuild.\n- Resource footprint: ~50-150MB RAM, <1s startup vs FullStore's ~200-500MB RAM and ~30s\n  first run.\n- LiteStore components: `hnsw_rs` (vector search), `petgraph` (graph traversal), `Redb`\n  (metadata, coordination, temporal index, edge storage), Git (source of truth).\n- `corvia rebuild` reconstructs all indexes from Git-tracked knowledge files.\n\n**Source:** `repos/corvia/docs/rfcs/2026-02-27-corvia-v0.2.0-brainstorm.md` (D35-D42)",
+  "source_version": "decisions/d35-litestore-full-product.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007318112Z",
+  "valid_from": "2026-04-01T03:19:54.007318112Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/d35-litestore-full-product.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 24,
+    "end_line": 37,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

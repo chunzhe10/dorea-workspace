@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-746dda8d4bcc",
+  "content": "l, minmax(250px, 1fr)); gap: 8px; }\n    .name { font-weight: bold; }\n    .state { opacity: 0.8; font-size: 0.9em; }\n    .actions { margin-top: 16px; }\n    button {\n        background: var(--vscode-button-background); color: var(--vscode-button-foreground);\n        border: none; padding: 6px 14px; border-radius: 4px; cursor: pointer; margin: 4px;\n    }\n    button:hover { background: var(--vscode-button-hoverBackground); }\n    .config { opacity: 0.8; margin-top: 12px; }\n    .logs { margin-top: 12px; font-family: monospace; font-size: 0.85em; white-space: pre-wrap; max-height: 200px; overflow-y: auto; }\n    h2 { margin: 16px 0 8px; }\n    .none { opacity: 0.5; }\n</style>\n</head>\n<body>\n<h1>Corvia Dashboard</h1>\n<div id=\"content\"><p class=\"none\">Loading...</p></div>\n<script>\n    const vscode = acquireVsCodeApi();\n\n    window.addEventListener(\"message\", (e) => {\n        if (e.data.type === \"status\") render(e.data.data);\n    });\n\n    function render(data) {\n        const el = document.getElementById(\"content\");\n        if (!data) { el.innerHTML = '<p class=\"none\">corvia-dev not responding</p>'; return; }\n\n        let html = \"<h2>Services</h2><div class='grid'>\";\n        for (const svc of data.services || []) {\n            const port = svc.port ? \":\" + svc.port : \"\";\n            const pid = svc.pid ? \" pid \" + svc.pid : \"\";",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-cli.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007719702Z",
+  "valid_from": "2026-04-01T03:19:54.007719702Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-cli.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1825,
+    "end_line": 1851,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

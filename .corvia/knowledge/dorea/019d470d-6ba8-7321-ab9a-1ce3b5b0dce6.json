@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1ce3b5b0dce6",
+  "content": "\n\n    Returns [x_min, y_min, x_max, y_max] in pixel space.\n    \"\"\"\n    x_min, y_min, x_max, y_max = bbox_normalised\n    return np.array([\n        x_min * width,\n        y_min * height,\n        x_max * width,\n        y_max * height,\n    ], dtype=np.float32)\ndef save_mask_as_png(\n    mask: np.ndarray, output_path: Path\n) -> None:\n    \"\"\"Save a binary mask as a single-channel PNG (0 or 255 per pixel).\n\n    Args:\n        mask: Boolean or float numpy array of shape (H, W).\n        output_path: Path to save the PNG file.\n    \"\"\"\n    output_path.parent.mkdir(parents=True, exist_ok=True)\n\n    # Convert to binary alpha: 0 or 255\n    if mask.dtype == bool:\n        alpha = (mask.astype(np.uint8)) * 255\n    else:\n        # Threshold at 0.0 for logit masks\n        alpha = ((mask > 0).astype(np.uint8)) * 255\n\n    img = Image.fromarray(alpha, mode=\"L\")\n    img.save(str(output_path))",
+  "source_version": "scripts/03_run_sam2.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112208980Z",
+  "valid_from": "2026-04-01T03:19:15.112208980Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/03_run_sam2.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 334,
+    "end_line": 353,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

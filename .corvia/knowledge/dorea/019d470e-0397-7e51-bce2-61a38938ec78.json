@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-61a38938ec78",
+  "content": "erde(default)]` makes new fields optional.\n\n- [ ] **Step 6: Commit**\n\n```bash\ncd /workspaces/corvia-workspace/repos/corvia\ngit add crates/corvia-common/src/types.rs\ngit commit -m \"feat(common): add content_role and source_origin to EntryMetadata\"\n```\n\n---\n\n### Task 1.2: Add `DocsConfig` to workspace configuration\n\n**Files:**\n- Modify: `repos/corvia/crates/corvia-common/src/config.rs:37-42`\n- Test: `repos/corvia/crates/corvia-common/src/config.rs` (inline tests)\n\n- [ ] **Step 1: Write failing test — DocsConfig parses from TOML**\n\nAdd to `mod tests` in `config.rs`:\n\n```rust\n#[test]\nfn test_docs_config_from_toml() {\n    let toml_str = r#\"\n[project]\nname = \"test\"\nscope_id = \"test\"\n\n[workspace]\nrepos_dir = \"repos\"\n\n[workspace.docs]\nmemory_dir = \".memory\"\nworkspace_docs = \"docs\"\nallowed_workspace_subdirs = [\"decisions\", \"learnings\"]\n\n[workspace.docs.rules]\nblocked_paths = [\"docs/superpowers/*\"]\nrepo_docs_pattern = \"docs/\"\n\n[storage]\nstore_type = \"lite\"\ndata_dir = \".corvia\"\n\n[embedding]\nprovider = \"ollama\"\nmodel = \"nomic-embed-text\"\nurl = \"http://127.0.0.1:11434\"\ndimensions = 768\n\n[server]\nhost = \"127.0.0.1\"\nport = 8020\n\"#;\n    let config: CorviaConfig = toml::from_str(toml_str).unwrap();\n    let ws = config.workspace.as_ref().unwrap();\n    let docs = ws.docs.as_ref().unwrap();\n    assert_eq!(docs.memory_dir, Some(\".memory\".into()));\n    assert_eq!(docs.workspace_docs, Some(\"docs\".into()));\n    assert_eq!(docs.allowed_workspace_subdirs, vec![\"decisions\", \"learnings\"]);\n    let rules = docs.rules.as_ref().unwrap();\n    assert_eq!(rules.blocked_paths, vec![\"docs/superpowers/*\"]);\n    assert_eq!(rules.repo_docs_pattern, Some(\"docs/\".into()));\n}\n\n#[test]\nfn test_docs_config_optional() {\n    // Existing workspace configs without [workspace.docs] still parse\n    let config = CorviaConfig::default();\n    assert!(config.workspace.is_none());\n\n    let mut ws_config = CorviaConfig::default();\n    ws_config.workspace = Some(WorkspaceConfig {\n        repos_dir: \"repos\".into(),\n        repos: vec![],\n        docs: None,\n    });\n    let toml_str = toml::to_string_pretty(&ws_config).unwrap();",
+  "source_version": "plans/2026-03-13-docs-workflow-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007410558Z",
+  "valid_from": "2026-04-01T03:19:54.007410558Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-13-docs-workflow-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 149,
+    "end_line": 216,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

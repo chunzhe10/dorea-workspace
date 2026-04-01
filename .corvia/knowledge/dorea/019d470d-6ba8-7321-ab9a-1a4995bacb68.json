@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1a4995bacb68",
+  "content": "ectory.\"\"\"\n    if not references_dir.is_dir():\n        return []\n\n    images = []\n    for entry in sorted(references_dir.iterdir()):\n        if entry.is_file() and entry.suffix.lower() in IMAGE_EXTENSIONS:\n            images.append(entry)\n    return images\ndef deduplicate_clips(clips: list[Path], prefer: str = \"raw\") -> list[Path]:\n    \"\"\"Deduplicate clips by stem, preferring raw footage (D-Log M dynamic range).\n\n    When the same clip exists in both raw/ and flat/ directories, keeps only\n    the preferred version. Warns on duplicates.\n\n    Args:\n        clips: List of clip paths (may contain duplicates by stem).\n        prefer: Which to keep on conflict — \"raw\" or \"flat\".\n\n    Returns:\n        Deduplicated list preserving original order of kept clips.\n    \"\"\"\n    seen: dict[str, Path] = {}\n    result = []\n\n    for clip in clips:\n        stem = clip.stem\n        if stem in seen:\n            existing = seen[stem]\n            # Determine which is raw and which is flat by parent dir name\n            existing_is_raw = \"raw\" in existing.parts\n            clip_is_raw = \"raw\" in clip.parts\n\n            if prefer == \"raw\":\n                keep_new = clip_is_raw and not existing_is_raw\n            else:\n                keep_new = not clip_is_raw and existing_is_raw\n\n            if keep_new:\n                logger.warning(\n                    \"Duplicate clip '%s': keeping %s over %s\",\n                    stem, clip, existing,\n                )\n                result = [p for p in result if p.stem != stem]\n                result.append(clip)\n                seen[stem] = clip\n            else:\n                logger.warning(\n                    \"Duplicate clip '%s': keeping %s over %s\",\n                    stem, existing, clip,\n                )\n        else:\n            seen[stem] = clip\n            result.append(clip)\n\n    return result",
+  "source_version": "scripts/pipeline_utils.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112172449Z",
+  "valid_from": "2026-04-01T03:19:15.112172449Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/pipeline_utils.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 101,
+    "end_line": 147,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

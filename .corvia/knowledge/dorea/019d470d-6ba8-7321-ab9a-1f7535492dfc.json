@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1f7535492dfc",
+  "content": ".error(\"ffmpeg failed for %s: %s\", clip_path.name, e.stderr.strip())\n        return -1\n\n    # Count extracted frames\n    frame_count = len([\n        f for f in output_dir.iterdir()\n        if f.is_file() and f.suffix == \".jpg\"\n    ])\n    return frame_count\ndef main():\n    parser = argparse.ArgumentParser(description=\"Extract keyframes from dive footage\")\n    parser.add_argument(\"--date\", required=True, help=\"Dive date YYYY-MM-DD\")\n    parser.add_argument(\n        \"--verbose\", \"-v\", action=\"store_true\", help=\"Enable debug logging\"\n    )\n    args = parser.parse_args()\n\n    configure_logging(verbose=args.verbose)\n\n    validate_date(args.date)\n\n    workspace_root = find_workspace_root()\n    logger.info(\"Workspace root: %s\", workspace_root)\n\n    config = load_config(workspace_root)\n\n    # Resolve footage directories for the given date\n    raw_dir = workspace_root / config[\"footage_raw\"] / args.date\n    flat_dir = workspace_root / config[\"footage_flat\"] / args.date\n    paths = resolve_working_paths(workspace_root, config, args.date)\n    keyframes_dir = paths[\"keyframes\"]\n\n    check_legacy_working_dir(workspace_root, config, args.date)\n\n    logger.info(\"Scanning for footage dated %s\", args.date)\n    logger.debug(\"  Raw dir:  %s (exists: %s)\", raw_dir, raw_dir.is_dir())\n    logger.debug(\"  Flat dir: %s (exists: %s)\", flat_dir, flat_dir.is_dir())\n\n    # Check that at least one footage directory exists\n    if not raw_dir.is_dir() and not flat_dir.is_dir():\n        logger.error(\n            \"No footage directories found for date %s. \"\n            \"Expected at least one of:\\n  %s\\n  %s\",\n            args.date, raw_dir, flat_dir,\n        )\n        sys.exit(1)\n\n    # Discover all video clips (deduplicate raw/flat by stem)\n    clips = deduplicate_clips(discover_clips(raw_dir) + discover_clips(flat_dir))\n\n    if not clips:\n        logger.error(\n            \"No video files found in footage directories for date %s. \"\n            \"Supported extensions: %s\",",
+  "source_version": "scripts/01_extract_frames.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112242568Z",
+  "valid_from": "2026-04-01T03:19:15.112242568Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/01_extract_frames.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 82,
+    "end_line": 126,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

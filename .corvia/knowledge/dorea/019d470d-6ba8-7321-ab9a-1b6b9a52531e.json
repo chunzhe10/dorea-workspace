@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1b6b9a52531e",
+  "content": "def encode_frame_base64(frame_path: Path) -> str:\n    \"\"\"Read a JPEG frame file and return its base64-encoded string.\"\"\"\n    with open(frame_path, \"rb\") as f:\n        return base64.standard_b64encode(f.read()).decode(\"ascii\")\ndef build_batch_messages(\n    batch: list[tuple[int, Path]],\n    previously_identified: list[dict],\n) -> list[dict]:\n    \"\"\"Build the messages array for a Claude API call.\n\n    Each batch sends frames as base64 images with frame number labels,\n    plus context about previously identified subjects.\n    \"\"\"\n    content_blocks = []\n\n    # If there are previously identified subjects, include them as context\n    if previously_identified:\n        prev_text = (\n            \"Previously identified subjects (do NOT re-report these):\\n\"\n            + json.dumps(previously_identified, indent=2)\n            + \"\\n\\nNow analyse the following new frames for any NEW subjects:\"\n        )\n        content_blocks.append({\"type\": \"text\", \"text\": prev_text})\n    else:\n        content_blocks.append({\n            \"type\": \"text\",\n            \"text\": \"Analyse the following frames for subjects:\",\n        })\n\n    # Add each frame as an image with its frame number label\n    for frame_num, frame_path in batch:\n        content_blocks.append({\n            \"type\": \"text\",\n            \"text\": f\"Frame {frame_num}:\",\n        })\n        content_blocks.append({\n            \"type\": \"image\",\n            \"source\": {\n                \"type\": \"base64\",\n                \"media_type\": \"image/jpeg\",\n                \"data\": encode_frame_base64(frame_path),\n            },\n        })\n\n    return [{\"role\": \"user\", \"content\": content_blocks}]",
+  "source_version": "scripts/02_claude_scene_analysis.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112188360Z",
+  "valid_from": "2026-04-01T03:19:15.112188360Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/02_claude_scene_analysis.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 152,
+    "end_line": 192,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

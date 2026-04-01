@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-749007bfdf40",
+  "content": "# If vsce is available:\n# vsce package --no-dependencies -o corvia-services.vsix\n\n# Otherwise just update the raw files — the extension is loaded from source\n```\n\n**Step 3: Verify extension loads without errors**\n\nOpen VS Code, check that the status bar item appears and the dashboard opens.\n\n**Step 4: Commit**\n\n```bash\ngit add .devcontainer/extensions/corvia-services/\ngit commit -m \"refactor(extension): rewrite as thin skin consuming corvia-dev status --json\"\n```\n\n---\n",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-cli.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007723927Z",
+  "valid_from": "2026-04-01T03:19:54.007723927Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-cli.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1909,
+    "end_line": 1924,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

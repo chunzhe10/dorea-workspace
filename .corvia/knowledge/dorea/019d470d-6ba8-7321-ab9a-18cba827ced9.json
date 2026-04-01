@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-18cba827ced9",
+  "content": "resolve_lut_path: repos/dorea/luts/underwater_base.cube\nresolve_drx_path: repos/dorea/templates/underwater_grade_v1.drx\nresolve_project_name: Dive_2026\n\n# Processing\ngpu_device: cuda:0",
+  "source_version": "config.yaml",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112151400Z",
+  "valid_from": "2026-04-01T03:19:15.112151400Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "config.yaml",
+    "language": "yaml",
+    "chunk_type": "section",
+    "start_line": 29,
+    "end_line": 32,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

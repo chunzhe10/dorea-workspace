@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-6b2b8c51348c",
+  "content": "# ffmpeg for frame extraction (Phase 1)\n\n### Task 16.6: Review lib.sh and init-host.sh\n\n**Files:**\n- Review: `.devcontainer/scripts/lib.sh`\n- Review: `.devcontainer/scripts/init-host.sh`\n\n- [ ] **Step 1: Review lib.sh for corvia-specific hardcoded paths**\n\nCheck `lib.sh` for any hardcoded references to \"corvia-workspace\" or \"corvia\" paths that need updating. Key functions to check:\n- `install_binaries` — downloads from GitHub releases (may reference chunzhe10/corvia-workspace)\n- `pre_clone_repos` — reads corvia.toml for repo list (should work with updated toml)\n- `init_workspace` — calls `corvia workspace init`\n- `WORKSPACE_ROOT` — should use `$CORVIA_WORKSPACE` env var (not hardcoded)\n\nUpdate any hardcoded \"corvia-workspace\" strings to use the `$CORVIA_WORKSPACE` env var instead.\n\n- [ ] **Step 2: Review init-host.sh for corvia-specific references**\n\nCheck `init-host.sh` for hardcoded workspace names. This script runs on the host before container creation. Key areas:\n- Container name cleanup (may reference \"corvia\")\n- Override file generation (generic, should work as-is)\n\nUpdate any corvia-specific container name patterns.\n",
+  "source_version": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007566998Z",
+  "valid_from": "2026-04-01T03:19:54.007566998Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 976,
+    "end_line": 999,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

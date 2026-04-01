@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-58e70f7925ee",
+  "content": "# Prebuilt Binaries Implementation Plan\n\n> **Status:** Shipped (v0.3.3)\n\n**Goal:** Speed up devcontainer creation by downloading prebuilt corvia-cli and corvia-inference binaries from GitHub releases (~5s vs ~5min), with source fallback and local rebuild.\n\n**Architecture:** GitHub Actions workflow in `chunzhe10/corvia` builds binaries on tag push. `post-create.sh` downloads from latest release, falls back to cargo build. `corvia-workspace rebuild` recompiles from local source.\n\n**Tech Stack:** GitHub Actions, bash, curl\n\n**Design doc:** `docs/decisions/2026-03-03-prebuilt-binaries-design.md`\n**Decision:** D71 in `repos/corvia/docs/rfcs/2026-02-27-corvia-v0.2.0-brainstorm.md`\n\n---\n",
+  "source_version": "decisions/2026-03-03-prebuilt-binaries.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007278204Z",
+  "valid_from": "2026-04-01T03:19:54.007278204Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-03-03-prebuilt-binaries.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1,
+    "end_line": 15,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

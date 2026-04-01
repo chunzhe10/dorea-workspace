@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1a531d918509",
+  "content": " else:\n                logger.warning(\n                    \"Duplicate clip '%s': keeping %s over %s\",\n                    stem, existing, clip,\n                )\n        else:\n            seen[stem] = clip\n            result.append(clip)\n\n    return result\ndef resolve_working_paths(workspace_root: Path, config: dict, date: str) -> dict:\n    \"\"\"Resolve date-scoped working directory paths.\n\n    Returns a dict with keys:\n        - keyframes: working/keyframes/{date}/\n        - scene_analysis: working/scene_analysis/{date}/\n        - masks: working/masks/{date}/\n        - depth: working/depth/{date}/\n        - working_dir: working/\n    \"\"\"\n    working_dir = workspace_root / config[\"working_dir\"]\n    return {\n        \"working_dir\": working_dir,\n        \"keyframes\": working_dir / \"keyframes\" / date,\n        \"scene_analysis\": working_dir / \"scene_analysis\" / date,\n        \"masks\": working_dir / \"masks\" / date,\n        \"depth\": working_dir / \"depth\" / date,\n    }",
+  "source_version": "scripts/pipeline_utils.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112173105Z",
+  "valid_from": "2026-04-01T03:19:15.112173105Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/pipeline_utils.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 150,
+    "end_line": 167,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

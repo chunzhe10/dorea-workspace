@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1f16c3f9ea8b",
+  "content": " %d clip(s), %d issue(s) found\", len(clips), total_issues)\n    if total_issues == 0:\n        logger.info(\"[DRY RUN] All inputs validated. Ready for live run.\")\n    else:\n        logger.warning(\"[DRY RUN] Fix %d issue(s) before running live.\", total_issues)\ndef main():\n    parser = argparse.ArgumentParser(\n        description=\"Set up DaVinci Resolve project with footage, grades, and mattes\"\n    )\n    parser.add_argument(\"--date\", required=True, help=\"Dive date YYYY-MM-DD\")\n    parser.add_argument(\n        \"--dry-run\",\n        action=\"store_true\",\n        help=\"Validate inputs and show summary without connecting to Resolve\",\n    )\n    parser.add_argument(\n        \"--verbose\", \"-v\", action=\"store_true\", help=\"Enable debug logging\"\n    )\n    args = parser.parse_args()\n\n    configure_logging(verbose=args.verbose)\n\n    validate_date(args.date)\n\n    workspace_root = find_workspace_root()\n    logger.info(\"Workspace root: %s\", workspace_root)\n\n    config = load_config(workspace_root)\n\n    # Resolve paths from config (date-scoped)\n    raw_dir = workspace_root / config[\"footage_raw\"] / args.date",
+  "source_version": "scripts/05_resolve_setup.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112237441Z",
+  "valid_from": "2026-04-01T03:19:15.112237441Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/05_resolve_setup.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 742,
+    "end_line": 767,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

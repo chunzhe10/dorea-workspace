@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-5ecaba02e036",
+  "content": "### Large Graph Handling\n### What Works Well\n\n### Common Complaints\n\n- Limited to relationship mapping (not a general knowledge tool)\n- No content preview on hover\n- Profile sidebar is basic -- no structured content or rich documents\n\n\n### Innovative Patterns to Steal\n\n- **Tab key to toggle sidebar**: Simple, memorable keyboard shortcut\n- **Profile with custom fields**: Extensible metadata alongside the graph\n- **Decorations**: Data-driven visual styling (node size/color/shape from field values)\n- **Multi-select bulk editing** in the sidebar\n\n---\n",
+  "source_version": "decisions/graph-document-ux-research.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007366798Z",
+  "valid_from": "2026-04-01T03:19:54.007366798Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/graph-document-ux-research.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 343,
+    "end_line": 357,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

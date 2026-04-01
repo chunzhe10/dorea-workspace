@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1c2609e10322",
+  "content": "ame\"], refined_frame,\n            )\n            subject[\"first_appearance_frame\"] = refined_frame\n            subject[\"pass2_refined\"] = True\n        else:\n            logger.info(\"  Pass 2: '%s' — subject not found in window\", label)\n\n    return subject\ndef main():\n    parser = argparse.ArgumentParser(\n        description=\"Run Claude scene analysis on keyframes\"\n    )\n    parser.add_argument(\"--date\", required=True, help=\"Dive date YYYY-MM-DD\")\n    parser.add_argument(\n        \"--dry-run\",\n        action=\"store_true\",\n        help=\"Show what would be sent without making API calls\",\n    )\n    parser.add_argument(\n        \"--skip-pass2\",\n        action=\"store_true\",\n        help=\"Skip Pass 2 refinement (keyframe-level precision only)\",\n    )\n    parser.add_argument(\n        \"--verbose\", \"-v\", action=\"store_true\", help=\"Enable debug logging\"\n    )\n    args = parser.parse_args()\n\n    configure_logging(verbose=args.verbose)\n\n    validate_date(args.date)\n\n    workspace_root = find_workspace_root()\n    logger.info(\"Workspace root: %s\", workspace_root)\n\n    config = load_config(workspace_root)\n\n    # Resolve paths (date-scoped)\n    paths = resolve_working_paths(workspace_root, config, args.date)\n    keyframes_root = paths[\"keyframes\"]\n    scene_analysis_dir = paths[\"scene_analysis\"]\n\n    # Check for keyframe directories\n    clip_dirs = discover_keyframe_dirs(keyframes_root)\n    if not clip_dirs:\n        logger.error(\n            \"No keyframe directories found under %s. \"\n            \"Run Phase 1 (01_extract_frames.py --date %s) first.\",\n            keyframes_root, args.date,\n        )\n        sys.exit(1)\n\n    logger.info(\"Found %d clip(s) with keyframes for date %s\", len(clip_dirs), args.date)\n\n    # Resolve config values\n    model = config.get(\"claude_model\", \"claude-sonnet-4-6\")\n    batch_size = config.get(\"claude_batch_size\", 12)",
+  "source_version": "scripts/02_claude_scene_analysis.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112198962Z",
+  "valid_from": "2026-04-01T03:19:15.112198962Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/02_claude_scene_analysis.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 638,
+    "end_line": 686,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

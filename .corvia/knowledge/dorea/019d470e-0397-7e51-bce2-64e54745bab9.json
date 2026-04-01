@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-64e54745bab9",
+  "content": "ding = Some(embedding);\n                store.insert(&new_entry).await?;\n            }\n            println!(\"    Created {} entries (supersedes previous)\", chunks.len());\n        }\n        return Ok(());\n    }\n\n    // Existing full ingest logic (unchanged)\n    if let Some(path) = path {\n        cmd_ingest_single(path).await\n    } else {\n        let root = std::env::current_dir()?;\n        workspace::ingest_workspace(&root, None, false).await\n    }\n}\n```\n\n- [ ] **Step 3: Update the match arm**\n\n```rust\nCommands::Ingest { path, incremental, files } =>\n    cmd_ingest(path.as_deref(), incremental, &files).await?,\n```\n\n- [ ] **Step 4: Build and verify CLI help**\n\nRun: `cd /workspaces/corvia-workspace/repos/corvia && cargo build -p corvia-cli`\nExpected: Compiles. `corvia ingest --help` shows `--incremental` and `--files` flags.\n\n- [ ] **Step 5: Write integration test for incremental ingest**\n\nAdd a test that verifies the chunking + store insertion path. Uses `LiteStore` + `MockEngine` (existing test patterns from `tests/integration/`):\n\n```rust\n#[tokio::test]\nasync fn test_incremental_ingest_creates_chunked_entries() {\n    use corvia_kernel::lite_store::LiteStore;\n    use corvia_kernel::chunking_pipeline::ChunkingPipeline;\n    use corvia_kernel::chunking_strategy::SourceMetadata;\n    use corvia_common::config::ChunkingConfig;\n    use corvia_common::types::KnowledgeEntry;\n\n    let dir = tempfile::tempdir().unwrap();\n    let store = LiteStore::open(dir.path(), 768).unwrap();\n    store.init_schema().await.unwrap();\n\n    // Create a test markdown file with two sections\n    let test_file = dir.path().join(\"test.md\");\n    std::fs::write(&test_file, \"# Section 1\\n\\nContent one.\\n\\n# Section 2\\n\\nContent two.\").unwrap();\n\n    // Chunk through the standard pipeline\n    let config = ChunkingConfig::default();",
+  "source_version": "plans/2026-03-13-docs-workflow-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007465133Z",
+  "valid_from": "2026-04-01T03:19:54.007465133Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-13-docs-workflow-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 2188,
+    "end_line": 2231,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

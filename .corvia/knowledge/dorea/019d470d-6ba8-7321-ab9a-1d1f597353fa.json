@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1d1f597353fa",
+  "content": "s_available():\n        vram_after = torch.cuda.memory_allocated(device) / (1024 ** 3)\n        logger.info(\n            \"VRAM after model load: %.2f GB (model uses ~%.2f GB)\",\n            vram_after, vram_after - vram_before,\n        )\n\n    return predictor\ndef unload_sam2_model(predictor, device: str) -> None:\n    \"\"\"Explicitly unload the SAM2 model and free GPU memory.\"\"\"\n    logger.info(\"Unloading SAM2 model\")\n    del predictor\n\n    if torch.cuda.is_available():\n        torch.cuda.empty_cache()\n        vram_after = torch.cuda.memory_allocated(device) / (1024 ** 3)\n        logger.info(\"VRAM after model unload: %.2f GB\", vram_after)",
+  "source_version": "scripts/03_run_sam2.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112210976Z",
+  "valid_from": "2026-04-01T03:19:15.112210976Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/03_run_sam2.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 411,
+    "end_line": 419,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

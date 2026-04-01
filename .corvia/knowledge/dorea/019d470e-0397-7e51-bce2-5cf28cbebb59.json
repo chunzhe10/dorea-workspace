@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-5cf28cbebb59",
+  "content": "# GPU Inference: Device & Backend Control\n\n## Decision\n\nOpenVINO for Intel iGPU embedding, CUDA for NVIDIA GPU, with runtime backend switching\nvia config. The `LoadModelRequest` gRPC message accepts `device` (auto/gpu/cpu) and\n`backend` (cuda/openvino/vulkan/cpu) fields. Responses report `actual_device` and\n`actual_backend`, implementing a fallback-with-signal pattern: if GPU is unavailable,\nthe model loads on CPU successfully but the caller sees the mismatch.\n\n\n## Context\n\nCPU-only inference is slow for embedding workloads. Users have diverse GPU hardware --\nIntel integrated GPUs (common in laptops and devcontainers via WSL) and NVIDIA discrete\nGPUs. The corvia-inference server needed a way to select the appropriate execution\nprovider at runtime without recompilation, while gracefully degrading when requested\nhardware is unavailable.\n",
+  "source_version": "decisions/gpu-inference.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007342421Z",
+  "valid_from": "2026-04-01T03:19:54.007342421Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/gpu-inference.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 7,
+    "end_line": 22,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

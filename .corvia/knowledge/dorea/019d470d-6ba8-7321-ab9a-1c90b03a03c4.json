@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1c90b03a03c4",
+  "content": "    logger.error(\"Missing 'clip_id' in %s\", json_path)\n        return None\n\n    if \"subjects\" not in data or not isinstance(data[\"subjects\"], list):\n        logger.error(\"Missing or invalid 'subjects' in %s\", json_path)\n        return None\n\n    return data\ndef find_source_video(\n    clip_id: str, raw_dir: Path, flat_dir: Path\n) -> Path | None:\n    \"\"\"Find the source video file for a given clip_id.\n\n    Searches raw_dir first (preserves D-Log M dynamic range), then flat_dir.\n    Returns the path or None if not found.\n    \"\"\"\n    for footage_dir in [raw_dir, flat_dir]:\n        if not footage_dir.is_dir():\n            continue\n        for entry in footage_dir.iterdir():\n            if entry.is_file() and entry.suffix in VIDEO_EXTENSIONS:\n                if entry.stem == clip_id:\n                    logger.debug(\n                        \"Source video for '%s': %s (raw preferred)\", clip_id, entry\n                    )\n                    return entry\n    return None",
+  "source_version": "scripts/03_run_sam2.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112204233Z",
+  "valid_from": "2026-04-01T03:19:15.112204233Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/03_run_sam2.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 181,
+    "end_line": 199,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

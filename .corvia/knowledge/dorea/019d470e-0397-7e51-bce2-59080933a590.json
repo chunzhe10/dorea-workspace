@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-59080933a590",
+  "content": "### Task 1: Create GitHub Actions release workflow\n\n        with:\n          path: |\n            ~/.cargo/registry\n            ~/.cargo/git\n            target\n          key: ${{ runner.os }}-cargo-release-${{ hashFiles('**/Cargo.lock') }}\n\n      - name: Build release binaries\n        run: cargo build --release -p corvia-cli -p corvia-inference\n\n      - name: Prepare release assets\n        run: |\n          cp target/release/corvia corvia-cli-linux-amd64\n          cp target/release/corvia-inference corvia-inference-linux-amd64\n          chmod +x corvia-cli-linux-amd64 corvia-inference-linux-amd64\n\n      - name: Create GitHub release\n        uses: softprops/action-gh-release@v2\n        with:\n          files: |\n            corvia-cli-linux-amd64\n            corvia-inference-linux-amd64\n          generate_release_notes: true\n```\n\nNote: The corvia-cli binary is named `corvia` in `target/release/` (the `[[bin]]` name in `crates/corvia-cli/Cargo.toml` is `corvia`). The corvia-inference binary is named `corvia-inference`.\n\n**Step 3: Verify the workflow YAML is valid**\n\nRun: `python3 -c \"import yaml; yaml.safe_load(open('repos/corvia/.github/workflows/release.yml')); print('Valid YAML')\"` (if pyyaml available) or just verify visually.\n\n**Step 4: Commit**\n\n```bash\ncd repos/corvia\ngit add .github/workflows/release.yml\ngit commit -m \"ci: add release workflow for prebuilt binaries (D71)\"\n```\n\n---\n",
+  "source_version": "decisions/2026-03-03-prebuilt-binaries.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007280160Z",
+  "valid_from": "2026-04-01T03:19:54.007280160Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-03-03-prebuilt-binaries.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 56,
+    "end_line": 96,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

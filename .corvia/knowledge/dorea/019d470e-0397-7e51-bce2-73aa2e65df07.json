@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-73aa2e65df07",
+  "content": "    # Build properly\n\n    if resp.enabled_services:\n        click.echo(f\"\\nEnabled: {', '.join(resp.enabled_services)}\")\n\n    if resp.logs:\n        click.echo(f\"\\nRecent logs:\")\n        for line in resp.logs[-10:]:\n            click.echo(f\"  {line}\")\n\n\n@main.command()\n@click.option(\"--no-foreground\", is_flag=True, help=\"Run in background\")\ndef up(no_foreground: bool) -> None:\n    \"\"\"Start and supervise all enabled services.\"\"\"\n    cfg = load_config(_config_path())\n    enabled = read_enabled_services(_flags_path())\n    services = resolve_startup_order(cfg.embedding_provider, cfg.storage, enabled)\n\n    config_summary = ConfigSummary(\n        embedding_provider=cfg.embedding_provider,\n        merge_provider=cfg.merge_provider,\n        storage=cfg.storage,\n        workspace=cfg.workspace_name,\n    )\n\n    mgr = ProcessManager(\n        services=services,\n        workspace_root=_workspace_root(),\n        config_summary=config_summary,\n        enabled_services=enabled,\n    )\n\n    if no_foreground:",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-cli.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007707781Z",
+  "valid_from": "2026-04-01T03:19:54.007707781Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-cli.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1428,
+    "end_line": 1459,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

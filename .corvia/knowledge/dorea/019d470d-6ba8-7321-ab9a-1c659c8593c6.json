@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1c659c8593c6",
+  "content": "def download_sam2_weights(model_key: str, target_path: Path) -> bool:\n    \"\"\"Download SAM2 model weights from Meta's servers.\n\n    Downloads to a .tmp file then atomically renames to prevent partial downloads.\n    Logs progress every 10%.\n\n    Returns True on success, False on failure.\n    \"\"\"\n    url = SAM2_DOWNLOAD_URLS.get(model_key)\n    if not url:\n        logger.error(\n            \"No download URL for model '%s'. Valid options: %s\",\n            model_key, \", \".join(SAM2_DOWNLOAD_URLS.keys()),\n        )\n        return False\n\n    target_path.parent.mkdir(parents=True, exist_ok=True)\n    tmp_path = target_path.with_suffix(\".pt.tmp\")\n\n    logger.info(\"Downloading SAM2 weights: %s\", url)\n    logger.info(\"Target: %s\", target_path)\n\n    try:\n        response = urllib.request.urlopen(url)\n        total_size = int(response.headers.get(\"Content-Length\", 0))\n        downloaded = 0\n        last_pct = -10\n        chunk_size = 1024 * 1024  # 1MB chunks\n\n        with open(tmp_path, \"wb\") as f:\n            while True:\n                chunk = response.read(chunk_size)\n                if not chunk:\n                    break\n                f.write(chunk)\n                downloaded += len(chunk)\n                if total_size > 0:\n                    pct = int(downloaded / total_size * 100)\n                    if pct >= last_pct + 10:\n                        logger.info(\n                            \"  Download progress: %d%% (%d / %d MB)\",\n                            pct, downloaded // (1024 * 1024),\n                            total_size // (1024 * 1024),\n                        )\n                        last_pct = pct\n\n        # Atomic rename\n        tmp_path.rename(target_path)\n        logger.info(\"Download complete: %s\", target_path)\n        return True\n\n    except Exception as e:\n        logger.error(\"Download failed: %s\", e)\n        if tmp_path.is_file():\n            tmp_path.unlink()\n        logger.error(\n            \"Manual download: %s -> %s\",\n            url, target_path,\n        )\n        return False",
+  "source_version": "scripts/03_run_sam2.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112201786Z",
+  "valid_from": "2026-04-01T03:19:15.112201786Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/03_run_sam2.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 77,
+    "end_line": 136,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

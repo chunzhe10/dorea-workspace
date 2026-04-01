@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-63b867f06b4d",
+  "content": "### Task 3.1: Add new `CheckType` variants to Reasoner\n\n    // Docs workflow checks\n    /// Doc file in wrong directory for its content_role.\n    MisplacedDoc,\n    /// Two entries with conflicting claims at overlapping valid time ranges from different origins.\n    TemporalContradiction,\n    /// Topic cluster has only memory-role entries, no formal design doc.\n    CoverageGap,\n}\n```\n\nUpdate `as_str()`:\n\n```rust\nCheckType::MisplacedDoc => \"misplaced_doc\",\nCheckType::TemporalContradiction => \"temporal_contradiction\",\nCheckType::CoverageGap => \"coverage_gap\",\n```\n\nUpdate `from_str()`:\n\n```rust\n\"misplaced\" | \"misplaced_doc\" => Ok(CheckType::MisplacedDoc),\n\"temporal\" | \"temporal_contradiction\" => Ok(CheckType::TemporalContradiction),\n\"coverage\" | \"coverage_gap\" => Ok(CheckType::CoverageGap),\n```\n\nUpdate the error message to include the new types.\n\n- [ ] **Step 4: Run tests to verify they pass**\n\nRun: `cd /workspaces/corvia-workspace/repos/corvia && cargo test -p corvia-kernel test_new_check_types -- --nocapture`\nExpected: PASS\n\n- [ ] **Step 5: Commit**\n\n```bash\ncd /workspaces/corvia-workspace/repos/corvia\ngit add crates/corvia-kernel/src/reasoner.rs\ngit commit -m \"feat(reasoner): add MisplacedDoc, TemporalContradiction, CoverageGap check types\"\n```\n\n---\n",
+  "source_version": "plans/2026-03-13-docs-workflow-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007445261Z",
+  "valid_from": "2026-04-01T03:19:54.007445261Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-13-docs-workflow-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1508,
+    "end_line": 1550,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

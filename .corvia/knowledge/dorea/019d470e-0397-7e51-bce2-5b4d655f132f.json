@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-5b4d655f132f",
+  "content": "# D01: Project Identity -- Corvia\n\n## Decision\n\nNamed the project \"Corvia\" (derived from Corvus, the raven constellation), positioned\nas a knowledge-gathering system for AI agents, and licensed under AGPL-3.0. The name\nreferences Odin's ravens Huginn and Muninn who gathered knowledge daily -- mapping\ndirectly to the concept of agents collecting and returning organizational knowledge.\nThe all-Rust tech stack was chosen for performance (4,700 QPS MCP servers vs Python's\n~300 QPS) and portfolio differentiation over the LangChain/LangGraph ecosystem.\n\n\n## Context\n\nThe project needed a distinctive name and positioning for a knowledge layer that goes\nbeyond individual agent memory. Alternatives considered included Lyra (harmony metaphor,\ntoo generic), Corvus (too dark/Gothic), and Munin (strong mythology but harder to\nspell internationally). The broader identity decisions -- AGPL-3.0 licensing, all-Rust\nimplementation, and CLI-first form factor -- were shaped by the goal of building a\ngenuinely useful open-source tool with commercial optionality, rather than a portfolio\nshowcase alone.\n",
+  "source_version": "decisions/d01-project-identity.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007314649Z",
+  "valid_from": "2026-04-01T03:19:54.007314649Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/d01-project-identity.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 7,
+    "end_line": 25,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

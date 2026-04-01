@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-5e4bcb40d7b7",
+  "content": "### Large Graph Handling\n### What Works Well\n\n### Common Complaints\n\n- Graph view is considered decorative, not functional\n- Clicking a node loses your graph position (no back navigation)\n- Cannot open pages in sidebar from graph view\n- No meaningful way to filter or focus the graph\n- Users describe a \"conceptual gap\" between how Logseq is supposed to be used and what\n  the graph actually provides\n\n\n### Lessons\n\nLogseq demonstrates the failure mode of \"graph view as afterthought.\" When graph navigation\ndestroys the graph context (by replacing the view), users abandon it entirely. The graph\nMUST coexist with the document reader.\n\n---\n",
+  "source_version": "decisions/graph-document-ux-research.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007361100Z",
+  "valid_from": "2026-04-01T03:19:54.007361100Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/graph-document-ux-research.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 228,
+    "end_line": 244,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

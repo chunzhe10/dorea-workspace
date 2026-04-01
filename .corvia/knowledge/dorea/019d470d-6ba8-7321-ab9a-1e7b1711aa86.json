@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1e7b1711aa86",
+  "content": "   \"CreateTimelineFromClips returned None for '%s'. \"\n            \"Clips may already be on a timeline or be incompatible.\",\n            timeline_name,\n        )\n        return None\n\n    logger.info(\"Created timeline: %s\", timeline_name)\n    return timeline\ndef apply_drx_template(timeline_item, drx_path: str) -> bool:\n    \"\"\"Apply a DRX grade template to a timeline item.\n\n    The DRX file deploys the 8-node grade structure.\n    Returns True on success, False on failure.\n    \"\"\"\n    try:\n        result = timeline_item.ApplyGradeFromDRX(drx_path, 0)\n        if result:\n            logger.debug(\"  Applied DRX template\")\n            return True\n        else:\n            logger.warning(\"  ApplyGradeFromDRX returned False\")\n            return False\n    except Exception as e:\n        logger.warning(\"  Failed to apply DRX template: %s\", e)\n        return False",
+  "source_version": "scripts/05_resolve_setup.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112229271Z",
+  "valid_from": "2026-04-01T03:19:15.112229271Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/05_resolve_setup.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 435,
+    "end_line": 451,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-71ad9f7383cd",
+  "content": " tools/corvia-dev/tests/test_models.py -v`\nExpected: All 5 tests PASS\n\n**Step 5: Commit**\n\n```bash\ngit add tools/corvia-dev/corvia_dev/models.py tools/corvia-dev/tests/\ngit commit -m \"feat(corvia-dev): add Pydantic models for services and status\"\n```\n\n---\n\n### Task 3: Service Registry\n\n**Files:**\n- Create: `tools/corvia-dev/corvia_dev/services.py`\n- Create: `tools/corvia-dev/tests/test_services.py`\n\n**Step 1: Write the failing test**\n\n```python\n\"\"\"Tests for service registry and dependency resolution.\"\"\"\n\nfrom corvia_dev.services import SERVICES, get_service, resolve_startup_order\n\n\ndef test_registry_has_core_services() -> None:\n    names = [s.name for s in SERVICES]\n    assert \"corvia-inference\" in names\n    assert \"corvia-server\" in names\n\n\ndef test_registry_tiers() -> None:\n    for svc in SERVICES:\n        if svc.name in (\"corvia-inference\", \"corvia-server\"):\n            assert svc.tier == 0, f\"{svc.name} should be tier 0\"\n        elif svc.name in (\"ollama\", \"vllm\", \"surrealdb\", \"postgres\"):\n            assert svc.tier == 1, f\"{svc.name} should be tier 1\"\n        elif svc.name == \"coding-llm\":\n            assert svc.tier == 2, f\"{svc.name} should be tier 2\"\n\n\ndef test_get_service_found() -> None:\n    svc = get_service(\"corvia-server\")\n    assert svc is not None\n    assert svc.port == 8020\n\n\ndef test_get_service_not_found() -> None:\n    svc = get_service(\"nonexistent\")\n    assert svc is None\n\n\ndef test_resolve_startup_order_default() -> None:\n    \"\"\"Default config: corvia-inference → corvia-server, no extras.\"\"\"\n    order = resolve_startup_order(\n        embedding_provider=\"corvia\",\n        storage=\"lite\",\n        enabled_services=[],\n    )\n    names = [s.name for s in order]\n    assert names == [\"corvia-inference\", \"corvia-server\"]\n\n\ndef test_resolve_startup_order_ollama() -> None:\n    \"\"\"Ollama as provider: ollama → corvia-server.\"\"\"\n    order = resolve_startup_order(\n        embedding_provider=\"ollama\",\n        storage=\"lite\",\n        enabled_services=[],\n    )\n    names = [s.name for s in order]\n    assert names == [\"ollama\", \"corvia-server\"]",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-cli.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007675031Z",
+  "valid_from": "2026-04-01T03:19:54.007675031Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-cli.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 281,
+    "end_line": 341,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

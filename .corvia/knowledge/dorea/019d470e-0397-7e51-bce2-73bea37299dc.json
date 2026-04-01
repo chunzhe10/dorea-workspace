@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-73bea37299dc",
+  "content": "e=cfg.storage,\n        workspace=cfg.workspace_name,\n    )\n\n    mgr = ProcessManager(\n        services=services,\n        workspace_root=_workspace_root(),\n        config_summary=config_summary,\n        enabled_services=enabled,\n    )\n\n    if no_foreground:\n        # Fork to background\n        pid = os.fork()\n        if pid > 0:\n            click.echo(f\"corvia-dev manager started (pid {pid})\")\n            return",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-cli.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007708762Z",
+  "valid_from": "2026-04-01T03:19:54.007708762Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-cli.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1460,
+    "end_line": 1464,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

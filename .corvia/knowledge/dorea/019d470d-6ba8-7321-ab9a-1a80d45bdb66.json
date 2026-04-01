@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1a80d45bdb66",
+  "content": "def load_depth_model(\n    weights_path: Path, device: str, model_name: str = DEFAULT_MODEL\n) -> tuple:\n    \"\"\"Load the Depth Anything V2 model and image processor.\n\n    If weights_path is a local directory containing model files, load from there.\n    Otherwise fall back to HuggingFace model ID for download.\n\n    Returns (processor, model) tuple.\n    \"\"\"\n    from transformers import AutoImageProcessor, AutoModelForDepthEstimation\n\n    hf_model_id = DEPTH_MODEL_MAP.get(model_name)\n    if not hf_model_id:\n        logger.error(\n            \"Unknown depth model '%s'. Supported: %s\",\n            model_name, \", \".join(DEPTH_MODEL_MAP.keys()),\n        )\n        sys.exit(1)\n\n    # Determine model source: local directory or HuggingFace ID\n    if weights_path.is_dir() and (weights_path / \"config.json\").is_file():\n        model_source = str(weights_path)\n        logger.info(\"Loading depth model from local weights: %s\", weights_path)\n    else:\n        model_source = hf_model_id\n        logger.info(\n            \"Local weights not found at %s; loading from HuggingFace: %s\",\n            weights_path, hf_model_id,\n        )\n\n    try:\n        processor = AutoImageProcessor.from_pretrained(model_source)\n        model = AutoModelForDepthEstimation.from_pretrained(model_source)\n        model.to(device)\n        model.eval()\n    except Exception as e:\n        logger.error(\"Failed to load depth model from %s: %s\", model_source, e)\n        sys.exit(1)\n\n    # Log VRAM usage after loading\n    if device.startswith(\"cuda\"):\n        allocated_mb = torch.cuda.memory_allocated() / (1024 * 1024)\n        reserved_mb = torch.cuda.memory_reserved() / (1024 * 1024)\n        logger.info(\n            \"Depth model loaded on %s | VRAM: %.0f MB allocated, %.0f MB reserved\",\n            device, allocated_mb, reserved_mb,\n        )\n\n    return processor, model",
+  "source_version": "scripts/04_run_depth.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112176211Z",
+  "valid_from": "2026-04-01T03:19:15.112176211Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/04_run_depth.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 65,
+    "end_line": 114,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

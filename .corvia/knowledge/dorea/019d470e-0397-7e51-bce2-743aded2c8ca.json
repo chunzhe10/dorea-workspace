@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-743aded2c8ca",
+  "content": "# Start corvia-dev manager (replaces corvia-supervisor.sh)\n\n### Task 9: Rewrite VS Code Extension (Thin Skin)\n\n**Files:**\n- Modify: `.devcontainer/extensions/corvia-services/extension.js`\n- Modify: `.devcontainer/extensions/corvia-services/package.json`\n\n**Step 1: Rewrite extension.js**\n\nReplace the entire 818-line extension with a thin ~200-line version that consumes `corvia-dev status --json`:\n\n```javascript\nconst vscode = require(\"vscode\");\nconst { exec } = require(\"child_process\");\n\nlet statusBarItem;\nlet panel;\nlet pollTimer;\n\nconst POLL_INTERVAL = 10000;\n\nfunction activate(context) {\n    statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 50);\n    statusBarItem.command = \"corvia.openDashboard\";\n    statusBarItem.text = \"$(loading~spin) Corvia\";\n    statusBarItem.show();\n    context.subscriptions.push(statusBarItem);\n\n    context.subscriptions.push(\n        vscode.commands.registerCommand(\"corvia.openDashboard\", () => openDashboard(context))\n    );\n\n    refresh();\n    pollTimer = setInterval(refresh, POLL_INTERVAL);\n    context.subscriptions.push({ dispose: () => clearInterval(pollTimer) });\n}\n\nfunction run(cmd) {\n    return new Promise((resolve) => {\n        exec(cmd, { timeout: 8000 }, (err, stdout) => {\n            resolve(err ? null : stdout);\n        });\n    });\n}\n\nasync function refresh() {\n    const raw = await run(\"corvia-dev status --json\");\n    if (!raw) {\n        statusBarItem.text = \"$(error) Corvia\";\n        statusBarItem.backgroundColor = new vscode.ThemeColor(\"statusBarItem.errorBackground\");\n        statusBarItem.tooltip = \"corvia-dev not responding\";\n        if (panel) panel.webview.postMessage({ type: \"status\", data: null });\n        return;\n    }\n",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-cli.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007717209Z",
+  "valid_from": "2026-04-01T03:19:54.007717209Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-cli.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1690,
+    "end_line": 1743,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1f2f7b269874",
+  "content": "ate)\n\n    workspace_root = find_workspace_root()\n    logger.info(\"Workspace root: %s\", workspace_root)\n\n    config = load_config(workspace_root)\n\n    # Resolve paths from config (date-scoped)\n    raw_dir = workspace_root / config[\"footage_raw\"] / args.date\n    flat_dir = workspace_root / config[\"footage_flat\"] / args.date\n    paths = resolve_working_paths(workspace_root, config, args.date)\n    masks_base = paths[\"masks\"]\n    depth_base = paths[\"depth\"]\n    scene_analysis_dir = paths[\"scene_analysis\"]\n\n    # Resolve template and LUT paths\n    lut_rel = config.get(\"resolve_lut_path\", \"repos/dorea/luts/underwater_base.cube\")\n    drx_rel = config.get(\"resolve_drx_path\", \"repos/dorea/templates/underwater_grade_v1.drx\")\n    lut_path = workspace_root / lut_rel\n    drx_path = workspace_root / drx_rel\n\n    project_name = config.get(\"resolve_project_name\", \"Dive_2026\")\n\n    # Validate paths\n    logger.info(\"Date: %s\", args.date)\n    logger.info(\"Project name: %s\", project_name)\n    logger.debug(\"Raw footage dir:  %s (exists: %s)\", raw_dir, raw_dir.is_dir())\n    logger.debug(\"Flat footage dir: %s (exists: %s)\", flat_dir, flat_dir.is_dir())\n    logger.debug(\"Masks dir:        %s (exists: %s)\", masks_base, masks_base.is_dir())\n    logger.debug(\"Depth dir:        %s (exists: %s)\", depth_base, depth_base.is_dir())\n    logger.debug(\"LUT path:         %s (exists: %s)\", lut_path, lut_path.is_file())\n    logger.debug(\"DRX path:         %s (exists: %s)\", drx_path, drx_path.is_file())\n\n    # Check LUT and DRX availability (warn, don't exit)\n    lut_path_str = str(lut_path) if lut_path.is_file() else None",
+  "source_version": "scripts/05_resolve_setup.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112238485Z",
+  "valid_from": "2026-04-01T03:19:15.112238485Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/05_resolve_setup.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 768,
+    "end_line": 793,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

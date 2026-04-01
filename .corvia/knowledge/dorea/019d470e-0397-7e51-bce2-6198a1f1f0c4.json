@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-6198a1f1f0c4",
+  "content": "### Task 1.1: Extend `EntryMetadata` with new fields\n\nRun: `cd /workspaces/corvia-workspace/repos/corvia && cargo test -p corvia-common test_entry_metadata_new_fields -- --nocapture`\nExpected: FAIL — `content_role` and `source_origin` fields don't exist on `EntryMetadata`\n\n- [ ] **Step 3: Add fields to `EntryMetadata`**\n\nIn `types.rs`, add to the `EntryMetadata` struct after `end_line`:\n\n```rust\n#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]\npub struct EntryMetadata {\n    pub source_file: Option<String>,\n    pub language: Option<String>,\n    pub chunk_type: Option<String>,\n    pub start_line: Option<u32>,\n    pub end_line: Option<u32>,\n    #[serde(default)]\n    pub content_role: Option<String>,\n    #[serde(default)]\n    pub source_origin: Option<String>,\n}\n```\n\n- [ ] **Step 4: Run test to verify it passes**\n\nRun: `cd /workspaces/corvia-workspace/repos/corvia && cargo test -p corvia-common test_entry_metadata_new_fields -- --nocapture`\nExpected: PASS\n\n- [ ] **Step 5: Run full corvia-common tests to verify no regressions**\n\nRun: `cd /workspaces/corvia-workspace/repos/corvia && cargo test -p corvia-common`\nExpected: All tests pass. Existing serialization tests still work because `#[serde(default)]` makes new fields optional.\n\n- [ ] **Step 6: Commit**\n\n```bash\ncd /workspaces/corvia-workspace/repos/corvia\ngit add crates/corvia-common/src/types.rs\ngit commit -m \"feat(common): add content_role and source_origin to EntryMetadata\"\n```\n\n---\n",
+  "source_version": "plans/2026-03-13-docs-workflow-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007409766Z",
+  "valid_from": "2026-04-01T03:19:54.007409766Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-13-docs-workflow-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 107,
+    "end_line": 148,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-754f9fd0c903",
+  "content": "# corvia-dev rebuild Implementation Plan\n\n### Task 1: Create `rebuild.py` — staleness check\n\n**Files:**\n- Create: `tools/corvia-dev/corvia_dev/rebuild.py`\n- Test: `tools/corvia-dev/tests/test_rebuild.py`\n\n**Step 1: Write the failing test**\n\nCreate `tools/corvia-dev/tests/test_rebuild.py`:\n\n```python\n\"\"\"Tests for rebuild module.\"\"\"\n\nfrom __future__ import annotations\n\nimport os\nfrom pathlib import Path\n\nfrom corvia_dev.rebuild import check_staleness\n\n\ndef test_no_target_binary_not_stale(tmp_path: Path) -> None:\n    \"\"\"No target binary means nothing was built — not stale.\"\"\"\n    installed = tmp_path / \"installed\" / \"corvia\"\n    installed.parent.mkdir()\n    installed.write_text(\"old\")\n\n    result = check_staleness(\n        workspace_root=tmp_path,\n        target_dir=tmp_path / \"target\" / \"debug\",\n        install_dir=installed.parent,\n    )\n    assert result == []\n\n\ndef test_target_newer_than_installed_is_stale(tmp_path: Path) -> None:\n    \"\"\"Target binary newer than installed → stale.\"\"\"\n    install_dir = tmp_path / \"installed\"\n    install_dir.mkdir()\n    target_dir = tmp_path / \"target\" / \"debug\"\n    target_dir.mkdir(parents=True)\n\n    for name in (\"corvia\", \"corvia-inference\"):\n        installed = install_dir / name\n        installed.write_text(\"old\")\n        os.utime(installed, (1000, 1000))\n\n        target = target_dir / name\n        target.write_text(\"new\")\n        os.utime(target, (2000, 2000))\n\n    result = check_staleness(\n        workspace_root=tmp_path,\n        target_dir=target_dir,\n        install_dir=install_dir,\n    )\n    assert sorted(result) == [\"corvia\", \"corvia-inference\"]\n\n\ndef test_installed_newer_than_target_not_stale(tmp_path: Path) -> None:\n    \"\"\"Installed binary newer than target → not stale.\"\"\"\n    install_dir = tmp_path / \"installed\"\n    install_dir.mkdir()\n    target_dir = tmp_path / \"target\" / \"debug\"\n    target_dir.mkdir(parents=True)\n\n    for name in (\"corvia\", \"corvia-inference\"):\n        target = target_dir / name\n        target.write_text(\"old\")\n        os.utime(target, (1000, 1000))",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-rebuild.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007734222Z",
+  "valid_from": "2026-04-01T03:19:54.007734222Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-rebuild.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 13,
+    "end_line": 82,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

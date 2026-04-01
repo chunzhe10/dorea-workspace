@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1ed8a85cf304",
+  "content": "\n\n    Returns the path as a string, or None if no frames found.\n    \"\"\"\n    png_files = sorted(\n        f for f in sequence_dir.iterdir()\n        if f.is_file() and f.suffix == \".png\"\n    )\n    if png_files:\n        return str(png_files[0])\n    return None\ndef process_timeline_item(\n    timeline_item,\n    media_pool,\n    clip_id: str,\n    drx_path: str | None,\n    lut_path: str | None,\n    masks_base: Path,\n    depth_base: Path,\n    scene_analysis_dir: Path,\n) -> dict:\n    \"\"\"Process a single timeline item: apply DRX, LUT, and attach mattes.\n\n    Returns a summary dict with counts of applied elements.\n    \"\"\"\n    result = {\n        \"drx_applied\": False,\n        \"lut_set\": False,\n        \"depth_attached\": False,\n        \"mattes_attached\": 0,\n        \"mattes_failed\": 0,\n        \"warnings\": [],\n    }\n\n    # Step 1: Apply DRX template (deploys 8-node structure)\n    if drx_path:\n        result[\"drx_applied\"] = apply_drx_template(timeline_item, drx_path)\n        if not result[\"drx_applied\"]:\n            result[\"warnings\"].append(\"DRX template not applied\")\n    else:\n        result[\"warnings\"].append(\"DRX template file not found, skipped\")\n\n    # Step 2: Set LUT on Node 1 (Base LUT)\n    if lut_path:\n        result[\"lut_set\"] = set_node_lut(timeline_item, NODE_BASE_LUT, lut_path)\n        if not result[\"lut_set\"]:\n            result[\"warnings\"].append(\"LUT not set on Node 1\")\n    else:\n        result[\"warnings\"].append(\"LUT file not found, skipped\")\n\n    # Step 3: Find and attach depth sequence to Node 3\n    depth_dir = find_depth_sequence_dir(depth_base, clip_id)\n    if depth_dir:\n        depth_matte_path = get_first_frame_path(depth_dir)\n        if depth_matte_path:\n            # Import depth sequence to media pool\n            depth_item = import_image_sequence(media_pool, depth_dir)\n            if depth_item:\n                logger.debug(\"  Imported depth sequence for %s\", clip_id)\n\n            result[\"depth_attached\"] = attach_external_matte(\n                timeline_item, NODE_DEPTH_GRADE, depth_matte_path",
+  "source_version": "scripts/05_resolve_setup.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112234578Z",
+  "valid_from": "2026-04-01T03:19:15.112234578Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/05_resolve_setup.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 570,
+    "end_line": 620,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

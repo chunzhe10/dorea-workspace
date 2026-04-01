@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1a71b7b97f12",
+  "content": "rning(\n                    \"Legacy (non-date-scoped) data found: %s. \"\n                    \"Consider moving to %s/%s/%s/\",\n                    entry, subdir_name, date, entry.name,\n                )\n                break  # One warning per subdir is enough\ndef get_progress_bar(iterable, total=None, desc=None, **kwargs):\n    \"\"\"Return a tqdm progress bar if stderr is a TTY, otherwise the plain iterable.\n\n    This keeps log-based progress as fallback for batch/headless runs.\n    \"\"\"\n    try:\n        import tqdm\n        if sys.stderr.isatty():\n            return tqdm.tqdm(iterable, total=total, desc=desc, file=sys.stderr, **kwargs)\n    except ImportError:\n        pass\n    return iterable",
+  "source_version": "scripts/pipeline_utils.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112175351Z",
+  "valid_from": "2026-04-01T03:19:15.112175351Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/pipeline_utils.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 193,
+    "end_line": 204,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

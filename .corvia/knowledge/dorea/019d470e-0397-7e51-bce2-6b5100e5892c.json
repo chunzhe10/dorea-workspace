@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-6b5100e5892c",
+  "content": "# Activate dorea Python venv for all shells\n\n### Task 18: Commit devcontainer changes\n\n- [ ] **Step 1: Stage and commit**\n\n```bash\ncd /home/chunzhe/corvia-project/dorea-workspace\ngit add .devcontainer/\ngit commit -m \"feat: adapt devcontainer for dorea workspace\n\n- Dockerfile: add dorea Python venv, PyTorch+CUDA, SAM2, ffmpeg\n- devcontainer.json: Dorea Workspace, port offset +100, Python extension\n- docker-compose.yml: dorea-workspace mount, pip cache, host.docker.internal\n- post-start.sh: add davinci-resolve-mcp to MCP list, dorea venv activation\n- Review lib.sh and init-host.sh for corvia-specific references\"\n```\n\n---\n",
+  "source_version": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007569246Z",
+  "valid_from": "2026-04-01T03:19:54.007569246Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1045,
+    "end_line": 1062,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

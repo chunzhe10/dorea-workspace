@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-5817d9b633ed",
+  "content": "    # Show current config\n\n# --- Main ---\n\ncase \"${1:-}\" in\n    enable)\n        case \"${2:-}\" in\n            ollama)    enable_ollama ;;\n            surrealdb) enable_surrealdb ;;\n            *)         echo \"Usage: corvia-workspace enable {ollama|surrealdb}\"; exit 1 ;;\n        esac\n        ;;\n    disable)\n        case \"${2:-}\" in\n            ollama)    disable_ollama ;;\n            surrealdb) disable_surrealdb ;;\n            *)         echo \"Usage: corvia-workspace disable {ollama|surrealdb}\"; exit 1 ;;\n        esac\n        ;;\n    status)\n        show_status\n        ;;\n    *)\n        echo \"corvia-workspace — toggle optional devcontainer services\"\n        echo \"\"\n        echo \"Usage:\"\n        echo \"  corvia-workspace enable {ollama|surrealdb}\"\n        echo \"  corvia-workspace disable {ollama|surrealdb}\"\n        echo \"  corvia-workspace status\"\n        exit 1\n        ;;\nesac\n```\n\n**Step 2: Make it executable**\n\nRun: `chmod +x .devcontainer/scripts/corvia-workspace.sh`\n\n**Step 3: Verify syntax**\n\nRun: `bash -n /root/corvia-project/corvia-workspace/.devcontainer/scripts/corvia-workspace.sh`\nExpected: No output (no syntax errors).\n\n**Step 4: Test the help output**\n\nRun: `bash /root/corvia-project/corvia-workspace/.devcontainer/scripts/corvia-workspace.sh`\nExpected:\n```\ncorvia-workspace — toggle optional devcontainer services\n\nUsage:\n  corvia-workspace enable {ollama|surrealdb}\n  corvia-workspace disable {ollama|surrealdb}\n  corvia-workspace status\n```\n\n**Step 5: Test the status command**\n\nRun: `bash /root/corvia-project/corvia-workspace/.devcontainer/scripts/corvia-workspace.sh status`\nExpected: Shows all services with enabled=disabled, running=no, and current config.\n\n**Step 6: Commit**\n\n```bash\ngit add .devcontainer/scripts/corvia-workspace.sh\ngit commit -m \"feat: add corvia-workspace toggle for optional services (D70)\"\n```\n\n---\n",
+  "source_version": "decisions/2026-03-03-optional-devcontainer-services.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007267047Z",
+  "valid_from": "2026-04-01T03:19:54.007267047Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-03-03-optional-devcontainer-services.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 382,
+    "end_line": 449,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

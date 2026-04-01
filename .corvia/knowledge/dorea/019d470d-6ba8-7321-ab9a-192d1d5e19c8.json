@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-192d1d5e19c8",
+  "content": "def compute_luminance(linear_rgb: np.ndarray) -> np.ndarray:\n    \"\"\"Compute relative luminance from linear RGB using Rec. 709 coefficients.\"\"\"\n    return 0.2126 * linear_rgb[..., 0] + 0.7152 * linear_rgb[..., 1] + 0.0722 * linear_rgb[..., 2]\ndef analyse_images(image_paths: list[Path]) -> dict:\n    \"\"\"Analyse colour characteristics across all reference images.\n\n    Computes per-channel statistics in shadow, midtone, and highlight zones,\n    plus overall hue and saturation characteristics.\n\n    Returns:\n        Dictionary with keys:\n            - shadows_mean_rgb: mean (R, G, B) in linear light for shadow zone\n            - midtones_mean_rgb: mean (R, G, B) for midtone zone\n            - highlights_mean_rgb: mean (R, G, B) for highlight zone\n            - overall_mean_rgb: mean (R, G, B) across all pixels\n            - saturation_mean: mean saturation (0-1) across all pixels\n            - hue_histogram: 36-bin hue distribution (each bin = 10 degrees)\n    \"\"\"\n    # Running-sum accumulators for zone statistics (memory-efficient)\n    shadow_sum = np.zeros(3, dtype=np.float64)\n    shadow_n = 0\n    midtone_sum = np.zeros(3, dtype=np.float64)\n    midtone_n = 0\n    highlight_sum = np.zeros(3, dtype=np.float64)\n    highlight_n = 0\n    overall_sum = np.zeros(3, dtype=np.float64)\n    overall_n = 0\n\n    # Hue and saturation accumulators\n    hue_bins = np.zeros(36, dtype=np.float64)\n    saturation_sum = 0.0\n    saturation_count = 0\n\n    for path in image_paths:\n        logger.debug(\"  Loading: %s\", path.name)\n        linear = load_image_linear(path)\n\n        # Reshape to (N, 3)\n        pixels = linear.reshape(-1, 3)\n        overall_sum += pixels.sum(axis=0)\n        overall_n += len(pixels)\n\n        # Compute luminance for zone classification\n        lum = compute_luminance(linear).ravel()\n\n        # Classify pixels into zones and accumulate running sums\n        shadow_mask = lum < SHADOW_UPPER",
+  "source_version": "scripts/00_generate_lut.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112156704Z",
+  "valid_from": "2026-04-01T03:19:15.112156704Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/00_generate_lut.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 171,
+    "end_line": 214,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

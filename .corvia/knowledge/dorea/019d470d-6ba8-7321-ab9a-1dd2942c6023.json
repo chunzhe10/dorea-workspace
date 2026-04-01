@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1dd2942c6023",
+  "content": "   if not footage_dir.is_dir():\n            continue\n        for entry in sorted(footage_dir.iterdir()):\n            if entry.is_file() and entry.suffix in VIDEO_EXTENSIONS:\n                clips.append(entry)\n    return sorted(clips, key=lambda p: p.name)\ndef load_scene_analysis(scene_analysis_dir: Path, clip_id: str) -> list[dict]:\n    \"\"\"Load scene analysis subjects for a clip.\n\n    Returns the list of subject dicts, or empty list if not found.\n    \"\"\"\n    json_path = scene_analysis_dir / f\"{clip_id}.json\"\n    if not json_path.is_file():\n        logger.debug(\"No scene analysis file for clip %s at %s\", clip_id, json_path)\n        return []\n\n    try:\n        with open(json_path, \"r\") as f:\n            data = json.load(f)\n    except (json.JSONDecodeError, OSError) as e:\n        logger.warning(\"Failed to load scene analysis for %s: %s\", clip_id, e)\n        return []\n\n    if not isinstance(data, dict) or \"subjects\" not in data:\n        logger.warning(\"Invalid scene analysis format for %s\", clip_id)\n        return []\n\n    return data[\"subjects\"]",
+  "source_version": "scripts/05_resolve_setup.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112221043Z",
+  "valid_from": "2026-04-01T03:19:15.112221043Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/05_resolve_setup.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 101,
+    "end_line": 122,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

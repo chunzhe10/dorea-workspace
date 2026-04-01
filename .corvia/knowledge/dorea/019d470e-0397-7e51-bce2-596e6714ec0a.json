@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-596e6714ec0a",
+  "content": "# --- Rebuild ---\n\n### Task 4: Verify the binary name in corvia-cli\n\n**Files:**\n- Read only: `repos/corvia/crates/corvia-cli/Cargo.toml`\n\n**Step 1: Confirm the binary output name**\n\nRun: `grep -A2 '^\\[\\[bin\\]\\]' repos/corvia/crates/corvia-cli/Cargo.toml`\n\nExpected: The binary name is `corvia` (not `corvia-cli`). This confirms the release workflow correctly copies `target/release/corvia` (not `target/release/corvia-cli`) to `corvia-cli-linux-amd64`.\n\nIf the binary name is different, update the `release.yml` `Prepare release assets` step accordingly.\n\n**Step 2: Confirm corvia-inference binary name**\n\nRun: `grep -A2 '^\\[\\[bin\\]\\]' repos/corvia/crates/corvia-inference/Cargo.toml`\n\nExpected: The binary name is `corvia-inference`.\n\nNo commit needed — this is a verification step.\n\n---\n\n\n### Task 5: Smoke test\n\n**Step 1: Verify all script syntax**\n\nRun: `bash -n .devcontainer/scripts/post-create.sh && echo \"post-create: OK\" && bash -n .devcontainer/scripts/corvia-workspace.sh && echo \"corvia-workspace: OK\"`\nExpected: Both OK.\n\n**Step 2: Test corvia-workspace help shows rebuild**\n\nRun: `bash .devcontainer/scripts/corvia-workspace.sh 2>&1 || true`\nExpected: Usage output includes `corvia-workspace rebuild`.\n\n**Step 3: Test download path (will fail gracefully since no release exists yet)**\n\nRun: `curl -fsSL -o /dev/null \"https://github.com/chunzhe10/corvia/releases/latest/download/corvia-cli-linux-amd64\" 2>&1; echo \"exit: $?\"`\nExpected: Non-zero exit (no release yet). This confirms the fallback path would activate.\n\n**Step 4: Verify workflow YAML exists**\n\nRun: `cat repos/corvia/.github/workflows/release.yml | head -5`\nExpected: Shows the workflow name and trigger.\n\n**Step 5: Commit if needed, push**\n\n```bash\ngit add -A\ngit status  # verify only expected files\ngit push\n```\n\nAlso push the corvia repo workflow:\n\n```bash\ncd repos/corvia\ngit push\n```",
+  "source_version": "decisions/2026-03-03-prebuilt-binaries.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007284821Z",
+  "valid_from": "2026-04-01T03:19:54.007284821Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-03-03-prebuilt-binaries.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 244,
+    "end_line": 302,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

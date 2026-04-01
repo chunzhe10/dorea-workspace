@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1eadcf579f06",
+  "content": "one\n\n    # Extract the single imported item\n    if isinstance(result, list) and len(result) > 0:\n        return result[0]\n    if isinstance(result, dict):\n        values = list(result.values())\n        return values[0] if values else None\n    return result\ndef attach_external_matte(timeline_item, node_index: int, matte_path: str) -> bool:\n    \"\"\"Attach an external matte (image sequence) to a specific node.\n\n    Uses the Resolve API to set the external matte on the given node.\n    The matte_path should point to the first frame or directory of the sequence.\n\n    Returns True on success, False on failure.\n    \"\"\"\n    # The Resolve API provides multiple approaches for attaching mattes.\n    # The most reliable approach is via SetNodeCacheMode or using the\n    # Fusion page. We use the Color page's external matte functionality.\n    #\n    # Method: Use the timeline item's SetNodeExternalMatte API if available,\n    # otherwise fall back to property-based approaches.\n    try:\n        # Primary approach: Use the node-level external matte API\n        # SetNodeEnabled and similar APIs are node-index-based (1-based)\n        result = timeline_item.SetNodeExternalMatte(node_index, matte_path)\n        if result:\n            logger.debug(\n                \"  Attached external matte to Node %d (%s)\",\n                node_index, NODE_NAMES.get(node_index, \"?\"),\n            )\n            return True\n    except AttributeError:",
+  "source_version": "scripts/05_resolve_setup.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112231280Z",
+  "valid_from": "2026-04-01T03:19:15.112231280Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/05_resolve_setup.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 504,
+    "end_line": 528,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

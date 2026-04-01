@@ -1,0 +1,31 @@
+{
+  "id": "019d480d-332e-7910-b4a6-615027e83cec",
+  "content": "# Two-Repo Workflow: dorea Pipeline + Workspace\nPipeline code (scripts/, luts/, references/) lives in repos/dorea/ — separate git repo (chunzhe10/dorea.git, default branch: main). This directory is gitignored in the workspace repo.\nWorkspace-level changes (docs/, .corvia/, AGENTS.md) go in the workspace repo (chunzhe10/dorea-workspace.git, default branch: master).\n## Workflow\nCreate feature branches and PRs in both repos when changes span both. Reference workspace issues with chunzhe10/dorea-workspace#N in the dorea PR.\n## Example (issue #3)\nchunzhe10/dorea#2 for pipeline code, chunzhe10/dorea-workspace#13 for design decision doc.",
+  "source_version": "AGENTS.md",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-01T07:58:37.870120150Z",
+  "valid_from": "2026-04-01T07:58:37.870120150Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "learning",
+    "source_origin": "workspace"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

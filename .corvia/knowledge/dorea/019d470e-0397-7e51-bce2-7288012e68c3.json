@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-7288012e68c3",
+  "content": "    # Read existing flags\n    # Write back\n\n### Task 5: Health Checker\n\n**Files:**\n- Create: `tools/corvia-dev/corvia_dev/health.py`\n- Create: `tools/corvia-dev/tests/test_health.py`\n\n**Step 1: Write the failing test**\n\n```python\n\"\"\"Tests for health checking.\"\"\"\n\nimport http.server\nimport threading\nfrom unittest.mock import patch\n\nfrom corvia_dev.health import check_http, check_service\nfrom corvia_dev.models import ServiceDefinition\n\n\ndef test_check_http_unreachable() -> None:\n    \"\"\"Health check against a port with nothing listening.\"\"\"\n    result = check_http(\"127.0.0.1\", 19999, \"/health\", timeout=1.0)\n    assert result.healthy is False\n    assert result.latency_ms < 0\n\n\ndef test_check_http_healthy() -> None:\n    \"\"\"Health check against a real HTTP server.\"\"\"\n    handler = http.server.BaseHTTPRequestHandler\n\n    class OkHandler(handler):\n        def do_GET(self) -> None:\n            self.send_response(200)\n            self.end_headers()\n            self.wfile.write(b\"ok\")\n\n        def log_message(self, *args: object) -> None:\n            pass  # suppress output\n\n    server = http.server.HTTPServer((\"127.0.0.1\", 0), OkHandler)\n    port = server.server_address[1]\n    thread = threading.Thread(target=server.handle_request, daemon=True)\n    thread.start()\n\n    result = check_http(\"127.0.0.1\", port, \"/health\", timeout=2.0)\n    assert result.healthy is True\n    assert result.latency_ms >= 0\n    server.server_close()\n\n\ndef test_check_service_no_port() -> None:\n    \"\"\"Virtual services (like coding-llm) with no port are always 'unknown'.\"\"\"\n    svc = ServiceDefinition(name=\"coding-llm\", tier=2, port=None, depends_on=[\"ollama\"])\n    result = check_service(svc, timeout=1.0)\n    assert result.healthy is None  # indeterminate\n```\n\n**Step 2: Run test to verify it fails**\n",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-cli.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007690112Z",
+  "valid_from": "2026-04-01T03:19:54.007690112Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-cli.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 812,
+    "end_line": 870,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

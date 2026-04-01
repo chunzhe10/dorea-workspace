@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-18ffabc35a6a",
+  "content": "ar segment inverse: linear = (encoded - intercept) / slope\n        (x - intercept) / slope,\n        # Log segment inverse: linear = (10^((encoded - d) / c) - b) / a\n        (np.power(10.0, (x - d) / c) - b) / a,\n    )\n\n    return np.clip(linear, 0.0, None)\ndef linear_to_dlog_m(x: np.ndarray) -> np.ndarray:\n    \"\"\"Convert scene-linear light values to D-Log M encoding.\n\n    Inverse of dlog_m_to_linear(). Used for verification.\n    \"\"\"\n    x = np.asarray(x, dtype=np.float64)\n\n    a = 0.9892\n    b = 0.0108\n    c = 0.256663\n    d = 0.584555\n    cut_encoded = 0.14\n\n    # Compute the same cut/slope/intercept as the decode function\n    cut_linear = (10.0 ** ((cut_encoded - d) / c) - b) / a\n    slope = c * a / ((a * cut_linear + b) * np.log(10.0))\n    intercept = cut_encoded - slope * cut_linear\n\n    encoded = np.where(\n        x <= cut_linear,\n        slope * x + intercept,\n        c * np.log10(a * x + b) + d,\n    )\n\n    return np.clip(encoded, 0.0, 1.0)",
+  "source_version": "scripts/00_generate_lut.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112154296Z",
+  "valid_from": "2026-04-01T03:19:15.112154296Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/00_generate_lut.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 117,
+    "end_line": 141,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

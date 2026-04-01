@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1b842191defa",
+  "content": "ray\")\n        return [result] if isinstance(result, dict) else []\n    except json.JSONDecodeError as e:\n        logger.error(\"Failed to parse Claude response as JSON: %s\", e)\n        logger.error(\"Raw response:\\n%s\", response_text[:2000])\n        return []\ndef validate_subject(subject: dict) -> bool:\n    \"\"\"Validate that a subject dict has the required fields with correct types.\"\"\"\n    required_fields = {\n        \"label\": str,\n        \"first_appearance_frame\": int,\n        \"bbox_normalised\": list,\n        \"confidence\": str,\n    }\n    for field, expected_type in required_fields.items():\n        if field not in subject:\n            logger.warning(\"Subject missing field '%s': %s\", field, subject)\n            return False\n        if not isinstance(subject[field], expected_type):\n            logger.warning(\n                \"Subject field '%s' has wrong type (expected %s): %s\",\n                field, expected_type.__name__, subject,\n            )\n            return False\n\n    # Validate bbox has 4 elements, all floats/ints between 0 and 1\n    bbox = subject[\"bbox_normalised\"]\n    if len(bbox) != 4:\n        logger.warning(\"bbox_normalised must have 4 elements: %s\", subject)\n        return False\n    for val in bbox:\n        if not isinstance(val, (int, float)) or val < 0.0 or val > 1.0:\n            logger.warning(\"bbox_normalised values must be 0.0-1.0: %s\", subject)\n            return False\n\n    # Validate confidence\n    if subject[\"confidence\"] not in (\"high\", \"medium\", \"low\"):\n        logger.warning(\"confidence must be high/medium/low: %s\", subject)\n        return False\n\n    return True",
+  "source_version": "scripts/02_claude_scene_analysis.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112189941Z",
+  "valid_from": "2026-04-01T03:19:15.112189941Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/02_claude_scene_analysis.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 223,
+    "end_line": 257,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-58bdb40aeb0d",
+  "content": "#### 3. `corvia-workspace rebuild` command\n\n### Files Changed\n\n1. **New: `repos/corvia/.github/workflows/release.yml`** — Release workflow\n2. **Modify: `.devcontainer/scripts/post-create.sh`** — Download-first with fallback\n3. **Modify: `.devcontainer/scripts/corvia-workspace.sh`** — Add `rebuild` command\n\n\n### Version Strategy\n\nAlways download `latest` release. No pinning. Simple pre-1.0.\n",
+  "source_version": "decisions/2026-03-03-prebuilt-binaries-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007274538Z",
+  "valid_from": "2026-04-01T03:19:54.007274538Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-03-03-prebuilt-binaries-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 64,
+    "end_line": 73,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

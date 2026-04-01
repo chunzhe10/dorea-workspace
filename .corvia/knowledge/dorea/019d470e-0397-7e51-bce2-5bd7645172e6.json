@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-5bd7645172e6",
+  "content": "# D52: Devcontainer as Integration Surface\n\n## Decision\n\nThe devcontainer is the primary integration surface for corvia workspaces. It serves a\ntriple role: template for scaffolding new workspaces (`corvia workspace create --template`),\none-click demo for evaluators (clone and open in Codespaces/DevPod), and the development\nenvironment used to build corvia itself. The workspace model (purpose-built directory with\n`corvia.toml` and `.corvia/` data store) works identically in native and containerized\nmodes.\n\n\n## Context\n\nCorvia needed a reproducible development environment that works across GitHub Codespaces,\nVS Code Dev Containers, and DevPod, while also serving as the showcase for multi-repo\nknowledge management. The workspace concept (D46) separates corvia artifacts from target\nrepos -- repos live under `repos/` and are never polluted with corvia files. The\ndevcontainer packages this into a portable, zero-setup experience.\n",
+  "source_version": "decisions/d52-devcontainer-integration.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007324349Z",
+  "valid_from": "2026-04-01T03:19:54.007324349Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/d52-devcontainer-integration.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 7,
+    "end_line": 23,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

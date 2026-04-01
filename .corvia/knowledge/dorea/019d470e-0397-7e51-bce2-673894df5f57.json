@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-673894df5f57",
+  "content": "      # Docker-outside-of-Docker\n    # Enable host.docker.internal for reaching Resolve MCP on host\n\n### post-start.sh adaptations\n\nUpdate the following in the inherited `post-start.sh`:\n- Health check URLs: keep container-internal port 8020 (unchanged — health checks run inside container)\n- Dashboard check: keep container-internal port 8021 (unchanged)\n- MCP server URL: keep `http://127.0.0.1:8020/mcp` (unchanged — container-internal)\n- `settings.local.json`: add `\"davinci-resolve-mcp\"` to `enabledMcpjsonServers`\n- Add: Python venv activation for dorea pipeline (`source /opt/dorea-venv/bin/activate`)\n- Remove: `corvia-dev` service management (not applicable to dorea)\n\n\n### Dockerfile adaptations\n\nAdd to the existing Dockerfile (after the corvia/Rust build stages):\n\n```dockerfile",
+  "source_version": "plans/2026-03-17-dorea-underwater-pipeline-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007503850Z",
+  "valid_from": "2026-04-01T03:19:54.007503850Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-17-dorea-underwater-pipeline-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 396,
+    "end_line": 410,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

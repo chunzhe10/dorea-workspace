@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1f0a829810b0",
+  "content": "cene_json.is_file():\n            try:\n                with open(scene_json, \"r\") as f:\n                    data = json.load(f)\n                subjects = data.get(\"subjects\", [])\n                logger.info(\"  Scene analysis: %d subject(s)\", len(subjects))\n                for s in subjects:\n                    logger.info(\"    - %s (frame %d, %s)\", s.get(\"label\"), s.get(\"first_appearance_frame\", 0), s.get(\"confidence\", \"?\"))\n            except Exception as e:\n                logger.warning(\"  Scene analysis: ERROR reading %s: %s\", scene_json, e)\n                total_issues += 1\n        else:\n            logger.warning(\"  Scene analysis: MISSING (%s)\", scene_json)\n            total_issues += 1\n\n        # Masks\n        mask_clip_dir = masks_base / clip_id\n        if mask_clip_dir.is_dir():\n            mask_labels = [d.name for d in mask_clip_dir.iterdir() if d.is_dir()]\n            logger.info(\"  Masks: %d label(s) — %s\", len(mask_labels), \", \".join(mask_labels) or \"none\")\n        else:\n            logger.warning(\"  Masks: MISSING (%s)\", mask_clip_dir)\n            total_issues += 1\n\n        # Depth\n        depth_clip_dir = depth_base / clip_id\n        if depth_clip_dir.is_dir():\n            png_count = len([f for f in depth_clip_dir.iterdir() if f.suffix == \".png\"])\n            logger.info(\"  Depth: %d frame(s)\", png_count)\n        else:\n            logger.warning(\"  Depth: MISSING (%s)\", depth_clip_dir)\n            total_issues += 1\n\n    logger.info(\"\")\n    logger.info(\"[DRY RUN] Summary: %d clip(s), %d issue(s) found\", len(clips), total_issues)\n    if total_issues == 0:\n        logger.info(\"[DRY RUN] All inputs validated. Ready for live run.\")\n    else:\n        logger.warning(\"[DRY RUN] Fix %d issue(s) before running live.\", total_issues)",
+  "source_version": "scripts/05_resolve_setup.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112236958Z",
+  "valid_from": "2026-04-01T03:19:15.112236958Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/05_resolve_setup.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 707,
+    "end_line": 739,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

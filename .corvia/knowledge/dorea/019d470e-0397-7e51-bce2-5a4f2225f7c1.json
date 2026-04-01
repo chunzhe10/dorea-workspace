@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-5a4f2225f7c1",
+  "content": "### Population Rules\n### `corvia_write` MCP Changes\n\n### `corvia_search` Filtering\n\nNew optional filter parameters on search and context MCP tools:\n\n```json\n{\n  \"name\": \"corvia_search\",\n  \"arguments\": {\n    \"query\": \"adapter IPC protocol\",\n    \"scope_id\": \"corvia\",\n    \"content_role\": \"design\",\n    \"source_origin\": \"repo:corvia\"\n  }\n}\n```\n\nDashboard filter dropdowns map directly to these API params.\n\n\n### `QueryableStore` Trait Change\n\nThe existing `search` method signature:\n```rust\nasync fn search(&self, embedding: &[f32], scope_id: &str, limit: usize) -> Result<Vec<SearchResult>>;\n```\n\nMust be extended to accept optional metadata filters. Two approaches:\n\n**Option A (recommended): Post-filter.** Keep the trait signature unchanged. After vector\nsearch returns top-N results, filter by `content_role` and `source_origin` in the calling\ncode. Simple, no backend changes required. Trade-off: may return fewer than `limit` results\nif many are filtered out. Mitigate by over-fetching (request `limit * 3`, then filter).\n\n**Option B: Backend-native filtering.** Add a `SearchFilter` struct to the trait:\n```rust\npub struct SearchFilter {\n    pub content_role: Option<String>,\n    pub source_origin: Option<String>,\n}\nasync fn search(&self, embedding: &[f32], scope_id: &str, limit: usize,\n                filter: Option<SearchFilter>) -> Result<Vec<SearchResult>>;\n```\nRequires changes to all three backends (LiteStore, SurrealStore, PostgresStore).\nSurrealDB/Postgres can push filters into the query. LiteStore falls back to post-filter.\n\nPhase 1 should implement Option A (post-filter) for speed. Option B can be added later\nas a performance optimization if filter selectivity causes result count issues.\n\nThe `RetrievalOpts` struct in `rag_types.rs` also needs the filter fields for RAG pipeline\npassthrough.\n\n---\n",
+  "source_version": "decisions/2026-03-13-docs-workflow-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007299100Z",
+  "valid_from": "2026-04-01T03:19:54.007299100Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-03-13-docs-workflow-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 239,
+    "end_line": 290,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

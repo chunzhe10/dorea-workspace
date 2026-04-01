@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1994da73661b",
+  "content": " Gamma (R,G,B): %.4f, %.4f, %.4f\", *gamma)\n    logger.info(\"  Gain  (R,G,B): %.4f, %.4f, %.4f\", *gain)\n    logger.info(\"  Saturation factor: %.3f\", sat_target)\n    logger.info(\"  Red deficit: %.3f (boost: %.2fx)\", red_deficit, red_boost)\n\n    return params\ndef apply_correction(rgb: np.ndarray, params: dict) -> np.ndarray:\n    \"\"\"Apply lift/gamma/gain colour correction to linear RGB values.\n\n    The processing chain is:\n        1. D-Log M decode (input is in D-Log M space)\n        2. Apply lift (shadow offset)\n        3. Apply gain (highlight scaling)\n        4. Apply gamma (midtone contrast curve)\n        5. Saturation adjustment\n        6. Encode back to output space (clipped to 0-1)\n\n    Args:\n        rgb: Array of shape (..., 3) with D-Log M encoded values (0-1).\n        params: Correction parameters from compute_correction_params().\n\n    Returns:\n        Corrected RGB values in output space, clipped to [0, 1].\n    \"\"\"\n    lift = params[\"lift\"]\n    gamma = params[\"gamma\"]\n    gain = params[\"gain\"]\n    sat_factor = params[\"saturation_factor\"]\n\n    # Step 1: Decode D-Log M to linear light\n    linear = dlog_m_to_linear(rgb)\n\n    # Step 2: Apply lift (shadow offset)\n    corrected = linear + lift\n\n    # Step 3: Apply gain (highlight scaling)\n    corrected = corrected * gain\n\n    # Clamp to avoid negative values before gamma\n    corrected = np.clip(corrected, 0.0, None)\n\n    # Step 4: Apply gamma (midtone contrast — power curve)\n    # Safe power: avoid issues with zero values\n    corrected = np.power(corrected + 1e-10, gamma) - np.power(1e-10, gamma)\n\n    # Step 5: Saturation adjustment\n    # Compute luminance and adjust saturation relative to it\n    lum = (0.2126 * corrected[..., 0:1]\n           + 0.7152 * corrected[..., 1:2]\n           + 0.0722 * corrected[..., 2:3])\n    corrected = lum + (corrected - lum) * sat_factor\n\n    # Step 6: Clip to valid range\n    corrected = np.clip(corrected, 0.0, 1.0)\n\n    return corrected",
+  "source_version": "scripts/00_generate_lut.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112163386Z",
+  "valid_from": "2026-04-01T03:19:15.112163386Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/00_generate_lut.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 386,
+    "end_line": 435,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

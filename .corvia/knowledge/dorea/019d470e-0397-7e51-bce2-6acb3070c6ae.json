@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-6acb3070c6ae",
+  "content": "## Chunk 5: Devcontainer Adaptations\n\n### Task 15: Update devcontainer.json\n\n**Files:**\n- Modify: `.devcontainer/devcontainer.json`\n\n- [ ] **Step 1: Update devcontainer.json**\n\nChanges to make:\n1. `\"name\"` → `\"Dorea Workspace\"`\n2. `\"workspaceFolder\"` → `\"/workspaces/dorea-workspace\"`\n3. `\"forwardPorts\"` → `[8120, 8121, 8130, 11534]` (offset +100, note: add portsAttributes if supported)\n4. `\"customizations.vscode.extensions\"` → remove `\"rust-lang.rust-analyzer\"`, add `\"ms-python.python\"`\n5. Remove `rust-analyzer` settings from `customizations.vscode.settings`\n6. Keep `corvia.serverUrl` as `http://localhost:8020` (container-internal, unchanged)\n\nFull content:\n\n```jsonc\n{\n    \"name\": \"Dorea Workspace\",\n    \"dockerComposeFile\": [\"docker-compose.yml\", \"docker-compose.override.yml\"],\n    \"service\": \"app\",\n    \"workspaceFolder\": \"/workspaces/dorea-workspace\",\n    \"initializeCommand\": \".devcontainer/scripts/init-host.sh\",\n    \"postCreateCommand\": \".devcontainer/scripts/post-create.sh\",\n    \"postStartCommand\": \".devcontainer/scripts/post-start.sh\",\n    // 8120-8130: corvia services (host-forwarded +100), 11534: ollama (host-forwarded +100)\n    // 8050 (playwright-mcp) is container-internal only — not forwarded.\n    \"forwardPorts\": [8120, 8121, 8130, 11534],\n    \"portsAttributes\": {\n        \"8120\": {\"label\": \"Corvia API\", \"onAutoForward\": \"notify\"},\n        \"8121\": {\"label\": \"Corvia Dashboard\", \"onAutoForward\": \"notify\"},\n        \"8130\": {\"label\": \"Corvia Inference\", \"onAutoForward\": \"notify\"},",
+  "source_version": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007560176Z",
+  "valid_from": "2026-04-01T03:19:54.007560176Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 832,
+    "end_line": 864,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

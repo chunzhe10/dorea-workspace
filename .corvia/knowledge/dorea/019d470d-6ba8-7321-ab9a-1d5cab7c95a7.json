@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1d5cab7c95a7",
+  "content": "t subject_exited:\n                    logger.info(\n                        \"  Subject '%s': exited at frame %d \"\n                        \"(empty for %d consecutive frames)\",\n                        label, frame_idx, consecutive_empty,\n                    )\n                    subject_exited = True\n            else:\n                if subject_exited:\n                    # Subject re-entered after exit — for now, continue tracking\n                    # (re-entry with new SAM2 session would require additional logic\n                    # to detect the re-entry frame and re-initialise; the current\n                    # propagation may lose accuracy, but SAM2's built-in tracking\n                    # handles many re-entry cases adequately)\n                    logger.info(\n                        \"  Subject '%s': possible re-entry at frame %d\",\n                        label, frame_idx,\n                    )\n                    subject_exited = False\n                consecutive_empty = 0\n\n            # Convert SAM2 0-indexed frame back to 1-indexed for output naming\n            output_frame_num = frame_idx + 1\n            output_path = mask_output_dir / f\"frame_{output_frame_num:06d}.png\"\n\n            if subject_exited:\n                # Pad with empty mask after subject exit\n                save_empty_mask(video_width, video_height, output_path)\n            else:\n                save_mask_as_png(mask_binary, output_path)\n\n            masks_written += 1\n\n        # Reset state to free memory for next subject\n        predictor.reset_state(state)\n\n    return masks_written",
+  "source_version": "scripts/03_run_sam2.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112214632Z",
+  "valid_from": "2026-04-01T03:19:15.112214632Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/03_run_sam2.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 512,
+    "end_line": 542,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-5f6d539f0e2d",
+  "content": "## 10. GitHub Dependency Graph\n\n### Graph-to-Document Navigation UX\n\n- **Not a visual graph**: Despite the name, GitHub's dependency \"graph\" is a **tabular list**,\n  not a node-link diagram. It shows dependencies as rows with version, license, manifest\n  file, and vulnerability status.\n- **Click to navigate**: Clicking a dependency name navigates to that package's repository.\n  Hovering shows repository metadata.\n- **Dependents tab**: Separate tab shows which other repos depend on the current one.\n- **Show Paths**: For transitive dependencies, a dropdown reveals the dependency chain.\n\n\n### Panel Pattern\n\n**Tabular list under Insights tab**. No split panel or graph visualization.\n",
+  "source_version": "decisions/graph-document-ux-research.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007375508Z",
+  "valid_from": "2026-04-01T03:19:54.007375508Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/graph-document-ux-research.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 485,
+    "end_line": 498,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

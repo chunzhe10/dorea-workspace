@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1c7d335c8a08",
+  "content": "  except Exception as e:\n        logger.error(\"Download failed: %s\", e)\n        if tmp_path.is_file():\n            tmp_path.unlink()\n        logger.error(\n            \"Manual download: %s -> %s\",\n            url, target_path,\n        )\n        return False\ndef discover_scene_analyses(scene_analysis_dir: Path) -> list[Path]:\n    \"\"\"Find all scene_analysis JSON files.\n\n    Returns sorted list of JSON file paths.\n    \"\"\"\n    if not scene_analysis_dir.is_dir():\n        return []\n\n    jsons = []\n    for entry in sorted(scene_analysis_dir.iterdir()):\n        if entry.is_file() and entry.suffix == \".json\":\n            jsons.append(entry)\n    return jsons",
+  "source_version": "scripts/03_run_sam2.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112202807Z",
+  "valid_from": "2026-04-01T03:19:15.112202807Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/03_run_sam2.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 139,
+    "end_line": 151,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

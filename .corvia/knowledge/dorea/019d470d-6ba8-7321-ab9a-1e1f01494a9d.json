@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1e1f01494a9d",
+  "content": "d / label\n    if not mask_dir.is_dir():\n        return None\n\n    # Verify it contains at least one PNG file\n    png_files = [f for f in mask_dir.iterdir() if f.is_file() and f.suffix == \".png\"]\n    if not png_files:\n        return None\n\n    return mask_dir\ndef find_depth_sequence_dir(depth_base: Path, clip_id: str) -> Path | None:\n    \"\"\"Find the depth map sequence directory for a clip.\n\n    Expected path: working/depth/{date}/{clip_id}/\n    Returns the path if it exists and contains PNG files, else None.\n    \"\"\"\n    depth_dir = depth_base / clip_id\n    if not depth_dir.is_dir():\n        return None\n\n    # Verify it contains at least one PNG file\n    png_files = [f for f in depth_dir.iterdir() if f.is_file() and f.suffix == \".png\"]\n    if not png_files:\n        return None\n\n    return depth_dir",
+  "source_version": "scripts/05_resolve_setup.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112223942Z",
+  "valid_from": "2026-04-01T03:19:15.112223942Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/05_resolve_setup.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 211,
+    "end_line": 226,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

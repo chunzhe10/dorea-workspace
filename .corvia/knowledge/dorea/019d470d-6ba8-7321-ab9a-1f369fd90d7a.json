@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1f369fd90d7a",
+  "content": "   %s (exists: %s)\", lut_path, lut_path.is_file())\n    logger.debug(\"DRX path:         %s (exists: %s)\", drx_path, drx_path.is_file())\n\n    # Check LUT and DRX availability (warn, don't exit)\n    lut_path_str = str(lut_path) if lut_path.is_file() else None\n    drx_path_str = str(drx_path) if drx_path.is_file() else None\n\n    if lut_path_str is None:\n        logger.warning(\n            \"LUT file not found at %s. Node 1 LUT will not be set. \"\n            \"Run Phase 0 (00_generate_lut.py) to generate it.\",\n            lut_path,\n        )\n\n    if drx_path_str is None:\n        logger.warning(\n            \"DRX template not found at %s. 8-node grade structure will not be \"\n            \"deployed. Place the template file manually or create it in Resolve.\",\n            drx_path,\n        )\n\n    # Discover footage (deduplicate raw/flat by stem)\n    clips = deduplicate_clips(discover_footage(raw_dir, flat_dir))\n    if not clips:\n        logger.error(\n            \"No footage files found for date %s. \"\n            \"Expected video files in:\\n  %s\\n  %s\",\n            args.date, raw_dir, flat_dir,\n        )\n        sys.exit(1)\n\n    logger.info(\"Found %d footage clip(s)\", len(clips))\n    for clip in clips:\n        logger.debug(\"  %s\", clip)\n\n    # --- Dry-run mode: validate and exit ---\n    if args.dry_run:\n        dry_run_validate(clips, masks_base, depth_base, scene_analysis_dir, lut_path, drx_path)\n        return\n\n    # --- Connect to Resolve ---\n    resolve = connect_to_resolve()\n    if resolve is None:\n        sys.exit(1)\n\n    # --- Project setup ---\n    project = get_or_create_project(resolve, project_name)\n    if project is None:\n        sys.exit(1)\n\n    # --- Media Pool setup ---\n    try:\n        media_pool = project.GetMediaPool()\n    except Exception as e:\n        logger.error(\"Failed to get Media Pool: %s\", e)\n        sys.exit(1)\n",
+  "source_version": "scripts/05_resolve_setup.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112239089Z",
+  "valid_from": "2026-04-01T03:19:15.112239089Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/05_resolve_setup.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 794,
+    "end_line": 845,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

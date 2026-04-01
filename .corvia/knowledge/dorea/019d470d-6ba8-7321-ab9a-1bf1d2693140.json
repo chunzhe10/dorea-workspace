@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1bf1d2693140",
+  "content": "   if not footage_dir.is_dir():\n            continue\n        for entry in footage_dir.iterdir():\n            if entry.is_file() and entry.suffix in VIDEO_EXTENSIONS:\n                if entry.stem == clip_id:\n                    return entry\n    return None\ndef extract_pass2_frames(\n    video_path: Path,\n    center_frame: int,\n    source_fps: float,\n    output_dir: Path,\n    window_frames: int = 120,\n    step: int = 10,\n) -> list[tuple[int, Path]]:\n    \"\"\"Extract frames around a detection point for Pass 2 refinement.\n\n    Extracts every `step` frames in a window of `window_frames` centered on\n    `center_frame`. Returns list of (frame_number, path) tuples.\n    \"\"\"\n    start_frame = max(0, center_frame - window_frames // 2)\n    end_frame = center_frame + window_frames // 2\n\n    output_dir.mkdir(parents=True, exist_ok=True)\n\n    frames = []\n    for frame_num in range(start_frame, end_frame + 1, step):\n        timestamp = frame_num / source_fps\n        output_path = output_dir / f\"frame_{frame_num:06d}.jpg\"\n\n        cmd = [\n            \"ffmpeg\",\n            \"-y\",\n            \"-ss\", f\"{timestamp:.4f}\",\n            \"-i\", str(video_path),\n            \"-vframes\", \"1\",\n            \"-q:v\", \"2\",\n            str(output_path),\n        ]\n\n        try:\n            subprocess.run(cmd, capture_output=True, text=True, check=True)\n            if output_path.is_file():\n                frames.append((frame_num, output_path))\n        except subprocess.CalledProcessError:\n            continue\n\n    return frames",
+  "source_version": "scripts/02_claude_scene_analysis.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112195995Z",
+  "valid_from": "2026-04-01T03:19:15.112195995Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/02_claude_scene_analysis.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 495,
+    "end_line": 535,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

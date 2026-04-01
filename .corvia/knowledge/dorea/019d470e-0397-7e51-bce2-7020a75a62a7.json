@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-7020a75a62a7",
+  "content": "### Tiers\n### Service Registry\n\n### Dependency Resolution\n\nThe key insight: **embedding provider and merge/chat provider are independently configurable**, and **Continue (coding-llm) cannot use corvia-inference's gRPC API** — it requires ollama or an OpenAI-compatible HTTP API.\n\nValid concurrent configurations:\n- `corvia-inference` for corvia embeddings + `ollama` for coding-llm (both run)\n- `ollama` for everything (corvia embeddings + chat + coding-llm)\n- `corvia-inference` for corvia + no coding-llm (ollama not needed)\n\n\n### Startup Order (on `dev up`)\n\n1. Resolve active embedding/storage provider from `corvia.toml`\n2. Start active embedding provider → wait for health\n3. Start active storage if non-lite (surrealdb/postgres) → wait for health\n4. Start corvia-server → wait for health\n5. Start additive services (ollama for coding-llm if not already running)\n6. Post-start hooks (pull models, write Continue config)\n",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-cli-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007652563Z",
+  "valid_from": "2026-04-01T03:19:54.007652563Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-cli-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 83,
+    "end_line": 100,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

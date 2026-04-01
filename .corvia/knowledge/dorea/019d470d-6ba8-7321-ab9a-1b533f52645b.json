@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1b533f52645b",
+  "content": "dir.iterdir():\n        if f.is_file():\n            match = frame_pattern.match(f.name)\n            if match:\n                frame_num = int(match.group(1))\n                frames.append((frame_num, f))\n    frames.sort(key=lambda x: x[0])\n    return frames\ndef encode_frame_base64(frame_path: Path) -> str:\n    \"\"\"Read a JPEG frame file and return its base64-encoded string.\"\"\"\n    with open(frame_path, \"rb\") as f:\n        return base64.standard_b64encode(f.read()).decode(\"ascii\")",
+  "source_version": "scripts/02_claude_scene_analysis.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112187447Z",
+  "valid_from": "2026-04-01T03:19:15.112187447Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/02_claude_scene_analysis.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 146,
+    "end_line": 149,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

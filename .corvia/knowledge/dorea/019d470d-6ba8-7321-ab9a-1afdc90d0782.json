@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1afdc90d0782",
+  "content": ".debug(\"  Flat dir: %s (exists: %s)\", flat_dir, flat_dir.is_dir())\n\n    # Check that at least one footage directory exists\n    if not raw_dir.is_dir() and not flat_dir.is_dir():\n        logger.error(\n            \"No footage directories found for date %s. \"\n            \"Expected at least one of:\\n  %s\\n  %s\",\n            args.date, raw_dir, flat_dir,\n        )\n        sys.exit(1)\n\n    # Discover all video clips (deduplicate raw/flat by stem)\n    clips = deduplicate_clips(discover_clips(raw_dir) + discover_clips(flat_dir))\n\n    if not clips:\n        logger.error(\n            \"No video files found in footage directories for date %s. \"\n            \"Supported extensions: %s\",\n            args.date, \", \".join(sorted(VIDEO_EXTENSIONS)),\n        )\n        sys.exit(1)\n\n    logger.info(\"Found %d clip(s) to process\", len(clips))\n\n    # Resolve model config\n    device = config.get(\"gpu_device\", \"cuda:0\")\n    model_name = config.get(\"depth_model\", DEFAULT_MODEL)\n    weights_path = workspace_root / config.get(\"depth_weights\", \"models/depth_anything_v2_small/\")\n\n    # Check CUDA availability\n    if device.startswith(\"cuda\") and not torch.cuda.is_available():\n        logger.error(\n            \"CUDA is not available but gpu_device is '%s'. \"\n            \"Install CUDA-enabled PyTorch or set gpu_device to 'cpu' in config.yaml.\",\n            device,\n        )\n        sys.exit(1)\n\n    if device.startswith(\"cuda\"):",
+  "source_version": "scripts/04_run_depth.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112181832Z",
+  "valid_from": "2026-04-01T03:19:15.112181832Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/04_run_depth.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 336,
+    "end_line": 368,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

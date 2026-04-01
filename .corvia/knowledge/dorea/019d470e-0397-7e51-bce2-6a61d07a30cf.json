@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-6a61d07a30cf",
+  "content": "## What's inside\n## Pipeline\n\n## Upstream sync\n\nThis workspace was created from the [corvia-workspace](https://github.com/chunzhe10/corvia-workspace) template. To pull upstream updates:\n\n```bash\ngit fetch upstream\ngit merge upstream/main\n```\n```\n",
+  "source_version": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007550970Z",
+  "valid_from": "2026-04-01T03:19:54.007550970Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 695,
+    "end_line": 704,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

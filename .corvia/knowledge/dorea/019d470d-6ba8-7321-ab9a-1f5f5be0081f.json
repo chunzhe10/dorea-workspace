@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1f5f5be0081f",
+  "content": "\n    total_lut = 0\n    total_depth = 0\n    total_mattes = 0\n    total_matte_failures = 0\n    all_warnings = []\n\n    for item in timeline_items:\n        try:\n            clip_name = item.GetName()\n        except Exception:\n            clip_name = \"unknown\"\n\n        # Derive clip_id from the timeline item name (strip extension)\n        clip_id = Path(clip_name).stem if clip_name else \"unknown\"\n        logger.info(\"--- Clip: %s (clip_id: %s) ---\", clip_name, clip_id)\n\n        item_result = process_timeline_item(\n            timeline_item=item,\n            media_pool=media_pool,\n            clip_id=clip_id,\n            drx_path=drx_path_str,\n            lut_path=lut_path_str,\n            masks_base=masks_base,\n            depth_base=depth_base,\n            scene_analysis_dir=scene_analysis_dir,\n        )\n\n        if item_result[\"drx_applied\"]:\n            total_drx += 1\n        if item_result[\"lut_set\"]:\n            total_lut += 1\n        if item_result[\"depth_attached\"]:\n            total_depth += 1\n        total_mattes += item_result[\"mattes_attached\"]\n        total_matte_failures += item_result[\"mattes_failed\"]\n        all_warnings.extend(item_result[\"warnings\"])\n\n    # --- Summary ---\n    logger.info(\"--- Resolve setup complete ---\")\n    logger.info(\"Project: %s | Timeline: %s\", project_name, timeline_name)\n    logger.info(\n        \"Clips: %d imported, %d on timeline\",\n        len(imported_clips), len(timeline_items),\n    )\n    logger.info(\n        \"Grades: %d DRX applied, %d LUT set\",\n        total_drx, total_lut,\n    )\n    logger.info(\n        \"Mattes: %d depth attached, %d subject mattes attached, %d failed\",\n        total_depth, total_mattes, total_matte_failures,\n    )\n\n    if all_warnings:\n        unique_warnings = sorted(set(all_warnings))\n        logger.info(\"Warnings (%d):\", len(unique_warnings))\n        for w in unique_warnings:\n            logger.warning(\"  %s\", w)\n\n    if total_matte_failures > 0:\n        logger.warning(\n            \"%d matte attachment(s) failed. \"\n            \"Check Resolve's Color page to manually attach missing mattes.\",\n            total_matte_failures,\n        )",
+  "source_version": "scripts/05_resolve_setup.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112240333Z",
+  "valid_from": "2026-04-01T03:19:15.112240333Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/05_resolve_setup.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 898,
+    "end_line": 950,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

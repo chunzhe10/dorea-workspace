@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-71197b55a76e",
+  "content": "## Implementation Decisions (post-design)\n\n### Health Check Protocols (2026-03-09)\n\n**Problem**: corvia-inference serves gRPC (HTTP/2 only), not HTTP/1.1. A plain `GET /health` always fails because the server rejects HTTP/1.1 requests.\n\n**Decision**: Add a `health_proto` field to `ServiceDefinition` with values `\"http\"` (default), `\"grpc\"`, `\"tcp\"`, or `\"none\"`.\n\n**gRPC check implementation**: TCP connect → send HTTP/2 connection preface (`PRI * HTTP/2.0\\r\\n\\r\\nSM\\r\\n\\r\\n`) → read response → validate that byte[3] == 0x04 (HTTP/2 SETTINGS frame). This confirms the server is alive and speaking HTTP/2 without needing a gRPC client library.\n\n| Service | health_proto | Check Method |\n|---------|-------------|--------------|\n| corvia-server | http | GET /health |\n| corvia-inference | grpc | HTTP/2 preface handshake |\n| ollama | http | GET /api/tags |\n| postgres | tcp | TCP connect (port 5432) |\n| coding-llm | none | Virtual service, no check |\n",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-cli-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007665670Z",
+  "valid_from": "2026-04-01T03:19:54.007665670Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-cli-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 239,
+    "end_line": 254,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

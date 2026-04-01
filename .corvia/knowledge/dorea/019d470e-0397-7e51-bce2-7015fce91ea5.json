@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-7015fce91ea5",
+  "content": "## Service Model\n\n### Tiers\n\n| Tier | Purpose | Failure Impact |\n|------|---------|----------------|\n| 0 | Core (always runs) | Blocks everything |\n| 1 | Provider (replaces defaults) | Blocks corvia-server if active |\n| 2 | Additive (extra capability) | Warning only, doesn't block |\n\n\n### Service Registry\n\n| Service | Tier | Port | Health | Depends On | Exclusive Group |\n|---------|------|------|--------|------------|-----------------|\n| `corvia-inference` | 0 | 8030 | `/health` | — | `embedding`* |\n| `corvia-server` | 0 | 8020 | `/health` | active embedding provider | — |\n| `ollama` | 1 | 11434 | `/api/tags` | — | `embedding`* |\n| `vllm` | 1 | TBD | TBD | — | `embedding`* |\n| `surrealdb` | 1 | 8000 | `/health` | docker | `storage` |\n| `postgres` | 1 | 5432 | pg_isready | docker | `storage` |\n| `coding-llm` | 2 | — | — | `ollama` | — |\n\n*`exclusive_group` only applies for corvia's configured provider. Ollama can run alongside corvia-inference when serving coding-llm.\n",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-cli-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007651810Z",
+  "valid_from": "2026-04-01T03:19:54.007651810Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-cli-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 61,
+    "end_line": 82,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

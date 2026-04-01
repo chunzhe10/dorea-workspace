@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1ef8986feaa7",
+  "content": "gger.info(\n                \"  Mask '%s' -> Node %d (%s)\",\n                label, node_index, NODE_NAMES.get(node_index, \"?\"),\n            )\n            result[\"mattes_attached\"] += 1\n        else:\n            result[\"mattes_failed\"] += 1\n\n    return result\ndef dry_run_validate(\n    clips: list[Path],\n    masks_base: Path,\n    depth_base: Path,\n    scene_analysis_dir: Path,\n    lut_path: Path,\n    drx_path: Path,\n) -> None:\n    \"\"\"Dry-run mode: validate all inputs and show per-clip summary.\"\"\"\n    logger.info(\"[DRY RUN] Validating inputs — Resolve connection skipped\")\n    logger.info(\"\")\n\n    # Template/LUT validation\n    logger.info(\"Templates:\")\n    logger.info(\"  LUT:  %s %s\", lut_path, \"(OK)\" if lut_path.is_file() else \"(MISSING)\")\n    logger.info(\"  DRX:  %s %s\", drx_path, \"(OK)\" if drx_path.is_file() else \"(MISSING)\")\n    logger.info(\"\")\n\n    # Per-clip validation\n    total_issues = 0\n    for clip_path in clips:\n        clip_id = clip_path.stem\n        logger.info(\"--- Clip: %s ---\", clip_id)\n        logger.info(\"  Source: %s\", clip_path)\n\n        # Scene analysis\n        scene_json = scene_analysis_dir / f\"{clip_id}.json\"\n        if scene_json.is_file():\n            try:\n                with open(scene_json, \"r\") as f:\n                    data = json.load(f)\n                subjects = data.get(\"subjects\", [])\n                logger.info(\"  Scene analysis: %d subject(s)\", len(subjects))",
+  "source_version": "scripts/05_resolve_setup.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112236196Z",
+  "valid_from": "2026-04-01T03:19:15.112236196Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/05_resolve_setup.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 674,
+    "end_line": 706,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

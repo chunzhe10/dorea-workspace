@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1857e16f95c6",
+  "content": "footage_flat: footage/flat\nworking_dir: working\npipeline_dir: repos/dorea\n\n# Claude API (for overnight batch scene analysis only)\n# Set ANTHROPIC_API_KEY env var or replace below",
+  "source_version": "config.yaml",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112145102Z",
+  "valid_from": "2026-04-01T03:19:15.112145102Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "config.yaml",
+    "language": "yaml",
+    "chunk_type": "section",
+    "start_line": 8,
+    "end_line": 11,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

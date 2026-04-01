@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-19cba4f6797f",
+  "content": " {look_name}\",\n    ]\n\n    # Write using colour-science's Iridas .cube writer\n    write_LUT_IridasCube(lut, str(output_path), decimals=6)\n\n    file_size = output_path.stat().st_size\n    logger.info(\"LUT written: %s (%.1f KB)\", output_path, file_size / 1024)\ndef main():\n    parser = argparse.ArgumentParser(\n        description=\"Generate underwater reference LUT from images\"\n    )\n    parser.add_argument(\n        \"--references\",\n        required=True,\n        help=\"Directory of reference images (JPEG, PNG, TIFF)\",\n    )\n    parser.add_argument(\n        \"--output\",\n        default=\"luts/underwater_base.cube\",\n        help=\"Output .cube file path (default: luts/underwater_base.cube)\",\n    )\n    parser.add_argument(\n        \"--verbose\", \"-v\",\n        action=\"store_true\",\n        help=\"Enable debug logging\",\n    )\n    args = parser.parse_args()\n\n    configure_logging(verbose=args.verbose)\n\n    workspace_root = find_workspace_root()\n    repo_root = workspace_root / \"repos\" / \"dorea\"\n    logger.info(\"Workspace root: %s\", workspace_root)\n\n    # --- Resolve references directory ---\n    references_dir = Path(args.references)\n    if not references_dir.is_absolute():\n        references_dir = repo_root / references_dir\n    references_dir = references_dir.resolve()\n\n    if not references_dir.is_dir():\n        logger.error(\"References directory does not exist: %s\", references_dir)\n        sys.exit(1)\n\n    # --- Resolve output path ---\n    output_path = Path(args.output)\n    if not output_path.is_absolute():\n        output_path = repo_root / output_path\n    output_path = output_path.resolve()\n\n    # --- Discover reference images ---\n    image_paths = discover_images(references_dir)\n\n    if not image_paths:\n        logger.error(\n            \"No valid image files found in %s. \"\n            \"Supported formats: %s\",\n            references_dir, \", \".join(sorted(IMAGE_EXTENSIONS)),\n        )\n        sys.exit(1)\n\n    logger.info(\"Found %d reference image(s) in %s\", len(image_paths), references_dir)",
+  "source_version": "scripts/00_generate_lut.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112165744Z",
+  "valid_from": "2026-04-01T03:19:15.112165744Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/00_generate_lut.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 518,
+    "end_line": 572,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

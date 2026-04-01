@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1de6e7f1b298",
+  "content": "g(\"Failed to load scene analysis for %s: %s\", clip_id, e)\n        return []\n\n    if not isinstance(data, dict) or \"subjects\" not in data:\n        logger.warning(\"Invalid scene analysis format for %s\", clip_id)\n        return []\n\n    return data[\"subjects\"]\ndef classify_subject(label: str) -> int | None:\n    \"\"\"Map a subject label to its target node index.\n\n    Returns:\n        NODE_DIVER (5) for diver subjects,\n        NODE_MARINE_LIFE (6) for marine life subjects,\n        NODE_FOREGROUND_POP (4) for other identifiable subjects,\n        or None if the label cannot be classified.\n    \"\"\"\n    label_lower = label.lower()\n\n    # Diver detection\n    if \"diver\" in label_lower:\n        return NODE_DIVER\n\n    # Marine life detection — check if any keyword appears in the label\n    for keyword in MARINE_LIFE_KEYWORDS:\n        if keyword in label_lower:\n            return NODE_MARINE_LIFE\n\n    # Default: foreground subject\n    return NODE_FOREGROUND_POP",
+  "source_version": "scripts/05_resolve_setup.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112221814Z",
+  "valid_from": "2026-04-01T03:19:15.112221814Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/05_resolve_setup.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 125,
+    "end_line": 146,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

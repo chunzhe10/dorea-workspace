@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-71d6fbe897f3",
+  "content": "# --- Service Definitions ---\n\n# Maps provider config value to service name\nEMBEDDING_PROVIDERS: dict[str, str] = {\n    \"corvia\": \"corvia-inference\",\n    \"ollama\": \"ollama\",\n    \"vllm\": \"vllm\",\n}\n\nSTORAGE_BACKENDS: dict[str, str | None] = {\n    \"lite\": None,  # in-process, no service to start\n    \"surrealdb\": \"surrealdb\",\n    \"postgres\": \"postgres\",\n}\n\n\ndef get_service(name: str) -> ServiceDefinition | None:\n    \"\"\"Look up a service definition by name.\"\"\"\n    return _SERVICES_BY_NAME.get(name)\n\n\ndef resolve_startup_order(\n    embedding_provider: str,\n    storage: str,\n    enabled_services: list[str],\n) -> list[ServiceDefinition]:\n    \"\"\"Resolve which services to start and in what order.\n\n    Returns services in dependency order: embedding → storage → server → additive.\n    \"\"\"\n    to_start: list[str] = []\n    seen: set[str] = set()\n\n    def _add(name: str) -> None:\n        if name in seen:\n            return\n        svc = get_service(name)\n        if svc is None:\n            return\n\n        # Add dependencies first\n        for dep in svc.depends_on:\n            if dep == \"_active_embedding\":\n                _add(EMBEDDING_PROVIDERS.get(embedding_provider, \"corvia-inference\"))\n            else:\n                _add(dep)\n        if name not in seen:\n            seen.add(name)\n            to_start.append(name)\n",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-cli.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007679598Z",
+  "valid_from": "2026-04-01T03:19:54.007679598Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-cli.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 465,
+    "end_line": 511,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-72f620c4af5e",
+  "content": "        # Keep last 100 lines\n\n            # Virtual service (e.g., coding-llm) — mark as healthy\n            mp.state = ServiceState.HEALTHY\n            mp.started_at = time.time()\n            self._log(f\"{name}: virtual service marked healthy\")\n            return\n\n        mp.state = ServiceState.STARTING\n        self._log(f\"{name}: starting ({' '.join(mp.service.start_cmd)})\")\n\n        try:\n            proc = await asyncio.create_subprocess_exec(\n                *mp.service.start_cmd,\n                cwd=str(self.workspace_root),\n                stdout=asyncio.subprocess.PIPE,\n                stderr=asyncio.subprocess.PIPE,\n            )\n            mp.process = proc\n            mp.pid = proc.pid\n            mp.started_at = time.time()\n            mp.state = ServiceState.STARTING\n            self._log(f\"{name}: started (pid {proc.pid})\")\n        except FileNotFoundError:\n            mp.state = ServiceState.CRASHED\n            self._log(f\"{name}: binary not found\")\n        except OSError as e:\n            mp.state = ServiceState.CRASHED\n            self._log(f\"{name}: failed to start: {e}\")\n\n    async def stop_service(self, name: str) -> None:",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-cli.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007697697Z",
+  "valid_from": "2026-04-01T03:19:54.007697697Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-cli.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1114,
+    "end_line": 1142,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

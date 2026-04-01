@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1c34e3dbd952",
+  "content": "  )\n        sys.exit(1)\n\n    logger.info(\"Found %d clip(s) with keyframes for date %s\", len(clip_dirs), args.date)\n\n    # Resolve config values\n    model = config.get(\"claude_model\", \"claude-sonnet-4-6\")\n    batch_size = config.get(\"claude_batch_size\", 12)\n\n    # Resolve API key (not needed for dry-run)\n    api_key = resolve_api_key(config)\n    if not args.dry_run and not api_key:\n        logger.error(\n            \"Anthropic API key not found. Set ANTHROPIC_API_KEY environment variable \"\n            \"or configure anthropic_api_key in config.yaml.\"\n        )\n        sys.exit(1)\n\n    # Initialize Anthropic client (only if not dry-run)\n    client = None\n    if not args.dry_run:\n        import anthropic\n        client = anthropic.Anthropic(api_key=api_key)\n\n    logger.info(\"Model: %s | Batch size: %d | Dry run: %s\", model, batch_size, args.dry_run)\n\n    # Create output directory\n    scene_analysis_dir.mkdir(parents=True, exist_ok=True)\n\n    # Process each clip\n    total_subjects = 0\n    total_api_calls = 0\n    successful_clips = 0\n    failed_clips = 0\n\n    for clip_dir in clip_dirs:\n        clip_id = clip_dir.name\n        logger.info(\"--- Processing clip: %s ---\", clip_id)\n\n        result = analyse_clip(\n            clip_dir=clip_dir,\n            clip_id=clip_id,\n            client=client,\n            model=model,\n            batch_size=batch_size,\n            dry_run=args.dry_run,\n        )\n\n        if not args.dry_run:\n            # Write output JSON\n            output_path = scene_analysis_dir / f\"{clip_id}.json\"\n            try:\n                with open(output_path, \"w\") as f:\n                    json.dump(result, f, indent=2)\n                logger.info(\"Wrote: %s\", output_path)\n                successful_clips += 1\n            except OSError as e:",
+  "source_version": "scripts/02_claude_scene_analysis.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112199743Z",
+  "valid_from": "2026-04-01T03:19:15.112199743Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/02_claude_scene_analysis.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 687,
+    "end_line": 735,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

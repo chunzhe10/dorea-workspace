@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1bd8a0a0a524",
+  "content": "r.info(\n            \"Clip %s: %d subject(s) found | Tokens: %d in, %d out (~$%.4f)\",\n            clip_id, len(all_subjects),\n            total_input_tokens, total_output_tokens, est_cost,\n        )\n\n    return {\"clip_id\": clip_id, \"subjects\": all_subjects}\ndef get_source_fps(video_path: Path) -> float | None:\n    \"\"\"Get the frame rate of a video file via ffprobe.\"\"\"\n    cmd = [\n        \"ffprobe\",\n        \"-v\", \"quiet\",\n        \"-print_format\", \"json\",\n        \"-show_streams\",\n        \"-select_streams\", \"v:0\",\n        str(video_path),\n    ]\n    try:\n        result = subprocess.run(cmd, capture_output=True, text=True, check=True)\n        data = json.loads(result.stdout)\n    except (subprocess.CalledProcessError, json.JSONDecodeError) as e:\n        logger.error(\"ffprobe failed for %s: %s\", video_path, e)\n        return None\n\n    streams = data.get(\"streams\", [])\n    if not streams:\n        return None\n\n    # Parse r_frame_rate which is a fraction like \"30000/1001\"\n    r_frame_rate = streams[0].get(\"r_frame_rate\", \"\")\n    if \"/\" in r_frame_rate:\n        num, den = r_frame_rate.split(\"/\")\n        try:\n            return float(num) / float(den)\n        except (ValueError, ZeroDivisionError):\n            pass\n\n    # Fallback to avg_frame_rate\n    avg = streams[0].get(\"avg_frame_rate\", \"\")\n    if \"/\" in avg:\n        num, den = avg.split(\"/\")\n        try:\n            return float(num) / float(den)\n        except (ValueError, ZeroDivisionError):\n            pass\n\n    return None",
+  "source_version": "scripts/02_claude_scene_analysis.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112194609Z",
+  "valid_from": "2026-04-01T03:19:15.112194609Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/02_claude_scene_analysis.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 436,
+    "end_line": 475,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

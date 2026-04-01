@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1a2c5ee33759",
+  "content": "YYY-MM-DD format.\n\n    Exits with error if invalid. Returns the date string if valid.\n    \"\"\"\n    if not DATE_PATTERN.match(date_str):\n        logger.error(\"Invalid date format: '%s'. Expected YYYY-MM-DD.\", date_str)\n        sys.exit(1)\n    return date_str\ndef discover_clips(footage_dir: Path) -> list[Path]:\n    \"\"\"Find all video files in a footage directory (non-recursive).\"\"\"\n    if not footage_dir.is_dir():\n        return []\n\n    clips = []\n    for entry in sorted(footage_dir.iterdir()):\n        if entry.is_file() and entry.suffix in VIDEO_EXTENSIONS:\n            clips.append(entry)\n    return clips",
+  "source_version": "scripts/pipeline_utils.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112171008Z",
+  "valid_from": "2026-04-01T03:19:15.112171008Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/pipeline_utils.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 77,
+    "end_line": 86,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

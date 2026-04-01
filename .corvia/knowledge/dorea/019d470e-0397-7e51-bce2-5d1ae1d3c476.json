@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-5d1ae1d3c476",
+  "content": "# Interactive Graph + Document Browsing UX Research\n\n> **Status:** Reference\n\nResearch date: 2026-03-13\n\nComparative analysis of products that combine document reading with graph navigation,\nfocused on concrete UX patterns, interaction models, and lessons for corvia's dashboard.\n\n---\n",
+  "source_version": "decisions/graph-document-ux-research.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007343872Z",
+  "valid_from": "2026-04-01T03:19:54.007343872Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/graph-document-ux-research.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1,
+    "end_line": 11,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

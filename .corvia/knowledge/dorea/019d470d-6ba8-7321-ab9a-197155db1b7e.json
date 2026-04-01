@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-197155db1b7e",
+  "content": "hannel has gain ~1.0\n    gain = gain / max(gain.max(), 1e-6)\n    # Ensure gain stays in reasonable range\n    gain = np.clip(gain, 0.5, 1.5)\n\n    # --- Gamma (midtone correction) ---\n    # Gamma adjusts the midtone response. We need to expand D-Log M's flat\n    # contrast into the reference look's richer tones.\n    midtone_lum = compute_luminance(midtones.reshape(1, 1, 3)).item()\n    if midtone_lum < 1e-6:\n        midtone_lum = 0.18\n\n    # Per-channel gamma: ratio of midtone channel to midtone luminance\n    # tells us the colour balance in midtones\n    mid_balance = midtones / max(midtone_lum, 1e-6)\n    mid_balance = mid_balance / max(mid_balance.max(), 1e-6)\n\n    # D-Log M needs an S-curve expansion. The base gamma controls contrast.\n    # A gamma < 1 expands contrast (makes midtones brighter), > 1 compresses.\n    # Typical D-Log M to Rec.709 needs gamma ~0.45-0.55 for good contrast.\n    base_gamma = 0.50\n\n    # Adjust per-channel gamma based on midtone colour balance\n    gamma = np.full(3, base_gamma) * (1.0 / np.clip(mid_balance, 0.5, 2.0))\n    gamma = np.clip(gamma, 0.3, 0.8)\n\n    # --- Underwater-specific: red channel recovery ---\n    # Water absorbs red light first, so underwater images are blue/green biased.\n    # We boost the red channel to compensate, scaled by how much red is missing.\n    red_ratio = overall[0] / max(overall.mean(), 1e-6)\n    red_deficit = max(0.0, 1.0 - red_ratio)\n\n    # Apply graduated red recovery\n    red_boost = 1.0 + red_deficit * 0.3  # Up to 30% boost\n    gain[0] *= red_boost\n",
+  "source_version": "scripts/00_generate_lut.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112161513Z",
+  "valid_from": "2026-04-01T03:19:15.112161513Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/00_generate_lut.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 325,
+    "end_line": 353,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

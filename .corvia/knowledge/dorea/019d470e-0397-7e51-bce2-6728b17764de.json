@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-6728b17764de",
+  "content": "### docker-compose.yml changes\n\n      # Docker-outside-of-Docker\n      - /var/run/docker.sock:/var/run/docker.sock\n\n    # Enable host.docker.internal for reaching Resolve MCP on host\n    extra_hosts:\n      - \"host.docker.internal:host-gateway\"\n\nvolumes:\n  dorea-pip-cache:\n```\n\nKey changes from corvia-workspace:\n- Workspace mount: `dorea-workspace` instead of `corvia-workspace`\n- Remove `corvia-cargo-registry` and `corvia-cargo-git` volumes (no Rust builds)\n- Add `dorea-pip-cache` for Python package caching\n- Add `extra_hosts` for `host.docker.internal` (needed for Resolve MCP connection)\n",
+  "source_version": "plans/2026-03-17-dorea-underwater-pipeline-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007501710Z",
+  "valid_from": "2026-04-01T03:19:54.007501710Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-17-dorea-underwater-pipeline-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 380,
+    "end_line": 395,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

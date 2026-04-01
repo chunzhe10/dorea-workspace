@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-5ddf7330410a",
+  "content": "### Large Graph Handling\n### What Works Well\n\n### Common Complaints\n\n- Graph view is rarely used in practice -- it's more of a demo feature\n- $15/month pricing for what competitors offer free\n- Performance degrades with large graphs\n- No offline access (cloud-only)\n\n\n### Innovative Patterns to Steal\n\n- **Shift+click to right sidebar** for non-destructive navigation\n- **Unlinked references** (automatic mention detection without explicit linking)\n- **Block-level references** (linking to specific paragraphs, not just pages)\n- **Stacked sidebar pages** for multi-document cross-referencing\n\n---\n",
+  "source_version": "decisions/graph-document-ux-research.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007356253Z",
+  "valid_from": "2026-04-01T03:19:54.007356253Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/graph-document-ux-research.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 149,
+    "end_line": 164,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

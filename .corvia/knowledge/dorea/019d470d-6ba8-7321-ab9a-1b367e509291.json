@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1b367e509291",
+  "content": "HROPIC_API_KEY}' placeholder.\n    Falls back to the ANTHROPIC_API_KEY environment variable.\n    \"\"\"\n    key = config.get(\"anthropic_api_key\", \"\")\n    if key and not key.startswith(\"${\"):\n        return key\n    return os.environ.get(\"ANTHROPIC_API_KEY\", \"\")\ndef discover_keyframe_dirs(keyframes_root: Path) -> list[Path]:\n    \"\"\"Find all clip keyframe directories under the keyframes root.\n\n    Returns sorted list of directories containing .jpg files.\n    \"\"\"\n    if not keyframes_root.is_dir():\n        return []\n\n    dirs = []\n    for entry in sorted(keyframes_root.iterdir()):\n        if entry.is_dir():\n            # Check that it contains at least one .jpg file\n            jpg_files = [f for f in entry.iterdir() if f.suffix == \".jpg\"]\n            if jpg_files:\n                dirs.append(entry)\n    return dirs",
+  "source_version": "scripts/02_claude_scene_analysis.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112186125Z",
+  "valid_from": "2026-04-01T03:19:15.112186125Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/02_claude_scene_analysis.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 110,
+    "end_line": 125,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

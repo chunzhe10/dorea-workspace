@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-75f29f4cf4bc",
+  "content": "### Task 6: Integrate staleness warning into `status` command\n\n            # Check staleness regardless of state source\n            resp.stale_binaries = check_staleness(workspace_root=_workspace_root())\n```\n\nAlso add the same to the fallback path (around line 118, before the `if as_json:` check):\n\n```python\n    resp.stale_binaries = check_staleness(workspace_root=_workspace_root())\n```\n\n**Step 3: Add warning to human-readable output**\n\nIn `_print_status_human`, add after the enabled services block (after line 158):\n\n```python\n    if resp.stale_binaries:\n        names = \", \".join(resp.stale_binaries)\n        click.echo(f\"\\n  Warning: stale binaries: {names}\")\n        click.echo(f\"  Run 'corvia-dev rebuild' to update.\")\n```\n\n**Step 4: Test manually**\n\nRun: `corvia-dev status`\nExpected: If binaries are stale, shows warning. JSON output includes `stale_binaries` field.\n\n**Step 5: Commit**\n\n```bash\ngit add tools/corvia-dev/corvia_dev/cli.py tools/corvia-dev/corvia_dev/models.py\ngit commit -m \"feat(corvia-dev): show stale binary warning in status\"\n```\n\n---\n",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-rebuild.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007746574Z",
+  "valid_from": "2026-04-01T03:19:54.007746574Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-rebuild.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 476,
+    "end_line": 510,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

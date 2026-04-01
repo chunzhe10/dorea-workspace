@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1ec07c38d81f",
+  "content": "ty fallback failed: %s\", e)\n\n    logger.warning(\n        \"  Could not attach external matte to Node %d (%s) — \"\n        \"manual attachment may be required in Resolve Color page\",\n        node_index, NODE_NAMES.get(node_index, \"?\"),\n    )\n    return False\ndef get_first_frame_path(sequence_dir: Path) -> str | None:\n    \"\"\"Get the path to the first PNG frame in a sequence directory.\n\n    Returns the path as a string, or None if no frames found.\n    \"\"\"\n    png_files = sorted(\n        f for f in sequence_dir.iterdir()\n        if f.is_file() and f.suffix == \".png\"\n    )\n    if png_files:\n        return str(png_files[0])\n    return None",
+  "source_version": "scripts/05_resolve_setup.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112232908Z",
+  "valid_from": "2026-04-01T03:19:15.112232908Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/05_resolve_setup.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 556,
+    "end_line": 567,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

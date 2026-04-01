@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1aca6b5ca131",
+  "content": " exist_ok=True)\n    success = cv2.imwrite(\n        str(output_path),\n        depth_uint16,\n        [cv2.IMWRITE_PNG_COMPRESSION, 3],  # moderate compression (0-9)\n    )\n    if not success:\n        raise RuntimeError(f\"cv2.imwrite failed for {output_path}\")\ndef process_clip(\n    clip_path: Path,\n    output_dir: Path,\n    processor,\n    model,\n    device: str,\n) -> tuple[int, int]:\n    \"\"\"Extract every frame from a video clip and run depth estimation.\n\n    Returns (frames_processed, frames_failed).\n    \"\"\"\n    cap = cv2.VideoCapture(str(clip_path))\n    if not cap.isOpened():\n        logger.error(\"Failed to open video: %s\", clip_path)\n        return 0, 0\n\n    total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))\n    fps = cap.get(cv2.CAP_PROP_FPS)\n    width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))\n    height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))\n\n    logger.info(\n        \"  %s: %d frames, %.1f fps, %dx%d\",\n        clip_path.name, total_frames, fps, width, height,\n    )\n\n    output_dir.mkdir(parents=True, exist_ok=True)\n\n    frames_processed = 0\n    frames_failed = 0\n    frame_idx = 0\n    clip_start_time = time.monotonic()\n    last_log_time = clip_start_time\n\n    # Use tqdm for TTY, fall back to 10-second log intervals for headless\n    use_tqdm = sys.stderr.isatty()\n    pbar = None\n    if use_tqdm:\n        try:\n            import tqdm\n            pbar = tqdm.tqdm(\n                total=total_frames, desc=f\"  {clip_path.stem}\",\n                file=sys.stderr, unit=\"frame\",\n            )\n        except ImportError:\n            pass\n\n    while True:\n        ret, frame_bgr = cap.read()\n        if not ret:\n            break\n\n        frame_idx += 1",
+  "source_version": "scripts/04_run_depth.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112179645Z",
+  "valid_from": "2026-04-01T03:19:15.112179645Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/04_run_depth.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 195,
+    "end_line": 247,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

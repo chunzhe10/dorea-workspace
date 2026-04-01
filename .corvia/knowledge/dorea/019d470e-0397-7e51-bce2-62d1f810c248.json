@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-62d1f810c248",
+  "content": "### Task 2.2: Update dashboard types with metadata fields\n\n### Task 2.3: Add dashboard API functions\n\n**Files:**\n- Modify: `tools/corvia-dashboard/src/api.ts`\n\n- [ ] **Step 1: Add `fetchEntryNeighbors` and update `fetchGraphScope` with filter params**\n\n```typescript\n// --- Neighbors ---\n\nexport function fetchEntryNeighbors(\n  entryId: string,\n  depth?: number,\n): Promise<NeighborsResponse> {\n  const q = new URLSearchParams();\n  if (depth) q.set(\"depth\", String(depth));\n  const qs = q.toString();\n  return get(`/entries/${encodeURIComponent(entryId)}/neighbors${qs ? `?${qs}` : \"\"}`);\n}\n\n// Update fetchGraphScope to accept filter params\nexport function fetchGraphScope(filters?: {\n  content_role?: string;\n  source_origin?: string;\n}): Promise<GraphScopeResponse> {\n  const q = new URLSearchParams();\n  if (filters?.content_role) q.set(\"content_role\", filters.content_role);\n  if (filters?.source_origin) q.set(\"source_origin\", filters.source_origin);\n  const qs = q.toString();\n  return get(`/graph/scope${qs ? `?${qs}` : \"\"}`);\n}\n```\n\nAdd the `NeighborsResponse` import from types.\n\n- [ ] **Step 2: Commit**\n\n```bash\ncd /workspaces/corvia-workspace\ngit add tools/corvia-dashboard/src/api.ts\ngit commit -m \"feat(dashboard): add fetchEntryNeighbors API and filter params to fetchGraphScope\"\n```\n\n---\n",
+  "source_version": "plans/2026-03-13-docs-workflow-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007431704Z",
+  "valid_from": "2026-04-01T03:19:54.007431704Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-13-docs-workflow-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 967,
+    "end_line": 1011,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d480d-118b-7a51-8a0b-8f2e04f9e7a3",
+  "content": "# LUT Algorithm Bug: Gain Normalization Suppresses Red Channel\n## What\n`compute_correction_params()` in `00_generate_lut.py` normalized gain to max=1.0, setting the strongest channel (blue underwater) to 1.0 and pushing red to ~0.5. With red boost capped at 30%, effective red gain was only 0.57.\n## Fix (applied in issue #3)\nRemoved normalization. Clip to [0.5, 1.5] range instead. Increased red boost from 0.3 to 0.8. Tightened per-channel gamma from [0.5, 2.0] to [0.7, 1.3].\n## Why it matters\nAny normalization-to-max approach suppresses the weakest channel in color-imbalanced footage. For underwater, always expect red to be weakest.",
+  "source_version": "scripts/00_generate_lut.py",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-01T07:58:29.259063942Z",
+  "valid_from": "2026-04-01T07:58:29.259063942Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "finding",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

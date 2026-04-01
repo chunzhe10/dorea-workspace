@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1eb5ed7f590c",
+  "content": "(node_index, matte_path)\n        if result:\n            logger.debug(\n                \"  Attached external matte to Node %d (%s)\",\n                node_index, NODE_NAMES.get(node_index, \"?\"),\n            )\n            return True\n    except AttributeError:\n        # API method may not exist in this Resolve version\n        logger.debug(\"  SetNodeExternalMatte not available, trying alternative\")\n    except Exception as e:\n        logger.debug(\"  SetNodeExternalMatte failed: %s\", e)\n\n    # Fallback approach: Use the clip-level external matte property\n    # This attaches the matte to the clip's overall external matte slot,\n    # which can then be routed to specific nodes in the Color page.\n    try:\n        result = timeline_item.SetClipProperty(\"ExternalMatte\", matte_path)\n        if result:\n            logger.debug(\n                \"  Attached external matte via SetClipProperty for Node %d (%s)\",\n                node_index, NODE_NAMES.get(node_index, \"?\"),\n            )\n            return True\n    except Exception as e:\n        logger.debug(\"  SetClipProperty fallback failed: %s\", e)\n\n    logger.warning(\n        \"  Could not attach external matte to Node %d (%s) — \"\n        \"manual attachment may be required in Resolve Color page\",\n        node_index, NODE_NAMES.get(node_index, \"?\"),\n    )\n    return False",
+  "source_version": "scripts/05_resolve_setup.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112232065Z",
+  "valid_from": "2026-04-01T03:19:15.112232065Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/05_resolve_setup.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 529,
+    "end_line": 553,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

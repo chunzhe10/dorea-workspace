@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-2023bcc41b7f",
+  "content": "# 4. One-time: generate reference LUT\n# 5. After each dive: run overnight batch\n\n# 6. Morning: open Resolve — timeline is ready for creative grading\n```\n",
+  "source_version": "README.md",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112248375Z",
+  "valid_from": "2026-04-01T03:19:15.112248375Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "README.md",
+    "language": "markdown",
+    "chunk_type": "heading_section",
+    "start_line": 54,
+    "end_line": 56,
+    "content_role": "instruction",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

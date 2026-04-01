@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1a6ef79a4c2d",
+  "content": "\n        \"working_dir\": working_dir,\n        \"keyframes\": working_dir / \"keyframes\" / date,\n        \"scene_analysis\": working_dir / \"scene_analysis\" / date,\n        \"masks\": working_dir / \"masks\" / date,\n        \"depth\": working_dir / \"depth\" / date,\n    }\ndef check_legacy_working_dir(workspace_root: Path, config: dict, date: str) -> None:\n    \"\"\"Warn if non-date-scoped working data exists (from before date-scoped dirs).\n\n    Checks for clip directories directly under working/{type}/ that aren't\n    date directories (YYYY-MM-DD pattern).\n    \"\"\"\n    working_dir = workspace_root / config[\"working_dir\"]\n    subdirs = [\"keyframes\", \"scene_analysis\", \"masks\", \"depth\"]\n\n    for subdir_name in subdirs:\n        subdir = working_dir / subdir_name\n        if not subdir.is_dir():\n            continue\n        for entry in subdir.iterdir():\n            if entry.is_dir() and not DATE_PATTERN.match(entry.name):\n                logger.warning(\n                    \"Legacy (non-date-scoped) data found: %s. \"\n                    \"Consider moving to %s/%s/%s/\",\n                    entry, subdir_name, date, entry.name,\n                )\n                break  # One warning per subdir is enough",
+  "source_version": "scripts/pipeline_utils.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112173854Z",
+  "valid_from": "2026-04-01T03:19:15.112173854Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/pipeline_utils.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 170,
+    "end_line": 190,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

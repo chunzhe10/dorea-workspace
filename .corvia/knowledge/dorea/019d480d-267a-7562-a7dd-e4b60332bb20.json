@@ -1,0 +1,31 @@
+{
+  "id": "019d480d-267a-7562-a7dd-e4b60332bb20",
+  "content": "# LUT Generation Design: Bootstrap References from Footage (2026-04-01)\n## Decision\nGenerate reference images from existing D-Log M keyframes using generate_references.py rather than downloading external images or using synthetic gradients.\n## Rationale\nUses real DJI Action 4 footage (realistic color distribution), reproducible (no external dependencies), color science grounded (D-Log M decode, white balance, contrast, highlight rolloff, saturation, sRGB encode).\n## Parameters (look_v1)\nred_gain=2.0, green_gain=1.0, blue_gain=0.75, gamma=0.55, saturation=1.3, shadow_lift=0.005\n## Known limitation\nReference-based gain derivation has circular reasoning — derives gains from already-corrected images, reinforcing blue bias. v2 should compute correction from raw-to-target delta. Follow-up: issue #14.",
+  "source_version": "docs/decisions/2026-04-01-first-lut-generation-design.md",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-01T07:58:34.618074226Z",
+  "valid_from": "2026-04-01T07:58:34.618074226Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "decision",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

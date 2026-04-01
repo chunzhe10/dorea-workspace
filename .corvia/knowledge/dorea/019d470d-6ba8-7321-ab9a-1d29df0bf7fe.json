@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1d29df0bf7fe",
+  "content": "er.info(\"Unloading SAM2 model\")\n    del predictor\n\n    if torch.cuda.is_available():\n        torch.cuda.empty_cache()\n        vram_after = torch.cuda.memory_allocated(device) / (1024 ** 3)\n        logger.info(\"VRAM after model unload: %.2f GB\", vram_after)\ndef track_subject(\n    predictor,\n    frame_dir: str,\n    subject: dict,\n    video_width: int,\n    video_height: int,\n    total_frames: int,\n    mask_output_dir: Path,\n    device: str,\n) -> int:\n    \"\"\"Track a single subject through the video and export mask PNGs.\n\n    Args:\n        predictor: SAM2VideoPredictor instance.\n        frame_dir: Path to directory of extracted JPEG frames.\n        subject: Subject dict with label, first_appearance_frame, bbox_normalised.\n        video_width: Video width in pixels.\n        video_height: Video height in pixels.\n        total_frames: Total number of frames in the video.\n        mask_output_dir: Output directory for this subject's masks.\n        device: CUDA device string.\n\n    Returns:\n        Number of mask frames written.\n    \"\"\"\n    label = subject[\"label\"]\n    first_frame = subject[\"first_appearance_frame\"]\n    bbox_norm = subject[\"bbox_normalised\"]\n\n    # Convert normalised bbox to pixel coordinates",
+  "source_version": "scripts/03_run_sam2.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112211516Z",
+  "valid_from": "2026-04-01T03:19:15.112211516Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/03_run_sam2.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 422,
+    "end_line": 451,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

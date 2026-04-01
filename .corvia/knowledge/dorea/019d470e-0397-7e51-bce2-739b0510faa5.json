@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-739b0510faa5",
+  "content": "    # No state file — build status from live checks\n\n    # Build properly\n    from corvia_dev.models import ServiceStatus\n    resp.services = [ServiceStatus(**s) for s in service_statuses]\n\n    if as_json:\n        click.echo(resp.model_dump_json(indent=2))\n    else:\n        _print_status_human(resp)\n\n\ndef _print_status_human(resp: StatusResponse) -> None:\n    \"\"\"Print status in human-readable format.\"\"\"\n    click.echo(\"=== corvia-dev status ===\\n\")\n\n    if resp.manager:\n        click.echo(f\"Manager: {resp.manager.state} (pid {resp.manager.pid})\")\n    else:\n        click.echo(\"Manager: not running\")\n\n    click.echo(f\"\\nConfig:\")\n    click.echo(f\"  Embedding: {resp.config.embedding_provider}\")\n    click.echo(f\"  Merge:     {resp.config.merge_provider}\")\n    click.echo(f\"  Storage:   {resp.config.storage}\")\n    click.echo(f\"  Workspace: {resp.config.workspace}\")\n\n    click.echo(f\"\\nServices:\")\n    for svc in resp.services:\n        icon = {\"healthy\": \"+\", \"unhealthy\": \"!\", \"stopped\": \"-\", \"starting\": \"~\", \"crashed\": \"x\"}.get(svc.state, \"?\")\n        pid_str = f\" (pid {svc.pid})\" if svc.pid else \"\"\n        port_str = f\" :{svc.port}\" if svc.port else \"\"\n        click.echo(f\"  [{icon}] {svc.name}{port_str}{pid_str} — {svc.state}\")\n",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-cli.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007707190Z",
+  "valid_from": "2026-04-01T03:19:54.007707190Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-cli.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1396,
+    "end_line": 1427,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

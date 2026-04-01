@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-5d4ad28d0f8a",
+  "content": "### Graph-to-Document Navigation UX\n### Panel Pattern\n\n### Large Graph Handling\n\n- Force-directed layout with physics simulation\n- Filtering by file groups (folders, tags), orphan nodes, attachments\n- Color groups for visual categorization\n- Depth slider to control how many hops of connections are shown (local graph)\n- **Performance issues**: Vaults with 100K+ notes can take 10+ minutes to index. Graph becomes\n  unusable above ~10K nodes without aggressive filtering. Nodes shake/lag when toggling settings.\n\n\n### What Works Well\n\n- Hover-to-highlight-connected-nodes is universally praised\n- Local graph in sidebar is the actual useful pattern (not global graph)\n- Depth slider for controlling connection radius\n- Color coding by folder/tag groups\n",
+  "source_version": "decisions/graph-document-ux-research.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007348129Z",
+  "valid_from": "2026-04-01T03:19:54.007348129Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/graph-document-ux-research.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 34,
+    "end_line": 49,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

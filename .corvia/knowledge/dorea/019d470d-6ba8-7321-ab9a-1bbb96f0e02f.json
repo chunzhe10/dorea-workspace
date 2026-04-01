@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1bbb96f0e02f",
+  "content": "PROMPT,\n                messages=messages,\n            )\n        except Exception as e:\n            logger.error(\n                \"    API call failed for batch %d/%d: %s\",\n                batch_idx + 1, len(batches), e,\n            )\n            continue\n\n        # Track token usage\n        if hasattr(response, \"usage\"):\n            total_input_tokens += response.usage.input_tokens\n            total_output_tokens += response.usage.output_tokens\n            logger.debug(\n                \"    Tokens: %d in, %d out\",\n                response.usage.input_tokens, response.usage.output_tokens,\n            )\n\n        # Extract text response\n        response_text = \"\"\n        for block in response.content:\n            if hasattr(block, \"text\"):\n                response_text += block.text\n\n        if not response_text:\n            logger.warning(\"    Empty response from Claude for batch %d\", batch_idx + 1)\n            continue\n\n        # Parse subjects from response\n        new_subjects = parse_claude_response(response_text)\n\n        # Validate and add subjects\n        batch_frame_nums = {f[0] for f in batch}\n        valid_count = 0\n        for subject in new_subjects:\n            if not validate_subject(subject):\n                continue\n            # Check frame number is in this batch\n            if subject[\"first_appearance_frame\"] not in batch_frame_nums:\n                nearest = min(batch_frame_nums, key=lambda n: abs(n - subject[\"first_appearance_frame\"]))",
+  "source_version": "scripts/02_claude_scene_analysis.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112193179Z",
+  "valid_from": "2026-04-01T03:19:15.112193179Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/02_claude_scene_analysis.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 351,
+    "end_line": 381,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

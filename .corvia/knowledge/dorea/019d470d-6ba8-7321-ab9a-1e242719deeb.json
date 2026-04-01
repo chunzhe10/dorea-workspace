@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1e242719deeb",
+  "content": "lip_id\n    if not depth_dir.is_dir():\n        return None\n\n    # Verify it contains at least one PNG file\n    png_files = [f for f in depth_dir.iterdir() if f.is_file() and f.suffix == \".png\"]\n    if not png_files:\n        return None\n\n    return depth_dir\ndef connect_to_resolve():\n    \"\"\"Connect to a running DaVinci Resolve instance.\n\n    Returns the Resolve object, or None if connection fails.\n    \"\"\"\n    try:\n        import DaVinciResolveScript as dvr\n    except ImportError:\n        logger.error(\n            \"Cannot import DaVinciResolveScript. Ensure that:\\n\"\n            \"  1. DaVinci Resolve Studio is installed\\n\"\n            \"  2. Environment variables are set:\\n\"\n            \"     - RESOLVE_SCRIPT_API (e.g., /opt/resolve/Developer/Scripting)\\n\"\n            \"     - RESOLVE_SCRIPT_LIB (e.g., /opt/resolve/libs/Fusion/fusionscript.so)\\n\"\n            \"     - PYTHONPATH includes the Resolve scripting modules directory\\n\"\n            \"  3. This script is run from the HOST machine, not the devcontainer\"\n        )\n        return None\n\n    try:\n        resolve = dvr.scriptapp(\"Resolve\")\n    except Exception as e:\n        logger.error(\"Failed to connect to Resolve scripting API: %s\", e)\n        return None\n\n    if resolve is None:\n        logger.error(\n            \"DaVinci Resolve is not running or not responding. \"\n            \"Please start Resolve Studio before running this script.\"\n        )\n        return None\n\n    logger.info(\"Connected to DaVinci Resolve\")\n    return resolve",
+  "source_version": "scripts/05_resolve_setup.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112224504Z",
+  "valid_from": "2026-04-01T03:19:15.112224504Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/05_resolve_setup.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 234,
+    "end_line": 267,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

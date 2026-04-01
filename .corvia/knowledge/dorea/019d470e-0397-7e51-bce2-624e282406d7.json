@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-624e282406d7",
+  "content": "### Task 1.6: Update MCP tool schemas and handlers\n\njson!({\n    \"name\": \"corvia_write\",\n    \"description\": \"Write a knowledge entry to organizational memory (requires agent identity)\",\n    \"inputSchema\": {\n        \"type\": \"object\",\n        \"properties\": {\n            \"content\": { \"type\": \"string\", \"description\": \"The knowledge content to store\" },\n            \"scope_id\": { \"type\": \"string\", \"description\": \"Target scope (defaults to workspace scope if omitted)\" },\n            \"source_version\": { \"type\": \"string\", \"description\": \"Source version reference\" },\n            \"agent_id\": { \"type\": \"string\", \"description\": \"Agent identity for attribution (e.g. 'claude-code')\" },\n            \"content_role\": { \"type\": \"string\", \"description\": \"Content role: design, decision, plan, code, memory, finding, instruction, learning\" },\n            \"source_origin\": { \"type\": \"string\", \"description\": \"Source origin: repo:<name>, workspace, memory\" }\n        },\n        \"required\": [\"content\"]\n    }\n}),\n```\n\n- [ ] **Step 3: Update `tool_corvia_search` to pass filters through retrieval**\n\nIn `tool_corvia_search` (mcp.rs ~line 610), read the new args. Clone before moving into `RetrievalOpts` since the fallback branch also needs them:\n\n```rust\nlet content_role = args.get(\"content_role\").and_then(|v| v.as_str()).map(String::from);\nlet source_origin = args.get(\"source_origin\").and_then(|v| v.as_str()).map(String::from);\n\n// When using RAG pipeline — clone because fallback branch also needs these values:\nlet opts = corvia_kernel::rag_types::RetrievalOpts {\n    limit,\n    expand_graph: false,\n    content_role: content_role.clone(),\n    source_origin: source_origin.clone(),\n    ..Default::default()",
+  "source_version": "plans/2026-03-13-docs-workflow-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007422212Z",
+  "valid_from": "2026-04-01T03:19:54.007422212Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-13-docs-workflow-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 623,
+    "end_line": 655,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-5be1243993a8",
+  "content": "## Decision\n## Context\n\n## Consequences\n\n- `.devcontainer/` directory with `devcontainer.json`, Dockerfile, and lifecycle scripts:\n  `post-create.sh` (clone repos, install binaries) and `post-start.sh` (start corvia\n  server in background).\n- Pre-ingested knowledge (`.corvia/knowledge/` + `hnsw_index/`) ships with the repo for\n  instant search without waiting for embedding on first open.\n- `corvia.toml` with `[workspace]` section declares repos, storage, embedding, and server\n  config. Detection: if `[workspace]` section present, directory is a workspace.\n- Workspace CLI surface: `corvia workspace create|init|status|add|remove|ingest`.\n- Two operating modes: Mode 1 (native, local Ollama) and Mode 2 (devcontainer, services\n  in container). Both use the same workspace layout and config.\n- Port 8020 forwarded for the REST + MCP API server.\n\n**Source:** `repos/corvia/docs/rfcs/2026-03-01-m2.1-workspace-devcontainer-design.md`",
+  "source_version": "decisions/d52-devcontainer-integration.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007325018Z",
+  "valid_from": "2026-04-01T03:19:54.007325018Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/d52-devcontainer-integration.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 24,
+    "end_line": 38,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

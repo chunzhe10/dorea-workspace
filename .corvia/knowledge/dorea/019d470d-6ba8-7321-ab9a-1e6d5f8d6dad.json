@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1e6d5f8d6dad",
+  "content": "ps, dict) else list(clips)\n        logger.info(\"Imported %d clip(s) to Media Pool\", len(clip_list))\n        return clip_list\n    except Exception:\n        logger.info(\"Imported clip(s) to Media Pool (count unknown)\")\n        return [clips] if clips else []\ndef create_timeline(media_pool, timeline_name: str, clips):\n    \"\"\"Create a timeline from imported clips.\n\n    Returns the Timeline object, or None on failure.\n    \"\"\"\n    if not clips:\n        logger.error(\"No clips provided for timeline creation\")\n        return None\n\n    try:\n        timeline = media_pool.CreateTimelineFromClips(timeline_name, clips)\n    except Exception as e:\n        logger.error(\"Failed to create timeline '%s': %s\", timeline_name, e)\n        return None\n\n    if timeline is None:\n        logger.error(\n            \"CreateTimelineFromClips returned None for '%s'. \"\n            \"Clips may already be on a timeline or be incompatible.\",\n            timeline_name,\n        )\n        return None\n\n    logger.info(\"Created timeline: %s\", timeline_name)\n    return timeline",
+  "source_version": "scripts/05_resolve_setup.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112228633Z",
+  "valid_from": "2026-04-01T03:19:15.112228633Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/05_resolve_setup.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 408,
+    "end_line": 432,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

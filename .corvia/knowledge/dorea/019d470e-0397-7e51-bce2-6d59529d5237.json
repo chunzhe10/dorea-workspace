@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-6d59529d5237",
+  "content": "# Master overnight batch script for Dorea pipeline\n# Runs Phases 1-4 inside the devcontainer, then prompts for Phase 5 on host.\n\n#\n\n# Usage: bash scripts/run_all.sh",
+  "source_version": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007600862Z",
+  "valid_from": "2026-04-01T03:19:54.007600862Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1439,
+    "end_line": 1440,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

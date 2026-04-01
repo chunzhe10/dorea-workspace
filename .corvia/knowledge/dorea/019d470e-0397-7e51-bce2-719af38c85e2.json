@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-719af38c85e2",
+  "content": "    # Verify JSON serialization works\n\n    name: str\n    state: ServiceState\n    port: int | None = None\n    pid: int | None = None\n    uptime_s: float | None = None\n    reason: str | None = None\n\n\nclass ManagerStatus(BaseModel):\n    \"\"\"Status of the process manager itself.\"\"\"\n\n    pid: int\n    uptime_s: float\n    state: str\n\n\nclass ConfigSummary(BaseModel):\n    \"\"\"Summary of current corvia.toml config.\"\"\"\n\n    embedding_provider: str\n    merge_provider: str\n    storage: str\n    workspace: str\n\n\nclass StatusResponse(BaseModel):\n    \"\"\"Full status response — the JSON contract for the VS Code extension.\"\"\"\n\n    manager: ManagerStatus | None = None\n    services: list[ServiceStatus] = []\n    config: ConfigSummary\n    enabled_services: list[str] = []\n    logs: list[str] = []\n```\n\n**Step 4: Run test to verify it passes**\n\nRun: `cd /workspaces/corvia-workspace && python3 -m pytest tools/corvia-dev/tests/test_models.py -v`\nExpected: All 5 tests PASS\n\n**Step 5: Commit**\n\n```bash\ngit add tools/corvia-dev/corvia_dev/models.py tools/corvia-dev/tests/\ngit commit -m \"feat(corvia-dev): add Pydantic models for services and status\"\n```\n\n---\n",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-cli.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007674273Z",
+  "valid_from": "2026-04-01T03:19:54.007674273Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-cli.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 232,
+    "end_line": 280,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1d49986911a2",
+  "content": " = 0\n    consecutive_empty = 0\n    subject_exited = False\n\n    with torch.inference_mode(), torch.autocast(\"cuda\", dtype=torch.bfloat16):\n        # Initialise SAM2 state for this video\n        state = predictor.init_state(\n            video_path=frame_dir,\n            offload_video_to_cpu=True,  # save VRAM on 6GB card\n        )\n\n        # Add bounding box prompt at the first appearance frame\n        # SAM2 expects pixel coordinates when normalize_coords=True (default)\n        frame_idx, obj_ids, masks = predictor.add_new_points_or_box(\n            inference_state=state,\n            frame_idx=sam2_first_frame_idx,\n            obj_id=1,  # single object per tracking session\n            box=bbox_pixel,\n        )\n\n        # Propagate forward through remaining frames\n        for frame_idx, obj_ids, video_res_masks in predictor.propagate_in_video(state):\n            # video_res_masks shape: (num_objects, 1, H, W) — logit scores\n            # We track one object, so index [0, 0]\n            mask_logits = video_res_masks[0, 0]  # (H, W)\n            mask_binary = (mask_logits > 0.0).cpu().numpy()\n\n            # Check mask area for subject exit detection\n            mask_area_fraction = mask_binary.sum() / mask_binary.size\n\n            if mask_area_fraction < MASK_EXIT_THRESHOLD:\n                consecutive_empty += 1\n                if consecutive_empty >= EXIT_FRAME_GAP and not subject_exited:\n                    logger.info(\n                        \"  Subject '%s': exited at frame %d \"\n                        \"(empty for %d consecutive frames)\",\n                        label, frame_idx, consecutive_empty,\n                    )",
+  "source_version": "scripts/03_run_sam2.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112213972Z",
+  "valid_from": "2026-04-01T03:19:15.112213972Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/03_run_sam2.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 482,
+    "end_line": 511,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

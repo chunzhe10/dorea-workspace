@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-6ada54c3c209",
+  "content": "### Task 15: Update devcontainer.json\n\n        \"11534\": {\"label\": \"Ollama\", \"onAutoForward\": \"ignore\"}\n    },\n    \"mounts\": [\n        \"source=${localEnv:HOME}${localEnv:USERPROFILE}/.config/gh,target=/root/.config/gh-host,type=bind,consistency=cached,readonly\",\n        \"source=${localEnv:HOME}${localEnv:USERPROFILE}/.claude,target=/root/.claude,type=bind,consistency=cached\"\n    ],\n    \"remoteUser\": \"root\",\n    \"containerEnv\": {\n        \"CORVIA_WORKSPACE\": \"${containerWorkspaceFolder}\"\n    },\n    \"customizations\": {\n        \"vscode\": {\n            \"extensions\": [\n                \"ms-python.python\",\n                \"tamasfe.even-better-toml\",\n                \"Continue.continue\",\n                \"ms-vscode.live-server\"\n            ],\n            \"settings\": {\n                \"corvia.serverUrl\": \"http://localhost:8020\",\n                \"files.watcherExclude\": {\n                    \"**/.corvia/**\": true,\n                    \"**/node_modules/**\": true,\n                    \"**/footage/**\": true,\n                    \"**/working/**\": true,\n                    \"**/models/**\": true\n                }\n            }\n        }\n    }\n}\n```\n",
+  "source_version": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007560940Z",
+  "valid_from": "2026-04-01T03:19:54.007560940Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 865,
+    "end_line": 897,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

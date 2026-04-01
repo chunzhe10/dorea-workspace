@@ -1,0 +1,31 @@
+{
+  "id": "019d46fb-e772-7503-a64b-00993cea38bf",
+  "content": "## Depth Map Upscale-Then-Store Antipattern (Performance Finding)\n\nDepth Anything V2 Small processes internally at 518x518 pixels. The pipeline (`04_run_depth.py` lines 165-171) upscales the output back to source resolution (3840x2160) via `cv2.resize(INTER_LINEAR)` before saving as 16-bit PNG.\n\n**Quantified waste:**\n- Pixel inflation: 30.9x (268K native → 8.29M stored)\n- Per-frame: ~500KB (native 518px 16-bit) vs ~3.6MB (4K 16-bit) = 7.2x bloat\n- 2 test clips: 1.7GB (native) vs 15GB (current) \n- Annual at 10 clips/dive, 2x/week: 884GB (native) vs 6.3TB (current)\n\n**Fix:** Remove the `cv2.resize` upscale. Store at native model resolution. Resolve auto-scales external mattes to match timeline resolution via GPU — this is what it's designed to do. Native 518px 16-bit is both smaller AND higher quality than upscaled 4K 16-bit (no interpolation artifacts).\n\n**Also:** `depth_output_format: png16` in config.yaml is dead code — `save_depth_map_16bit()` is called unconditionally. Wire this config key if adding resolution/format options.",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-01T03:00:07.154181572Z",
+  "valid_from": "2026-04-01T03:00:07.154181572Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "finding",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

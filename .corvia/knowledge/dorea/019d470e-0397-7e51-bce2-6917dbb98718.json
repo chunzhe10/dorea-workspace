@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-6917dbb98718",
+  "content": "# dorea-workspace — Claude Code\n\n## STOP — Read this FIRST before doing ANYTHING\n\n**Your FIRST tool call in EVERY conversation and EVERY new task MUST be a corvia MCP\ntool** (`corvia_search`, `corvia_ask`, or `corvia_context`). This overrides your\ndefault behavior of reaching for Grep/Glob/Read first.\n\n**DO NOT use Grep, Glob, or code search as your first action.** Always query corvia\nfor project context before touching code. The order is:\n\n1. `corvia_search` or `corvia_ask` — get project knowledge and prior decisions\n2. THEN use Grep/Glob/Read for code-level details\n\nThis is the single most important instruction in this file. If you skip corvia and\ngo straight to code search, you are violating this project's workflow.\n\n@AGENTS.md\n\n\n## corvia MCP tool usage (detailed)\n\n- Before writing or modifying code: `corvia_search` for prior decisions and patterns\n- Before answering any question about the project: `corvia_ask` first\n- Before designing a feature: `corvia_search` + `corvia_context` for existing context\n- After making a design decision: `corvia_write` to record it for future sessions\n- When exploring unfamiliar areas: `corvia_ask` before diving into code\n\n**Do NOT skip corvia lookups to save time.** The knowledge base exists to prevent\nre-discovering things that were already decided. Always check corvia first, then\nuse native tools (file read, grep, bash) for code-level details.\n",
+  "source_version": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007531683Z",
+  "valid_from": "2026-04-01T03:19:54.007531683Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 415,
+    "end_line": 443,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

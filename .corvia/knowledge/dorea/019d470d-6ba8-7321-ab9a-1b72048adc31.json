@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1b72048adc31",
+  "content": "pe\": \"image\",\n            \"source\": {\n                \"type\": \"base64\",\n                \"media_type\": \"image/jpeg\",\n                \"data\": encode_frame_base64(frame_path),\n            },\n        })\n\n    return [{\"role\": \"user\", \"content\": content_blocks}]\ndef parse_claude_response(response_text: str) -> list[dict]:\n    \"\"\"Parse Claude's JSON response into a list of subject dicts.\n\n    Handles cases where Claude wraps JSON in markdown code blocks.\n    Returns empty list if parsing fails.\n    \"\"\"\n    text = response_text.strip()\n\n    # Strip markdown code block wrappers if present\n    if text.startswith(\"```\"):\n        # Remove opening ``` line (with optional language tag)\n        text = re.sub(r\"^```[a-zA-Z]*\\n?\", \"\", text)\n        # Remove closing ```\n        text = re.sub(r\"\\n?```\\s*$\", \"\", text)\n        text = text.strip()\n\n    try:\n        result = json.loads(text)\n        if isinstance(result, list):\n            return result\n        logger.warning(\"Claude returned JSON but not an array; wrapping in array\")\n        return [result] if isinstance(result, dict) else []\n    except json.JSONDecodeError as e:\n        logger.error(\"Failed to parse Claude response as JSON: %s\", e)\n        logger.error(\"Raw response:\\n%s\", response_text[:2000])\n        return []",
+  "source_version": "scripts/02_claude_scene_analysis.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112189272Z",
+  "valid_from": "2026-04-01T03:19:15.112189272Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/02_claude_scene_analysis.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 195,
+    "end_line": 220,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

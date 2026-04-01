@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1c80f026d2ec",
+  "content": "ON file paths.\n    \"\"\"\n    if not scene_analysis_dir.is_dir():\n        return []\n\n    jsons = []\n    for entry in sorted(scene_analysis_dir.iterdir()):\n        if entry.is_file() and entry.suffix == \".json\":\n            jsons.append(entry)\n    return jsons\ndef load_scene_analysis(json_path: Path) -> dict | None:\n    \"\"\"Load and validate a scene_analysis JSON file.\n\n    Returns the parsed dict or None if invalid.\n    \"\"\"\n    try:\n        with open(json_path, \"r\") as f:\n            data = json.load(f)\n    except (json.JSONDecodeError, OSError) as e:\n        logger.error(\"Failed to load %s: %s\", json_path, e)\n        return None\n\n    if not isinstance(data, dict):\n        logger.error(\"Invalid scene_analysis format in %s: expected dict\", json_path)\n        return None\n\n    if \"clip_id\" not in data:\n        logger.error(\"Missing 'clip_id' in %s\", json_path)\n        return None\n\n    if \"subjects\" not in data or not isinstance(data[\"subjects\"], list):\n        logger.error(\"Missing or invalid 'subjects' in %s\", json_path)\n        return None\n\n    return data",
+  "source_version": "scripts/03_run_sam2.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112203622Z",
+  "valid_from": "2026-04-01T03:19:15.112203622Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/03_run_sam2.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 154,
+    "end_line": 178,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1955f359e057",
+  "content": "def safe_mean(zone_sum: np.ndarray, zone_n: int) -> np.ndarray:\n        if zone_n == 0:\n            return np.array([0.0, 0.0, 0.0])\n        return zone_sum / zone_n\ndef compute_correction_params(analysis: dict) -> dict:\n    \"\"\"Derive lift/gamma/gain correction parameters from reference analysis.\n\n    Builds a per-channel colour correction that maps D-Log M neutral values\n    towards the reference underwater look.\n\n    The correction model uses:\n        - Lift: offset applied to shadows (additive)\n        - Gamma: power curve applied to midtones (exponent)\n        - Gain: multiplier applied to highlights (multiplicative)\n\n    Additionally applies underwater-specific corrections:\n        - Red channel recovery (red is absorbed first underwater)\n        - Blue/green balance adjustment\n    \"\"\"\n    shadows = analysis[\"shadows_mean_rgb\"]\n    midtones = analysis[\"midtones_mean_rgb\"]\n    highlights = analysis[\"highlights_mean_rgb\"]\n    overall = analysis[\"overall_mean_rgb\"]\n    saturation = analysis[\"saturation_mean\"]\n\n    # --- Compute D-Log M decoded reference points ---\n    # D-Log M middle grey sits at ~0.39 encoded, which decodes to ~0.18 linear\n    # We compute what each zone's mean colour looks like as a target.\n\n    # For a neutral D-Log M image, all channels would decode similarly.\n    # The reference images tell us what the target colour balance should be.\n\n    # Normalise zone means relative to overall brightness",
+  "source_version": "scripts/00_generate_lut.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112159804Z",
+  "valid_from": "2026-04-01T03:19:15.112159804Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/00_generate_lut.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 266,
+    "end_line": 294,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

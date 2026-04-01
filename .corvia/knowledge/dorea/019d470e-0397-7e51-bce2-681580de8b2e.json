@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-681580de8b2e",
+  "content": "## Chunk 2: Workspace Configuration Files\n\n### Task 3: Update corvia.toml\n\n**Files:**\n- Modify: `corvia.toml`\n\n- [ ] **Step 1: Update corvia.toml for dorea**\n\nReplace the full content of `corvia.toml` with:\n\n```toml\n[project]\nname = \"dorea\"\nscope_id = \"dorea\"\n\n[storage]\nstore_type = \"lite\"\ndata_dir = \".corvia\"\n\n[embedding]\nprovider = \"corvia\"\nmodel = \"nomic-embed-text-v1.5\"\nurl = \"http://127.0.0.1:8030\"\ndimensions = 768\n\n[server]\nhost = \"127.0.0.1\"\nport = 8020\n\n[agent_lifecycle]\nheartbeat_interval_secs = 30\nstale_timeout_secs = 300\norphan_grace_secs = 1200\ngc_orphan_after_secs = 86400\ngc_closed_session_after_secs = 604800\ngc_inactive_agent_after_secs = 2592000\n\n[merge]\nprovider = \"corvia\"\nmodel = \"qwen3\"\nsimilarity_threshold = 0.8500000238418579\nmax_retries = 3\n\n[workspace]\nrepos_dir = \"repos\"\n\n[[workspace.repos]]\nname = \"dorea\"\nurl = \"https://github.com/chunzhe10/dorea\"\nnamespace = \"pipeline\"\n\n[rag]\ndefault_limit = 10\ngraph_expand = true\ngraph_depth = 2\ngraph_alpha = 0.30000001192092896\nreserve_for_answer = 0.20000000298023224\nmax_context_tokens = 0\nsystem_prompt = \"\"\ngraph_oversample_factor = 3\nskills_enabled = false\nskills_dirs = [\"skills\"]",
+  "source_version": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007516663Z",
+  "valid_from": "2026-04-01T03:19:54.007516663Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 165,
+    "end_line": 225,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

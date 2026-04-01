@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1b4b0bc09166",
+  "content": "_root.iterdir()):\n        if entry.is_dir():\n            # Check that it contains at least one .jpg file\n            jpg_files = [f for f in entry.iterdir() if f.suffix == \".jpg\"]\n            if jpg_files:\n                dirs.append(entry)\n    return dirs\ndef get_sorted_frames(clip_dir: Path) -> list[tuple[int, Path]]:\n    \"\"\"Get sorted list of (frame_number, path) for all keyframes in a clip directory.\n\n    Expects filenames like frame_000001.jpg, frame_000014.jpg, etc.\n    Returns list sorted by frame number.\n    \"\"\"\n    frame_pattern = re.compile(r\"frame_(\\d+)\\.jpg$\")\n    frames = []\n    for f in clip_dir.iterdir():\n        if f.is_file():\n            match = frame_pattern.match(f.name)\n            if match:\n                frame_num = int(match.group(1))\n                frames.append((frame_num, f))\n    frames.sort(key=lambda x: x[0])\n    return frames",
+  "source_version": "scripts/02_claude_scene_analysis.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112186719Z",
+  "valid_from": "2026-04-01T03:19:15.112186719Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/02_claude_scene_analysis.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 128,
+    "end_line": 143,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

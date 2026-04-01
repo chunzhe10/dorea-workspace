@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-58a5d1bd855c",
+  "content": "    # Fall back to source build\n\n#### 3. `corvia-workspace rebuild` command\n\nNew subcommand in `corvia-workspace.sh` for local recompilation:\n\n```bash\ncorvia-workspace rebuild    # builds both binaries from repos/corvia/ source\n```\n\nRuns:\n```bash\ncargo install --path \"$WORKSPACE_ROOT/repos/corvia/crates/corvia-cli\"\ncargo install --path \"$WORKSPACE_ROOT/repos/corvia/crates/corvia-inference\"\n```\n\nThis overwrites the prebuilt binaries with locally compiled versions, useful when developing against source changes in `repos/corvia/`.\n",
+  "source_version": "decisions/2026-03-03-prebuilt-binaries-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007273737Z",
+  "valid_from": "2026-04-01T03:19:54.007273737Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-03-03-prebuilt-binaries-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 48,
+    "end_line": 63,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

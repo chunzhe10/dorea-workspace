@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1860605ab1dd",
+  "content": "pipeline_dir: repos/dorea\n\n# Claude API (for overnight batch scene analysis only)\n# Set ANTHROPIC_API_KEY env var or replace below\nanthropic_api_key: ${ANTHROPIC_API_KEY}\nclaude_model: claude-sonnet-4-6",
+  "source_version": "config.yaml",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112146347Z",
+  "valid_from": "2026-04-01T03:19:15.112146347Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "config.yaml",
+    "language": "yaml",
+    "chunk_type": "section",
+    "start_line": 12,
+    "end_line": 13,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

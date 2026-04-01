@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1a3cec94d848",
+  "content": "rectory (non-recursive).\"\"\"\n    if not footage_dir.is_dir():\n        return []\n\n    clips = []\n    for entry in sorted(footage_dir.iterdir()):\n        if entry.is_file() and entry.suffix in VIDEO_EXTENSIONS:\n            clips.append(entry)\n    return clips\ndef discover_images(references_dir: Path) -> list[Path]:\n    \"\"\"Find all valid image files in a directory.\"\"\"\n    if not references_dir.is_dir():\n        return []\n\n    images = []\n    for entry in sorted(references_dir.iterdir()):\n        if entry.is_file() and entry.suffix.lower() in IMAGE_EXTENSIONS:\n            images.append(entry)\n    return images",
+  "source_version": "scripts/pipeline_utils.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112171521Z",
+  "valid_from": "2026-04-01T03:19:15.112171521Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/pipeline_utils.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 89,
+    "end_line": 98,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

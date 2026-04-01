@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-75e56c0c2802",
+  "content": "    # Check for stale binaries\n\n### Task 6: Integrate staleness warning into `status` command\n\n**Files:**\n- Modify: `tools/corvia-dev/corvia_dev/cli.py`\n- Modify: `tools/corvia-dev/corvia_dev/models.py`\n\n**Step 1: Add `stale_binaries` field to `StatusResponse`**\n\nIn `models.py`, add to the `StatusResponse` class (after line 70):\n\n```python\n    stale_binaries: list[str] = []\n```\n\n**Step 2: Add staleness check to `status` command**\n\nIn `cli.py`, in the `status` function, add staleness check. After loading the state from file (around line 51, inside the `if DEFAULT_STATE_PATH.exists():` block, before returning):\n\n```python",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-rebuild.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007745282Z",
+  "valid_from": "2026-04-01T03:19:54.007745282Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-rebuild.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 457,
+    "end_line": 475,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

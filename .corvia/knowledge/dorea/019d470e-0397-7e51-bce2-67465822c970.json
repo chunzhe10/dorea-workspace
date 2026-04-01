@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-67465822c970",
+  "content": "### post-start.sh adaptations\n### Dockerfile adaptations\n\n# Dorea Python environment — isolated venv to avoid CUDA conflicts\nRUN python3 -m venv /opt/dorea-venv\nRUN /opt/dorea-venv/bin/pip install --no-cache-dir \\\n    anthropic colour-science numpy Pillow opencv-python \\\n    torch torchvision --index-url https://download.pytorch.org/whl/cu121 \\\n    transformers\n\n\n# SAM2 installed from GitHub (not on PyPI as segment-anything-2)\nRUN /opt/dorea-venv/bin/pip install --no-cache-dir \\\n    git+https://github.com/facebookresearch/sam2.git\n",
+  "source_version": "plans/2026-03-17-dorea-underwater-pipeline-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007504711Z",
+  "valid_from": "2026-04-01T03:19:54.007504711Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-17-dorea-underwater-pipeline-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 411,
+    "end_line": 421,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

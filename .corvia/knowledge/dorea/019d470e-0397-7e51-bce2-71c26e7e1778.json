@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-71c26e7e1778",
+  "content": "    # corvia-inference should NOT be in the list\n\n# --- Service Definitions ---\n\nSERVICES: list[ServiceDefinition] = [\n    ServiceDefinition(\n        name=\"corvia-inference\",\n        tier=0,\n        port=8030,\n        health_path=\"/health\",\n        start_cmd=[\"corvia-inference\", \"serve\", \"--port\", \"8030\"],\n        depends_on=[],\n        exclusive_group=\"embedding\",\n    ),\n    ServiceDefinition(\n        name=\"corvia-server\",\n        tier=0,\n        port=8020,\n        health_path=\"/health\",\n        start_cmd=[\"corvia\", \"serve\"],\n        depends_on=[\"_active_embedding\"],  # resolved dynamically\n    ),\n    ServiceDefinition(\n        name=\"ollama\",\n        tier=1,\n        port=11434,\n        health_path=\"/api/tags\",\n        start_cmd=[\"ollama\", \"serve\"],\n        depends_on=[],\n        exclusive_group=\"embedding\",\n    ),\n    ServiceDefinition(\n        name=\"vllm\",\n        tier=1,\n        port=None,  # TBD\n        health_path=\"/health\",\n        start_cmd=[],  # Docker-managed\n        depends_on=[],\n        exclusive_group=\"embedding\",\n    ),\n    ServiceDefinition(\n        name=\"surrealdb\",\n        tier=1,\n        port=8000,\n        health_path=\"/health\",\n        start_cmd=[\"docker\", \"compose\", \"-f\", \"repos/corvia/docker/docker-compose.yml\", \"up\", \"-d\"],\n        depends_on=[],\n        exclusive_group=\"storage\",\n    ),\n    ServiceDefinition(\n        name=\"postgres\",\n        tier=1,\n        port=5432,\n        health_path=\"\",  # uses pg_isready instead of HTTP\n        start_cmd=[\"docker\", \"compose\", \"-f\", \"repos/corvia/docker/docker-compose-pg.yml\", \"up\", \"-d\"],\n        depends_on=[],\n        exclusive_group=\"storage\",\n    ),\n    ServiceDefinition(\n        name=\"coding-llm\",\n        tier=2,\n        port=None,\n        health_path=\"\",\n        start_cmd=[],  # virtual — depends on ollama, configures Continue\n        depends_on=[\"ollama\"],\n    ),\n]\n\n_SERVICES_BY_NAME: dict[str, ServiceDefinition] = {s.name: s for s in SERVICES}\n",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-cli.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007678562Z",
+  "valid_from": "2026-04-01T03:19:54.007678562Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-cli.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 397,
+    "end_line": 464,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1ca1b6c90325",
+  "content": "ffix in VIDEO_EXTENSIONS:\n                if entry.stem == clip_id:\n                    logger.debug(\n                        \"Source video for '%s': %s (raw preferred)\", clip_id, entry\n                    )\n                    return entry\n    return None\ndef get_video_info(video_path: Path) -> dict | None:\n    \"\"\"Get video resolution and frame count using ffprobe.\n\n    Returns dict with 'width', 'height', 'frame_count' or None on failure.\n    \"\"\"\n    cmd = [\n        \"ffprobe\",\n        \"-v\", \"quiet\",\n        \"-print_format\", \"json\",\n        \"-show_streams\",\n        \"-select_streams\", \"v:0\",\n        str(video_path),\n    ]\n    try:\n        result = subprocess.run(cmd, capture_output=True, text=True, check=True)\n        data = json.loads(result.stdout)\n    except (subprocess.CalledProcessError, json.JSONDecodeError) as e:\n        logger.error(\"ffprobe failed for %s: %s\", video_path, e)\n        return None\n\n    streams = data.get(\"streams\", [])\n    if not streams:\n        logger.error(\"No video streams found in %s\", video_path)\n        return None\n\n    stream = streams[0]\n    width = int(stream.get(\"width\", 0))\n    height = int(stream.get(\"height\", 0))\n\n    # Try to get frame count from nb_frames, fall back to counting via ffprobe",
+  "source_version": "scripts/03_run_sam2.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112205703Z",
+  "valid_from": "2026-04-01T03:19:15.112205703Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/03_run_sam2.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 202,
+    "end_line": 231,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

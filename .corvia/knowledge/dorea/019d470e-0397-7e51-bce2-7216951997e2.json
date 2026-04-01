@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-7216951997e2",
+  "content": "        # Resolve dependencies (e.g., coding-llm → ollama)\n\n### Task 4: Config Reader & Mutator\n\n**Files:**\n- Create: `tools/corvia-dev/corvia_dev/config.py`\n- Create: `tools/corvia-dev/tests/test_config.py`\n\n**Step 1: Write the failing test**\n\n```python\n\"\"\"Tests for corvia.toml config read/mutate/write.\"\"\"\n\nimport tomllib\nfrom pathlib import Path\nfrom textwrap import dedent\n\nfrom corvia_dev.config import load_config, use_provider, read_enabled_services, set_enabled_service\n\n\nSAMPLE_TOML = dedent(\"\"\"\\\n    [project]\n    name = \"test\"\n    scope_id = \"test\"\n\n    [workspace]\n    repos_dir = \"repos\"\n\n    [[workspace.repos]]\n    name = \"corvia\"\n    url = \"https://github.com/chunzhe10/corvia\"\n    namespace = \"kernel\"\n\n    [storage]\n    store_type = \"lite\"\n    data_dir = \".corvia\"\n\n    [embedding]\n    provider = \"corvia\"\n    model = \"nomic-embed-text-v1.5\"\n    url = \"http://127.0.0.1:8030\"\n    dimensions = 768\n\n    [server]\n    host = \"127.0.0.1\"\n    port = 8020\n\"\"\")\n\n\ndef test_load_config(tmp_path: Path) -> None:\n    toml_path = tmp_path / \"corvia.toml\"\n    toml_path.write_text(SAMPLE_TOML)\n    cfg = load_config(toml_path)\n    assert cfg.embedding_provider == \"corvia\"\n    assert cfg.merge_provider == \"corvia\"  # defaults when [merge] absent\n    assert cfg.storage == \"lite\"\n    assert cfg.workspace_name == \"test\"\n\n\ndef test_use_ollama(tmp_path: Path) -> None:\n    toml_path = tmp_path / \"corvia.toml\"\n    toml_path.write_text(SAMPLE_TOML)\n    use_provider(\"ollama\", toml_path)\n",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-cli.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007682565Z",
+  "valid_from": "2026-04-01T03:19:54.007682565Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-cli.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 549,
+    "end_line": 610,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

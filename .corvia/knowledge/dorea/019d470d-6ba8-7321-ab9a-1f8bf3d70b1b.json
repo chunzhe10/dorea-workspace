@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1f8bf3d70b1b",
+  "content": "ate raw/flat by stem)\n    clips = deduplicate_clips(discover_clips(raw_dir) + discover_clips(flat_dir))\n\n    if not clips:\n        logger.error(\n            \"No video files found in footage directories for date %s. \"\n            \"Supported extensions: %s\",\n            args.date, \", \".join(sorted(VIDEO_EXTENSIONS)),\n        )\n        sys.exit(1)\n\n    logger.info(\"Found %d clip(s) to process\", len(clips))\n\n    # Compute fps from config sample rate\n    sample_rate = config.get(\"frame_sample_rate_seconds\", 2)\n    fps = 1.0 / sample_rate\n\n    # Process each clip\n    total_frames = 0\n    successful_clips = 0\n    failed_clips = 0\n\n    for clip_path in get_progress_bar(clips, desc=\"Extracting frames\"):\n        clip_id = clip_path.stem\n        output_dir = keyframes_dir / clip_id\n\n        frame_count = extract_frames(clip_path, output_dir, fps=fps)\n\n        if frame_count < 0:\n            failed_clips += 1\n            logger.warning(\"Skipping %s due to ffmpeg error\", clip_path.name)\n            continue\n\n        successful_clips += 1\n        total_frames += frame_count\n        logger.info(\n            \"  %s: %d frame(s) extracted → %s\",\n            clip_id, frame_count, output_dir,\n        )\n\n    # Summary\n    logger.info(\"--- Extraction complete ---\")\n    logger.info(\n        \"Clips: %d processed, %d failed | Total frames: %d\",\n        successful_clips, failed_clips, total_frames,\n    )\n\n    if failed_clips > 0 and successful_clips == 0:\n        logger.error(\"All clips failed. Check ffmpeg errors above.\")\n        sys.exit(1)\n\n    if failed_clips > 0:\n        logger.warning(\"%d clip(s) failed. Check errors above.\", failed_clips)",
+  "source_version": "scripts/01_extract_frames.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112243544Z",
+  "valid_from": "2026-04-01T03:19:15.112243544Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/01_extract_frames.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 127,
+    "end_line": 172,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

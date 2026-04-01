@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1cbd9a5d7fe5",
+  "content": "error(\"No video streams found in %s\", video_path)\n        return None\n\n    stream = streams[0]\n    width = int(stream.get(\"width\", 0))\n    height = int(stream.get(\"height\", 0))\n\n    # Try to get frame count from nb_frames, fall back to counting via ffprobe\n    frame_count = 0\n    nb_frames = stream.get(\"nb_frames\")\n    if nb_frames and nb_frames != \"N/A\":\n        frame_count = int(nb_frames)\n    else:\n        # Count frames using ffprobe\n        count_cmd = [\n            \"ffprobe\",\n            \"-v\", \"quiet\",\n            \"-count_frames\",\n            \"-select_streams\", \"v:0\",\n            \"-show_entries\", \"stream=nb_read_frames\",\n            \"-print_format\", \"json\",\n            str(video_path),\n        ]\n        try:\n            count_result = subprocess.run(\n                count_cmd, capture_output=True, text=True, check=True, timeout=120\n            )\n            count_data = json.loads(count_result.stdout)\n            nb_read = count_data.get(\"streams\", [{}])[0].get(\"nb_read_frames\")\n            if nb_read and nb_read != \"N/A\":\n                frame_count = int(nb_read)\n        except (subprocess.CalledProcessError, json.JSONDecodeError, subprocess.TimeoutExpired):\n            pass\n\n    if width == 0 or height == 0:\n        logger.error(\"Could not determine video resolution for %s\", video_path)\n        return None\n\n    return {\"width\": width, \"height\": height, \"frame_count\": frame_count}",
+  "source_version": "scripts/03_run_sam2.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112206573Z",
+  "valid_from": "2026-04-01T03:19:15.112206573Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/03_run_sam2.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 232,
+    "end_line": 262,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

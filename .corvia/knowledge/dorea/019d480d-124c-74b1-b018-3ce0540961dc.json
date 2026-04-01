@@ -1,0 +1,31 @@
+{
+  "id": "019d480d-124c-74b1-b018-3ce0540961dc",
+  "content": "# Underwater Red Absorption: Beer-Lambert Gain Requirements\nRed gain needed to restore R/G parity in pure water (Beer-Lambert law):\n- 3m depth: 2.18x\n- 5m depth: 3.67x\n- 8m depth: 8.0x\n- 10m depth: 14.5x\nTropical water with dissolved organics absorbs faster — practical values are higher.\n## Implication for Dorea\nv1 LUT uses red_gain=2.0 (conservative for 3m, insufficient for 5m). Final R/G ratio 0.67 reads as uncorrected. Target 0.80-0.85 for v2. Scale red_gain based on dive depth. For mixed-depth footage, consider depth-adaptive LUTs blended via depth maps from Phase 4.",
+  "source_version": "scripts/generate_references.py",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-01T07:58:29.452574689Z",
+  "valid_from": "2026-04-01T07:58:29.452574689Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "learning",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

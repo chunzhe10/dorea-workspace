@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1bed68591030",
+  "content": " to avg_frame_rate\n    avg = streams[0].get(\"avg_frame_rate\", \"\")\n    if \"/\" in avg:\n        num, den = avg.split(\"/\")\n        try:\n            return float(num) / float(den)\n        except (ValueError, ZeroDivisionError):\n            pass\n\n    return None\ndef find_source_video_for_clip(\n    clip_id: str, workspace_root: Path, config: dict, date: str\n) -> Path | None:\n    \"\"\"Find the source video file for a clip_id in raw or flat footage dirs.\"\"\"\n    raw_dir = workspace_root / config[\"footage_raw\"] / date\n    flat_dir = workspace_root / config[\"footage_flat\"] / date\n\n    for footage_dir in [raw_dir, flat_dir]:\n        if not footage_dir.is_dir():\n            continue\n        for entry in footage_dir.iterdir():\n            if entry.is_file() and entry.suffix in VIDEO_EXTENSIONS:\n                if entry.stem == clip_id:\n                    return entry\n    return None",
+  "source_version": "scripts/02_claude_scene_analysis.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112195345Z",
+  "valid_from": "2026-04-01T03:19:15.112195345Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/02_claude_scene_analysis.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 478,
+    "end_line": 492,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

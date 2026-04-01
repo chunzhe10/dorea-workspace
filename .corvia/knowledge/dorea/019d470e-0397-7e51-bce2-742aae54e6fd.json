@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-742aae54e6fd",
+  "content": "# Install corvia-workspace toggle command\n# Install corvia-dev CLI\n\n# Start corvia-dev manager (replaces corvia-supervisor.sh)\nif corvia-dev status --json 2>/dev/null | python3 -c \"import sys,json; d=json.load(sys.stdin); exit(0 if d.get('manager',{}).get('state')=='running' else 1)\" 2>/dev/null; then\n    echo \"corvia-dev manager already running\"\nelse\n    corvia-dev up --no-foreground\n    sleep 2\n    echo \"corvia-dev manager started\"\nfi\n```\n\nKeep the MCP registration and VS Code extension install sections unchanged.\n\n**Step 3: Verify post-start.sh still works**\n\nRun: `bash .devcontainer/scripts/post-start.sh`\nExpected: Server starts via corvia-dev manager, MCP registration succeeds.\n\n**Step 4: Commit**\n\n```bash\ngit add .devcontainer/scripts/post-create.sh .devcontainer/scripts/post-start.sh\ngit commit -m \"feat(corvia-dev): integrate with devcontainer lifecycle scripts\"\n```\n\n---\n",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-cli.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007716385Z",
+  "valid_from": "2026-04-01T03:19:54.007716385Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-cli.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1664,
+    "end_line": 1689,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

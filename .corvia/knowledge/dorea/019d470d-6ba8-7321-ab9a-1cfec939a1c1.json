@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1cfec939a1c1",
+  "content": "255\n    if mask.dtype == bool:\n        alpha = (mask.astype(np.uint8)) * 255\n    else:\n        # Threshold at 0.0 for logit masks\n        alpha = ((mask > 0).astype(np.uint8)) * 255\n\n    img = Image.fromarray(alpha, mode=\"L\")\n    img.save(str(output_path))\ndef save_empty_mask(width: int, height: int, output_path: Path) -> None:\n    \"\"\"Save an all-black (empty) mask as a single-channel PNG.\"\"\"\n    output_path.parent.mkdir(parents=True, exist_ok=True)\n    alpha = np.zeros((height, width), dtype=np.uint8)\n    img = Image.fromarray(alpha, mode=\"L\")\n    img.save(str(output_path))",
+  "source_version": "scripts/03_run_sam2.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112209537Z",
+  "valid_from": "2026-04-01T03:19:15.112209537Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/03_run_sam2.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 356,
+    "end_line": 361,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

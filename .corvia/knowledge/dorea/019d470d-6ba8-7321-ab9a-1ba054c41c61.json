@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1ba054c41c61",
+  "content": "gh estimate for response\n\n    cost_usd = (input_tokens * INPUT_COST_PER_MTOK + output_tokens * OUTPUT_COST_PER_MTOK) / 1_000_000\n\n    return {\n        \"input_tokens\": input_tokens,\n        \"output_tokens\": output_tokens,\n        \"cost_usd\": cost_usd,\n    }\ndef analyse_clip(\n    clip_dir: Path,\n    clip_id: str,\n    client,  # anthropic.Anthropic client\n    model: str,\n    batch_size: int,\n    dry_run: bool = False,\n) -> dict:\n    \"\"\"Run scene analysis on a single clip.\n\n    Returns the output dict with clip_id and subjects list.\n    \"\"\"\n    frames = get_sorted_frames(clip_dir)\n    if not frames:\n        logger.warning(\"No keyframes found in %s, skipping\", clip_dir)\n        return {\"clip_id\": clip_id, \"subjects\": []}\n\n    logger.info(\"Clip %s: %d keyframe(s)\", clip_id, len(frames))\n\n    # Split frames into batches\n    batches = []\n    for i in range(0, len(frames), batch_size):\n        batches.append(frames[i : i + batch_size])\n\n    logger.info(\"Clip %s: %d batch(es) of up to %d frames\", clip_id, len(batches), batch_size)\n\n    all_subjects = []\n    total_input_tokens = 0\n    total_output_tokens = 0\n\n    for batch_idx, batch in enumerate(batches):\n        frame_range = f\"{batch[0][0]}-{batch[-1][0]}\"\n        logger.info(\n            \"  Batch %d/%d (frames %s, %d frame(s))\",\n            batch_idx + 1, len(batches), frame_range, len(batch),\n        )\n\n        if dry_run:\n            cost_est = estimate_batch_cost(batch, model)\n            logger.info(\n                \"    [DRY RUN] Would send %d frame(s) to %s \"\n                \"(~%d input tokens, est. $%.4f)\",\n                len(batch), model, cost_est[\"input_tokens\"], cost_est[\"cost_usd\"],\n            )\n            continue\n\n        # Build messages with accumulated context\n        messages = build_batch_messages(batch, all_subjects)\n\n        try:\n            response = client.messages.create(\n                model=model,\n                max_tokens=4096,\n                system=SYSTEM_PROMPT,\n                messages=messages,\n            )\n        except Exception as e:\n            logger.error(\n                \"    API call failed for batch %d/%d: %s\",\n                batch_idx + 1, len(batches), e,\n            )\n            continue\n",
+  "source_version": "scripts/02_claude_scene_analysis.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112192424Z",
+  "valid_from": "2026-04-01T03:19:15.112192424Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/02_claude_scene_analysis.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 288,
+    "end_line": 350,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

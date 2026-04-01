@@ -1,0 +1,31 @@
+{
+  "id": "019d4884-e767-77f0-80ee-2183994d6407",
+  "content": "# LUT Preview Script — Final Decision Record (2026-04-01)\n\n## What\n`preview_lut.py` applies .cube LUT to Phase 1 keyframes via ffmpeg and generates side-by-side RAW|GRADED comparison images. Enables visual evaluation of colour correction without DaVinci Resolve.\n\n## Key Design Decisions\n1. **format=rgb24 before lut3d**: Ensures LUT operates on full-resolution RGB, matching Resolve. 8-bit precision is acceptable since source keyframes are already 8-bit JPEG — Resolve will produce higher quality due to 32-bit float pipeline.\n2. **Remove single-quote wrapping in lut3d filter**: Use backslash escaping only (via `_escape_ffmpeg_filter_value()`) to avoid ambiguous double-escaping with ffmpeg's filter parser.\n3. **format=rgb24 on comparison inputs**: Both hstack inputs are normalized to rgb24 for pixel format consistency, regardless of source format.\n4. **Subprocess timeout (60s)**: All ffmpeg calls have a 60-second timeout to prevent hung processes on malformed input.\n5. **Partial failure exits non-zero**: Script exits 1 if any frames fail, not just when all fail. Enables reliable automation.\n6. **Skip-existing with --force**: Default behaviour skips existing outputs for fast iteration. Skipped frames reported separately from success counts.\n7. **Not a numbered pipeline phase**: Named `preview_lut.py` (not `06_preview_lut.py`) — it's an evaluation utility, not a production phase. Referenced in `run_all.sh` as optional.\n\n## Review Findings Worth Remembering\n- ffmpeg's lut3d defaults to tetrahedral interpolation, matching Resolve — no need to specify explicitly.\n- `-q:v 2` for previews (vs `-q:v 5` for source keyframes) is intentional for evaluation quality but increases disk usage ~2-3x.\n- Video loops (2-3s around keyframes) deferred to follow-up issue.\n\n## What Blocked / Surprised\n- Nothing significant. The escaping/quoting interaction between single-quoted filter values and backslash escaping was the most subtle issue caught in review.",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-01T10:09:22.791922991Z",
+  "valid_from": "2026-04-01T10:09:22.791922991Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "decision",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

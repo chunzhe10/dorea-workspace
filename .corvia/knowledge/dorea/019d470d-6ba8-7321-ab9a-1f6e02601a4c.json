@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1f6e02601a4c",
+  "content": "def extract_frames(clip_path: Path, output_dir: Path, fps: float = 0.5) -> int:\n    \"\"\"Extract keyframes from a single clip using ffmpeg.\n\n    Returns the number of frames extracted, or -1 on failure.\n    \"\"\"\n    output_dir.mkdir(parents=True, exist_ok=True)\n\n    cmd = [\n        \"ffmpeg\",\n        \"-y\",\n        \"-i\", str(clip_path),\n        \"-vf\", f\"fps={fps},scale=1280:-1\",\n        \"-q:v\", \"5\",\n        str(output_dir / \"frame_%06d.jpg\"),\n    ]\n\n    logger.info(\"Processing: %s\", clip_path.name)\n    logger.debug(\"Command: %s\", \" \".join(cmd))\n\n    try:\n        result = subprocess.run(\n            cmd,\n            capture_output=True,\n            text=True,\n            check=True,\n        )\n    except subprocess.CalledProcessError as e:\n        logger.error(\"ffmpeg failed for %s: %s\", clip_path.name, e.stderr.strip())\n        return -1\n\n    # Count extracted frames\n    frame_count = len([\n        f for f in output_dir.iterdir()\n        if f.is_file() and f.suffix == \".jpg\"\n    ])\n    return frame_count",
+  "source_version": "scripts/01_extract_frames.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112241698Z",
+  "valid_from": "2026-04-01T03:19:15.112241698Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/01_extract_frames.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 44,
+    "end_line": 79,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

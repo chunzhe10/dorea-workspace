@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-6ba238155197",
+  "content": "    # 2. Analyse colour characteristics: mean RGB per zone (shadow/midtone/highlight)\n    # 3. Compute hue distribution, red channel falloff with depth, saturation targets\n\n    # 4. Generate 33x33x33 3D LUT mapping D-Log M → target look\n\n    # 5. Write .cube file to --output path\n\n    print(f\"LUT generation not yet implemented\", file=sys.stderr)\n    sys.exit(1)\n\n\nif __name__ == \"__main__\":\n    main()\n```\n\n- [ ] **Step 2: Create 01_extract_frames.py**\n\n```python\n\"\"\"Phase 1: Footage Ingest & Frame Extraction (~5-10 min per dive session)\n\nExtracts keyframes from raw footage at 2-second intervals for AI analysis.\nHandles both DJI Action 4 (D-Log M) and Insta360 X5 (pre-flattened) clips.\n\nUsage:\n    python 01_extract_frames.py --date 2026-03-17\n\nInputs:\n    - footage/raw/YYYY-MM-DD/ — DJI Action 4 clips\n    - footage/flat/YYYY-MM-DD/ — Insta360 X5 flattened clips\n\nOutputs:\n    - working/keyframes/{clip_id}/frame_NNNNNN.jpg (1280px wide, JPEG 85%)\n\nDependencies:\n    - ffmpeg (system package, CPU only, no GPU required)\n\nArchitecture doc: Section 4.1\n\"\"\"\n\nimport argparse\nimport sys\n\n\ndef main():\n    parser = argparse.ArgumentParser(description=\"Extract keyframes from dive footage\")\n    parser.add_argument(\"--date\", required=True, help=\"Dive date YYYY-MM-DD\")\n    args = parser.parse_args()\n",
+  "source_version": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007574970Z",
+  "valid_from": "2026-04-01T03:19:54.007574970Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1136,
+    "end_line": 1179,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-5d346f0051cd",
+  "content": "## 1. Obsidian\n\n### Graph-to-Document Navigation UX\n\n- **Global Graph View**: Force-directed layout showing all notes as nodes, links as edges.\n  Opens as a full tab. Clicking a node opens the corresponding note in the main editor pane.\n- **Local Graph View**: Shows only connections for the currently active note. Can be dragged\n  into the right sidebar where it dynamically updates as users select different notes. This\n  is the recommended \"graph + document\" workflow.\n- **Click behavior**: Clicking a node in the graph opens the note in the main pane. When the\n  graph is pinned in a sidebar, clicking a node has historically been buggy -- sometimes it\n  replaces the graph panel itself instead of opening in the main pane.\n- **Ctrl+Click**: Opens the note in a new split pane while keeping the graph visible.\n- **Hover**: Highlights connected nodes and fades unrelated ones (one of the best-received features).\n\n\n### Panel Pattern\n\n**Split-panel with sidebar graph**. The primary pattern is: editor in the main pane, local graph\nin the right sidebar. The graph acts as a navigation aid, not the primary workspace.\n",
+  "source_version": "decisions/graph-document-ux-research.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007345803Z",
+  "valid_from": "2026-04-01T03:19:54.007345803Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/graph-document-ux-research.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 16,
+    "end_line": 33,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

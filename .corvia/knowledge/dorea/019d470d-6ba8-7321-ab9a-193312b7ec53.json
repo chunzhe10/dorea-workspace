@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-193312b7ec53",
+  "content": "els.sum(axis=0)\n        overall_n += len(pixels)\n\n        # Compute luminance for zone classification\n        lum = compute_luminance(linear).ravel()\n\n        # Classify pixels into zones and accumulate running sums\n        shadow_mask = lum < SHADOW_UPPER\n        midtone_mask = (lum >= SHADOW_UPPER) & (lum < MIDTONE_UPPER)\n        highlight_mask = lum >= MIDTONE_UPPER\n\n        if shadow_mask.any():\n            shadow_sum += pixels[shadow_mask].sum(axis=0)\n            shadow_n += shadow_mask.sum()\n        if midtone_mask.any():\n            midtone_sum += pixels[midtone_mask].sum(axis=0)\n            midtone_n += midtone_mask.sum()\n        if highlight_mask.any():\n            highlight_sum += pixels[highlight_mask].sum(axis=0)\n            highlight_n += highlight_mask.sum()\n\n        # Convert to sRGB for hue/saturation analysis (HSV works in display space)\n        srgb = eotf_inverse_sRGB(linear)\n        srgb_uint8 = np.clip(srgb * 255, 0, 255).astype(np.uint8)\n        hsv_img = np.array(Image.fromarray(srgb_uint8, \"RGB\").convert(\"HSV\"))\n        hsv_flat = hsv_img.reshape(-1, 3)\n\n        # Hue histogram (Pillow HSV: H is 0-255 mapping to 0-360 degrees)\n        hues_deg = hsv_flat[:, 0].astype(np.float64) * 360.0 / 255.0\n        bin_indices = np.clip((hues_deg / 10.0).astype(int), 0, 35)\n        hue_bins += np.bincount(bin_indices, minlength=36).astype(np.float64)\n\n        # Saturation (Pillow HSV: S is 0-255)\n        sat = hsv_flat[:, 1].astype(np.float64) / 255.0\n        saturation_sum += sat.sum()\n        saturation_count += len(sat)\n\n    # Compute zone means from running sums\n    def safe_mean(zone_sum: np.ndarray, zone_n: int) -> np.ndarray:\n        if zone_n == 0:\n            return np.array([0.0, 0.0, 0.0])\n        return zone_sum / zone_n\n\n    result = {\n        \"shadows_mean_rgb\": safe_mean(shadow_sum, shadow_n),\n        \"midtones_mean_rgb\": safe_mean(midtone_sum, midtone_n),\n        \"highlights_mean_rgb\": safe_mean(highlight_sum, highlight_n),\n        \"overall_mean_rgb\": safe_mean(overall_sum, overall_n),\n        \"saturation_mean\": saturation_sum / max(saturation_count, 1),\n        \"hue_histogram\": hue_bins / max(hue_bins.sum(), 1),\n    }\n\n    return result",
+  "source_version": "scripts/00_generate_lut.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112157466Z",
+  "valid_from": "2026-04-01T03:19:15.112157466Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/00_generate_lut.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 215,
+    "end_line": 259,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

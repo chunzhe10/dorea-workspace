@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1b0e5daea189",
+  "content": ":\n        logger.error(\n            \"CUDA is not available but gpu_device is '%s'. \"\n            \"Install CUDA-enabled PyTorch or set gpu_device to 'cpu' in config.yaml.\",\n            device,\n        )\n        sys.exit(1)\n\n    if device.startswith(\"cuda\"):\n        gpu_name = torch.cuda.get_device_name(0)\n        total_vram = torch.cuda.get_device_properties(0).total_memory / (1024 * 1024)\n        logger.info(\"GPU: %s (%.0f MB VRAM)\", gpu_name, total_vram)\n\n    # Load depth model\n    logger.info(\"Loading Depth Anything V2 model...\")\n    pipeline_start_time = time.monotonic()\n    processor, model = load_depth_model(weights_path, device, model_name=model_name)\n\n    # Process each clip\n    total_depth_maps = 0\n    total_failed = 0\n    successful_clips = 0\n    failed_clips = 0\n\n    try:\n        for clip_path in get_progress_bar(clips, desc=\"Depth estimation\"):\n            clip_id = clip_path.stem\n            output_dir = depth_output_root / clip_id\n\n            logger.info(\"--- Processing clip: %s ---\", clip_id)\n\n            frames_processed, frames_failed = process_clip(\n                clip_path=clip_path,\n                output_dir=output_dir,\n                processor=processor,\n                model=model,\n                device=device,\n            )\n\n            if frames_processed == 0 and frames_failed == 0:\n                # Could not open video\n                failed_clips += 1",
+  "source_version": "scripts/04_run_depth.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112183635Z",
+  "valid_from": "2026-04-01T03:19:15.112183635Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/04_run_depth.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 369,
+    "end_line": 401,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

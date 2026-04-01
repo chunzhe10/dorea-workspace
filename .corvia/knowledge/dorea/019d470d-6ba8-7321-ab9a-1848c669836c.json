@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1848c669836c",
+  "content": "# Dorea Pipeline Configuration\n# Paths resolve relative to workspace root ($CORVIA_WORKSPACE)\n\n# Footage paths\nfootage_raw: footage/raw\nfootage_flat: footage/flat\nworking_dir: working",
+  "source_version": "config.yaml",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112144064Z",
+  "valid_from": "2026-04-01T03:19:15.112144064Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "config.yaml",
+    "language": "yaml",
+    "chunk_type": "section",
+    "start_line": 6,
+    "end_line": 7,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

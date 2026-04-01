@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-631534c1389f",
+  "content": "### Task 2.5: Create `NeighborCards` component\n\n### Task 2.6: Create `DocumentReader` side panel\n\n**Files:**\n- Create: `tools/corvia-dashboard/src/components/DocumentReader.tsx`\n\n- [ ] **Step 1: Create the document reader panel**\n\n```tsx\nimport { useEffect, useState } from \"preact/hooks\";\nimport { fetchEntryDetail, fetchEntryNeighbors } from \"../api\";\nimport { NeighborCards } from \"./NeighborCards\";\nimport type { EntryDetail, NeighborEntry } from \"../types\";\n\ninterface DocumentReaderProps {\n  entryId: string | null;\n  onNavigate: (entryId: string) => void;\n  onClose: () => void;\n}\n\nexport function DocumentReader({ entryId, onNavigate, onClose }: DocumentReaderProps) {\n  const [entry, setEntry] = useState<EntryDetail | null>(null);\n  const [neighbors, setNeighbors] = useState<NeighborEntry[]>([]);\n  const [loading, setLoading] = useState(false);\n\n  useEffect(() => {\n    if (!entryId) {\n      setEntry(null);\n      setNeighbors([]);\n      return;\n    }\n    setLoading(true);\n    Promise.all([\n      fetchEntryDetail(entryId),\n      fetchEntryNeighbors(entryId),\n    ]).then(([detail, nbrs]) => {\n      setEntry(detail);\n      setNeighbors(nbrs.neighbors);\n    }).finally(() => setLoading(false));\n  }, [entryId]);\n\n  if (!entryId) {\n    return (\n      <div class=\"reader-placeholder\">\n        <p>Click a node to view its content</p>\n      </div>\n    );\n  }",
+  "source_version": "plans/2026-03-13-docs-workflow-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007435294Z",
+  "valid_from": "2026-04-01T03:19:54.007435294Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-13-docs-workflow-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1178,
+    "end_line": 1224,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

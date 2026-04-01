@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1d7ab8ab93bc",
+  "content": "th.name\n            )\n            return {\"subjects_tracked\": 0, \"total_masks\": 0, \"errors\": len(subjects)}\n\n        logger.info(\n            \"Clip %s: %d frames extracted, %d subject(s) to track\",\n            clip_id, frame_count, len(subjects),\n        )\n\n        subjects_tracked = 0\n        total_masks = 0\n        errors = 0\n\n        for subj_idx, subject in enumerate(get_progress_bar(\n            subjects, desc=f\"Tracking {clip_id}\"\n        )):\n            label = subject.get(\"label\", f\"unknown_{subj_idx}\")\n            logger.info(\n                \"Tracking subject %d/%d: '%s'\",\n                subj_idx + 1, len(subjects), label,\n            )\n\n            mask_output_dir = masks_base_dir / clip_id / label\n\n            try:\n                mask_count = track_subject(\n                    predictor=predictor,\n                    frame_dir=str(frame_dir),\n                    subject=subject,\n                    video_width=video_width,\n                    video_height=video_height,\n                    total_frames=frame_count,\n                    mask_output_dir=mask_output_dir,\n                    device=device,\n                )\n                subjects_tracked += 1\n                total_masks += mask_count\n                logger.info(\n                    \"  Subject '%s': %d mask frames written → %s\",\n                    label, mask_count, mask_output_dir,\n                )\n            except Exception as e:\n                logger.error(\n                    \"  SAM2 tracking failed for subject '%s': %s\", label, e,\n                    exc_info=True,\n                )\n                errors += 1\n                continue\n\n    return {\n        \"subjects_tracked\": subjects_tracked,\n        \"total_masks\": total_masks,\n        \"errors\": errors,\n    }",
+  "source_version": "scripts/03_run_sam2.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112215929Z",
+  "valid_from": "2026-04-01T03:19:15.112215929Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/03_run_sam2.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 590,
+    "end_line": 635,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

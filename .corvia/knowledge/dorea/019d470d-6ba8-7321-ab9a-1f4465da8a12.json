@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1f4465da8a12",
+  "content": "(resolve, project_name)\n    if project is None:\n        sys.exit(1)\n\n    # --- Media Pool setup ---\n    try:\n        media_pool = project.GetMediaPool()\n    except Exception as e:\n        logger.error(\"Failed to get Media Pool: %s\", e)\n        sys.exit(1)\n\n    if media_pool is None:\n        logger.error(\"GetMediaPool returned None\")\n        sys.exit(1)\n\n    try:\n        root_folder = media_pool.GetRootFolder()\n    except Exception as e:\n        logger.error(\"Failed to get root folder: %s\", e)\n        sys.exit(1)\n\n    # Create subfolder structure\n    target_folder = create_footage_subfolder(media_pool, root_folder, args.date)\n\n    # --- Import footage ---\n    imported_clips = import_footage_to_media_pool(media_pool, target_folder, clips)\n    if not imported_clips:\n        logger.error(\"No clips were imported to Media Pool. Cannot continue.\")\n        sys.exit(1)\n\n    # --- Create timeline ---\n    timeline_name = f\"Dive_{args.date}\"\n    timeline = create_timeline(media_pool, timeline_name, imported_clips)\n    if timeline is None:\n        logger.error(\"Failed to create timeline. Cannot continue.\")\n        sys.exit(1)\n\n    # --- Process each clip on the timeline ---\n    try:\n        timeline_items = timeline.GetItemListInTrack(\"video\", 1)\n    except Exception as e:\n        logger.error(\"Failed to get timeline items: %s\", e)\n        sys.exit(1)\n\n    if not timeline_items:\n        logger.error(\"No items found on timeline video track 1\")\n        sys.exit(1)\n\n    logger.info(\"Processing %d timeline item(s)\", len(timeline_items))\n\n    total_drx = 0\n    total_lut = 0\n    total_depth = 0\n    total_mattes = 0\n    total_matte_failures = 0\n    all_warnings = []\n\n    for item in timeline_items:\n        try:\n            clip_name = item.GetName()\n        except Exception:\n            clip_name = \"unknown\"\n",
+  "source_version": "scripts/05_resolve_setup.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112239732Z",
+  "valid_from": "2026-04-01T03:19:15.112239732Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/05_resolve_setup.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 846,
+    "end_line": 897,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

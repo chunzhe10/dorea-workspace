@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1d385705e6a0",
+  "content": "CUDA device string.\n\n    Returns:\n        Number of mask frames written.\n    \"\"\"\n    label = subject[\"label\"]\n    first_frame = subject[\"first_appearance_frame\"]\n    bbox_norm = subject[\"bbox_normalised\"]\n\n    # Convert normalised bbox to pixel coordinates\n    bbox_pixel = bbox_normalised_to_pixel(bbox_norm, video_width, video_height)\n\n    logger.info(\n        \"  Subject '%s': first_frame=%d, bbox_norm=%s, bbox_pixel=%s\",\n        label, first_frame, bbox_norm,\n        [f\"{v:.1f}\" for v in bbox_pixel],\n    )\n\n    # Clamp first_frame to valid range (0-indexed for SAM2)\n    # Scene analysis frame numbers are 1-indexed (from ffmpeg frame_NNNNNN naming\n    # where frame_000001 is the first frame). SAM2's frame directory uses 0-indexed\n    # filenames (000000.jpg, 000001.jpg, ...).\n    # Convert: scene analysis frame N -> SAM2 frame index N-1\n    sam2_first_frame_idx = max(0, first_frame - 1)\n    if sam2_first_frame_idx >= total_frames:\n        logger.warning(\n            \"  Subject '%s': first_frame %d exceeds video length %d, clamping\",\n            label, first_frame, total_frames,\n        )\n        sam2_first_frame_idx = total_frames - 1\n\n    mask_output_dir.mkdir(parents=True, exist_ok=True)\n    masks_written = 0\n    consecutive_empty = 0\n    subject_exited = False\n\n    with torch.inference_mode(), torch.autocast(\"cuda\", dtype=torch.bfloat16):\n        # Initialise SAM2 state for this video\n        state = predictor.init_state(\n            video_path=frame_dir,",
+  "source_version": "scripts/03_run_sam2.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112213081Z",
+  "valid_from": "2026-04-01T03:19:15.112213081Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/03_run_sam2.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 452,
+    "end_line": 481,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

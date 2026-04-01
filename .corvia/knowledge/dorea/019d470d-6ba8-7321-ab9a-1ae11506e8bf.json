@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1ae11506e8bf",
+  "content": "> 0 else 0\n    logger.info(\n        \"  Completed: %d depth maps in %.1fs (%.2f frames/sec)%s\",\n        frames_processed, elapsed, fps_rate,\n        f\" | {frames_failed} failed\" if frames_failed > 0 else \"\",\n    )\n\n    return frames_processed, frames_failed\ndef main():\n    parser = argparse.ArgumentParser(\n        description=\"Run Depth Anything V2 depth estimation on dive footage\"\n    )\n    parser.add_argument(\"--date\", required=True, help=\"Dive date YYYY-MM-DD\")\n    parser.add_argument(\n        \"--verbose\", \"-v\", action=\"store_true\", help=\"Enable debug logging\"\n    )\n    args = parser.parse_args()\n\n    configure_logging(verbose=args.verbose)\n\n    validate_date(args.date)\n\n    workspace_root = find_workspace_root()\n    logger.info(\"Workspace root: %s\", workspace_root)\n\n    config = load_config(workspace_root)\n\n    # Resolve footage directories for the given date\n    raw_dir = workspace_root / config[\"footage_raw\"] / args.date\n    flat_dir = workspace_root / config[\"footage_flat\"] / args.date\n    paths = resolve_working_paths(workspace_root, config, args.date)\n    depth_output_root = paths[\"depth\"]\n\n    logger.info(\"Scanning for footage dated %s\", args.date)\n    logger.debug(\"  Raw dir:  %s (exists: %s)\", raw_dir, raw_dir.is_dir())\n    logger.debug(\"  Flat dir: %s (exists: %s)\", flat_dir, flat_dir.is_dir())\n\n    # Check that at least one footage directory exists\n    if not raw_dir.is_dir() and not flat_dir.is_dir():\n        logger.error(\n            \"No footage directories found for date %s. \"",
+  "source_version": "scripts/04_run_depth.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112181284Z",
+  "valid_from": "2026-04-01T03:19:15.112181284Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/04_run_depth.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 303,
+    "end_line": 335,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

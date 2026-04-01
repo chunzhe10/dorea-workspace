@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1e8f899bbf4a",
+  "content": "d DRX template\")\n            return True\n        else:\n            logger.warning(\"  ApplyGradeFromDRX returned False\")\n            return False\n    except Exception as e:\n        logger.warning(\"  Failed to apply DRX template: %s\", e)\n        return False\ndef set_node_lut(timeline_item, node_index: int, lut_path: str) -> bool:\n    \"\"\"Set a LUT on a specific node of a timeline item.\n\n    Node indices are 1-based.\n    Returns True on success, False on failure.\n    \"\"\"\n    try:\n        result = timeline_item.SetLUT(node_index, lut_path)\n        if result:\n            logger.debug(\n                \"  Set LUT on Node %d (%s)\",\n                node_index, NODE_NAMES.get(node_index, \"?\"),\n            )\n            return True\n        else:\n            logger.warning(\n                \"  SetLUT returned False for Node %d\", node_index\n            )\n            return False\n    except Exception as e:\n        logger.warning(\"  Failed to set LUT on Node %d: %s\", node_index, e)\n        return False",
+  "source_version": "scripts/05_resolve_setup.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112230085Z",
+  "valid_from": "2026-04-01T03:19:15.112230085Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/05_resolve_setup.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 454,
+    "end_line": 475,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

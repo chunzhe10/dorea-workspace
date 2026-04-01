@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1c47fedd9c7a",
+  "content": "lip_id}.json\"\n            try:\n                with open(output_path, \"w\") as f:\n                    json.dump(result, f, indent=2)\n                logger.info(\"Wrote: %s\", output_path)\n                successful_clips += 1\n            except OSError as e:\n                logger.error(\"Failed to write %s: %s\", output_path, e)\n                failed_clips += 1\n                continue\n        else:\n            successful_clips += 1\n\n        total_subjects += len(result[\"subjects\"])\n\n        # Count API calls (batches) for this clip\n        frames = get_sorted_frames(clip_dir)\n        num_batches = (len(frames) + batch_size - 1) // batch_size if frames else 0\n        total_api_calls += num_batches\n\n    # Summary\n    logger.info(\"--- Scene analysis complete ---\")\n    logger.info(\n        \"Clips: %d processed, %d failed | Subjects found: %d | API calls: %d\",\n        successful_clips, failed_clips, total_subjects, total_api_calls,\n    )\n\n    if args.dry_run:\n        logger.info(\"[DRY RUN] No API calls were made. No output files written.\")\n\n    # --- Pass 2: Refine first_appearance_frame using original footage ---\n    if not args.dry_run and not args.skip_pass2 and total_subjects > 0:\n        sample_rate = config.get(\"frame_sample_rate_seconds\", 2)\n        pass2_refined = 0\n        pass2_failed = 0\n\n        for clip_dir in clip_dirs:\n            clip_id = clip_dir.name\n            output_path = scene_analysis_dir / f\"{clip_id}.json\"\n            if not output_path.is_file():\n                continue\n\n            with open(output_path, \"r\") as f:\n                clip_data = json.load(f)\n\n            subjects = clip_data.get(\"subjects\", [])\n            if not subjects:\n                continue\n\n            video_path = find_source_video_for_clip(\n                clip_id, workspace_root, config, args.date\n            )\n            if video_path is None:\n                logger.warning(\n                    \"Pass 2: no source video found for '%s', skipping\", clip_id\n                )",
+  "source_version": "scripts/02_claude_scene_analysis.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112200487Z",
+  "valid_from": "2026-04-01T03:19:15.112200487Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/02_claude_scene_analysis.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 736,
+    "end_line": 784,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

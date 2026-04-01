@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-198c82cd25b7",
+  "content": ", scaled by how much red is missing.\n    red_ratio = overall[0] / max(overall.mean(), 1e-6)\n    red_deficit = max(0.0, 1.0 - red_ratio)\n\n    # Apply graduated red recovery\n    red_boost = 1.0 + red_deficit * 0.3  # Up to 30% boost\n    gain[0] *= red_boost\n\n    # --- Underwater-specific: blue/green balance ---\n    # Underwater images are often overly cyan. Slight green reduction if needed.\n    green_excess = overall[1] / max(overall.mean(), 1e-6) - 1.0\n    if green_excess > 0.05:\n        gain[1] *= (1.0 - green_excess * 0.15)\n\n    # --- Saturation ---\n    # Reference saturation guides how vibrant the output should be.\n    # A multiplier > 1 increases saturation, < 1 decreases.\n    # Underwater images often need a saturation boost.\n    sat_target = np.clip(saturation * 1.3, 0.3, 0.9)\n\n    # Re-clip gain to safe bounds\n    gain = np.clip(gain, 0.5, 1.8)\n\n    params = {\n        \"lift\": lift,\n        \"gamma\": gamma,\n        \"gain\": gain,\n        \"saturation_factor\": sat_target,\n    }\n\n    logger.info(\"Correction parameters:\")\n    logger.info(\"  Lift  (R,G,B): %.4f, %.4f, %.4f\", *lift)\n    logger.info(\"  Gamma (R,G,B): %.4f, %.4f, %.4f\", *gamma)\n    logger.info(\"  Gain  (R,G,B): %.4f, %.4f, %.4f\", *gain)\n    logger.info(\"  Saturation factor: %.3f\", sat_target)\n    logger.info(\"  Red deficit: %.3f (boost: %.2fx)\", red_deficit, red_boost)\n\n    return params",
+  "source_version": "scripts/00_generate_lut.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112162566Z",
+  "valid_from": "2026-04-01T03:19:15.112162566Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/00_generate_lut.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 354,
+    "end_line": 383,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

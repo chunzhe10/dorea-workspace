@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-6fdf3e0913e8",
+  "content": "## Problem\n## Decision: Approach B — Unified CLI + Thin Extension\n\n### Why Python (not Rust, not bash)\n\n- **Not Rust**: This is a dev tool owned by the workspace repo, not the corvia product. No compile step needed. Faster iteration.\n- **Not bash**: Config mutation needs proper TOML parsing. Process supervision needs structured state. JSON output needs serialization. Bash can't do these reliably.\n- **Python**: Pre-installed in devcontainers. `pydantic` for strict typing. `tomli`/`tomli_w` for lossless TOML round-tripping. `click` for CLI. No runtime to install.\n\n\n### Why this repo (not corvia repo)\n\n`corvia workspace` (Rust) is core product — multi-repo knowledge management for end users. `corvia-dev` is dev environment orchestration — service lifecycle, provider switching, dashboards. Different audiences, different release cadences.\n",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-cli-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007648981Z",
+  "valid_from": "2026-04-01T03:19:54.007648981Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-cli-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 27,
+    "end_line": 36,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

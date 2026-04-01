@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1d878640cfa4",
+  "content": "t '%s': %s\", label, e,\n                    exc_info=True,\n                )\n                errors += 1\n                continue\n\n    return {\n        \"subjects_tracked\": subjects_tracked,\n        \"total_masks\": total_masks,\n        \"errors\": errors,\n    }\ndef main():\n    parser = argparse.ArgumentParser(\n        description=\"Run SAM2 subject tracking from scene analysis\"\n    )\n    parser.add_argument(\"--date\", required=True, help=\"Dive date YYYY-MM-DD\")\n    parser.add_argument(\n        \"--verbose\", \"-v\", action=\"store_true\", help=\"Enable debug logging\"\n    )\n    args = parser.parse_args()\n\n    configure_logging(verbose=args.verbose)\n\n    validate_date(args.date)\n\n    workspace_root = find_workspace_root()\n    logger.info(\"Workspace root: %s\", workspace_root)\n\n    config = load_config(workspace_root)\n\n    # Resolve paths (date-scoped)\n    paths = resolve_working_paths(workspace_root, config, args.date)\n    scene_analysis_dir = paths[\"scene_analysis\"]\n    masks_base_dir = paths[\"masks\"]\n    raw_dir = workspace_root / config[\"footage_raw\"] / args.date\n    flat_dir = workspace_root / config[\"footage_flat\"] / args.date\n\n    # Resolve SAM2 config\n    sam2_model_key = config.get(\"sam2_model\", \"sam2_small\")\n    sam2_config_name = SAM2_CONFIG_MAP.get(sam2_model_key)\n    if sam2_config_name is None:\n        logger.error(\n            \"Unknown sam2_model '%s' in config. Valid options: %s\",\n            sam2_model_key, \", \".join(SAM2_CONFIG_MAP.keys()),\n        )\n        sys.exit(1)\n\n    sam2_weights_path = workspace_root / config.get(\n        \"sam2_weights\", \"models/sam2/sam2.1_hiera_small.pt\"\n    )\n    device = config.get(\"gpu_device\", \"cuda:0\")\n\n    logger.info(\"SAM2 config: model=%s (%s)\", sam2_model_key, sam2_config_name)\n    logger.info(\"SAM2 weights: %s\", sam2_weights_path)\n    logger.info(\"GPU device: %s\", device)",
+  "source_version": "scripts/03_run_sam2.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112216752Z",
+  "valid_from": "2026-04-01T03:19:15.112216752Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/03_run_sam2.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 638,
+    "end_line": 681,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

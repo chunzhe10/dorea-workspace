@@ -1,0 +1,31 @@
+{
+  "id": "019d46fb-c7ff-7291-b128-2960f7c21e69",
+  "content": "## 5-Persona Pipeline Review — Revised Plan (2026-04-01)\n\n### Context\nFull 5-persona review of the Dorea pipeline to evaluate end-to-end readiness and colour correction quality. User's goal: learn from XHS underwater before/after tutorials to assess whether Dorea's approach is best-in-class — NOT to build XHS content creation features.\n\n### Key Findings\n\n**Senior SWE:**\n- Depth map \"18x reduction\" claim incorrect — 8-bit alone is ~2x, combined 8-bit+1080p is ~8x\n- Video encoding (FFV1/ProRes) incompatible with Resolve's `SetNodeExternalMatte()` — requires image sequences\n- SAM2 mask resolution mismatch bug: propagated masks ~1024px, empty/exit masks at full source resolution\n- `depth_output_format: png16` config key is dead code (never read)\n- Missing: resume/idempotency, disk space monitoring\n\n**QA Engineer:**\n- SAM2 is completely broken — masks directory empty (8K), OOM at 2% frame loading on 4K. Pipeline-blocking bug.\n- Zero test coverage — no tests/ directory anywhere in repo\n- Recommends keeping 16-bit depth, only downscale resolution to avoid banding on smooth UW gradients\n- Partial output detection missing (crashed Phase 4 → Phase 5 uses incomplete mattes silently)\n\n**Performance Engineer (most impactful):**\n- Upscale-then-store antipattern: Depth Anything V2 processes at 518x518 internally, pipeline upscales to 3840x2160 via bilinear interpolation then stores. Pixel inflation: 30.9x.\n- Native 518px 16-bit is the strictly dominant option: smaller than 1080p 8-bit AND zero quality loss\n- Storage projection: current 4K 16-bit = 6.3 TB/year; native 518px 16-bit = 884 GB/year\n- SAM2 OOM fix (downscale input to 1280px) is P0 — documented fix exists but plan omitted it\n\n**UX Designer:**\n- No visual feedback loop — can't evaluate colour correction without full Resolve workflow\n- Morning experience undesigned: no summary, no preview, no notification after overnight batch\n- LUT preview on keyframes is essential for comparing against XHS reference material\n\n**Product Manager (reframed for actual goal):**\n- Resolve-free preview path (ffmpeg + .cube LUT) needed to evaluate correction quality quickly\n- Feedback loop missing: if LUT is wrong, must re-run entire pipeline\n\n### Colour Correction Assessment vs XHS Creators\n\n**Dorea's advantages:**\n- Depth-dependent correction is physically correct (no static LUT can do this)\n- Subject-aware isolation via SAM2 (automates manual Power Windows)\n- Automated overnight batch vs hours of manual grading\n\n**Gaps vs XHS best practices:**\n- LUT doesn't exist yet (luts/ empty, Phase 0 needs reference images)\n- Depth Anything V2 trained on terrestrial footage — \"reduced accuracy in turbid water\"\n- No explicit white balance correction (baked into LUT, not per-clip adaptive)\n- No backscatter removal (common in XHS before/after)\n- 8-node Resolve template untested on real footage\n\n### Revised Priority Plan\n\n**P0 — Unblock the pipeline:**\n1. Fix SAM2 OOM (downscale input to 1280px) — pipeline broken without masks\n2. Fix depth storage (native 518px, keep 16-bit) — remove upscale waste\n3. Generate a real LUT from reference images — can't evaluate without it\n4. Create DRX template + run Phase 5 E2E once — prove the chain works\n\n**P1 — Evaluate colour correction quality:**\n5. LUT preview on keyframes (ffmpeg + .cube) — fast A/B vs XHS references\n6. Add per-clip white balance estimation — missing, standard in XHS workflows\n\n**P2 — Improve correction quality:**\n7. Evaluate Depth Anything accuracy on UW footage — does terrestrial model work underwater?\n8. Backscatter detection/mitigation — common in XHS, absent from Dorea\n\n**P3 — Handle variety:**\n9. Water type classification + multi-LUT — different dive conditions",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-01T02:59:59.103880045Z",
+  "valid_from": "2026-04-01T02:59:59.103880045Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "decision",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-580c175a0e1c",
+  "content": "    # SurrealDB\n    # Corvia server\n\n    # Show current config\n    local provider model store_type\n    provider=$(grep '^provider' \"$CORVIA_TOML\" | head -1 | cut -d'\"' -f2)\n    model=$(grep '^model' \"$CORVIA_TOML\" | head -1 | cut -d'\"' -f2)\n    store_type=$(grep '^store_type' \"$CORVIA_TOML\" | head -1 | cut -d'\"' -f2)\n    echo \"  Config: provider=$provider model=$model store=$store_type\"\n}\n",
+  "source_version": "decisions/2026-03-03-optional-devcontainer-services.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007266164Z",
+  "valid_from": "2026-04-01T03:19:54.007266164Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-03-03-optional-devcontainer-services.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 374,
+    "end_line": 381,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

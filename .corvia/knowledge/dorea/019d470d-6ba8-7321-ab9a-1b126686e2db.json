@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1b126686e2db",
+  "content": "utput_dir,\n                processor=processor,\n                model=model,\n                device=device,\n            )\n\n            if frames_processed == 0 and frames_failed == 0:\n                # Could not open video\n                failed_clips += 1\n                logger.warning(\"Skipping %s due to video open error\", clip_path.name)\n                continue\n\n            if frames_processed > 0:\n                successful_clips += 1\n            else:\n                failed_clips += 1\n\n            total_depth_maps += frames_processed\n            total_failed += frames_failed\n    finally:\n        # Always unload model, even if processing fails partway through\n        logger.info(\"Unloading depth model...\")\n        unload_depth_model(model, device)\n\n    pipeline_elapsed = time.monotonic() - pipeline_start_time\n\n    # Summary\n    logger.info(\"--- Depth estimation complete ---\")\n    logger.info(\n        \"Clips: %d processed, %d failed | \"\n        \"Depth maps: %d generated, %d failed | \"\n        \"Total time: %.1fs\",\n        successful_clips, failed_clips,\n        total_depth_maps, total_failed,\n        pipeline_elapsed,\n    )\n\n    if failed_clips > 0 and successful_clips == 0:\n        logger.error(\"All clips failed. Check errors above.\")\n        sys.exit(1)\n\n    if failed_clips > 0:\n        logger.warning(\"%d clip(s) failed. Check errors above.\", failed_clips)",
+  "source_version": "scripts/04_run_depth.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112184458Z",
+  "valid_from": "2026-04-01T03:19:15.112184458Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/04_run_depth.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 402,
+    "end_line": 435,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

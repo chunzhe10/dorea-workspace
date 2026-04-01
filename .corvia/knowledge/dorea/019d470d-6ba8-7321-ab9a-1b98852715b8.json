@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1b98852715b8",
+  "content": "ust be 0.0-1.0: %s\", subject)\n            return False\n\n    # Validate confidence\n    if subject[\"confidence\"] not in (\"high\", \"medium\", \"low\"):\n        logger.warning(\"confidence must be high/medium/low: %s\", subject)\n        return False\n\n    return True\ndef estimate_batch_cost(batch: list[tuple[int, Path]], model: str) -> dict:\n    \"\"\"Estimate token usage and cost for a batch.\n\n    Very rough estimation:\n    - Each image at 1280px wide ~ 1600 tokens (medium detail)\n    - System prompt ~ 500 tokens\n    - Text content per frame ~ 10 tokens\n    - Response ~ 200 tokens per subject found (estimate 2-3 subjects)\n\n    Returns dict with estimated input_tokens, output_tokens, and cost_usd.\n    \"\"\"\n    num_frames = len(batch)\n    # Rough token estimates\n    image_tokens = num_frames * 1600\n    system_tokens = 500\n    text_tokens = num_frames * 10 + 200  # frame labels + previously identified\n    input_tokens = image_tokens + system_tokens + text_tokens\n    output_tokens = 500  # rough estimate for response\n\n    cost_usd = (input_tokens * INPUT_COST_PER_MTOK + output_tokens * OUTPUT_COST_PER_MTOK) / 1_000_000\n\n    return {\n        \"input_tokens\": input_tokens,\n        \"output_tokens\": output_tokens,\n        \"cost_usd\": cost_usd,\n    }",
+  "source_version": "scripts/02_claude_scene_analysis.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112191604Z",
+  "valid_from": "2026-04-01T03:19:15.112191604Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/02_claude_scene_analysis.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 260,
+    "end_line": 285,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

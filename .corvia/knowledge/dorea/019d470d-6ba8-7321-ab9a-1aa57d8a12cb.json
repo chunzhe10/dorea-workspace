@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1aa57d8a12cb",
+  "content": "\n        allocated_mb = torch.cuda.memory_allocated() / (1024 * 1024)\n        logger.info(\n            \"Depth model unloaded | VRAM after cleanup: %.0f MB allocated\",\n            allocated_mb,\n        )\n    else:\n        logger.info(\"Depth model unloaded\")\ndef run_depth_inference(\n    image: Image.Image, processor, model, device: str\n) -> np.ndarray:\n    \"\"\"Run depth estimation on a single PIL Image.\n\n    Returns a float32 numpy array of shape (H, W) with values in [0.0, 1.0],\n    where 1.0 = close to camera (bright) and 0.0 = far from camera (dark).\n    The array is resized to match the original image dimensions.\n    \"\"\"\n    original_size = image.size  # (width, height)\n\n    inputs = processor(images=image, return_tensors=\"pt\")\n    inputs = {k: v.to(device) for k, v in inputs.items()}\n\n    with torch.inference_mode():\n        outputs = model(**inputs)\n\n    # Extract predicted depth — shape is (1, H, W) or (1, 1, H, W)\n    predicted_depth = outputs.predicted_depth\n\n    # Squeeze batch/channel dimensions to get (H, W)\n    depth = predicted_depth.squeeze().cpu().numpy()\n\n    # Normalise to [0.0, 1.0] range\n    depth_min = depth.min()\n    depth_max = depth.max()\n    if depth_max - depth_min > 0:\n        depth_normalised = (depth - depth_min) / (depth_max - depth_min)\n    else:\n        depth_normalised = np.zeros_like(depth)\n\n    # Depth Anything outputs inverse depth (closer = higher values), which\n    # matches our convention: bright = close, dark = far. No inversion needed.\n\n    # Resize to match original source resolution for pixel-accurate matte alignment\n    w, h = original_size\n    if depth_normalised.shape[0] != h or depth_normalised.shape[1] != w:\n        depth_normalised = cv2.resize(\n            depth_normalised, (w, h), interpolation=cv2.INTER_LINEAR\n        )\n\n    return depth_normalised",
+  "source_version": "scripts/04_run_depth.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112178028Z",
+  "valid_from": "2026-04-01T03:19:15.112178028Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/04_run_depth.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 131,
+    "end_line": 172,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

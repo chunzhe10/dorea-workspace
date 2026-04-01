@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1abb3e792206",
+  "content": "e alignment\n    w, h = original_size\n    if depth_normalised.shape[0] != h or depth_normalised.shape[1] != w:\n        depth_normalised = cv2.resize(\n            depth_normalised, (w, h), interpolation=cv2.INTER_LINEAR\n        )\n\n    return depth_normalised\ndef save_depth_map_16bit(depth_float: np.ndarray, output_path: Path) -> None:\n    \"\"\"Save a float32 depth map as a 16-bit grayscale PNG.\n\n    Input: float32 array in [0.0, 1.0]\n    Output: 16-bit PNG where 65535 = close (bright), 0 = far (dark)\n    \"\"\"\n    # Scale to uint16 range\n    depth_uint16 = (depth_float * 65535.0).clip(0, 65535).astype(np.uint16)\n\n    # Save using OpenCV (reliable 16-bit PNG support)\n    output_path.parent.mkdir(parents=True, exist_ok=True)\n    success = cv2.imwrite(\n        str(output_path),\n        depth_uint16,\n        [cv2.IMWRITE_PNG_COMPRESSION, 3],  # moderate compression (0-9)\n    )\n    if not success:\n        raise RuntimeError(f\"cv2.imwrite failed for {output_path}\")",
+  "source_version": "scripts/04_run_depth.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112178876Z",
+  "valid_from": "2026-04-01T03:19:15.112178876Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/04_run_depth.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 175,
+    "end_line": 192,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

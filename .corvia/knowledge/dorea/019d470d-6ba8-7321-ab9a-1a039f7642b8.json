@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1a039f7642b8",
+  "content": "   config_path = workspace_root / \"repos\" / \"dorea\" / \"config.yaml\"\n    if not config_path.is_file():\n        logger.error(\"Config file not found: %s\", config_path)\n        sys.exit(1)\n\n    with open(config_path, \"r\") as f:\n        return yaml.safe_load(f)\ndef configure_logging(verbose: bool = False) -> None:\n    \"\"\"Configure logging with standard format used across all pipeline scripts.\"\"\"\n    logging.basicConfig(\n        level=logging.DEBUG if verbose else logging.INFO,\n        format=\"%(asctime)s [%(levelname)s] %(message)s\",\n        datefmt=\"%H:%M:%S\",\n    )",
+  "source_version": "scripts/pipeline_utils.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112169821Z",
+  "valid_from": "2026-04-01T03:19:15.112169821Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/pipeline_utils.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 57,
+    "end_line": 63,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

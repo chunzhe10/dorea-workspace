@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-196ee29e7080",
+  "content": "each zone's mean colour looks like as a target.\n\n    # For a neutral D-Log M image, all channels would decode similarly.\n    # The reference images tell us what the target colour balance should be.\n\n    # Normalise zone means relative to overall brightness\n    overall_lum = compute_luminance(overall.reshape(1, 1, 3)).item()\n    if overall_lum < 1e-6:\n        logger.warning(\"Overall luminance near zero — using middle grey fallback\")\n        overall_lum = 0.18\n\n    # --- Lift (shadow correction) ---\n    # Lift shifts the black point. Underwater shadows tend to be blue/green.\n    # Small offset to push shadows toward the reference look.\n    shadow_lum = compute_luminance(shadows.reshape(1, 1, 3)).item()\n    if shadow_lum < 1e-6:\n        logger.warning(\"Shadow luminance near zero — using fallback value\")\n        shadow_lum = 0.01\n    lift = shadows / max(shadow_lum, 0.01) * 0.02  # Small lift per channel\n    lift = np.clip(lift, -0.05, 0.05)\n\n    # --- Gain (highlight correction) ---\n    # Gain scales the white point. We want highlights to match the reference.\n    highlight_lum = compute_luminance(highlights.reshape(1, 1, 3)).item()\n    if highlight_lum < 1e-6:\n        logger.warning(\"Highlight luminance near zero — using fallback value\")\n        highlight_lum = 0.8\n    # Compute per-channel gain relative to luminance\n    gain = highlights / highlight_lum\n    # Normalise so the brightest channel has gain ~1.0\n    gain = gain / max(gain.max(), 1e-6)\n    # Ensure gain stays in reasonable range\n    gain = np.clip(gain, 0.5, 1.5)\n\n    # --- Gamma (midtone correction) ---\n    # Gamma adjusts the midtone response. We need to expand D-Log M's flat",
+  "source_version": "scripts/00_generate_lut.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112160648Z",
+  "valid_from": "2026-04-01T03:19:15.112160648Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/00_generate_lut.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 295,
+    "end_line": 324,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

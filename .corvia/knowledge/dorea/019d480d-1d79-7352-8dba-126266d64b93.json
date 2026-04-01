@@ -1,0 +1,31 @@
+{
+  "id": "019d480d-1d79-7352-8dba-126266d64b93",
+  "content": "# Highlight Rolloff Essential for D-Log M LUT\nD-Log M stores 14+ stops of dynamic range in a flat curve. Expanding with gamma &lt; 1 pushes highlights past 1.0. Without a soft shoulder, highlights clip hard to white.\n## Solution\nExponential soft-clip at shoulder=0.85: corrected = shoulder + headroom * (1 - exp(-excess/headroom)). At input 1.0 output is 0.945 (5.5% compression). Smooth, monotonic, asymptotically approaches 1.0.\n## Correction Chain Ordering\nCorrect order: gamma then saturation then rolloff then clip. Saturation after rolloff can push compressed highlights above 1.0, causing hue shifts. v1 has saturation after rolloff (known issue for v2, tracked in issue #14).",
+  "source_version": "scripts/00_generate_lut.py",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-01T07:58:32.313629010Z",
+  "valid_from": "2026-04-01T07:58:32.313629010Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "learning",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

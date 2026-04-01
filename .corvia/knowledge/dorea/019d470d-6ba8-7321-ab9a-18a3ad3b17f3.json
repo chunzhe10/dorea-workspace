@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-18a3ad3b17f3",
+  "content": "depth_model: depth_anything_v2_small\ndepth_weights: models/depth_anything_v2_small/\ndepth_output_format: png16  # 16-bit PNG for matte precision\n\n# DaVinci Resolve (host paths — used by 05_resolve_setup.py on host)",
+  "source_version": "config.yaml",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112149205Z",
+  "valid_from": "2026-04-01T03:19:15.112149205Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "config.yaml",
+    "language": "yaml",
+    "chunk_type": "section",
+    "start_line": 24,
+    "end_line": 26,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

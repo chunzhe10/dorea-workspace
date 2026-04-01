@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1901f53f1a2b",
+  "content": " * a / ((a * cut_linear + b) * np.log(10.0))\n    intercept = cut_encoded - slope * cut_linear\n\n    encoded = np.where(\n        x <= cut_linear,\n        slope * x + intercept,\n        c * np.log10(a * x + b) + d,\n    )\n\n    return np.clip(encoded, 0.0, 1.0)\ndef load_image_linear(path: Path) -> np.ndarray:\n    \"\"\"Load an image and convert to linear-light float64 RGB array.\n\n    Assumes input images are sRGB-encoded (standard for JPEG/PNG from cameras\n    and editing software). Converts via the sRGB EOTF to linear light for\n    accurate colour analysis.\n\n    Returns:\n        numpy array of shape (H, W, 3) in linear light, range [0, 1].\n    \"\"\"\n    img = Image.open(path).convert(\"RGB\")\n    # Normalise to 0-1 float\n    data = np.asarray(img, dtype=np.float64) / 255.0\n    # Convert sRGB encoding to linear light\n    linear = eotf_sRGB(data)\n    return linear",
+  "source_version": "scripts/00_generate_lut.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112154870Z",
+  "valid_from": "2026-04-01T03:19:15.112154870Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/00_generate_lut.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 148,
+    "end_line": 163,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

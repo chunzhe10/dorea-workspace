@@ -1,0 +1,31 @@
+{
+  "id": "019d46fc-014b-7102-8ad0-8cdc030e51b0",
+  "content": "## SAM2 Mask Resolution Mismatch Bug\n\nIn `03_run_sam2.py`, there is a resolution mismatch between propagated masks and empty/exit masks:\n\n- Propagated masks: saved at the resolution SAM2 returns them (~1024px, matching the extracted frame resolution from `max_short_edge=1024`)\n- Empty/exit masks (`save_empty_mask()` around line 356-361): saved at `video_width x video_height` (original source resolution from `get_video_info()`, e.g., 3840x2160)\n\nThis means a subject's mask sequence has inconsistent dimensions — most frames are ~1024px but gap/exit frames are 4K. Resolve will handle this (it scales per-frame), but it's unnecessary waste and a correctness bug.\n\n**Fix:** Standardize all mask output to the same resolution (match the SAM2 extraction resolution, ~1024px). Update `save_empty_mask()` to use the extracted frame dimensions, not the source video dimensions.",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-01T03:00:13.771276518Z",
+  "valid_from": "2026-04-01T03:00:13.771276518Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "finding",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

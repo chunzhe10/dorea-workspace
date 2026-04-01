@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1e478b908715",
+  "content": "%s\", project_name)\n            return project\n    except Exception as e:\n        logger.error(\"Failed to create project '%s': %s\", project_name, e)\n        return None\n\n    logger.error(\"Failed to create or open project '%s'\", project_name)\n    return None\ndef create_footage_subfolder(media_pool, root_folder, date: str):\n    \"\"\"Create a 'Footage/{date}' subfolder in the Media Pool.\n\n    Returns the subfolder object, or the root folder on failure.\n    \"\"\"\n    # Try to find or create 'Footage' folder\n    footage_folder = None\n    try:\n        subfolders = root_folder.GetSubFolderList()\n        for sf in subfolders:\n            if sf.GetName() == \"Footage\":\n                footage_folder = sf\n                break\n    except Exception as e:\n        logger.debug(\"Error listing subfolders: %s\", e)\n\n    if footage_folder is None:\n        try:\n            footage_folder = media_pool.AddSubFolder(root_folder, \"Footage\")\n            if footage_folder is None:\n                logger.warning(\"Could not create 'Footage' subfolder, using root\")\n                return root_folder\n        except Exception as e:\n            logger.warning(\"Error creating 'Footage' subfolder: %s — using root\", e)\n            return root_folder\n\n    # Create date subfolder under Footage\n    date_folder = None\n    try:\n        subfolders = footage_folder.GetSubFolderList()\n        for sf in subfolders:\n            if sf.GetName() == date:\n                date_folder = sf\n                break\n    except Exception:\n        pass\n\n    if date_folder is None:\n        try:\n            date_folder = media_pool.AddSubFolder(footage_folder, date)\n            if date_folder is None:\n                logger.warning(\n                    \"Could not create date subfolder '%s', using 'Footage'\", date\n                )\n                return footage_folder\n        except Exception as e:\n            logger.warning(\n                \"Error creating date subfolder '%s': %s — using 'Footage'\", date, e\n            )\n            return footage_folder\n\n    logger.info(\"Media Pool folder: Footage/%s\", date)\n    return date_folder",
+  "source_version": "scripts/05_resolve_setup.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112225826Z",
+  "valid_from": "2026-04-01T03:19:15.112225826Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/05_resolve_setup.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 317,
+    "end_line": 369,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

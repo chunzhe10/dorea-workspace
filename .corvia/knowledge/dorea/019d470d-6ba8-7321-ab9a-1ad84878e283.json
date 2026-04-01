@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1ad84878e283",
+  "content": "frames, desc=f\"  {clip_path.stem}\",\n                file=sys.stderr, unit=\"frame\",\n            )\n        except ImportError:\n            pass\n\n    while True:\n        ret, frame_bgr = cap.read()\n        if not ret:\n            break\n\n        frame_idx += 1\n        frame_number = frame_idx  # 1-based, sequential\n\n        output_path = output_dir / f\"frame_{frame_number:06d}.png\"\n\n        try:\n            # Convert BGR (OpenCV) to RGB PIL Image\n            frame_rgb = cv2.cvtColor(frame_bgr, cv2.COLOR_BGR2RGB)\n            pil_image = Image.fromarray(frame_rgb)\n\n            # Run depth inference\n            depth_map = run_depth_inference(pil_image, processor, model, device)\n\n            # Save as 16-bit PNG\n            save_depth_map_16bit(depth_map, output_path)\n            frames_processed += 1\n\n        except Exception as e:\n            frames_failed += 1\n            logger.error(\n                \"  Depth inference failed for frame %d of %s: %s\",\n                frame_number, clip_path.name, e,\n            )\n            continue\n\n        if pbar is not None:\n            pbar.update(1)\n        else:\n            # Log progress every 10 seconds for headless/batch runs\n            now = time.monotonic()\n            if now - last_log_time >= 10.0 or frame_number == total_frames:\n                elapsed = now - clip_start_time\n                fps_rate = frames_processed / elapsed if elapsed > 0 else 0\n                logger.info(\n                    \"  Progress: %d/%d frames (%.1f%%) | %.2f frames/sec\",\n                    frame_number, total_frames,\n                    (frame_number / total_frames * 100) if total_frames > 0 else 0,\n                    fps_rate,\n                )\n                last_log_time = now\n\n    if pbar is not None:\n        pbar.close()\n    cap.release()\n\n    elapsed = time.monotonic() - clip_start_time\n    fps_rate = frames_processed / elapsed if elapsed > 0 else 0\n    logger.info(\n        \"  Completed: %d depth maps in %.1fs (%.2f frames/sec)%s\",\n        frames_processed, elapsed, fps_rate,\n        f\" | {frames_failed} failed\" if frames_failed > 0 else \"\",\n    )\n\n    return frames_processed, frames_failed",
+  "source_version": "scripts/04_run_depth.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112180457Z",
+  "valid_from": "2026-04-01T03:19:15.112180457Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/04_run_depth.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 248,
+    "end_line": 300,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

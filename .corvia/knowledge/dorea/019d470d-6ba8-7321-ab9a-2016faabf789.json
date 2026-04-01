@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-2016faabf789",
+  "content": "# 3. Configure\n# Edit config.yaml with your paths and API key\n\n# 4. One-time: generate reference LUT\npython scripts/00_generate_lut.py --references references/look_v1/ --output luts/underwater_base.cube\n\n\n# 5. After each dive: run overnight batch\nbash scripts/run_all.sh\n",
+  "source_version": "README.md",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112248041Z",
+  "valid_from": "2026-04-01T03:19:15.112248041Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "README.md",
+    "language": "markdown",
+    "chunk_type": "heading_section",
+    "start_line": 48,
+    "end_line": 53,
+    "content_role": "instruction",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

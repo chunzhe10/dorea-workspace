@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-693a43043543",
+  "content": "## Dorea-Specific Context\n\n### Project\nDorea is an automated underwater video AI editing pipeline. See\n`repos/dorea/README.md` for the full overview.\n\n\n### Architecture Document\nThe pipeline architecture is defined in `underwater_pipeline_architecture.docx`.\nAlways consult this document (via corvia — it should be ingested) before making\npipeline design decisions.\n",
+  "source_version": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007533194Z",
+  "valid_from": "2026-04-01T03:19:54.007533194Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 446,
+    "end_line": 454,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

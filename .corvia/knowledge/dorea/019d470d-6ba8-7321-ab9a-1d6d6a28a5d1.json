@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1d6d6a28a5d1",
+  "content": "h, video_height, output_path)\n            else:\n                save_mask_as_png(mask_binary, output_path)\n\n            masks_written += 1\n\n        # Reset state to free memory for next subject\n        predictor.reset_state(state)\n\n    return masks_written\ndef process_clip(\n    predictor,\n    clip_id: str,\n    subjects: list[dict],\n    video_path: Path,\n    masks_base_dir: Path,\n    device: str,\n) -> dict:\n    \"\"\"Process all subjects in a single clip.\n\n    Extracts frames to a temp directory, then runs SAM2 tracking for each subject\n    independently (one tracking session per subject).\n\n    Returns dict with per-subject results.\n    \"\"\"\n    # Get video info\n    video_info = get_video_info(video_path)\n    if video_info is None:\n        logger.error(\"Could not get video info for %s, skipping clip\", video_path)\n        return {\"subjects_tracked\": 0, \"total_masks\": 0, \"errors\": len(subjects)}\n\n    video_width = video_info[\"width\"]\n    video_height = video_info[\"height\"]\n    logger.info(\n        \"Clip %s: %dx%d, source=%s\",\n        clip_id, video_width, video_height, video_path.name,\n    )\n\n    # Extract all frames to a temporary directory for SAM2\n    # SAM2 init_state expects a directory of sequentially-named JPEG files\n    with tempfile.TemporaryDirectory(prefix=f\"sam2_{clip_id}_\") as tmp_dir:\n        frame_dir = Path(tmp_dir) / \"frames\"\n        logger.info(\"Extracting frames from %s to temp dir...\", video_path.name)\n        frame_count = extract_frames_to_dir(video_path, frame_dir)\n\n        if frame_count <= 0:\n            logger.error(\n                \"Failed to extract frames from %s, skipping clip\", video_path.name\n            )\n            return {\"subjects_tracked\": 0, \"total_masks\": 0, \"errors\": len(subjects)}\n\n        logger.info(\n            \"Clip %s: %d frames extracted, %d subject(s) to track\",\n            clip_id, frame_count, len(subjects),\n        )",
+  "source_version": "scripts/03_run_sam2.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112215382Z",
+  "valid_from": "2026-04-01T03:19:15.112215382Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/03_run_sam2.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 545,
+    "end_line": 589,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

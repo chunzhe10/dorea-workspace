@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1eec827eb801",
+  "content": "nce(media_pool, depth_dir)\n            if depth_item:\n                logger.debug(\"  Imported depth sequence for %s\", clip_id)\n\n            result[\"depth_attached\"] = attach_external_matte(\n                timeline_item, NODE_DEPTH_GRADE, depth_matte_path\n            )\n            if result[\"depth_attached\"]:\n                logger.info(\"  Depth matte -> Node %d (%s)\", NODE_DEPTH_GRADE, NODE_NAMES[NODE_DEPTH_GRADE])\n        else:\n            result[\"warnings\"].append(\"Depth directory exists but contains no PNG frames\")\n    else:\n        logger.debug(\"  No depth sequence found for %s\", clip_id)\n\n    # Step 4: Load scene analysis and assign subjects to nodes\n    subjects = load_scene_analysis(scene_analysis_dir, clip_id)\n    if not subjects:\n        logger.debug(\"  No subjects from scene analysis for %s\", clip_id)\n        return result\n\n    assignments = assign_subjects_to_nodes(subjects)\n\n    # Step 5: Attach mask mattes for assigned subjects\n    for node_index, subject in assignments.items():\n        label = subject.get(\"label\", \"unknown\")\n        mask_dir = find_mask_sequence_dir(masks_base, clip_id, label)\n\n        if mask_dir is None:\n            logger.warning(\n                \"  No mask sequence found for subject '%s' (expected at %s)\",\n                label, masks_base / clip_id / label,\n            )\n            result[\"mattes_failed\"] += 1\n            continue\n\n        # Import mask sequence to media pool\n        mask_item = import_image_sequence(media_pool, mask_dir)\n        if mask_item:\n            logger.debug(\"  Imported mask sequence for subject '%s'\", label)\n\n        mask_path = get_first_frame_path(mask_dir)\n        if mask_path is None:\n            logger.warning(\"  Mask directory for '%s' contains no PNG frames\", label)\n            result[\"mattes_failed\"] += 1\n            continue\n\n        attached = attach_external_matte(timeline_item, node_index, mask_path)\n        if attached:\n            logger.info(\n                \"  Mask '%s' -> Node %d (%s)\",\n                label, node_index, NODE_NAMES.get(node_index, \"?\"),\n            )\n            result[\"mattes_attached\"] += 1\n        else:\n            result[\"mattes_failed\"] += 1\n\n    return result",
+  "source_version": "scripts/05_resolve_setup.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112235334Z",
+  "valid_from": "2026-04-01T03:19:15.112235334Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/05_resolve_setup.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 621,
+    "end_line": 671,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

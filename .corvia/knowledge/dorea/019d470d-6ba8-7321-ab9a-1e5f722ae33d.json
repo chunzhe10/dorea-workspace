@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1e5f722ae33d",
+  "content": "Exception as e:\n            logger.warning(\n                \"Error creating date subfolder '%s': %s — using 'Footage'\", date, e\n            )\n            return footage_folder\n\n    logger.info(\"Media Pool folder: Footage/%s\", date)\n    return date_folder\ndef import_footage_to_media_pool(media_pool, target_folder, clip_paths: list[Path]):\n    \"\"\"Import footage clips into the specified Media Pool folder.\n\n    Returns list of imported MediaPoolItem objects, or empty list on failure.\n    \"\"\"\n    try:\n        media_pool.SetCurrentFolder(target_folder)\n    except Exception as e:\n        logger.warning(\"Could not set current folder: %s\", e)\n\n    file_paths = [str(p) for p in clip_paths]\n\n    try:\n        clips = media_pool.ImportMedia(file_paths)\n    except Exception as e:\n        logger.error(\"Failed to import footage: %s\", e)\n        return []\n\n    if clips is None:\n        logger.error(\"ImportMedia returned None — check file paths and Resolve logs\")\n        return []\n\n    if isinstance(clips, list):\n        logger.info(\"Imported %d clip(s) to Media Pool\", len(clips))\n        return clips\n\n    # Some API versions return a dict or other iterable\n    try:\n        clip_list = list(clips.values()) if isinstance(clips, dict) else list(clips)\n        logger.info(\"Imported %d clip(s) to Media Pool\", len(clip_list))\n        return clip_list\n    except Exception:\n        logger.info(\"Imported clip(s) to Media Pool (count unknown)\")\n        return [clips] if clips else []",
+  "source_version": "scripts/05_resolve_setup.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112227777Z",
+  "valid_from": "2026-04-01T03:19:15.112227777Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/05_resolve_setup.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 372,
+    "end_line": 405,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1df2a72ede8e",
+  "content": "VER\n\n    # Marine life detection — check if any keyword appears in the label\n    for keyword in MARINE_LIFE_KEYWORDS:\n        if keyword in label_lower:\n            return NODE_MARINE_LIFE\n\n    # Default: foreground subject\n    return NODE_FOREGROUND_POP\ndef assign_subjects_to_nodes(subjects: list[dict]) -> dict[int, dict]:\n    \"\"\"Assign subjects to grade nodes based on their labels.\n\n    Each node (4, 5, 6) gets at most one subject. The first matching subject\n    for each category wins; additional subjects are logged as unassigned.\n\n    Returns:\n        Dict mapping node_index -> subject dict for assigned subjects.\n    \"\"\"\n    assignments: dict[int, dict] = {}\n    unassigned: list[dict] = []\n\n    for subject in subjects:\n        label = subject.get(\"label\", \"unknown\")\n        target_node = classify_subject(label)\n\n        if target_node is None:\n            unassigned.append(subject)\n            continue\n\n        if target_node not in assignments:\n            assignments[target_node] = subject\n            logger.debug(\n                \"  Assigned '%s' -> Node %d (%s)\",\n                label, target_node, NODE_NAMES.get(target_node, \"?\"),\n            )\n        else:\n            # Node already taken — log as unassigned\n            unassigned.append(subject)\n            logger.debug(\n                \"  Subject '%s' unassigned (Node %d already has '%s')\",\n                label, target_node, assignments[target_node].get(\"label\", \"?\"),\n            )\n\n    if unassigned:\n        labels = [s.get(\"label\", \"?\") for s in unassigned]\n        logger.info(\n            \"  %d subject(s) unassigned (can be manually added): %s\",\n            len(unassigned), \", \".join(labels),\n        )\n\n    return assignments",
+  "source_version": "scripts/05_resolve_setup.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112222606Z",
+  "valid_from": "2026-04-01T03:19:15.112222606Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/05_resolve_setup.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 149,
+    "end_line": 190,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

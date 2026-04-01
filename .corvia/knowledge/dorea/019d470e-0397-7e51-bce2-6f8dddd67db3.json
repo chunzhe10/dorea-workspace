@@ -1,0 +1,31 @@
+{
+  "id": "019d470e-0397-7e51-bce2-6f8dddd67db3",
+  "content": "### Task 26: Create workspace data directories\n### Task 27: Transfer design spec and plan\n\n### Task 28: Final commit and push\n\n- [ ] **Step 1: Check for any uncommitted changes**\n\n```bash\ncd /home/chunzhe/corvia-project/dorea-workspace\ngit status\n```\n\n- [ ] **Step 2: Stage any remaining changes and commit**\n\n```bash\ncd /home/chunzhe/corvia-project/dorea-workspace\ngit status  # review what's untracked/modified",
+  "source_version": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-01T03:19:54.007644719Z",
+  "valid_from": "2026-04-01T03:19:54.007644719Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1722,
+    "end_line": 1735,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

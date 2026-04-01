@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-194fb1cf9224",
+  "content": "safe_mean(highlight_sum, highlight_n),\n        \"overall_mean_rgb\": safe_mean(overall_sum, overall_n),\n        \"saturation_mean\": saturation_sum / max(saturation_count, 1),\n        \"hue_histogram\": hue_bins / max(hue_bins.sum(), 1),\n    }\n\n    return result\ndef safe_mean(zone_sum: np.ndarray, zone_n: int) -> np.ndarray:\n        if zone_n == 0:\n            return np.array([0.0, 0.0, 0.0])\n        return zone_sum / zone_n",
+  "source_version": "scripts/00_generate_lut.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112157986Z",
+  "valid_from": "2026-04-01T03:19:15.112157986Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/00_generate_lut.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 245,
+    "end_line": 248,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

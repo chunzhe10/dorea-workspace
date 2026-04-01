@@ -1,0 +1,31 @@
+{
+  "id": "019d470d-6ba8-7321-ab9a-1d04105fdd78",
+  "content": "one:\n    \"\"\"Save an all-black (empty) mask as a single-channel PNG.\"\"\"\n    output_path.parent.mkdir(parents=True, exist_ok=True)\n    alpha = np.zeros((height, width), dtype=np.uint8)\n    img = Image.fromarray(alpha, mode=\"L\")\n    img.save(str(output_path))\ndef load_sam2_model(\n    config_name: str, checkpoint_path: Path, device: str\n):\n    \"\"\"Load the SAM2 video predictor model.\n\n    Args:\n        config_name: SAM2 config identifier (e.g., \"sam2.1_hiera_s\").\n        checkpoint_path: Path to the model weights file.\n        device: CUDA device string (e.g., \"cuda:0\").\n\n    Returns:\n        SAM2VideoPredictor instance.\n    \"\"\"\n    from sam2.build_sam import build_sam2_video_predictor\n\n    # Ensure hydra can find SAM2.1 configs in the configs/sam2.1/ subdirectory\n    # by re-initializing with the configs subpackage as search path\n    from hydra.core.global_hydra import GlobalHydra\n    if GlobalHydra.instance().is_initialized():\n        GlobalHydra.instance().clear()\n    from hydra import initialize_config_dir\n    import sam2 as _sam2_pkg\n    sam2_configs_dir = str(Path(_sam2_pkg.__file__).parent / \"configs\" / \"sam2.1\")\n    initialize_config_dir(config_dir=sam2_configs_dir, version_base=\"1.2\")\n\n    logger.info(\"Loading SAM2 model: config=%s, weights=%s\", config_name, checkpoint_path)\n\n    if torch.cuda.is_available():\n        vram_before = torch.cuda.memory_allocated(device) / (1024 ** 3)\n        logger.info(\"VRAM before model load: %.2f GB\", vram_before)\n\n    predictor = build_sam2_video_predictor(\n        config_file=config_name,\n        ckpt_path=str(checkpoint_path),\n        device=device,\n    )\n\n    if torch.cuda.is_available():\n        vram_after = torch.cuda.memory_allocated(device) / (1024 ** 3)\n        logger.info(\n            \"VRAM after model load: %.2f GB (model uses ~%.2f GB)\",\n            vram_after, vram_after - vram_before,\n        )\n\n    return predictor",
+  "source_version": "scripts/03_run_sam2.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-01T03:19:15.112210417Z",
+  "valid_from": "2026-04-01T03:19:15.112210417Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "scripts/03_run_sam2.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 364,
+    "end_line": 408,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}
