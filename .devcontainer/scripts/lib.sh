@@ -408,7 +408,8 @@ for r in cfg.get('workspace', {}).get('repos', []):
 }
 
 # Initialize the corvia workspace.
-# Idempotent: skips `corvia workspace init` if the store already exists.
+# Always fixes perms and pre-clones repos (both are idempotent).
+# Only runs `corvia workspace init` if the store does not yet exist.
 init_workspace() {
     fix_workspace_perms
     pre_clone_repos
