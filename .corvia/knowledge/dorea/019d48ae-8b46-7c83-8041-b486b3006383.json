@@ -1,0 +1,31 @@
+{
+  "id": "019d48ae-8b46-7c83-8041-b486b3006383",
+  "content": "# D-Log M Saturation in Linear Space is Very High\nUnderwater footage decoded from D-Log M to linear light has pixel saturation of ~0.85 (computed as (max-min)/max per pixel in linear RGB). This is because red absorption at depth creates extreme R:B channel ratios. A saturation filter threshold below 0.85 will reject most underwater pixels, making grey-world WB estimation impossible. Threshold must be >= 0.90 for underwater D-Log M footage.",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-01T10:54:51.718029644Z",
+  "valid_from": "2026-04-01T10:54:51.718029644Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "learning",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

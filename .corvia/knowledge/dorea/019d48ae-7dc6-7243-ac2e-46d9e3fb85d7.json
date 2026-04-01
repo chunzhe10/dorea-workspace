@@ -1,0 +1,31 @@
+{
+  "id": "019d48ae-7dc6-7243-ac2e-46d9e3fb85d7",
+  "content": "# Per-Clip White Balance — Decision Record (2026-04-01)\n## What: Phase 1b script estimates per-clip WB from D-Log M keyframes using filtered grey-world, applied to Resolve Node 2.\n## Key Design Decisions:\n1. Use dlog_m_to_linear() NOT eotf_sRGB — keyframes from Phase 1 are D-Log M encoded (ffmpeg does no color space conversion). 5-persona review caught this critical bug.\n2. Saturation threshold = 0.92 in linear space — underwater illuminant has ~0.85 saturation due to extreme R:B ratio. Lower thresholds (0.70) filter out the very pixels we need.\n3. D-Log M luminance thresholds: MIN=0.02, MAX=0.60 — D-Log M middle grey decodes to ~0.18 linear; highlights rarely exceed 0.6.\n4. GAIN_MAX = 3.5 — Beer-Lambert says 5m depth needs 3.67x red correction; LUT provides ~2.0x static, so Node 2 needs up to 1.8x residual.\n5. Gain normalization to min=1.0 — boost-only strategy avoids the gain-normalization bug from issue #3.\n## Review Findings Worth Remembering:\n- Grey-world assumption fails for underwater macro/reef scenes dominated by single-color subjects. Confidence metric is the safety valve.\n- Mixed camera support (DJI D-Log M + Insta360 sRGB) needs per-clip EOTF selection in future.\n## What Blocked / Surprised:\n- sRGB vs D-Log M linearization was not caught during implementation — caught by Color Science reviewer. Always match EOTF to source encoding.",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-01T10:54:48.262047411Z",
+  "valid_from": "2026-04-01T10:54:48.262047411Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "decision",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

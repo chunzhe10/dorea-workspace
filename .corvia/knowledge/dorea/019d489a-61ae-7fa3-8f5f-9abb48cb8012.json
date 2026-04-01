@@ -1,0 +1,31 @@
+{
+  "id": "019d489a-61ae-7fa3-8f5f-9abb48cb8012",
+  "content": "# Per-Clip White Balance — Design Decisions (Issue #8)\n## What: New pipeline script `01b_estimate_white_balance.py` that estimates per-clip white balance from keyframes using grey-world algorithm, outputs JSON consumed by Phase 5 to set Resolve Node 2 (\"Neutral Balance\") gains.\n## Why: Static LUT applies identical WB to every clip. Underwater conditions (depth, turbidity, ambient light) vary per clip. XHS creators always do per-clip WB as first correction step.\n## Key Design Choices:\n1. Standalone script (not integrated into Phase 2 or 5) — follows pipeline separation-of-concerns pattern\n2. Grey-world algorithm over white-patch — underwater footage lacks reliable white references\n3. Pixel filtering: exclude very dark (<5% luminance) and highly saturated (>90%) pixels that skew WB estimate\n4. Output to `working/white_balance/{date}/{clip_id}.json` — same pattern as scene_analysis\n5. NOT depth-aware — depth maps come from Phase 4 (runs after this script), can't depend on them\n## Alternatives Rejected:\n- White-patch: no reliable white references in underwater footage\n- Integration into Phase 2: conflates API-dependent scene analysis with pure-computation WB\n- Integration into Phase 5: Phase 5 runs on host machine without numpy/PIL\n- Depth-aware WB: creates circular dependency with Phase 4",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-01T10:32:50.350302566Z",
+  "valid_from": "2026-04-01T10:32:50.350302566Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "decision",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}
