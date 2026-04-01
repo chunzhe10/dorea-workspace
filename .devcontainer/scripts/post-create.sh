@@ -41,6 +41,11 @@ step "Ingesting workspace into knowledge base"
 spin "Ingesting repos..." corvia workspace ingest \
     || echo "    ingest failed — run 'corvia workspace ingest' manually to populate knowledge base"
 
+step "Setting up hooks (git + doc-placement)"
+if command -v corvia >/dev/null 2>&1; then
+    corvia workspace init-hooks 2>/dev/null && echo "    hooks initialized" || echo "    hook init deferred (server not ready)"
+fi
+
 step "Ensuring tooling"
 ensure_tooling
 

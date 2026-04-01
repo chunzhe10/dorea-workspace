@@ -76,6 +76,15 @@ service_name = "dorea"
 log_format = "json"
 metrics_enabled = true
 
+[hooks]
+session_recording = true
+doc_placement = true
+agent_check = true
+write_reminder = true
+orphan_cleanup = true
+corvia_first_reminder = true
+agent_teams = true
+
 [inference]
 device = "cpu"
 kv_quant = "q8"

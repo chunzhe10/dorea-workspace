@@ -534,6 +534,20 @@ install_claude_plugin() {
     local plugins_json="/root/.claude/plugins/installed_plugins.json"
     local cache_base="/root/.claude/plugins/cache/${marketplace}/${plugin_name}"
 
+    # Ensure workspace symlink so AI file search can find plugin skills.
+    # The plugin runtime injects skills via JS hook, but Claude (the AI model)
+    # also needs to read SKILL.md files during conversations — and it searches
+    # the workspace tree, not ~/.claude/plugins/cache/.
+    _link_plugin_skills() {
+        local target_skills="$1/skills"
+        local link_path="${WORKSPACE_ROOT}/.agents/skills/${plugin_name}"
+        if [ -d "$target_skills" ]; then
+            mkdir -p "$(dirname "$link_path")"
+            ln -sfn "$target_skills" "$link_path"
+            logm claude "${plugin_name}: linked skills → ${link_path}"
+        fi
+    }
+
     # Check if already installed by looking at installed_plugins.json
     if [ -f "$plugins_json" ] && python3 -c "
 import json, sys
@@ -544,6 +558,14 @@ if entries and entries[0].get('installPath'):
     sys.exit(0 if os.path.isdir(entries[0]['installPath']) else 1)
 sys.exit(1)
 " 2>/dev/null; then
+        # Plugin exists — still ensure the workspace symlink is current
+        local existing_path
+        existing_path=$(python3 -c "
+import json
+d = json.load(open('$plugins_json'))
+print(d['plugins']['$plugin_key'][0]['installPath'])
+" 2>/dev/null)
+        [ -n "$existing_path" ] && _link_plugin_skills "$existing_path"
         echo "already installed"
         return 0
     fi
@@ -591,6 +613,7 @@ d['plugins']['$plugin_key'] = [{
 }]
 json.dump(d, open(path, 'w'), indent=2)
 "
+    _link_plugin_skills "$install_path"
     echo "installed v${version}"
 }
 
