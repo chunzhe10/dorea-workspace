@@ -2,11 +2,19 @@
   "hooks": {
     "PostToolUse": [
       {
-        "_comment": "After git commits, remind to persist decisions/learnings to corvia knowledge base.",
         "hooks": [
           {
-            "command": "bash .claude/hooks/corvia-write-reminder.sh",
-            "timeout": 10000,
+            "command": "[ \"$CORVIA_HOOKS_DISABLED\" = \"1\" ] && exit 0; corvia hooks run --event PostToolUse 2>/tmp/.corvia-hook-err || { rc=$?; grep -q \"unrecognized subcommand\" /tmp/.corvia-hook-err 2>/dev/null && exit 0; cat /tmp/.corvia-hook-err >&2; exit $rc; }",
+            "timeout": 5000,
+            "type": "command"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "command": "[ \"$CORVIA_HOOKS_DISABLED\" = \"1\" ] && exit 0; corvia hooks run --event PostToolUse --handler write-reminder 2>/tmp/.corvia-hook-err || { rc=$?; grep -q \"unrecognized subcommand\" /tmp/.corvia-hook-err 2>/dev/null && exit 0; cat /tmp/.corvia-hook-err >&2; exit $rc; }",
+            "timeout": 5000,
             "type": "command"
           }
         ],
@@ -17,28 +25,39 @@
       {
         "hooks": [
           {
-            "command": "echo 'REMINDER: Have you called corvia_search or corvia_ask first? Per CLAUDE.md, you MUST query corvia MCP tools (scope_id: dorea) before using Grep/Glob for any new task or question. If you already called corvia this session, proceed.'",
+            "command": "[ \"$CORVIA_HOOKS_DISABLED\" = \"1\" ] && exit 0; corvia hooks run --event PreToolUse 2>/tmp/.corvia-hook-err || { rc=$?; grep -q \"unrecognized subcommand\" /tmp/.corvia-hook-err 2>/dev/null && exit 0; cat /tmp/.corvia-hook-err >&2; exit $rc; }",
+            "timeout": 5000,
             "type": "command"
           }
-        ],
-        "matcher": "Grep|Glob"
+        ]
       },
       {
         "hooks": [
           {
-            "command": "bash .corvia/hooks/doc-placement-check.sh",
+            "command": "[ \"$CORVIA_HOOKS_DISABLED\" = \"1\" ] && exit 0; corvia hooks run --event PreToolUse --handler doc-placement 2>/tmp/.corvia-hook-err || { rc=$?; grep -q \"unrecognized subcommand\" /tmp/.corvia-hook-err 2>/dev/null && exit 0; cat /tmp/.corvia-hook-err >&2; exit $rc; }",
+            "timeout": 5000,
             "type": "command"
           }
         ],
         "matcher": "Write|Edit"
+      },
+      {
+        "hooks": [
+          {
+            "command": "[ \"$CORVIA_HOOKS_DISABLED\" = \"1\" ] && exit 0; corvia hooks run --event PreToolUse --handler corvia-first-reminder 2>/tmp/.corvia-hook-err || { rc=$?; grep -q \"unrecognized subcommand\" /tmp/.corvia-hook-err 2>/dev/null && exit 0; cat /tmp/.corvia-hook-err >&2; exit $rc; }",
+            "timeout": 5000,
+            "type": "command"
+          }
+        ],
+        "matcher": "Grep|Glob"
       }
     ],
     "SessionEnd": [
       {
-        "_comment": "WORKAROUND: Claude Code leaks memory via orphaned node processes in WSL. Kills orphans on session exit. Remove when upstream fix lands.",
         "hooks": [
           {
-            "command": "bash \"$CORVIA_WORKSPACE/.devcontainer/scripts/cleanup-orphans.sh\" --quiet 2>/dev/null || true",
+            "command": "[ \"$CORVIA_HOOKS_DISABLED\" = \"1\" ] && exit 0; corvia hooks run --event SessionEnd 2>/tmp/.corvia-hook-err || { rc=$?; grep -q \"unrecognized subcommand\" /tmp/.corvia-hook-err 2>/dev/null && exit 0; cat /tmp/.corvia-hook-err >&2; exit $rc; }",
+            "timeout": 30000,
             "type": "command"
           }
         ]
@@ -46,10 +65,20 @@
     ],
     "SessionStart": [
       {
-        "_comment": "Display-only reminder for agent identity selection.",
         "hooks": [
           {
-            "command": "bash .claude/hooks/agent-check.sh",
+            "command": "[ \"$CORVIA_HOOKS_DISABLED\" = \"1\" ] && exit 0; corvia hooks run --event SessionStart 2>/tmp/.corvia-hook-err || { rc=$?; grep -q \"unrecognized subcommand\" /tmp/.corvia-hook-err 2>/dev/null && exit 0; cat /tmp/.corvia-hook-err >&2; exit $rc; }",
+            "timeout": 5000,
+            "type": "command"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "command": "[ \"$CORVIA_HOOKS_DISABLED\" = \"1\" ] && exit 0; corvia hooks run --event UserPromptSubmit 2>/tmp/.corvia-hook-err || { rc=$?; grep -q \"unrecognized subcommand\" /tmp/.corvia-hook-err 2>/dev/null && exit 0; cat /tmp/.corvia-hook-err >&2; exit $rc; }",
             "timeout": 5000,
             "type": "command"
           }
