@@ -1,0 +1,31 @@
+{
+  "id": "019d48ba-eaea-7412-a0ed-57d8d27255ca",
+  "content": "# Pipeline Redesign: Drop DaVinci Resolve, Sea-thru Color Correction (2026-04-01)\n\n## Decision\nReplace the entire Resolve-based color pipeline with Sea-thru physics-based color correction in Python. DaVinci Resolve is no longer a pipeline dependency. User imports batch-processed clips into Resolve (or any NLE) manually if needed.\n\n## What's removed\n- Phase 0 (`00_generate_lut.py`) — static LUT replaced by per-pixel Sea-thru correction\n- Phase 1b (`01b_estimate_white_balance.py`) — Sea-thru has built-in white balance\n- Phase 5 (`05_resolve_setup.py`) — no longer automating Resolve; ffmpeg renders final output\n- DRX template, .cube LUT files\n- davinci-resolve-mcp server dependency\n- DaVinci Resolve Studio purchase requirement\n\n## New pipeline\n1. Extract frames (ffmpeg) — existing Phase 1\n2. Claude scene analysis — existing Phase 2\n3. SAM2 segmentation — existing Phase 3\n4. Depth estimation (Depth Anything V2) — existing Phase 4\n5. Sea-thru color correction + depth/SAM2 blend — NEW Phase 5\n6. ffmpeg render (corrected frames → video) — NEW Phase 6\n\n## Sea-thru approach\n- Based on hainh/sea-thru implementation (pure numpy/scipy, CPU)\n- Uses Depth Anything V2 relative depth maps from Phase 4 (not metric — acceptable per Teragion results)\n- Depth + SAM2 blend mask: near objects get full water removal (in-air look), background keeps blue underwater look\n- Cameras: DJI Action 4 (D-Log M) and Insta360 X5 (sRGB flattened)\n- C/OpenMP acceleration needed for illuminant estimation at video resolution (from Teragion impl)\n\n## Why\nSimplifies pipeline, removes host-machine dependency, removes paid software requirement, enables fully automated batch processing, and Sea-thru produces better color correction than static LUT approach.",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-01T11:08:22.634372053Z",
+  "valid_from": "2026-04-01T11:08:22.634372053Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "decision",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

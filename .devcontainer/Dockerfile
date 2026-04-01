@@ -156,16 +156,21 @@ RUN apt-get update && apt-get install -y --no-install-recommends python3.13-venv
 
 RUN python3 -m venv /opt/dorea-venv
 
-# Install pipeline dependencies with CUDA 12.1 wheels
+# Install pipeline dependencies with CUDA 12.4 wheels
+# Pin torch BEFORE sam2 — sam2's setup.py lists torch as a dep and will
+# pull the latest (cu130+) from PyPI if torch isn't already installed.
+RUN /opt/dorea-venv/bin/pip install --no-cache-dir \
+    torch==2.6.0+cu124 torchvision==0.21.0+cu124 \
+    --index-url https://download.pytorch.org/whl/cu124
+
 RUN /opt/dorea-venv/bin/pip install --no-cache-dir \
     anthropic colour-science numpy Pillow opencv-python pyyaml \
     transformers
 
-RUN /opt/dorea-venv/bin/pip install --no-cache-dir \
-    torch torchvision --index-url https://download.pytorch.org/whl/cu121
-
 # SAM2 — canonical install from GitHub (not on PyPI)
-RUN /opt/dorea-venv/bin/pip install --no-cache-dir \
+# --no-build-isolation ensures sam2 sees the already-installed torch
+# instead of fetching a new one during its build
+RUN /opt/dorea-venv/bin/pip install --no-cache-dir --no-build-isolation \
     git+https://github.com/facebookresearch/sam2.git
 
 # ffmpeg for frame extraction (Phase 1)

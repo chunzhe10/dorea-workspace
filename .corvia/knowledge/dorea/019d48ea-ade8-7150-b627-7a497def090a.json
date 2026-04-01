@@ -1,0 +1,31 @@
+{
+  "id": "019d48ea-ade8-7150-b627-7a497def090a",
+  "content": "# Color Correction Approach: WaterNet Base + Depth-Aware Grading (2026-04-01)\n\n## Decision\nReplace Sea-thru physics-based water removal with WaterNet AI enhancement as the base correction layer. Optionally layer gentle depth-aware color grading on top.\n\n## Why Sea-thru was abandoned\n- Sea-thru requires metric depth maps (SfM/stereo). Depth Anything V2 produces relative depth — insufficient for the physics model to produce correct attenuation recovery.\n- Output was consistently too dark: backscatter subtraction removes scene brightness, and relative depth can't recover the right amount.\n- Green hue persisted despite multiple WB approaches.\n- The algorithm targets \"full water removal\" (in-air look) but the user wants underwater color grading (warm subjects on blue water background, like XHS dive content).\n- 5-persona review found compounding color science bugs (B_inf bounds, per-channel normalization, LSAC brightness bias) that explain the dark/desaturated output.\n\n## Why WaterNet\n- Pre-trained CNN (1M params) that learned underwater enhancement from UIEB dataset.\n- Clean output: no noise amplification, no clipping — the model generates plausible color rather than amplifying absent signal.\n- Fast: 3.7s per frame on CPU at 1024px. Would be <1s on GPU.\n- Blue water preserved naturally (the model was trained on underwater images, not in-air restoration).\n- Simple integration: torch.hub.load, numpy in/out.\n\n## Depth-aware grading layer\n- Gentle warm shift on near subjects using Depth Anything V2 depth maps.\n- Current implementation introduces artifacts — needs further tuning or may be dropped in favor of WaterNet-only.\n- The depth maps are still useful for this graduated correction even though they're relative (not metric).\n\n## What this means for the pipeline\n- Phase 5 becomes: WaterNet inference (+ optional depth grading)\n- Sea-thru script (`05_sea_thru_correct.py`) to be replaced\n- WaterNet model (~4MB) needs to be cached/downloaded\n- GPU optional but preferred for batch speed\n\n## Key learning\nPhysics-based underwater correction (Sea-thru, Beer-Lambert) requires accurate metric depth. Without it, AI-based enhancement produces better visual results with less complexity. The user's aesthetic goal (warm subjects on blue water) is a color grading task, not a physics restoration task.",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-01T12:00:32.744650086Z",
+  "valid_from": "2026-04-01T12:00:32.744650086Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "decision",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}
