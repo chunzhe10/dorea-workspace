@@ -1,0 +1,31 @@
+{
+  "id": "019d4eba-fcf2-7823-bd5e-497232927f0b",
+  "content": "# Knowledge Store Sync — Grading Pipeline Perf v3 (2026-04-02)\n## What: Synced 3 knowledge entries + 5 docs from grading pipeline performance v3 design session\n## Key Decisions:\n1. Included knowledge entries AND their referenced docs (decisions + plans) in a single sync commit — entries alone lack context without the specs they reference\n2. Fixed \"Four→Five\" optimization count mismatch and added cross-references between entries during review phase — knowledge entries must be internally consistent and cross-linked for retrieval quality\n## Review Findings Worth Remembering:\n- Knowledge entries that reference docs should always include Spec/Plan cross-reference lines at the end of content\n- Baseline benchmark findings should cross-reference the decisions that address their identified bottlenecks\n- The \"chore: sync\" pattern works well — commit knowledge JSON + related docs together, not separately\n## What Blocked / Surprised:\n- Issue #27 description was stale (mentioned competitive analysis research entries, but actual new files were grading pipeline perf) — adapted to reality rather than issue description",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-02T15:06:10.546911859Z",
+  "valid_from": "2026-04-02T15:06:10.546911859Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}
