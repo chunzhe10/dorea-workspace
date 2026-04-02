@@ -1,0 +1,31 @@
+{
+  "id": "019d49a1-c59b-77d0-b7b0-ecc652809419",
+  "content": "# UNet-Based Underwater Enhancement Model Survey — WaterNet Challengers (2026-04-01)\n\n## Context\nSurveyed underwater image enhancement models to find a UNet-based challenger to the current WaterNet baseline (~1M params, 3.7s/frame CPU at 1024px). Constraint: RTX 3060 with 6GB VRAM. FUnIE-GAN was previously evaluated but results weren't satisfactory. \"MarineNN by Pavan Kumar\" was requested but does not exist in any public repository, paper, or preprint — name could not be verified.\n\n## Models With Code AND Pretrained Weights (Usable for POC)\n\n### 1. Five A+ Network (FA+Net) — BMVC 2023 ⭐ TOP PICK\n- **Params**: ~9K (112x smaller than WaterNet)\n- **Speed**: ~0.01s/frame — real-time at 1080p\n- **Architecture**: Two-stage UNet-like. Prior stage decomposes degradation into sub-problems; fine-grained stage uses multi-branch color enhancement + pixel attention.\n- **Weights**: Yes — two variants (α=0.1, α=0.4) in model/ folder\n- **GitHub**: https://github.com/Owen718/FiveAPlus-Network\n- **Paper**: arXiv:2305.08824\n- **VRAM**: Trivial (<0.1GB). Model is ~36KB.\n- **UIEB trained**: Yes\n- **Why interesting**: Claims SOTA on multiple benchmarks with 9K params. Real-time 1080p. The extreme efficiency is the opposite end of the spectrum from WaterNet.\n\n### 2. RAUNE-Net — IFTC 2023\n- **Params**: Unknown (moderate, UNet-based with residual + attention)\n- **Architecture**: Wide-range perception module, attention down-sampling, high-level feature residual learning, feature map smoothing + Tanh output\n- **Weights**: Yes — pretrained models for RAUNE-Net, WaterNet, UGAN, FUnIE-GAN included\n- **GitHub**: https://github.com/fansuregrin/RAUNE-Net\n- **Trained on**: LSUI3879 dataset (3,879 pairs)\n- **VRAM**: Should fit 6GB easily (standard UNet scale)\n- **Why interesting**: Trained on a larger/different dataset than UIEB. Attention mechanisms may handle color correction differently than WaterNet.\n\n### 3. UIE-WD (Wavelet Dual-Stream) — ICASSP 2022\n- **Architecture**: Discrete wavelet transform decomposes input into frequency bands, separate streams for structure and detail\n- **Weights**: Yes — Google Drive, goes in ./checkpoints/\n- **GitHub**: https://github.com/ZZiyin/UIE-WD_Code\n- **Tested on**: RTX 2070 (fits 6GB easily)\n- **Trained on**: NYU Depth V2 synthesized underwater (1449 base images × 36 augmentations)\n- **Why interesting**: Wavelet decomposition approach is architecturally different from direct pixel-space UNets. May handle detail preservation differently.\n\n### 4. UIEC²-Net — Signal Processing: Image Communication 2021\n- **Architecture**: Three-block CNN — RGB pixel-level block (denoise/decast), HSV global-adjust block (saturation/brightness), attention map block\n- **Weights**: Yes — via ddz16/UIE_Benckmark or BIGWangYuDong/UWEnhancement\n- **GitHub**: https://github.com/ddz16/UIE_Benckmark (includes NU2Net, UIEC2Net, UWCNN checkpoints)\n- **Also**: https://github.com/BIGWangYuDong/UWEnhancement (PyTorch ports)\n- **VRAM**: Lightweight, fits 6GB\n- **Why interesting**: Dual color-space approach (RGB + HSV). May handle saturation/brightness differently than WaterNet's single-space approach.\n\n## Models Without Pretrained Weights (Not Usable for Quick POC)\n\n| Model | Year | Params | Code? | Weights? | Note |\n|-------|------|--------|-------|----------|------|\n| LU2Net | 2024 | 176K | No | No | Benchmarked on RTX 3060 at 100fps but unreleased |\n| MUFFNet | 2025 | 2.2M | No | No | Multi-scale frequency, no release |\n| OUNet-JL | 2025 | 7.1M | Yes | No | Would require training from scratch at 128x128 |\n| ViT-ClarityNet | 2025 | ~350M | No | No | Too large, marginal on 6GB |\n| CPDM | 2024 | 121M | Yes | No | Diffusion model, too slow for video pipeline |\n| LSNet (7K) | 2024 | 7K | No | No | Transmission map prior, no code released |\n\n## Recommendation for POC\n1. **Five A+ Network** — strongest candidate. 9K params, real-time, weights available, UIEB-trained. Extreme lightweight could mean less correction power, but worth testing.\n2. **RAUNE-Net** — good second candidate. Attention-driven UNet, different training data (LSUI3879), weights available.\n3. **UIEC²-Net** — interesting dual color-space approach, weights available via benchmark repo.\n\n## Evaluation Plan (if proceeding)\n- Same 3 test frames as previous evaluation (3840x2160 DJI Action 4, deep/turbid water, resized to 1024px)\n- Metrics: R/G ratio, B/G ratio, saturation, noise (σ delta), black/white clipping, visual quality\n- Compare against WaterNet baseline + WaterNet+ambiance pipeline\n- CPU and GPU timing at 1024px",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-01T15:20:31.899554909Z",
+  "valid_from": "2026-04-01T15:20:31.899554909Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "finding",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

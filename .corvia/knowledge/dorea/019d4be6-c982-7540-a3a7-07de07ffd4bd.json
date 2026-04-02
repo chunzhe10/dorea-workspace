@@ -1,0 +1,31 @@
+{
+  "id": "019d4be6-c982-7540-a3a7-07de07ffd4bd",
+  "content": "# Dorea v2 Phases 2+3 — Decision Record (2026-04-02)\n\n## What\nImplemented the Python inference bridge (Phase 2) and end-to-end video grading pipeline (Phase 3) as Rust+PyTorch architecture. The pipeline uses a JSON-lines IPC protocol over stdin/stdout to communicate between the Rust binary and a Python subprocess running RAUNE-Net and Depth Anything V2.\n\n## Key Design Decisions\n\n1. **JSON-lines IPC over stdin/stdout** — chosen over gRPC/REST for zero-dependency, process-local communication. Parent (Rust) writes requests; child (Python) writes responses. EOF on stdin = clean shutdown. Simple, debuggable, no network stack.\n\n2. **Base64 PNG for image transport** — images encoded as base64 PNG in JSON. Rust encoder uses store-mode zlib (fast), Python Pillow produces compressed DEFLATE. Rust decoder uses flate2 for full zlib decompression (previously only handled store-mode, which broke Pillow output).\n\n3. **PNG filter types 0-4 implemented in Rust** — Pillow can produce any filter type (None/Sub/Up/Average/Paeth). All five must be supported in the Rust decoder. Paeth predictor implemented from PNG spec section 9.4.\n\n4. **Per-frame depth-only inference server** — the grading loop spawns a depth-only server (no RAUNE). RAUNE is only needed in auto-calibration. Using a full server for per-frame grading would waste VRAM and startup time loading an unneeded model.\n\n5. **startup_timeout via thread+channel** — BufReader::read_line() blocks indefinitely. Enforcing the startup_timeout requires spawning a background thread to read the pong, then recv_timeout() on the main thread.\n\n6. **PYTHONPATH from current_exe()** — binary at target/{debug,release}/dorea → parent().parent().parent() → workspace root → join(\"python\"). This works for both debug and release builds without hardcoded paths.\n\n7. **parents[4] for Python default paths** — python/dorea_inference/*.py is 4 levels deep from workspace root (python/dorea_inference/file.py → parents[4] = workspace root). parents[5] was an off-by-one that pointed to /workspaces instead of /workspaces/dorea-workspace.\n\n8. **OnceLock for nvenc availability** — probing ffmpeg --encoders is cached across FrameEncoder instances to avoid repeated subprocess spawns.\n\n9. **FrameReader Drop impl** — kills and waits for the ffmpeg child process on early exit (e.g., when the caller breaks out of the iterator loop). Without this, ffmpeg would accumulate as zombies.\n\n## Review Findings Worth Remembering\n\n- **Borrow checker + PNG filter decode**: Cannot hold `&rgb[prior_row]` while writing `rgb[curr_row]` — even though the ranges don't overlap, the borrow checker can't prove this with a single slice. Solution: copy prior row to Vec before the filter match.\n- **Image.BILINEAR deprecated** in modern Pillow — use `Image.Resampling.BILINEAR` instead.\n- **bool clap args**: `#[arg(long, default_value = \"false\")]` on a `bool` field is wrong in clap 4 — booleans are false by default, adding `default_value` produces a confusing `[default: false]` in --help. Just use `#[arg(long)]`.\n- **cargo:rustc-cfg vs feature**: `println!(\"cargo:rustc-cfg=feature=\\\"cuda\\\"\")` in build.rs bypasses Cargo feature validation. Must also declare `cuda = []` in `[features]` for `#[cfg(feature = \"cuda\")]` to be a valid condition.\n\n## What Blocked / Surprised\n\n- **Off-by-one in parents[]**: The Python default model paths used parents[5] throughout. This resolved to /workspaces instead of /workspaces/dorea-workspace, meaning no default model would ever be found. Caught in review.\n- **PNG store-mode only**: The original inflate_zlib only handled DEFLATE store blocks. Pillow always produces compressed DEFLATE. This was a C-1 (critical) bug that would have caused all image decode operations to fail silently.\n- **Double inference server**: auto_calibrate and the grading loop both called build_inference_config(). The grading loop only needs depth, but would load RAUNE too if --raune-weights was provided, wasting VRAM on a model that's never called.\n",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-02T01:55:09.314802247Z",
+  "valid_from": "2026-04-02T01:55:09.314802247Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "decision",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

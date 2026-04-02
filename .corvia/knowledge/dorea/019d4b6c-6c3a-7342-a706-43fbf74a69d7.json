@@ -1,0 +1,31 @@
+{
+  "id": "019d4b6c-6c3a-7342-a706-43fbf74a69d7",
+  "content": "# Dorea v2 Implementation Plan — Issue #24\n\n## GitHub Issue\nchunzhe10/dorea-workspace#24 — \"Dorea v2: Rust+PyTorch pipeline rewrite for 4K video\"\n\n## Phase 1: Cargo Workspace + Core Pipeline (Rust)\n\n### Crate: dorea-cli\n- Binary entry point\n- CLI: `dorea grade --input clip.mp4 --output graded.mp4 [--config dorea.toml]`\n- CLI: `dorea calibrate --keyframes ./kf/ --depth ./depth/ --output cal.dorea-cal`\n- Orchestrates the full pipeline\n\n### Crate: dorea-core\nFiles to create:\n- `src/lut.rs` — Depth-stratified LUT building\n  - Port from `working/sea_thru_poc/run_fixed_hsl_lut_poc.py` function `build_fixed_depth_luts()`\n  - 5 depth zones × 33³ grid, importance-weighted pixel binning\n  - NN fill via KD-tree for empty cells\n  - NO Gaussian smoothing (σ=0 — critical fix)\n  - Trilinear interpolation for LUT application\n  - Depth-weighted zone blending\n- `src/hsl.rs` — HSL qualifier correction\n  - Port from `run_fixed_hsl_lut_poc.py` functions `derive_hsl_corrections()` + `apply_hsl_corrections()`\n  - 6 color qualifiers (Red/Skin, Yellow, Green, Cyan, Blue, Magenta)\n  - Per-qualifier: hue offset, saturation ratio, value offset\n  - Soft cosine falloff qualifier masks, minimum saturation threshold 0.08\n- `src/color.rs` — Color space conversions\n  - RGB ↔ LAB (port from skimage implementation)\n  - RGB ↔ HSV\n  - D-Log M ↔ linear (port from `pipeline_utils.py`)\n- `src/grading.rs` — Depth-aware ambiance grading (CPU fallback)\n  - Port from `depth_aware_ambiance()` in POC scripts\n  - Shadow lift, adaptive S-curve, highlight compression, local contrast, warmth, vibrance\n  - All operations depth-graduated\n- `src/calibration.rs` — Serialize/deserialize LUT + HSL params\n  - Binary format: 5 LUTs (5 × 33³ × 3 × f32) + HSL corrections (6 × 3 floats) + metadata\n\n### Crate: dorea-gpu\n- `src/pipeline.rs` — wgpu compute pipeline setup\n- `shaders/depth_lut.wgsl` — Trilinear LUT lookup with 5-zone depth blending\n- `shaders/hsl_correct.wgsl` — 6-qualifier HSL correction\n- `shaders/depth_grade.wgsl` — Full ambiance grading (shadow/contrast/highlight/warmth/vibrance)\n- `shaders/lab_convert.wgsl` — RGB ↔ LAB for GPU\n- Fused single-dispatch: LUT → HSL → grade in one GPU pass per frame\n- Workgroup size 16×16, dispatch 240×135 for 4K\n\n### Crate: dorea-video\n- `src/decode.rs` — ffmpeg subprocess: video → raw frames (NVDEC)\n- `src/encode.rs` — ffmpeg subprocess: raw frames → video (NVENC)\n- `src/keyframes.rs` — Keyframe selection logic (interval-based)\n\n## Phase 2: PyTorch Inference Integration\n\n### Python module: python/dorea_inference/\n- `vda.py` — Video Depth Anything inference\n  - torch.compile optimized\n  - Proxy resolution (512-1024px)\n  - Temporal consistency mode for video\n  - Output: 16-bit depth maps\n- `raune.py` — RAUNE-Net inference\n  - Load pretrained weights (141MB, 30 ResBlocks + CBAM)\n  - Proxy resolution, keyframes only\n  - Output: enhanced RGB frames\n- `server.py` — Communication bridge\n  - Shared memory or named pipes for frame data\n  - JSON control messages for commands\n  - Async pipeline: inference runs ahead of grading\n\n### ONNX export utility\n- `export_onnx.py` — Export RAUNE-Net to ONNX for benchmarking\n- Compare PyTorch vs ONNX Runtime quality and speed\n- Decision point: if ONNX quality matches, can eliminate Python dependency long-term\n\n## Phase 3: End-to-End Video Pipeline\n\n### Integration\n- Wire up: decode → VDA depth → LUT+HSL+grade → encode\n- Async frame pipeline: depth inference overlaps with grading\n- Memory management: frame ring buffer, depth map ring buffer\n\n### Calibration workflow\n- `dorea calibrate`: process keyframes → build LUTs + HSL → save .dorea-cal file\n- `dorea grade`: load .dorea-cal → process video frames → output video\n- Can re-use calibration across clips from same dive (same water conditions)\n\n### Benchmarks needed\n- Proxy resolution quality: 512 vs 768 vs 1024px for VDA and RAUNE-Net\n- 4K throughput: target 20-32 FPS\n- VRAM usage: VDA + grading on RTX 3060 6GB\n- Temporal consistency: verify no flicker on real dive clips\n\n## Algorithm Reference (from POC)\nAll proven algorithms are in:\n- `working/sea_thru_poc/run_fixed_hsl_lut_poc.py` — LUT build + HSL correction (BEST approach)\n- `working/sea_thru_poc/run_depth_lut_amb_poc.py` — depth-stratified LUT + ambiance\n- `working/sea_thru_poc/ambiance_grade.py` — core grading algorithms (LAB space)\n\n## Key Constants\n- LUT_SIZE = 33\n- N_DEPTH_ZONES = 5\n- EDGE_SCALE = 0.3, CONTRAST_SCALE = 0.3 (importance weighting)\n- HSL qualifiers: 6 vectors with h_center/h_width as defined in POC\n- Depth segments for grading: near warmth_a=6, far warmth_a=1 (graduated)\n- Highlight knee = 0.88 (depth grading), 0.92 (final rolloff)\n- Clarity sigma = 30px (local contrast gaussian)",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-01T23:41:30.042618473Z",
+  "valid_from": "2026-04-01T23:41:30.042618473Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "plan",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

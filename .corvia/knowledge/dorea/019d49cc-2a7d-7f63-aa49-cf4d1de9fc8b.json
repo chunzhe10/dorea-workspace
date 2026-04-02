@@ -1,0 +1,31 @@
+{
+  "id": "019d49cc-2a7d-7f63-aa49-cf4d1de9fc8b",
+  "content": "# NAFNet Post-Grading Denoiser POC Results (2026-04-01)\n\n## Setup\n- Model: NAFNet-SIDD-width32 (ECCV 2022), 29.16M params, 111.2 MB\n- Architecture: UNet with NAFBlocks (no nonlinear activations), width=32, enc=[2,2,4,8], middle=12, dec=[2,2,2,2]\n- Trained on SIDD real noise dataset, NOT underwater-specific\n- Applied as post-processing after RAUNE-Net + depth-aware grading\n- CPU inference: ~3.6s/frame at 1024x576\n\n## Results\n\n### Ambiance+Depth → NAFNet\n| Metric | Before DN | After DN | Change |\n|--------|-----------|----------|--------|\n| Noise (laplacian) | +44.7% | **-36.3%** | **-81pp** |\n| R/G ratio | 0.880 | 0.885 | +0.006 (preserved) |\n| Saturation | 0.284 | 0.277 | -0.007 (minimal loss) |\n| White clip | 0.22% | 0.11% | halved |\n| Laplacian std | 12.9 | 5.7 | **-56% reduction** |\n\n### LAB+Depth → NAFNet\n| Metric | Before DN | After DN | Change |\n|--------|-----------|----------|--------|\n| Noise (laplacian) | +25.7% | **-47.9%** | **-74pp** |\n| R/G ratio | 0.931 | 0.934 | +0.004 (preserved) |\n| Saturation | 0.272 | 0.267 | -0.005 (minimal loss) |\n| White clip | 1.22% | 1.07% | slight reduction |\n| Laplacian std | 11.2 | 4.7 | **-58% reduction** |\n\n## Key Findings\n1. **Massive noise reduction**: 55-58% laplacian std reduction. Noise goes from amplified (+25-45%) to BELOW original levels (-36 to -48%).\n2. **Color preserved**: R/G ratio actually slightly improves (+0.004-0.006). NAFNet doesn't shift color.\n3. **Saturation barely affected**: Only -0.005 to -0.007 loss. Acceptable.\n4. **Clipping reduced**: Both white and black clipping decrease slightly.\n5. **Clean visual output**: Smoother water background, preserved subject detail, no visible artifacts.\n6. **General-purpose works fine**: Despite being trained on SIDD (phone camera noise), it effectively denoises the processing-introduced noise from grading operations. The noise from contrast/saturation amplification has similar statistical properties to sensor noise.\n\n## Recommended Pipeline\nRAUNE-Net → Depth-aware ambiance grading → NAFNet denoise\n\nTotal pipeline on CPU: ~7.5s (RAUNE) + 0.2s (grade) + 3.6s (denoise) = ~11.3s/frame\nOn GPU (estimated): ~0.5s + 0.2s + ~0.3s = ~1.0s/frame\n\n## Scripts & Artifacts\n- Script: working/sea_thru_poc/run_nafnet_denoise.py\n- Results: working/sea_thru_poc/results/{01,02,03}_raune_{amb,lab}_depth_dn.png\n- Model: working/sea_thru_poc/models/NAFNet/experiments/pretrained_models/NAFNet-SIDD-width32.pth",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-01T16:06:50.237132750Z",
+  "valid_from": "2026-04-01T16:06:50.237132750Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "finding",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

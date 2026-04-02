@@ -1,0 +1,31 @@
+{
+  "id": "019d4b74-ceef-75c1-a390-37ba2df95f87",
+  "content": "# Dorea v2 Five-Persona Review Findings (2026-04-01)\n\n## Blocking Risk: wgpu + PyTorch CUDA GPU Interop\nwgpu uses Vulkan backend, PyTorch uses CUDA. They cannot share the same GPU device without explicit VK_KHR_external_memory interop which wgpu doesn't support. Options:\n1. **Use CUDA compute directly** (`.cu` kernels from Rust via cuLaunchKernel) — same memory space as PyTorch\n2. **Serialize GPU access** — PyTorch finishes depth estimation, then CUDA grading runs (kills async benefit but works)\n3. Add CPU fallback path for grading (`--cpu-only` mode)\n\n## Color Science Issues\n1. **D-Log M decode unspecified** — RAUNE-Net expects sRGB input, not D-Log M log encoding. Pipeline must specify where decode happens (before RAUNE-Net inference)\n2. **RGB→LAB round-trip clips to sRGB gamut** — skimage lab2rgb silently destroys out-of-gamut chroma from warmth/vibrance boosts. Should use wide-gamut working space\n3. **92% of LUT cells extrapolated** — NN fill copies wrong corrections for out-of-gamut colors (diver equipment, flashlight-lit coral). Need extrapolation confidence mask\n4. **Depth zone boundaries are arbitrary** — linear `linspace(0,1,6)` doesn't match actual depth distribution (~70% background water). Need adaptive density-weighted zones\n5. **6-vector HSL insufficient for content-dependent errors** — 10° diver hue error on some frames is perceptible (JND for skin tones is 2-3°)\n\n## Performance Issues\n1. **3ms/frame estimate is wrong** — sigma=30 Gaussian blur for clarity is ~5-8ms alone at 4K. Realistic: 8-15ms\n2. **Fix: compute clarity blur at proxy resolution** (512px), upscale to 4K. Clarity is low-frequency. 50x cheaper, visually identical\n3. **Python subprocess communication protocol undesigned** — shared memory semantics, error recovery, crash supervision all unspecified\n4. **wgpu wrong for this workload** — single-GPU CUDA-dependent tool. Use CUDA compute or Vulkan compute directly\n\n## Architecture Issues\n1. **dorea-core is a grab-bag** — split into: dorea-color (color math), dorea-lut (LUT building), dorea-hsl (HSL qualifier), dorea-cal (calibration format)\n2. **No testing strategy** — color math is numerically sensitive, needs golden-file tests against reference implementations\n3. **No ffmpeg error handling** — exit codes, fallback for missing NVDEC/NVENC, progress reporting, cancellation\n4. **No binary distribution story** — needs Docker image or Nix flake (deps: Python+PyTorch, ffmpeg, CUDA driver, model weights)\n\n## End User Issues\n1. **No preview command** — need `dorea preview` that processes 5-10 frames and shows before/after contact sheet (~30s)\n2. **No user-adjustable parameters** — need `--warmth`, `--strength`, `--contrast` sliders that scale grading intensity\n3. **No audio handling** — must preserve original audio track, not re-encode, keep A/V sync\n4. **No scene change detection** — water conditions change during a dive, single calibration may be wrong by end of clip\n5. **Aesthetic target is vague** — need quantified color targets (e.g., diver skin R/G 0.95-1.05, water hue 200-220°)\n\n## ML/Model Issues\n1. **RAUNE-Net trained on 3,879 images** — no evidence of generalization beyond 3 test frames from one dive\n2. **Video Depth Anything at proxy resolution unvalidated** — benchmark quality degradation at 384/512/768/1024px blocking before architecture commitment\n3. **No scene change detection for re-calibration** — histogram distance between consecutive keyframes could trigger re-cal\n4. **Neural distillation should be prioritized** — tiny CNN (10K params) conditioned on depth could capture spatial context that LUT cannot, runs per-frame\n\n## Accepted Findings (incorporated into plan)\n- Replace wgpu with CUDA compute (or serialize as fallback)\n- Add `dorea preview` command\n- Add user controls: --warmth, --strength, --contrast\n- Compute clarity blur at proxy resolution, upscale\n- Specify D-Log M decode location\n- Add extrapolation confidence mask for unreliable LUT pixels\n- Define IPC protocol between Rust and Python\n- Split dorea-core into finer crates\n- Add --cpu-only fallback mode\n- Add scene change detection for auto re-calibration\n- Audio passthrough via ffmpeg\n- Testing strategy with golden files\n\n## Rejected\n- .cube LUT export for DaVinci Resolve (Resolve is eliminated from workflow)",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-01T23:50:39.599736990Z",
+  "valid_from": "2026-04-01T23:50:39.599736990Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "finding",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

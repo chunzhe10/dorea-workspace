@@ -1,0 +1,31 @@
+{
+  "id": "019d4b68-b2c0-7271-8eb8-79c1b8cc9dac",
+  "content": "# Dorea v2 Architecture: Hybrid Rust + PyTorch Pipeline (2026-04-01)\n\n## Decision\nRewrite dorea as a Rust binary with PyTorch inference subprocess. Not pure Rust — PyTorch is essential for video-aware models and future model flexibility.\n\n## Why Keep PyTorch\n- Video Depth Anything (CVPR 2025 Highlight) requires PyTorch — temporal state can't ONNX-export\n- torch.compile gives fused kernel optimizations for repeated inference\n- Batched inference, CUDA graphs, FP16 auto mixed precision\n- Fine-tuning on footage, easy model swaps without re-export\n- ONNX Runtime lags TensorRT and PyTorch on deeper networks\n\n## Architecture\n\n```\ndorea (Rust binary)\n├── CLI + orchestration (Rust, clap)\n├── Video I/O (Rust + ffmpeg subprocess)\n├── LUT building (Rust ndarray) — 50-100x faster than Python\n├── GPU grading pipeline (Rust + wgpu compute shaders)\n│   ├── Depth-stratified LUT apply (fused)\n│   ├── Global HSL qualifier correction (fused)\n│   └── Depth-aware ambiance grading (fused)\n│\n└── Model inference (Python subprocess, torch.compile optimized)\n    ├── Video Depth Anything — temporal consistent depth, ~30fps\n    ├── RAUNE-Net — color correction on keyframes only\n    └── Communication: shared memory / named pipes for frames\n```\n\n## Pipeline Flow\n\n### One-time setup (per scene)\n1. Extract keyframes (Rust + ffmpeg)\n2. RAUNE-Net on keyframes at proxy resolution (PyTorch) — color reference pairs\n3. Build depth-stratified 33^3 LUTs (Rust) — σ=0, NN fill, gentle object weighting\n4. Derive global HSL qualifier corrections (Rust) — 6-vector DaVinci-style\n\n### Per-frame\n5. Video Depth Anything at proxy resolution (PyTorch) — temporal consistent depth\n6. Upscale depth map to 4K (bilinear, fast)\n7. Apply depth-stratified LUT + HSL + depth grading (Rust+wgpu fused compute shader)\n8. Encode output (Rust + ffmpeg NVENC)\n\n## Proxy Resolution Strategy\nVDA and RAUNE-Net can run at smaller resolution (512-1024px) when processing 4K video.\n- Depth maps: compute at proxy, bilinear upscale to 4K — depth is low-frequency, upscale is fine\n- RAUNE-Net: runs on keyframes only at proxy — LUT captures the color mapping, applied at 4K\n- LUT apply + HSL + grading: runs at native 4K on GPU — these are per-pixel ops, cheap\n- **Benchmark needed**: quantify quality degradation at 512px vs 1024px proxy for both models\n\n## 4K Performance Estimate (5-min clip, 30fps = 9000 frames)\n\n| Step | Engine | Per-frame | Notes |\n|------|--------|-----------|-------|\n| Video decode | Rust+ffmpeg | ~3ms | NVDEC hardware |\n| Video Depth Anything | PyTorch (proxy) | ~15-33ms | 512-1024px, temporal |\n| RAUNE-Net | PyTorch (proxy) | ~50ms | Keyframes only (~75 total) |\n| LUT+HSL+grade (fused) | Rust+wgpu | ~3ms | Native 4K, GPU compute |\n| Video encode | Rust+ffmpeg | ~10ms | NVENC hardware |\n| **Per-frame total** | | **~31-49ms** | **20-32 FPS at 4K** |\n\n## What's Dropped from Original Pipeline\n- Phase 0 (old LUT gen) — replaced by RAUNE-Net + depth-stratified LUT\n- Phase 2 (Claude scene analysis) — was for SAM2 initialization, no longer needed\n- Phase 3 (SAM2 tracking) — depth maps provide sufficient object separation\n- Phase 5 (DaVinci Resolve) — replaced by code-based GPU grading\n\n## What's Kept\n- Phase 1 (frame extraction) — ported to Rust+ffmpeg\n- Phase 4 (depth estimation) — upgraded to Video Depth Anything\n- pipeline_utils.py D-Log M functions — ported to Rust\n\n## Cargo Workspace\n```\ndorea/\n  crates/\n    dorea-cli/          # Binary: CLI + pipeline orchestration\n    dorea-core/         # LUT build, HSL derivation, color math\n    dorea-gpu/          # wgpu compute shaders: fused grading pipeline\n    dorea-video/        # ffmpeg subprocess: decode/encode\n  python/\n    dorea_inference/    # PyTorch inference server\n      vda.py            # Video Depth Anything\n      raune.py          # RAUNE-Net\n      server.py         # Frame I/O via shared memory\n  models/               # Model weights (gitignored)\n```\n\n## Key Risks\n1. wgpu compute shader for Gaussian blur (clarity) — needs separable 2-pass with shared memory\n2. Python subprocess latency — mitigated by shared memory, async frame pipeline\n3. Video Depth Anything on RTX 3060 6GB — may need smallest model variant\n4. Proxy resolution degradation — needs benchmarking at 512/768/1024px",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-01T23:37:25.952377501Z",
+  "valid_from": "2026-04-01T23:37:25.952377501Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "decision",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

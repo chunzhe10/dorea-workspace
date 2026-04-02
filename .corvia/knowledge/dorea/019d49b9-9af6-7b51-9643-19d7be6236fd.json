@@ -1,0 +1,31 @@
+{
+  "id": "019d49b9-9af6-7b51-9643-19d7be6236fd",
+  "content": "# RAUNE-Net + LAB Grade: Best Color Result So Far (2026-04-01)\n\n## Finding\nRAUNE-Net + shadow-aware LAB grade produces the strongest \"warm subjects on blue water\" look of any model/grading combination tested. R/G ratio hits 0.97-1.00 (near neutral), significantly better than WaterNet+LAB (0.86-0.91) or RAUNE+Ambiance (0.92-0.93).\n\n## LAB Grade v2 Parameters (tuned for RAUNE-Net's darker output)\n- contrast=1.15 (lower than WaterNet's 1.4 — RAUNE already has more contrast)\n- saturation=1.3\n- warmth_a=5.0, warmth_b=3.0\n- shadow_lift=0.05 (prevents black crush on RAUNE-Net's darker output)\n- S-curve centered on image mean (not 0.5) — critical for RAUNE-Net's darker distribution\n\n## Full Comparison (averaged across 3 frames)\n\n| Metric | WaterNet+LAB | RAUNE+Ambiance | RAUNE+LAB grade |\n|--------|-------------|----------------|-----------------|\n| R/G ratio | 0.878 | 0.930 | **0.981** |\n| B/G ratio | 1.147 | 1.130 | 1.113 |\n| Saturation | 0.310 | 0.260 | 0.281 |\n| White clip | 2.78% | 0.11% | 5.30% |\n| Black clip | 2.31% | 0.02% | 2.63% |\n\n## Key Insight\nRAUNE-Net's better base red recovery (R/G 0.877 vs WaterNet 0.864) compounds with the LAB grade's warm shift. The LAB grade adds ~0.10 to R/G ratio on both models, but RAUNE-Net starts from a higher baseline, landing near 1.0 (neutral).\n\n## Tradeoff\n5.3% white clipping in bright areas (water surface, bubbles). Ambiance approach (0.11% clipping) is safer but less punchy. May be addressable with depth-aware grading — apply less contrast/warmth to highlights and distant/bright water.\n\n## Next Step\nExplore depth-context-aware enhancement: use Depth Anything V2 depth maps to apply graduated grading — stronger warm shift on near subjects (divers), gentler on far/bright background water. This should reduce white clipping while preserving the warm subject look.",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-01T15:46:33.846510994Z",
+  "valid_from": "2026-04-01T15:46:33.846510994Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "finding",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}
