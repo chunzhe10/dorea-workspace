@@ -1,5 +1,7 @@
 FROM mcr.microsoft.com/playwright:latest AS playwright
 FROM ghcr.io/astral-sh/uv:latest AS uv
+# CUDA 12.4 devel image — source for nvcc, headers, and stub libs
+FROM nvidia/cuda:12.4.1-devel-debian12 AS cuda-devel
 
 FROM rust:1.88-trixie
 
@@ -176,3 +178,11 @@ RUN /opt/dorea-venv/bin/pip install --no-cache-dir --no-build-isolation \
 # ffmpeg for frame extraction (Phase 1)
 RUN apt-get update && apt-get install -y --no-install-recommends ffmpeg \
     && rm -rf /var/lib/apt/lists/*
+
+# CUDA 12.4 Toolkit — nvcc compiler + headers for building .cu kernels in Rust crates.
+# Copied from the official CUDA devel image to avoid NVIDIA apt GPG key issues on Debian trixie.
+# Matches PyTorch cu124 wheels installed above.
+# Only copy on amd64; on arm64 there's no NVIDIA GPU support.
+COPY --from=cuda-devel /usr/local/cuda /usr/local/cuda
+ENV PATH="/usr/local/cuda/bin:${PATH}"
+ENV CUDA_HOME="/usr/local/cuda"
