@@ -1,0 +1,31 @@
+{
+  "id": "019d4dfe-4536-77d0-8aec-aae528c431da",
+  "content": "## Grading Pipeline Performance v3 — Design Decisions (2026-04-02)\n\nFour performance optimizations decided for `dorea grade`:\n\n### 1. Motion-Adaptive Depth Interpolation\n- Skip depth inference for frames visually similar to previous keyframe\n- Compute normalized MSE between proxy frames in Rust, before IPC\n- Keyframe forced on: MSE > threshold (0.005), max interval exceeded (12 frames), or scene cut (MSE > 10x threshold)\n- Linearly interpolate depth maps for non-keyframe frames using lookahead buffer\n- Buffer overflow safety valve at 1.5x max_interval\n- Edge cases: frame 0 always keyframe, trailing frames use last keyframe depth\n- Expected savings: 4-12x fewer depth inference calls\n\n### 2. Fused LAB Pass (Ambiance + Warmth) with Rayon\n- Merge depth_aware_ambiance + user warmth into single RGB→LAB→RGB roundtrip\n- Parallelized with rayon par_chunks_exact_mut\n- Clarity pass stays separate (CUDA kernel already handles it)\n- Output is NOT bit-exact with old pipeline (accepted color-science tradeoff, ΔE < 2)\n- Eliminates ~1.45B redundant FLOPs per 4K frame\n\n### 3. Raw RGB IPC Protocol\n- Replace PNG encode/decode with raw RGB bytes for both depth AND RAUNE requests\n- Format field in protocol is backward-compatible (defaults to \"png\" if absent)\n- Byte format: raw interleaved RGB, uint8, row-major, no padding\n- At proxy 518x292, raw is ~453KB — negligible vs PNG ~460KB\n\n### 4. HF Processor Bypass + GPU-Required Runtime\n- Replace AutoImageProcessor with direct tensor construction using known ImageNet constants\n- CUDA is now a hard requirement for `dorea grade` — no silent CPU fallback\n- Clarity kernel failure also becomes hard error (was silently swallowed)\n- Python depth model hard-errors if CUDA unavailable\n- CPU code retained for cargo test only\n\n### Review Panel Findings\nReviewed by 5 personas (SWE, QA, PM, Video Pipeline Specialist, Performance Engineer):\n- Scene-cut ghosting resolved via forced keyframe + buffer flush\n- LAB fusion color-science tradeoff accepted (not bit-exact, validate ΔE < 2)\n- Buffer overflow safety valve added\n- HF processor savings revised from 20ms to 5-10ms\n- Rayon parallelism added to fused LAB pass\n\nSpec: docs/decisions/2026-04-02-grading-pipeline-perf-v3.md\nPlan: docs/plans/2026-04-02-grading-pipeline-perf-v3.md",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-02T11:40:02.742725949Z",
+  "valid_from": "2026-04-02T11:40:02.742725949Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}
