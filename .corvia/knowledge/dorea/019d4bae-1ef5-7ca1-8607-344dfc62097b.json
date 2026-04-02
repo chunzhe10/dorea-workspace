@@ -1,0 +1,31 @@
+{
+  "id": "019d4bae-1ef5-7ca1-8607-344dfc62097b",
+  "content": "# Dorea v2 Phase 1 — Review Insights (2026-04-02)\n\n## Patterns validated\n- **f64 for D-Log M math, f32 for pixels**: Correct. Transcendental curves need f64; pixel arrays are fine as f32.\n- **LUT accumulation in f64**: Correct. `lut_wsum`/`lut_wcount` as Vec<f64> avoids catastrophic cancellation summing millions of small weights.\n- **`total_cmp()` instead of `partial_cmp().unwrap()`** for sorting f32 depth slices: Rust 1.62+ builtin, NaN-safe.\n\n## Patterns to avoid\n- **env_logger::init() before argument parsing**: `set_var(\"RUST_LOG\", ...)` after `init()` has zero effect. Initialize with `env_logger::Builder::from_env().filter_level(...)` AFTER parsing args.\n- **Fixed `zone_width = 1/n_zones` against adaptive zone centers**: When using adaptive quantile zone boundaries, the blending radius must come from `zone_boundaries[z+1] - zone_boundaries[z]`, not a fixed `1/n_zones`. Mismatch silently prevents corrections from reaching pixels outside the training depth distribution.\n- **`partial_cmp().unwrap()` in sort_by on f32**: Panics on NaN. Always use `total_cmp()`.\n- **Bincode full deserialization before version check**: The version field cannot be read after struct layout has changed. Read the first raw byte before full deserialization.\n- **Library `assert_eq!` without context**: Always include message strings: `assert_eq!(a, b, \"context: a={}, b={}\", a, b)`.\n- **Declaring `rayon` in Cargo.toml but not using it**: Either use it or remove it. `cargo check` won't warn.\n\n## Reusable knowledge for future crates\n- **HSL qualifier aggregation across keyframes**: Weight by `corr.weight` (qualifier's actual pixel coverage), not by total frame pixel count. A 4K frame where only 50 cyan pixels exist should not outweigh a 720p frame with 200K cyan pixels.\n- **`usize` subtraction with N-1 pattern**: Always guard with `.saturating_sub(1)` or early empty check. `n - 1` where `n: usize = 0` wraps to `usize::MAX` in release mode.\n- **`zip()` silent truncation**: `iter.zip(other_iter)` silently truncates to shorter slice. For pixel arrays that must be same length, add an upfront `assert_eq!` with context.\n",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-02T00:53:15.637679725Z",
+  "valid_from": "2026-04-02T00:53:15.637679725Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "learning",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

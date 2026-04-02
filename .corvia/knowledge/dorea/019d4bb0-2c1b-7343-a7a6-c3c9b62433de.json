@@ -1,0 +1,31 @@
+{
+  "id": "019d4bb0-2c1b-7343-a7a6-c3c9b62433de",
+  "content": "# Dorea v2 Phase 1 — Final Decision Record (2026-04-02)\n\n## What\nImplemented Phase 1 of the Dorea v2 Rust rewrite: Cargo workspace with 6 crates (dorea-color, dorea-lut, dorea-hsl, dorea-cal, dorea-video stub, dorea-cli). Deleted all Python pipeline scripts. `dorea calibrate` command is fully functional.\n\n## GitHub\nchunzhe10/dorea-workspace#24, branch: feat/24-dorea-v2-rust-rewrite (workspace) + dorea main commits `3e6ac98` + `0968c97`\n\n## Key Design Decisions Made\n\n1. **`zone_width` for LUT blending must use per-zone adaptive width, NOT `1/n_zones`**: When adaptive quantile zone boundaries are used, the blending radius must come from `zone_boundaries[z+1] - zone_boundaries[z]`. Fixed width produces silent passthrough for pixels outside the training depth distribution.\n\n2. **`--input-encoding srgb|dlog_m` flag**: Phase 1 accepts pre-computed RAUNE-Net targets. Keyframes must be in the same encoding as what RAUNE-Net receives. Added explicit flag rather than auto-detecting.\n\n3. **calibration format version = 2**: Bumped from v1 when changing `created_at: String` to `created_at_unix_secs: u64`. First byte is the version; checked before full bincode deserialization.\n\n4. **Calibration file size** = exactly `n_zones × LUT_SIZE³ × 3 × sizeof(f32) + overhead` = 2.06 MB for 5-zone 33³ LUT. Real-data verification: 3 POC keyframes (3840×2160 JPEG, depth 924×518) produced a 2,156,589-byte .dorea-cal with physically plausible HSL corrections (Blue: -0.36°, Cyan: -4.46° — underwater blue/cyan dominance as expected).\n\n## What Blocked / Surprised\n\n- **env_logger initialized before verbose flag parsed**: Classic Rust CLI gotcha. `env_logger::init()` reads `RUST_LOG` once at call time. Must parse the `verbose` flag first, then initialize the logger with an explicit `LevelFilter`. `std::env::set_var(\"RUST_LOG\", ...)` after init is silently ignored.\n\n- **Adaptive zone boundaries + fixed zone_width mismatch**: This is a subtle but important bug class. Building with adaptive boundaries and blending with fixed width are inconsistent. The fix requires threading per-zone widths from the build step through to the apply step via `DepthLuts`.\n\n- **`usize` subtraction in `n - 1` pattern**: `n.saturating_sub(1)` should always be used when `n` can be 0. Regular subtraction wraps to `usize::MAX` in release mode with no panic.\n\n## Phase 2 Next Steps\n- Python subprocess for RAUNE-Net and Video Depth Anything inference\n- IPC protocol between Rust and Python (shared memory + semaphores)\n- CUDA compute kernels for fused LUT+HSL+grading pipeline (replaces wgpu)\n- `dorea grade` CLI command (video in → video out)\n",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-02T00:55:30.075635639Z",
+  "valid_from": "2026-04-02T00:55:30.075635639Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "decision",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

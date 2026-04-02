@@ -1,0 +1,31 @@
+{
+  "id": "019d4b8d-8cc8-7430-992a-7ffae49cae88",
+  "content": "# Dorea v2 Architecture — Key Design Decisions (2026-04-02)\n\n## Issue\nchunzhe10/dorea-workspace#24 — \"Dorea v2: Rust+PyTorch pipeline rewrite for 4K video\"\n\n## Decision: Rust binary + PyTorch subprocess (not pure Rust, not pure Python)\n**Why:** PyTorch is essential for Video Depth Anything (temporal state, CVPR 2025) and RAUNE-Net inference. Pure Rust cannot replace torch.compile optimizations or the temporal recurrence in VDA. But core grading (LUT, HSL, color math, video I/O) in Rust gives near-native performance and eliminates DaVinci Resolve dependency.\n\n## Decision: CUDA compute kernels (not wgpu) for GPU grading\n**Why:** wgpu uses Vulkan backend; PyTorch uses CUDA. They cannot share the same GPU device without explicit VK_KHR_external_memory interop (which wgpu doesn't support). CUDA compute `.cu` kernels called from Rust via cuLaunchKernel live in the same CUDA memory space as PyTorch tensors — no copy needed. This unblocks the async depth→grade pipeline.\n**Alternative rejected:** wgpu (GPU interop impossible with CUDA PyTorch). Serialized GPU access (possible fallback but kills async benefit).\n\n## Decision: Phase 1 CPU-only, no DaVinci Resolve\n**Why:** Phase 1 validates all color math and calibration workflow on CPU before adding CUDA complexity. `--cpu-only` mode serves as both test fallback and portability option.\n**DaVinci Resolve dropped entirely:** The v2 pipeline is self-contained. No Resolve import, no DRX templates, no host-machine script.\n\n## Decision: dorea-color, dorea-lut, dorea-hsl, dorea-cal, dorea-video crate split\n**Why:** Color math (dorea-color) is pure functions with no deps. LUT building (dorea-lut) and HSL correction (dorea-hsl) have separate concerns and test surfaces. Calibration format (dorea-cal) needs serde/bincode separately. This was flagged in 5-persona review — monolithic dorea-core was rejected.\n\n## Decision: Legacy Python code archived as `legacy/v1` branch\n**Why:** 90%+ of existing Python scripts (00-05, SAM2, Resolve) are dead code in v2. Archiving preserves history without polluting main. Branch `legacy/v1` pushed to origin on 2026-04-02.\n\n## Alternatives rejected\n- WaterNet/Sea-thru: replaced by RAUNE-Net (better generalization, lower hue error)\n- SAM2 tracking: depth maps suffice for per-depth correction without per-subject masks\n- DaVinci Resolve: eliminated, fully code-based pipeline\n- Global σ=1 Gaussian LUT smoothing: was the primary cause of 9.8° hue shift — σ=0 required\n",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-02T00:17:41.064412582Z",
+  "valid_from": "2026-04-02T00:17:41.064412582Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "decision",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}
