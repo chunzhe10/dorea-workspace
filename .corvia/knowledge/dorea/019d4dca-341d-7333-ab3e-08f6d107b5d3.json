@@ -1,0 +1,31 @@
+{
+  "id": "019d4dca-341d-7333-ab3e-08f6d107b5d3",
+  "content": "# Rayon CPU Parallelization — Decision Record (2026-04-02)\n\n## What\nAdded rayon parallelism to 4 CPU-bound operations in dorea-lut and dorea-hsl (issue #10).\nMerged to main via feat/10-rayon-cpu-parallelization.\n\n## Key Design Decisions\n\n1. **rayon = \"1\" at workspace level, not per-crate** — single version pin, only wired into dorea-lut and dorea-hsl. dorea-video and dorea-cli explicitly excluded.\n\n2. **par_iter_mut().zip().zip().for_each() for apply_depth_luts** — flat zip chain (not nested) is idiomatic rayon for 3-way parallel iteration. luts is &DepthLuts shared read-only; DepthLuts contains only Vec<f32>/Vec<LutGrid> which are Sync.\n\n3. **par_chunks_mut(width).enumerate() for Sobel + Gaussian blur** — row granularity is correct for image convolutions. H-pass and V-pass must remain SEQUENTIAL (not rayon::join) because the V-pass reads temp which the H-pass writes. The for_each() call blocks until complete, so sequencing is safe.\n\n4. **find_nearest extracted as pure function + par_iter().map().collect()** — parallel gather over empty cells, then sequential write-back. Empty cells are guaranteed distinct (built from triple-nested loop over unique (ri,gi,bi) indices). type CellIdx = [usize; 3] added for clarity.\n\n5. **QualifierAccum struct for fold/reduce** — 5-tuple (f64,f64,f64,f64,f64) was rejected as unreadable magic indices. Named struct with zero()/combine() methods is idiomatic and zero-cost. fold() and reduce() use same identity (QualifierAccum::zero).\n\n6. **Outer qualifier loop stays serial** — 6-8 qualifiers × par_iter on full pixel array. Parallelizing the outer loop would over-subscribe the rayon thread pool and cause contention. Serial outer + parallel inner is the right granularity.\n\n7. **f64 accumulation in fold/reduce** — floating-point reduction order differs ~1e-6 from serial path. Acceptable within test tolerances.\n\n## Review Findings Worth Remembering\n\n- IDE/rust-analyzer reports `use rayon::prelude::*` as unused import — false positive. cargo clippy correctly sees the traits as used. Don't remove the import based on IDE warnings.\n- needless_range_loop fires when `row[x]` is assigned inside `for x in 0..row.len()` even if x is also used to compute other indices. Fix: `for (x, out) in row.iter_mut().enumerate()` with `*out = value`.\n- par_chunks_mut(width) always produces chunks of exactly width (last chunk may be shorter if n % width != 0, but n = width*height so n is always divisible by width for well-formed images). Added assert_eq!(n, width * height) to document and enforce this invariant.\n\n## What Blocked / Surprised\n\n- Local `main` branch was behind origin/main by 2 commits at branch creation; ran git pull origin main --rebase to update before starting work.\n- IDE diagnostics (rust-analyzer) consistently reported false-positive unused-import warnings for rayon::prelude in all 3 modified files. Every time: cargo clippy -p dorea-lut -p dorea-hsl -- -D warnings passed clean.\n- Pre-existing clippy warnings in dorea-gpu/src/cpu.rs (unused mean_d variable, useless u8 comparison) showed up in workspace-wide cargo clippy but are not our crates to fix.\n",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-02T10:43:10.493791078Z",
+  "valid_from": "2026-04-02T10:43:10.493791078Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "decision",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}
