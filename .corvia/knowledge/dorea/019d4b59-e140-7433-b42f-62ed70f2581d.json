@@ -1,0 +1,31 @@
+{
+  "id": "019d4b59-e140-7433-b42f-62ed70f2581d",
+  "content": "# Final Pipeline Design: RAUNE-Net + Depth-LUT + Global HSL + Depth Grading (2026-04-01)\n\n## Pipeline Architecture\n\n### One-Time Setup (per scene, ~30s for 3 keyframes on CPU)\n1. RAUNE-Net inference on N keyframes (36.7M params)\n2. Build depth-stratified 33^3 LUTs from all keyframes (σ=0, NN fill, gentle object weighting edge=0.3 contrast=0.3)\n3. Derive global HSL qualifier corrections (6-vector DaVinci-style) from keyframe LUT-vs-RAUNE residual\n\n### Per-Frame Pipeline (~1.2s at 1024px CPU)\n4. Depth estimation (Depth Anything V2 — already in pipeline)\n5. Apply depth-stratified LUT (depth-aware color correction via blended 5-zone LUTs)\n6. Apply global HSL correction (6 color qualifiers: Red/Skin, Yellow, Green, Cyan, Blue, Magenta)\n7. Per-frame depth-aware ambiance grading (shadow lift, S-curve, highlight compress, clarity, warmth, vibrance — all depth-graduated)\n\n### Key Design Decisions\n- **No Gaussian smoothing on LUT** — σ=0, trilinear interpolation already smooths\n- **Nearest-neighbor fill** for empty LUT cells — not identity\n- **No ambiance compensation** — was actively harmful (pixel mask mismatch bug)\n- **Global HSL over depth-segmented HSL** — global pools more pixels, produces stabler corrections, better diver hue accuracy (+0.7° vs +10° for depth-segmented)\n- **Object-importance weighting** in LUT build: gentle (0.3 edge, 0.3 contrast), ~5x subject/bg ratio\n\n### Quality Metrics (avg delta vs full RAUNE-Net pipeline)\n- Hue: +0.3° (excellent)\n- Saturation: -0.004\n- R/G: -0.007\n- Noise: -6pp (less noise than full pipeline)\n- Per-object diver hue (frame 02): +0.7°\n- Background water hue: +1.8°\n\n### HSL Qualifier Corrections (typical values)\n| Qualifier | H offset | S ratio |\n|-----------|----------|---------|\n| Blue (dominant) | -0.96° | 1.105 |\n| Cyan | -2.91° | 1.066 |\n| Red/Skin | -1.25° | 1.236 |\n| Yellow | +4.41° | 1.194 |\n\n### 4K Video Strategy\n- RAUNE-Net: keyframes only (not per-frame)\n- Depth estimation: per-frame at proxy resolution, upscale\n- LUT apply: could use ffmpeg lut3d filter or GPU shader (near-free)\n- HSL correction: cheap per-pixel math\n- Depth grading: numpy at proxy, or GPU compute shader\n- Bottleneck at 4K: depth grading (LAB conversion + gaussian_filter)\n\n### Irreducible Limitations\n- ~9° per-pixel hue error floor from spatial averaging (RAUNE-Net's attention context cannot be captured in any LUT)\n- Global metrics hide per-object variation (diver accurate on frame 02 but 10° off on frame 01 — content-dependent)\n- LUT coverage: only 6-8% of 33^3 cells populated from underwater footage color gamut",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-01T23:21:14.816369749Z",
+  "valid_from": "2026-04-01T23:21:14.816369749Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "decision",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

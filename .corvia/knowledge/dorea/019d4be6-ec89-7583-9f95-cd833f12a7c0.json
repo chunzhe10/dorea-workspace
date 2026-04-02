@@ -1,0 +1,31 @@
+{
+  "id": "019d4be6-ec89-7583-9f95-cd833f12a7c0",
+  "content": "# Rust PNG decode + borrow checker pattern\n\nWhen implementing a PNG filter decoder in Rust that reads from the prior decoded row while writing the current row, you cannot hold a shared `&[u8]` reference into the output Vec while also writing into it — even if the row ranges are non-overlapping. The borrow checker requires a disjoint split.\n\nPattern that works:\n```rust\nlet prior: Vec<u8> = if row > 0 {\n    rgb[(row - 1) * stride..row * stride].to_vec()\n} else {\n    vec![0u8; stride]\n};\n// Now freely mutate rgb[dst_start..dst_start+stride]\n```\n\nAlternative (more efficient, avoids allocation): use `split_at_mut` to get two non-overlapping mutable sub-slices, then borrow the prior half as `&[u8]`. But the per-row Vec copy is simpler and the allocation cost is negligible for image I/O.\n",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-02T01:55:18.281878153Z",
+  "valid_from": "2026-04-02T01:55:18.281878153Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "learning",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d49af-f748-76d2-b1f2-c3e39c8bd5b5",
+  "content": "# RAUNE-Net POC Results — WaterNet Challenger (2026-04-01)\n\n## Test Setup\n- 3 test frames: 3840x2160 DJI Action 4, deep/turbid water, resized to 1024x576\n- Model: RAUNE-Net (IFTC 2023), 36.73M params, 140.1 MB model\n- Architecture: 2 downsamples, 30 residual blocks, ngf=64, CBAM attention, Tanh output\n- Trained on LSUI3879 dataset (3,879 pairs — different from WaterNet's UIEB)\n- CPU inference (no GPU in devcontainer)\n- Also tested with ambiance grading layer (strength=0.5, warmth=1.0, clarity=0.3, vibrance=0.9)\n\n## Full Comparison Table (averaged across 3 frames)\n\n| Metric | WaterNet | WaterNet+Ambiance | RAUNE-Net | RAUNE-Net+Ambiance |\n|--------|----------|-------------------|-----------|---------------------|\n| R/G ratio | 0.864 | 0.914 | **0.877** | **0.930** |\n| B/G ratio | 1.117 | 1.142 | 1.105 | 1.130 |\n| Saturation | 0.274 | 0.282 | 0.255 | 0.260 |\n| White clip | 0.39% | 0.53% | 0.46% | **0.11%** |\n| Black clip | 0.06% | 0.10% | 0.61% | 0.02% |\n| Noise delta | +20% | N/A | +20% | N/A |\n| CPU time/frame | 3.7s | +0.2s | 7.5s | +0.2s |\n| Params | 1M | — | 36.7M | — |\n\n## Key Findings\n\n### RAUNE-Net Advantages Over WaterNet\n1. **Better red recovery**: R/G 0.877 vs 0.864 (raw), 0.930 vs 0.914 (with ambiance). More consistent across frames (less variance).\n2. **Lower white clipping with ambiance**: 0.11% vs 0.53% — RAUNE-Net leaves more headroom for grading.\n3. **Comparable noise**: +20% noise delta for both models — no noise penalty.\n4. **More consistent frame-to-frame**: Less variation in R/G ratio across 3 frames.\n\n### RAUNE-Net Disadvantages\n1. **Slower**: 7.5s CPU vs 3.7s CPU (2x slower). On GPU would be ~0.5-1s (36.7M params).\n2. **Lower saturation**: 0.255 vs 0.274 — subtler color. Ambiance doesn't fully close the gap (0.260 vs 0.282).\n3. **Larger model**: 140 MB vs ~4 MB. 36.7M vs 1M params. Still fits easily in 6GB VRAM.\n4. **Slightly darker output**: More subdued mood, requires ambiance layer to match WaterNet brightness.\n\n### Visual Assessment\n- RAUNE-Net raw output: Darker, more contrasty, good blue preservation, subtle enhancement\n- RAUNE-Net + Ambiance: Competitive with WaterNet+Ambiance. Slightly more cinematic/contrasty, better highlight headroom, slightly less saturated\n- Both pipelines produce acceptable results for the \"warm subjects on blue water\" XHS aesthetic\n- The two are close enough that the choice may come down to speed vs highlight headroom\n\n## Verdict: COMPETITIVE — Not a clear winner over WaterNet\n\nRAUNE-Net is the first model to match or beat WaterNet on key metrics. With the ambiance layer, it produces:\n- Better red recovery (0.930 vs 0.914)\n- Much less white clipping (0.11% vs 0.53%)\n- Comparable noise characteristics\n- Slightly less saturation\n\nThe tradeoff is 2x CPU time and 37x model size. On GPU, the speed difference would narrow significantly. For batch video processing where highlight preservation matters, RAUNE-Net+Ambiance is a viable alternative.\n\n**Recommendation**: Keep WaterNet as default for speed. Consider RAUNE-Net for footage where highlight clipping is problematic (bright water surface, high-contrast scenes).\n\n## Scripts & Artifacts\n- Script: working/sea_thru_poc/run_raune_net.py\n- Results: working/sea_thru_poc/results/{01,02,03}_raune_net.png\n- Ambiance results: working/sea_thru_poc/results/{01,02,03}_raune_net_ambiance.png\n- Model weights: working/sea_thru_poc/models/RAUNE-Net/pretrained/RAUNENet/test/weights_95.pth",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-01T15:36:02.120677452Z",
+  "valid_from": "2026-04-01T15:36:02.120677452Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "finding",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d49d7-a66a-7ff0-9860-0a0fc3754563",
+  "content": "# Correction-Map LUT POC: Keyframe Transfer Results (2026-04-01)\n\n## Approach\nRun RAUNE-Net + depth-aware ambiance on frame_01 only. Compute per-pixel correction ratio map (output/input, smoothed σ=15, clamped 0.3-3.0). Apply as multiply to frames 02 and 03.\n\n## Speed\n- Full pipeline per frame: ~7.7s CPU\n- Correction map apply: **0.002s** (4500x faster)\n- Map computation (one-time): 0.09s\n\n## Quality Comparison\n\n| Frame | Method | R/G | Sat | WClip | Noise |\n|-------|--------|-----|-----|-------|-------|\n| 02 | Full pipeline | **0.903** | **0.283** | **0.22%** | +43.3% |\n| 02 | Correction map | 0.869 | 0.277 | 1.14% | **-10.7%** |\n| 03 | Full pipeline | **0.874** | **0.293** | **0.21%** | +48.8% |\n| 03 | Correction map | 0.857 | 0.290 | 1.06% | **-10.4%** |\n\n## Analysis\n\n### Correction map wins\n- **4500x faster** — 0.002s vs 7.7s per frame\n- **Much less noise** — actually reduces noise (-10%) vs full pipeline amplifying (+43-49%)\n- Visually clean and smooth\n\n### Full pipeline wins\n- **Better red recovery**: R/G 0.903 vs 0.869 (frame 02), 0.874 vs 0.857 (frame 03)\n- **Less white clipping**: 0.22% vs 1.14%\n- **Better spatial adaptation**: full pipeline adjusts to each frame's specific depth/content\n\n### Why the gap?\nThe correction map is a static spatial correction derived from frame 01's specific layout (diver position, depth distribution). When the scene composition changes (diver moves, camera angle shifts), the map doesn't adapt. The R/G gap (~0.03) comes from the depth-aware warmth being baked to frame 01's depth layout.\n\n## Verdict\nCorrection map is a viable 4K video approach — visually close, massively faster, and lower noise. The R/G and clipping gap is noticeable but acceptable for video (vs keyframe-quality stills). Could be improved by:\n1. Blending correction maps from multiple keyframes\n2. Using depth-only grading per-frame (cheap) + static color correction from map\n3. Interpolating between keyframe maps for scene transitions",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-01T16:19:22.858019991Z",
+  "valid_from": "2026-04-01T16:19:22.858019991Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "finding",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

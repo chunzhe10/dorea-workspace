@@ -1,0 +1,31 @@
+{
+  "id": "019d4936-cbb9-7fe0-a38c-978652346943",
+  "content": "# Underwater Enhancement Model Evaluation (2026-04-01)\n\nCompared 3 models against WaterNet baseline on 3 test frames (3840x2160 DJI Action 4, deep/turbid water, resized to 1024px). CPU-only inference. Goal: warm subjects on blue water background (XHS dive aesthetic).\n\n## Results Summary\n\n| Model | Params | CPU Time/frame | R/G Ratio | Verdict |\n|-------|--------|---------------|-----------|---------|\n| WaterNet (baseline) | ~1M | 3.7s | 0.86 | Solid baseline. Subtle, natural. Slight noise amp (+20%). |\n| FUnIE-GAN | 7.0M | 0.46s | 0.91 | **Best challenger.** 8x faster, better red recovery, best blue preservation. No noise amp. |\n| Shallow-UWnet | 219K | 1.5s | 0.98 | **Rejected.** Severe desaturation (-61%) — gray/washed output. |\n| Deep SESR | 2.46M | 12.5s | 0.97 | **Rejected.** Purple/lavender water tint. 3.4x slower. TF dependency. |\n\n## Key Findings\n- FUnIE-GAN's fully-convolutional UNet runs at native 1024px (critical — 256px resize destroys detail)\n- Shallow-UWnet trained for in-air restoration, not underwater grading — strips underwater character\n- Deep SESR denoises well (-15%) but purple tint in water background is a dealbreaker\n- FUnIE-GAN edges ahead of WaterNet on speed (8x), red recovery (0.91 vs 0.86), and blue water preservation (B/G 1.19 vs 1.10)\n\n## Test artifacts\n- Results: working/sea_thru_poc/results/{01,02,03}_{waternet,funie_gan,shallow_uwnet,deep_sesr}.png\n- Scripts: working/sea_thru_poc/run_funie_gan_hires.py, run_shallow_uwnet.py, run_deep_sesr.py\n- Model repos: working/sea_thru_poc/models/{FUnIE-GAN,Shallow-UWnet,Deep-SESR}/",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-01T13:23:41.113411481Z",
+  "valid_from": "2026-04-01T13:23:41.113411481Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "finding",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

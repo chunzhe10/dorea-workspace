@@ -1,0 +1,31 @@
+{
+  "id": "019d49c1-2d3d-7742-abd1-93eb1722f5fc",
+  "content": "# Depth-Aware Grading Decision: Ambiance+Depth Preferred (2026-04-01)\n\n## Decision\nUser prefers RAUNE-Net + Depth-Aware Ambiance over LAB+Depth and flat variants. Key reasons: better colors, higher clarity.\n\n## Why Ambiance+Depth Over LAB+Depth\n- Colors feel more natural/appealing despite lower R/G ratio (0.880 vs 0.931)\n- Higher perceived clarity from the local contrast (unsharp mask on L channel)\n- Near-zero clipping (0.21% white, 0.02% black) — safest for downstream editing\n- The smooth tone curves (sigmoid, tanh) produce more pleasing tonal transitions than LAB grade's hard S-curve\n\n## Why Ambiance+Depth Over Ambiance Flat\n- Depth-graduated warmth: near subjects warmer, far water stays blue\n- Better saturation (0.284 vs 0.260) — depth weighting concentrates color boost where it matters\n- Lower noise (+45% vs +56%) — less processing on far/uniform water areas\n\n## Full Pipeline\n1. RAUNE-Net inference (36.7M params, ~7.5s CPU / ~0.5s GPU)\n2. Load Depth Anything V2 depth map (16-bit, relative depth)\n3. Depth-aware ambiance grading with graduated parameters:\n   - Near (depth~1): warmth_a=6, warmth_b=4, vibrance=0.9, strength=0.6\n   - Far (depth~0): warmth_a=1, warmth_b=0, vibrance=0.4, strength=0.3\n   - Highlight compression stronger on far (protect bright water)\n   - Local contrast (clarity) applied globally\n\n## Metrics (averaged across 3 test frames)\n| Metric | Value |\n|--------|-------|\n| R/G ratio | 0.880 |\n| B/G ratio | 1.132 |\n| Saturation | 0.284 |\n| White clip | 0.21% |\n| Black clip | 0.02% |\n| Noise delta | +45% |\n| Grading time | ~0.18s/frame |\n\n## Script\nworking/sea_thru_poc/run_raune_depth_grade.py — function `depth_aware_ambiance()`",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-01T15:54:50.045385597Z",
+  "valid_from": "2026-04-01T15:54:50.045385597Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "decision",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

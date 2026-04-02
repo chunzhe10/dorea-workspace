@@ -1,0 +1,31 @@
+{
+  "id": "019d4b45-f0ba-7992-8d36-b75921c890e6",
+  "content": "# LUT Hue Shift Root Cause Analysis (2026-04-01)\n\n## Problem\nFrame 01 is the keyframe used to BUILD the LUT, yet applying the LUT back produces a 9.8° hue shift. This is a LUT construction bug, not a temporal/transfer issue.\n\n## Three Compounding Bugs Found\n\n### Bug 1: Gaussian Smoothing Destroys LUT (σ=1.0) — BIGGEST CAUSE\nWith only 6-8% of 33^3 cells populated, the σ=1.0 Gaussian blur pulls every correction toward identity (empty cells = identity). Removes 4.5° of error just by setting σ=0.\n- σ=0: 9.5° error (baseline)\n- σ=1.0 (current): 14.0° error (+4.5°)\n- 91.3% of populated cells weakened by smoothing\n- Trilinear interpolation already smooths output — LUT-level blur is redundant\n\n### Bug 2: Ambiance Compensation Has Pixel Mask Mismatch — ACTIVELY HARMFUL\n`derive_ambiance_comp()` uses `mask_l = (LUT_L >= lo)` and `mask_r = (RAUNE_L >= lo)` — different spatial regions compared since luminance distributions differ. Produces chroma_ratio < 1 everywhere, crushing saturation globally.\n- LUT only: 17.7° hue error\n- LUT + comp: 18.3° (worse!)\n- LUT + NO comp + grading: 17.9° (better without comp!)\n\n### Bug 3: Empty Cell Identity Fill\n94% empty cells filled with identity pull trilinear interpolation toward no-correction. Nearest-neighbor fill reduces error by 0.3°.\n\n## Fix Priority\n1. Remove Gaussian smoothing (σ=0) — one line change, -4.5° error\n2. Remove or rewrite ambiance compensation — stops saturation crush\n3. Nearest-neighbor fill for empty LUT cells — free 0.3° improvement\n4. Consider 65^3 LUT — halves RGB MAE\n5. Long-term: HSL qualifier-based correction to target per-object hue residual (DaVinci/Adobe approach)\n6. Long-term: Neural distillation — train tiny CNN to mimic RAUNE-Net\n\n## Irreducible Floor\n~9° hue error from spatial averaging is the theoretical minimum for any LUT. RAUNE-Net applies different corrections to the same input color at different spatial locations (attention/convolution context). No point-function LUT can capture this.",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-01T22:59:28.058718930Z",
+  "valid_from": "2026-04-01T22:59:28.058718930Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "finding",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d49ee-2ab3-7032-8110-3cb0866e568b",
+  "content": "# Multi-Keyframe LUT POC Results (2026-04-01)\n\n## Approach\nPool pixel pairs from all 3 keyframes (1.77M total) to build a 33^3 base LUT + multi-frame LAB compensation + per-frame depth grading.\n\n## Coverage Improvement\n- Single-keyframe: 2,206/35,937 cells populated (6.1%)\n- Multi-keyframe: 2,950/35,937 cells populated (8.2%) — 1.3x more\n\n## Results\n\n| Metric | Multi vs Full (avg delta) | Single vs Full (avg delta) |\n|--------|--------------------------|---------------------------|\n| R/G | **-0.002** | -0.005 |\n| B/G | +0.005 | -0.025 |\n| Saturation | **-0.002** | -0.026 |\n| Hue | +3.7° | -3.6° |\n\nMulti-keyframe substantially improved saturation matching (gap 0.002 vs 0.026) and R/G matching (gap 0.002 vs 0.005). B/G also much closer.\n\n## Remaining issue\nHue still shifts by 3-12° depending on frame. The hue shift direction flipped — single was -3.6° (too yellow), multi is +3.7° (slightly too blue on some frames). This is the fundamental limit of a global LUT trying to approximate a spatially-aware neural network.\n\n## Key insight\nMulti-keyframe blending is clearly better than single-keyframe for color metrics, but the hue shift persists because the LUT can only capture color→color mappings, not the spatial context RAUNE-Net uses. The hue variation across frames comes from RAUNE-Net applying different corrections to the same color depending on its spatial neighborhood.",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-01T16:43:58.515344982Z",
+  "valid_from": "2026-04-01T16:43:58.515344982Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "finding",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

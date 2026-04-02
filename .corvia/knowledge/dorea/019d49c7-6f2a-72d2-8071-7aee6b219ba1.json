@@ -1,0 +1,31 @@
+{
+  "id": "019d49c7-6f2a-72d2-8071-7aee6b219ba1",
+  "content": "# OceanLens POC Results — Backscatter Removal (2026-04-01)\n\n## Test Setup\n- 3 test frames: 3840x2160 DJI Action 4, deep/turbid water, resized to 1024x576\n- Depth maps: Depth Anything V2, 16-bit, normalized to [0,1]\n- Checkpoint: Seethru-trained (model_checkpoint_6.pth, gzip compressed)\n- BackscatterNet: 174 params, DeattenuateNet: 1,327 params, Total: 1,501 params\n- CPU inference: ~0.055s/frame (very fast)\n\n## Results\n\n| Output | R/G | B/G | Sat | WClip | BClip | Noise |\n|--------|-----|-----|-----|-------|-------|-------|\n| Original | ~0.82 | ~1.15 | ~0.25 | low | low | baseline |\n| Direct (BS removed) | 0.493 | 1.263 | 0.721 | 0.05% | 14.8% | +49% |\n| Corrected (full) | 0.561 | 0.975 | 0.591 | 20.7% | 11.5% | +219% |\n\n## Visual Assessment\n\n### Corrected (full pipeline)\n- Severe artifacts: banded color regions in background water (visible as cyan/green patches)\n- Massive noise amplification (+219%)\n- 20.7% white clipping — blown highlights\n- R/G 0.56 — pushed too green, worse than original\n- The deattenuation step over-corrects: amplifies depth-dependent artifacts\n\n### Direct (backscatter removed only)\n- Better than corrected — no banding artifacts\n- Blue water shifted more blue (B/G 1.26)\n- Very high saturation (0.72) — over-saturated\n- 14.8% black clipping — lost shadow detail\n- R/G 0.49 — even less red than original (backscatter removal took warmth)\n\n### Backscatter map\n- Shows depth-dependent backscatter estimation\n- Concentrated in far/bright water regions (as expected)\n- But the estimated backscatter has banded/blocky structure from depth map quantization\n\n## Verdict: REJECTED\n\nOceanLens fails on this footage for several reasons:\n1. **Depth map mismatch**: OceanLens was trained with SfM metric depth or specific depth estimation setups. Our Depth Anything V2 relative depth maps have different value distributions, causing over/under-correction.\n2. **Training domain gap**: Seethru checkpoint was trained on Sea-thru dataset images (clear tropical water, stereo rigs) — very different from deep/turbid DJI Action 4 footage.\n3. **Only 1,501 params**: The tiny model can't generalize to unseen depth distributions. It learns dataset-specific physics constants, not transferable ones.\n4. **Deattenuation amplifies artifacts**: The correction factor (exp(beta*depth)) exponentially amplifies any error in the depth-dependent estimation, causing banding and noise explosion.\n\n## Key Learning\nPhysics-based models (OceanLens, Sea-thru) that use depth maps for underwater correction fail on our footage because:\n- Depth Anything V2 produces relative depth (arbitrary scale) while physics models need metric depth (meters)\n- The exponential nature of Beer-Lambert correction means small depth errors create large color errors\n- This confirms the earlier Sea-thru finding: learned enhancement models (RAUNE-Net, WaterNet) are more robust for our use case\n\n## Scripts & Artifacts\n- Script: working/sea_thru_poc/run_oceanlens.py\n- Results: working/sea_thru_poc/results/{01,02,03}_oceanlens_{corrected,direct,backscatter}.png",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-01T16:01:40.138671153Z",
+  "valid_from": "2026-04-01T16:01:40.138671153Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "finding",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

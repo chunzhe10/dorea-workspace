@@ -1,0 +1,31 @@
+{
+  "id": "019d49f2-b998-7e53-a945-7aebcad2c423",
+  "content": "# Depth-Stratified LUT POC Results (2026-04-01)\n\n## Approach\n5 depth zones x 33^3 LUTs built from 3 keyframes. Each pixel corrected by blending between nearest depth-zone LUTs. Combined with per-frame depth-aware ambiance grading.\n\n## Results — Best LUT approach so far\n\n| Metric | Depth-LUT vs Full (avg delta) | Previous multi-key (avg delta) |\n|--------|-------------------------------|-------------------------------|\n| R/G | -0.019 | -0.002 |\n| B/G | **+0.001** | +0.005 |\n| Saturation | **-0.006** | -0.002 |\n| Hue | **+3.4°** | +3.7° |\n| Noise | **-14.3pp** (much less noise) | ~-9pp |\n\n## Key improvements\n- B/G nearly perfect (0.001 avg delta)\n- Noise massively reduced: +31% vs +43-49% full pipeline\n- Near-zero white clipping (0.09-0.18%)\n- Hue gap narrowed slightly (3.4° vs 3.7°)\n\n## Remaining gap\n- R/G still 0.019 short (0.87 vs 0.88 avg) — slightly less warm\n- Hue shift still ~3-8° on individual frames\n- Speed: 1.2s per frame (5 LUT lookups + depth grading) vs 0.4s for global LUT\n\n## Why depth-stratified helps\nZone-specific LUTs capture that RAUNE-Net corrects far water pixels (blue, low depth) differently from near subject pixels (warmer, high depth). The far-zone LUT preserves blue water, the near-zone LUT warms subjects — matching RAUNE-Net's spatial behavior.",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-01T16:48:57.240335233Z",
+  "valid_from": "2026-04-01T16:48:57.240335233Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "finding",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

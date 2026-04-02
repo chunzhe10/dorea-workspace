@@ -1,0 +1,31 @@
+{
+  "id": "019d49a7-473e-79c3-9248-4538fbe0e635",
+  "content": "# Five A+ Network (FA+Net) POC Results — WaterNet Challenger (2026-04-01)\n\n## Test Setup\n- 3 test frames: 3840x2160 DJI Action 4, deep/turbid water, resized to 1024x512\n- Model: FA+Net (BMVC 2023), 8,990 params (9K), 35.1 KB model size\n- Two weight variants: α=0.1 (subtle) and α=0.4 (aggressive)\n- CPU inference (no GPU available in devcontainer)\n- Compared against WaterNet baseline (1M params, R/G=0.86)\n\n## Results\n\n| Metric | WaterNet | FA+Net α=0.1 | FA+Net α=0.4 |\n|--------|----------|---------------|---------------|\n| R/G ratio | 0.86 | 0.833 | 0.769 |\n| B/G ratio | 1.10 | 1.063 | 1.089 |\n| Saturation | ~0.30 | 0.257 | 0.328 |\n| White clip (>250) | low | 3.4% | **18.8%** |\n| Black clip (<5) | low | 0.2% | 0.0% |\n| Noise delta | +20% | **+45%** | +31% |\n| CPU time/frame | 3.7s | 0.43s | 0.41s |\n| Params | 1M | 9K | 9K |\n\n## Visual Assessment\n\n### FA+Net α=0.1 (subtle variant)\n- Barely perceptible color correction — output nearly identical to input\n- Still heavy blue-green cast, minimal red recovery\n- Low saturation (0.257) — less vivid than original\n- Some contrast enhancement but underwater character unchanged\n- +45% noise amplification\n\n### FA+Net α=0.4 (aggressive variant)\n- Significantly brighter but washed out — 18.8% white clipping is a dealbreaker\n- **Worse** red recovery than WaterNet (R/G 0.769 vs 0.86) — pushed more blue\n- Blown highlights destroy detail in bright areas (bubbles, water surface)\n- Higher saturation (0.328) but from brightness increase, not true color enhancement\n\n## Verdict: **REJECTED**\n\nFA+Net fails on deep-water DJI Action 4 footage for both variants:\n- α=0.1 does almost nothing — too subtle for heavily degraded footage\n- α=0.4 blows highlights and makes the image more blue, not less\n- Neither variant achieves the \"warm subjects on blue water\" aesthetic\n- Noise amplification is 2-2.5x worse than WaterNet\n- The model was trained on UIEB benchmark data which has different degradation characteristics than deep-water D-Log M footage\n\n## Why FA+Net Fails Here\nThe 9K parameter budget is too small to learn complex underwater color correction for heavily attenuated footage. FA+Net was optimized for UIEB benchmark metrics (PSNR/SSIM) on relatively mild degradation. Deep-water footage with extreme red absorption (D-Log M, 10-20m depth) requires more correction capacity. The multi-scale pyramid (128/64/32 pooling) captures global statistics but can't apply the per-region graduated correction needed for depth-varying attenuation.\n\n## WaterNet Remains Baseline\nWaterNet (1M params) continues to be the best available model for this footage type. Its larger capacity allows it to learn the stronger color mapping needed. The 8.7x speed advantage of FA+Net is irrelevant if the output quality doesn't meet the aesthetic target.\n\n## Scripts & Artifacts\n- Script: working/sea_thru_poc/run_five_aplus.py\n- Results: working/sea_thru_poc/results/{01,02,03}_five_aplus_{a01,a04}.png\n- Model: working/sea_thru_poc/models/FiveAPlus-Network/",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-01T15:26:32.766053765Z",
+  "valid_from": "2026-04-01T15:26:32.766053765Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "finding",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}
