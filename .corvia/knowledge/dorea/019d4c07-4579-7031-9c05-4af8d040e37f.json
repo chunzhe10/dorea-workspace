@@ -1,0 +1,31 @@
+{
+  "id": "019d4c07-4579-7031-9c05-4af8d040e37f",
+  "content": "    # Merge section created\n    # Unrelated sections preserved\n\n    # First switch to ollama, then back to corvia\n    use_provider(\"ollama\", toml_path)\n    use_provider(\"corvia-inference\", toml_path)\n\n    raw = tomllib.loads(toml_path.read_text())\n    assert raw[\"embedding\"][\"provider\"] == \"corvia\"\n    assert raw[\"embedding\"][\"url\"] == \"http://127.0.0.1:8030\"\n    assert raw[\"merge\"][\"provider\"] == \"corvia\"\n    assert raw[\"merge\"][\"url\"] == \"http://127.0.0.1:8030\"\n\n\ndef test_use_invalid_provider(tmp_path: Path) -> None:\n    toml_path = tmp_path / \"corvia.toml\"\n    toml_path.write_text(SAMPLE_TOML)\n    try:\n        use_provider(\"invalid\", toml_path)\n        assert False, \"Should have raised ValueError\"\n    except ValueError as e:\n        assert \"invalid\" in str(e).lower()\n\n\ndef test_enabled_services_empty(tmp_path: Path) -> None:\n    flags_path = tmp_path / \".corvia-workspace-flags\"\n    services = read_enabled_services(flags_path)\n    assert services == []\n\n\ndef test_enabled_services_roundtrip(tmp_path: Path) -> None:\n    flags_path = tmp_path / \".corvia-workspace-flags\"\n    set_enabled_service(\"coding-llm\", True, flags_path)\n    set_enabled_service(\"surrealdb\", True, flags_path)\n    services = read_enabled_services(flags_path)\n    assert sorted(services) == [\"coding-llm\", \"surrealdb\"]\n\n    set_enabled_service(\"surrealdb\", False, flags_path)\n    services = read_enabled_services(flags_path)\n    assert services == [\"coding-llm\"]\n```\n\n**Step 2: Run test to verify it fails**\n\nRun: `cd /workspaces/corvia-workspace && python3 -m pytest tools/corvia-dev/tests/test_config.py -v`\nExpected: FAIL with `ModuleNotFoundError`\n\n**Step 3: Write the implementation**\n\n```python\n\"\"\"Config reader and mutator for corvia.toml.\"\"\"\n\nfrom __future__ import annotations\n\nimport tomllib\nfrom dataclasses import dataclass\nfrom pathlib import Path\n\nimport tomli_w\n\n\nPROVIDER_MAP: dict[str, dict[str, str]] = {",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-cli.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:30:38.201548363Z",
+  "valid_from": "2026-04-02T02:30:38.201548363Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-cli.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 630,
+    "end_line": 688,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

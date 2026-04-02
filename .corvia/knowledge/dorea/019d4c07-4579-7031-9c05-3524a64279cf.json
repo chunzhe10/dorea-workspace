@@ -1,0 +1,31 @@
+{
+  "id": "019d4c07-4579-7031-9c05-3524a64279cf",
+  "content": "### Large Graph Handling\n### What Works Well\n\n### Common Complaints\n\n- Requires infrastructure (GPU server)\n- Oriented toward data analysts, not knowledge workers\n- No concept of \"documents\" -- purely node/edge property data\n- Setup complexity\n\n\n### Innovative Patterns to Steal\n\n- **Histogram-based filtering**: Click-drag on a histogram to filter the graph by value range\n- **Data Brush**: Select a region of the graph to inspect aggregated properties\n- **GPU streaming architecture**: Server-side layout, client-side rendering for scale\n- **Timebar animation**: Temporal graph exploration\n- **Attribute-driven coloring/sizing**: Color and size nodes by any property value\n\n---\n",
+  "source_version": "decisions/graph-document-ux-research.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:30:38.201321242Z",
+  "valid_from": "2026-04-02T02:30:38.201321242Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/graph-document-ux-research.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 568,
+    "end_line": 584,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

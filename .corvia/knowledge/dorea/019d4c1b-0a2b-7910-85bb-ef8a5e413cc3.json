@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2b-7910-85bb-ef8a5e413cc3",
+  "content": "# Set ANTHROPIC_API_KEY env var or replace below\n# SAM2\n\n# Depth Anything V2\ndepth_model: depth_anything_v2_small\ndepth_weights: models/depth_anything_v2_small/\ndepth_output_format: png16  # 16-bit PNG for matte precision\n\n\n# DaVinci Resolve (host paths — used by 05_resolve_setup.py on host)\nresolve_lut_path: repos/dorea/luts/underwater_base.cube\nresolve_drx_path: repos/dorea/templates/underwater_grade_v1.drx\nresolve_project_name: Dive_2026\n",
+  "source_version": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.739260634Z",
+  "valid_from": "2026-04-02T02:52:13.739260634Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1519,
+    "end_line": 1528,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

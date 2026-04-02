@@ -1,0 +1,31 @@
+{
+  "id": "019d4c19-c598-7391-b6d8-b68b567af0b9",
+  "content": ".map_err(FfmpegError::NotFound)?;\n        if !status.success() {\n            return Err(FfmpegError::EncodeFailed(format!(\n                \"ffmpeg encoder exited with code {:?}\",\n                status.code()\n            )));\n        }\n        Ok(())\n    }\nmod tests {\n    use super::parse_rational;\n\n    #[test]\n    fn rational_parse() {\n        assert!((parse_rational(\"30000/1001\") - 29.97).abs() < 0.01);\n        assert!((parse_rational(\"25/1\") - 25.0).abs() < 0.001);\n        assert!((parse_rational(\"24\") - 24.0).abs() < 0.001);\n        assert!((parse_rational(\"0/0\") - 30.0).abs() < 0.001); // div-by-zero fallback\n    }\n}",
+  "source_version": "crates/dorea-video/src/ffmpeg.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:50:50.648388077Z",
+  "valid_from": "2026-04-02T02:50:50.648388077Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/ffmpeg.rs",
+    "language": "rs",
+    "chunk_type": "mod_item",
+    "start_line": 382,
+    "end_line": 392,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

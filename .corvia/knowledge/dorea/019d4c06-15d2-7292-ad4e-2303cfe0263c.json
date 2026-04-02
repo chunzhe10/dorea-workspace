@@ -1,0 +1,31 @@
+{
+  "id": "019d4c06-15d2-7292-ad4e-2303cfe0263c",
+  "content": "def decode_png(b64: str) -> \"np.ndarray\":\n    \"\"\"Decode base64 PNG to uint8 HxWx3 RGB array.\"\"\"\n    import io\n    import numpy as np\n    from PIL import Image\n    data = base64.b64decode(b64)\n    return np.array(Image.open(io.BytesIO(data)).convert(\"RGB\"))\ndef decode_depth_f32(b64: str, width: int, height: int) -> \"np.ndarray\":\n    \"\"\"Decode base64 raw f32 LE array to float32 HxW array.\"\"\"\n    import numpy as np\n    raw = base64.b64decode(b64)\n    arr = np.frombuffer(raw, dtype=\"<f4\").reshape(height, width)\n    return arr",
+  "source_version": "python/dorea_inference/protocol.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:29:20.466065647Z",
+  "valid_from": "2026-04-02T02:29:20.466065647Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/protocol.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 156,
+    "end_line": 161,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

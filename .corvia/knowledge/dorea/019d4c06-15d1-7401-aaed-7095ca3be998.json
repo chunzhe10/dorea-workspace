@@ -1,0 +1,31 @@
+{
+  "id": "019d4c06-15d1-7401-aaed-7095ca3be998",
+  "content": "frame_data_vec: Vec<KeyframeData> = Vec::new();\n\n    for kf_path in &keyframe_paths {\n        let stem = kf_path.file_stem().context(\"keyframe has no stem\")?.to_string_lossy().to_string();\n\n        log::info!(\"Processing keyframe: {}\", kf_path.display());\n\n        let (mut kf_pixels, kf_w, kf_h) = load_rgb_image(kf_path)\n            .with_context(|| format!(\"Failed to load keyframe: {}\", kf_path.display()))?;\n\n        // Apply D-Log M → linear decode if requested\n        if args.input_encoding == InputEncoding::DlogM {\n            log::debug!(\"Applying D-Log M decode to keyframe {kf_path:?}\");\n            for px in kf_pixels.iter_mut() {\n                px[0] = dlog_m_to_linear(px[0]);\n                px[1] = dlog_m_to_linear(px[1]);\n                px[2] = dlog_m_to_linear(px[2]);\n            }\n        }\n\n        // Load or generate depth map\n        let depth_pixels = if let Some(depth_dir) = &args.depth {\n            let depth_path = depth_dir.join(format!(\"{stem}.png\"));\n            let (mut depth, dw, dh) = load_depth_map(&depth_path)\n                .with_context(|| format!(\"Failed to load depth map: {}\", depth_path.display()))?;\n            if dw != kf_w || dh != kf_h {\n                depth = resize_depth(&depth, dw, dh, kf_w, kf_h);\n            }\n            depth\n        } else {",
+  "source_version": "crates/dorea-cli/src/calibrate.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:29:20.465917014Z",
+  "valid_from": "2026-04-02T02:29:20.465917014Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/calibrate.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 224,
+    "end_line": 246,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

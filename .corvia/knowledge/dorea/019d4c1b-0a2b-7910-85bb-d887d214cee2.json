@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2b-7910-85bb-d887d214cee2",
+  "content": "# --- SurrealDB ---\n    # Wait for readiness\n\n    # Update corvia.toml\n    sed -i 's/^store_type = \"lite\"/store_type = \"surrealdb\"/' \"$CORVIA_TOML\"\n\n    set_flag surrealdb enabled\n    echo \"  SurrealDB enabled. Storage switched to SurrealStore.\"\n}\n\ndisable_surrealdb() {\n    echo \"Disabling SurrealDB...\"\n\n    local compose_file=\"$WORKSPACE_ROOT/repos/corvia/docker/docker-compose.yml\"\n\n    if [ -f \"$compose_file\" ]; then\n        docker compose -f \"$compose_file\" down 2>/dev/null || true\n    fi\n\n\n    # Revert corvia.toml\n    sed -i 's/^store_type = \"surrealdb\"/store_type = \"lite\"/' \"$CORVIA_TOML\"\n\n    set_flag surrealdb disabled\n    echo \"  SurrealDB disabled. Storage switched to LiteStore.\"\n}\n",
+  "source_version": "decisions/2026-03-03-optional-devcontainer-services.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.739002108Z",
+  "valid_from": "2026-04-02T02:52:13.739002108Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-03-03-optional-devcontainer-services.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 317,
+    "end_line": 339,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

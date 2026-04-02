@@ -1,0 +1,31 @@
+{
+  "id": "019d4c06-15d1-7401-aaed-73c981a0447c",
+  "content": "ap_err(FfmpegError::NotFound)?;\n        if !status.success() {\n            return Err(FfmpegError::EncodeFailed(format!(\n                \"ffmpeg encoder exited with code {:?}\",\n                status.code()\n            )));\n        }\n        Ok(())\n    }\n}\npub fn new(\n        output: &Path,\n        width: usize,\n        height: usize,\n        fps: f64,\n        input_for_audio: Option<&Path>,\n    ) -> Result<Self, FfmpegError> {\n        let w_s = width.to_string();\n        let h_s = height.to_string();\n        let fps_s = format!(\"{fps:.3}\");\n        let size_s = format!(\"{w_s}x{h_s}\");\n        let out_s = output.to_str().unwrap_or(\"output.mp4\");\n\n        let mut cmd = Command::new(\"ffmpeg\");\n        cmd.args([\n            \"-y\",\n            \"-f\", \"rawvideo\",\n            \"-pixel_format\", \"rgb24\",\n            \"-s\", &size_s,\n            \"-r\", &fps_s,\n            \"-i\", \"pipe:0\",\n        ]);\n\n        if let Some(audio_src) = input_for_audio {\n            cmd.args([\"-i\", audio_src.to_str().unwrap_or(\"\")]);\n            cmd.args([\"-map\", \"0:v\", \"-map\", \"1:a\", \"-c:a\", \"copy\"]);\n        } else {\n            cmd.args([\"-map\", \"0:v\"]);\n        }\n\n        // Try NVENC first",
+  "source_version": "crates/dorea-video/src/ffmpeg.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:29:20.465947104Z",
+  "valid_from": "2026-04-02T02:29:20.465947104Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/ffmpeg.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 292,
+    "end_line": 322,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

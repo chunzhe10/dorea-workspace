@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2b-7910-85bb-e6fc5f4cf44e",
+  "content": "# Test blocked path\n# Expected: exit 2 (blocked)\n\n# Test allowed path\necho '{\"file_path\":\"repos/corvia/docs/design.md\"}' | bash .corvia/hooks/doc-placement-check.sh\n\n# Expected: exit 0 (allowed)\n",
+  "source_version": "plans/2026-03-13-docs-workflow-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.739167891Z",
+  "valid_from": "2026-04-02T02:52:13.739167891Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-13-docs-workflow-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 2485,
+    "end_line": 2488,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

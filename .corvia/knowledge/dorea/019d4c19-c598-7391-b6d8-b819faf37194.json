@@ -1,0 +1,31 @@
+{
+  "id": "019d4c19-c598-7391-b6d8-b819faf37194",
+  "content": "    .stderr(Stdio::inherit()); // let stderr pass through for diagnostics\n\n        let mut child = cmd.spawn()?;\n        let mut stdin = child.stdin.take().ok_or_else(|| {\n            InferenceError::Ipc(\"could not open inference server stdin\".to_string())\n        })?;\n        let stdout = child.stdout.take().ok_or_else(|| {\n            InferenceError::Ipc(\"could not open inference server stdout\".to_string())\n        })?;\n\n        // Send ping immediately so the server starts loading models ASAP.\n        stdin.write_all(b\"{\\\"type\\\":\\\"ping\\\"}\\n\")\n            .and_then(|_| stdin.flush())\n            .map_err(|e| InferenceError::Ipc(format!(\"write ping: {e}\")))?;\n\n        // Read pong in a background thread so we can enforce the startup timeout.\n        // BufReader<ChildStdout> is Send, so this is safe.\n        let timeout = config.startup_timeout;\n        let (tx, rx) = mpsc::channel::<io::Result<(String, BufReader<std::process::ChildStdout>)>>();\n        std::thread::spawn(move || {\n            let mut reader = BufReader::new(stdout);\n            let mut line = String::new();\n            let result = reader.read_line(&mut line).map(|_| (line, reader));\n            let _ = tx.send(result);\n        });\n\n        let (pong_line, stdout_reader) = match rx.recv_timeout(timeout) {\n            Ok(Ok((line, reader))) => (line, reader),\n            Ok(Err(e)) => {\n                let _ = child.kill();",
+  "source_version": "crates/dorea-video/src/inference.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:50:50.648411101Z",
+  "valid_from": "2026-04-02T02:50:50.648411101Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 119,
+    "end_line": 143,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

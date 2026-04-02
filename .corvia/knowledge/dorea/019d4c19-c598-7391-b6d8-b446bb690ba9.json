@@ -1,0 +1,31 @@
+{
+  "id": "019d4c19-c598-7391-b6d8-b446bb690ba9",
+  "content": "tions,\n    /// Unix timestamp (seconds since epoch) of calibration creation.\n    pub created_at_unix_secs: u64,\n    pub keyframe_count: usize,\n    /// Human-readable description, e.g. \"3 keyframes from 2026-04-01 dive\"\n    pub source_description: String,\n}\nimpl Calibration {\n    pub fn new(\n        depth_luts: DepthLuts,\n        hsl_corrections: HslCorrections,\n        keyframe_count: usize,\n    ) -> Self {\n        Self {\n            version: FORMAT_VERSION,\n            depth_luts,\n            hsl_corrections,\n            created_at_unix_secs: unix_now(),\n            keyframe_count,\n            source_description: format!(\"{keyframe_count} keyframe(s)\"),\n        }\n    }\n\n    /// Save to a `.dorea-cal` file (bincode-encoded).\n    pub fn save(&self, path: &Path) -> Result<(), CalError> {\n        let bytes = bincode::serialize(self).map_err(|e| CalError::Serialization(e.to_string()))?;\n        let mut file = std::fs::File::create(path)?;\n        file.write_all(&bytes)?;\n        Ok(())\n    }\n\n    /// Load from a `.dorea-cal` file.\n    pub fn load(path: &Path) -> Result<Self, CalError> {\n        let mut file = std::fs::File::open(path)?;\n        let mut bytes = Vec::new();\n        file.read_to_end(&mut bytes)?;\n\n        // L2: check version byte before full deserialization to give a clear error.\n        let version_byte = bytes\n            .first()\n            .copied()\n            .ok_or_else(|| CalError::Serialization(\"empty file\".into()))?;\n        if version_byte != FORMAT_VERSION {\n            return Err(CalError::UnsupportedVersion(version_byte));\n        }\n\n        let cal: Calibration =\n            bincode::deserialize(&bytes).map_err(|e| CalError::Serialization(e.to_string()))?;\n        Ok(cal)\n    }\n}",
+  "source_version": "crates/dorea-cal/src/format.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:50:50.648333022Z",
+  "valid_from": "2026-04-02T02:50:50.648333022Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cal/src/format.rs",
+    "language": "rs",
+    "chunk_type": "impl_item",
+    "start_line": 28,
+    "end_line": 71,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

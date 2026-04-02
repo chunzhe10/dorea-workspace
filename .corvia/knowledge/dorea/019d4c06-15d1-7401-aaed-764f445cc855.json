@@ -1,0 +1,31 @@
+{
+  "id": "019d4c06-15d1-7401-aaed-764f445cc855",
+  "content": "fn drop(&mut self) {\n        // Best-effort shutdown\n        let _ = self.stdin.write_all(b\"{\\\"type\\\":\\\"shutdown\\\"}\\n\");\n        let _ = self.child.wait();\n    }\nfn encode_png_bytes(rgb: &[u8], width: usize, height: usize) -> Result<Vec<u8>, InferenceError> {\n    // Minimal uncompressed PNG (for speed; compression is the Python server's concern)\n    // Use the `image` crate idiom via raw bytes.\n    // Since we don't have image crate here, build a minimal PNG manually.\n    // Actually: use a simple raw RGB PNG via the lodepng-compatible format.\n    // Simplest: use the `miniz_oxide` approach or just write raw PNG header.\n    //\n    // For now, produce a valid PNG using raw inflate + PNG chunk construction.\n    // This avoids adding the `image` dep to dorea-video.\n\n    let expected = width * height * 3;\n    if rgb.len() < expected {\n        return Err(InferenceError::ImageError(format!(\n            \"expected {} bytes, got {}\", expected, rgb.len()\n        )));\n    }\n\n    // Build PNG using miniz_oxide (already available transitively) or manual construction.\n    // We'll use a dead-simple approach: prepend filter bytes and zlib-compress.\n    let mut filtered = Vec::with_capacity(height * (1 + width * 3));\n    for row in rgb.chunks_exact(width * 3) {\n        filtered.push(0u8); // filter type = None\n        filtered.extend_from_slice(row);\n    }\n\n    let compressed = deflate_zlib(&filtered);\n\n    let mut out = Vec::new();\n    // PNG signature\n    out.extend_from_slice(b\"\\x89PNG\\r\\n\\x1a\\n\");\n    // IHDR\n    write_png_chunk(&mut out, b\"IHDR\", &{\n        let mut h = Vec::new();\n        h.extend_from_slice(&(width as u32).to_be_bytes());\n        h.extend_from_slice(&(height as u32).to_be_bytes());\n        h.extend_from_slice(&[8u8, 2, 0, 0, 0]); // bit depth=8, color type=RGB, compression, filter, interlace\n        h\n    });\n    // IDAT\n    write_png_chunk(&mut out, b\"IDAT\", &compressed);\n    // IEND\n    write_png_chunk(&mut out, b\"IEND\", &[]);\n\n    Ok(out)\n}",
+  "source_version": "crates/dorea-video/src/inference.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:29:20.465971569Z",
+  "valid_from": "2026-04-02T02:29:20.465971569Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 357,
+    "end_line": 401,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

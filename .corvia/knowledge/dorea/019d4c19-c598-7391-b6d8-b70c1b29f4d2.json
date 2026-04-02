@@ -1,0 +1,31 @@
+{
+  "id": "019d4c19-c598-7391-b6d8-b70c1b29f4d2",
+  "content": "vec![0u8; 3 * 1024];\n        let white: Vec<u8> = vec![255u8; 3 * 1024];\n        assert!(is_scene_change(&black, &white), \"black→white should be a scene change\");\n        assert!(!is_scene_change(&black, &black), \"same frame should not trigger\");\n    }\n}\nfn identical_frames_zero_distance() {\n        let frame: Vec<u8> = (0..768).map(|i| (i % 256) as u8).collect();\n        let dist = histogram_distance(&frame, &frame);\n        assert!(dist < 1e-6, \"identical frames should have distance ~0, got {dist}\");\n    }",
+  "source_version": "crates/dorea-video/src/scene.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:50:50.648395360Z",
+  "valid_from": "2026-04-02T02:50:50.648395360Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/scene.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 69,
+    "end_line": 73,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

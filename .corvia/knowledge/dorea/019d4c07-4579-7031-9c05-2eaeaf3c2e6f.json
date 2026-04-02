@@ -1,0 +1,31 @@
+{
+  "id": "019d4c07-4579-7031-9c05-2eaeaf3c2e6f",
+  "content": "## Problem Statement\n## Design Principles\n\n## Architecture\n\n```\nWRITE PATH (knowledge goes in)\n─────────────────────────────────────────────────\nAgent decision     → corvia_write(source_origin: \"repo:corvia\") → knowledge store\nHuman edits docs   → git commit → post-commit hook → incremental re-index\nCode changes       → corvia ingest → chunked + embedded → knowledge store\nSuperpowers spec   → hook enforces path → saved to repo docs/ → ingested\n\nREAD PATH (knowledge comes out)\n─────────────────────────────────────────────────\nQuick orientation  → repo's README.md / ARCHITECTURE.md (curated, few files)\nDeep exploration   → corvia dashboard (graphed document reader)\nAgent queries      → corvia_search / corvia_ask via MCP (with filters)\nPeriodic health    → corvia docs check (Aggregator findings in dashboard)\n```\n",
+  "source_version": "decisions/2026-03-13-docs-workflow-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:30:38.201250538Z",
+  "valid_from": "2026-04-02T02:30:38.201250538Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-03-13-docs-workflow-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 35,
+    "end_line": 52,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

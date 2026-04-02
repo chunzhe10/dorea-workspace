@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2b-7910-85bb-daeb1cfaf567",
+  "content": "### Extended `EntryMetadata`\n\n### Population Rules\n\n| Write path | `content_role` | `source_origin` |\n|-----------|---------------|-----------------|\n| `corvia ingest` (code files) | Inferred: `.rs`/`.py`/`.ts` → `\"code\"` | From repo path: `\"repo:<name>\"` |\n| `corvia ingest` (markdown in repo docs/) | Inferred from dir: `rfcs/` → `\"design\"`, `plans/` → `\"plan\"` | `\"repo:<name>\"` |\n| `corvia ingest` (workspace docs/) | Inferred from dir: `decisions/` → `\"design\"`, `learnings/` → `\"learning\"` | `\"workspace\"` |\n| `corvia ingest` (.memory/) | `\"memory\"` | `\"memory\"` |\n| `corvia_write` MCP tool | New optional param, agent provides | New optional param, agent provides |\n| Reasoner findings | `\"finding\"` | `\"workspace\"` |\n\n\n### `corvia_write` MCP Changes\n\nNew optional parameters (backward compatible):\n\n```json\n{\n  \"name\": \"corvia_write\",\n  \"arguments\": {\n    \"content\": \"We chose JSONL over gRPC for adapter IPC because...\",\n    \"scope_id\": \"corvia\",\n    \"content_role\": \"decision\",\n    \"source_origin\": \"repo:corvia\"\n  }\n}\n```\n\nDefaults: `content_role` = null (unclassified), `source_origin` = `\"workspace\"`.\n",
+  "source_version": "decisions/2026-03-13-docs-workflow-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.739033497Z",
+  "valid_from": "2026-04-02T02:52:13.739033497Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-03-13-docs-workflow-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 210,
+    "end_line": 238,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d4c07-4579-7031-9c05-3516d605ab34",
+  "content": "### Graph-to-Document Navigation UX\n### Panel Pattern\n\n### Large Graph Handling\n\n- **GPU acceleration**: Server-side NVIDIA GPUs run layout and clustering algorithms.\n  Client WebGL renders up to 8 million nodes+edges.\n- **Streaming architecture**: Heavy computation on server GPU, light render data streamed\n  to browser. Works on any device.\n- **Timebar animation**: For temporal data, animates the graph over time\n- **Pruning controls**: Toggle labels/icons, remove isolated nodes\n- **Visual templates**: Pre-configured investigation workflows\n\n\n### What Works Well\n\n- **Scale**: Handles orders of magnitude more data than any other tool in this comparison\n  (100K-8MM elements vs ~10K for consumer tools)\n- **Filter-by-histogram** is intuitive for data exploration\n- **Data Brush** for inspecting graph regions\n- **Streaming GPU rendering** keeps the client responsive regardless of data size\n- Timebar animation for temporal exploration\n",
+  "source_version": "decisions/graph-document-ux-research.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:30:38.201320784Z",
+  "valid_from": "2026-04-02T02:30:38.201320784Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/graph-document-ux-research.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 549,
+    "end_line": 567,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

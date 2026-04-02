@@ -1,0 +1,31 @@
+{
+  "id": "019d4c07-4579-7031-9c05-2c116eeb2624",
+  "content": "# Optional Devcontainer Services Implementation Plan\n\n### Task 1: Slim down the Dockerfile\n\n**Files:**\n- Modify: `.devcontainer/Dockerfile`\n\n**Step 1: Remove the Ollama install from the Dockerfile**\n\nReplace the entire file with:\n\n```dockerfile\nFROM rust:1.88-bookworm\n\nRUN apt-get update && apt-get install -y \\\n    curl git build-essential pkg-config libssl-dev cmake protobuf-compiler \\\n    && rm -rf /var/lib/apt/lists/*\n\nWORKDIR /workspace\n```\n\n**Step 2: Verify the Dockerfile is valid**\n\nRun: `docker build -f /root/corvia-project/corvia-workspace/.devcontainer/Dockerfile /root/corvia-project/corvia-workspace/.devcontainer/ --no-cache --progress=plain 2>&1 | tail -5`\nExpected: Build succeeds, no Ollama references in output.\n\n**Step 3: Commit**\n\n```bash\ngit add .devcontainer/Dockerfile\ngit commit -m \"chore: remove Ollama from Dockerfile for light default (D70)\"\n```\n\n---\n\n\n### Task 2: Switch corvia.toml to corvia-inference provider\n\n**Files:**\n- Modify: `corvia.toml`\n\n**Step 1: Update the embedding section**\n\nChange the `[embedding]` section from:\n\n```toml\n[embedding]\nprovider = \"ollama\"\nmodel = \"nomic-embed-text\"\nurl = \"http://127.0.0.1:11434\"\ndimensions = 768\n```\n\nTo:\n\n```toml\n[embedding]\nprovider = \"corvia\"\nmodel = \"nomic-embed-text-v1.5\"\nurl = \"http://127.0.0.1:8030\"\ndimensions = 768\n```\n\nThis ensures `corvia workspace init` skips Ollama provisioning (the Rust code checks `config.embedding.provider == InferenceProvider::Ollama` at `crates/corvia-cli/src/workspace.rs:249`). The `corvia serve` command will auto-provision corvia-inference when it sees `provider = \"corvia\"` (`crates/corvia-cli/src/main.rs:332-337`).\n\n**Step 2: Commit**\n\n```bash\ngit add corvia.toml\ngit commit -m \"chore: default embedding provider to corvia-inference (D70)\"\n```\n\n---\n",
+  "source_version": "decisions/2026-03-03-optional-devcontainer-services.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:30:38.201220397Z",
+  "valid_from": "2026-04-02T02:30:38.201220397Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-03-03-optional-devcontainer-services.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 16,
+    "end_line": 86,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

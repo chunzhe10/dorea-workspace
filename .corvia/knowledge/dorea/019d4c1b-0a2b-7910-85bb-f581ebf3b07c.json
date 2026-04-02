@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2b-7910-85bb-f581ebf3b07c",
+  "content": "### Dashboard UX: Contextual Actions Over Command Palettes (2026-03-09)\n\n### Service Log Capture (2026-03-09)\n\n**Problem**: The ProcessManager piped subprocess stdout/stderr to `asyncio.subprocess.PIPE` but never read from them. This meant: (1) no logs visible anywhere, (2) potential deadlock if pipe buffer fills up.\n\n**Decision**: Write subprocess output to per-service log files at `/tmp/corvia-dev-logs/<service>.log` in append mode.\n\n**JSON contract extension**: Added `service_logs` field to `StatusResponse`:\n\n```json\n{\n  \"service_logs\": {\n    \"corvia-server\": [\"line1\", \"line2\", \"...last 30 lines\"],\n    \"corvia-inference\": [\"...\"],\n    \"supervisor\": [\"...legacy supervisor log if present\"]\n  }\n}\n```\n\nThe existing `logs` field continues to carry manager lifecycle events (\"corvia-server started pid 123\", \"now healthy\", etc.). `service_logs` carries actual service output.\n\n**Dashboard**: Tabbed log viewer at the bottom of the dashboard. One tab per service with log output. Tabs show line count badges. Active tab persists across poll refreshes. Auto-scrolls to bottom. Collapsible (open by default, state survives re-renders since the log panel is outside the `#content` div that gets replaced on each poll).\n\n**CLI**: `corvia-dev logs` shows all service logs. `corvia-dev logs corvia-server` shows one. Reads directly from log files (works even without a running manager).\n\n**Legacy fallback**: When running without the manager (services started by old supervisor), the status command also checks `/tmp/corvia-supervisor.log` and includes it as a \"supervisor\" tab.\n\n\n### TOML Serialization Side Effect (2026-03-09)\n\n`tomli_w` normalizes TOML syntax when round-tripping. Specifically, `[[workspace.repos]]` (array of tables) becomes inline `repos = [{...}]`. This is semantically identical but looks different in the file. Accepted as a trade-off for reliable parse-modify-serialize over fragile `sed`.",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-cli-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.739322103Z",
+  "valid_from": "2026-04-02T02:52:13.739322103Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-cli-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 272,
+    "end_line": 300,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

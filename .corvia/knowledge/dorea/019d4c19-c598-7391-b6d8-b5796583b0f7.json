@@ -1,0 +1,31 @@
+{
+  "id": "019d4c19-c598-7391-b6d8-b5796583b0f7",
+  "content": "pub fn decode_frames(\n    input: &Path,\n    info: &VideoInfo,\n) -> Result<impl Iterator<Item = Result<Frame, FfmpegError>>, FfmpegError> {\n    let child = spawn_decoder(input, info)?;\n    Ok(FrameReader::new(child, info.width, info.height))\n}\nfn spawn_decoder(input: &Path, info: &VideoInfo) -> Result<Child, FfmpegError> {\n    let input_str = input.to_str().unwrap_or(\"\");\n    let size_str = format!(\"{}x{}\", info.width, info.height);\n\n    // Try hardware decode first, fall back to software\n    let hw_result = Command::new(\"ffmpeg\")\n        .args([\n            \"-hwaccel\", \"nvdec\",\n            \"-i\", input_str,\n            \"-vf\", &format!(\"scale={size_str}\"),\n            \"-f\", \"rawvideo\",\n            \"-pix_fmt\", \"rgb24\",\n            \"pipe:1\",\n        ])\n        .stdin(Stdio::null())\n        .stdout(Stdio::piped())\n        .stderr(Stdio::null())\n        .spawn();\n\n    if let Ok(child) = hw_result {\n        return Ok(child);\n    } else if let Err(ref e) = hw_result {\n        log::debug!(\"nvdec spawn failed ({e}), falling back to software decode\");\n    }\n\n    // Software fallback\n    Command::new(\"ffmpeg\")\n        .args([\n            \"-i\", input_str,\n            \"-f\", \"rawvideo\",\n            \"-pix_fmt\", \"rgb24\",\n            \"pipe:1\",\n        ])\n        .stdin(Stdio::null())\n        .stdout(Stdio::piped())\n        .stderr(Stdio::null())\n        .spawn()\n        .map_err(FfmpegError::NotFound)\n}",
+  "source_version": "crates/dorea-video/src/ffmpeg.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:50:50.648374785Z",
+  "valid_from": "2026-04-02T02:50:50.648374785Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/ffmpeg.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 121,
+    "end_line": 159,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

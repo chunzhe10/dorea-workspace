@@ -1,0 +1,31 @@
+{
+  "id": "019d4c07-4579-7031-9c05-4930eeba1cce",
+  "content": "## Process Supervision\n\n### ProcessManager\n\nSingle Python process manages all children. No PID files in `/tmp`.\n\nState held in-memory, written to `/tmp/corvia-dev-state.json` every health check cycle:\n\n```json\n{\n  \"manager\": {\"pid\": 123, \"uptime_s\": 3600, \"state\": \"running\"},\n  \"services\": [\n    {\"name\": \"corvia-inference\", \"state\": \"healthy\", \"port\": 8030, \"pid\": 456, \"uptime_s\": 3595},\n    {\"name\": \"corvia-server\", \"state\": \"healthy\", \"port\": 8020, \"pid\": 789, \"uptime_s\": 3590},\n    {\"name\": \"ollama\", \"state\": \"stopped\", \"port\": null, \"pid\": null, \"reason\": \"not enabled\"}\n  ],\n  \"config\": {\n    \"embedding_provider\": \"corvia\",\n    \"merge_provider\": \"corvia\",\n    \"storage\": \"lite\",\n    \"workspace\": \"corvia-workspace\"\n  },\n  \"enabled_services\": [\"coding-llm\"],\n  \"logs\": [\"2026-03-09T02:30:00 corvia-server started (pid 789)\", \"...last 20 lines\"]\n}\n```\n\n\n### Why state file over Unix socket\n\n- Simpler — no async server in the manager\n- `status` works even if manager is crashed (reports stale data with warning)\n- VS Code extension can read file directly for instant updates\n",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-cli-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:30:38.201530477Z",
+  "valid_from": "2026-04-02T02:30:38.201530477Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-cli-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 132,
+    "end_line": 162,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

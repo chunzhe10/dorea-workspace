@@ -1,0 +1,31 @@
+{
+  "id": "019d4c06-15d1-7401-aaed-72da9b72a204",
+  "content": "(num, den)) = s.split_once('/') {\n        let n = num.trim().parse::<f64>().unwrap_or(30.0);\n        let d = den.trim().parse::<f64>().unwrap_or(1.0);\n        if d == 0.0 { 30.0 } else { n / d }\n    } else {\n        s.parse::<f64>().unwrap_or(30.0)\n    }\n}\npub struct Frame {\n    pub index: u64,\n    pub pixels: Vec<u8>, // RGB24, width * height * 3\n    pub width: usize,\n    pub height: usize,\n}",
+  "source_version": "crates/dorea-video/src/ffmpeg.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:29:20.465938699Z",
+  "valid_from": "2026-04-02T02:29:20.465938699Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/ffmpeg.rs",
+    "language": "rs",
+    "chunk_type": "struct_item",
+    "start_line": 103,
+    "end_line": 108,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

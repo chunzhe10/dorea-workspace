@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2b-7910-85bb-e79926ee29bd",
+  "content": "## Section 1: Repos & Setup Flow\n\n### GitHub Repos\n\n| Repo | Purpose |\n|------|---------|\n| `chunzhe10/corvia-workspace` | Upstream template (marked as GitHub Template) |\n| `chunzhe10/dorea-workspace` | Created from template, hosts the pipeline workspace |\n| `chunzhe10/dorea` | The pipeline project code itself |\n\n\n### Setup Sequence\n\n1. Mark `chunzhe10/corvia-workspace` as a GitHub Template Repository (Settings → Template repository)\n2. Create `chunzhe10/dorea-workspace` using \"Use this template\" on GitHub\n3. Create `chunzhe10/dorea` as a new empty repo on GitHub\n4. Clone dorea-workspace locally to `/home/chunzhe/corvia-project/dorea-workspace/`\n5. Add upstream remote: `git remote add upstream https://github.com/chunzhe10/corvia-workspace.git`\n6. Remove `repos/corvia` references:\n   - Delete `repos/corvia/` directory (if template included it — may be gitignored)\n   - Remove any `.gitkeep` or placeholder files in `repos/corvia/`\n   - Update `.gitignore`: replace `repos/corvia/` with `repos/dorea/`\n   - Update `corvia.toml` repo entry (see Section 2)\n7. Clone `chunzhe10/dorea` into `repos/dorea`\n8. Commit the workspace adaptations (see Section 2)\n",
+  "source_version": "plans/2026-03-17-dorea-underwater-pipeline-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.739174027Z",
+  "valid_from": "2026-04-02T02:52:13.739174027Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-17-dorea-underwater-pipeline-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 21,
+    "end_line": 43,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d4c06-15d1-7401-aaed-757ad9faad52",
+  "content": "y0 + 1).min(src_h - 1);\n                let fx = sx - x0 as f32;\n                let fy = sy - y0 as f32;\n\n                let v00 = depth[y0 * src_w + x0];\n                let v10 = depth[y0 * src_w + x1];\n                let v01 = depth[y1 * src_w + x0];\n                let v11 = depth[y1 * src_w + x1];\n\n                out[dy * dst_w + dx] = v00 * (1.0 - fx) * (1.0 - fy)\n                    + v10 * fx * (1.0 - fy)\n                    + v01 * (1.0 - fx) * fy\n                    + v11 * fx * fy;\n            }\n        }\n        out\n    }\n\n    /// Send a graceful shutdown request and wait for the process to exit.\n    pub fn shutdown(mut self) -> Result<(), InferenceError> {\n        let _ = self.send_line(r#\"{\"type\":\"shutdown\"}\"#);\n        let _ = self.child.wait();\n        Ok(())\n    }\n\n    fn send_line(&mut self, line: &str) -> Result<(), InferenceError> {\n        self.stdin.write_all(line.as_bytes())\n            .and_then(|_| self.stdin.write_all(b\"\\n\"))\n            .and_then(|_| self.stdin.flush())\n            .map_err(|e| InferenceError::Ipc(format!(\"write to server: {e}\")))\n    }\n\n    fn recv_line(&mut self) -> Result<String, InferenceError> {\n        let mut line = String::new();\n        self.stdout_reader.read_line(&mut line)\n            .map_err(|e| InferenceError::Ipc(format!(\"read from server: {e}\")))?;\n        let trimmed = line.trim_end_matches('\\n').trim_end_matches('\\r').to_string();\n        if trimmed.is_empty() {\n            return Err(InferenceError::Ipc(\"server sent empty response (may have crashed)\".to_string()));\n        }\n        Ok(trimmed)\n    }\n}",
+  "source_version": "crates/dorea-video/src/inference.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:29:20.465963461Z",
+  "valid_from": "2026-04-02T02:29:20.465963461Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference.rs",
+    "language": "rs",
+    "chunk_type": "impl_item",
+    "start_line": 311,
+    "end_line": 346,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

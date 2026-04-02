@@ -1,0 +1,31 @@
+{
+  "id": "019d4c07-4579-7031-9c05-2dd4111402eb",
+  "content": "### Files Changed\n### Version Strategy\n\n### User Flows\n\n**Normal devcontainer open (has release):**\n```\npost-create.sh → downloads 2 binaries (~5s) → corvia workspace init → done\n```\n\n**No release yet / network failure:**\n```\npost-create.sh → download fails → cargo install from source (~5min) → corvia workspace init → done\n```\n\n**Developing against local source:**\n```",
+  "source_version": "decisions/2026-03-03-prebuilt-binaries-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:30:38.201241920Z",
+  "valid_from": "2026-04-02T02:30:38.201241920Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-03-03-prebuilt-binaries-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 74,
+    "end_line": 87,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

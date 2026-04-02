@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2b-7910-85bb-e4fd61cdcd12",
+  "content": "lpha = isConnected ? 1.0 : 0.15;\n```\n\n- [ ] **Step 5: Wire click → select entry → populate reader panel**\n\nOn node click, call `setSelectedEntryId(node.id)` which triggers the `DocumentReader` to load.\n\n- [ ] **Step 6: Add CSS for split-panel layout**\n\nAdd styles to `tools/corvia-dashboard/src/styles/graph-reader.css` (new file). Import it from `GraphView.tsx`. Key classes:\n\n```css\n.graph-split-panel { display: flex; height: 100%; }\n.graph-panel { flex: 1; transition: flex 0.3s ease; position: relative; }\n.graph-panel--narrow { flex: 0.6; }\n.reader-panel { flex: 0.4; overflow-y: auto; border-left: 1px solid var(--border); padding: 1rem; }\n.document-reader { display: flex; flex-direction: column; gap: 0.75rem; }\n.reader-header { display: flex; justify-content: space-between; align-items: center; }\n.reader-close { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-muted); }\n.reader-content pre { white-space: pre-wrap; word-break: break-word; font-size: 0.85rem; }\n.reader-meta { display: flex; gap: 0.5rem; flex-wrap: wrap; }\n.badge { padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; }\n.badge-role { background: var(--accent-dim); color: var(--accent); }\n.badge-origin { background: var(--surface-2); color: var(--text-muted); }\n.neighbor-cards { display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1rem; }\n.neighbor-card { display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem; border: 1px solid var(--border); border-radius: 6px; cursor: pointer; background: var(--surface); text-align: left; }\n.neighbor-card:hover { background: var(--surface-2); }\n.role-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }\n.graph-controls { display: flex; gap: 0.75rem; padding: 0.5rem; align-items: center; }\n.depth-control { display: flex; align-items: center; gap: 0.5rem; }\n```",
+  "source_version": "plans/2026-03-13-docs-workflow-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.739146355Z",
+  "valid_from": "2026-04-02T02:52:13.739146355Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-13-docs-workflow-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1407,
+    "end_line": 1428,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

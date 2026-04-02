@@ -1,0 +1,31 @@
+{
+  "id": "019d4c06-15d1-7401-aaed-77b21dedd26b",
+  "content": "px at proxy).\n    // We run a 3-pass box blur (approximates Gaussian well).\n    let radius = (30.0_f32 * 3.0).ceil() as usize;\n    let clarity_amount = (0.2 + 0.25 * mean_d) * contrast_scale;\n    apply_clarity(rgb, width, height, radius, clarity_amount);\n}\nfn apply_clarity(rgb: &mut [f32], width: usize, height: usize, radius: usize, clarity: f32) {\n    // Work on just the L channel in LAB space for clarity\n    let n = width * height;\n    let mut l_channel: Vec<f32> = (0..n)\n        .map(|i| {\n            let r = rgb[i * 3];\n            let g = rgb[i * 3 + 1];\n            let b = rgb[i * 3 + 2];\n            let (l, _, _) = srgb_to_lab(r, g, b);\n            l / 100.0\n        })\n        .collect();\n\n    // 3-pass box blur to approximate Gaussian\n    let blur = three_pass_box_blur(&l_channel, width, height, radius);\n\n    // Apply clarity: detail = tanh((L - blur) * 3) / 3\n    for i in 0..n {\n        let detail = ((l_channel[i] - blur[i]) * 3.0).tanh() / 3.0;\n        l_channel[i] = (l_channel[i] + detail * clarity).clamp(0.0, 1.0);\n    }\n\n    // Write back L channel modifications into rgb\n    for i in 0..n {\n        let r = rgb[i * 3];\n        let g = rgb[i * 3 + 1];\n        let b = rgb[i * 3 + 2];\n        let (l_old, a, b_ab) = srgb_to_lab(r, g, b);\n\n        let l_new = l_channel[i] * 100.0;\n        let l_delta = l_new - l_old;\n        let l_adjusted = (l_old + l_delta).clamp(0.0, 100.0);\n\n        let (ro, go, bo) = lab_to_srgb(l_adjusted, a, b_ab);\n        rgb[i * 3]     = ro.clamp(0.0, 1.0);\n        rgb[i * 3 + 1] = go.clamp(0.0, 1.0);\n        rgb[i * 3 + 2] = bo.clamp(0.0, 1.0);\n    }\n}",
+  "source_version": "crates/dorea-gpu/src/cpu.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:29:20.465988085Z",
+  "valid_from": "2026-04-02T02:29:20.465988085Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cpu.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 118,
+    "end_line": 156,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

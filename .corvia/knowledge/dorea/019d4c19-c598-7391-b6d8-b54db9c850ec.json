@@ -1,0 +1,31 @@
+{
+  "id": "019d4c19-c598-7391-b6d8-b54db9c850ec",
+  "content": "arse::<u64>().ok())\n        .unwrap_or_else(|| (duration_secs * fps).round() as u64);\n\n    let has_audio = streams.iter().any(|s| s[\"codec_type\"].as_str() == Some(\"audio\"));\n\n    Ok(VideoInfo { width, height, fps, duration_secs, frame_count, has_audio })\n}\nfn parse_rational(s: &str) -> f64 {\n    if let Some((num, den)) = s.split_once('/') {\n        let n = num.trim().parse::<f64>().unwrap_or(30.0);\n        let d = den.trim().parse::<f64>().unwrap_or(1.0);\n        if d == 0.0 { 30.0 } else { n / d }\n    } else {\n        s.parse::<f64>().unwrap_or(30.0)\n    }\n}",
+  "source_version": "crates/dorea-video/src/ffmpeg.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:50:50.648372630Z",
+  "valid_from": "2026-04-02T02:50:50.648372630Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/ffmpeg.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 91,
+    "end_line": 99,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

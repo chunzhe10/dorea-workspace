@@ -1,0 +1,31 @@
+{
+  "id": "019d4c07-4579-7031-9c05-3e42e59a7b5b",
+  "content": "# Cloned repos (created by corvia workspace init)\n# Dorea data directories (large binary, not version controlled)\n\n# Derived data (rebuilt at runtime)\n.corvia/hnsw/\n.corvia/hnsw_index/\n.corvia/lite_store.redb\n.corvia/coordination.redb\n.corvia/coordination.redb.lock\n.corvia/staging/\n\n\n# Knowledge files are tracked — no source to re-ingest from",
+  "source_version": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:30:38.201419714Z",
+  "valid_from": "2026-04-02T02:30:38.201419714Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 332,
+    "end_line": 340,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

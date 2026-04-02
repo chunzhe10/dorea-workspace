@@ -1,0 +1,31 @@
+{
+  "id": "019d4c07-4579-7031-9c05-42937b797f01",
+  "content": "    # 2. For each clip, extract every frame at source resolution\n    # 3. Run depth estimation per frame\n\n    # 4. Save as 16-bit grayscale PNG (preserves precision for soft mattes)\n\n    # 5. Unload model before next phase\n\n    print(f\"Depth estimation not yet implemented\", file=sys.stderr)\n    sys.exit(1)\n\n\nif __name__ == \"__main__\":\n    main()\n```\n\n- [ ] **Step 6: Create 05_resolve_setup.py**\n\n```python\n\"\"\"Phase 5: DaVinci Resolve Import & Setup (HOST ONLY)\n\nWARNING: This script runs on the HOST MACHINE, not in the devcontainer.\nIt requires DaVinci Resolve Studio to be running and imports fusionscript.\n\nImports footage into Resolve, deploys the DRX template, applies the base LUT,\nand attaches mask/depth sequences as Fusion mattes.\n\nUsage:\n    python 05_resolve_setup.py --date 2026-03-17\n\nInputs:\n    - Raw footage files\n    - working/masks/{clip_id}/{subject}/ — SAM2 mask sequences from Phase 3\n    - working/depth/{clip_id}/ — depth map sequences from Phase 4\n    - repos/dorea/luts/underwater_base.cube — reference LUT from Phase 0\n    - repos/dorea/templates/underwater_grade_v1.drx — DRX node template\n\nOutputs:\n    - DaVinci Resolve project with timeline ready for creative grading\n    - Each clip has 8-node structure: Base LUT, Neutral Balance, Depth Grade,\n      Foreground Pop, Diver, Marine Life, Creative Look, Output\n\nDependencies:\n    - DaVinci Resolve Studio (running on host)\n    - fusionscript.so (Resolve Python API)\n    - Environment vars: RESOLVE_SCRIPT_API, RESOLVE_SCRIPT_LIB, PYTHONPATH\n    - No GPU required (Resolve uses GPU independently)\n\nArchitecture doc: Sections 5 and 7\n\"\"\"\n\nimport argparse\nimport sys\n\n\ndef main():\n    parser = argparse.ArgumentParser(description=\"Set up DaVinci Resolve project with mattes\")\n    parser.add_argument(\"--date\", required=True, help=\"Dive date YYYY-MM-DD\")\n    args = parser.parse_args()\n",
+  "source_version": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:30:38.201462933Z",
+  "valid_from": "2026-04-02T02:30:38.201462933Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1349,
+    "end_line": 1403,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

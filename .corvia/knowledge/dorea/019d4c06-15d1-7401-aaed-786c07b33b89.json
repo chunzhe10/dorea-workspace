@@ -1,0 +1,31 @@
+{
+  "id": "019d4c06-15d1-7401-aaed-786c07b33b89",
+  "content": "et mut args = vec![\n            \"-c\".to_string(),\n            \"-O2\".to_string(),\n            \"-arch=sm_86\".to_string(), // RTX 3060 is Ampere sm_86\n            \"--compiler-options=-fPIC\".to_string(),\n        ];\n        if let Some(ref inc) = cuda_include {\n            args.push(\"-isystem\".to_string());\n            args.push(inc.to_str().unwrap().to_string());\n        }\n        args.push(src.to_str().unwrap().to_string());\n        args.push(\"-o\".to_string());\n        args.push(obj.to_str().unwrap().to_string());\n\n        let status = std::process::Command::new(&nvcc)\n            .args(&args)\n            .status()\n            .expect(\"failed to run nvcc\");\n\n        if !status.success() {\n            panic!(\"nvcc failed to compile {name}.cu\");\n        }\n        obj_files.push(obj);\n    }\n\n    // Archive into a static lib\n    let lib_path = out_dir.join(\"libdorea_cuda_kernels.a\");\n    let mut ar = std::process::Command::new(\"ar\");\n    ar.arg(\"rcs\").arg(&lib_path);\n    for obj in &obj_files {\n        ar.arg(obj);\n    }\n    ar.status().expect(\"failed to run ar\");\n\n    // Add CUDA lib directory to linker search path.\n    // nvcc lives at <cuda_root>/bin/nvcc; lib is at <cuda_root>/targets/x86_64-linux/lib/.\n    if let Some(cuda_lib) = nvcc.parent()\n        .and_then(|p| p.parent())\n        .map(|p| p.join(\"targets/x86_64-linux/lib\"))\n        .filter(|p| p.exists())\n    {\n        println!(\"cargo:rustc-link-search=native={}\", cuda_lib.display());\n    }\n    println!(\"cargo:rustc-link-search=native={}\", out_dir.display());\n    println!(\"cargo:rustc-link-lib=static=dorea_cuda_kernels\");\n    println!(\"cargo:rustc-link-lib=dylib=cuda\");\n    println!(\"cargo:rustc-link-lib=dylib=cudart\");\n\n    // Signal to Cargo to enable the \"cuda\" feature\n    println!(\"cargo:rustc-cfg=feature=\\\"cuda\\\"\");\n}",
+  "source_version": "crates/dorea-gpu/build.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:29:20.465995934Z",
+  "valid_from": "2026-04-02T02:29:20.465995934Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/build.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 95,
+    "end_line": 138,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

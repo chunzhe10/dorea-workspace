@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2b-7910-85bb-f599055e5899",
+  "content": "# corvia-dev CLI Implementation Plan\n\n> **Status:** Superseded — Python CLI abandoned in favor of Rust CLI (`corvia workspace`)\n\n**Goal:** Replace bash scripts and VS Code extension with a Python CLI that manages dev services, config mutation, and process supervision with structured JSON output.\n\n**Architecture:** Python CLI (`corvia-dev`) using click for commands, pydantic for models, tomllib/tomli_w for config. Single ProcessManager supervises all services. VS Code extension becomes a thin consumer of `corvia-dev status --json`.\n\n**Tech Stack:** Python 3.13, click, pydantic, tomli_w (write), tomllib (read, stdlib), asyncio (subprocess management)\n\n**Design doc:** `docs/plans/archive/2026-03-09-corvia-dev-cli-design.md`\n\n---\n",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-cli.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.739322876Z",
+  "valid_from": "2026-04-02T02:52:13.739322876Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-cli.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1,
+    "end_line": 14,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

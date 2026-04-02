@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2b-7910-85bb-f2c03fb19279",
+  "content": "### CPU `depth_aware_ambiance` Algorithm\n### CUDA Kernels (build time, optional)\n\n### build.rs Strategy\n```rust\n// If nvcc found in PATH or CUDA_HOME/bin/nvcc:\n//   compile .cu files with nvcc -ptx or nvcc -arch=sm_86 -c\n//   set cfg(feature = \"cuda\") via println!(\"cargo:rustc-cfg=feature=\\\"cuda\\\"\")\n// Else:\n//   emit warning, skip; CPU fallback is always compiled\n```\n\n---\n",
+  "source_version": "plans/2026-04-02-dorea-v2-phase2-3-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.739294322Z",
+  "valid_from": "2026-04-02T02:52:13.739294322Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-dorea-v2-phase2-3-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 88,
+    "end_line": 98,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

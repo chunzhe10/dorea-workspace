@@ -1,0 +1,31 @@
+{
+  "id": "019d4c07-4579-7031-9c05-4b29c649eb30",
+  "content": "    # Mutate embedding\n    # Mutate merge (create if absent)\n\n    # Read existing flags\n    flags: dict[str, str] = {}\n    if flags_path.exists():\n        for line in flags_path.read_text().splitlines():\n            line = line.strip()\n            if \"=\" in line:\n                k, v = line.split(\"=\", 1)\n                flags[k.strip()] = v.strip()\n\n    if enabled:\n        flags[name] = \"enabled\"\n    else:\n        flags[name] = \"disabled\"\n\n\n    # Write back\n    lines = [f\"{k}={v}\" for k, v in sorted(flags.items())]\n    flags_path.write_text(\"\\n\".join(lines) + \"\\n\")\n```\n\n**Step 4: Run test to verify it passes**\n\nRun: `cd /workspaces/corvia-workspace && python3 -m pytest tools/corvia-dev/tests/test_config.py -v`\nExpected: All 6 tests PASS\n\n**Step 5: Commit**\n\n```bash\ngit add tools/corvia-dev/corvia_dev/config.py tools/corvia-dev/tests/test_config.py\ngit commit -m \"feat(corvia-dev): add config reader/mutator with TOML round-tripping\"\n```\n\n---\n",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-cli.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:30:38.201551095Z",
+  "valid_from": "2026-04-02T02:30:38.201551095Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-cli.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 779,
+    "end_line": 811,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

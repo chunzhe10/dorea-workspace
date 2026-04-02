@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2b-7910-85bb-f16b7a893471",
+  "content": "## Goal\n\n## Cargo Workspace Structure\n\n```\nrepos/dorea/\n├── Cargo.toml              # workspace manifest\n├── Cargo.lock\n├── README.md               # updated for v2\n├── crates/\n│   ├── dorea-cli/          # binary: dorea grade/calibrate/preview\n│   │   ├── Cargo.toml\n│   │   └── src/\n│   │       ├── main.rs\n│   │       └── calibrate.rs\n│   ├── dorea-color/        # pure color math (no external deps)\n│   │   ├── Cargo.toml\n│   │   └── src/\n│   │       ├── lib.rs\n│   │       ├── dlog_m.rs   # D-Log M ↔ linear\n│   │       ├── lab.rs      # RGB ↔ CIELAB (D65)\n│   │       └── hsv.rs      # RGB ↔ HSV\n│   ├── dorea-lut/          # depth-stratified LUT build + apply\n│   │   ├── Cargo.toml\n│   │   └── src/\n│   │       ├── lib.rs\n│   │       ├── types.rs    # LutGrid, DepthLuts\n│   │       ├── build.rs    # build_depth_luts (importance weighting, NN fill)\n│   │       └── apply.rs    # apply_depth_luts (trilinear + depth blending)\n│   ├── dorea-hsl/          # HSL 6-vector qualifier correction\n│   │   ├── Cargo.toml\n│   │   └── src/\n│   │       ├── lib.rs\n│   │       ├── qualifiers.rs\n│   │       ├── derive.rs   # derive_hsl_corrections\n│   │       └── apply.rs    # apply_hsl_corrections\n│   ├── dorea-cal/          # calibration file format\n│   │   ├── Cargo.toml\n│   │   └── src/\n│   │       ├── lib.rs\n│   │       └── format.rs   # Calibration struct, save/load (bincode)\n│   └── dorea-video/        # stub (Phase 2: ffmpeg subprocess)\n│       ├── Cargo.toml\n│       └── src/\n│           └── lib.rs\n└── python/                 # stub (Phase 2: VDA + RAUNE-Net subprocess)\n    └── dorea_inference/\n        └── __init__.py\n```\n\n---\n",
+  "source_version": "plans/2026-04-02-dorea-v2-phase1-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.739279901Z",
+  "valid_from": "2026-04-02T02:52:13.739279901Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-dorea-v2-phase1-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 21,
+    "end_line": 70,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

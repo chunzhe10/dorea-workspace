@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2b-7910-85bb-e90b52c927b5",
+  "content": "### VRAM Management\n### .agents/ directory\n\n### Host-Container Interaction\n\n```\n┌──────────────────────────────────────┐     ┌──────────────────────────┐\n│ Devcontainer                         │     │ Host Machine             │\n│                                      │     │                          │\n│ Scripts 00-04 (Python, /opt/dorea-venv)    │ DaVinci Resolve Studio   │\n│ Corvia server (:8020 internal)       │     │   (GPU, display)         │\n│ Corvia inference (:8030 internal,CPU)│     │                          │\n│ Playwright (:8050 internal)          │     │ Ollama (optional, GPU)   │\n│                                      │     │                          │\n│ .mcp.json ──── corvia (:8020) ───────│     │ davinci-resolve-mcp      │\n│            ├── playwright (:8050) ───│     │   (:9090, Python IPC)    │\n│            └── resolve-mcp ──────────│────▶│   → Resolve API          │\n│                (host.docker.internal) │     │                          │\n│                                      │     │ Script 05 (host Python)  │\n│ Host ports: 8120,8121,8130,11534 ◄───│────▶│   → fusionscript.so     │\n└──────────────────────────────────────┘     └──────────────────────────┘\n```\n\n---\n",
+  "source_version": "plans/2026-03-17-dorea-underwater-pipeline-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.739191443Z",
+  "valid_from": "2026-04-02T02:52:13.739191443Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-17-dorea-underwater-pipeline-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 449,
+    "end_line": 470,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

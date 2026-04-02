@@ -1,0 +1,31 @@
+{
+  "id": "019d4c19-c598-7391-b6d8-ba4be1c7d639",
+  "content": "t l_adjusted = (l_old + l_delta).clamp(0.0, 100.0);\n\n        let (ro, go, bo) = lab_to_srgb(l_adjusted, a, b_ab);\n        rgb[i * 3]     = ro.clamp(0.0, 1.0);\n        rgb[i * 3 + 1] = go.clamp(0.0, 1.0);\n        rgb[i * 3 + 2] = bo.clamp(0.0, 1.0);\n    }\n}\nfn three_pass_box_blur(input: &[f32], width: usize, height: usize, radius: usize) -> Vec<f32> {\n    let mut buf_a = input.to_vec();\n    let mut buf_b = vec![0.0_f32; input.len()];\n    for _ in 0..3 {\n        box_blur_rows(&buf_a, &mut buf_b, width, height, radius);\n        box_blur_cols(&buf_b, &mut buf_a, width, height, radius);\n    }\n    buf_a\n}",
+  "source_version": "crates/dorea-gpu/src/cpu.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:50:50.648438085Z",
+  "valid_from": "2026-04-02T02:50:50.648438085Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cpu.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 159,
+    "end_line": 167,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

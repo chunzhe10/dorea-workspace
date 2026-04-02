@@ -1,0 +1,31 @@
+{
+  "id": "019d4c06-15d1-7401-aaed-769103d1fd7a",
+  "content": "roducing valid 8-bit RGB PNGs.\n    //\n    // Since we don't have the `image` crate in dorea-video, we implement a\n    // minimal PNG reader supporting only 8-bit RGB non-interlaced PNGs.\n    parse_png_rgb(png)\n        .map_err(InferenceError::ImageError)\n}\nfn parse_png_rgb(data: &[u8]) -> Result<Vec<u8>, String> {\n    if data.len() < 8 || &data[..8] != b\"\\x89PNG\\r\\n\\x1a\\n\" {\n        return Err(\"not a PNG file\".to_string());\n    }\n\n    let mut pos = 8;\n    let mut width = 0usize;\n    let mut height = 0usize;\n    let mut idat = Vec::new();\n\n    while pos + 12 <= data.len() {\n        let length = u32::from_be_bytes([data[pos], data[pos+1], data[pos+2], data[pos+3]]) as usize;\n        let chunk_type = &data[pos+4..pos+8];\n        if pos + 8 + length > data.len() {\n            return Err(format!(\"truncated PNG chunk at offset {pos}\"));\n        }\n        let chunk_data = &data[pos+8..pos+8+length];\n        pos += 12 + length;\n\n        match chunk_type {\n            b\"IHDR\" if chunk_data.len() >= 13 => {\n                width  = u32::from_be_bytes([chunk_data[0],chunk_data[1],chunk_data[2],chunk_data[3]]) as usize;\n                height = u32::from_be_bytes([chunk_data[4],chunk_data[5],chunk_data[6],chunk_data[7]]) as usize;\n                let bit_depth  = chunk_data[8];\n                let color_type = chunk_data[9];\n                let interlace  = chunk_data[12];",
+  "source_version": "crates/dorea-video/src/inference.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:29:20.465974712Z",
+  "valid_from": "2026-04-02T02:29:20.465974712Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 473,
+    "end_line": 498,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

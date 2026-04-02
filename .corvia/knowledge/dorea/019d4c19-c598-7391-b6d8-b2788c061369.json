@@ -1,0 +1,31 @@
+{
+  "id": "019d4c19-c598-7391-b6d8-b2788c061369",
+  "content": "%)\", info.frame_count, pct);\n        }\n    }\n\n    // Finalize\n    let _ = inf_server.shutdown();\n    encoder.finish().context(\"ffmpeg encoder failed to finalize\")?;\n\n    log::info!(\"Done. Graded {frame_count} frames → {}\", output.display());\n    Ok(())\n}\nfn auto_calibrate(args: &GradeArgs, info: &ffmpeg::VideoInfo) -> Result<Calibration> {\n    use crate::calibrate::{run_calibration_from_frames, CalibrationInput};\n\n    let duration = info.duration_secs;\n    let interval_secs = args.keyframe_interval as f64 / info.fps.max(1.0);\n    let n_kf = ((duration / interval_secs) as usize).clamp(1, 20);\n\n    log::info!(\"Auto-calibrating from {n_kf} keyframes...\");\n\n    // Extract keyframes\n    let inf_cfg = build_inference_config(args);\n    let mut inf_server = InferenceServer::spawn(&inf_cfg)\n        .context(\"failed to spawn inference server for auto-calibration\")?;\n\n    let mut inputs: Vec<CalibrationInput> = Vec::new();\n\n    for i in 0..n_kf {\n        let ts = (i as f64 + 0.5) * duration / n_kf as f64;\n        let pixels = ffmpeg::extract_frame_at(&args.input, ts, info.width, info.height)\n            .with_context(|| format!(\"failed to extract keyframe at {ts:.2}s\"))?;\n\n        let id = format!(\"kf{i:03}\");\n\n        // Run RAUNE-Net for target\n        let target = match inf_server.run_raune(&id, &pixels, info.width, info.height, 1024) {\n            Ok((t, _, _)) => t,\n            Err(e) => {\n                log::warn!(\"RAUNE-Net failed for {id}: {e} — using original as target\");\n                pixels.clone()\n            }\n        };\n\n        // Run Depth Anything for depth map\n        let (depth_proxy, dw, dh) = match inf_server.run_depth(&id, &pixels, info.width, info.height, 518) {\n            Ok(d) => d,\n            Err(e) => {\n                log::warn!(\"Depth failed for {id}: {e} — using uniform depth 0.5\");\n                let n = info.width * info.height;\n                (vec![0.5f32; n], info.width, info.height)\n            }\n        };\n\n        let depth = InferenceServer::upscale_depth(&depth_proxy, dw, dh, info.width, info.height);\n\n        inputs.push(CalibrationInput { pixels, target, depth, width: info.width, height: info.height });\n    }\n\n    let _ = inf_server.shutdown();\n\n    run_calibration_from_frames(&inputs)\n        .context(\"calibration failed\")\n}",
+  "source_version": "crates/dorea-cli/src/grade.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:50:50.648304106Z",
+  "valid_from": "2026-04-02T02:50:50.648304106Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/grade.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 195,
+    "end_line": 246,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

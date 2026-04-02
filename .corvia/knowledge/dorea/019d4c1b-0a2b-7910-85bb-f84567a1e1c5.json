@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2b-7910-85bb-f84567a1e1c5",
+  "content": "    # Send SIGHUP to manager (could be extended to restart individual services)\n            # For now, full restart via stop + start\n\n            # Re-invoke up\n            ctx = click.get_current_context()\n            ctx.invoke(up, no_foreground=True)\n    except (json.JSONDecodeError, ValueError, ProcessLookupError) as e:\n        click.echo(f\"Failed: {e}\")\n\n\n@main.command()\ndef config() -> None:\n    \"\"\"Show current corvia.toml config summary.\"\"\"\n    cfg = load_config(_config_path())\n    click.echo(f\"Embedding: {cfg.embedding_provider} ({cfg.embedding_url})\")\n    click.echo(f\"Merge:     {cfg.merge_provider} ({cfg.merge_url})\")\n    click.echo(f\"Storage:   {cfg.storage}\")\n    click.echo(f\"Workspace: {cfg.workspace_name}\")\n\n\n@main.command()\n@click.argument(\"service\", required=False)\n@click.option(\"--tail\", \"-n\", default=20, help=\"Number of log lines\")\ndef logs(service: str | None, tail: int) -> None:\n    \"\"\"Show recent logs.\"\"\"\n    if not DEFAULT_STATE_PATH.exists():\n        click.echo(\"No state file found. Manager may not be running.\")\n        return\n\n    try:\n        data = json.loads(DEFAULT_STATE_PATH.read_text())\n        resp = StatusResponse.model_validate(data)\n        for line in resp.logs[-tail:]:\n            click.echo(line)\n    except (json.JSONDecodeError, ValueError) as e:\n        click.echo(f\"Failed to read logs: {e}\")\n\n\nif __name__ == \"__main__\":\n    main()\n```\n\n**Step 2: Run the CLI to verify all commands register**\n\nRun:\n```bash\ncorvia-dev --help\ncorvia-dev status --help\ncorvia-dev up --help\ncorvia-dev use --help\ncorvia-dev enable --help\n```\n\nExpected: All commands show help text with correct options.\n\n**Step 3: Test `status` and `config` against live workspace**\n\nRun:\n```bash\ncd /workspaces/corvia-workspace\ncorvia-dev config\ncorvia-dev status\ncorvia-dev status --json\n```\n\nExpected: `config` shows embedding/merge/storage info from `corvia.toml`. `status` shows service health. `--json` outputs valid JSON.\n\n**Step 4: Commit**\n\n```bash\ngit add tools/corvia-dev/corvia_dev/cli.py\ngit commit -m \"feat(corvia-dev): wire up all CLI commands (status, up, down, use, enable, disable)\"\n```\n\n---\n",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-cli.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.739353238Z",
+  "valid_from": "2026-04-02T02:52:13.739353238Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-cli.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1554,
+    "end_line": 1626,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

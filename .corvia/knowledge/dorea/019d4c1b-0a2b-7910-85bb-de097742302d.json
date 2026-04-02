@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2b-7910-85bb-de097742302d",
+  "content": "## Decision\n## Context\n\n## Consequences\n\n- `backend.rs` module with `resolve_backend()` function, `ResolvedBackend` struct\n  (device, backend kind, fallback flag), and GPU availability probing cached at startup.\n- Embedding service switched from `fastembed::InitOptions` to `InitOptionsUserDefined`\n  to unlock per-model execution provider control. Model registry maps friendly names to\n  `UserDefinedEmbeddingModel` structs (ONNX paths, tokenizer config, dimensions).\n- Chat service configures `LlamaModelParams` GPU layer offloading based on resolved\n  backend. OpenVINO rejected for chat models (llama.cpp does not support it).\n- `[inference]` config section with `device`, `backend`, and `embedding_backend` fields.\n  Default `device = \"auto\"` prefers NVIDIA/CUDA when both NVIDIA and Intel GPUs are\n  present. Intel GPU used only when explicitly requested via `backend: \"openvino\"`.\n- Cargo features: `ort` pinned with `openvino` + `cuda` features, `fastembed` with\n  `cuda` feature, `llama-cpp-2` with `cuda` feature.\n- Devcontainer: NVIDIA GPU works via `--gpus all`. Intel GPU passthrough documented but\n  opt-in (commented out `--device=/dev/dri` in `devcontainer.json`). Dockerfile includes\n  Intel OpenCL/Level Zero runtime packages.\n- Out of scope: NPU support, hot-switching (requires unload + reload), Vulkan for\n  llama-cpp-2 (deferred).\n\n**Source:** `repos/corvia/docs/rfcs/2026-03-11-inference-gpu-device-control-design.md`",
+  "source_version": "decisions/gpu-inference.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.739069328Z",
+  "valid_from": "2026-04-02T02:52:13.739069328Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/gpu-inference.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 23,
+    "end_line": 43,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

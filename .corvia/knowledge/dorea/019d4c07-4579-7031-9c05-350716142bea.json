@@ -1,0 +1,31 @@
+{
+  "id": "019d4c07-4579-7031-9c05-350716142bea",
+  "content": "## 11. Graphistry\n\n### Graph-to-Document Navigation UX\n\n- **Click node for details**: Click a node to see its properties. Click again to drag.\n- **Data Brush tool**: Select a region of the graph to populate the inspector with details\n  of all selected nodes.\n- **Data Inspector (bottom panel)**: Table view of underlying data. Searchable, sortable,\n  downloadable (CSV/Parquet/JSON).\n- **Histogram panel (right panel)**: Shows attribute distributions. Click-drag to filter\n  by value range. Clicking an attribute value adds a filter.\n\n\n### Panel Pattern\n\n**Graph canvas + right histogram panel + bottom data inspector**.\n\nThree-panel layout optimized for data analysis:\n1. **Center**: WebGL-rendered graph with GPU-accelerated layout\n2. **Right**: Histogram panel for attribute analysis, filtering, and coloring\n3. **Bottom**: Data inspector table for detail examination\n",
+  "source_version": "decisions/graph-document-ux-research.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:30:38.201320049Z",
+  "valid_from": "2026-04-02T02:30:38.201320049Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/graph-document-ux-research.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 530,
+    "end_line": 548,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

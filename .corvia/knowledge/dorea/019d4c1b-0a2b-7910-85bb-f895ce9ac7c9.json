@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2b-7910-85bb-f895ce9ac7c9",
+  "content": "### Task 9: Rewrite VS Code Extension (Thin Skin)\n\n    let data;\n    try {\n        data = JSON.parse(raw);\n    } catch {\n        statusBarItem.text = \"$(error) Corvia\";\n        return;\n    }\n\n    const tier0 = (data.services || []).filter(\n        (s) => [\"corvia-inference\", \"corvia-server\"].includes(s.name)\n    );\n    const allHealthy = tier0.every((s) => s.state === \"healthy\");\n    const anyDown = tier0.some((s) => s.state !== \"healthy\");\n\n    if (allHealthy) {\n        statusBarItem.text = \"$(check) Corvia\";\n        statusBarItem.backgroundColor = undefined;\n    } else if (anyDown) {\n        statusBarItem.text = \"$(error) Corvia\";\n        statusBarItem.backgroundColor = new vscode.ThemeColor(\"statusBarItem.errorBackground\");\n    } else {\n        statusBarItem.text = \"$(warning) Corvia\";\n        statusBarItem.backgroundColor = new vscode.ThemeColor(\"statusBarItem.warningBackground\");\n    }\n\n    const svcSummary = (data.services || [])\n        .map((s) => `${s.name}: ${s.state}`)\n        .join(\" | \");\n    statusBarItem.tooltip = svcSummary;\n\n    if (panel) {\n        panel.webview.postMessage({ type: \"status\", data });\n    }\n}\n\nfunction openDashboard(context) {\n    if (panel) {\n        panel.reveal();\n        return;\n    }\n\n    panel = vscode.window.createWebviewPanel(\n        \"corviaDashboard\",\n        \"Corvia Dashboard\",\n        vscode.ViewColumn.One,\n        { enableScripts: true }\n    );\n\n    panel.webview.html = getDashboardHtml();\n\n    panel.webview.onDidReceiveMessage((msg) => {\n        if (msg.type === \"command\") {\n            const terminal = vscode.window.createTerminal(\"corvia-dev\");\n            terminal.show();",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-cli.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.739356164Z",
+  "valid_from": "2026-04-02T02:52:13.739356164Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-cli.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1744,
+    "end_line": 1797,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

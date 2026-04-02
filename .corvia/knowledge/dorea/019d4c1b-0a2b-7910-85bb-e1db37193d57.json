@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2b-7910-85bb-e1db37193d57",
+  "content": "### 3. VS Code extension not appearing in devcontainer\n\n## Key Takeaways\n\n| Lesson | Detail |\n|--------|--------|\n| **Don't mask build failures** | `\\|\\| echo \"WARNING\"` in Dockerfiles hides real problems. Let critical steps fail loudly. |\n| **Multi-stage COPY > curl install** | For tools with official Docker images, `COPY --from` is always more reliable than downloading during build. |\n| **`code` CLI needs IPC** | The VS Code remote CLI doesn't work in `postStartCommand` or `postCreateCommand` — it needs the full VS Code server running. |\n| **Direct disk install works** | VS Code extensions are just directories in `~/.vscode-server/extensions/`. Extracting the `.vsix` manually is perfectly valid. |\n| **Cascade failures are sneaky** | One silent failure (`uv` install) cascaded into three separate symptoms across two scripts. |\n\n\n## Files Changed\n\n- `.devcontainer/Dockerfile` — multi-stage uv, split RUN layers\n- `.devcontainer/scripts/lib.sh` — PATH fix, uv-only install, `install_vsix_direct`\n- `.devcontainer/scripts/post-create.sh` — added extension install step\n- `.devcontainer/scripts/post-start.sh` — removed extension install (now in post-create)\n",
+  "source_version": "learnings/2026-03-10-devcontainer-setup-fixes.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.739110337Z",
+  "valid_from": "2026-04-02T02:52:13.739110337Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "learnings/2026-03-10-devcontainer-setup-fixes.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 62,
+    "end_line": 78,
+    "content_role": "learning",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

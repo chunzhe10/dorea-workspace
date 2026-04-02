@@ -1,0 +1,31 @@
+{
+  "id": "019d4c07-4579-7031-9c05-2fd59b9d2248",
+  "content": "### Layer 1: PreToolUse Hook (Real-Time Prevention)\n### Layer 2: `corvia docs check` (Periodic Aggregator)\n\n#### New Reasoner Check Types\n\n| Check | Detects | Method |\n|-------|---------|--------|\n| `MisplacedDoc` | Doc in wrong directory for its `content_role` | Compare path against `corvia.toml` rules |\n| `TemporalContradiction` | Two entries with conflicting claims at overlapping valid time ranges | Extension of existing `Contradiction` check: same high-similarity filter, but additionally requires overlapping `valid_from`/`valid_to` windows AND different `source_origin` values. The existing `Contradiction` compares `source_version`; this compares temporal ranges across origins. |\n| `CoverageGap` | Topic has agent memory but no formal design doc | Cluster by embedding, flag clusters with only `memory` role |\n\nThese extend existing checks (`StaleEntry`, `BrokenChain`, `Contradiction`, `SemanticGap`)\nusing the same `Finding` → `KnowledgeEntry` pipeline. Dashboard surfaces findings in a\ndedicated view.\n\n\n#### Optional Auto-Fix\n\n`corvia docs check --fix` proposes moves for misplaced files and requires explicit `--yes`\nto execute. Safety invariants:\n- Refuses to run if the git working tree has uncommitted changes (clean tree required)\n- Skips moves where target path already has a file (reports conflict, does not overwrite)\n- Each move creates a separate git commit with message: `docs(migrate): move <file> to <target>`\n- Prints a dry-run summary first, waits for `--yes` confirmation\n\n---\n",
+  "source_version": "decisions/2026-03-13-docs-workflow-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:30:38.201263044Z",
+  "valid_from": "2026-04-02T02:30:38.201263044Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-03-13-docs-workflow-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 366,
+    "end_line": 388,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

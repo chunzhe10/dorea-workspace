@@ -1,0 +1,31 @@
+{
+  "id": "019d4c07-4579-7031-9c05-310e2b517d46",
+  "content": "# D45: Multi-Agent Lifecycle\n\n## Decision\n\nMulti-layer agent identity with session isolation, staging branches, LLM-assisted merge,\nand crash recovery. Agents are identified across four tiers: Registered (internal, full\nstaging access), McpClient (external via MCP `_meta.agent_id`), ActorToken (future IETF\nstandard), and Anonymous (read-only). Sessions are ephemeral work units that survive\ncrashes through a five-step idempotent commit flow.\n\n\n## Context\n\nMultiple concurrent AI agents need to write to the same knowledge base without conflicts\nor data loss. No standard for agent-level identity exists (as of 2026-03-01) -- MCP\nidentifies applications, not agents. The system needed optimistic concurrency (agents\nwrite freely, conflicts resolved at merge time) to maximize throughput, plus crash\nrecovery so that no work is lost when agents or the server restart unexpectedly.\n",
+  "source_version": "decisions/d45-multi-agent-lifecycle.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:30:38.201276143Z",
+  "valid_from": "2026-04-02T02:30:38.201276143Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/d45-multi-agent-lifecycle.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 7,
+    "end_line": 22,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

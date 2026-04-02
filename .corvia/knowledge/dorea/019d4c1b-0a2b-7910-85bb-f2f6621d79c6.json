@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2b-7910-85bb-f2f6621d79c6",
+  "content": "### `ffmpeg.rs` Design\n### `scene.rs` Design\n\n### `inference.rs` Design — IPC Protocol\n\n**Protocol**: JSON lines over stdin/stdout. One request per line in, one response per line out.\n\n```json\n// Request types:\n{\"type\": \"ping\"}\n{\"type\": \"raune\", \"id\": \"kf001\", \"image_b64\": \"<base64 PNG>\", \"max_size\": 1024}\n{\"type\": \"depth\", \"id\": \"kf001\", \"image_b64\": \"<base64 PNG>\", \"max_size\": 518}\n{\"type\": \"shutdown\"}\n\n// Response types:\n{\"type\": \"pong\", \"version\": \"0.1.0\"}\n{\"type\": \"raune_result\", \"id\": \"kf001\", \"image_b64\": \"<base64 PNG>\", \"width\": W, \"height\": H}\n{\"type\": \"depth_result\", \"id\": \"kf001\", \"depth_f32_b64\": \"<base64 raw f32 LE array>\", \"width\": W, \"height\": H}\n{\"type\": \"error\", \"id\": \"kf001\", \"message\": \"...\"}\n{\"type\": \"ok\"}\n```\n\n**Rust subprocess manager** (`InferenceServer` struct):\n- `spawn(python_exe, script_path, model_args) -> Result<InferenceServer>`\n- `ping() -> Result<()>` — health check with 5s timeout\n- `run_raune(id, image_rgb: &[u8], width, height) -> Result<Vec<u8>>` — returns sRGB PNG bytes\n- `run_depth(id, image_rgb: &[u8], width, height) -> Result<Vec<f32>>` — returns f32 depth [0,1]\n- `shutdown() -> Result<()>` — send shutdown, wait for process exit\n\n---\n",
+  "source_version": "plans/2026-04-02-dorea-v2-phase2-3-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.739296332Z",
+  "valid_from": "2026-04-02T02:52:13.739296332Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-dorea-v2-phase2-3-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 140,
+    "end_line": 167,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

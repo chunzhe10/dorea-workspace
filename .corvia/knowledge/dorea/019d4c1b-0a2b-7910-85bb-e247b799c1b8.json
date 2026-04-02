@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2b-7910-85bb-e247b799c1b8",
+  "content": "## Color Science Insights\n\n### 4. Beer-Lambert underwater red absorption\nRed gain needed to restore R/G parity (pure water, per Beer-Lambert):\n- 3m depth: 2.18x\n- 5m depth: 3.67x\n- 8m depth: 8.0x\n- 10m depth: 14.5x\n\nReal tropical water absorbs faster (dissolved organics). Our 2.0x is conservative\nfor 3m and insufficient for 5m. Final R/G of 0.67 reads as \"uncorrected\" to most\nviewers. Target 0.80-0.85 for \"underwater ambiance\" look.\n\n\n### 5. Circular reasoning in reference-based gain derivation\nThe LUT script analyzes corrected reference images to derive gains. Since references\nare already blue-biased (even after correction), the derived gains reinforce the blue\nbias. Better approach: derive gains from the *correction needed* (raw vs target),\nnot from the target appearance alone.\n",
+  "source_version": "learnings/2026-04-01-lut-generation-learnings.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.739114732Z",
+  "valid_from": "2026-04-02T02:52:13.739114732Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "learnings/2026-04-01-lut-generation-learnings.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 35,
+    "end_line": 51,
+    "content_role": "learning",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

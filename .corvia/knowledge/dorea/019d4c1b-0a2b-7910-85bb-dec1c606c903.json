@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2b-7910-85bb-dec1c606c903",
+  "content": "### Graph-to-Document Navigation UX\n### Panel Pattern\n\n### Large Graph Handling\n\n- Graph overview becomes unwieldy with large databases\n- Primary navigation is through daily notes + bidirectional links, not the graph\n- Filtering linked references by keyword or page\n\n\n### What Works Well\n\n- **Shift+click to sidebar** is the single most innovative interaction pattern in the space.\n  It solves the \"I want to read this but not lose my place\" problem.\n- Unlinked references surface hidden connections automatically\n- Block-level references allow granular linking (not just page-to-page)\n- Daily notes as entry point creates a natural knowledge accumulation pattern\n",
+  "source_version": "decisions/graph-document-ux-research.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.739076966Z",
+  "valid_from": "2026-04-02T02:52:13.739076966Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/graph-document-ux-research.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 135,
+    "end_line": 148,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

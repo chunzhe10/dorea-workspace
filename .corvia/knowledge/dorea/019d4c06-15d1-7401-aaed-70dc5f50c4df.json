@@ -1,0 +1,31 @@
+{
+  "id": "019d4c06-15d1-7401-aaed-70dc5f50c4df",
+  "content": "output))?;\n\n    log::info!(\"Calibration saved to {:?}\", args.output);\n    println!(\n        \"Calibration saved to {} ({} zones, {} keyframes)\",\n        args.output.display(),\n        cal.depth_luts.n_zones(),\n        cal.keyframe_count\n    );\n\n    Ok(())\n}\nfn load_rgb_image(path: &Path) -> Result<(Vec<[f32; 3]>, usize, usize)> {\n    let img = ImageReader::open(path)\n        .with_context(|| format!(\"Cannot open {}\", path.display()))?\n        .decode()\n        .with_context(|| format!(\"Cannot decode {}\", path.display()))?\n        .into_rgb8();\n\n    let (w, h) = (img.width() as usize, img.height() as usize);\n    let pixels: Vec<[f32; 3]> = img\n        .pixels()\n        .map(|p| [p[0] as f32 / 255.0, p[1] as f32 / 255.0, p[2] as f32 / 255.0])\n        .collect();\n    Ok((pixels, w, h))\n}",
+  "source_version": "crates/dorea-cli/src/calibrate.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:29:20.465919450Z",
+  "valid_from": "2026-04-02T02:29:20.465919450Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/calibrate.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 370,
+    "end_line": 383,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

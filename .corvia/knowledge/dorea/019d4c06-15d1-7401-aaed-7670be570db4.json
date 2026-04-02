@@ -1,0 +1,31 @@
+{
+  "id": "019d4c06-15d1-7401-aaed-7670be570db4",
+  "content": "nk_type: &[u8; 4], data: &[u8]) {\n    out.extend_from_slice(&(data.len() as u32).to_be_bytes());\n    out.extend_from_slice(chunk_type);\n    out.extend_from_slice(data);\n    let crc = crc32(chunk_type, data);\n    out.extend_from_slice(&crc.to_be_bytes());\n}\nfn crc32(chunk_type: &[u8], data: &[u8]) -> u32 {\n    // CRC-32 (IEEE 802.3)\n    let table: [u32; 256] = {\n        let mut t = [0u32; 256];\n        for i in 0..256u32 {\n            let mut c = i;\n            for _ in 0..8 {\n                c = if c & 1 != 0 { 0xEDB8_8320 ^ (c >> 1) } else { c >> 1 };\n            }\n            t[i as usize] = c;\n        }\n        t\n    };\n    let mut crc = 0xFFFF_FFFFu32;\n    for &b in chunk_type.iter().chain(data.iter()) {\n        crc = table[((crc ^ b as u32) & 0xFF) as usize] ^ (crc >> 8);\n    }\n    crc ^ 0xFFFF_FFFF\n}",
+  "source_version": "crates/dorea-video/src/inference.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:29:20.465973595Z",
+  "valid_from": "2026-04-02T02:29:20.465973595Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 441,
+    "end_line": 459,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

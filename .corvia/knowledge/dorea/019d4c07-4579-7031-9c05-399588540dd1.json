@@ -1,0 +1,31 @@
+{
+  "id": "019d4c07-4579-7031-9c05-399588540dd1",
+  "content": "## Chunk 3: Phase 3 — Intelligence (Reasoner + Docs Check)\n\n### Task 3.1: Add new `CheckType` variants to Reasoner\n\n**Files:**\n- Modify: `repos/corvia/crates/corvia-kernel/src/reasoner.rs:12-62`\n\n- [ ] **Step 1: Write failing test — new check types parse from string**\n\nAdd to the existing test module in `reasoner.rs`:\n\n```rust\n#[test]\nfn test_new_check_types_parse() {\n    assert_eq!(\"misplaced_doc\".parse::<CheckType>().unwrap(), CheckType::MisplacedDoc);\n    assert_eq!(\"misplaced\".parse::<CheckType>().unwrap(), CheckType::MisplacedDoc);\n    assert_eq!(\"temporal_contradiction\".parse::<CheckType>().unwrap(), CheckType::TemporalContradiction);\n    assert_eq!(\"coverage_gap\".parse::<CheckType>().unwrap(), CheckType::CoverageGap);\n    assert_eq!(\"coverage\".parse::<CheckType>().unwrap(), CheckType::CoverageGap);\n}\n\n#[test]\nfn test_new_check_types_as_str() {\n    assert_eq!(CheckType::MisplacedDoc.as_str(), \"misplaced_doc\");\n    assert_eq!(CheckType::TemporalContradiction.as_str(), \"temporal_contradiction\");\n    assert_eq!(CheckType::CoverageGap.as_str(), \"coverage_gap\");\n}\n```\n\n- [ ] **Step 2: Run test to verify it fails**\n\nRun: `cd /workspaces/corvia-workspace/repos/corvia && cargo test -p corvia-kernel test_new_check_types -- --nocapture`\nExpected: FAIL — variants don't exist\n\n- [ ] **Step 3: Add variants to `CheckType` enum**\n\n```rust\npub enum CheckType {\n    StaleEntry,\n    BrokenChain,\n    OrphanedNode,\n    DanglingImport,\n    DependencyCycle,\n    SemanticGap,\n    Contradiction,",
+  "source_version": "plans/2026-03-13-docs-workflow-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:30:38.201371474Z",
+  "valid_from": "2026-04-02T02:30:38.201371474Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-13-docs-workflow-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1465,
+    "end_line": 1507,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

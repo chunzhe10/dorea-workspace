@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2b-7910-85bb-f861da1a24db",
+  "content": "### Task 8: Update Devcontainer Integration\n\n# Install corvia-workspace toggle command\nchmod +x \"$WORKSPACE_ROOT/.devcontainer/scripts/corvia-workspace.sh\"\nln -sf \"$WORKSPACE_ROOT/.devcontainer/scripts/corvia-workspace.sh\" \"$INSTALL_DIR/corvia-workspace\"\n```\n\nWith:\n```bash\n\n# Install corvia-dev CLI\npython3 -m pip install -e \"$WORKSPACE_ROOT/tools/corvia-dev\" --quiet\n```\n\nUpdate help text at the end:\n```bash\necho \"=== Post-Create Complete ===\"\necho \"Run 'corvia-dev status' to see available services.\"\necho \"Run 'corvia-dev use ollama' to switch to Ollama embeddings.\"\necho \"Run 'corvia-dev enable coding-llm' to enable local coding LLM.\"\necho \"Run 'corvia-dev enable surrealdb' to enable SurrealDB FullStore.\"\n```\n\n**Step 2: Update post-start.sh to use corvia-dev**\n\nReplace the supervisor startup block and service restart logic with:\n\n```bash",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-cli.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.739354331Z",
+  "valid_from": "2026-04-02T02:52:13.739354331Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-cli.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1639,
+    "end_line": 1663,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

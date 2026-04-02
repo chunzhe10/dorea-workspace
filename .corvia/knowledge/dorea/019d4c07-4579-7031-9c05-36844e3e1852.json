@@ -1,0 +1,31 @@
+{
+  "id": "019d4c07-4579-7031-9c05-36844e3e1852",
+  "content": "### 1. Gain normalization suppresses red channel\n### 2. Per-channel gamma penalizes weak channels\n\n### 3. Highlight rolloff is essential for D-Log M\n**What:** D-Log M stores 14+ stops of dynamic range in a flat curve. Expanding with\ngamma < 1 pushes highlights past 1.0. Without a soft shoulder, highlights clip hard.\n**Fix:** Added exponential rolloff at shoulder=0.85:\n`corrected = shoulder + headroom * (1 - exp(-excess / headroom))`\n**Why it matters:** Any D-Log-to-Rec.709 conversion needs highlight protection.\nThe shoulder=0.85 starting point preserves detail without visible compression artifacts.\n",
+  "source_version": "learnings/2026-04-01-lut-generation-learnings.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:30:38.201337034Z",
+  "valid_from": "2026-04-02T02:30:38.201337034Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "learnings/2026-04-01-lut-generation-learnings.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 25,
+    "end_line": 32,
+    "content_role": "learning",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d4c07-4579-7031-9c05-4127484717a8",
+  "content": "### Task 16.6: Review lib.sh and init-host.sh\n\n### Task 17: Update post-start.sh for dorea\n\n**Files:**\n- Modify: `.devcontainer/scripts/post-start.sh`\n\n- [ ] **Step 1: Update settings.local.json generation**\n\nFind the section in post-start.sh that writes `.claude/settings.local.json` and update the `enabledMcpjsonServers` list to include `davinci-resolve-mcp`:\n\nChange from:\n\n```bash\n\"enabledMcpjsonServers\": [\"corvia\", \"playwright\"]\n```\n\nto:\n\n```bash\n\"enabledMcpjsonServers\": [\"corvia\", \"playwright\", \"davinci-resolve-mcp\"]\n```\n\n- [ ] **Step 2: Keep corvia-dev service management**\n\n`corvia-dev` is the mechanism that starts the corvia server, inference server, and dashboard — all of which still run in dorea-workspace. Do NOT remove `corvia-dev` references. The services are needed for corvia's organizational memory functionality.\n\n- [ ] **Step 3: Add Python venv activation**\n\nAdd the following near the end of post-start.sh (after service startup, before optional services section), so all devcontainer terminals have the dorea venv on PATH:\n\n```bash",
+  "source_version": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:30:38.201448931Z",
+  "valid_from": "2026-04-02T02:30:38.201448931Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1000,
+    "end_line": 1029,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

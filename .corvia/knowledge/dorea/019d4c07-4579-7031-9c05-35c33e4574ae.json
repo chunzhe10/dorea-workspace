@@ -1,0 +1,31 @@
+{
+  "id": "019d4c07-4579-7031-9c05-35c33e4574ae",
+  "content": "### Nice-to-Have (Tier 3)\n\n## Anti-Patterns to Avoid\n\n1. **Graph replaces document view** (Logseq failure mode)\n   - Clicking a node should NEVER destroy the graph context\n   - Always use split-panel, side-panel, or overlay\n\n2. **Graph as decoration** (Obsidian/Logseq common complaint)\n   - If the graph doesn't provide actionable navigation, users abandon it\n   - The graph must be integral to the workflow, not a pretty visualization\n\n3. **No content preview before navigation** (common across tools)\n   - Users want to peek at content without committing to full navigation\n   - Hover previews or expandable cards solve this\n\n4. **Undifferentiated nodes** (Obsidian complaint)\n   - All nodes looking the same (just circles of varying size) limits usefulness\n   - Use color, shape, size, and icons to differentiate node types\n\n5. **No way back** (Logseq complaint)\n   - After navigating away from a graph view, users need to return to their position\n   - Maintain graph state/position across navigation\n\n---\n\n\n## Key Insight: The Maturity Spectrum\n\nTools fall on a spectrum from \"graph as afterthought\" to \"graph as core surface\":\n\n```\nGraph as Afterthought          Graph as Core Surface\n        |                              |\n   Logseq  Notion  Obsidian  Roam  Neo4j  Heptabase  Scrintal  TheBrain\n        |                              |\n   Graph is decorative          Graph IS the workspace\n```\n\nThe most successful tools (Heptabase, TheBrain) treat the graph not as a separate view\nbut as an integral part of the content interaction model. corvia's dashboard should aim\nfor the Heptabase zone: graph as a first-class navigation surface with seamless content\naccess via the side panel.\n\n---\n",
+  "source_version": "decisions/graph-document-ux-research.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:30:38.201327616Z",
+  "valid_from": "2026-04-02T02:30:38.201327616Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/graph-document-ux-research.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 746,
+    "end_line": 788,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d4c19-c598-7391-b6d8-b4906829e1f3",
+  "content": "fn unix_now() -> u64 {\n    std::time::SystemTime::now()\n        .duration_since(std::time::UNIX_EPOCH)\n        .unwrap_or_default()\n        .as_secs()\n}\npub enum CalError {\n    #[error(\"IO error: {0}\")]\n    Io(#[from] std::io::Error),\n    #[error(\"Serialization error: {0}\")]\n    Serialization(String),\n    #[error(\"Format version {0} not supported (expected {FORMAT_VERSION})\")]\n    UnsupportedVersion(u8),\n}",
+  "source_version": "crates/dorea-cal/src/format.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:50:50.648363108Z",
+  "valid_from": "2026-04-02T02:50:50.648363108Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cal/src/format.rs",
+    "language": "rs",
+    "chunk_type": "enum_item",
+    "start_line": 83,
+    "end_line": 90,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

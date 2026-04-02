@@ -1,0 +1,31 @@
+{
+  "id": "019d4c06-15d2-7292-ad4e-23cd92adc020",
+  "content": "             resp = RauneResult(\n                    id=req_id,\n                    image_b64=encode_png(result),\n                    width=result.shape[1],\n                    height=result.shape[0],\n                )\n            elif req_type == \"depth\":\n                if depth_model is None:\n                    raise RuntimeError(\"Depth Anything model not loaded (--no-depth or load failed)\")\n                img = decode_png(req[\"image_b64\"])\n                max_size = int(req.get(\"max_size\", 518))\n                depth = depth_model.infer(img, max_size=max_size)\n                resp = DepthResult.from_array(req_id, depth)\n            elif req_type == \"shutdown\":\n                resp = OkResponse()\n                try:\n                    print(json.dumps(resp.to_dict()), flush=True)\n                except BrokenPipeError:\n                    pass\n                break\n            else:\n                resp = ErrorResponse(id=req_id, message=f\"unknown request type: {req_type!r}\")\n\n        except Exception as e:\n            tb = traceback.format_exc()\n            print(f\"[dorea-inference] ERROR on {req_type}: {e}\\n{tb}\", file=sys.stderr, flush=True)\n            resp = ErrorResponse(id=req_id, message=str(e))\n\n        try:\n            print(json.dumps(resp.to_dict()), flush=True)\n        except BrokenPipeError:\n            break\n\n    print(\"[dorea-inference] exiting\", file=sys.stderr, flush=True)",
+  "source_version": "python/dorea_inference/server.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:29:20.466074185Z",
+  "valid_from": "2026-04-02T02:29:20.466074185Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/server.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 141,
+    "end_line": 167,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

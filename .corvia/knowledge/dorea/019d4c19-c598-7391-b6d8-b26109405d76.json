@@ -1,0 +1,31 @@
+{
+  "id": "019d4c19-c598-7391-b6d8-b26109405d76",
+  "content": "ult in frames {\n        let frame = frame_result.context(\"frame decode error\")?;\n\n        // Scene change detection\n        let is_cut = prev_frame.as_ref()\n            .map(|prev| scene::is_scene_change(prev, &frame.pixels))\n            .unwrap_or(false);\n\n        if is_cut {\n            log::info!(\"Scene change detected at frame {}\", frame.index);\n            // TODO(Phase 3+): trigger re-calibration on scene cut\n        }\n\n        // Run depth inference at proxy resolution\n        let (depth_proxy, dw, dh) = inf_server\n            .run_depth(\n                &frame.index.to_string(),\n                &frame.pixels,\n                frame.width,\n                frame.height,\n                args.proxy_size,\n            )\n            .unwrap_or_else(|e| {\n                log::warn!(\"Depth inference failed for frame {}: {e} — using uniform depth\", frame.index);\n                let n = frame.width * frame.height;\n                (vec![0.5f32; n], frame.width, frame.height)\n            });\n\n        // Upscale depth to full resolution\n        let depth = if dw == frame.width && dh == frame.height {\n            depth_proxy\n        } else {\n            InferenceServer::upscale_depth(&depth_proxy, dw, dh, frame.width, frame.height)\n        };\n\n        // Apply grading\n        let graded = grade_frame(\n            &frame.pixels,\n            &depth,\n            frame.width,\n            frame.height,\n            &calibration,\n            &params,\n        )\n        .unwrap_or_else(|e| {\n            log::warn!(\"Grading failed for frame {}: {e} — passing through\", frame.index);\n            frame.pixels.clone()\n        });\n\n        encoder.write_frame(&graded).context(\"encoder write failed\")?;\n\n        prev_frame = Some(frame.pixels);\n        frame_count += 1;\n\n        if frame_count % 100 == 0 {\n            let pct = frame_count as f64 / info.frame_count.max(1) as f64 * 100.0;\n            log::info!(\"Progress: {frame_count}/{} frames ({:.1}%)\", info.frame_count, pct);\n        }\n    }\n\n    // Finalize\n    let _ = inf_server.shutdown();\n    encoder.finish().context(\"ffmpeg encoder failed to finalize\")?;\n\n    log::info!(\"Done. Graded {frame_count} frames → {}\", output.display());\n    Ok(())\n}",
+  "source_version": "crates/dorea-cli/src/grade.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:50:50.648302712Z",
+  "valid_from": "2026-04-02T02:50:50.648302712Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/grade.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 134,
+    "end_line": 193,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

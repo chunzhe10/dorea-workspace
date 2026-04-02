@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2b-7910-85bb-f5c610f6a705",
+  "content": "### Task 2: Pydantic Models\n\n        exclusive_group=\"embedding\",\n    )\n    assert svc.exclusive_group == \"embedding\"\n\n\ndef test_service_status_stopped() -> None:\n    s = ServiceStatus(name=\"ollama\", state=ServiceState.STOPPED)\n    assert s.pid is None\n    assert s.port is None\n    assert s.reason is None\n\n\ndef test_service_status_healthy() -> None:\n    s = ServiceStatus(\n        name=\"corvia-server\",\n        state=ServiceState.HEALTHY,\n        port=8020,\n        pid=1234,\n        uptime_s=3600.0,\n    )\n    assert s.state == ServiceState.HEALTHY\n    assert s.uptime_s == 3600.0\n\n\ndef test_status_response_json_roundtrip() -> None:\n    resp = StatusResponse(\n        manager=ManagerStatus(pid=100, uptime_s=60.0, state=\"running\"),\n        services=[\n            ServiceStatus(name=\"corvia-inference\", state=ServiceState.HEALTHY, port=8030, pid=101, uptime_s=55.0),\n            ServiceStatus(name=\"corvia-server\", state=ServiceState.HEALTHY, port=8020, pid=102, uptime_s=50.0),\n        ],\n        config=ConfigSummary(\n            embedding_provider=\"corvia\",\n            merge_provider=\"corvia\",\n            storage=\"lite\",\n            workspace=\"corvia-workspace\",\n        ),\n        enabled_services=[],\n        logs=[],\n    )\n    data = resp.model_dump()\n    assert data[\"manager\"][\"pid\"] == 100\n    assert len(data[\"services\"]) == 2\n    assert data[\"config\"][\"embedding_provider\"] == \"corvia\"",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-cli.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.739324622Z",
+  "valid_from": "2026-04-02T02:52:13.739324622Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-cli.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 140,
+    "end_line": 183,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

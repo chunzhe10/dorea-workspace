@@ -1,0 +1,31 @@
+{
+  "id": "019d4c06-15d2-7292-ad4e-1e52d392142f",
+  "content": "92 * gl + 0.9503041 * bl;\n\n    // XYZ → Lab\n    let fx = f_lab(x / XN);\n    let fy = f_lab(y / YN);\n    let fz = f_lab(z / ZN);\n\n    let l = 116.0 * fy - 16.0;\n    let a_lab = 500.0 * (fx - fy);\n    let b_lab = 200.0 * (fy - fz);\n\n    (l, a_lab, b_lab)\n}\npub fn lab_to_srgb(l: f32, a: f32, b: f32) -> (f32, f32, f32) {\n    let fy = (l + 16.0) / 116.0;\n    let fx = a / 500.0 + fy;\n    let fz = fy - b / 200.0;\n\n    let x = XN * f_lab_inv(fx);\n    let y = YN * f_lab_inv(fy);\n    let z = ZN * f_lab_inv(fz);\n\n    // XYZ → linear RGB (D65, Rec. 709) — inverse matrix\n    let rl = 3.2404542 * x - 1.5371385 * y - 0.4985314 * z;\n    let gl = -0.969_266 * x + 1.8760108 * y + 0.0415560 * z;\n    let bl = 0.0556434 * x - 0.2040259 * y + 1.0572252 * z;\n\n    // Linear → sRGB, clamped\n    let r = linear_to_srgb(rl.clamp(0.0, 1.0));\n    let g = linear_to_srgb(gl.clamp(0.0, 1.0));\n    let b_out = linear_to_srgb(bl.clamp(0.0, 1.0));\n\n    (r.clamp(0.0, 1.0), g.clamp(0.0, 1.0), b_out.clamp(0.0, 1.0))\n}",
+  "source_version": "crates/dorea-color/src/lab.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:29:20.466011396Z",
+  "valid_from": "2026-04-02T02:29:20.466011396Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-color/src/lab.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 82,
+    "end_line": 102,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

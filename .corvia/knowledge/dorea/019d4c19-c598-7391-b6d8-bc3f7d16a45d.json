@@ -1,0 +1,31 @@
+{
+  "id": "019d4c19-c598-7391-b6d8-bc3f7d16a45d",
+  "content": "fn f_lab(t: f32) -> f32 {\n    if t > DELTA_CUBED {\n        t.cbrt()\n    } else {\n        t / DELTA_SQ_3 + 4.0 / 29.0\n    }\n}\nfn f_lab_inv(s: f32) -> f32 {\n    let delta = 6.0_f32 / 29.0;\n    if s > delta {\n        s * s * s\n    } else {\n        DELTA_SQ_3 * (s - 4.0 / 29.0)\n    }\n}",
+  "source_version": "crates/dorea-color/src/lab.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:50:50.648461954Z",
+  "valid_from": "2026-04-02T02:50:50.648461954Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-color/src/lab.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 46,
+    "end_line": 53,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

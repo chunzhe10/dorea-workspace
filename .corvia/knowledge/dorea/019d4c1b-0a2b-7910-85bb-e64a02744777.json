@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2b-7910-85bb-e64a02744777",
+  "content": "## Chunk 4: Phase 4 — Enforcement (Hooks + Git Triggers)\n\n### Task 4.1: Add `--incremental --files` flags to Ingest command\n\n**Files:**\n- Modify: `repos/corvia/crates/corvia-cli/src/main.rs:66-69`\n\n- [ ] **Step 1: Extend the `Ingest` command with new flags**\n\n```rust\n/// Ingest a repository (or all workspace repos if no path given)\nIngest {\n    /// Path to repository (optional in workspace mode)\n    path: Option<String>,\n    /// Incremental mode: only re-index changed files\n    #[arg(long)]\n    incremental: bool,\n    /// Specific files to re-index (requires --incremental)\n    #[arg(long, num_args = 1.., requires = \"incremental\")]\n    files: Vec<String>,\n},\n```\n\nThe `requires = \"incremental\"` attribute makes clap reject `--files` without `--incremental`.\n\n- [ ] **Step 2: Implement incremental re-index logic in `cmd_ingest`**\n\nUses the `ChunkingPipeline` (same as full ingest) to properly chunk files before embedding. Each chunk becomes a separate `KnowledgeEntry` with its own embedding, preserving the same quality as full ingest.\n\n```rust\nuse corvia_kernel::chunking_pipeline::ChunkingPipeline;\nuse corvia_kernel::chunking_strategy::SourceMetadata;\n\nasync fn cmd_ingest(path: Option<&str>, incremental: bool, files: &[String]) -> Result<()> {\n    let config = load_config()?;\n    ensure_inference_ready(&config).await?;\n\n    if incremental && !files.is_empty() {\n        println!(\"Incremental re-indexing {} file(s)...\", files.len());\n        let (store, _graph, temporal) = init_stores(&config).await?;\n        let engine = init_engine(&config).await?;\n        let pipeline = ChunkingPipeline::with_kernel_defaults(config.chunking.clone());\n\n        let scope_id = &config.project.scope_id;\n\n        for file_path in files {",
+  "source_version": "plans/2026-03-13-docs-workflow-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.739160607Z",
+  "valid_from": "2026-04-02T02:52:13.739160607Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-13-docs-workflow-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 2099,
+    "end_line": 2142,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

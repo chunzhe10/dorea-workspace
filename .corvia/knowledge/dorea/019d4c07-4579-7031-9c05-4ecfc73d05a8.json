@@ -1,0 +1,31 @@
+{
+  "id": "019d4c07-4579-7031-9c05-4ecfc73d05a8",
+  "content": "### Task 7: Run full test suite and verify\n\n# Verify rebuild command works end-to-end\ncorvia-dev rebuild --no-build   # should install from existing target/debug\ncorvia-dev status               # should show no stale warning now\ncorvia-dev rebuild --help       # should show flags\n```\n\n**Step 3: Commit any fixes if needed**\n\n```bash\ngit add -u\ngit commit -m \"fix(corvia-dev): address test/integration issues\"\n```",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-rebuild.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:30:38.201587338Z",
+  "valid_from": "2026-04-02T02:30:38.201587338Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-rebuild.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 521,
+    "end_line": 532,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

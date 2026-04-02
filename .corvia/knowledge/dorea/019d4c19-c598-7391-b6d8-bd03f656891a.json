@@ -1,0 +1,31 @@
+{
+  "id": "019d4c19-c598-7391-b6d8-bd03f656891a",
+  "content": "pub struct QualifierCorrection {\n    pub h_center: f32,\n    pub h_width: f32,\n    /// Degrees to add to hue\n    pub h_offset: f32,\n    /// Saturation multiplier\n    pub s_ratio: f32,\n    /// Value offset in [0, 1]\n    pub v_offset: f32,\n    /// Total weight; 0 = inactive qualifier\n    pub weight: f32,\n}",
+  "source_version": "crates/dorea-hsl/src/derive.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:50:50.648472255Z",
+  "valid_from": "2026-04-02T02:50:50.648472255Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-hsl/src/derive.rs",
+    "language": "rs",
+    "chunk_type": "struct_item",
+    "start_line": 11,
+    "end_line": 22,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

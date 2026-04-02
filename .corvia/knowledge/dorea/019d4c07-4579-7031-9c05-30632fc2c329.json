@@ -1,0 +1,31 @@
+{
+  "id": "019d4c07-4579-7031-9c05-30632fc2c329",
+  "content": "## Problem\n## Decision: Bootstrap references from existing dive footage\n\n### Approach\n\nCreate a helper script (`scripts/generate_references.py`) that applies principled\nunderwater color correction to raw D-Log M keyframes, producing the \"target look\"\nreference images that `00_generate_lut.py` needs.\n\n\n### Why this approach\n\n1. **Real footage**: Uses actual DJI Action 4 D-Log M keyframes from 2025-11-01 dive\n   (28 frames across 2 clips), preserving realistic underwater color distribution\n2. **Reproducible**: No external image dependencies. Parameters are documented and\n   tunable. Re-run with different parameters = different look.\n3. **Color science grounded**: Correction parameters based on known underwater light\n   absorption characteristics (red attenuates ~50% at 3m depth)\n4. **Not circular**: Reference images define the TARGET aesthetic; `00_generate_lut.py`\n   then derives an optimized lift/gamma/gain LUT to reproduce that target from raw\n   D-Log M input. Different correction models, same goal.\n",
+  "source_version": "decisions/2026-04-01-first-lut-generation-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:30:38.201269150Z",
+  "valid_from": "2026-04-02T02:30:38.201269150Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-01-first-lut-generation-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 14,
+    "end_line": 31,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

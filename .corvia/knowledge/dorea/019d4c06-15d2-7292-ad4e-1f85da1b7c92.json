@@ -1,0 +1,31 @@
+{
+  "id": "019d4c06-15d2-7292-ad4e-1f85da1b7c92",
+  "content": "pub struct LutGrid {\n    pub size: usize,\n    /// Length = size³ × 3\n    pub data: Vec<f32>,\n}\nimpl LutGrid {\n    /// Create a zeroed LUT of given size.\n    pub fn new(size: usize) -> Self {\n        Self {\n            size,\n            data: vec![0.0_f32; size * size * size * 3],\n        }\n    }\n\n    #[inline]\n    fn idx(&self, ri: usize, gi: usize, bi: usize) -> usize {\n        (ri * self.size * self.size + gi * self.size + bi) * 3\n    }\n\n    /// Get the output RGB triple at grid position (ri, gi, bi).\n    pub fn get(&self, ri: usize, gi: usize, bi: usize) -> [f32; 3] {\n        debug_assert!(ri < self.size && gi < self.size && bi < self.size);\n        let i = self.idx(ri, gi, bi);\n        [self.data[i], self.data[i + 1], self.data[i + 2]]\n    }\n\n    /// Set the output RGB triple at grid position (ri, gi, bi).\n    pub fn set(&mut self, ri: usize, gi: usize, bi: usize, val: [f32; 3]) {\n        debug_assert!(ri < self.size && gi < self.size && bi < self.size);\n        let i = self.idx(ri, gi, bi);\n        self.data[i] = val[0];\n        self.data[i + 1] = val[1];\n        self.data[i + 2] = val[2];\n    }\n}",
+  "source_version": "crates/dorea-lut/src/types.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:29:20.466025822Z",
+  "valid_from": "2026-04-02T02:29:20.466025822Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-lut/src/types.rs",
+    "language": "rs",
+    "chunk_type": "impl_item",
+    "start_line": 14,
+    "end_line": 43,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

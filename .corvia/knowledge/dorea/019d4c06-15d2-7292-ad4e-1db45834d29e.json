@@ -1,0 +1,31 @@
+{
+  "id": "019d4c06-15d2-7292-ad4e-1db45834d29e",
+  "content": ") < 1e-7 {\n        60.0 * (((g - b) / delta) % 6.0)\n    } else if (cmax - g).abs() < 1e-7 {\n        60.0 * ((b - r) / delta + 2.0)\n    } else {\n        60.0 * ((r - g) / delta + 4.0)\n    };\n\n    let h = if h < 0.0 { h + 360.0 } else { h };\n\n    (h, s, v)\n}\npub fn hsv_to_rgb(h: f32, s: f32, v: f32) -> (f32, f32, f32) {\n    if s < 1e-7 {\n        return (v, v, v);\n    }\n\n    let h = h % 360.0;\n    let sector = h / 60.0;\n    let i = sector.floor() as i32;\n    let f = sector - i as f32;\n\n    let p = v * (1.0 - s);\n    let q = v * (1.0 - s * f);\n    let t = v * (1.0 - s * (1.0 - f));\n\n    match i % 6 {\n        0 => (v, t, p),\n        1 => (q, v, p),\n        2 => (p, v, t),\n        3 => (p, q, v),\n        4 => (t, p, v),\n        _ => (v, p, q),\n    }\n}",
+  "source_version": "crates/dorea-color/src/hsv.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:29:20.466004491Z",
+  "valid_from": "2026-04-02T02:29:20.466004491Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-color/src/hsv.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 35,
+    "end_line": 57,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

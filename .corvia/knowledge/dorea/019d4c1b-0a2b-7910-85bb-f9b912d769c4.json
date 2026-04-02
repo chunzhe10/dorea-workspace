@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2b-7910-85bb-f9b912d769c4",
+  "content": "est tests/test_rebuild.py -v`\nExpected: PASS (3 tests)\n\n**Step 5: Commit**\n\n```bash\ngit add tools/corvia-dev/corvia_dev/rebuild.py tools/corvia-dev/tests/test_rebuild.py\ngit commit -m \"feat(corvia-dev): add staleness check for installed binaries\"\n```\n\n---\n\n### Task 2: Add `install_binaries` to `rebuild.py`\n\n**Files:**\n- Modify: `tools/corvia-dev/corvia_dev/rebuild.py`\n- Test: `tools/corvia-dev/tests/test_rebuild.py`\n\n**Step 1: Write the failing test**\n\nAppend to `tools/corvia-dev/tests/test_rebuild.py`:\n\n```python\nfrom corvia_dev.rebuild import install_binaries\n\n\ndef test_install_copies_binaries(tmp_path: Path) -> None:\n    \"\"\"install_binaries copies from target to install dir.\"\"\"\n    target_dir = tmp_path / \"target\" / \"debug\"\n    target_dir.mkdir(parents=True)\n    install_dir = tmp_path / \"installed\"\n    install_dir.mkdir()\n\n    for name in (\"corvia\", \"corvia-inference\"):\n        (target_dir / name).write_bytes(b\"binary-content-\" + name.encode())\n\n    installed = install_binaries(target_dir=target_dir, install_dir=install_dir)\n    assert sorted(installed) == [\"corvia\", \"corvia-inference\"]\n    for name in (\"corvia\", \"corvia-inference\"):\n        assert (install_dir / name).read_bytes() == b\"binary-content-\" + name.encode()\n\n\ndef test_install_skips_missing_target(tmp_path: Path) -> None:\n    \"\"\"install_binaries skips binaries that don't exist in target.\"\"\"\n    target_dir = tmp_path / \"target\" / \"debug\"\n    target_dir.mkdir(parents=True)\n    install_dir = tmp_path / \"installed\"\n    install_dir.mkdir()\n",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-rebuild.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.739370572Z",
+  "valid_from": "2026-04-02T02:52:13.739370572Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-rebuild.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 154,
+    "end_line": 190,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

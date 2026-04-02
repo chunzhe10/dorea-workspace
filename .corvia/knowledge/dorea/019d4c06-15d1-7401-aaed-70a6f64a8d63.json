@@ -1,0 +1,31 @@
+{
+  "id": "019d4c06-15d1-7401-aaed-70a6f64a8d63",
+  "content": ")\n                .with_context(|| format!(\"Failed to load depth map: {}\", depth_path.display()))?;\n            if dw != kf_w || dh != kf_h {\n                depth = resize_depth(&depth, dw, dh, kf_w, kf_h);\n            }\n            depth\n        } else {\n            // Use inference subprocess\n            let srv = inf_server.as_mut().unwrap();\n            let pixels_u8: Vec<u8> = kf_pixels.iter()\n                .flat_map(|p| [(p[0] * 255.0) as u8, (p[1] * 255.0) as u8, (p[2] * 255.0) as u8])\n                .collect();\n            match srv.run_depth(&stem, &pixels_u8, kf_w, kf_h, 518) {\n                Ok((depth_proxy, dw, dh)) => {\n                    InferenceServer::upscale_depth(&depth_proxy, dw, dh, kf_w, kf_h)\n                }\n                Err(e) => {\n                    log::warn!(\"Depth inference failed for {stem}: {e} — using uniform 0.5\");\n                    vec![0.5f32; kf_w * kf_h]\n                }\n            }\n        };\n\n        // Load or generate RAUNE-Net target\n        let tgt_pixels = if let Some(targets_dir) = &args.targets {\n            let target_path = targets_dir.join(format!(\"{stem}.png\"));\n            let (mut tgt, tw, th) = load_rgb_image(&target_path)\n                .with_context(|| format!(\"Failed to load target: {}\", target_path.display()))?;\n            if tw != kf_w || th != kf_h {\n                tgt = resize_rgb_nn(&tgt, tw, th, kf_w, kf_h);\n            }",
+  "source_version": "crates/dorea-cli/src/calibrate.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:29:20.465917624Z",
+  "valid_from": "2026-04-02T02:29:20.465917624Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/calibrate.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 247,
+    "end_line": 270,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

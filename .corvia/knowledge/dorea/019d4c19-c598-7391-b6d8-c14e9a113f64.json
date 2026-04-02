@@ -1,0 +1,31 @@
+{
+  "id": "019d4c19-c598-7391-b6d8-c14e9a113f64",
+  "content": "  file=sys.stderr,\n            )\n            # Fall back to HuggingFace hub (requires internet access)\n            model_id_or_path = \"depth-anything/Depth-Anything-V2-Small-hf\"\n\n        self.processor = AutoImageProcessor.from_pretrained(model_id_or_path)\n        self.model = AutoModelForDepthEstimation.from_pretrained(model_id_or_path)\n        self.model = self.model.to(self.device)\n        self.model.eval()\n\n    def infer(self, img_rgb: np.ndarray, max_size: int = 518) -> np.ndarray:\n        \"\"\"Run depth estimation on uint8 HxWx3 RGB image.\n\n        Returns float32 HxW depth map normalized to [0, 1] at inference resolution.\n        \"\"\"\n        import torch\n        from PIL import Image as _Image\n\n        pil = _Image.fromarray(img_rgb)\n        # Cap to max_size so inference doesn't process enormous frames,\n        # then let the processor handle patch-aligned resizing.\n        capped = _resize_for_depth(pil, max_size)\n\n        inputs = self.processor(images=capped, return_tensors=\"pt\")\n        inputs = {k: v.to(self.device) for k, v in inputs.items()}\n\n        with torch.no_grad():\n            outputs = self.model(**inputs)\n\n        # predicted_depth: (1, H, W)\n        depth = outputs.predicted_depth.squeeze(0).cpu().numpy()\n\n        # Normalize to [0, 1]\n        d_min, d_max = float(depth.min()), float(depth.max())\n        if d_max - d_min < 1e-6:\n            depth = np.zeros_like(depth, dtype=np.float32)\n        else:\n            depth = ((depth - d_min) / (d_max - d_min)).astype(np.float32)\n\n        return depth",
+  "source_version": "python/dorea_inference/depth_anything.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:50:50.648526290Z",
+  "valid_from": "2026-04-02T02:50:50.648526290Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/depth_anything.py",
+    "language": "py",
+    "chunk_type": "class_definition",
+    "start_line": 73,
+    "end_line": 106,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

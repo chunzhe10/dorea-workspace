@@ -1,0 +1,31 @@
+{
+  "id": "019d4c06-15d1-7401-aaed-713c1444b75e",
+  "content": "    } else {\n        log::info!(\"Auto-deriving calibration from sampled frames...\");\n        use crate::calibrate::{run_calibration_from_frames, CalibrationInput};\n        let mut inputs = Vec::new();\n        for (i, &ts) in timestamps.iter().enumerate() {\n            let pixels = ffmpeg::extract_frame_at(&args.input, ts, tile_w, tile_h)\n                .with_context(|| format!(\"extract frame at {ts:.2}s failed\"))?;\n            let id = format!(\"p{i:02}\");\n            let target = inf_server.run_raune(&id, &pixels, tile_w, tile_h, 1024)\n                .map(|(t, _, _)| t)\n                .unwrap_or_else(|_| pixels.clone());\n            let (depth_proxy, dw, dh) = inf_server.run_depth(&id, &pixels, tile_w, tile_h, 518)\n                .unwrap_or_else(|_| (vec![0.5f32; tile_w * tile_h], tile_w, tile_h));\n            let depth = InferenceServer::upscale_depth(&depth_proxy, dw, dh, tile_w, tile_h);\n            inputs.push(CalibrationInput { pixels, target, depth, width: tile_w, height: tile_h });\n        }\n        run_calibration_from_frames(&inputs).context(\"auto-calibration failed\")?\n    };\n\n    // Build contact sheet: 2 rows (original / graded), n columns\n    let sheet_w = tile_w * n;\n    let sheet_h = tile_h * 2;\n    let mut sheet = RgbImage::new(sheet_w as u32, sheet_h as u32);\n\n    for (i, &ts) in timestamps.iter().enumerate() {\n        let orig = ffmpeg::extract_frame_at(&args.input, ts, tile_w, tile_h)\n            .with_context(|| format!(\"extract frame at {ts:.2}s failed\"))?;",
+  "source_version": "crates/dorea-cli/src/preview.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:29:20.465923296Z",
+  "valid_from": "2026-04-02T02:29:20.465923296Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/preview.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 114,
+    "end_line": 135,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,7 +1,7 @@
 FROM mcr.microsoft.com/playwright:latest AS playwright
 FROM ghcr.io/astral-sh/uv:latest AS uv
 # CUDA 12.4 devel image — source for nvcc, headers, and stub libs
-FROM nvidia/cuda:12.4.1-devel-debian12 AS cuda-devel
+FROM nvidia/cuda:12.4.1-devel-ubuntu22.04 AS cuda-devel
 
 FROM rust:1.88-trixie
 
@@ -186,3 +186,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends ffmpeg \
 COPY --from=cuda-devel /usr/local/cuda /usr/local/cuda
 ENV PATH="/usr/local/cuda/bin:${PATH}"
 ENV CUDA_HOME="/usr/local/cuda"
+# Tell the NVIDIA Container Runtime to inject compute (CUDA) + utility (nvidia-smi) libraries.
+# Without this, only `utility` capability is provided and cuInit returns error 999.
+# Mirrors what official nvidia/cuda images set (e.g. nvidia/cuda:12.4.1-base-*).
+ENV NVIDIA_DRIVER_CAPABILITIES=compute,utility

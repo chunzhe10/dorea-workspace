@@ -1,0 +1,31 @@
+{
+  "id": "019d4c06-15d1-7401-aaed-743435ed0a20",
+  "content": "pub fn histogram_distance(a: &[u8], b: &[u8]) -> f32 {\n    assert_eq!(a.len(), b.len(), \"frame size mismatch\");\n\n    let hist_a = build_histogram(a);\n    let hist_b = build_histogram(b);\n\n    let n_pixels = (a.len() / 3) as f64;\n    if n_pixels == 0.0 {\n        return 0.0;\n    }\n\n    // L1 distance between normalized per-channel histograms, averaged over 3 channels.\n    // Sum |ha[i]/N - hb[i]/N| over all bins, divide by 2 to normalize to [0,1].\n    let mut l1_sum = 0.0_f64;\n    for i in 0..TOTAL_BINS {\n        l1_sum += (hist_a[i] as f64 - hist_b[i] as f64).abs();\n    }\n    // l1_sum is over 3 channels combined; each channel sums to n_pixels.\n    // Max l1_sum = 3 * 2 * n_pixels = 6 * n_pixels (completely disjoint histograms).\n    (l1_sum / (6.0 * n_pixels)) as f32\n}",
+  "source_version": "crates/dorea-video/src/scene.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:29:20.465951367Z",
+  "valid_from": "2026-04-02T02:29:20.465951367Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/scene.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 15,
+    "end_line": 35,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

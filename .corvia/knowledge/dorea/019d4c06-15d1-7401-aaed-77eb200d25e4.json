@@ -1,0 +1,31 @@
+{
+  "id": "019d4c06-15d1-7401-aaed-77eb200d25e4",
+  "content": "       let hi = (col as isize + r).min(width as isize - 1) as usize;\n            let mut s = 0.0_f32;\n            for k in lo..=hi {\n                s += src[base + k];\n            }\n            dst[base + col] = s / (hi - lo + 1) as f32;\n        }\n    }\n}\nfn box_blur_cols(src: &[f32], dst: &mut [f32], width: usize, height: usize, radius: usize) {\n    let r = radius.min(height - 1) as isize;\n    for col in 0..width {\n        for row in 0..height {\n            let lo = (row as isize - r).max(0) as usize;\n            let hi = (row as isize + r).min(height as isize - 1) as usize;\n            let mut s = 0.0_f32;\n            for k in lo..=hi {\n                s += src[k * width + col];\n            }\n            dst[row * width + col] = s / (hi - lo + 1) as f32;\n        }\n    }\n}",
+  "source_version": "crates/dorea-gpu/src/cpu.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:29:20.465989703Z",
+  "valid_from": "2026-04-02T02:29:20.465989703Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cpu.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 185,
+    "end_line": 198,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

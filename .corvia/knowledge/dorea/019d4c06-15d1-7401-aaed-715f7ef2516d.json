@@ -1,0 +1,31 @@
+{
+  "id": "019d4c06-15d1-7401-aaed-715f7ef2516d",
+  "content": "w, tile_h);\n    }\n\n    let _ = inf_server.shutdown();\n\n    sheet.save(&args.output)\n        .with_context(|| format!(\"failed to save contact sheet to {}\", args.output.display()))?;\n\n    log::info!(\"Preview saved to {}\", args.output.display());\n    Ok(())\n}\nfn blit_row(sheet: &mut RgbImage, pixels: &[u8], width: usize, height: usize, x_off: usize, y_off: usize) {\n    for row in 0..height {\n        for col in 0..width {\n            let src = row * width * 3 + col * 3;\n            let r = pixels[src];\n            let g = pixels[src + 1];\n            let b = pixels[src + 2];\n            sheet.put_pixel((x_off + col) as u32, (y_off + row) as u32, Rgb([r, g, b]));\n        }\n    }\n}",
+  "source_version": "crates/dorea-cli/src/preview.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:29:20.465924305Z",
+  "valid_from": "2026-04-02T02:29:20.465924305Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/preview.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 160,
+    "end_line": 170,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

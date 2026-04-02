@@ -1,0 +1,31 @@
+{
+  "id": "019d4c07-4579-7031-9c05-331c83ae843a",
+  "content": "## 3. Roam Research\n\n### Graph-to-Document Navigation UX\n\n- **Graph Overview**: Full knowledge graph accessible from the sidebar. Clicking any node\n  navigates graph-to-graph, showing connections for each clicked node.\n- **Page Graph**: Small graph icon in the top-right of every page shows a local graph of\n  directly connected pages. Clicking nodes transitions between page graphs.\n- **Shift+Click**: Opens any link in the right sidebar without losing current context.\n  This is Roam's signature interaction -- you can stack multiple pages in the right sidebar\n  for cross-referencing.\n- **Linked/Unlinked References**: Below every page, automatic sections show all pages that\n  reference the current page (linked) and pages that mention the page title without explicit\n  links (unlinked). These can be filtered.\n\n\n### Panel Pattern\n\n**Main page + right sidebar stack**. The main editing area shows one page. Shift+click opens\nadditional pages stacked vertically in a right sidebar. Users can have many pages open\nsimultaneously for reference. The graph is a discovery tool, not the primary workspace.\n",
+  "source_version": "decisions/graph-document-ux-research.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:30:38.201299773Z",
+  "valid_from": "2026-04-02T02:30:38.201299773Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/graph-document-ux-research.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 116,
+    "end_line": 134,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

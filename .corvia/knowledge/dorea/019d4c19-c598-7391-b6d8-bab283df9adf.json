@@ -1,0 +1,31 @@
+{
+  "id": "019d4c19-c598-7391-b6d8-bab283df9adf",
+  "content": "ut\n        let mut rgb2 = rgb_copy.clone();\n        depth_aware_ambiance(&mut rgb2, &depth, width, height, 1.0);\n        for (a, b) in rgb.iter().zip(rgb2.iter()) {\n            assert!((a - b).abs() < 1e-5, \"not deterministic: {a} vs {b}\");\n        }\n    }\nfn depth_aware_ambiance_zero_contrast() {\n        let width = 2;\n        let height = 2;\n        let n = width * height;\n        let rgb_orig: Vec<f32> = vec![0.5; n * 3];\n        let mut rgb = rgb_orig.clone();\n        let depth: Vec<f32> = vec![0.5; n];\n\n        // contrast_scale = 0 should still run without panic\n        depth_aware_ambiance(&mut rgb, &depth, width, height, 0.0);\n\n        // Values should remain in [0, 1]\n        for &v in &rgb {\n            assert!((0.0..=1.0).contains(&v), \"out-of-range: {v}\");\n        }\n    }",
+  "source_version": "crates/dorea-gpu/src/cpu.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:50:50.648444240Z",
+  "valid_from": "2026-04-02T02:50:50.648444240Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cpu.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 306,
+    "end_line": 321,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

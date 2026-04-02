@@ -1,0 +1,31 @@
+{
+  "id": "019d4c07-4579-7031-9c05-4c367c39297d",
+  "content": "    # Try reading state file first (from running manager)\n            # Check if manager is still alive\n\n    # No state file — build status from live checks\n    cfg = load_config(_config_path())\n    enabled = read_enabled_services(_flags_path())\n    services = resolve_startup_order(cfg.embedding_provider, cfg.storage, enabled)\n\n    service_statuses = []\n    for svc in services:\n        result = check_service(svc)\n        state = (\n            ServiceState.HEALTHY\n            if result.healthy is True\n            else ServiceState.STOPPED\n            if result.healthy is None\n            else ServiceState.UNHEALTHY\n        )\n        service_statuses.append({\n            \"name\": svc.name,\n            \"state\": state.value,\n            \"port\": svc.port,\n            \"pid\": None,\n            \"uptime_s\": None,\n        })\n\n    resp = StatusResponse(\n        manager=None,\n        services=[StatusResponse.model_validate(s) if False else\n                  type(\"_\", (), s)  # handled below\n                  for s in []],\n        config=ConfigSummary(\n            embedding_provider=cfg.embedding_provider,\n            merge_provider=cfg.merge_provider,\n            storage=cfg.storage,\n            workspace=cfg.workspace_name,\n        ),\n        enabled_services=enabled,\n        logs=[],\n    )",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-cli.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:30:38.201562313Z",
+  "valid_from": "2026-04-02T02:30:38.201562313Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-cli.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1359,
+    "end_line": 1395,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

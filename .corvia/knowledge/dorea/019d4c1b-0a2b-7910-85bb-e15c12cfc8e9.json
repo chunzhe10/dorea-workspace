@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2b-7910-85bb-e15c12cfc8e9",
+  "content": "### Must-Have (Tier 1)\n### Should-Have (Tier 2)\n\n### Nice-to-Have (Tier 3)\n\n9. **Shift+click to open in sidebar without losing position** (Roam pattern)\n   - Different click modifiers for different navigation behaviors\n   - Regular click: select. Shift+click: open in side panel. Ctrl+click: open in new tab.\n\n10. **Unlinked mentions / automatic relationship discovery** (Roam/TheBrain pattern)\n    - Surface entries that mention the selected entry's content but aren't explicitly linked\n    - Helps discover hidden connections\n\n11. **Histogram-based filtering** (Graphistry pattern)\n    - For large graphs, show distribution of edge weights or node properties\n    - Filter by clicking/dragging on the histogram\n\n12. **Graph layout algorithms** (Scrintal/Neo4j pattern)\n    - One-click \"organize\" that centers the most-connected node\n    - Multiple layout options (force-directed, hierarchical, radial)\n\n---\n",
+  "source_version": "decisions/graph-document-ux-research.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.739103877Z",
+  "valid_from": "2026-04-02T02:52:13.739103877Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/graph-document-ux-research.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 726,
+    "end_line": 745,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

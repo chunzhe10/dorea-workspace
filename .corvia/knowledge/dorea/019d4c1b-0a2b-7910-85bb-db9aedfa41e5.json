@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2b-7910-85bb-db9aedfa41e5",
+  "content": "## Section 5: Configuration\n\n### `corvia.toml` Additions\n\n```toml\n[workspace.docs]\nmemory_dir = \".memory\"\nworkspace_docs = \"docs\"\nallowed_workspace_subdirs = [\"decisions\", \"learnings\", \"marketing\"]\n\n[workspace.docs.rules]\nblocked_paths = [\"docs/superpowers/*\"]\nrepo_docs_pattern = \"docs/\"\n```\n\n**Rust struct needed** (new in `crates/corvia-common/src/config.rs`):\n```rust\n#[derive(Debug, Clone, Serialize, Deserialize, Default)]\npub struct DocsConfig {\n    #[serde(default)]\n    pub memory_dir: Option<String>,\n    #[serde(default)]\n    pub workspace_docs: Option<String>,\n    #[serde(default)]\n    pub allowed_workspace_subdirs: Vec<String>,\n    #[serde(default)]\n    pub rules: Option<DocsRulesConfig>,\n}\n\n#[derive(Debug, Clone, Serialize, Deserialize, Default)]\npub struct DocsRulesConfig {\n    #[serde(default)]\n    pub blocked_paths: Vec<String>,\n    #[serde(default)]\n    pub repo_docs_pattern: Option<String>,\n}\n```\n\nAdded as `pub docs: Option<DocsConfig>` on `WorkspaceConfig`. The hook generator reads\n`blocked_paths` globs and converts them to shell case patterns in the validation script.\n\n\n### `CLAUDE.md` Additions\n\n```markdown",
+  "source_version": "decisions/2026-03-13-docs-workflow-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.739041645Z",
+  "valid_from": "2026-04-02T02:52:13.739041645Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-03-13-docs-workflow-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 391,
+    "end_line": 432,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

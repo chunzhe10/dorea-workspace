@@ -1,0 +1,31 @@
+{
+  "id": "019d4c06-15d1-7401-aaed-760c4e5c5bc4",
+  "content": "pub fn shutdown(mut self) -> Result<(), InferenceError> {\n        let _ = self.send_line(r#\"{\"type\":\"shutdown\"}\"#);\n        let _ = self.child.wait();\n        Ok(())\n    }\nfn send_line(&mut self, line: &str) -> Result<(), InferenceError> {\n        self.stdin.write_all(line.as_bytes())\n            .and_then(|_| self.stdin.write_all(b\"\\n\"))\n            .and_then(|_| self.stdin.flush())\n            .map_err(|e| InferenceError::Ipc(format!(\"write to server: {e}\")))\n    }",
+  "source_version": "crates/dorea-video/src/inference.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:29:20.465969292Z",
+  "valid_from": "2026-04-02T02:29:20.465969292Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 329,
+    "end_line": 334,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

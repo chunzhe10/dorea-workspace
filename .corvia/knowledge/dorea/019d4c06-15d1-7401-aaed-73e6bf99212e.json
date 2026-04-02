@@ -1,0 +1,31 @@
+{
+  "id": "019d4c06-15d1-7401-aaed-73e6bf99212e",
+  "content": "stdin = child.stdin.take().ok_or_else(|| {\n            FfmpegError::EncodeFailed(\"could not open encoder stdin\".to_string())\n        })?;\n\n        Ok(Self {\n            child,\n            stdin,\n            frame_bytes: width * height * 3,\n        })\n    }\npub fn write_frame(&mut self, pixels: &[u8]) -> Result<(), FfmpegError> {\n        if pixels.len() != self.frame_bytes {\n            return Err(FfmpegError::EncodeFailed(format!(\n                \"frame size mismatch: expected {} bytes, got {}\",\n                self.frame_bytes,\n                pixels.len()\n            )));\n        }\n        self.stdin.write_all(pixels).map_err(FfmpegError::NotFound)\n    }",
+  "source_version": "crates/dorea-video/src/ffmpeg.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:29:20.465948510Z",
+  "valid_from": "2026-04-02T02:29:20.465948510Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/ffmpeg.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 356,
+    "end_line": 365,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

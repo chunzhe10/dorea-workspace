@@ -1,0 +1,31 @@
+{
+  "id": "019d4c07-4579-7031-9c05-4d238b7cb09d",
+  "content": "ev not responding</p>'; return; }\n\n        let html = \"<h2>Services</h2><div class='grid'>\";\n        for (const svc of data.services || []) {\n            const port = svc.port ? \":\" + svc.port : \"\";\n            const pid = svc.pid ? \" pid \" + svc.pid : \"\";\n            html += '<div class=\"card ' + svc.state + '\">';\n            html += '<div class=\"name\">' + svc.name + port + '</div>';\n            html += '<div class=\"state\">' + svc.state + pid + '</div>';\n            html += \"</div>\";\n        }\n        html += \"</div>\";\n\n        html += '<h2>Config</h2><div class=\"config\">';\n        html += \"Embedding: \" + data.config.embedding_provider + \"<br>\";\n        html += \"Merge: \" + data.config.merge_provider + \"<br>\";\n        html += \"Storage: \" + data.config.storage + \"</div>\";\n\n        html += '<h2>Actions</h2><div class=\"actions\">';\n        html += btn(\"Status\", \"corvia-dev status\");\n        html += btn(\"Use Ollama\", \"corvia-dev use ollama\");\n        html += btn(\"Use Corvia-Inference\", \"corvia-dev use corvia-inference\");\n        html += btn(\"Enable coding-llm\", \"corvia-dev enable coding-llm\");\n        html += btn(\"Restart\", \"corvia-dev restart\");\n        html += btn(\"Refresh\", null, \"refresh\");\n        html += \"</div>\";\n\n        if (data.logs && data.logs.length) {\n            html += '<h2>Logs</h2><div class=\"logs\">' + data.logs.join(\"\\\\n\") + \"</div>\";\n        }\n\n        el.innerHTML = html;\n        el.querySelectorAll(\"[data-cmd]\").forEach((b) => {\n            b.onclick = () => vscode.postMessage({ type: \"command\", command: b.dataset.cmd });\n        });\n        el.querySelectorAll(\"[data-action]\").forEach((b) => {\n            b.onclick = () => vscode.postMessage({ type: b.dataset.action });\n        });\n    }\n\n    function btn(label, cmd, action) {\n        if (action) return '<button data-action=\"' + action + '\">' + label + \"</button>\";\n        return '<button data-cmd=\"' + cmd + '\">' + label + \"</button>\";\n    }\n</script>\n</body>\n</html>`;\n}\n\nfunction deactivate() {\n    if (pollTimer) clearInterval(pollTimer);\n}\n\nmodule.exports = { activate, deactivate };\n```\n\n**Step 2: Rebuild the .vsix**\n\nRun:\n```bash\ncd .devcontainer/extensions/corvia-services",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-cli.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:30:38.201570821Z",
+  "valid_from": "2026-04-02T02:30:38.201570821Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-cli.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1852,
+    "end_line": 1906,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

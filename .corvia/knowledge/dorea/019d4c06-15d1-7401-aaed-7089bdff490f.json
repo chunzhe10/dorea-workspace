@@ -1,0 +1,31 @@
+{
+  "id": "019d4c06-15d1-7401-aaed-7089bdff490f",
+  "content": ") -> std::result::Result<InputEncoding, String> {\n    match s {\n        \"srgb\" => Ok(InputEncoding::Srgb),\n        \"dlog_m\" => Ok(InputEncoding::DlogM),\n        other => Err(format!(\"unknown input encoding '{other}'; expected 'srgb' or 'dlog_m'\")),\n    }\n}\npub fn run(args: CalibrateArgs) -> Result<()> {\n    // Logging is already initialised by main() based on the verbose flag.\n    log::info!(\"dorea calibrate — scanning keyframes in {:?}\", args.keyframes);\n\n    // Determine whether we need the inference subprocess\n    let need_inference = args.targets.is_none() || args.depth.is_none();\n    let mut inf_server: Option<InferenceServer> = None;\n\n    if need_inference {\n        log::info!(\"Spawning inference subprocess for auto-generation of missing inputs...\");\n        let cfg = InferenceConfig {\n            python_exe: args.python.clone(),\n            raune_weights: args.raune_weights.clone(),\n            raune_models_dir: args.raune_models_dir.clone(),\n            depth_model: args.depth_model.clone(),\n            device: if args.cpu_only { Some(\"cpu\".to_string()) } else { None },\n            startup_timeout: Duration::from_secs(180),\n        };\n        inf_server = Some(\n            InferenceServer::spawn(&cfg).context(\"failed to spawn inference server\")?,\n        );\n    }\n\n    // 1. Scan keyframe directory for PNGs\n    let mut keyframe_paths: Vec<PathBuf> = std::fs::read_dir(&args.keyframes)\n        .with_context(|| format!(\"Cannot read keyframes dir: {:?}\", args.keyframes))?\n        .filter_map(|e| e.ok())\n        .map(|e| e.path())\n        .filter(|p| p.extension().map(|e| e.eq_ignore_ascii_case(\"png\")).unwrap_or(false))\n        .collect();\n    keyframe_paths.sort();\n\n    if keyframe_paths.is_empty() {\n        anyhow::bail!(\"No PNG files found in {:?}\", args.keyframes);\n    }\n\n    log::info!(\"Found {} keyframe(s)\", keyframe_paths.len());\n\n    // 2. Load each keyframe + matching depth + target\n    let mut keyframe_data_vec: Vec<KeyframeData> = Vec::new();\n\n    for kf_path in &keyframe_paths {\n        let stem = kf_path.file_stem().context(\"keyframe has no stem\")?.to_string_lossy().to_string();\n\n        log::info!(\"Processing keyframe: {}\", kf_path.display());\n",
+  "source_version": "crates/dorea-cli/src/calibrate.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:29:20.465916334Z",
+  "valid_from": "2026-04-02T02:29:20.465916334Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/calibrate.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 178,
+    "end_line": 223,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

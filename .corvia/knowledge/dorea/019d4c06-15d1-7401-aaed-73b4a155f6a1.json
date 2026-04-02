@@ -1,0 +1,31 @@
+{
+  "id": "019d4c06-15d1-7401-aaed-73b4a155f6a1",
+  "content": "   let nvenc_available = *NVENC_AVAILABLE.get_or_init(|| {\n            Command::new(\"ffmpeg\")\n                .args([\"-hide_banner\", \"-encoders\"])\n                .output()\n                .map(|o| String::from_utf8_lossy(&o.stdout).contains(\"h264_nvenc\"))\n                .unwrap_or(false)\n        });\n\n        let codec_args: &[&str] = if nvenc_available { &nvenc_args } else { &sw_args };\n        cmd.args(codec_args);\n        cmd.arg(out_s);\n        cmd.stdin(Stdio::piped())\n            .stdout(Stdio::null())\n            .stderr(Stdio::null());\n\n        let mut child = cmd.spawn().map_err(FfmpegError::NotFound)?;\n        let stdin = child.stdin.take().ok_or_else(|| {\n            FfmpegError::EncodeFailed(\"could not open encoder stdin\".to_string())\n        })?;\n\n        Ok(Self {\n            child,\n            stdin,\n            frame_bytes: width * height * 3,\n        })\n    }\n\n    /// Write one RGB24 frame to the encoder.\n    pub fn write_frame(&mut self, pixels: &[u8]) -> Result<(), FfmpegError> {\n        if pixels.len() != self.frame_bytes {\n            return Err(FfmpegError::EncodeFailed(format!(\n                \"frame size mismatch: expected {} bytes, got {}\",\n                self.frame_bytes,\n                pixels.len()\n            )));\n        }\n        self.stdin.write_all(pixels).map_err(FfmpegError::NotFound)\n    }\n\n    /// Finalize encoding. Must be called after all frames are written.\n    pub fn finish(mut self) -> Result<(), FfmpegError> {\n        drop(self.stdin); // close stdin → signal EOF to ffmpeg\n        let status = self.child.wait().map_err(FfmpegError::NotFound)?;\n        if !status.success() {\n            return Err(FfmpegError::EncodeFailed(format!(\n                \"ffmpeg encoder exited with code {:?}\",\n                status.code()\n            )));\n        }\n        Ok(())\n    }\n}",
+  "source_version": "crates/dorea-video/src/ffmpeg.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:29:20.465946556Z",
+  "valid_from": "2026-04-02T02:29:20.465946556Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/ffmpeg.rs",
+    "language": "rs",
+    "chunk_type": "impl_item",
+    "start_line": 333,
+    "end_line": 379,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

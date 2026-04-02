@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2b-7910-85bb-dff4e3bb39d2",
+  "content": "### Graph-to-Document Navigation UX\n### Panel Pattern\n\n### Large Graph Handling\n\n- **Organize button**: Graph algorithm centers the most-linked card and arranges others\n- **Boards**: Separate canvases for different topics (equivalent to multiple graphs)\n- **Card folding**: Cards can be collapsed to post-it size to reduce visual clutter\n- **Color coding**: Instant visual segmentation by card color\n- **Sidebar navigation**: Search and browse all cards/boards outside the canvas\n\n\n### What Works Well\n\n- Eliminates the graph/document duality entirely -- they are the same surface\n- Spatial arrangement creates intuitive visual memory\n- Card folding for information density control\n- Two types of connections (visual links and text links) serve different purposes\n- Drag-to-connect is intuitive\n",
+  "source_version": "decisions/graph-document-ux-research.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.739089518Z",
+  "valid_from": "2026-04-02T02:52:13.739089518Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/graph-document-ux-research.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 382,
+    "end_line": 397,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

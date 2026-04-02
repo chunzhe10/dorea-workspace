@@ -1,0 +1,31 @@
+{
+  "id": "019d4c07-4579-7031-9c05-4e29188583d6",
+  "content": "### Task 2: Add `install_binaries` to `rebuild.py`\n\n    # Only create corvia, not corvia-inference\n    (target_dir / \"corvia\").write_bytes(b\"binary\")\n\n    installed = install_binaries(target_dir=target_dir, install_dir=install_dir)\n    assert installed == [\"corvia\"]\n```\n\n**Step 2: Run test to verify it fails**\n\nRun: `cd /workspaces/corvia-workspace/tools/corvia-dev && python -m pytest tests/test_rebuild.py::test_install_copies_binaries -v`\nExpected: FAIL with `ImportError: cannot import name 'install_binaries'`\n\n**Step 3: Write minimal implementation**\n\nAdd to `tools/corvia-dev/corvia_dev/rebuild.py`:\n\n```python\nimport shutil\nimport stat\n\n\ndef install_binaries(\n    target_dir: Path,\n    install_dir: Path = DEFAULT_INSTALL_DIR,\n) -> list[str]:\n    \"\"\"Copy built binaries from target_dir to install_dir.\n\n    Returns list of binary names that were installed.\n    \"\"\"\n    installed: list[str] = []\n    for name in BINARY_NAMES:\n        src = target_dir / name\n        if not src.exists():\n            continue\n        dst = install_dir / name\n        shutil.copy2(src, dst)\n        dst.chmod(dst.stat().st_mode | stat.S_IEXEC)\n        installed.append(name)\n    return installed\n```\n\n**Step 4: Run test to verify it passes**\n\nRun: `cd /workspaces/corvia-workspace/tools/corvia-dev && python -m pytest tests/test_rebuild.py -v`\nExpected: PASS (5 tests)\n\n**Step 5: Commit**\n\n```bash\ngit add tools/corvia-dev/corvia_dev/rebuild.py tools/corvia-dev/tests/test_rebuild.py\ngit commit -m \"feat(corvia-dev): add install_binaries to rebuild module\"\n```\n\n---\n",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-rebuild.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:30:38.201580895Z",
+  "valid_from": "2026-04-02T02:30:38.201580895Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-rebuild.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 191,
+    "end_line": 245,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

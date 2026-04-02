@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2b-7910-85bb-f3bc22f647e2",
+  "content": "### `dorea grade`\n\n### `dorea preview`\n\n```\ndorea preview\n  --input <path>          Input video file\n  --calibration <path>    .dorea-cal file\n  --output <path>         Output contact sheet PNG [default: preview.png]\n  --frames <n>            Number of frames to sample [default: 8]\n  --raune-weights <path>\n  --depth-model <path>\n  --cpu-only\n  -v / --verbose\n```\n\n**Pipeline:**\n1. Probe input for duration/fps\n2. Sample `--frames` evenly-spaced frame timestamps\n3. Extract frames via ffmpeg seeking\n4. Load or auto-derive calibration from sampled keyframes\n5. Run depth inference on each frame\n6. Apply grading pipeline\n7. Compose 2×N grid (top: original, bottom: graded) → PNG\n\n---\n",
+  "source_version": "plans/2026-04-02-dorea-v2-phase2-3-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.739303343Z",
+  "valid_from": "2026-04-02T02:52:13.739303343Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-dorea-v2-phase2-3-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 264,
+    "end_line": 288,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

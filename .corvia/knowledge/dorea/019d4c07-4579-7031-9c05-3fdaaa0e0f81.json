@@ -1,0 +1,31 @@
+{
+  "id": "019d4c07-4579-7031-9c05-3fdaaa0e0f81",
+  "content": "## Hybrid Tool Usage (corvia MCP + native tools)\n\n### When to use corvia MCP tools (ALWAYS do this first)\n\n- **Starting ANY task**: Call `corvia_search` or `corvia_ask` first to find prior decisions,\n  design context, or patterns relevant to the work. **This is mandatory, not optional.**\n- **Answering ANY question about the project**: Call `corvia_ask` before searching code.\n- **Understanding \"why\"**: Use `corvia_ask` for questions about architecture, rationale,\n  or past discussions.\n- **Recording decisions**: Use `corvia_write` to persist design decisions, architectural\n  context, or implementation notes that future sessions should know.\n\n\n### When to use native tools\n\n- **Reading/editing specific files** — corvia doesn't replace file access.\n- **Searching for code patterns** — precise text/regex matching in source code.\n- **Running commands** — Python scripts, tests, git, CLI tools.\n- **File discovery** — finding files by name or extension.\n",
+  "source_version": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:30:38.201434768Z",
+  "valid_from": "2026-04-02T02:30:38.201434768Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 588,
+    "end_line": 604,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

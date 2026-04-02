@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2b-7910-85bb-daa02b97c752",
+  "content": "─────────────┘│\n└──────────────────────────────────────────────────────────────────┘\n```\n\n### Core Interactions\n\n| Interaction | Behavior | Source pattern |\n|------------|----------|---------------|\n| Click node | Content loads in right panel, graph re-centers on node | Heptabase |\n| Hover node | Connected nodes highlight, unrelated nodes fade to low opacity | Obsidian |\n| Click neighbor card in panel | Navigates graph + updates panel (graph traversal from reader) | Neo4j Bloom |\n| Depth slider | Controls graph expansion radius (1-3 hops) | Obsidian |\n| Search | Highlights matching nodes in graph, lists results in panel | Neo4j Bloom |\n| Filter dropdowns | Filter by repo (`source_origin`) and type (`content_role`) | Custom |\n\n\n### Node Styling (data-driven)\n\n| Visual property | Driven by | Example |\n|----------------|-----------|---------|\n| Color | `content_role` | design=blue, code=green, plan=orange, memory=purple, finding=red |\n| Size | Connection count | More connections = larger node |\n| Shape | `source_origin` | Circle=repo, diamond=workspace, triangle=memory |\n| Edge color | Relation type | imports=gray, references=blue, contains=green |\n",
+  "source_version": "decisions/2026-03-13-docs-workflow-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.739031148Z",
+  "valid_from": "2026-04-02T02:52:13.739031148Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-03-13-docs-workflow-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 116,
+    "end_line": 135,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

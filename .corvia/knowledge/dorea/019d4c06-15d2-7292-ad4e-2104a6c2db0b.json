@@ -1,0 +1,31 @@
+{
+  "id": "019d4c06-15d2-7292-ad4e-2104a6c2db0b",
+  "content": " let idx = (z * n) / n_zones;\n        // C2: use saturating_sub to avoid underflow if n == 0 (already guarded above).\n        let idx = idx.min(n.saturating_sub(1));\n        boundaries.push(sorted[idx]);\n    }\n    boundaries.push(1.0_f32);\n    boundaries\n}\npub fn build_depth_luts(keyframes: &[KeyframeData]) -> DepthLuts {\n    // I7: validate that all keyframe slices have consistent lengths.\n    for (i, kd) in keyframes.iter().enumerate() {\n        assert_eq!(\n            kd.original.len(),\n            kd.target.len(),\n            \"keyframe {i}: original and target length mismatch\"\n        );\n        assert_eq!(\n            kd.original.len(),\n            kd.depth.len(),\n            \"keyframe {i}: original and depth length mismatch\"\n        );\n        assert_eq!(\n            kd.original.len(),\n            kd.importance.len(),\n            \"keyframe {i}: original and importance length mismatch\"\n        );\n    }\n\n    // Collect all depth values for adaptive boundaries\n    let all_depths: Vec<f32> = keyframes.iter().flat_map(|kd| kd.depth.iter().cloned()).collect();\n    let zone_boundaries = adaptive_zone_boundaries(&all_depths, N_DEPTH_ZONES);\n\n    let mut luts = Vec::with_capacity(N_DEPTH_ZONES);\n\n    for z in 0..N_DEPTH_ZONES {\n        let d_lo = zone_boundaries[z];\n        let d_hi = zone_boundaries[z + 1];\n\n        // Accumulation buffers: wsum[cell*3 + c], wcount[cell]",
+  "source_version": "crates/dorea-lut/src/build.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:29:20.466041926Z",
+  "valid_from": "2026-04-02T02:29:20.466041926Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-lut/src/build.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 200,
+    "end_line": 230,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

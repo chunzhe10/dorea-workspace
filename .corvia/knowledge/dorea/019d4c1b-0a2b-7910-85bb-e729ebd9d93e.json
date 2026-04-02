@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2b-7910-85bb-e729ebd9d93e",
+  "content": "# Test unusual path (warn)\n# Expected: exit 0 with warning on stderr\n\n# Expected: shows the doc-placement hook entry\n```\n\n- [ ] **Step 3: Commit generated hook**\n\n```bash\ncd /workspaces/corvia-workspace\ngit add .corvia/hooks/doc-placement-check.sh\ngit commit -m \"feat(hooks): add generated doc-placement validation script\"\n```\n\n---\n",
+  "source_version": "plans/2026-03-13-docs-workflow-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.739170156Z",
+  "valid_from": "2026-04-02T02:52:13.739170156Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-13-docs-workflow-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 2502,
+    "end_line": 2514,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

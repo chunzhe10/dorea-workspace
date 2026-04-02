@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2a-75d1-bc7b-4e2d6f81c046",
+  "content": "### Two Modes\n### Toggle Mechanism\n\n### State Persistence\n\nFile: `.devcontainer/.corvia-workspace-flags` (gitignored)\n\n```\nollama=disabled\nsurrealdb=disabled\n```\n\n`post-start.sh` reads this file on container restart and re-starts previously enabled services.\n\n\n### Files Changed\n\n1. **`.devcontainer/Dockerfile`** — Remove Ollama install\n2. **`.devcontainer/scripts/post-create.sh`** — Remove Ollama model pull, add corvia-workspace install\n3. **`.devcontainer/scripts/post-start.sh`** — Only start services from flags file\n4. **`corvia.toml`** — Default to `provider = \"corvia\"`, `store_type = \"lite\"`\n5. **New: `.devcontainer/scripts/corvia-workspace.sh`** — Toggle script\n6. **New: `.devcontainer/.corvia-workspace-flags`** — State file (gitignored)\n",
+  "source_version": "decisions/2026-03-03-optional-devcontainer-services-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.738987500Z",
+  "valid_from": "2026-04-02T02:52:13.738987500Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-03-03-optional-devcontainer-services-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 40,
+    "end_line": 59,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

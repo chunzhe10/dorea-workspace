@@ -1,0 +1,31 @@
+{
+  "id": "019d4c07-4579-7031-9c05-34d08b8623c2",
+  "content": "### Graph-to-Document Navigation UX\n### Panel Pattern\n\n### Large Graph Handling\n\n- Auto-sorting with vulnerable dependencies at top\n- Keyword filters: `ecosystem:npm`, `relationship:direct`\n- Pagination for large dependency lists\n- Separate tabs for Dependencies vs Dependents\n\n\n### What Works Well\n\n- Vulnerability highlighting is immediately useful (security context)\n- License information at a glance\n- Transitive dependency chain visualization via \"Show Paths\"\n",
+  "source_version": "decisions/graph-document-ux-research.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:30:38.201317390Z",
+  "valid_from": "2026-04-02T02:30:38.201317390Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/graph-document-ux-research.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 499,
+    "end_line": 511,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

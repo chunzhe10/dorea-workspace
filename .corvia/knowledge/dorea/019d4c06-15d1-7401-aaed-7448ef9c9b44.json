@@ -1,0 +1,31 @@
+{
+  "id": "019d4c06-15d1-7401-aaed-7448ef9c9b44",
+  "content": "m += (hist_a[i] as f64 - hist_b[i] as f64).abs();\n    }\n    // l1_sum is over 3 channels combined; each channel sums to n_pixels.\n    // Max l1_sum = 3 * 2 * n_pixels = 6 * n_pixels (completely disjoint histograms).\n    (l1_sum / (6.0 * n_pixels)) as f32\n}\nfn build_histogram(frame: &[u8]) -> Vec<u32> {\n    let mut hist = vec![0u32; TOTAL_BINS];\n    for chunk in frame.chunks_exact(3) {\n        let r_bin = (chunk[0] as usize * BINS) >> 8; // fast floor(v * BINS / 256)\n        let g_bin = (chunk[1] as usize * BINS) >> 8;\n        let b_bin = (chunk[2] as usize * BINS) >> 8;\n        hist[r_bin] += 1;\n        hist[BINS + g_bin] += 1;\n        hist[BINS * 2 + b_bin] += 1;\n    }\n    hist\n}",
+  "source_version": "crates/dorea-video/src/scene.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:29:20.465952012Z",
+  "valid_from": "2026-04-02T02:29:20.465952012Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/scene.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 37,
+    "end_line": 48,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

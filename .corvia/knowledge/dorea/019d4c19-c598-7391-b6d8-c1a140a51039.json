@@ -1,0 +1,31 @@
+{
+  "id": "019d4c19-c598-7391-b6d8-c1a140a51039",
+  "content": "def _choose_device(requested: Optional[str]) -> str:\n    if requested:\n        return requested\n    try:\n        import torch\n        return \"cuda\" if torch.cuda.is_available() else \"cpu\"\n    except ImportError:\n        return \"cpu\"\ndef main(argv: Optional[list] = None) -> None:\n    args = _parse_args(argv)\n    device = _choose_device(args.device)\n\n    # Write startup message to stderr (not stdout — stdout is the IPC channel)\n    print(f\"[dorea-inference] v{__version__} starting on device={device}\", file=sys.stderr, flush=True)\n\n    # Lazy-load models to avoid startup cost when not needed\n    raune_model = None\n    depth_model = None\n\n    if not args.no_raune:\n        try:\n            from .raune_net import RauneNetInference\n            raune_model = RauneNetInference(\n                weights_path=args.raune_weights,\n                device=device,\n                raune_models_dir=args.raune_models_dir,\n            )\n            print(\"[dorea-inference] RAUNE-Net loaded\", file=sys.stderr, flush=True)\n        except Exception as e:\n            print(f\"[dorea-inference] WARNING: RAUNE-Net failed to load: {e}\", file=sys.stderr, flush=True)\n\n    if not args.no_depth:\n        try:\n            from .depth_anything import DepthAnythingInference\n            depth_model = DepthAnythingInference(\n                model_path=args.depth_model,\n                device=device,\n            )\n            print(\"[dorea-inference] Depth Anything V2 loaded\", file=sys.stderr, flush=True)\n        except Exception as e:\n            print(f\"[dorea-inference] WARNING: Depth Anything V2 failed to load: {e}\", file=sys.stderr, flush=True)\n\n    print(\"[dorea-inference] ready\", file=sys.stderr, flush=True)\n\n    # Main request loop\n    for line in sys.stdin:\n        line = line.strip()\n        if not line:\n            continue\n\n        try:\n            req = json.loads(line)\n        except json.JSONDecodeError as e:\n            resp = ErrorResponse(id=None, message=f\"invalid JSON: {e}\")\n            try:\n                print(json.dumps(resp.to_dict()), flush=True)\n            except BrokenPipeError:\n                break\n            continue\n\n        if not isinstance(req, dict):",
+  "source_version": "python/dorea_inference/server.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:50:50.648530544Z",
+  "valid_from": "2026-04-02T02:50:50.648530544Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/server.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 62,
+    "end_line": 114,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d4c07-4579-7031-9c05-4bf2ec12d7b6",
+  "content": "        # Handle SIGTERM/SIGINT\n        # Start services in order\n\n            # Wait for health before starting dependents\n            for _ in range(30):  # 30s max wait\n                await asyncio.sleep(1)\n                result = check_service(self.processes[name].service)\n                if result.healthy is True or result.healthy is None:\n                    self.processes[name].state = ServiceState.HEALTHY\n                    break\n            self.write_state()\n\n\n        # Supervision loop\n        while not stop_event.is_set():\n            await self.health_check_all()\n            await self.restart_crashed()\n            self.write_state()\n            try:\n                await asyncio.wait_for(stop_event.wait(), timeout=HEALTH_CHECK_INTERVAL)\n            except asyncio.TimeoutError:\n                pass\n",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-cli.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:30:38.201559083Z",
+  "valid_from": "2026-04-02T02:30:38.201559083Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-cli.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1242,
+    "end_line": 1260,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2b-7910-85bb-e48f2868dc03",
+  "content": "### Task 2.4: Create `GraphControls` component\n\n    onFilterChange({ contentRole: role, sourceOrigin: val, depth });\n  };\n\n  const handleDepthChange = (e: Event) => {\n    const val = parseInt((e.target as HTMLInputElement).value, 10);\n    setDepth(val);\n    onFilterChange({ contentRole: role, sourceOrigin: origin, depth: val });\n  };\n\n  return (\n    <div class=\"graph-controls\">\n      <select value={role ?? \"\"} onChange={handleRoleChange}>\n        <option value=\"\">All roles</option>\n        {availableRoles.map((r) => (\n          <option key={r} value={r}>{ROLE_LABELS[r] ?? r}</option>\n        ))}\n      </select>\n\n      <select value={origin ?? \"\"} onChange={handleOriginChange}>\n        <option value=\"\">All sources</option>\n        {availableOrigins.map((o) => (\n          <option key={o} value={o}>{o}</option>\n        ))}\n      </select>\n\n      <label class=\"depth-control\">\n        <span>Depth: {depth}</span>\n        <input\n          type=\"range\"\n          min={1}\n          max={3}\n          value={depth}\n          onInput={handleDepthChange}\n        />\n      </label>\n    </div>\n  );\n}\n```\n\n- [ ] **Step 2: Commit**\n\n```bash\ncd /workspaces/corvia-workspace\ngit add tools/corvia-dashboard/src/components/GraphControls.tsx\ngit commit -m \"feat(dashboard): add GraphControls component (depth slider + metadata filters)\"\n```\n\n---\n",
+  "source_version": "plans/2026-03-13-docs-workflow-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.739141118Z",
+  "valid_from": "2026-04-02T02:52:13.739141118Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-13-docs-workflow-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1061,
+    "end_line": 1110,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

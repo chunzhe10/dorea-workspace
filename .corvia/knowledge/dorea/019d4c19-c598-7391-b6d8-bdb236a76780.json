@@ -1,0 +1,31 @@
+{
+  "id": "019d4c19-c598-7391-b6d8-bdb236a76780",
+  "content": "fn idx(&self, ri: usize, gi: usize, bi: usize) -> usize {\n        (ri * self.size * self.size + gi * self.size + bi) * 3\n    }\npub fn get(&self, ri: usize, gi: usize, bi: usize) -> [f32; 3] {\n        debug_assert!(ri < self.size && gi < self.size && bi < self.size);\n        let i = self.idx(ri, gi, bi);\n        [self.data[i], self.data[i + 1], self.data[i + 2]]\n    }",
+  "source_version": "crates/dorea-lut/src/types.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:50:50.648481058Z",
+  "valid_from": "2026-04-02T02:50:50.648481058Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-lut/src/types.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 29,
+    "end_line": 33,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

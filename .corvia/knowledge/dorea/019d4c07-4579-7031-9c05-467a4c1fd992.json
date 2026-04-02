@@ -1,0 +1,31 @@
+{
+  "id": "019d4c07-4579-7031-9c05-467a4c1fd992",
+  "content": "### Task 1: Workspace manifest + crate scaffolding\n### Task 2: `dorea-color` — color math\n\n### Task 3: `dorea-lut` — LUT build + apply\n- `types.rs`: LutGrid, DepthLuts\n- `build.rs`: build_depth_luts (importance weighting, adaptive zones, NN fill, σ=0)\n- `apply.rs`: apply_depth_luts (trilinear + depth blending)\n- Unit tests\n\n\n### Task 4: `dorea-hsl` — HSL qualifier correction\n- `qualifiers.rs`: HSL_QUALIFIERS constants\n- `derive.rs`: derive_hsl_corrections\n- `apply.rs`: apply_hsl_corrections\n- Unit tests\n",
+  "source_version": "plans/2026-04-02-dorea-v2-phase1-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:30:38.201502372Z",
+  "valid_from": "2026-04-02T02:30:38.201502372Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-dorea-v2-phase1-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 268,
+    "end_line": 279,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

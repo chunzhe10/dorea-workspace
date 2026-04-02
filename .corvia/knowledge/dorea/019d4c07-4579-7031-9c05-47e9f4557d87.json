@@ -1,0 +1,31 @@
+{
+  "id": "019d4c07-4579-7031-9c05-47e9f4557d87",
+  "content": "        # Resize to max_size (must be multiple of 14 for ViT patch alignment)\n        # Run inference → raw depth map\n\n        # Normalize to [0, 1]: (d - d.min()) / (d.max() - d.min())\n\n        # Return float32 array at inference resolution\n```\n\n---\n",
+  "source_version": "plans/2026-04-02-dorea-v2-phase2-3-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:30:38.201516398Z",
+  "valid_from": "2026-04-02T02:30:38.201516398Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-dorea-v2-phase2-3-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 221,
+    "end_line": 226,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

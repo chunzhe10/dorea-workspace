@@ -1,0 +1,31 @@
+{
+  "id": "019d4c06-15d1-7401-aaed-77acd5729112",
+  "content": "ss = 0.4 + 0.2 * (1.0 - d);\n        let knee_h = 0.88_f32;\n        if l_norm > knee_h {\n            let over = l_norm - knee_h;\n            let headroom = 1.0 - knee_h;\n            l_norm = knee_h + headroom * ((over / headroom * (1.0 + compress)).tanh());\n        }\n\n        // 4. Warmth (LAB a*/b* push proportional to depth and luminance)\n        let lum_weight = 4.0 * l_norm * (1.0 - l_norm);\n        let warmth_a = 1.0 + 5.0 * d;\n        let warmth_b = 4.0 * d;\n        a_ab += warmth_a * lum_weight;\n        b_ab += warmth_b * lum_weight;\n\n        // 5. Vibrance (chroma boost for desaturated pixels)\n        let vibrance = 0.4 + 0.5 * d;\n        let chroma = (a_ab * a_ab + b_ab * b_ab + 1e-8).sqrt();\n        let chroma_norm = (chroma / 40.0).clamp(0.0, 1.0);\n        let boost = vibrance * (1.0 - chroma_norm) * (l_norm / 0.25).clamp(0.0, 1.0);\n        a_ab *= 1.0 + boost;\n        b_ab *= 1.0 + boost;\n\n        // Clamp LAB components\n        let l_out = (l_norm * 100.0).clamp(0.0, 100.0);\n        let a_out = a_ab.clamp(-128.0, 127.0);\n        let b_out = b_ab.clamp(-128.0, 127.0);\n\n        // --- LAB → RGB ---\n        let (ro, go, bo) = lab_to_srgb(l_out, a_out, b_out);\n\n        // Final highlight knee\n        let knee = 0.92_f32;\n        let apply_knee = |v: f32| {\n            if v > knee {\n                let over = v - knee;\n                let room = 1.0 - knee;\n                knee + room * ((over / room).tanh())\n            } else {\n                v\n            }\n        };\n\n        rgb[i * 3]     = apply_knee(ro).clamp(0.0, 1.0);\n        rgb[i * 3 + 1] = apply_knee(go).clamp(0.0, 1.0);\n        rgb[i * 3 + 2] = apply_knee(bo).clamp(0.0, 1.0);\n    }\n\n    // Clarity: separable box-blur approximation of Gaussian (σ=30px at proxy).\n    // We run a 3-pass box blur (approximates Gaussian well).\n    let radius = (30.0_f32 * 3.0).ceil() as usize;\n    let clarity_amount = (0.2 + 0.25 * mean_d) * contrast_scale;\n    apply_clarity(rgb, width, height, radius, clarity_amount);\n}",
+  "source_version": "crates/dorea-gpu/src/cpu.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:29:20.465987057Z",
+  "valid_from": "2026-04-02T02:29:20.465987057Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cpu.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 68,
+    "end_line": 115,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

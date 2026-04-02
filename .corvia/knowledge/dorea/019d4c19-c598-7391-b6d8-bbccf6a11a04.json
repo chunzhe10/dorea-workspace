@@ -1,0 +1,31 @@
+{
+  "id": "019d4c19-c598-7391-b6d8-bbccf6a11a04",
+  "content": " v * (1.0 - s);\n    let q = v * (1.0 - s * f);\n    let t = v * (1.0 - s * (1.0 - f));\n\n    match i % 6 {\n        0 => (v, t, p),\n        1 => (q, v, p),\n        2 => (p, v, t),\n        3 => (p, q, v),\n        4 => (t, p, v),\n        _ => (v, p, q),\n    }\n}\nmod tests {\n    use super::*;\n\n    fn round_trip(r: f32, g: f32, b: f32) {\n        let (h, s, v) = rgb_to_hsv(r, g, b);\n        let (r2, g2, b2) = hsv_to_rgb(h, s, v);\n        assert!(\n            (r2 - r).abs() < 1e-5 && (g2 - g).abs() < 1e-5 && (b2 - b).abs() < 1e-5,\n            \"Round-trip ({r},{g},{b}) -> HSV({h:.2},{s:.4},{v:.4}) -> ({r2:.6},{g2:.6},{b2:.6})\"\n        );\n    }\n\n    #[test]\n    fn test_hsv_round_trip() {\n        round_trip(1.0, 0.0, 0.0); // red\n        round_trip(0.0, 1.0, 0.0); // green\n        round_trip(0.0, 0.0, 1.0); // blue\n        round_trip(1.0, 1.0, 1.0); // white\n        round_trip(0.0, 0.0, 0.0); // black\n        round_trip(0.5, 0.5, 0.5); // grey\n        round_trip(0.2, 0.6, 0.8); // arbitrary\n        round_trip(1.0, 0.5, 0.0); // orange\n    }\n\n    #[test]\n    fn test_pure_red() {\n        let (h, s, v) = rgb_to_hsv(1.0, 0.0, 0.0);\n        assert!((h - 0.0).abs() < 1e-5, \"Red hue: expected 0, got {h}\");\n        assert!((s - 1.0).abs() < 1e-5, \"Red sat: expected 1, got {s}\");\n        assert!((v - 1.0).abs() < 1e-5, \"Red val: expected 1, got {v}\");\n    }\n}",
+  "source_version": "crates/dorea-color/src/hsv.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:50:50.648456898Z",
+  "valid_from": "2026-04-02T02:50:50.648456898Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-color/src/hsv.rs",
+    "language": "rs",
+    "chunk_type": "mod_item",
+    "start_line": 60,
+    "end_line": 91,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

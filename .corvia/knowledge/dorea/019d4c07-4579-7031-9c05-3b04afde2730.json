@@ -1,0 +1,31 @@
+{
+  "id": "019d4c07-4579-7031-9c05-3b04afde2730",
+  "content": "### Task 4.2: Create hook generator CLI command\n\n        .map_err(|e| corvia_common::errors::CorviaError::Config(format!(\"Failed to create hooks dir: {e}\")))?;\n\n    let blocked_cases: String = rules.blocked_paths.iter()\n        .map(|p| format!(\"  {})\\n    echo \\\"BLOCKED: '$FILE_PATH' matches blocked path '{}'.\\\" >&2\\n    exit 2\\n    ;;\", p, p))\n        .collect::<Vec<_>>()\n        .join(\"\\n\");\n\n    let script = format!(r#\"#!/usr/bin/env bash\nset -euo pipefail\nINPUT=$(cat)\nFILE_PATH=$(echo \"$INPUT\" | jq -r '.file_path // empty')\n[ -z \"$FILE_PATH\" ] && exit 0\ncase \"$FILE_PATH\" in *.md|*.mdx|*.rst) ;; *) exit 0 ;; esac\ncase \"$FILE_PATH\" in\n{blocked_cases}\n  repos/*/docs/*|docs/decisions/*|docs/learnings/*|docs/marketing/*|docs/plans/*)\n    exit 0 ;;\nesac\necho \"NOTE: '$FILE_PATH' is in an unusual location for docs.\" >&2\nexit 0\n\"#);\n\n    let path = hook_dir.join(\"doc-placement-check.sh\");\n    std::fs::write(&path, script)\n        .map_err(|e| corvia_common::errors::CorviaError::Config(format!(\"Failed to write hook: {e}\")))?;\n\n    #[cfg(unix)]\n    {\n        use std::os::unix::fs::PermissionsExt;\n        std::fs::set_permissions(&path, std::fs::Permissions::from_mode(0o755))\n            .map_err(|e| corvia_common::errors::CorviaError::Config(format!(\"Failed to chmod: {e}\")))?;\n    }\n\n    println!(\"  Created: {}\", path.display());\n    Ok(())\n}\n\nfn generate_post_commit_hooks(\n    root: &Path,\n    ws: &corvia_common::config::WorkspaceConfig,\n    _config: &CorviaConfig,\n) -> Result<()> {\n    for repo in &ws.repos {\n        let git_hooks_dir = root.join(&ws.repos_dir).join(&repo.name).join(\".git/hooks\");\n        if !git_hooks_dir.exists() {\n            println!(\"  Skipped: {} (no .git directory)\", repo.name);\n            continue;\n        }\n\n        // Use xargs to safely handle filenames with newlines/spaces\n        let hook = r#\"#!/usr/bin/env bash",
+  "source_version": "plans/2026-03-13-docs-workflow-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:30:38.201387501Z",
+  "valid_from": "2026-04-02T02:30:38.201387501Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-13-docs-workflow-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 2327,
+    "end_line": 2377,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

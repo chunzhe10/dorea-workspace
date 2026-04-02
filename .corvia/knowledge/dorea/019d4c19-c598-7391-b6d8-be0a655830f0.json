@@ -1,0 +1,31 @@
+{
+  "id": "019d4c19-c598-7391-b6d8-be0a655830f0",
+  "content": " let n = luts.len();\n        let zone_centers = (0..n)\n            .map(|i| (zone_boundaries[i] + zone_boundaries[i + 1]) / 2.0)\n            .collect();\n        Self {\n            luts,\n            zone_boundaries,\n            zone_centers,\n        }\n    }\npub fn n_zones(&self) -> usize {\n        self.luts.len()\n    }",
+  "source_version": "crates/dorea-lut/src/types.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:50:50.648484751Z",
+  "valid_from": "2026-04-02T02:50:50.648484751Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-lut/src/types.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 76,
+    "end_line": 78,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

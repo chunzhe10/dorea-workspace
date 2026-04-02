@@ -1,0 +1,31 @@
+{
+  "id": "019d4c19-c598-7391-b6d8-b5edf4b26b82",
+  "content": "      Ok(_) => {}\n        }\n\n        let frame = Frame {\n            index: self.frame_index,\n            pixels: buf,\n            width: self.width,\n            height: self.height,\n        };\n        self.frame_index += 1;\n        Some(Ok(frame))\n    }\n}\nfn next(&mut self) -> Option<Self::Item> {\n        if self.done {\n            return None;\n        }\n\n        let mut buf = vec![0u8; self.frame_bytes];\n        let stdout = self.child.stdout.as_mut()?;\n\n        match read_exact(stdout, &mut buf) {\n            Ok(0) | Err(_) => {\n                self.done = true;\n                return None;\n            }\n            Ok(_) => {}\n        }\n\n        let frame = Frame {\n            index: self.frame_index,\n            pixels: buf,\n            width: self.width,\n            height: self.height,\n        };\n        self.frame_index += 1;\n        Some(Ok(frame))\n    }",
+  "source_version": "crates/dorea-video/src/ffmpeg.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:50:50.648380033Z",
+  "valid_from": "2026-04-02T02:50:50.648380033Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/ffmpeg.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 194,
+    "end_line": 218,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d4c19-c598-7391-b6d8-b5a5a8aa908f",
+  "content": "r {\n    fn new(child: Child, width: usize, height: usize) -> Self {\n        Self {\n            child,\n            frame_index: 0,\n            width,\n            height,\n            frame_bytes: width * height * 3,\n            done: false,\n        }\n    }\n}\nfn new(child: Child, width: usize, height: usize) -> Self {\n        Self {\n            child,\n            frame_index: 0,\n            width,\n            height,\n            frame_bytes: width * height * 3,\n            done: false,\n        }\n    }",
+  "source_version": "crates/dorea-video/src/ffmpeg.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:50:50.648377426Z",
+  "valid_from": "2026-04-02T02:50:50.648377426Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/ffmpeg.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 171,
+    "end_line": 180,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

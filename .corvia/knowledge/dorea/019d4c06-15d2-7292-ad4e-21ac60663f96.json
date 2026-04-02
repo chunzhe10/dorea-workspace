@@ -1,0 +1,31 @@
+{
+  "id": "019d4c06-15d2-7292-ad4e-21ac60663f96",
+  "content": "o.\"\"\"\n    from PIL import Image as _Image\n    w, h = img.size\n    scale = min(max_size / max(w, h), 1.0)\n    tw = int(round(w * scale))\n    th = int(round(h * scale))\n    resized = img.resize((tw, th), _Image.Resampling.BILINEAR)\n    return resized, tw, th\nclass RauneNetInference:\n    \"\"\"Run RAUNE-Net underwater image enhancement.\"\"\"\n\n    def __init__(\n        self,\n        weights_path: Optional[str] = None,\n        device: str = \"cpu\",\n        raune_models_dir: Optional[str] = None,\n    ) -> None:\n        import torch\n\n        self.device = torch.device(device if torch.cuda.is_available() or device == \"cpu\" else \"cpu\")\n\n        # Add the sea_thru_poc directory to sys.path so we can import models.raune_net\n        models_dir = Path(raune_models_dir) if raune_models_dir else _DEFAULT_RAUNE_MODELS_DIR\n        if str(models_dir) not in sys.path:\n            sys.path.insert(0, str(models_dir))\n\n        try:\n            from models.raune_net import RauneNet  # type: ignore\n        except ImportError as e:\n            raise ImportError(\n                f\"Could not import RauneNet from {models_dir}/models/raune_net.py: {e}\\n\"\n                f\"Ensure --raune-models-dir points to the sea_thru_poc directory.\"\n            ) from e\n\n        weights = Path(weights_path) if weights_path else _DEFAULT_WEIGHTS\n        if not weights.exists():\n            raise FileNotFoundError(\n                f\"RAUNE-Net weights not found at {weights}. \"",
+  "source_version": "python/dorea_inference/raune_net.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:29:20.466049603Z",
+  "valid_from": "2026-04-02T02:29:20.466049603Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/raune_net.py",
+    "language": "py",
+    "chunk_type": "class_definition",
+    "start_line": 39,
+    "end_line": 68,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

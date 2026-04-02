@@ -1,0 +1,31 @@
+{
+  "id": "019d4c06-15d2-7292-ad4e-246e1e3ebd39",
+  "content": "## Quick start\n\n# Build\ncargo build --release\n\n\n# Calibrate from keyframes",
+  "source_version": "README.md",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:29:20.466081001Z",
+  "valid_from": "2026-04-02T02:29:20.466081001Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "README.md",
+    "language": "markdown",
+    "chunk_type": "heading_section",
+    "start_line": 46,
+    "end_line": 49,
+    "content_role": "instruction",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

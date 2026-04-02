@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2a-75d1-bc7b-4df3380aaf46",
+  "content": "# Optional Devcontainer Services — Light Default with Toggle\n\n> **Status:** Shipped (v0.3.3)\n\n**Date**: 2026-03-03\n**Decision**: D70 (in `repos/corvia/docs/rfcs/2026-02-27-corvia-v0.2.0-brainstorm.md`)\n**Refines**: D52 (Devcontainer as Integration Surface)\n",
+  "source_version": "decisions/2026-03-03-optional-devcontainer-services-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.738983373Z",
+  "valid_from": "2026-04-02T02:52:13.738983373Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-03-03-optional-devcontainer-services-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1,
+    "end_line": 8,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

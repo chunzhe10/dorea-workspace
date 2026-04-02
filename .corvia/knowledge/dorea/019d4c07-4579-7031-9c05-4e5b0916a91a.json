@@ -1,0 +1,31 @@
+{
+  "id": "019d4c07-4579-7031-9c05-4e5b0916a91a",
+  "content": "on -m pytest tests/test_rebuild.py -v`\nExpected: PASS (8 tests)\n\n**Step 5: Commit**\n\n```bash\ngit add tools/corvia-dev/corvia_dev/rebuild.py tools/corvia-dev/tests/test_rebuild.py\ngit commit -m \"feat(corvia-dev): add cargo_build to rebuild module\"\n```\n\n---\n\n### Task 4: Add `rebuild` command to CLI\n\n**Files:**\n- Modify: `tools/corvia-dev/corvia_dev/cli.py`\n\n**Step 1: Add the rebuild command**\n\nAdd import at top of `cli.py` (after existing imports around line 24):\n\n```python\nfrom corvia_dev.rebuild import cargo_build, check_staleness, install_binaries, DEFAULT_INSTALL_DIR\n```\n\nAdd the command before the `if __name__` block (before line 344):\n\n```python\n@main.command()\n@click.option(\"--no-build\", is_flag=True, help=\"Skip cargo build, only install and restart\")\n@click.option(\"--release\", is_flag=True, help=\"Build with --release\")\ndef rebuild(no_build: bool, release: bool) -> None:\n    \"\"\"Build from source, install binaries, and restart services.\"\"\"\n    workspace = _workspace_root()\n    profile = \"release\" if release else \"debug\"\n    target_dir = workspace / \"repos\" / \"corvia\" / \"target\" / profile\n\n    if not no_build:\n        click.echo(f\"Building corvia binaries ({profile})...\")\n        if not cargo_build(workspace_root=workspace, release=release):\n            click.echo(\"Build failed.\", err=True)\n            raise SystemExit(1)\n        click.echo(\"Build succeeded.\")\n\n    if not target_dir.exists():\n        click.echo(f\"Target directory not found: {target_dir}\", err=True)\n        raise SystemExit(1)\n\n    click.echo(\"Installing binaries...\")\n    installed = install_binaries(target_dir=target_dir)\n    if not installed:\n        click.echo(\"No binaries found to install.\", err=True)\n        raise SystemExit(1)\n    for name in installed:\n        click.echo(f\"  {name} -> {DEFAULT_INSTALL_DIR / name}\")\n",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-rebuild.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:30:38.201583301Z",
+  "valid_from": "2026-04-02T02:30:38.201583301Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-rebuild.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 333,
+    "end_line": 376,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

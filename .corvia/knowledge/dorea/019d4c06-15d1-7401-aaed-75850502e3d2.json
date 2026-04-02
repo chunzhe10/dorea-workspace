@@ -1,0 +1,31 @@
+{
+  "id": "019d4c06-15d1-7401-aaed-75850502e3d2",
+  "content": "   let trimmed = line.trim_end_matches('\\n').trim_end_matches('\\r').to_string();\n        if trimmed.is_empty() {\n            return Err(InferenceError::Ipc(\"server sent empty response (may have crashed)\".to_string()));\n        }\n        Ok(trimmed)\n    }\n}\npub fn spawn(config: &InferenceConfig) -> Result<Self, InferenceError> {\n        let mut cmd = Command::new(&config.python_exe);\n        cmd.args([\"-m\", \"dorea_inference.server\"]);\n\n        if let Some(p) = &config.raune_weights {\n            cmd.args([\"--raune-weights\", p.to_str().unwrap_or(\"\")]);\n        } else {\n            cmd.arg(\"--no-raune\");\n        }\n\n        if let Some(p) = &config.raune_models_dir {\n            cmd.args([\"--raune-models-dir\", p.to_str().unwrap_or(\"\")]);\n        }\n\n        if let Some(p) = &config.depth_model {\n            cmd.args([\"--depth-model\", p.to_str().unwrap_or(\"\")]);\n        } else {\n            cmd.arg(\"--no-depth\");\n        }\n\n        if let Some(d) = &config.device {\n            cmd.args([\"--device\", d]);\n        }\n\n        // Set PYTHONPATH to the python/ dir adjacent to the target/ build directory.\n        // Binary lives at <workspace>/target/{debug,release}/dorea; python/ is a sibling of target/.\n        let pythonpath = std::env::current_exe().ok()\n            .and_then(|exe| {\n                // .parent() = target/debug|release, .parent() = target, .parent() = workspace root\n                exe.parent().and_then(|p| p.parent()).and_then(|p| p.parent())\n                    .map(|root| root.join(\"python\"))\n            })\n            .filter(|p| p.exists());\n        if let Some(ref p) = pythonpath {\n            cmd.env(\"PYTHONPATH\", p);\n        } else {\n            log::debug!(\n                \"PYTHONPATH not set: could not derive python/ dir from binary path; \\\n                 ensure dorea_inference is installed in the Python environment\"\n            );\n        }\n\n        cmd.stdin(Stdio::piped())\n            .stdout(Stdio::piped())\n            .stderr(Stdio::inherit()); // let stderr pass through for diagnostics\n\n        let mut child = cmd.spawn()?;\n        let mut stdin = child.stdin.take().ok_or_else(|| {\n            InferenceError::Ipc(\"could not open inference server stdin\".to_string())",
+  "source_version": "crates/dorea-video/src/inference.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:29:20.465964111Z",
+  "valid_from": "2026-04-02T02:29:20.465964111Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 70,
+    "end_line": 118,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

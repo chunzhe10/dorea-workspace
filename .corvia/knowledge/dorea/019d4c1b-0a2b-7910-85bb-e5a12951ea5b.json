@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2b-7910-85bb-e5a12951ea5b",
+  "content": "### Task 3.4: Implement `TemporalContradiction` check\n\n    let mut e2 = KnowledgeEntry::new(\"auth uses session cookies\".into(), \"test\".into(), \"v2\".into());\n    e2.metadata.source_origin = Some(\"repo:frontend\".into());\n    e2.embedding = Some(fake_embedding); // identical = similarity 1.0\n\n    let findings = check_temporal_contradiction(&[e1, e2], 0.85);\n    assert_eq!(findings.len(), 1);\n    assert_eq!(findings[0].check_type, CheckType::TemporalContradiction);\n}\n\n#[test]\nfn test_temporal_contradiction_ignores_same_origin() {\n    let fake_embedding = vec![0.1, 0.2, 0.3, 0.4];\n    let mut e1 = KnowledgeEntry::new(\"v1\".into(), \"test\".into(), \"v1\".into());\n    e1.metadata.source_origin = Some(\"repo:backend\".into());\n    e1.embedding = Some(fake_embedding.clone());\n    let mut e2 = KnowledgeEntry::new(\"v2\".into(), \"test\".into(), \"v2\".into());\n    e2.metadata.source_origin = Some(\"repo:backend\".into()); // same origin\n    e2.embedding = Some(fake_embedding);\n\n    let findings = check_temporal_contradiction(&[e1, e2], 0.85);\n    assert!(findings.is_empty()); // same origin → not flagged\n}\n```\n\n- [ ] **Step 2: Implement `check_temporal_contradiction`**\n\nExtends the existing `Contradiction` pattern but additionally requires overlapping `valid_from`/`valid_to` windows AND different `source_origin` values. This is an LLM-assisted check (uses embeddings for similarity).",
+  "source_version": "plans/2026-03-13-docs-workflow-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.739153946Z",
+  "valid_from": "2026-04-02T02:52:13.739153946Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-13-docs-workflow-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1748,
+    "end_line": 1774,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

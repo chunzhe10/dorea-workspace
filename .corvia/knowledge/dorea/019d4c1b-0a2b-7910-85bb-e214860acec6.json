@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2b-7910-85bb-e214860acec6",
+  "content": "## Algorithm Bugs Found During First Real Run\n\n### 1. Gain normalization suppresses red channel\n**What:** `compute_correction_params()` normalized gain to max=1.0, which set the\nstrongest channel (blue, underwater) to 1.0 and pushed red to ~0.5. With subsequent\nred boost capped at 30%, effective red gain was only 0.57.\n**Fix:** Removed normalization. Clip to [0.5, 1.5] range instead.\n**Why it matters:** Any normalization-to-max approach will suppress the weakest channel\nin color-imbalanced footage. For underwater, always expect red to be weakest.\n\n\n### 2. Per-channel gamma penalizes weak channels\n**What:** Gamma was derived from midtone color balance: weak channels got higher gamma\n(less expansion), strong channels got lower gamma (more expansion). This created a\nnegative feedback loop for red.\n**Fix:** Tightened the balance clamp from [0.5, 2.0] to [0.7, 1.3] and gamma range\nfrom [0.3, 0.8] to [0.35, 0.65].\n**Why it matters:** Per-channel gamma couples color balance with contrast. For a base\nLUT, prefer uniform gamma with separate color balance (via gain).\n",
+  "source_version": "learnings/2026-04-01-lut-generation-learnings.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.739112349Z",
+  "valid_from": "2026-04-02T02:52:13.739112349Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "learnings/2026-04-01-lut-generation-learnings.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 8,
+    "end_line": 24,
+    "content_role": "learning",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

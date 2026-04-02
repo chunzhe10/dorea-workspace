@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2b-7910-85bb-f1ca42f80df2",
+  "content": "### 7. HSL Qualifier Application (`dorea-hsl/src/apply.rs`)\n### 8. Calibration Format (`dorea-cal/src/format.rs`)\n\n### 9. CLI — `dorea calibrate` (`dorea-cli/src/calibrate.rs`)\n\n```\ndorea calibrate\n  --keyframes <dir>   Directory of sRGB PNG keyframes\n  --depth <dir>       Directory of 16-bit PNG depth maps (matched by name stem)\n  --targets <dir>     Directory of RAUNE-Net output PNGs (Phase 1: pre-computed)\n  --output <path>     Output .dorea-cal file [default: calibration.dorea-cal]\n  --cpu-only          No-op in Phase 1 (placeholder for Phase 2 GPU path)\n  -v / --verbose      Enable debug logging\n```\n\n**Matching:** keyframe `foo.png` → depth `foo.png` + target `foo.png` (by stem).\n\n---\n",
+  "source_version": "plans/2026-04-02-dorea-v2-phase1-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.739284293Z",
+  "valid_from": "2026-04-02T02:52:13.739284293Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-dorea-v2-phase1-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 221,
+    "end_line": 236,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2b-7910-85bb-f916f31ec345",
+  "content": "# corvia-dev rebuild + Staleness Detection\n\n## Problem\n\nAfter building new Rust code with `cargo build`, binaries land in `target/debug/` but\nrunning services use `/usr/local/bin/` (installed from GitHub releases at container\ncreation). There is no command to sync them — users must manually copy binaries and\nrestart services, leading to confusing \"stale binary\" debugging sessions.\n\n\n## Solution\n\nTwo additions to `corvia-dev`:\n\n1. **`corvia-dev rebuild`** — builds from source, installs, and restarts services\n2. **Staleness detection** — warns or prompts when installed binaries are older than local builds\n",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-rebuild-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.739363479Z",
+  "valid_from": "2026-04-02T02:52:13.739363479Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-rebuild-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 7,
+    "end_line": 20,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

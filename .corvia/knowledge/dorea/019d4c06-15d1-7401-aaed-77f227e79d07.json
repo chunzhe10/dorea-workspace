@@ -1,0 +1,31 @@
+{
+  "id": "019d4c06-15d1-7401-aaed-77f227e79d07",
+  "content": " (row as isize + r).min(height as isize - 1) as usize;\n            let mut s = 0.0_f32;\n            for k in lo..=hi {\n                s += src[k * width + col];\n            }\n            dst[row * width + col] = s / (hi - lo + 1) as f32;\n        }\n    }\n}\npub fn grade_frame_cpu(\n    pixels: &[u8],\n    depth: &[f32],\n    width: usize,\n    height: usize,\n    calibration: &Calibration,\n    params: &GradeParams,\n) -> Result<Vec<u8>, String> {\n    let n = width * height;\n\n    // Convert u8 → f32\n    let mut rgb_f32: Vec<f32> = pixels.iter().map(|&p| p as f32 / 255.0).collect();\n\n    // 1. Apply depth-stratified LUT\n    let lut_result = apply_depth_luts(\n        &rgb_f32\n            .chunks_exact(3)\n            .map(|c| [c[0], c[1], c[2]])\n            .collect::<Vec<_>>(),\n        depth,\n        &calibration.depth_luts,\n    );\n\n    // Write LUT result back into rgb_f32\n    for (i, px) in lut_result.iter().enumerate() {\n        rgb_f32[i * 3]     = px[0];\n        rgb_f32[i * 3 + 1] = px[1];\n        rgb_f32[i * 3 + 2] = px[2];\n    }\n\n    // 2. Apply HSL qualifier corrections\n    let pixels_arr: Vec<[f32; 3]> = rgb_f32\n        .chunks_exact(3)\n        .map(|c| [c[0], c[1], c[2]])\n        .collect();\n    let hsl_result = apply_hsl_corrections(&pixels_arr, &calibration.hsl_corrections);",
+  "source_version": "crates/dorea-gpu/src/cpu.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:29:20.465990351Z",
+  "valid_from": "2026-04-02T02:29:20.465990351Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cpu.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 201,
+    "end_line": 236,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

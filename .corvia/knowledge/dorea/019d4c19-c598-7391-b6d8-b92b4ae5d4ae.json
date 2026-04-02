@@ -1,0 +1,31 @@
+{
+  "id": "019d4c19-c598-7391-b6d8-b92b4ae5d4ae",
+  "content": "               height = u32::from_be_bytes([chunk_data[4],chunk_data[5],chunk_data[6],chunk_data[7]]) as usize;\n                let bit_depth  = chunk_data[8];\n                let color_type = chunk_data[9];\n                let interlace  = chunk_data[12];\n                if bit_depth != 8 || color_type != 2 || interlace != 0 {\n                    return Err(format!(\n                        \"unsupported PNG: bit_depth={bit_depth} color_type={color_type} interlace={interlace}\"\n                    ));\n                }\n            }\n            b\"IDAT\" => idat.extend_from_slice(chunk_data),\n            b\"IEND\" => break,\n            _ => {}\n        }\n    }\n\n    if width == 0 || height == 0 {\n        return Err(\"could not parse PNG dimensions\".to_string());\n    }\n\n    let decompressed = inflate_zlib(&idat)\n        .map_err(|e| format!(\"zlib inflate failed: {e}\"))?;\n\n    // Each row: 1 filter byte + stride pixel bytes\n    let stride = width * 3;\n    let expected_decompressed = height * (stride + 1);\n    if decompressed.len() < expected_decompressed {\n        return Err(format!(\n            \"decompressed PNG data too short: {} < {expected_decompressed}\",\n            decompressed.len()\n        ));",
+  "source_version": "crates/dorea-video/src/inference.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:50:50.648424282Z",
+  "valid_from": "2026-04-02T02:50:50.648424282Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 499,
+    "end_line": 525,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

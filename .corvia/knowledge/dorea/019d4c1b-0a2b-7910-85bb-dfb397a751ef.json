@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2b-7910-85bb-dfb397a751ef",
+  "content": "### Graph-to-Document Navigation UX\n### Panel Pattern\n\n### Large Graph Handling\n\n- **Organize button**: Activates a built-in graph algorithm that centers the most-linked element\n- **Map templates**: System (loop diagrams), Stakeholder (people relationships), SNA (network\n  analysis) -- each with different layout defaults\n- **Views**: Save different filter/styling configurations as named views\n- **Decorations**: Conditional formatting based on data values (size, color, shape by field values)\n\n\n### What Works Well\n\n- Simple and clean: click element, see profile in sidebar. No complexity.\n- Custom fields allow domain-specific metadata\n- Description field supports narrative/explanatory text alongside the graph\n- Conditional styling (decorations) makes data patterns visible\n- Easy to embed and share maps\n",
+  "source_version": "decisions/graph-document-ux-research.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.739086407Z",
+  "valid_from": "2026-04-02T02:52:13.739086407Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/graph-document-ux-research.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 327,
+    "end_line": 342,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

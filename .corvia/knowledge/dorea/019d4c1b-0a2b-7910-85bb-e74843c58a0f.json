@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2b-7910-85bb-e74843c58a0f",
+  "content": "### Task 4.4: Update `CLAUDE.md` with doc save location instructions\n\n## Documentation Save Locations\n\nWhen using superpowers brainstorming or writing-plans skills:\n- Product-specific designs → relevant repo's `docs/` directory\n- Workspace-level decisions → `docs/decisions/`\n- Implementation plans → alongside their design doc in the repo\n- Learnings → `docs/learnings/`\n\nDo NOT save to `docs/superpowers/specs/` or `docs/superpowers/plans/`.\n\n\n## Recording Decisions\n\nUse `corvia_write` with `content_role` and `source_origin` params:\n- corvia product decisions: `source_origin = \"repo:corvia\"`\n- Workspace decisions: `source_origin = \"workspace\"`\n```\n\n- [ ] **Step 2: Commit**\n\n```bash\ncd /workspaces/corvia-workspace\ngit add CLAUDE.md\ngit commit -m \"docs: add documentation save location instructions to CLAUDE.md\"\n```\n\n---\n",
+  "source_version": "plans/2026-03-13-docs-workflow-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.739171301Z",
+  "valid_from": "2026-04-02T02:52:13.739171301Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-13-docs-workflow-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 2525,
+    "end_line": 2551,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2b-7910-85bb-fa2fef1e379e",
+  "content": "### Task 5: Integrate staleness check into `up` command\n\n    # Check for stale binaries\n    stale = check_staleness(workspace_root=_workspace_root())\n    if stale:\n        names = \", \".join(stale)\n        if sys.stdin.isatty() and not no_foreground:\n            if click.confirm(\n                f\"Newer build detected for {names}. Install and restart?\",\n                default=True,\n            ):\n                installed = install_binaries(\n                    target_dir=_workspace_root() / \"repos\" / \"corvia\" / \"target\" / \"debug\",\n                )\n                for name in installed:\n                    click.echo(f\"  Installed {name}\")\n        else:\n            click.echo(\n                f\"Warning: installed binaries are older than local build: {names}\",\n                err=True,\n            )\n            click.echo(\n                \"  Run 'corvia-dev rebuild' to update.\",\n                err=True,\n            )\n```\n\n**Step 2: Test manually**\n\nRun: `corvia-dev up --help` (should still work)\nThen test with a stale binary scenario if possible.\n\n**Step 3: Commit**\n\n```bash\ngit add tools/corvia-dev/corvia_dev/cli.py\ngit commit -m \"feat(corvia-dev): prompt for stale binaries on up\"\n```\n\n---\n",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-rebuild.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.739376312Z",
+  "valid_from": "2026-04-02T02:52:13.739376312Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-rebuild.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 418,
+    "end_line": 456,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

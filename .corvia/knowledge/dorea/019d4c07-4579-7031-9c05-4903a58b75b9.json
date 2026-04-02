@@ -1,0 +1,31 @@
+{
+  "id": "019d4c07-4579-7031-9c05-4903a58b75b9",
+  "content": "## Config Mutation\n\n### How `use <provider>` works\n\nParse-modify-serialize with field preservation:\n\n1. Load `corvia.toml` as raw dict via `tomli`\n2. Validate only sections we touch via Pydantic models\n3. Mutate dict in-place\n4. Write back via `tomli_w` — preserves all untouched sections\n\n\n### What `use` changes vs preserves\n\n**Changes:** `embedding.provider`, `embedding.url`, `merge.provider`, `merge.url`\n**Preserves:** `embedding.model`, `embedding.dimensions`, `storage.*`, `server.*`, `workspace.*`, everything else\n",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-cli-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:30:38.201528722Z",
+  "valid_from": "2026-04-02T02:30:38.201528722Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-cli-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 110,
+    "end_line": 123,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2b-7910-85bb-d98e01e2376c",
+  "content": "### User Flows\n\n# Edit code in repos/corvia/\ncorvia-workspace rebuild    # recompiles from local source\n```\n\n**Cutting a new release:**\n```\ncd repos/corvia\ngit tag v0.2.0\ngit push origin v0.2.0     # triggers workflow, uploads binaries\n```",
+  "source_version": "decisions/2026-03-03-prebuilt-binaries-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.739018467Z",
+  "valid_from": "2026-04-02T02:52:13.739018467Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-03-03-prebuilt-binaries-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 88,
+    "end_line": 97,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

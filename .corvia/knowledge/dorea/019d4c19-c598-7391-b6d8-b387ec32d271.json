@@ -1,0 +1,31 @@
+{
+  "id": "019d4c19-c598-7391-b6d8-b387ec32d271",
+  "content": "           let v11 = src[y1 * sw + x1];\n            dst[dy * dw + dx] =\n                v00 * (1.0 - fx) * (1.0 - fy)\n                + v01 * fx * (1.0 - fy)\n                + v10 * (1.0 - fx) * fy\n                + v11 * fx * fy;\n        }\n    }\n    dst\n}\nfn resize_rgb_nn(\n    src: &[[f32; 3]],\n    sw: usize,\n    sh: usize,\n    dw: usize,\n    dh: usize,\n) -> Vec<[f32; 3]> {\n    let mut dst = vec![[0.0_f32; 3]; dw * dh];\n    for dy in 0..dh {\n        for dx in 0..dw {\n            let sx = ((dx as f32 * sw as f32) / dw as f32) as usize;\n            let sy = ((dy as f32 * sh as f32) / dh as f32) as usize;\n            let sx = sx.min(sw - 1);\n            let sy = sy.min(sh - 1);\n            dst[dy * dw + dx] = src[sy * sw + sx];\n        }\n    }\n    dst\n}",
+  "source_version": "crates/dorea-cli/src/calibrate.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:50:50.648321942Z",
+  "valid_from": "2026-04-02T02:50:50.648321942Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/calibrate.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 448,
+    "end_line": 466,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

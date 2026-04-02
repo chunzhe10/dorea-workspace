@@ -1,0 +1,31 @@
+{
+  "id": "019d4c07-4579-7031-9c05-2da215a18de6",
+  "content": "#### 1. GitHub Actions Release Workflow\n#### 2. Updated post-create.sh\n\n    # Fall back to source build\n    cd \"$WORKSPACE_ROOT/repos/corvia\"\n    cargo install --path crates/corvia-cli\n    cargo install --path crates/corvia-inference\n    cd \"$WORKSPACE_ROOT\"\nfi\n```\n",
+  "source_version": "decisions/2026-03-03-prebuilt-binaries-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:30:38.201239488Z",
+  "valid_from": "2026-04-02T02:30:38.201239488Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-03-03-prebuilt-binaries-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 40,
+    "end_line": 47,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

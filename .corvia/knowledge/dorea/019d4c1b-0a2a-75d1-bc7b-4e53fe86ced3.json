@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2a-75d1-bc7b-4e53fe86ced3",
+  "content": "# Optional Devcontainer Services Implementation Plan\n\n> **Status:** Shipped (v0.3.3)\n\n**Goal:** Make the devcontainer default to a light mode (LiteStore + corvia-inference/ONNX) with Ollama and SurrealDB as independent opt-in toggles via `corvia-workspace enable/disable`.\n\n**Architecture:** Remove Ollama from Dockerfile and lifecycle scripts. Change `corvia.toml` default to `provider = \"corvia\"` (fastembed/ONNX via gRPC on port 8030). Add a `corvia-workspace` shell script that manages enable/disable/status for Ollama and SurrealDB, persisting state in a flags file that `post-start.sh` reads on container restart.\n\n**Tech Stack:** Bash (toggle script), Docker (Dockerfile), corvia-inference (fastembed/ONNX gRPC server on port 8030)\n\n**Design doc:** `docs/decisions/2026-03-03-optional-devcontainer-services-design.md`\n**Decision:** D70 in `repos/corvia/docs/rfcs/2026-02-27-corvia-v0.2.0-brainstorm.md`\n\n---\n",
+  "source_version": "decisions/2026-03-03-optional-devcontainer-services.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.738990076Z",
+  "valid_from": "2026-04-02T02:52:13.738990076Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-03-03-optional-devcontainer-services.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1,
+    "end_line": 15,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

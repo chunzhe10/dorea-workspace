@@ -1,0 +1,31 @@
+{
+  "id": "019d4c07-4579-7031-9c05-381908a207e5",
+  "content": "### Task 1.5: Extend REST DTOs with new metadata fields\n\n    pub source_origin: Option<String>,\n}\n```\n\n- [ ] **Step 3: Wire filter params into `search_memories` REST handler**\n\nThe REST search handler (`search_memories` at ~line 337) constructs `RetrievalOpts` for the RAG pipeline. Pass the new `SearchRequest` fields through. Also apply post-filter in the fallback (non-RAG) branch:\n\n```rust\n// In search_memories handler, after parsing req:\nlet content_role = req.content_role.clone();\nlet source_origin = req.source_origin.clone();\n\n// RAG branch: pass filters into RetrievalOpts\nlet opts = corvia_kernel::rag_types::RetrievalOpts {\n    limit,\n    content_role,\n    source_origin,\n    ..Default::default()\n};\n\n// Fallback branch: apply post-filter after raw store search\nlet search_limit = if req.content_role.is_some() || req.source_origin.is_some() {\n    limit * 3\n} else {\n    limit\n};\nlet results = state.store.search(&embedding, &req.scope_id, search_limit).await?;\nlet mut results = corvia_kernel::retriever::post_filter_metadata(\n    results,\n    req.content_role.as_deref(),\n    req.source_origin.as_deref(),\n);\nresults.truncate(limit);\n```\n\nThis mirrors the MCP handler pattern in Task 1.6 Step 3. The dashboard uses REST (not MCP), so this wiring is essential for dashboard filters to work.\n\n- [ ] **Step 4: Build to verify compilation**\n\nRun: `cd /workspaces/corvia-workspace/repos/corvia && cargo build -p corvia-server`\nExpected: Compiles.\n\n- [ ] **Step 5: Commit**\n\n```bash\ncd /workspaces/corvia-workspace/repos/corvia\ngit add crates/corvia-server/src/rest.rs\ngit commit -m \"feat(server): extend SearchResultDto and SearchRequest with metadata filter fields\"\n```\n\n---\n",
+  "source_version": "plans/2026-03-13-docs-workflow-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:30:38.201355536Z",
+  "valid_from": "2026-04-02T02:30:38.201355536Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-13-docs-workflow-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 538,
+    "end_line": 590,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

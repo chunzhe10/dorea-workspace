@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2a-75d1-bc7b-4e3e07c1ba87",
+  "content": "### State Persistence\n### Files Changed\n\n### Config Switching\n\n`corvia-workspace enable/disable` updates `corvia.toml` via targeted `sed` replacements:\n\n| Action | corvia.toml change |\n|--------|-------------------|\n| `enable ollama` | `provider = \"ollama\"`, `model = \"nomic-embed-text\"`, `url = \"http://127.0.0.1:11434\"` |\n| `disable ollama` | `provider = \"corvia\"`, `model = \"nomic-embed-text-v1.5\"`, `url = \"http://127.0.0.1:8030\"` |\n| `enable surrealdb` | `store_type = \"surrealdb\"` |\n| `disable surrealdb` | `store_type = \"lite\"` |\n\n\n### Enable Ollama Flow\n\n1. Check if Ollama binary exists → install via `curl -fsSL https://ollama.com/install.sh | sh` if not\n2. Start `ollama serve` in background\n3. Wait for readiness (poll `/api/tags` endpoint)\n4. Pull `nomic-embed-text` model if not present\n5. Update `corvia.toml` embedding section\n6. Write `ollama=enabled` to flags file\n",
+  "source_version": "decisions/2026-03-03-optional-devcontainer-services-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.738988367Z",
+  "valid_from": "2026-04-02T02:52:13.738988367Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-03-03-optional-devcontainer-services-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 60,
+    "end_line": 79,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

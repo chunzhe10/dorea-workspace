@@ -1,0 +1,31 @@
+{
+  "id": "019d4c06-15d1-7401-aaed-71892b150721",
+  "content": "alibrate::CalibrateArgs),\n    /// Grade a video end-to-end using calibration (auto-derives if none provided)\n    Grade(dorea_cli::grade::GradeArgs),\n    /// Generate a before/after contact sheet (5-10 frames)\n    Preview(dorea_cli::preview::PreviewArgs),\n}\nfn main() -> anyhow::Result<()> {\n    // Parse CLI first so we can inspect the verbose flag before initialising logging.\n    let cli = Cli::parse();\n\n    // Determine log level from the verbose flag on any subcommand.\n    let verbose = match &cli.command {\n        Command::Calibrate(a) => a.verbose,\n        Command::Grade(a) => a.verbose,\n        Command::Preview(a) => a.verbose,\n    };\n\n    env_logger::Builder::from_env(env_logger::Env::default())\n        .filter_level(if verbose {\n            log::LevelFilter::Debug\n        } else {\n            log::LevelFilter::Info\n        })\n        .init();\n\n    match cli.command {\n        Command::Calibrate(args) => dorea_cli::calibrate::run(args),\n        Command::Grade(args) => dorea_cli::grade::run(args),\n        Command::Preview(args) => dorea_cli::preview::run(args),\n    }\n}",
+  "source_version": "crates/dorea-cli/src/main.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:29:20.465925848Z",
+  "valid_from": "2026-04-02T02:29:20.465925848Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/main.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 20,
+    "end_line": 44,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

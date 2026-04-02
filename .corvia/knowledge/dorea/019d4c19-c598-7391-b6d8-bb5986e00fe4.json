@@ -1,0 +1,31 @@
+{
+  "id": "019d4c19-c598-7391-b6d8-bb5986e00fe4",
+  "content": "og_m_to_linear(x: f32) -> f32 {\n    let x = x as f64;\n    let sl = slope();\n    let ic = intercept();\n\n    let linear = if x <= CUT_ENCODED {\n        (x - ic) / sl\n    } else {\n        (10_f64.powf((x - D) / C) - B) / A\n    };\n\n    linear.max(0.0) as f32\n}\npub fn linear_to_dlog_m(x: f32) -> f32 {\n    let x = x as f64;\n    let cl = cut_linear();\n    let sl = slope();\n    let ic = intercept();\n\n    let encoded = if x <= cl {\n        sl * x + ic\n    } else {\n        C * (A * x + B).log10() + D\n    };\n\n    encoded.clamp(0.0, 1.0) as f32\n}",
+  "source_version": "crates/dorea-color/src/dlog_m.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:50:50.648451920Z",
+  "valid_from": "2026-04-02T02:50:50.648451920Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-color/src/dlog_m.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 45,
+    "end_line": 58,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

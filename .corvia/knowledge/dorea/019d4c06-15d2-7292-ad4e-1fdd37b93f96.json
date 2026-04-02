@@ -1,0 +1,31 @@
+{
+  "id": "019d4c06-15d2-7292-ad4e-1fdd37b93f96",
+  "content": ": usize, bi: usize, val: [f32; 3]) {\n        debug_assert!(ri < self.size && gi < self.size && bi < self.size);\n        let i = self.idx(ri, gi, bi);\n        self.data[i] = val[0];\n        self.data[i + 1] = val[1];\n        self.data[i + 2] = val[2];\n    }\npub struct DepthLuts {\n    pub luts: Vec<LutGrid>,\n    /// Length = n_zones + 1, values in [0, 1]\n    pub zone_boundaries: Vec<f32>,\n    /// Length = n_zones — midpoint of each zone\n    pub zone_centers: Vec<f32>,\n}",
+  "source_version": "crates/dorea-lut/src/types.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:29:20.466028651Z",
+  "valid_from": "2026-04-02T02:29:20.466028651Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-lut/src/types.rs",
+    "language": "rs",
+    "chunk_type": "struct_item",
+    "start_line": 47,
+    "end_line": 53,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

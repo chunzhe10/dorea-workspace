@@ -1,0 +1,31 @@
+{
+  "id": "019d4c07-4579-7031-9c05-391964728c2b",
+  "content": "### Task 2.6: Create `DocumentReader` side panel\n\n\n  if (loading) {\n    return <div class=\"reader-loading\">Loading...</div>;\n  }\n\n  if (!entry) {\n    return <div class=\"reader-error\">Entry not found</div>;\n  }\n\n  return (\n    <div class=\"document-reader\">\n      <div class=\"reader-header\">\n        <h3>{entry.metadata.source_file ?? entry.id}</h3>\n        <button class=\"reader-close\" onClick={onClose}>×</button>\n      </div>\n\n      <div class=\"reader-meta\">\n        {entry.metadata.content_role && (\n          <span class=\"badge badge-role\">{entry.metadata.content_role}</span>\n        )}\n        {entry.metadata.source_origin && (\n          <span class=\"badge badge-origin\">{entry.metadata.source_origin}</span>\n        )}\n        <span class=\"reader-date\">\n          {new Date(entry.recorded_at).toLocaleDateString()}\n        </span>\n      </div>\n\n      <div class=\"reader-content\">\n        <pre>{entry.content}</pre>\n      </div>\n\n      <NeighborCards neighbors={neighbors} onSelect={onNavigate} />\n    </div>\n  );\n}\n```\n\n- [ ] **Step 2: Commit**\n\n```bash\ncd /workspaces/corvia-workspace\ngit add tools/corvia-dashboard/src/components/DocumentReader.tsx\ngit commit -m \"feat(dashboard): add DocumentReader side panel with metadata badges and neighbor cards\"\n```\n\n---\n",
+  "source_version": "plans/2026-03-13-docs-workflow-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:30:38.201366341Z",
+  "valid_from": "2026-04-02T02:30:38.201366341Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-13-docs-workflow-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1225,
+    "end_line": 1272,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

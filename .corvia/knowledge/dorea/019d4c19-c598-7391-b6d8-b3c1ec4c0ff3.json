@@ -1,0 +1,31 @@
+{
+  "id": "019d4c19-c598-7391-b6d8-b3c1ec4c0ff3",
+  "content": "t = RgbImage::new(sheet_w as u32, sheet_h as u32);\n\n    for (i, &ts) in timestamps.iter().enumerate() {\n        let orig = ffmpeg::extract_frame_at(&args.input, ts, tile_w, tile_h)\n            .with_context(|| format!(\"extract frame at {ts:.2}s failed\"))?;\n\n        let id = format!(\"prev{i:02}\");\n        let (depth_proxy, dw, dh) = inf_server.run_depth(&id, &orig, tile_w, tile_h, 518)\n            .unwrap_or_else(|_| (vec![0.5f32; tile_w * tile_h], tile_w, tile_h));\n        let depth = InferenceServer::upscale_depth(&depth_proxy, dw, dh, tile_w, tile_h);\n\n        let graded = grade_frame(&orig, &depth, tile_w, tile_h, &calibration, &params)\n            .unwrap_or_else(|_| orig.clone());\n\n        // Copy original into top row\n        blit_row(&mut sheet, &orig, tile_w, tile_h, i * tile_w, 0);\n        // Copy graded into bottom row\n        blit_row(&mut sheet, &graded, tile_w, tile_h, i * tile_w, tile_h);\n    }\n\n    let _ = inf_server.shutdown();\n\n    sheet.save(&args.output)\n        .with_context(|| format!(\"failed to save contact sheet to {}\", args.output.display()))?;\n\n    log::info!(\"Preview saved to {}\", args.output.display());\n    Ok(())\n}",
+  "source_version": "crates/dorea-cli/src/preview.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:50:50.648325858Z",
+  "valid_from": "2026-04-02T02:50:50.648325858Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/preview.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 136,
+    "end_line": 158,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

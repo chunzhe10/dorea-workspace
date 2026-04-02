@@ -1,0 +1,31 @@
+{
+  "id": "019d4c07-4579-7031-9c05-39befcd96944",
+  "content": "ocapture`\nExpected: PASS\n\n- [ ] **Step 5: Commit**\n\n```bash\ncd /workspaces/corvia-workspace/repos/corvia\ngit add crates/corvia-kernel/src/reasoner.rs\ngit commit -m \"feat(reasoner): add MisplacedDoc, TemporalContradiction, CoverageGap check types\"\n```\n\n---\n\n### Task 3.2: Implement `MisplacedDoc` check\n\n**Files:**\n- Modify: `repos/corvia/crates/corvia-kernel/src/reasoner.rs`\n\n- [ ] **Step 1: Write failing test**\n\n```rust\n/// Test helper: build DocsRulesConfig with standard blocked paths\nfn test_docs_rules() -> corvia_common::config::DocsRulesConfig {\n    corvia_common::config::DocsRulesConfig {\n        blocked_paths: vec![\"docs/superpowers/*\".into()],\n        repo_docs_pattern: Some(\"docs/\".into()),\n    }\n}\n\n#[test]\nfn test_misplaced_doc_check_blocked() {\n    let mut entry = KnowledgeEntry::new(\"design doc\".into(), \"test\".into(), \"v1\".into());\n    entry.metadata.content_role = Some(\"design\".into());\n    entry.metadata.source_file = Some(\"docs/superpowers/specs/design.md\".into());\n    entry.metadata.source_origin = Some(\"repo:corvia\".into());\n\n    let findings = check_misplaced_doc(&[entry], &test_docs_rules());\n    assert_eq!(findings.len(), 1);\n    assert_eq!(findings[0].check_type, CheckType::MisplacedDoc);\n}\n\n#[test]\nfn test_misplaced_doc_check_allowed() {\n    let mut entry = KnowledgeEntry::new(\"design doc\".into(), \"test\".into(), \"v1\".into());\n    entry.metadata.content_role = Some(\"design\".into());\n    entry.metadata.source_file = Some(\"repos/corvia/docs/design.md\".into());\n\n    let findings = check_misplaced_doc(&[entry], &test_docs_rules());\n    assert!(findings.is_empty());\n}\n```\n\n- [ ] **Step 2: Implement `check_misplaced_doc`**\n\nThe function takes entries and docs rules, compares `source_file` against expected path patterns based on `content_role` and `source_origin`. If the path matches a `blocked_paths` glob, it's misplaced. Uses the `glob` crate's `Pattern` type (already a dependency of corvia-kernel):\n\n```rust",
+  "source_version": "plans/2026-03-13-docs-workflow-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:30:38.201372605Z",
+  "valid_from": "2026-04-02T02:30:38.201372605Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-13-docs-workflow-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1551,
+    "end_line": 1594,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

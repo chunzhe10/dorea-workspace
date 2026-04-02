@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2b-7910-85bb-f549737cd85e",
+  "content": "### New files\n### What gets deleted\n\n### What stays but changes\n\n| File | Change |\n|------|--------|\n| `.devcontainer/scripts/post-start.sh` | Calls `corvia-dev up --no-foreground` instead of supervisor script |\n| `.devcontainer/scripts/post-create.sh` | Adds `pip install -e tools/corvia-dev` |\n\n\n### Installation\n\n`pip install -e tools/corvia-dev` in post-create, gives `corvia-dev` on PATH.\n\n---\n",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-cli-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.739319015Z",
+  "valid_from": "2026-04-02T02:52:13.739319015Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-cli-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 222,
+    "end_line": 234,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

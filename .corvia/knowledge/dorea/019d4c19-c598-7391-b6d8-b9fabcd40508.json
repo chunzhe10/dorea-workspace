@@ -1,0 +1,31 @@
+{
+  "id": "019d4c19-c598-7391-b6d8-b9fabcd40508",
+  "content": "pub enum GpuError {\n    #[error(\"CUDA error: {0}\")]\n    Cuda(String),\n    #[error(\"invalid input: {0}\")]\n    InvalidInput(String),\n}\npub fn grade_frame(\n    pixels: &[u8],\n    depth: &[f32],\n    width: usize,\n    height: usize,\n    calibration: &Calibration,\n    params: &GradeParams,\n) -> Result<Vec<u8>, GpuError> {\n    if pixels.len() != width * height * 3 {\n        return Err(GpuError::InvalidInput(format!(\n            \"pixels length {} != width*height*3 {}\",\n            pixels.len(),\n            width * height * 3\n        )));\n    }\n    if depth.len() != width * height {\n        return Err(GpuError::InvalidInput(format!(\n            \"depth length {} != width*height {}\",\n            depth.len(),\n            width * height\n        )));\n    }\n\n    #[cfg(feature = \"cuda\")]\n    {\n        match cuda::grade_frame_cuda(pixels, depth, width, height, calibration, params) {\n            Ok(result) => return Ok(result),\n            Err(e) => {\n                log::warn!(\"CUDA grading failed ({e}), falling back to CPU\");\n            }\n        }\n    }\n\n    cpu::grade_frame_cpu(pixels, depth, width, height, calibration, params)\n        .map_err(|e| GpuError::InvalidInput(e.to_string()))\n}",
+  "source_version": "crates/dorea-gpu/src/lib.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:50:50.648433451Z",
+  "valid_from": "2026-04-02T02:50:50.648433451Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/lib.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 50,
+    "end_line": 85,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

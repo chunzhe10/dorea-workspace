@@ -1,0 +1,31 @@
+{
+  "id": "019d4c06-15d1-7401-aaed-7544c3206a2d",
+  "content": ", height)?;\n        let b64 = B64.encode(&png);\n\n        let req = serde_json::json!({\n            \"type\": \"raune\",\n            \"id\": id,\n            \"image_b64\": b64,\n            \"max_size\": max_size\n        });\n        self.send_line(&req.to_string())?;\n\n        let resp = self.recv_line()?;\n        let v: serde_json::Value = serde_json::from_str(&resp)\n            .map_err(|e| InferenceError::Ipc(format!(\"raune response parse: {e}\")))?;\n\n        if v[\"type\"].as_str() == Some(\"error\") {\n            return Err(InferenceError::ServerError(\n                v[\"message\"].as_str().unwrap_or(\"unknown error\").to_string(),\n            ));\n        }\n        if v[\"type\"].as_str() != Some(\"raune_result\") {\n            return Err(InferenceError::Ipc(format!(\"unexpected response type: {resp}\")));\n        }\n\n        let w = v[\"width\"].as_u64().unwrap_or(0) as usize;\n        let h = v[\"height\"].as_u64().unwrap_or(0) as usize;\n        let b64_out = v[\"image_b64\"].as_str()\n            .ok_or_else(|| InferenceError::Ipc(\"missing image_b64 in raune_result\".to_string()))?;\n\n        let png_bytes = B64.decode(b64_out)\n            .map_err(|e| InferenceError::Ipc(format!(\"base64 decode: {e}\")))?;\n        let rgb = decode_png_bytes(&png_bytes)?;\n\n        Ok((rgb, w, h))\n    }\n\n    /// Run Depth Anything V2 on an RGB image.\n    ///\n    /// Returns (depth_f32, out_width, out_height) at inference resolution.\n    pub fn run_depth(\n        &mut self,\n        id: &str,\n        image_rgb: &[u8],\n        width: usize,\n        height: usize,\n        max_size: usize,",
+  "source_version": "crates/dorea-video/src/inference.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:29:20.465961385Z",
+  "valid_from": "2026-04-02T02:29:20.465961385Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference.rs",
+    "language": "rs",
+    "chunk_type": "impl_item",
+    "start_line": 206,
+    "end_line": 240,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

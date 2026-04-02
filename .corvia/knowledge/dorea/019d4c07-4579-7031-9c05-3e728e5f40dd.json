@@ -1,0 +1,31 @@
+{
+  "id": "019d4c07-4579-7031-9c05-3e728e5f40dd",
+  "content": "# Claude Code local settings (session-specific permissions)\n# Editor / IDE state (per-user)\n\n# Built VS Code extension artifacts (built from source by post-start.sh or CI)\n*.vsix\n\n\n# Python build artifacts\n__pycache__/\n*.egg-info/\n",
+  "source_version": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:30:38.201422206Z",
+  "valid_from": "2026-04-02T02:30:38.201422206Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 355,
+    "end_line": 361,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

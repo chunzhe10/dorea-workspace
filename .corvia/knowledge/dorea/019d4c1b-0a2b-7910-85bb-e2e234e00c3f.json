@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2b-7910-85bb-e2e234e00c3f",
+  "content": "### Phase 1: Metadata + Repo-Aware Write + Filtered Search\n\n### Phase 2: Dashboard Graphed Document Reader\n\n| Action | File | Responsibility |\n|--------|------|---------------|\n| Modify | `tools/corvia-dashboard/src/types.ts` | Add `content_role`, `source_origin` to `GraphNode`, `EntryDetail`, `RagSource` |\n| Modify | `tools/corvia-dashboard/src/api.ts` | Add `fetchEntryNeighbors()`, update `fetchGraphScope()` with filter params |\n| Create | `tools/corvia-dashboard/src/components/DocumentReader.tsx` | Side panel: renders entry content, metadata badges, neighbor cards |\n| Create | `tools/corvia-dashboard/src/components/NeighborCards.tsx` | Clickable related entry cards for graph traversal from reader |\n| Create | `tools/corvia-dashboard/src/components/GraphControls.tsx` | Depth slider, content_role filter, source_origin filter dropdowns |\n| Modify | `tools/corvia-dashboard/src/components/GraphView.tsx` | Refactor: split-panel layout, entry-level graph mode, hover highlight/fade |\n| Modify | `repos/corvia/crates/corvia-server/src/dashboard/mod.rs` | New endpoint: `GET /api/dashboard/entries/{entry_id}/neighbors` |\n\n\n### Phase 3: Intelligence (Reasoner + Docs Check)\n\n| Action | File | Responsibility |\n|--------|------|---------------|\n| Modify | `repos/corvia/crates/corvia-kernel/src/reasoner.rs:12-28` | Add `MisplacedDoc`, `TemporalContradiction`, `CoverageGap` to `CheckType` |\n| Modify | `repos/corvia/crates/corvia-kernel/src/reasoner.rs` | Implement three new check functions |\n| Modify | `repos/corvia/crates/corvia-cli/src/main.rs:244-265` | Add `Docs { Check }` subcommand to `WorkspaceCommands` |\n| Modify | `tools/corvia-dashboard/src/components/HealthPanel.tsx` | Render new finding types with doc-specific styling |\n",
+  "source_version": "plans/2026-03-13-docs-workflow-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.739122133Z",
+  "valid_from": "2026-04-02T02:52:13.739122133Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-13-docs-workflow-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 29,
+    "end_line": 49,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

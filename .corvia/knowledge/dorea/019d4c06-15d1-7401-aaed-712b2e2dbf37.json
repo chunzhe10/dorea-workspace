@@ -1,0 +1,31 @@
+{
+  "id": "019d4c06-15d1-7401-aaed-712b2e2dbf37",
+  "content": "Python executable\n    #[arg(long, default_value = \"/opt/dorea-venv/bin/python\")]\n    pub python: PathBuf,\n\n    /// Force CPU-only mode\n    #[arg(long)]\n    pub cpu_only: bool,\n\n    /// Enable verbose logging\n    #[arg(short, long)]\n    pub verbose: bool,\n}\npub fn run(args: PreviewArgs) -> Result<()> {\n    log::info!(\"Generating preview for {}\", args.input.display());\n\n    let info = ffmpeg::probe(&args.input)\n        .context(\"ffprobe failed\")?;\n    log::info!(\"Input: {}x{} @ {:.2}fps, {:.1}s\", info.width, info.height, info.fps, info.duration_secs);\n\n    let n = args.frames.clamp(1, 20);\n    let params = GradeParams {\n        warmth: args.warmth,\n        strength: args.strength,\n        contrast: args.contrast,\n    };\n\n    // Decide preview tile size (max 512px wide per tile)\n    let tile_w = info.width.min(512);\n    let tile_h = (info.height as f64 * tile_w as f64 / info.width as f64).round() as usize;\n\n    // Sample evenly-spaced timestamps\n    let timestamps: Vec<f64> = (0..n)\n        .map(|i| (i as f64 + 0.5) * info.duration_secs / n as f64)\n        .collect();\n\n    log::info!(\"Sampling {n} frames at {tile_w}x{tile_h} tile size...\");\n\n    // Spawn inference server\n    let inf_cfg = InferenceConfig {\n        python_exe: args.python.clone(),\n        raune_weights: args.raune_weights.clone(),\n        raune_models_dir: args.raune_models_dir.clone(),\n        depth_model: args.depth_model.clone(),\n        device: if args.cpu_only { Some(\"cpu\".to_string()) } else { None },\n        startup_timeout: Duration::from_secs(180),\n    };\n    let mut inf_server = InferenceServer::spawn(&inf_cfg)\n        .context(\"failed to spawn inference server\")?;\n\n    // Load or auto-derive calibration\n    let calibration = if let Some(cal_path) = &args.calibration {\n        Calibration::load(cal_path).context(\"failed to load .dorea-cal\")?\n    } else {\n        log::info!(\"Auto-deriving calibration from sampled frames...\");\n        use crate::calibrate::{run_calibration_from_frames, CalibrationInput};\n        let mut inputs = Vec::new();\n        for (i, &ts) in timestamps.iter().enumerate() {",
+  "source_version": "crates/dorea-cli/src/preview.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:29:20.465922459Z",
+  "valid_from": "2026-04-02T02:29:20.465922459Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/preview.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 69,
+    "end_line": 113,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

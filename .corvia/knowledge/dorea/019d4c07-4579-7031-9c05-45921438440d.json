@@ -1,0 +1,31 @@
+{
+  "id": "019d4c07-4579-7031-9c05-45921438440d",
+  "content": "# Stage only the files that belong — review before adding\n\n### Task 29: Verification checklist\n\n- [ ] **Step 1: Verify repo structure**\n\n```bash\ncd /home/chunzhe/corvia-project/dorea-workspace\necho \"=== Top level ===\"\nls -la\necho \"=== repos/dorea ===\"\nls -la repos/dorea/\necho \"=== repos/dorea/scripts ===\"\nls -la repos/dorea/scripts/\necho \"=== docs ===\"\nls -la docs/\n```\n\nExpected: all files present, no repos/corvia, dorea scripts visible.\n\n- [ ] **Step 2: Verify corvia.toml scope**\n\n```bash\ncd /home/chunzhe/corvia-project/dorea-workspace\ngrep scope_id corvia.toml\ngrep 'name = \"dorea\"' corvia.toml\n```\n\nExpected: `scope_id = \"dorea\"` and repo name `\"dorea\"`.\n\n- [ ] **Step 3: Verify .mcp.json has all three servers**\n\n```bash\ncd /home/chunzhe/corvia-project/dorea-workspace\npython3 -c \"import json; d=json.load(open('.mcp.json')); print(list(d['mcpServers'].keys()))\"\n```\n\nExpected: `['corvia', 'davinci-resolve-mcp', 'playwright']`\n\n- [ ] **Step 4: Verify git remotes**\n\n```bash\ncd /home/chunzhe/corvia-project/dorea-workspace\ngit remote -v\n```\n\nExpected: `origin` → dorea-workspace, `upstream` → corvia-workspace.\n\n- [ ] **Step 5: Verify no corvia references remain in key files**\n\n```bash\ncd /home/chunzhe/corvia-project/dorea-workspace\ngrep -r \"scope_id.*corvia\" CLAUDE.md AGENTS.md corvia.toml .claude/settings.json .claude/hooks/ || echo \"Clean — no stale corvia scope_id references\"\n```\n\nExpected: \"Clean — no stale corvia scope_id references\"",
+  "source_version": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:30:38.201494165Z",
+  "valid_from": "2026-04-02T02:30:38.201494165Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1768,
+    "end_line": 1821,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d4c07-4579-7031-9c05-35ee359be0ba",
+  "content": "## Sources\n\n- [Scrintal Knowledge Graph](https://scrintal.com/features/knowledge-graph)\n- [Scrintal vs Obsidian Comparison](https://scrintal.com/comparisons/obsidian-vs-scrintal)\n- [Heptabase User Interface Logic](https://wiki.heptabase.com/user-interface-logic)\n- [Heptabase 2025 Changelog](https://wiki.heptabase.com/changelog/2025)\n- [Heptabase Fundamental Elements](https://wiki.heptabase.com/fundamental-elements)\n- [GitHub Dependency Graph Docs](https://docs.github.com/en/code-security/supply-chain-security/understanding-your-software-supply-chain/exploring-the-dependencies-of-a-repository)\n- [Graphistry UI Guide](https://hub.graphistry.com/docs/ui/index/)\n- [Graphistry GPU Visualization](https://www.graphistry.com/gpu)\n- [Graphistry MCP Integration](https://github.com/graphistry/graphistry-mcp)\n- [Dendron Graph View Design](https://docs.dendron.so/notes/6e87249b-358f-4f4b-8049-dff6e6a8463b/)\n- [Foam Graph Visualization](https://github.com/foambubble/foam)\n- [TheBrain Ubiquitous Visual Knowledge](https://www.thebrain.com/blog/enabling-ubiquitous-non-linear-visual-knowledge)\n- [TheBrain Navigating Beyond the Plex](https://thebrain.com/blog/navigating-beyond-the-plex)\n- [IVGraph Notion Knowledge Graph 2026](https://ivgraph.com/journal/ultimate-notion-knowledge-graph-guide-2026/)\n- [Knowledge Graph Visualization Guide](https://datavid.com/blog/knowledge-graph-visualization)\n- [UX Design for Enterprise Knowledge Graphs](https://predictiveux.com/insights/ux-design-for-enterprise-search-using-knowledge-graphs)\n- [Top Graph-Based KM Tools 2025](https://blog.knowing.app/posts/top-graph-based-knowledge-management-tools-2025/)\n- [Interactive Visual Knowledge Graphs Research](https://www.emergentmind.com/topics/interactive-visual-knowledge-graphs)",
+  "source_version": "decisions/graph-document-ux-research.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:30:38.201329078Z",
+  "valid_from": "2026-04-02T02:30:38.201329078Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/graph-document-ux-research.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 807,
+    "end_line": 824,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

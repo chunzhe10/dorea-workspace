@@ -1,0 +1,31 @@
+{
+  "id": "019d4c06-15d2-7292-ad4e-1f42a3d49879",
+  "content": "fn angular_dist(h: f32, center: f32) -> f32 {\n    let diff = (h - center).abs();\n    diff.min(360.0 - diff)\n}\nfn wrap_hue_diff(diff: f32) -> f32 {\n    (diff + 180.0).rem_euclid(360.0) - 180.0\n}\nmod tests {\n    use super::*;\n    use dorea_color::hsv::hsv_to_rgb;\n\n    /// I5c: When lut_output == target, all corrections should be zero/identity.\n    #[test]\n    fn test_derive_same_image() {\n        // Build a diverse set of saturated pixels that will activate qualifiers.\n        let mut pixels: Vec<[f32; 3]> = Vec::new();\n        // Generate pixels in different hue ranges with sufficient saturation.\n        for &(h, s, v) in &[\n            (0.0_f32, 0.8, 0.6),    // Red\n            (10.0, 0.9, 0.7),\n            (40.0, 0.85, 0.6),      // Yellow\n            (50.0, 0.9, 0.7),\n            (100.0, 0.8, 0.6),      // Green\n            (115.0, 0.9, 0.7),\n            (170.0, 0.85, 0.65),    // Cyan\n            (180.0, 0.9, 0.6),\n            (210.0, 0.8, 0.7),      // Blue\n            (220.0, 0.9, 0.65),\n            (290.0, 0.85, 0.6),     // Magenta\n            (300.0, 0.9, 0.7),\n        ] {\n            // Repeat each pixel many times to exceed MIN_WEIGHT.\n            for _ in 0..20 {\n                let (r, g, b) = hsv_to_rgb(h, s, v);\n                pixels.push([r, g, b]);\n            }\n        }\n\n        // When lut_output == target, corrections must be identity.\n        let corrs = derive_hsl_corrections(&pixels, &pixels);\n        for (i, c) in corrs.0.iter().enumerate() {\n            if c.weight < crate::qualifiers::MIN_WEIGHT {\n                continue;\n            }\n            assert!(\n                c.h_offset.abs() < 0.5,\n                \"qualifier {i}: h_offset should be ~0, got {}\",\n                c.h_offset\n            );\n            assert!(\n                (c.s_ratio - 1.0).abs() < 0.01,\n                \"qualifier {i}: s_ratio should be ~1.0, got {}\",\n                c.s_ratio\n            );\n            assert!(\n                c.v_offset.abs() < 0.01,\n                \"qualifier {i}: v_offset should be ~0, got {}\",\n                c.v_offset\n            );\n        }\n    }\n}",
+  "source_version": "crates/dorea-hsl/src/derive.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:29:20.466022477Z",
+  "valid_from": "2026-04-02T02:29:20.466022477Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-hsl/src/derive.rs",
+    "language": "rs",
+    "chunk_type": "mod_item",
+    "start_line": 137,
+    "end_line": 191,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

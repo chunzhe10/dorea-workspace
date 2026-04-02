@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2b-7910-85bb-d8ff1f261ddf",
+  "content": "# Optional service state (per-user, not shared)\n\n### Task 7: Smoke test the full flow\n\n**Step 1: Run status to verify clean state**\n\nRun: `cd /root/corvia-project/corvia-workspace && bash .devcontainer/scripts/corvia-workspace.sh status`\nExpected: All services disabled, config shows `provider=corvia model=nomic-embed-text-v1.5 store=lite`.\n\n**Step 2: Verify post-create.sh syntax**\n\nRun: `bash -n .devcontainer/scripts/post-create.sh`\nExpected: No errors.\n\n**Step 3: Verify post-start.sh syntax**\n\nRun: `bash -n .devcontainer/scripts/post-start.sh`\nExpected: No errors.\n\n**Step 4: Verify Dockerfile builds**\n\nRun: `docker build -f .devcontainer/Dockerfile .devcontainer/ --no-cache 2>&1 | tail -3`\nExpected: Build succeeds, no Ollama in output.\n\n**Step 5: Final commit (squash if desired)**\n\nIf all tasks were committed individually, no action needed. Otherwise:\n\n```bash\ngit add -A\ngit commit -m \"feat: optional devcontainer services — light default with toggle (D70)\n\nOllama and SurrealDB are now opt-in via 'corvia-workspace enable/disable'.\nDefault uses corvia-inference (fastembed/ONNX) for CPU embeddings.\"\n```",
+  "source_version": "decisions/2026-03-03-optional-devcontainer-services.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.739007522Z",
+  "valid_from": "2026-04-02T02:52:13.739007522Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-03-03-optional-devcontainer-services.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 473,
+    "end_line": 505,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

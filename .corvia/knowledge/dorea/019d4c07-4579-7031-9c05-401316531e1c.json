@@ -1,0 +1,31 @@
+{
+  "id": "019d4c07-4579-7031-9c05-401316531e1c",
+  "content": "### Task 10: Update README.md\n\n# dorea development workspace\n\nCorvia-powered workspace for developing [dorea](repos/dorea) — an automated\nunderwater video AI editing pipeline. This workspace uses corvia's MCP server\nand knowledge store for organizational memory during development.\n",
+  "source_version": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:30:38.201437577Z",
+  "valid_from": "2026-04-02T02:30:38.201437577Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 646,
+    "end_line": 651,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

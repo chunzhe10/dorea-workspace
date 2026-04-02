@@ -1,0 +1,31 @@
+{
+  "id": "019d4c06-15d2-7292-ad4e-238220e2ba1a",
+  "content": "def _parse_args(argv: Optional[list] = None) -> argparse.Namespace:\n    p = argparse.ArgumentParser(\n        prog=\"python -m dorea_inference.server\",\n        description=\"Dorea inference subprocess server\",\n    )\n    p.add_argument(\"--raune-weights\", default=None)\n    p.add_argument(\"--raune-models-dir\", default=None)\n    p.add_argument(\"--depth-model\", default=None)\n    p.add_argument(\"--device\", default=None, choices=[\"cpu\", \"cuda\"])\n    p.add_argument(\"--no-raune\", action=\"store_true\")\n    p.add_argument(\"--no-depth\", action=\"store_true\")\n    return p.parse_args(argv)",
+  "source_version": "python/dorea_inference/server.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:29:20.466071823Z",
+  "valid_from": "2026-04-02T02:29:20.466071823Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/server.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 38,
+    "end_line": 49,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

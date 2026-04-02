@@ -1,0 +1,31 @@
+{
+  "id": "019d4c06-15d2-7292-ad4e-1ec55970d389",
+  "content": "pub fn apply_hsl_corrections(\n    pixels: &[[f32; 3]],\n    corrections: &HslCorrections,\n) -> Vec<[f32; 3]> {\n    pixels\n        .iter()\n        .map(|&[r, g, b]| {\n            let (mut h, mut s, mut v) = rgb_to_hsv(r, g, b);\n\n            for corr in &corrections.0 {\n                if corr.weight < crate::qualifiers::MIN_WEIGHT {\n                    continue;\n                }\n\n                let hc = corr.h_center;\n                let hw = corr.h_width;\n\n                let h_dist = {\n                    let diff = (h - hc).abs();\n                    diff.min(360.0 - diff)\n                };\n                let soft_mask = (1.0 - h_dist / hw).max(0.0)\n                    * if s > MIN_SATURATION { 1.0 } else { 0.0 };\n\n                h += corr.h_offset * soft_mask;\n                s = (s * (1.0 + (corr.s_ratio - 1.0) * soft_mask)).clamp(0.0, 1.0);\n                v = (v + corr.v_offset * soft_mask).clamp(0.0, 1.0);\n            }\n\n            // Wrap hue to [0, 360)\n            h = h.rem_euclid(360.0);\n\n            let (ro, go, bo) = hsv_to_rgb(h, s, v);\n            [ro, go, bo]\n        })\n        .collect()\n}",
+  "source_version": "crates/dorea-hsl/src/apply.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:29:20.466016306Z",
+  "valid_from": "2026-04-02T02:29:20.466016306Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-hsl/src/apply.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 14,
+    "end_line": 50,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

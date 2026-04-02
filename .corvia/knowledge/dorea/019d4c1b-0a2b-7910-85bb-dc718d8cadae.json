@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2b-7910-85bb-dc718d8cadae",
+  "content": "# D35: LiteStore as Full Product\n\n## Decision\n\nLiteStore (hnsw_rs + petgraph + Redb + Git-tracked JSON) is the full product, not a\nlite fallback. It provides vector search, graph traversal, multi-agent coordination,\nLLM-assisted merge, bi-temporal queries, and the complete namespace system -- all with\nzero Docker dependency. FullStore (SurrealDB) and PostgresStore are opt-in upgrades for\nadvanced graph SQL and scale.\n\n\n## Context\n\nThe original design (D13, D15) assumed SurrealDB in Docker was the real store and\nembedded storage was a future possibility. After further analysis, it became clear that\nmost users want zero-dependency setup. Docker was originally justified by environment\nisolation requirements, but correctness isolation (preventing cross-scope data pollution)\ncan be enforced at the application level without OS-level boundaries. The `QueryableStore`\ntrait boundary made this a natural evolution rather than a rewrite.\n",
+  "source_version": "decisions/d35-litestore-full-product.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.739051390Z",
+  "valid_from": "2026-04-02T02:52:13.739051390Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/d35-litestore-full-product.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 7,
+    "end_line": 23,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2b-7910-85bb-f2be9b2dbe27",
+  "content": "## New Crate: `dorea-gpu`\n\n### CPU `depth_aware_ambiance` Algorithm\n\nPort from `run_fixed_hsl_lut_poc.py::depth_aware_ambiance()`:\n\n```\n1. RGB f32 → LAB (via dorea-color)\n2. Shadow lift: lift_amount = 0.2 + 0.15*d; shadow_mask = clamp((0.15 - L/100) / 0.15, 0, 1)\n   L/100 += shadow_mask * lift_amount * 0.15\n3. S-curve: strength = 0.3 + 0.3*d; s = 1/(1+exp(-(x-0.5)*(4+4*strength))); L = x + (s-x)*strength\n4. Highlight compress: knee=0.88; over = max(L-knee,0); L = knee + (1-knee)*tanh(over/(1-knee)*(1+compress))\n   compress = 0.4 + 0.2*(1-d)\n5. Clarity: sigma proportional to image height (full res) / proxy res; at proxy: sigma=30px\n   blur = gaussian_blur(L, sigma); detail = tanh((L-blur)*3)/3; L += detail * (0.2+0.25*mean(d))\n6. Warmth: a += (1+5*d)*lum_weight; b += 4*d*lum_weight; lum_weight = 4*L*(1-L)\n7. Vibrance: chroma = sqrt(a²+b²); boost = vibrance*(1-chroma/40)*clamp(L/0.25,0,1)\n   a *= (1+boost); b *= (1+boost); vibrance = 0.4+0.5*d\n8. LAB → RGB (via dorea-color)\n9. Final knee: knee=0.92; over=max(rgb-knee,0); rgb = knee+(1-knee)*tanh(over/(1-knee))\n10. Clamp [0,1]\n```\n\n\n### CUDA Kernels (build time, optional)\n\n**`lut_apply.cu`** — one thread per pixel:\n- Read pixel (r,g,b) and depth value\n- Compute soft zone weights (n_zones triangles over [0,1])\n- Trilinear interp from each zone LUT, weighted sum\n- Write output (r,g,b)\n\n**`hsl_correct.cu`** — one thread per pixel:\n- Read (r,g,b) → HSV\n- For each of 6 qualifiers: soft mask, apply H/S/V corrections\n- HSV → (r,g,b) write\n\n**`clarity.cu`** — operates at proxy resolution:\n- Separable Gaussian blur (σ=30 at proxy)\n- detail = tanh((L - blur)*3)/3\n- Add detail*clarity back to L\n- Bilinear upscale to full res\n",
+  "source_version": "plans/2026-04-02-dorea-v2-phase2-3-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.739292907Z",
+  "valid_from": "2026-04-02T02:52:13.739292907Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-dorea-v2-phase2-3-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 48,
+    "end_line": 87,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

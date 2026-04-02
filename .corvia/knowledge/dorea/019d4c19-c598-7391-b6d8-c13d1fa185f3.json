@@ -1,0 +1,31 @@
+{
+  "id": "019d4c19-c598-7391-b6d8-c13d1fa185f3",
+  "content": "\"\n    from PIL import Image as _Image\n    w, h = img.size\n    scale = min(max_size / max(w, h), 1.0)\n    tw = _round_to_patch(int(round(w * scale)))\n    th = _round_to_patch(int(round(h * scale)))\n    return img.resize((tw, th), _Image.Resampling.BILINEAR)\nclass DepthAnythingInference:\n    \"\"\"Run Depth Anything V2 Small for monocular depth estimation.\"\"\"\n\n    def __init__(\n        self,\n        model_path: Optional[str] = None,\n        device: str = \"cpu\",\n    ) -> None:\n        import torch\n        from transformers import AutoModelForDepthEstimation, AutoImageProcessor\n\n        self.device = torch.device(\n            device if (device == \"cpu\" or torch.cuda.is_available()) else \"cpu\"\n        )\n\n        path = Path(model_path) if model_path else _DEFAULT_DEPTH_MODEL\n        # If the directory is empty or doesn't have model files, use HF hub ID.\n        model_id_or_path = str(path)\n        has_local = path.is_dir() and any(\n            (path / f).exists() for f in (\"config.json\", \"pytorch_model.bin\", \"model.safetensors\")\n        )\n        if not has_local:\n            import sys\n            print(\n                f\"[dorea_inference] WARNING: local depth model not found at {path}; \"\n                \"falling back to HuggingFace hub download (requires internet access). \"\n                \"Pass --depth-model to suppress this.\",\n                file=sys.stderr,\n            )\n            # Fall back to HuggingFace hub (requires internet access)\n            model_id_or_path = \"depth-anything/Depth-Anything-V2-Small-hf\"\n\n        self.processor = AutoImageProcessor.from_pretrained(model_id_or_path)",
+  "source_version": "python/dorea_inference/depth_anything.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:50:50.648525618Z",
+  "valid_from": "2026-04-02T02:50:50.648525618Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/depth_anything.py",
+    "language": "py",
+    "chunk_type": "class_definition",
+    "start_line": 40,
+    "end_line": 72,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

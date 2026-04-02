@@ -1,0 +1,31 @@
+{
+  "id": "019d4c07-4579-7031-9c05-2cfaf846fa8b",
+  "content": "    # Update corvia.toml\n    # Revert corvia.toml\n\n# --- Status ---\n\nshow_status() {\n    init_flags\n    echo \"=== Corvia Workspace Services ===\"\n    echo \"\"\n\n\n    # Ollama\n    local ollama_flag\n    ollama_flag=$(get_flag ollama)\n    local ollama_running=\"no\"\n    if curl -sf http://localhost:11434/api/tags >/dev/null 2>&1; then\n        ollama_running=\"yes\"\n    fi\n    printf \"  %-12s enabled=%-8s running=%s\\n\" \"ollama\" \"$ollama_flag\" \"$ollama_running\"\n",
+  "source_version": "decisions/2026-03-03-optional-devcontainer-services.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:30:38.201230820Z",
+  "valid_from": "2026-04-02T02:30:38.201230820Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-03-03-optional-devcontainer-services.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 340,
+    "end_line": 355,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

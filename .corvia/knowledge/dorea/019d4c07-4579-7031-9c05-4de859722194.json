@@ -1,0 +1,31 @@
+{
+  "id": "019d4c07-4579-7031-9c05-4de859722194",
+  "content": "# corvia-dev rebuild Implementation Plan\n\n> **Status:** Superseded — rebuild functionality moved to Rust CLI\n\n**Goal:** Add a `corvia-dev rebuild` command that builds Rust binaries from source, installs them, and restarts services — plus staleness detection that prompts on `corvia-dev up` and warns on `corvia-dev status`.\n\n**Architecture:** New `rebuild.py` module handles build/install/staleness logic. `cli.py` gets a `rebuild` command and integrates staleness checks into `up` and `status`. No changes to `manager.py` — staleness is checked before the manager starts.\n\n**Tech Stack:** Python (click, subprocess, pathlib, shutil). Tests with pytest.\n\n---\n",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-rebuild.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:30:38.201578480Z",
+  "valid_from": "2026-04-02T02:30:38.201578480Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-rebuild.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1,
+    "end_line": 12,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2b-7910-85bb-f734be83d7b4",
+  "content": "   self._started_at = time.time()\n        self._running = False\n        self._log_lines: list[str] = []\n\n    def _log(self, msg: str) -> None:\n        ts = time.strftime(\"%Y-%m-%dT%H:%M:%S\")\n        line = f\"{ts} {msg}\"\n        self._log_lines.append(line)\n        # Keep last 100 lines\n        if len(self._log_lines) > 100:\n            self._log_lines = self._log_lines[-100:]\n        logger.info(msg)\n\n    async def start_service(self, name: str) -> None:\n        \"\"\"Start a single service process.\"\"\"\n        mp = self.processes.get(name)\n        if mp is None:\n            return\n\n        if not mp.service.start_cmd:",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-cli.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.739341478Z",
+  "valid_from": "2026-04-02T02:52:13.739341478Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-cli.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1102,
+    "end_line": 1113,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

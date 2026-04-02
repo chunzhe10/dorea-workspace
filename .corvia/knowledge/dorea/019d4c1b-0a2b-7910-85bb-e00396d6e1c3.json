@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2b-7910-85bb-e00396d6e1c3",
+  "content": "### Large Graph Handling\n### What Works Well\n\n### Common Complaints\n\n- Performance degrades on very large canvases\n- Limited compared to text-first tools for long-form writing\n- No hierarchical organization (everything is flat on canvases)\n\n\n### Innovative Patterns to Steal\n\n- **Canvas as unified graph+document surface**: No mode switching between graph and reading\n- **Card folding/sizing**: Post-it (collapsed) to full-screen (expanded) on the same surface\n- **Dual connection types**: Visual (spatial) and textual (semantic) links as distinct concepts\n- **Organize algorithm**: One-click graph layout that centers most-connected nodes\n\n---\n",
+  "source_version": "decisions/graph-document-ux-research.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.739089962Z",
+  "valid_from": "2026-04-02T02:52:13.739089962Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/graph-document-ux-research.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 398,
+    "end_line": 412,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

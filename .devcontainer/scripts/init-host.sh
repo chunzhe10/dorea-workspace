@@ -59,6 +59,17 @@ if command -v nvidia-smi >/dev/null 2>&1 && nvidia-smi >/dev/null 2>&1; then
     if command -v nvidia-container-cli >/dev/null 2>&1 || \
        [ -f /usr/bin/nvidia-container-runtime ]; then
         HAS_NVIDIA=true
+        # Pre-initialize nvidia-uvm on the host. Without this, /dev/nvidia-uvm
+        # is present inside the container but returns I/O error, causing cuInit
+        # to fail with error 999 (CUDA_ERROR_UNKNOWN).  Initialization is a
+        # one-time kernel-side operation that persists until reboot.
+        if command -v nvidia-modprobe >/dev/null 2>&1; then
+            sudo nvidia-modprobe -u -c=0 >/dev/null 2>&1 || \
+                echo "GPU: Warning — nvidia-modprobe -u -c=0 failed (CUDA may not work inside container)"
+        else
+            sudo modprobe nvidia-uvm >/dev/null 2>&1 || \
+                echo "GPU: Warning — modprobe nvidia-uvm failed (CUDA may not work inside container)"
+        fi
         # Ensure CDI spec exists and matches the running driver version.
         # Docker uses CDI to discover GPUs; a missing or stale spec causes
         # "could not select device driver nvidia" even when the driver works.

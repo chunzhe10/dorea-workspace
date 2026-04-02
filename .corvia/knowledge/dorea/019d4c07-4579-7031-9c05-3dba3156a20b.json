@@ -1,0 +1,31 @@
+{
+  "id": "019d4c07-4579-7031-9c05-3dba3156a20b",
+  "content": "### Files to create (new)\n\n### Files to modify (from template)\n\n| File | What changes |\n|------|-------------|\n| `corvia.toml` | project.name, scope_id, repo entry (name, url, namespace), inference.device → cpu |\n| `.mcp.json` | Add davinci-resolve-mcp server entry |\n| `.gitignore` | Replace repos/corvia/ with repos/dorea/, add footage/ working/ models/ |\n| `CLAUDE.md` | Adapt for dorea: scope_id, pipeline context, script 05 host note |\n| `AGENTS.md` | Full rewrite for dorea's Python pipeline stack |\n| `README.md` | Full rewrite for dorea project |\n| `.claude/settings.json` | Update scope_id in reminder hook |\n| `.claude/hooks/corvia-write-reminder.sh` | Update scope_id from corvia to dorea |\n| `.devcontainer/devcontainer.json` | Name, workspaceFolder, forwardPorts, extensions |\n| `.devcontainer/Dockerfile` | Add Python venv, PyTorch+CUDA, SAM2, ffmpeg |\n| `.devcontainer/docker-compose.yml` | Workspace mount path, volume names, extra_hosts |\n| `.devcontainer/scripts/post-start.sh` | settings.local.json MCP list, add venv activation |\n| `.devcontainer/scripts/lib.sh` | Review for corvia-specific path references |\n| `.devcontainer/scripts/init-host.sh` | Review for corvia-specific references |\n\n\n### Files to delete (from template)\n\n| File | Reason |\n|------|--------|\n| `TASK.md` | Corvia-specific parallel agent task |\n| `repos/corvia/` | Replaced by repos/dorea |\n| `.github/workflows/release.yml` | Builds corvia-specific artifacts (VS Code ext + dashboard dist) |\n\n---\n",
+  "source_version": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:30:38.201413213Z",
+  "valid_from": "2026-04-02T02:30:38.201413213Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 34,
+    "end_line": 62,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

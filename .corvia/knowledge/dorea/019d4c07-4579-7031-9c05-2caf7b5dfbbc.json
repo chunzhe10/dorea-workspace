@@ -1,0 +1,31 @@
+{
+  "id": "019d4c07-4579-7031-9c05-2caf7b5dfbbc",
+  "content": "# Ensure flags file exists with defaults\n# --- Ollama ---\n\n    # Install if not present\n    if ! command -v ollama &>/dev/null; then\n        echo \"  Installing Ollama...\"\n        curl -fsSL https://ollama.com/install.sh | sh\n    fi\n\n\n    # Start server if not running\n    if ! curl -sf http://localhost:11434/api/tags >/dev/null 2>&1; then\n        echo \"  Starting Ollama server...\"\n        ollama serve &\n        for i in $(seq 1 30); do\n            curl -sf http://localhost:11434/api/tags >/dev/null 2>&1 && break\n            sleep 1\n        done\n    fi\n",
+  "source_version": "decisions/2026-03-03-optional-devcontainer-services.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:30:38.201227490Z",
+  "valid_from": "2026-04-02T02:30:38.201227490Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-03-03-optional-devcontainer-services.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 250,
+    "end_line": 265,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

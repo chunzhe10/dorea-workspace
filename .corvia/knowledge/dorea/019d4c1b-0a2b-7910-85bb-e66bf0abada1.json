@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2b-7910-85bb-e66bf0abada1",
+  "content": "ntent, &meta)?;\n            println!(\"    Chunked into {} pieces\", chunks.len());\n\n            // 2. Supersede old entries: find by source_file, set valid_to, link superseded_by\n            // This uses the LiteStore's file-based scan (via as_any downcast)\n            // to find entries where metadata.source_file matches.\n            // For each old entry: old.valid_to = Some(now), old.superseded_by = Some(new_entry.id)\n            // Then write updated old entry back to disk.\n\n            // 3. Embed and insert each chunk as a new entry\n            for chunk in &chunks {\n                let embedding = engine.embed(&chunk.content).await?;\n                let mut new_entry = KnowledgeEntry::new(\n                    chunk.content.clone(), scope_id.clone(), \"incremental\".into(),\n                );\n                new_entry.metadata.source_file = Some(file_path.to_string());\n                new_entry.metadata.chunk_type = Some(chunk.processing.strategy_name.clone());\n                new_entry.metadata.start_line = Some(chunk.start_line);\n                new_entry.metadata.end_line = Some(chunk.end_line);\n                new_entry.embedding = Some(embedding);\n                store.insert(&new_entry).await?;\n            }\n            println!(\"    Created {} entries (supersedes previous)\", chunks.len());\n        }\n        return Ok(());\n    }\n\n    // Existing full ingest logic (unchanged)",
+  "source_version": "plans/2026-03-13-docs-workflow-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.739161652Z",
+  "valid_from": "2026-04-02T02:52:13.739161652Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-13-docs-workflow-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 2165,
+    "end_line": 2187,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

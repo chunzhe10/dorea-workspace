@@ -1,0 +1,31 @@
+{
+  "id": "019d4c07-4579-7031-9c05-3ce0b026287b",
+  "content": "# DaVinci Resolve (host paths — used by 05_resolve_setup.py on host)\n# Processing\n\n## Section 4: Devcontainer & Environment\n",
+  "source_version": "plans/2026-03-17-dorea-underwater-pipeline-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:30:38.201405087Z",
+  "valid_from": "2026-04-02T02:30:38.201405087Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-17-dorea-underwater-pipeline-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 318,
+    "end_line": 319,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

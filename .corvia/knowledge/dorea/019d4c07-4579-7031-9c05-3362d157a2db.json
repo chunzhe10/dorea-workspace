@@ -1,0 +1,31 @@
+{
+  "id": "019d4c07-4579-7031-9c05-3362d157a2db",
+  "content": "### Status\n### What It Was\n\n### Why It Failed\n\n- Could not sustain development pace against Roam, Logseq, and Obsidian\n- Community fragmented across too many similar tools\n- Business model challenges for open-source knowledge management\n\n\n### Lesson\n\nOpen-source Roam clones struggle because the bidirectional linking UX is table-stakes now.\nThe differentiator is in the ecosystem (plugins, integrations, community) not the core graph model.\n\n---\n",
+  "source_version": "decisions/graph-document-ux-research.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:30:38.201302437Z",
+  "valid_from": "2026-04-02T02:30:38.201302437Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/graph-document-ux-research.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 181,
+    "end_line": 193,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

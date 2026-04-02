@@ -1,0 +1,31 @@
+{
+  "id": "019d4c19-c598-7391-b6d8-c25988a1a9d9",
+  "content": "### Hardware requirements\n### Camera support\n\n## Quick start\n\n```bash",
+  "source_version": "README.md",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:50:50.648539579Z",
+  "valid_from": "2026-04-02T02:50:50.648539579Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "README.md",
+    "language": "markdown",
+    "chunk_type": "heading_section",
+    "start_line": 43,
+    "end_line": 45,
+    "content_role": "instruction",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

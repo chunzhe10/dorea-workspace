@@ -1,0 +1,31 @@
+{
+  "id": "019d4c07-4579-7031-9c05-32d5a8ad8bd7",
+  "content": "## 2. Notion\n\n### Graph-to-Document Navigation UX\n\nNotion has **no built-in graph view**. It is fundamentally document-and-database-first.\nConnections between pages exist via @mentions, database relations, and inline page links,\nbut there is no visual graph representation.\n\n\n### Third-Party Solutions\n\n- **IVGraph**: Upcoming tool (beta Q1 2026) that provides 3D interactive graph visualization\n  of Notion workspaces. Claims 86% performance improvement in latest architecture. Connects\n  via Notion API, reads @mentions, relations, and links to build the graph. Not yet publicly\n  available.\n- **Graphify**: Transforms Notion workspace into an interactive knowledge graph using existing\n  mentions and relations. Available as a Notion integration.\n- **notion-graph-view**: Open-source tool that generates Roam-like network graphs from Notion pages.\n",
+  "source_version": "decisions/graph-document-ux-research.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:30:38.201297584Z",
+  "valid_from": "2026-04-02T02:30:38.201297584Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/graph-document-ux-research.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 72,
+    "end_line": 87,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

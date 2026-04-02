@@ -1,0 +1,31 @@
+{
+  "id": "019d4c19-c598-7391-b6d8-be9b15d80c93",
+  "content": "daries all equal the single depth value.\n        for &b in &bounds[1..N_DEPTH_ZONES] {\n            assert!(\n                (b - 0.5).abs() < 1e-6,\n                \"interior boundary should be 0.5 for uniform depths, got {b}\"\n            );\n        }\n    }\nfn test_adaptive_zone_boundaries_single_value() {\n        let bounds = adaptive_zone_boundaries(&[0.3_f32], N_DEPTH_ZONES);\n        assert_eq!(bounds.len(), N_DEPTH_ZONES + 1);\n        assert!((bounds[0] - 0.0).abs() < 1e-6);\n        assert!((bounds[N_DEPTH_ZONES] - 1.0).abs() < 1e-6);\n    }",
+  "source_version": "crates/dorea-lut/src/apply.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:50:50.648492903Z",
+  "valid_from": "2026-04-02T02:50:50.648492903Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-lut/src/apply.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 211,
+    "end_line": 216,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d4c19-c598-7391-b6d8-bd3cef9a23fb",
+  "content": "        corrections.push(QualifierCorrection {\n            h_center: hc,\n            h_width: hw,\n            h_offset,\n            s_ratio,\n            v_offset,\n            weight: total_weight as f32,\n        });\n    }\n\n    HslCorrections(corrections)\n}\nfn angular_dist(h: f32, center: f32) -> f32 {\n    let diff = (h - center).abs();\n    diff.min(360.0 - diff)\n}\nfn wrap_hue_diff(diff: f32) -> f32 {\n    (diff + 180.0).rem_euclid(360.0) - 180.0\n}",
+  "source_version": "crates/dorea-hsl/src/derive.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:50:50.648474580Z",
+  "valid_from": "2026-04-02T02:50:50.648474580Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-hsl/src/derive.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 125,
+    "end_line": 134,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

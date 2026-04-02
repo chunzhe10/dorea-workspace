@@ -1,0 +1,31 @@
+{
+  "id": "019d4c19-c598-7391-b6d8-b796c5b10a90",
+  "content": "  let pythonpath = std::env::current_exe().ok()\n            .and_then(|exe| {\n                // .parent() = target/debug|release, .parent() = target, .parent() = workspace root\n                exe.parent().and_then(|p| p.parent()).and_then(|p| p.parent())\n                    .map(|root| root.join(\"python\"))\n            })\n            .filter(|p| p.exists());\n        if let Some(ref p) = pythonpath {\n            cmd.env(\"PYTHONPATH\", p);\n        } else {\n            log::debug!(\n                \"PYTHONPATH not set: could not derive python/ dir from binary path; \\\n                 ensure dorea_inference is installed in the Python environment\"\n            );\n        }\n\n        cmd.stdin(Stdio::piped())\n            .stdout(Stdio::piped())\n            .stderr(Stdio::inherit()); // let stderr pass through for diagnostics\n\n        let mut child = cmd.spawn()?;\n        let mut stdin = child.stdin.take().ok_or_else(|| {\n            InferenceError::Ipc(\"could not open inference server stdin\".to_string())\n        })?;\n        let stdout = child.stdout.take().ok_or_else(|| {\n            InferenceError::Ipc(\"could not open inference server stdout\".to_string())\n        })?;\n\n        // Send ping immediately so the server starts loading models ASAP.\n        stdin.write_all(b\"{\\\"type\\\":\\\"ping\\\"}\\n\")\n            .and_then(|_| stdin.flush())\n            .map_err(|e| InferenceError::Ipc(format!(\"write ping: {e}\")))?;\n\n        // Read pong in a background thread so we can enforce the startup timeout.\n        // BufReader<ChildStdout> is Send, so this is safe.\n        let timeout = config.startup_timeout;\n        let (tx, rx) = mpsc::channel::<io::Result<(String, BufReader<std::process::ChildStdout>)>>();\n        std::thread::spawn(move || {\n            let mut reader = BufReader::new(stdout);",
+  "source_version": "crates/dorea-video/src/inference.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:50:50.648403425Z",
+  "valid_from": "2026-04-02T02:50:50.648403425Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference.rs",
+    "language": "rs",
+    "chunk_type": "impl_item",
+    "start_line": 100,
+    "end_line": 134,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

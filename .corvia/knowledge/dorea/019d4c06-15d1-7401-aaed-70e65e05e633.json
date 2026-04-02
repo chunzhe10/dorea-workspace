@@ -1,0 +1,31 @@
+{
+  "id": "019d4c06-15d1-7401-aaed-70e65e05e633",
+  "content": "to_rgb8();\n\n    let (w, h) = (img.width() as usize, img.height() as usize);\n    let pixels: Vec<[f32; 3]> = img\n        .pixels()\n        .map(|p| [p[0] as f32 / 255.0, p[1] as f32 / 255.0, p[2] as f32 / 255.0])\n        .collect();\n    Ok((pixels, w, h))\n}\nfn load_depth_map(path: &Path) -> Result<(Vec<f32>, usize, usize)> {\n    let img = ImageReader::open(path)\n        .with_context(|| format!(\"Cannot open {}\", path.display()))?\n        .decode()\n        .with_context(|| format!(\"Cannot decode {}\", path.display()))?;\n\n    // Warn if source is not a grayscale format (L6).\n    if !matches!(\n        img.color(),\n        image::ColorType::L8\n            | image::ColorType::L16\n            | image::ColorType::La8\n            | image::ColorType::La16\n    ) {\n        log::warn!(\n            \"Depth map {:?} is not grayscale (got {:?}); converting via luminance\",\n            path,\n            img.color()\n        );\n    }\n\n    let img = img.into_luma16();\n\n    let (w, h) = (img.width() as usize, img.height() as usize);\n    let pixels: Vec<f32> = img.pixels().map(|p| p[0] as f32 / 65535.0).collect();\n    Ok((pixels, w, h))\n}",
+  "source_version": "crates/dorea-cli/src/calibrate.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:29:20.465920015Z",
+  "valid_from": "2026-04-02T02:29:20.465920015Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/calibrate.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 386,
+    "end_line": 412,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

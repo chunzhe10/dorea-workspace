@@ -1,0 +1,31 @@
+{
+  "id": "019d4c07-4579-7031-9c05-3d4458c076f5",
+  "content": "# Dorea Python environment — isolated venv to avoid CUDA conflicts\n# SAM2 installed from GitHub (not on PyPI as segment-anything-2)\n\n# ffmpeg for frame extraction\nRUN apt-get update && apt-get install -y ffmpeg && rm -rf /var/lib/apt/lists/*\n```\n\nKey decisions:\n- **Isolated venv** (`/opt/dorea-venv`): prevents CUDA runtime conflicts between corvia's ONNX inference and PyTorch\n- **Pinned CUDA wheels** (`cu121`): matches the CUDA 12 runtime already in the image\n- **SAM2 from GitHub**: the canonical install method (not a PyPI package)\n",
+  "source_version": "plans/2026-03-17-dorea-underwater-pipeline-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:30:38.201409208Z",
+  "valid_from": "2026-04-02T02:30:38.201409208Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-17-dorea-underwater-pipeline-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 422,
+    "end_line": 430,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

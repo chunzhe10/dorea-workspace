@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2b-7910-85bb-dc28c493be02",
+  "content": "### Alternatives rejected\n### Reference generation parameters\n\n### Pipeline flow\n\n```\nworking/keyframes/2025-11-01/*.jpg  (D-Log M raw)\n        │\n        ▼\nscripts/generate_references.py  (color correction)\n        │\n        ▼\nreferences/look_v1/*.jpg  (sRGB target look)\n        │\n        ▼\nscripts/00_generate_lut.py  (LUT derivation)\n        │\n        ▼\nluts/underwater_base.cube  (33×33×33 3D LUT)\n```\n\n\n### Validation\n\n1. Format: LUT is valid 33×33×33 .cube file\n2. Visual: Apply LUT to raw keyframes via ffmpeg → visible red channel recovery\n3. Quality: Before/after comparison shows natural underwater colors",
+  "source_version": "decisions/2026-04-01-first-lut-generation-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.739048321Z",
+  "valid_from": "2026-04-02T02:52:13.739048321Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-01-first-lut-generation-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 53,
+    "end_line": 75,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

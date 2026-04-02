@@ -1,0 +1,31 @@
+{
+  "id": "019d4c19-c598-7391-b6d8-c23225357b31",
+  "content": "## v2 — Rust rewrite\n\n### Architecture\n\n```\ncrates/\n├── dorea-color   — D-Log M, sRGB↔LAB, RGB↔HSV color math\n├── dorea-lut     — Depth-stratified 33³ LUT build + trilinear apply\n├── dorea-hsl     — 6-vector HSL qualifier derive + apply\n├── dorea-cal     — .dorea-cal calibration file format (bincode)\n├── dorea-video   — Phase 2: ffmpeg NVDEC/NVENC integration (placeholder)\n└── dorea-cli     — `dorea` binary (calibrate / grade / preview)\n```\n\n\n### Pipeline (Phase 1)\n\n```\nkeyframes + depth maps + RAUNE targets\n         ↓\ndorea calibrate   →  calibration.dorea-cal\n         ↓\ndorea grade       →  graded video  (Phase 3)\n```\n",
+  "source_version": "README.md",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:50:50.648537423Z",
+  "valid_from": "2026-04-02T02:50:50.648537423Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "README.md",
+    "language": "markdown",
+    "chunk_type": "heading_section",
+    "start_line": 11,
+    "end_line": 32,
+    "content_role": "instruction",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

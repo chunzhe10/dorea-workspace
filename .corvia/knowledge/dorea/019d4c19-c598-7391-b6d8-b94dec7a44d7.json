@@ -1,0 +1,31 @@
+{
+  "id": "019d4c19-c598-7391-b6d8-b94dec7a44d7",
+  "content": " } else { 0 };\n                    rgb[dst_start + i] = src[i].wrapping_add(paeth_predictor(a, b, c));\n                }\n            }\n            _ => return Err(format!(\"unsupported PNG filter type {filter} at row {row}\")),\n        }\n    }\n\n    Ok(rgb)\n}\nfn paeth_predictor(a: u8, b: u8, c: u8) -> u8 {\n    let a = a as i32;\n    let b = b as i32;\n    let c = c as i32;\n    let p = a + b - c;\n    let pa = (p - a).abs();\n    let pb = (p - b).abs();\n    let pc = (p - c).abs();\n    if pa <= pb && pa <= pc { a as u8 }\n    else if pb <= pc { b as u8 }\n    else { c as u8 }\n}",
+  "source_version": "crates/dorea-video/src/inference.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:50:50.648425696Z",
+  "valid_from": "2026-04-02T02:50:50.648425696Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 582,
+    "end_line": 593,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

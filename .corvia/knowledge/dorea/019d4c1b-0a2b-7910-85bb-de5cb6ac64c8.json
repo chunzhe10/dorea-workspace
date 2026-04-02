@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2b-7910-85bb-de5cb6ac64c8",
+  "content": "### Large Graph Handling\n### What Works Well\n\n### Common Complaints\n\n- Graph view feels \"secondary\" and decorative, not integral to the workflow\n- Clicking nodes is imprecise -- you often click and nothing happens or the wrong thing opens\n- No way to preview note content without opening it (no hover preview on graph nodes)\n- Overwhelming at scale -- becomes a \"hairball\" that provides no insight\n- No shape/size differentiation for node types beyond connection count\n- Users request: node folding, progressive disclosure, graph sculpting (hide/show individual nodes)\n- Feature request for \"graph navigation mode\" where clicking selects nodes without opening notes\n\n\n### Innovative Patterns to Steal\n\n- **Hover-highlight with fade**: Hovering a node highlights its direct connections and fades everything else\n- **Local graph depth slider**: Controls how many hops of relationships to show\n- **Dynamic sidebar graph**: Graph updates reactively as user navigates documents\n\n---\n",
+  "source_version": "decisions/graph-document-ux-research.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.739073313Z",
+  "valid_from": "2026-04-02T02:52:13.739073313Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/graph-document-ux-research.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 50,
+    "end_line": 67,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

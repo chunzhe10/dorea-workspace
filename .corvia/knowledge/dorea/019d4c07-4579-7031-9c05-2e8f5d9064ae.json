@@ -1,0 +1,31 @@
+{
+  "id": "019d4c07-4579-7031-9c05-2e8f5d9064ae",
+  "content": "# Docs Workflow & Interactive Knowledge Dashboard — Design Spec\n\n**Date:** 2026-03-13\n**Status:** Approved design\n**Scope:** corvia product feature + workspace configuration\n**Approach:** B (Full Loop) — end-to-end write→store→dashboard read loop\n\n---\n",
+  "source_version": "decisions/2026-03-13-docs-workflow-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:30:38.201248988Z",
+  "valid_from": "2026-04-02T02:30:38.201248988Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-03-13-docs-workflow-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1,
+    "end_line": 9,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

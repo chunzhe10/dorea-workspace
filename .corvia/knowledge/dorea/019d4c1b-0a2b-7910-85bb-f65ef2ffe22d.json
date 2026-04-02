@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2b-7910-85bb-f65ef2ffe22d",
+  "content": "    # 3. corvia-server\n    # 4. Additive enabled services\n\n        # Resolve dependencies (e.g., coding-llm → ollama)\n        _add(svc_name)\n\n    return [_SERVICES_BY_NAME[name] for name in to_start if name in _SERVICES_BY_NAME]\n```\n\n**Step 4: Run test to verify it passes**\n\nRun: `cd /workspaces/corvia-workspace && python3 -m pytest tools/corvia-dev/tests/test_services.py -v`\nExpected: All 7 tests PASS\n\n**Step 5: Commit**\n\n```bash\ngit add tools/corvia-dev/corvia_dev/services.py tools/corvia-dev/tests/test_services.py\ngit commit -m \"feat(corvia-dev): add service registry with dependency resolution\"\n```\n\n---\n",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-cli.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.739331446Z",
+  "valid_from": "2026-04-02T02:52:13.739331446Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-cli.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 529,
+    "end_line": 548,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

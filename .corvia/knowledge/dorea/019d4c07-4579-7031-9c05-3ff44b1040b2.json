@@ -1,0 +1,31 @@
+{
+  "id": "019d4c07-4579-7031-9c05-3ff44b1040b2",
+  "content": "### Rule of thumb\n\n## Pipeline Overview\n\nDorea automates underwater video post-production in 6 phases:\n\n| Phase | Script | Runs in | GPU |\n|-------|--------|---------|-----|\n| 0 | `00_generate_lut.py` | Container | No (CPU) |\n| 1 | `01_extract_frames.py` | Container | No (ffmpeg CPU) |\n| 2 | `02_claude_scene_analysis.py` | Container | No (API call) |\n| 3 | `03_run_sam2.py` | Container | Yes (~3GB VRAM) |\n| 4 | `04_run_depth.py` | Container | Yes (~1.5GB VRAM) |\n| 5 | `05_resolve_setup.py` | **Host** | No (Resolve IPC) |\n\n**Critical constraint:** 6GB VRAM. Only one GPU model loaded at a time. Sequential\nprocessing enforced by pipeline scripts. Corvia inference runs on CPU.\n\n\n## Development\n\n- **Language**: Python\n- **Package manager**: pip (venv at `/opt/dorea-venv`)\n- **AI models**: SAM2-small, Depth Anything V2 Small, Claude API (sonnet)\n- **Video tools**: ffmpeg, DaVinci Resolve Studio (host)\n- **Storage**: corvia LiteStore — data in `.corvia/`\n- **Embedding**: corvia-inference server at `http://127.0.0.1:8030` (CPU mode)\n- **API server**: `http://127.0.0.1:8020` (REST + MCP)\n- **Config**: `corvia.toml` at workspace root, `repos/dorea/config.yaml` for pipeline\n```\n",
+  "source_version": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:30:38.201436675Z",
+  "valid_from": "2026-04-02T02:30:38.201436675Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 610,
+    "end_line": 637,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

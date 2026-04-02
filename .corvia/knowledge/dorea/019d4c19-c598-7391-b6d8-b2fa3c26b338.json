@@ -1,0 +1,31 @@
+{
+  "id": "019d4c19-c598-7391-b6d8-b2fa3c26b338",
+  "content": "pub enum InputEncoding {\n    Srgb,\n    DlogM,\n}\nfn parse_input_encoding(s: &str) -> std::result::Result<InputEncoding, String> {\n    match s {\n        \"srgb\" => Ok(InputEncoding::Srgb),\n        \"dlog_m\" => Ok(InputEncoding::DlogM),\n        other => Err(format!(\"unknown input encoding '{other}'; expected 'srgb' or 'dlog_m'\")),\n    }\n}",
+  "source_version": "crates/dorea-cli/src/calibrate.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:50:50.648313356Z",
+  "valid_from": "2026-04-02T02:50:50.648313356Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/calibrate.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 170,
+    "end_line": 176,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

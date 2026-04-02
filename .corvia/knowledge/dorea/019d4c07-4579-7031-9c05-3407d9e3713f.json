@@ -1,0 +1,31 @@
+{
+  "id": "019d4c07-4579-7031-9c05-3407d9e3713f",
+  "content": "## 7. Kumu\n\n### Graph-to-Document Navigation UX\n\n- **Click to select**: Clicking an element on the map opens its **Profile** in the right sidebar.\n- **Profile panel**: Shows Label, Type, Description, Tags, Image, and custom fields.\n  Description supports rich text for narrative content.\n- **Tab to toggle**: Press Tab on keyboard to show/hide the sidebar profile panel.\n- **Multi-select**: Selecting multiple elements shows a bulk editing tool in the sidebar.\n\n\n### Panel Pattern\n\n**Map canvas + right sidebar profile**. Clean two-panel layout where the map is always visible\nand the sidebar shows details for the selected element. Sidebar is toggle-able.\n",
+  "source_version": "decisions/graph-document-ux-research.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:30:38.201309552Z",
+  "valid_from": "2026-04-02T02:30:38.201309552Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/graph-document-ux-research.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 314,
+    "end_line": 326,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

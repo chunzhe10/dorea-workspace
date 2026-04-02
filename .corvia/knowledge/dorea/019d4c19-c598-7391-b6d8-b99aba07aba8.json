@@ -1,0 +1,31 @@
+{
+  "id": "019d4c19-c598-7391-b6d8-b99aba07aba8",
+  "content": " 3);\n        assert_eq!(out.len(), 9);\n        // Top-left corner = 0.0\n        assert!((out[0] - 0.0).abs() < 1e-5, \"top-left should be 0.0\");\n        // Top-right corner = 1.0\n        assert!((out[2] - 1.0).abs() < 1e-5, \"top-right should be 1.0\");\n    }\nfn png_encode_roundtrip_store_mode() {\n        let rgb: Vec<u8> = (0..12u8).collect(); // 2x2 RGB\n        let png = encode_png_bytes(&rgb, 2, 2).expect(\"encode failed\");\n        // Should have valid PNG signature\n        assert_eq!(&png[..8], b\"\\x89PNG\\r\\n\\x1a\\n\", \"PNG signature mismatch\");\n        // Decode should work (store-mode deflate)\n        let decoded = decode_png_bytes(&png).expect(\"decode failed\");\n        assert_eq!(decoded, rgb, \"roundtrip mismatch\");\n    }",
+  "source_version": "crates/dorea-video/src/inference.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:50:50.648429706Z",
+  "valid_from": "2026-04-02T02:50:50.648429706Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 629,
+    "end_line": 637,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

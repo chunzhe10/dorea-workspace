@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2b-7910-85bb-dda8398f2539",
+  "content": "## Decision\n## Context\n\n## Consequences\n\n- Protocol types in `corvia-kernel/src/adapter_protocol.rs`: `AdapterMetadata` (returned\n  by `--corvia-metadata`), `AdapterRequest` (Ingest, Chunk), `AdapterResponse`\n  (SourceFile, ChunkResult, Done, Error).\n- Discovery in `adapter_discovery.rs`: scans `~/.config/corvia/adapters/` then `$PATH`\n  for `corvia-adapter-*` executables, spawns each with `--corvia-metadata` to get\n  capabilities, caches results for session lifetime.\n- `ProcessAdapter` in `process_adapter.rs`: IPC wrapper managing adapter child process\n  lifecycle (spawn -> ingest -> chunk -> shutdown). One process per adapter per session.\n- Three-tier chunking priority preserved: (1) adapter override via IPC (e.g., `.rs` ->\n  AstChunker), (2) kernel defaults (MarkdownChunker, ConfigChunker), (3) fallback\n  (FallbackChunker line-split).\n- Two first-party adapters in the monorepo: `corvia-adapter-git` (tree-sitter code\n  ingestion) and `corvia-adapter-basic` (filesystem walk). External\n  `corvia-adapter-git` repo archived.\n- Config extensions: optional `[adapters]` and `[[sources]]` sections in `corvia.toml`.\n  Zero config required -- auto-detection handles everything by default.\n\n**Source:** `repos/corvia/docs/rfcs/2026-03-03-adapter-plugin-system-design.md`",
+  "source_version": "decisions/d72-adapter-protocol.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.739064627Z",
+  "valid_from": "2026-04-02T02:52:13.739064627Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/d72-adapter-protocol.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 22,
+    "end_line": 41,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

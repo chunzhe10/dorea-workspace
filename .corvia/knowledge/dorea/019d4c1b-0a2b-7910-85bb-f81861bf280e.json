@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2b-7910-85bb-f81861bf280e",
+  "content": "        # Fork to background\n\n        # Child: detach\n        os.setsid()\n        sys.stdin.close()\n\n    click.echo(f\"Starting {len(services)} services...\")\n    asyncio.run(mgr.run())\n\n\n@main.command()\ndef down() -> None:\n    \"\"\"Stop all managed services.\"\"\"\n    if not DEFAULT_STATE_PATH.exists():\n        click.echo(\"No running manager found.\")\n        return\n\n    try:\n        data = json.loads(DEFAULT_STATE_PATH.read_text())\n        resp = StatusResponse.model_validate(data)\n        if resp.manager and resp.manager.pid:\n            os.kill(resp.manager.pid, signal.SIGTERM)\n            click.echo(f\"Sent SIGTERM to manager (pid {resp.manager.pid})\")\n        else:\n            click.echo(\"Manager PID not found in state file.\")\n    except (json.JSONDecodeError, ValueError, ProcessLookupError) as e:\n        click.echo(f\"Failed to stop manager: {e}\")\n\n\n@main.command()\n@click.argument(\"provider\", type=click.Choice([\"ollama\", \"corvia-inference\", \"vllm\"]))\ndef use(provider: str) -> None:\n    \"\"\"Switch corvia's embedding and merge provider.\"\"\"\n    path = _config_path()\n    if not path.exists():\n        click.echo(f\"Error: {path} not found\", err=True)\n        raise SystemExit(1)\n\n    use_provider(provider, path)\n    click.echo(f\"Switched to {provider}\")\n    click.echo(f\"  embedding.provider = {provider}\")",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-cli.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.739350518Z",
+  "valid_from": "2026-04-02T02:52:13.739350518Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-cli.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1465,
+    "end_line": 1503,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

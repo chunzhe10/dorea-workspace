@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2b-7910-85bb-ddc967eedd2e",
+  "content": "# Docs Workflow & Knowledge Dashboard\n\n## Decision\n\nMulti-repo doc ownership with corvia as the aggregation layer and the dashboard as the\nprimary human read interface. Each repo owns its product-specific docs (stored in the\nrepo's `docs/` directory). The workspace owns cross-cutting decisions (in `docs/decisions/`\nand `docs/learnings/`). corvia aggregates all sources into a unified, searchable,\ngraph-navigable knowledge base with `content_role` and `source_origin` metadata on every\nentry.\n\n\n## Context\n\n94+ doc files scattered across 5+ directories (`docs/plans/`, `repos/corvia/docs/rfcs/`,\n`.agents/skills/`, Claude memory, workspace docs) with no unified management. 3,581\nknowledge entries stored as UUID-named JSON -- unreadable by humans. No way to filter\nsearch by content type (design vs code vs memory) or origin (which repo). AI tools\nfrequently saved docs to wrong locations (e.g., `docs/superpowers/` instead of the\nrelevant repo's `docs/` directory).\n",
+  "source_version": "decisions/docs-workflow.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.739066666Z",
+  "valid_from": "2026-04-02T02:52:13.739066666Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/docs-workflow.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 7,
+    "end_line": 24,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

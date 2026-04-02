@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2a-75d1-bc7b-4e847acb24ba",
+  "content": "### Task 3: Update post-create.sh\n\n# Capture workspace root (where devcontainer mounts the workspace)\nWORKSPACE_ROOT=\"$(pwd)\"\n\n\n# Build Corvia from source (repos cloned by workspace init)\necho \"Initializing workspace...\"\ncorvia workspace init 2>/dev/null || {\n    echo \"Corvia not installed — building from source...\"\n    git clone https://github.com/chunzhe10/corvia repos/corvia 2>/dev/null || true\n    cd \"$WORKSPACE_ROOT/repos/corvia\"\n    cargo install --path crates/corvia-cli\n    cargo install --path crates/corvia-inference\n    cd \"$WORKSPACE_ROOT\"\n    corvia workspace init\n}\n",
+  "source_version": "decisions/2026-03-03-optional-devcontainer-services.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.738993601Z",
+  "valid_from": "2026-04-02T02:52:13.738993601Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-03-03-optional-devcontainer-services.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 100,
+    "end_line": 114,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

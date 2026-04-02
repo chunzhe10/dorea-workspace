@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2b-7910-85bb-ec3cb4fcb6fd",
+  "content": "### Task 12: Update .claude/settings.json\n\n### Task 13: Update corvia-write-reminder.sh\n\n**Files:**\n- Modify: `.claude/hooks/corvia-write-reminder.sh`\n\n- [ ] **Step 1: Update scope_id in reminder output**\n\nChange the echo line in the script from:\n\n```\npersist it with corvia_write (scope_id: corvia, agent_id: claude-code)\n```\n\nto:\n\n```\npersist it with corvia_write (scope_id: dorea, agent_id: claude-code)\n```\n\n\n### Task 14: Commit Claude Code integration changes\n\n- [ ] **Step 1: Stage and commit**\n\n```bash\ncd /home/chunzhe/corvia-project/dorea-workspace\ngit add .claude/settings.json .claude/hooks/corvia-write-reminder.sh\ngit commit -m \"chore: update Claude Code hooks for dorea scope_id\n\n- PreToolUse reminder references scope_id: dorea\n- corvia-write-reminder.sh uses scope_id: dorea\"\n```\n\n---\n",
+  "source_version": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.739225859Z",
+  "valid_from": "2026-04-02T02:52:13.739225859Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 796,
+    "end_line": 829,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

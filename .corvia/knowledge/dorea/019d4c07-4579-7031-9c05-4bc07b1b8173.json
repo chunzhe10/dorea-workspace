@@ -1,0 +1,31 @@
+{
+  "id": "019d4c07-4579-7031-9c05-4bc07b1b8173",
+  "content": "    \"\"\"Run health checks on all managed processes.\"\"\"\n        for name, mp in self.processes.items():\n            if mp.state in (ServiceState.STOPPED,):\n                continue\n\n            if mp.process is not None and mp.process.returncode is not None:\n                # Process exited\n                mp.state = ServiceState.CRASHED\n                mp.pid = None\n                self._log(f\"{name}: crashed (exit code {mp.process.returncode})\")\n                mp.process = None\n                continue\n\n            result = check_service(mp.service)\n            if result.healthy is True:\n                if mp.state != ServiceState.HEALTHY:\n                    self._log(f\"{name}: now healthy\")\n                mp.state = ServiceState.HEALTHY",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-cli.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:30:38.201557417Z",
+  "valid_from": "2026-04-02T02:30:38.201557417Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-cli.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1172,
+    "end_line": 1183,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

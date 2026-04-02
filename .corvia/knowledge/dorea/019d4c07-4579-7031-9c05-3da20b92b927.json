@@ -1,0 +1,31 @@
+{
+  "id": "019d4c07-4579-7031-9c05-3da20b92b927",
+  "content": "## File Map\n\n### Files to create (new)\n\n| File | Responsibility |\n|------|---------------|\n| `.gitattributes` | Merge strategy for upstream sync (corvia.toml merge=ours) |\n| `repos/dorea/scripts/00_generate_lut.py` | Stub: reference images → .cube LUT |\n| `repos/dorea/scripts/01_extract_frames.py` | Stub: ffmpeg keyframe extraction |\n| `repos/dorea/scripts/02_claude_scene_analysis.py` | Stub: Claude API scene scanning → JSON |\n| `repos/dorea/scripts/03_run_sam2.py` | Stub: SAM2 subject tracking |\n| `repos/dorea/scripts/04_run_depth.py` | Stub: Depth Anything V2 depth maps |\n| `repos/dorea/scripts/05_resolve_setup.py` | Stub: Resolve API import + DRX + mattes (HOST ONLY) |\n| `repos/dorea/scripts/run_all.sh` | Master overnight batch script |\n| `repos/dorea/config.yaml` | Pipeline configuration |\n| `repos/dorea/requirements.txt` | Python dependencies |\n| `repos/dorea/README.md` | Project overview and quick start |\n| `repos/dorea/.gitignore` | Ignore patterns for dorea repo |\n",
+  "source_version": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:30:38.201412429Z",
+  "valid_from": "2026-04-02T02:30:38.201412429Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 17,
+    "end_line": 33,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

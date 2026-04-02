@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2b-7910-85bb-f8a95caab986",
+  "content": "ripts: true }\n    );\n\n    panel.webview.html = getDashboardHtml();\n\n    panel.webview.onDidReceiveMessage((msg) => {\n        if (msg.type === \"command\") {\n            const terminal = vscode.window.createTerminal(\"corvia-dev\");\n            terminal.show();\n            terminal.sendText(msg.command);\n        } else if (msg.type === \"refresh\") {\n            refresh();\n        }\n    });\n\n    panel.onDidDispose(() => { panel = undefined; });\n    refresh();\n}\n\nfunction getDashboardHtml() {\n    return `<!DOCTYPE html>\n<html>\n<head>\n<style>\n    body { font-family: var(--vscode-font-family); color: var(--vscode-foreground); padding: 16px; }\n    .card { border: 1px solid var(--vscode-panel-border); border-radius: 6px; padding: 12px; margin: 8px 0; }\n    .healthy { border-left: 4px solid #4caf50; }\n    .unhealthy, .crashed { border-left: 4px solid #f44336; }\n    .stopped { border-left: 4px solid #666; }\n    .starting { border-left: 4px solid #ff9800; }\n    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 8px; }\n    .name { font-weight: bold; }\n    .state { opacity: 0.8; font-size: 0.9em; }\n    .actions { margin-top: 16px; }\n    button {\n        background: var(--vscode-button-background); color: var(--vscode-button-foreground);",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-cli.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.739356746Z",
+  "valid_from": "2026-04-02T02:52:13.739356746Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-cli.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1798,
+    "end_line": 1824,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

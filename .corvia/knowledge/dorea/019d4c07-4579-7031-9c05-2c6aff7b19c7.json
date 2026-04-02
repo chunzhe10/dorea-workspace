@@ -1,0 +1,31 @@
+{
+  "id": "019d4c07-4579-7031-9c05-2c6aff7b19c7",
+  "content": "### Task 4: Update post-start.sh\n\n# Start Corvia server (always — uses corvia-inference automatically when provider=corvia)\ncorvia serve &\necho \"Corvia server running on http://127.0.0.1:8020\"\n\n\n# Re-start any previously enabled optional services\nif [ -f \"$FLAGS_FILE\" ]; then\n    if grep -q \"ollama=enabled\" \"$FLAGS_FILE\"; then\n        echo \"Starting Ollama (previously enabled)...\"\n        ollama serve &\n        for i in $(seq 1 30); do\n            curl -sf http://localhost:11434/api/tags >/dev/null 2>&1 && break\n            sleep 1\n        done\n    fi\n    if grep -q \"surrealdb=enabled\" \"$FLAGS_FILE\"; then\n        echo \"Starting SurrealDB (previously enabled)...\"\n        docker compose -f \"$WORKSPACE_ROOT/repos/corvia/docker/docker-compose.yml\" up -d\n    fi\nfi\n\necho \"Run 'corvia-workspace status' to check services.\"\n```\n\nKey changes:\n- Removed unconditional `ollama serve &` and `sleep 2`\n- `corvia serve` stays — it auto-provisions corvia-inference when `provider = \"corvia\"` (MCP always enabled)\n- Added flags-file-driven restart for previously enabled optional services\n- Uses readiness polling instead of `sleep` for Ollama (from devcontainer-improvements.md item 4)\n\n**Step 2: Verify the script is syntactically valid**\n\nRun: `bash -n /root/corvia-project/corvia-workspace/.devcontainer/scripts/post-start.sh`\nExpected: No output (no syntax errors).\n\n**Step 3: Commit**\n\n```bash\ngit add .devcontainer/scripts/post-start.sh\ngit commit -m \"chore: make post-start conditional on flags file (D70)\"\n```\n\n---\n",
+  "source_version": "decisions/2026-03-03-optional-devcontainer-services.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:30:38.201223780Z",
+  "valid_from": "2026-04-02T02:30:38.201223780Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-03-03-optional-devcontainer-services.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 160,
+    "end_line": 202,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

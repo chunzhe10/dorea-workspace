@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2b-7910-85bb-ee4fd1580cc0",
+  "content": "    # 4. Save as 16-bit grayscale PNG (preserves precision for soft mattes)\n    # 5. Unload model before next phase\n\n    # TODO: Implement Resolve setup\n\n    # Requires: RESOLVE_SCRIPT_API, RESOLVE_SCRIPT_LIB, PYTHONPATH set",
+  "source_version": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.739246660Z",
+  "valid_from": "2026-04-02T02:52:13.739246660Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1404,
+    "end_line": 1405,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

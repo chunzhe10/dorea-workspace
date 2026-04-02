@@ -1,0 +1,31 @@
+{
+  "id": "019d4c06-15d1-7401-aaed-6fd671261f77",
+  "content": " calibration from {}\", cal_path.display());\n        Calibration::load(cal_path).context(\"failed to load .dorea-cal file\")?\n    } else {\n        log::info!(\"No calibration provided — auto-calibrating from keyframes\");\n        auto_calibrate(&args, &info)?\n    };\n\n    // Open encoder\n    let audio_src = if info.has_audio { Some(args.input.as_path()) } else { None };\n    let mut encoder = FrameEncoder::new(&output, info.width, info.height, info.fps, audio_src)\n        .context(\"failed to spawn ffmpeg encoder\")?;\n\n    // Spawn inference server for per-frame depth (depth-only; RAUNE is not needed here).\n    let inf_cfg = InferenceConfig {\n        raune_weights: None,\n        raune_models_dir: None,\n        ..build_inference_config(&args)\n    };\n    let mut inf_server = InferenceServer::spawn(&inf_cfg)\n        .context(\"failed to spawn inference server — check --python and --depth-model\")?;\n\n    // Decode and grade frames\n    let frames = ffmpeg::decode_frames(&args.input, &info)\n        .context(\"failed to spawn ffmpeg decoder\")?;\n\n    let mut prev_frame: Option<Vec<u8>> = None;\n    let mut frame_count = 0u64;\n\n    for frame_result in frames {\n        let frame = frame_result.context(\"frame decode error\")?;\n\n        // Scene change detection\n        let is_cut = prev_frame.as_ref()\n            .map(|prev| scene::is_scene_change(prev, &frame.pixels))\n            .unwrap_or(false);",
+  "source_version": "crates/dorea-cli/src/grade.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:29:20.465908561Z",
+  "valid_from": "2026-04-02T02:29:20.465908561Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/grade.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 104,
+    "end_line": 133,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

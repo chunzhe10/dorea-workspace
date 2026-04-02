@@ -1,0 +1,31 @@
+{
+  "id": "019d4c06-15d1-7401-aaed-6fbaaf740e30",
+  "content": "pub struct GradeArgs {\n    /// Input video file (MP4/MOV/MKV)\n    #[arg(long)]\n    pub input: PathBuf,\n\n    /// Output video file [default: <input-stem>_graded.mp4]\n    #[arg(long)]\n    pub output: Option<PathBuf>,\n\n    /// Pre-computed .dorea-cal calibration file.\n    /// If omitted, auto-calibrates using inference subprocess.\n    #[arg(long)]\n    pub calibration: Option<PathBuf>,\n\n    /// Warmth multiplier [0.0–2.0]\n    #[arg(long, default_value = \"1.0\")]\n    pub warmth: f32,\n\n    /// LUT/HSL blend strength [0.0–1.0]\n    #[arg(long, default_value = \"0.8\")]\n    pub strength: f32,\n\n    /// Ambiance contrast multiplier [0.0–1.0]\n    #[arg(long, default_value = \"1.0\")]\n    pub contrast: f32,\n\n    /// Proxy resolution for inference (long edge, pixels) [default: 518]\n    #[arg(long, default_value = \"518\")]\n    pub proxy_size: usize,\n\n    /// Frames between keyframe samples for auto-calibration\n    #[arg(long, default_value = \"30\")]\n    pub keyframe_interval: usize,\n\n    /// Path to RAUNE-Net weights .pth (for auto-calibration)\n    #[arg(long)]\n    pub raune_weights: Option<PathBuf>,\n\n    /// Path to RAUNE-Net models dir (sea_thru_poc directory)\n    #[arg(long)]\n    pub raune_models_dir: Option<PathBuf>,\n\n    /// Path to Depth Anything V2 model directory\n    #[arg(long)]\n    pub depth_model: Option<PathBuf>,\n\n    /// Python executable to use for the inference subprocess\n    #[arg(long, default_value = \"/opt/dorea-venv/bin/python\")]\n    pub python: PathBuf,\n\n    /// Force CPU-only mode (no CUDA)\n    #[arg(long)]\n    pub cpu_only: bool,\n\n    /// Enable verbose logging\n    #[arg(short, long)]\n    pub verbose: bool,\n}",
+  "source_version": "crates/dorea-cli/src/grade.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:29:20.465906575Z",
+  "valid_from": "2026-04-02T02:29:20.465906575Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/grade.rs",
+    "language": "rs",
+    "chunk_type": "struct_item",
+    "start_line": 15,
+    "end_line": 72,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

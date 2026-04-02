@@ -1,0 +1,31 @@
+{
+  "id": "019d4c07-4579-7031-9c05-2d721bb1f2c6",
+  "content": "# Prebuilt Binaries via GitHub Releases\n\n## Problem\n\n`post-create.sh` compiles corvia-cli and corvia-inference from source (~600 crates, ~5 minutes). This runs every time the devcontainer is created.\n\n\n## Design\n\nDownload prebuilt binaries from GitHub releases (~5 seconds). Fall back to source build if unavailable. Allow local rebuild when developing against source changes.\n",
+  "source_version": "decisions/2026-03-03-prebuilt-binaries-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:30:38.201237851Z",
+  "valid_from": "2026-04-02T02:30:38.201237851Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-03-03-prebuilt-binaries-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 9,
+    "end_line": 16,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

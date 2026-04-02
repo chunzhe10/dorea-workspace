@@ -1,0 +1,31 @@
+{
+  "id": "019d4c19-c598-7391-b6d8-ba06fcb279f2",
+  "content": "pub fn grade_frame_cuda(\n    pixels: &[u8],\n    depth: &[f32],\n    width: usize,\n    height: usize,\n    calibration: &Calibration,\n    params: &GradeParams,\n) -> Result<Vec<u8>, GpuError> {\n    // TODO(Phase 2): Full CUDA implementation using cuLaunchKernel.\n    // For now, CUDA feature flag is reserved; CPU fallback handles all work.\n    // This function exists so the call site compiles when feature=\"cuda\".\n    let _ = (pixels, depth, width, height, calibration, params);\n    Err(GpuError::Cuda(\n        \"CUDA kernel launch not yet implemented; using CPU fallback\".to_string(),\n    ))\n}",
+  "source_version": "crates/dorea-gpu/src/cuda/mod.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:50:50.648434901Z",
+  "valid_from": "2026-04-02T02:50:50.648434901Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cuda/mod.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 17,
+    "end_line": 32,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

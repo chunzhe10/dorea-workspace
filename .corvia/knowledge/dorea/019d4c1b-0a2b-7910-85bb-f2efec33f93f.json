@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2b-7910-85bb-f2efec33f93f",
+  "content": "## Updated `dorea-video` Crate\n\n### `ffmpeg.rs` Design\n\n**Decode** (`ffmpeg_decode_frames`):\n```\nspawn: ffmpeg -hwaccel nvdec -i <input> -vf scale=<W>:<H> -f image2pipe -vcodec png pipe:1\n  fallback: ffmpeg -i <input> -f image2pipe -vcodec png pipe:1  (if NVDEC fails)\nparse: read 8-byte PNG header + PNG data for each frame\nyield: (frame_index, rgb_pixels: Vec<u8>, width, height)\n```\n\n**Encode** (`ffmpeg_encode_frames`):\n```\nspawn: ffmpeg -f rawvideo -pixel_format rgb24 -s WxH -framerate fps -i pipe:0\n         -i <input> -map 0:v -map 1:a -c:a copy\n         -c:v h264_nvenc -preset p4 -cq 18 <output>\n  fallback: -c:v libx264 -crf 18  (if NVENC fails)\nwrite: raw RGB frames to stdin\n```\n\n\n### `scene.rs` Design\n\n```\nhistogram_distance(frame_a, frame_b) -> f32:\n  compute RGB histograms (64 bins each channel)\n  chi-squared distance between frame_a and frame_b histograms\n  return chi2_dist / (3 * 64 * n_pixels)\n\nis_scene_change(dist) -> bool:\n  threshold = 0.15  (tunable via env DOREA_SCENE_THRESHOLD)\n```\n",
+  "source_version": "plans/2026-04-02-dorea-v2-phase2-3-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.739295416Z",
+  "valid_from": "2026-04-02T02:52:13.739295416Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-dorea-v2-phase2-3-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 109,
+    "end_line": 139,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

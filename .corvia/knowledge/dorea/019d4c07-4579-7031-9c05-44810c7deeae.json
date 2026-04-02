@@ -1,0 +1,31 @@
+{
+  "id": "019d4c07-4579-7031-9c05-44810c7deeae",
+  "content": "## What it does\n\n### Pipeline phases\n\n| # | Script | What it does | GPU |\n|---|--------|-------------|-----|\n| 0 | `00_generate_lut.py` | Reference images → .cube LUT | No |\n| 1 | `01_extract_frames.py` | ffmpeg keyframe extraction | No |\n| 2 | `02_claude_scene_analysis.py` | Claude API scene + subject detection | No |\n| 3 | `03_run_sam2.py` | SAM2 per-subject mask tracking | ~3GB |\n| 4 | `04_run_depth.py` | Depth Anything V2 depth maps | ~1.5GB |\n| 5 | `05_resolve_setup.py` | Resolve API: import, DRX, mattes | No |\n\n\n### Hardware requirements\n\n- Linux workstation\n- NVIDIA GPU with 6GB+ VRAM (RTX 3060 or better)\n- 64GB RAM recommended\n- DaVinci Resolve Studio (one-time purchase)\n",
+  "source_version": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:30:38.201483977Z",
+  "valid_from": "2026-04-02T02:30:38.201483977Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1585,
+    "end_line": 1602,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

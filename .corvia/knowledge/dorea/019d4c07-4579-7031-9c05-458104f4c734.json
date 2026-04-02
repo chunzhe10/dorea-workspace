@@ -1,0 +1,31 @@
+{
+  "id": "019d4c07-4579-7031-9c05-458104f4c734",
+  "content": "### Task 28: Final commit and push\n\n# Stage only the files that belong — review before adding\ngit add <specific files shown by git status>\ngit diff --cached --stat  # review what's staged\ngit commit -m \"feat: dorea workspace setup complete\n\nCorvia-powered workspace for the Dorea underwater video AI editing pipeline.\nCreated from corvia-workspace template with upstream tracking.\"\n```\n\n- [ ] **Step 3: Push to remote**\n\n```bash\ncd /home/chunzhe/corvia-project/dorea-workspace\ngit push -u origin main\n```\n\n- [ ] **Step 4: Verify upstream remote works**\n\n```bash\ncd /home/chunzhe/corvia-project/dorea-workspace\ngit fetch upstream\ngit log --oneline upstream/main -5\n```\n\nExpected: shows recent corvia-workspace commits.\n\n- [ ] **Step 5: Clean up temp directory**\n\n```bash\nrm -rf /home/chunzhe/dorea-temp\n```\n",
+  "source_version": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:30:38.201493455Z",
+  "valid_from": "2026-04-02T02:30:38.201493455Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1736,
+    "end_line": 1767,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

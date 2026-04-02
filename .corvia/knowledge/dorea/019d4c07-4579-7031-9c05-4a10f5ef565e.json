@@ -1,0 +1,31 @@
+{
+  "id": "019d4c07-4579-7031-9c05-4a10f5ef565e",
+  "content": "### Task 1: Project Scaffolding & Package Setup\n\n### Task 2: Pydantic Models\n\n**Files:**\n- Create: `tools/corvia-dev/corvia_dev/models.py`\n- Create: `tools/corvia-dev/tests/__init__.py`\n- Create: `tools/corvia-dev/tests/test_models.py`\n\n**Step 1: Write the failing test**\n\n```python\n\"\"\"Tests for corvia-dev Pydantic models.\"\"\"\n\nfrom corvia_dev.models import (\n    ServiceDefinition,\n    ServiceState,\n    ServiceStatus,\n    ManagerStatus,\n    ConfigSummary,\n    StatusResponse,\n)\n\n\ndef test_service_definition_corvia_inference() -> None:\n    svc = ServiceDefinition(\n        name=\"corvia-inference\",\n        tier=0,\n        port=8030,\n        health_path=\"/health\",\n        start_cmd=[\"corvia-inference\", \"serve\", \"--port\", \"8030\"],\n        depends_on=[],\n    )\n    assert svc.name == \"corvia-inference\"\n    assert svc.tier == 0\n    assert svc.exclusive_group is None\n\n\ndef test_service_definition_with_exclusive_group() -> None:\n    svc = ServiceDefinition(\n        name=\"ollama\",\n        tier=1,\n        port=11434,\n        health_path=\"/api/tags\",\n        start_cmd=[\"ollama\", \"serve\"],\n        depends_on=[],",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-cli.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:30:38.201539816Z",
+  "valid_from": "2026-04-02T02:30:38.201539816Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-cli.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 96,
+    "end_line": 139,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

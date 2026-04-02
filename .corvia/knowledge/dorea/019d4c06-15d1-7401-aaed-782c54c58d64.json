@@ -1,0 +1,31 @@
+{
+  "id": "019d4c06-15d1-7401-aaed-782c54c58d64",
+  "content": "= 0 should still run without panic\n        depth_aware_ambiance(&mut rgb, &depth, width, height, 0.0);\n\n        // Values should remain in [0, 1]\n        for &v in &rgb {\n            assert!((0.0..=1.0).contains(&v), \"out-of-range: {v}\");\n        }\n    }\n}\nfn depth_aware_ambiance_deterministic() {\n        let width = 4;\n        let height = 4;\n        let n = width * height;\n        let mut rgb: Vec<f32> = (0..n * 3).map(|i| (i as f32 % 256.0) / 255.0).collect();\n        let depth: Vec<f32> = (0..n).map(|i| i as f32 / n as f32).collect();\n\n        let rgb_copy = rgb.clone();\n        depth_aware_ambiance(&mut rgb, &depth, width, height, 1.0);\n\n        // Should change the pixel values\n        assert!(rgb != rgb_copy, \"ambiance should modify pixels\");\n\n        // All values should be in [0, 1]\n        for &v in &rgb {\n            assert!(v >= 0.0 && v <= 1.0, \"out-of-range value: {v}\");\n        }\n\n        // Second call with same input should produce same output\n        let mut rgb2 = rgb_copy.clone();\n        depth_aware_ambiance(&mut rgb2, &depth, width, height, 1.0);\n        for (a, b) in rgb.iter().zip(rgb2.iter()) {\n            assert!((a - b).abs() < 1e-5, \"not deterministic: {a} vs {b}\");\n        }\n    }",
+  "source_version": "crates/dorea-gpu/src/cpu.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:29:20.465992308Z",
+  "valid_from": "2026-04-02T02:29:20.465992308Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cpu.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 279,
+    "end_line": 303,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

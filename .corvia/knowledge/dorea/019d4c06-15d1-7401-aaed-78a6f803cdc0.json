@@ -1,0 +1,31 @@
+{
+  "id": "019d4c06-15d1-7401-aaed-78a6f803cdc0",
+  "content": "fn cut_linear() -> f64 {\n    (10_f64.powf((CUT_ENCODED - D) / C) - B) / A\n}\nfn slope() -> f64 {\n    let cl = cut_linear();\n    C * A / ((A * cl + B) * 10_f64.ln())\n}",
+  "source_version": "crates/dorea-color/src/dlog_m.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:29:20.465998104Z",
+  "valid_from": "2026-04-02T02:29:20.465998104Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-color/src/dlog_m.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 12,
+    "end_line": 19,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

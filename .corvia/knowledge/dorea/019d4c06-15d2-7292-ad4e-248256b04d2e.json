@@ -1,0 +1,31 @@
+{
+  "id": "019d4c06-15d2-7292-ad4e-248256b04d2e",
+  "content": "# NOTE: --targets expects RAUNE-Net output images (Phase 2, not yet implemented).\n# For testing, you can pass the original keyframes directory as a placeholder,\n\n# which produces an identity-like calibration useful for validating the pipeline.\n\n# Phase 2 will add `dorea infer` to generate these automatically.\ndorea calibrate \\\n  --keyframes /path/to/keyframes \\\n  --depth     /path/to/depth_maps \\\n  --targets   /path/to/raune_targets \\\n  --output    calibration.dorea-cal\n",
+  "source_version": "README.md",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:29:20.466082575Z",
+  "valid_from": "2026-04-02T02:29:20.466082575Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "README.md",
+    "language": "markdown",
+    "chunk_type": "heading_section",
+    "start_line": 52,
+    "end_line": 59,
+    "content_role": "instruction",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2b-7910-85bb-f3d722e3c659",
+  "content": "## User Parameter Scaling\n## Testing Strategy\n\n### Unit Tests\n- `dorea-gpu`: CPU depth_aware_ambiance round-trip (same input → same output deterministically)\n- `dorea-video`: scene change detection (identical frames → low distance; high-contrast frames → high distance)\n- `dorea-video/inference`: IPC message serialization/deserialization\n\n\n### Integration Tests\n- `dorea calibrate` without `--targets`: spawn Python server, use real RAUNE-Net on POC keyframes, verify .dorea-cal written\n- `dorea preview` on a short test clip\n",
+  "source_version": "plans/2026-04-02-dorea-v2-phase2-3-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.739305151Z",
+  "valid_from": "2026-04-02T02:52:13.739305151Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-dorea-v2-phase2-3-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 301,
+    "end_line": 309,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

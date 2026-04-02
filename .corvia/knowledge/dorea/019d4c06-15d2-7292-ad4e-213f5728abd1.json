@@ -1,0 +1,31 @@
+{
+  "id": "019d4c06-15d2-7292-ad4e-213f5728abd1",
+  "content": "E=33 but slow for sparse footage)\n        if !populated.is_empty() && !empty.is_empty() {\n            for &ec in &empty {\n                let mut best_dist = u64::MAX;\n                let mut best_pop = populated[0];\n                for &pc in &populated {\n                    let dr = (ec[0] as i64 - pc[0] as i64).pow(2) as u64;\n                    let dg = (ec[1] as i64 - pc[1] as i64).pow(2) as u64;\n                    let db = (ec[2] as i64 - pc[2] as i64).pow(2) as u64;\n                    let dist = dr + dg + db;\n                    if dist < best_dist {\n                        best_dist = dist;\n                        best_pop = pc;\n                    }\n                }\n                let val = lut.get(best_pop[0], best_pop[1], best_pop[2]);\n                lut.set(ec[0], ec[1], ec[2], val);\n            }\n        } else if populated.is_empty() {\n            // Fallback: identity mapping\n            for ri in 0..LUT_SIZE {\n                for gi in 0..LUT_SIZE {\n                    for bi in 0..LUT_SIZE {\n                        let r = ri as f32 / (LUT_SIZE - 1) as f32;\n                        let g = gi as f32 / (LUT_SIZE - 1) as f32;\n                        let b = bi as f32 / (LUT_SIZE - 1) as f32;\n                        lut.set(ri, gi, bi, [r, g, b]);\n                    }\n                }\n            }\n        }\n\n        // NO Gaussian smoothing (σ=0)\n        luts.push(lut);\n    }\n\n    DepthLuts::new(luts, zone_boundaries)\n}",
+  "source_version": "crates/dorea-lut/src/build.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:29:20.466044994Z",
+  "valid_from": "2026-04-02T02:29:20.466044994Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-lut/src/build.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 295,
+    "end_line": 326,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

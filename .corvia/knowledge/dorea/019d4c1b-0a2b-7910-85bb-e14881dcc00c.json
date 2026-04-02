@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2b-7910-85bb-e14881dcc00c",
+  "content": "## Top Patterns to Adopt for corvia Dashboard\n\n### Must-Have (Tier 1)\n\n1. **Click node -> right side panel reader** (Heptabase pattern)\n   - Click a node in the graph to open its content in a right side panel\n   - Graph stays visible and interactive\n   - Side panel shows: content preview, metadata, related entries, graph edges\n   - This is the single most effective pattern across all tools studied\n\n2. **Hover-highlight with fade** (Obsidian pattern)\n   - Hovering a node highlights its direct connections\n   - All unrelated nodes and edges fade to low opacity\n   - Provides instant visual context without clicking\n\n3. **Bidirectional selection sync** (Neo4j Bloom pattern)\n   - Selecting a node in the graph highlights it in any list/table view\n   - Selecting an entry in a list highlights it in the graph\n   - Keeps both views synchronized\n\n4. **Local/ego graph mode** (Obsidian/Roam pattern)\n   - Option to show only nodes within N hops of the selected node\n   - Depth slider to control the radius\n   - Essential for large knowledge bases\n\n\n### Should-Have (Tier 2)\n\n5. **Navigable neighbor cards in detail panel** (Neo4j Bloom pattern)\n   - The detail panel shows related entries as clickable cards\n   - Clicking a neighbor card navigates to that node\n   - Enables graph traversal from the detail panel without returning to the graph\n\n6. **Relationship type filtering on expand** (Neo4j Bloom pattern)\n   - When expanding a node, choose which edge types to follow\n   - Prevents information overload from showing all connections\n\n7. **Data-driven node styling** (Kumu/Graphistry pattern)\n   - Node size from connection count or edge weight\n   - Node color from entry type or source\n   - Edge color/thickness from relationship type or weight\n\n8. **Keyboard shortcut for panel toggle** (Kumu pattern)\n   - Tab or similar key to show/hide the detail panel\n   - Quick keyboard-driven workflow\n",
+  "source_version": "decisions/graph-document-ux-research.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.739103181Z",
+  "valid_from": "2026-04-02T02:52:13.739103181Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/graph-document-ux-research.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 683,
+    "end_line": 725,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

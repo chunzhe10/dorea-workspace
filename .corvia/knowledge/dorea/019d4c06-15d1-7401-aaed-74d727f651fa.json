@@ -1,0 +1,31 @@
+{
+  "id": "019d4c06-15d1-7401-aaed-74d727f651fa",
+  "content": "/ Path to Depth Anything V2 model directory. None = skip depth.\n    pub depth_model: Option<PathBuf>,\n    /// Compute device: \"cpu\" or \"cuda\". None = auto-detect.\n    pub device: Option<String>,\n    /// Startup timeout.\n    pub startup_timeout: Duration,\n}\nimpl Default for InferenceConfig {\n    fn default() -> Self {\n        Self {\n            python_exe: PathBuf::from(\"/opt/dorea-venv/bin/python\"),\n            raune_weights: None,\n            raune_models_dir: None,\n            depth_model: None,\n            device: None,\n            startup_timeout: Duration::from_secs(120),\n        }\n    }\n}",
+  "source_version": "crates/dorea-video/src/inference.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:29:20.465957256Z",
+  "valid_from": "2026-04-02T02:29:20.465957256Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference.rs",
+    "language": "rs",
+    "chunk_type": "impl_item",
+    "start_line": 45,
+    "end_line": 56,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d4c06-15d1-7401-aaed-76ecd9d9e1e9",
+  "content": "fn inflate_zlib(data: &[u8]) -> Result<Vec<u8>, String> {\n    use flate2::read::ZlibDecoder;\n    use std::io::Read;\n    let mut out = Vec::new();\n    ZlibDecoder::new(data)\n        .read_to_end(&mut out)\n        .map_err(|e| e.to_string())?;\n    Ok(out)\n}\nmod tests {\n    use super::*;\n\n    #[test]\n    fn upscale_depth_identity() {\n        let depth: Vec<f32> = vec![0.1, 0.2, 0.3, 0.4];\n        let out = InferenceServer::upscale_depth(&depth, 2, 2, 2, 2);\n        assert_eq!(out, depth, \"2x2→2x2 should be identity\");\n    }\n\n    #[test]\n    fn upscale_depth_bilinear() {\n        let depth: Vec<f32> = vec![0.0, 1.0, 0.0, 0.0];\n        // 2x2 → 3x3\n        let out = InferenceServer::upscale_depth(&depth, 2, 2, 3, 3);\n        assert_eq!(out.len(), 9);\n        // Top-left corner = 0.0\n        assert!((out[0] - 0.0).abs() < 1e-5, \"top-left should be 0.0\");\n        // Top-right corner = 1.0\n        assert!((out[2] - 1.0).abs() < 1e-5, \"top-right should be 1.0\");\n    }\n\n    #[test]\n    fn png_encode_roundtrip_store_mode() {\n        let rgb: Vec<u8> = (0..12u8).collect(); // 2x2 RGB\n        let png = encode_png_bytes(&rgb, 2, 2).expect(\"encode failed\");\n        // Should have valid PNG signature\n        assert_eq!(&png[..8], b\"\\x89PNG\\r\\n\\x1a\\n\", \"PNG signature mismatch\");\n        // Decode should work (store-mode deflate)\n        let decoded = decode_png_bytes(&png).expect(\"decode failed\");\n        assert_eq!(decoded, rgb, \"roundtrip mismatch\");\n    }\n}",
+  "source_version": "crates/dorea-video/src/inference.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:29:20.465977630Z",
+  "valid_from": "2026-04-02T02:29:20.465977630Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference.rs",
+    "language": "rs",
+    "chunk_type": "mod_item",
+    "start_line": 606,
+    "end_line": 638,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

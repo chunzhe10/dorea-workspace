@@ -1,0 +1,31 @@
+{
+  "id": "019d4c07-4579-7031-9c05-3d5811018844",
+  "content": "# ffmpeg for frame extraction\n\n### VRAM Management\n\nWith 6GB VRAM, corvia-inference and the pipeline cannot share the GPU:\n\n- `corvia.toml` sets `[inference] device = \"cpu\"` for the dorea workspace\n- Overnight batch scripts (00–04) get full GPU access\n- Corvia embedding runs on CPU — acceptable performance for a single-repo workspace\n- If GPU embedding is needed during development (not overnight), stop the pipeline first\n\n\n### .agents/ directory\n\nRetain the existing skills inherited from corvia-workspace:\n- `ai-assisted-development.md` — general best practices (applicable)\n- `content-verification.md` — verification patterns (applicable)\n- `visual-content-playwright.md` — browser automation (applicable)\n\nNo dorea-specific skills needed at scaffolding time. Add later as pipeline patterns emerge.\n",
+  "source_version": "plans/2026-03-17-dorea-underwater-pipeline-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:30:38.201409708Z",
+  "valid_from": "2026-04-02T02:30:38.201409708Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-17-dorea-underwater-pipeline-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 431,
+    "end_line": 448,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

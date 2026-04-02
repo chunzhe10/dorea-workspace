@@ -1,0 +1,31 @@
+{
+  "id": "019d4c19-c598-7391-b6d8-bf20657af96c",
+  "content": "LUT_SIZE + bi;\n                lut_wsum[cell * 3] += tgt[0] as f64 * w;\n                lut_wsum[cell * 3 + 1] += tgt[1] as f64 * w;\n                lut_wsum[cell * 3 + 2] += tgt[2] as f64 * w;\n                lut_wcount[cell] += w;\n            }\n        }\n\n        // Normalize populated cells\n        let mut lut = LutGrid::new(LUT_SIZE);\n        let mut populated: Vec<[usize; 3]> = Vec::new();\n        let mut empty: Vec<[usize; 3]> = Vec::new();\n\n        for ri in 0..LUT_SIZE {\n            for gi in 0..LUT_SIZE {\n                for bi in 0..LUT_SIZE {\n                    let cell = ri * LUT_SIZE * LUT_SIZE + gi * LUT_SIZE + bi;\n                    let wc = lut_wcount[cell];\n                    if wc > 0.0 {\n                        lut.set(ri, gi, bi, [\n                            (lut_wsum[cell * 3] / wc) as f32,\n                            (lut_wsum[cell * 3 + 1] / wc) as f32,\n                            (lut_wsum[cell * 3 + 2] / wc) as f32,\n                        ]);\n                        populated.push([ri, gi, bi]);\n                    } else {\n                        empty.push([ri, gi, bi]);\n                    }\n                }\n            }\n        }\n\n        // NN fill: brute-force L2 in index space\n        // TODO: parallelize with rayon (O(E×P) brute force, acceptable for LUT_SIZE=33 but slow for sparse footage)\n        if !populated.is_empty() && !empty.is_empty() {\n            for &ec in &empty {\n                let mut best_dist = u64::MAX;\n                let mut best_pop = populated[0];\n                for &pc in &populated {",
+  "source_version": "crates/dorea-lut/src/build.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:50:50.648499930Z",
+  "valid_from": "2026-04-02T02:50:50.648499930Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-lut/src/build.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 263,
+    "end_line": 294,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

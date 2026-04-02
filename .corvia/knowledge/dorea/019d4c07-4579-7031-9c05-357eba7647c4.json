@@ -1,0 +1,31 @@
+{
+  "id": "019d4c07-4579-7031-9c05-357eba7647c4",
+  "content": "## Comparative Analysis: UX Patterns\n\n### Pattern 1: Graph-to-Document Navigation Models\n\n| Model | Tools | Description | Best For |\n|-------|-------|-------------|----------|\n| **Replace** | Logseq, Obsidian (global) | Click node, document replaces graph | Simple but loses graph context |\n| **Split panel** | Obsidian (local), Kumu, Neo4j Bloom | Graph in one pane, document in another | Maintaining visual context while reading |\n| **Side panel reader** | Heptabase, Roam (sidebar) | Click node on canvas, content opens in side panel | Best balance of context and readability |\n| **Canvas-as-document** | Scrintal | Cards ON the canvas ARE the documents | Spatial thinkers, visual organization |\n| **Unified surface** | TheBrain | Graph and content are one scrollable surface | Seamless transitions, mobile |\n| **Tabular** | GitHub, Graphistry (inspector) | List/table view with click-to-navigate | Data-heavy, analytical use cases |\n\n\n### Pattern 2: Detail Panel Designs\n\n| Design | Tools | Behavior |\n|--------|-------|----------|\n| **Inspector overlay** | Neo4j Bloom | Double-click opens property inspector with navigable neighbor cards |\n| **Right sidebar** | Heptabase, Kumu, Roam | Click opens detail/content in persistent right panel |\n| **Expandable card** | Scrintal | Click card on canvas to resize/expand inline |\n| **Bottom data table** | Graphistry | Bottom panel shows tabular data for selected nodes |\n| **Footer links** | TheBrain | Navigation links embedded below content in the document itself |\n",
+  "source_version": "decisions/graph-document-ux-research.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:30:38.201324645Z",
+  "valid_from": "2026-04-02T02:30:38.201324645Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/graph-document-ux-research.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 635,
+    "end_line": 655,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

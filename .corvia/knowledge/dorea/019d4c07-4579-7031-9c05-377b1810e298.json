@@ -1,0 +1,31 @@
+{
+  "id": "019d4c07-4579-7031-9c05-377b1810e298",
+  "content": "## Chunk 1: Phase 1 — Metadata Extensions + Repo-Aware Write + Filtered Search\n\n### Task 1.1: Extend `EntryMetadata` with new fields\n\n**Files:**\n- Modify: `repos/corvia/crates/corvia-common/src/types.rs:29-36`\n- Test: `repos/corvia/crates/corvia-common/src/types.rs` (inline `#[cfg(test)] mod tests`)\n\n- [ ] **Step 1: Write failing test — new fields deserialize from JSON with defaults**\n\nAdd to the existing `mod tests` block in `types.rs`:\n\n```rust\n#[test]\nfn test_entry_metadata_new_fields_default() {\n    // Existing JSON without new fields should deserialize with None defaults\n    let json = r#\"{\"source_file\":\"lib.rs\",\"language\":\"rust\",\"chunk_type\":\"function\",\"start_line\":1,\"end_line\":10}\"#;\n    let meta: EntryMetadata = serde_json::from_str(json).unwrap();\n    assert_eq!(meta.source_file, Some(\"lib.rs\".into()));\n    assert!(meta.content_role.is_none());\n    assert!(meta.source_origin.is_none());\n}\n\n#[test]\nfn test_entry_metadata_new_fields_roundtrip() {\n    let meta = EntryMetadata {\n        source_file: Some(\"design.md\".into()),\n        language: Some(\"markdown\".into()),\n        chunk_type: Some(\"section\".into()),\n        start_line: Some(1),\n        end_line: Some(50),\n        content_role: Some(\"design\".into()),\n        source_origin: Some(\"repo:corvia\".into()),\n    };\n    let json = serde_json::to_string(&meta).unwrap();\n    let roundtrip: EntryMetadata = serde_json::from_str(&json).unwrap();\n    assert_eq!(roundtrip.content_role, Some(\"design\".into()));\n    assert_eq!(roundtrip.source_origin, Some(\"repo:corvia\".into()));\n}\n```\n\n- [ ] **Step 2: Run test to verify it fails**\n",
+  "source_version": "plans/2026-03-13-docs-workflow-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:30:38.201348681Z",
+  "valid_from": "2026-04-02T02:30:38.201348681Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-13-docs-workflow-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 66,
+    "end_line": 106,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

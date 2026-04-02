@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2b-7910-85bb-e77542d2c894",
+  "content": "# Dorea — Underwater Video AI Editing Pipeline\n\n## Overview\n\nDorea (named after the Dorado constellation — the golden fish) is an automated AI-assisted underwater video editing and colour grading pipeline. It integrates DaVinci Resolve Studio, local AI models (SAM2, Depth Anything V2), and Claude API to automate the technically repetitive stages of post-production while preserving full creative control for the human editor.\n\nThe system targets two camera systems — DJI Action 4 (D-Log M) and Insta360 X5 — running overnight batch processing on a Linux workstation with an RTX 3060 GPU (6GB VRAM) and 64GB DDR5 RAM. All AI inference runs locally. Claude API is called sparingly for high-reasoning vision tasks only.\n\n\n## Architecture Source\n\nThe full pipeline architecture is documented in `underwater_pipeline_architecture.docx`. This spec covers the **workspace setup and scaffolding** — not the pipeline implementation itself.\n\n---\n",
+  "source_version": "plans/2026-03-17-dorea-underwater-pipeline-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.739172985Z",
+  "valid_from": "2026-04-02T02:52:13.739172985Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-17-dorea-underwater-pipeline-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 7,
+    "end_line": 18,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

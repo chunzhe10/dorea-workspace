@@ -1,0 +1,31 @@
+{
+  "id": "019d4c19-c598-7391-b6d8-bf48300c917e",
+  "content": "UT_SIZE - 1) as f32;\n                        lut.set(ri, gi, bi, [r, g, b]);\n                    }\n                }\n            }\n        }\n\n        // NO Gaussian smoothing (σ=0)\n        luts.push(lut);\n    }\n\n    DepthLuts::new(luts, zone_boundaries)\n}\nmod tests {\n    use super::*;\n\n    #[test]\n    fn test_nn_fill_no_identity() {\n        // Build a simple keyframe where all pixels have red channel boosted.\n        // Target always has r = orig.r + 0.2 (clamped), same g/b.\n        // Verify no cell has identity mapping for the red channel in the populated region.\n        let size = 4;\n        let mut original = Vec::new();\n        let mut target = Vec::new();\n        let mut depth = Vec::new();\n        let mut importance = Vec::new();\n\n        // Use a grid of RGB values that uniformly samples the input space\n        for r in 0..size {\n            for g in 0..size {\n                for b in 0..size {\n                    let rf = r as f32 / (size - 1) as f32;\n                    let gf = g as f32 / (size - 1) as f32;\n                    let bf = b as f32 / (size - 1) as f32;\n                    original.push([rf, gf, bf]);\n                    target.push([(rf + 0.2).min(1.0), gf, bf]);\n                    depth.push(0.5); // all in middle zone\n                    importance.push(1.0);\n                }\n            }\n        }\n\n        let kf = KeyframeData {\n            original,\n            target,\n            depth,\n            importance,\n            width: size * size,\n            height: size,\n        };\n\n        let depth_luts = build_depth_luts(&[kf]);\n\n        // All pixels have depth=0.5, so with adaptive boundaries all land in the same zone.\n        // Find the zone that actually has data (populated cells) by checking which has non-zero\n        // values distinct from the identity mapping.\n        // With adaptive quantiles and all depths equal, zone 4 (last) captures all pixels.",
+  "source_version": "crates/dorea-lut/src/build.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:50:50.648501325Z",
+  "valid_from": "2026-04-02T02:50:50.648501325Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-lut/src/build.rs",
+    "language": "rs",
+    "chunk_type": "mod_item",
+    "start_line": 329,
+    "end_line": 372,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

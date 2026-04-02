@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2b-7910-85bb-f952372b42f7",
+  "content": "## Staleness Detection\n\n### Mechanism\n\nCompare mtime of `target/debug/corvia` vs `/usr/local/bin/corvia` (same for\n`corvia-inference`). A binary is \"stale\" when:\n\n- The target binary exists, AND\n- The target binary's mtime is newer than the installed binary's mtime\n\nIf the target binary doesn't exist (nothing built yet), no warning is shown.\n\n\n### Where it triggers\n\n| Context | Behavior |\n|---------|----------|\n| `corvia-dev up` | Interactive prompt: `Newer build detected. Install and restart? [Y/n]` |\n| `corvia-dev status` | Yellow warning line in output |\n| `corvia-dev status --json` | `\"stale_binaries\": [\"corvia\", \"corvia-inference\"]` field |\n",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-rebuild-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.739365715Z",
+  "valid_from": "2026-04-02T02:52:13.739365715Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-rebuild-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 43,
+    "end_line": 60,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

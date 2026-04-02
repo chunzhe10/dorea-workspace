@@ -1,0 +1,31 @@
+{
+  "id": "019d4c19-c598-7391-b6d8-bb7089377658",
+  "content": "\n        // Middle grey ~0.39 in D-Log M should decode to ~0.18 linear\n        let linear = dlog_m_to_linear(0.39);\n        assert!(\n            (linear - 0.18).abs() < 0.02,\n            \"Middle grey decode: expected ~0.18, got {linear}\"\n        );\n    }\n}\nfn test_dlog_m_round_trip() {\n        let values = [0.0_f32, 0.1, 0.2, 0.39, 0.5, 0.7, 0.9, 1.0];\n        for &v in &values {\n            let encoded = linear_to_dlog_m(v);\n            let decoded = dlog_m_to_linear(encoded);\n            assert!(\n                (decoded - v).abs() < 1e-5,\n                \"Round-trip failed for {v}: got {decoded}\"\n            );\n        }\n    }",
+  "source_version": "crates/dorea-color/src/dlog_m.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:50:50.648453196Z",
+  "valid_from": "2026-04-02T02:50:50.648453196Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-color/src/dlog_m.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 65,
+    "end_line": 75,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

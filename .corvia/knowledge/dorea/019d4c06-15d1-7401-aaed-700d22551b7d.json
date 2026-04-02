@@ -1,0 +1,31 @@
+{
+  "id": "019d4c06-15d1-7401-aaed-700d22551b7d",
+  "content": "info.width, info.height);\n\n        inputs.push(CalibrationInput { pixels, target, depth, width: info.width, height: info.height });\n    }\n\n    let _ = inf_server.shutdown();\n\n    run_calibration_from_frames(&inputs)\n        .context(\"calibration failed\")\n}\nfn build_inference_config(args: &GradeArgs) -> InferenceConfig {\n    InferenceConfig {\n        python_exe: args.python.clone(),\n        raune_weights: args.raune_weights.clone(),\n        raune_models_dir: args.raune_models_dir.clone(),\n        depth_model: args.depth_model.clone(),\n        device: if args.cpu_only { Some(\"cpu\".to_string()) } else { None },\n        startup_timeout: Duration::from_secs(180),\n    }\n}",
+  "source_version": "crates/dorea-cli/src/grade.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:29:20.465911053Z",
+  "valid_from": "2026-04-02T02:29:20.465911053Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/grade.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 248,
+    "end_line": 257,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2b-7910-85bb-e03b768a58d0",
+  "content": "### Graph-to-Document Navigation UX\n### Panel Pattern\n\n### Large Graph Handling\n\n- **Whiteboard tidy-up**: Batch tools for organizing multiple objects simultaneously\n- **Multiple whiteboards**: Separate visual spaces for different topics\n- **Card Library**: Searchable index of all cards across all whiteboards\n- **Global Search (Cmd+O)**: Searches cards, whiteboards, chats, and tags with advanced\n  filtering by card type, content source, and sorting\n- **Tag tables**: Clicking a tag gathers all cards with that tag into a single table view\n\n\n### What Works Well\n\n- **Click-to-side-panel** keeps visual context while reading -- best implementation of\n  graph+reader split\n- Cards can exist on multiple whiteboards (same content, different spatial contexts)\n- AI summaries chunk content into ~300 character units for quick scanning\n- Deeplink support for cross-whiteboard navigation\n- PDF annotation with highlights visible in the sidebar\n- Bi-directional links with backlink display\n",
+  "source_version": "decisions/graph-document-ux-research.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.739091875Z",
+  "valid_from": "2026-04-02T02:52:13.739091875Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/graph-document-ux-research.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 443,
+    "end_line": 461,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

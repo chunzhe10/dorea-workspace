@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2b-7910-85bb-fa0545b93336",
+  "content": "### Task 4: Add `rebuild` command to CLI\n\n    # Restart services if manager is running\n    if DEFAULT_STATE_PATH.exists():\n        click.echo(\"Restarting services...\")\n        try:\n            data = json.loads(DEFAULT_STATE_PATH.read_text())\n            resp = StatusResponse.model_validate(data)\n            if resp.manager and resp.manager.pid:\n                os.kill(resp.manager.pid, signal.SIGTERM)\n                time.sleep(2)\n                ctx = click.get_current_context()\n                ctx.invoke(up, no_foreground=True)\n        except (json.JSONDecodeError, ValueError, ProcessLookupError) as e:\n            click.echo(f\"Failed to restart: {e}\", err=True)\n    else:\n        click.echo(\"No running manager. Run 'corvia-dev up' to start services.\")\n```\n\n**Step 2: Test manually**\n\nRun: `cd /workspaces/corvia-workspace && corvia-dev rebuild --help`\nExpected: Shows help with `--no-build` and `--release` flags.\n\n**Step 3: Commit**\n\n```bash\ngit add tools/corvia-dev/corvia_dev/cli.py\ngit commit -m \"feat(corvia-dev): add rebuild command\"\n```\n\n---\n",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-rebuild.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.739374843Z",
+  "valid_from": "2026-04-02T02:52:13.739374843Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-rebuild.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 377,
+    "end_line": 407,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

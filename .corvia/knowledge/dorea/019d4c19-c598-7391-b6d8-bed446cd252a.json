@@ -1,0 +1,31 @@
+{
+  "id": "019d4c19-c598-7391-b6d8-bed446cd252a",
+  "content": "nel.iter_mut().enumerate() {\n        let offset = i as f32 - radius as f32;\n        let v = (-offset * offset / (2.0 * sigma * sigma)).exp();\n        *slot = v;\n        kernel_sum += v;\n    }\n    for k in kernel.iter_mut() {\n        *k /= kernel_sum;\n    }\n\n    // Horizontal pass\n    let mut temp = vec![0.0_f32; n];\n    for y in 0..height {\n        for x in 0..width {\n            let mut acc = 0.0_f32;\n            for (ki, &kv) in kernel.iter().enumerate() {\n                let nx = (x as i32 + ki as i32 - radius as i32).clamp(0, width as i32 - 1) as usize;\n                acc += edge_mag[y * width + nx] * kv;\n            }\n            temp[y * width + x] = acc;\n        }\n    }\n    // Vertical pass\n    let mut edge_dilated = vec![0.0_f32; n];\n    for y in 0..height {\n        for x in 0..width {\n            let mut acc = 0.0_f32;\n            for (ki, &kv) in kernel.iter().enumerate() {\n                let ny = (y as i32 + ki as i32 - radius as i32).clamp(0, height as i32 - 1) as usize;\n                acc += temp[ny * width + x] * kv;\n            }\n            edge_dilated[y * width + x] = acc;\n        }\n    }\n\n    let edge_max = edge_dilated.iter().cloned().fold(0.0_f32, f32::max).max(1e-6);\n    let edge_norm: Vec<f32> = edge_dilated.iter().map(|&v| v / edge_max).collect();\n\n    // --- Local variance via box filter (31×31 window) ---\n    // Use integral image for efficient box filtering\n    let box_r = 15_usize; // half-size of 31×31 window\n    let local_var = local_variance_box(depth, width, height, box_r);\n\n    let std_max = local_var.iter().cloned().map(|v| v.sqrt()).fold(0.0_f32, f32::max).max(1e-6);\n    let contrast_norm: Vec<f32> = local_var.iter().map(|&v| v.sqrt() / std_max).collect();\n\n    // --- Combine ---\n    let mut importance = vec![0.0_f32; n];\n    for i in 0..n {\n        let imp = depth[i]\n            * (1.0 + EDGE_SCALE * edge_norm[i])\n            * (1.0 + CONTRAST_SCALE * contrast_norm[i]);\n        importance[i] = imp.max(0.1);\n    }\n    importance\n}",
+  "source_version": "crates/dorea-lut/src/build.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:50:50.648495465Z",
+  "valid_from": "2026-04-02T02:50:50.648495465Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-lut/src/build.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 77,
+    "end_line": 123,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

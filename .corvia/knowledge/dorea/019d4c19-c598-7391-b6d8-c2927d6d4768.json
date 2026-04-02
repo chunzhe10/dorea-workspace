@@ -1,0 +1,31 @@
+{
+  "id": "019d4c19-c598-7391-b6d8-c2927d6d4768",
+  "content": "# which produces an identity-like calibration useful for validating the pipeline.\n# Phase 2 will add `dorea infer` to generate these automatically.\n\n# Grade (Phase 3 — not yet implemented)\ndorea grade --input dive.mp4 --calibration calibration.dorea-cal --output graded.mp4\n```\n",
+  "source_version": "README.md",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:50:50.648542342Z",
+  "valid_from": "2026-04-02T02:50:50.648542342Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "README.md",
+    "language": "markdown",
+    "chunk_type": "heading_section",
+    "start_line": 60,
+    "end_line": 63,
+    "content_role": "instruction",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

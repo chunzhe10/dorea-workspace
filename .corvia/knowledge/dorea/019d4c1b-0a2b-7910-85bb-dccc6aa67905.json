@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2b-7910-85bb-dccc6aa67905",
+  "content": "# D52: Devcontainer as Integration Surface\n\n**Date:** 2026-03-01\n**Status:** Shipped (v0.2.1)\n**Supersedes:** D4 (VS Code extension primary form factor from v0.1.0)\n",
+  "source_version": "decisions/d52-devcontainer-integration.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.739054982Z",
+  "valid_from": "2026-04-02T02:52:13.739054982Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/d52-devcontainer-integration.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1,
+    "end_line": 6,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

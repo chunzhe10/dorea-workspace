@@ -1,0 +1,31 @@
+{
+  "id": "019d4c07-4579-7031-9c05-38fb4ecbeb74",
+  "content": "   </div>\n  );\n}\n```\n\n- [ ] **Step 2: Commit**\n\n```bash\ncd /workspaces/corvia-workspace\ngit add tools/corvia-dashboard/src/components/GraphControls.tsx\ngit commit -m \"feat(dashboard): add GraphControls component (depth slider + metadata filters)\"\n```\n\n---\n\n### Task 2.5: Create `NeighborCards` component\n\n**Files:**\n- Create: `tools/corvia-dashboard/src/components/NeighborCards.tsx`\n\n- [ ] **Step 1: Create clickable neighbor cards**\n\n```tsx\nimport type { NeighborEntry } from \"../types\";\n\n// Role → color mapping (matches graph node colors from spec)\nconst ROLE_COLORS: Record<string, string> = {\n  design: \"#7dd3fc\",    // blue\n  code: \"#5eead4\",      // green\n  plan: \"#ffb07c\",      // orange\n  memory: \"#c4b5fd\",    // purple\n  finding: \"#ff8a80\",   // red\n  decision: \"#f0c94c\",  // gold\n  instruction: \"#fcd34d\", // amber\n  learning: \"#6ee7b7\",  // emerald\n};\n\ninterface NeighborCardsProps {\n  neighbors: NeighborEntry[];\n  onSelect: (entryId: string) => void;\n}\n\nexport function NeighborCards({ neighbors, onSelect }: NeighborCardsProps) {\n  if (neighbors.length === 0) {\n    return <div class=\"neighbor-empty\">No connected entries</div>;\n  }\n\n  return (\n    <div class=\"neighbor-cards\">\n      <h4>Connected Knowledge</h4>\n      {neighbors.map((n) => (\n        <button\n          key={n.id}\n          class=\"neighbor-card\"\n          onClick={() => onSelect(n.id)}\n          title={`${n.relation} (${n.direction})`}\n        >\n          <span\n            class=\"role-dot\"\n            style={{ backgroundColor: ROLE_COLORS[n.content_role ?? \"\"] ?? \"#8a8279\" }}\n          />\n          <span class=\"neighbor-label\">\n            {n.source_file ?? n.content.slice(0, 60)}\n          </span>\n          <span class=\"neighbor-role\">{n.content_role ?? \"unknown\"}</span>\n        </button>\n      ))}\n    </div>\n  );\n}\n```\n\n- [ ] **Step 2: Commit**\n\n```bash\ncd /workspaces/corvia-workspace\ngit add tools/corvia-dashboard/src/components/NeighborCards.tsx\ngit commit -m \"feat(dashboard): add NeighborCards component for graph traversal from reader\"\n```\n\n---\n",
+  "source_version": "plans/2026-03-13-docs-workflow-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:30:38.201365063Z",
+  "valid_from": "2026-04-02T02:30:38.201365063Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-13-docs-workflow-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1111,
+    "end_line": 1177,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -74,6 +74,39 @@
         ]
       }
     ],
+    "TaskCompleted": [
+      {
+        "hooks": [
+          {
+            "command": "[ \"$CORVIA_HOOKS_DISABLED\" = \"1\" ] && exit 0; corvia hooks run --event TaskCompleted 2>/tmp/.corvia-hook-err || { rc=$?; grep -q \"unrecognized subcommand\" /tmp/.corvia-hook-err 2>/dev/null && exit 0; cat /tmp/.corvia-hook-err >&2; exit $rc; }",
+            "timeout": 5000,
+            "type": "command"
+          }
+        ]
+      }
+    ],
+    "TaskCreated": [
+      {
+        "hooks": [
+          {
+            "command": "[ \"$CORVIA_HOOKS_DISABLED\" = \"1\" ] && exit 0; corvia hooks run --event TaskCreated 2>/tmp/.corvia-hook-err || { rc=$?; grep -q \"unrecognized subcommand\" /tmp/.corvia-hook-err 2>/dev/null && exit 0; cat /tmp/.corvia-hook-err >&2; exit $rc; }",
+            "timeout": 5000,
+            "type": "command"
+          }
+        ]
+      }
+    ],
+    "TeammateIdle": [
+      {
+        "hooks": [
+          {
+            "command": "[ \"$CORVIA_HOOKS_DISABLED\" = \"1\" ] && exit 0; corvia hooks run --event TeammateIdle 2>/tmp/.corvia-hook-err || { rc=$?; grep -q \"unrecognized subcommand\" /tmp/.corvia-hook-err 2>/dev/null && exit 0; cat /tmp/.corvia-hook-err >&2; exit $rc; }",
+            "timeout": 5000,
+            "type": "command"
+          }
+        ]
+      }
+    ],
     "UserPromptSubmit": [
       {
         "hooks": [

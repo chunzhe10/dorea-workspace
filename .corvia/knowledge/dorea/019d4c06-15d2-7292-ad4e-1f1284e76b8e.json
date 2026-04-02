@@ -1,0 +1,31 @@
+{
+  "id": "019d4c06-15d2-7292-ad4e-1f1284e76b8e",
+  "content": "r: f32,\n    pub h_width: f32,\n    /// Degrees to add to hue\n    pub h_offset: f32,\n    /// Saturation multiplier\n    pub s_ratio: f32,\n    /// Value offset in [0, 1]\n    pub v_offset: f32,\n    /// Total weight; 0 = inactive qualifier\n    pub weight: f32,\n}\npub fn derive_hsl_corrections(\n    lut_output: &[[f32; 3]],\n    target: &[[f32; 3]],\n) -> HslCorrections {\n    assert_eq!(\n        lut_output.len(),\n        target.len(),\n        \"lut_output ({}) and target ({}) must have the same length\",\n        lut_output.len(),\n        target.len()\n    );\n\n    // Convert to HSV\n    let lut_hsv: Vec<(f32, f32, f32)> = lut_output\n        .iter()\n        .map(|&[r, g, b]| rgb_to_hsv(r, g, b))\n        .collect();\n    let tgt_hsv: Vec<(f32, f32, f32)> = target\n        .iter()\n        .map(|&[r, g, b]| rgb_to_hsv(r, g, b))\n        .collect();\n\n    let mut corrections = Vec::with_capacity(HSL_QUALIFIERS.len());\n\n    for qual in HSL_QUALIFIERS {\n        let hc = qual.h_center;\n        let hw = qual.h_width;\n\n        // Build soft qualifier mask\n        let mut total_weight = 0.0_f64;\n        let mut weights: Vec<f32> = Vec::with_capacity(lut_hsv.len());\n\n        for &(lh, ls, _lv) in &lut_hsv {\n            let h_dist = angular_dist(lh, hc);\n            let mask = (1.0 - h_dist / hw).max(0.0) * if ls > MIN_SATURATION { 1.0 } else { 0.0 };\n            weights.push(mask);\n            total_weight += mask as f64;\n        }\n\n        if total_weight < MIN_WEIGHT as f64 {\n            corrections.push(QualifierCorrection {\n                h_center: hc,\n                h_width: hw,\n                h_offset: 0.0,\n                s_ratio: 1.0,",
+  "source_version": "crates/dorea-hsl/src/derive.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:29:20.466020794Z",
+  "valid_from": "2026-04-02T02:29:20.466020794Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-hsl/src/derive.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 31,
+    "end_line": 75,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

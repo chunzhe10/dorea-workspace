@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2b-7910-85bb-eb5a681bdc48",
+  "content": "## Service Ports (container-internal)\n\n## MCP Servers\n\n| Server | URL | Description |\n|--------|-----|-------------|\n| corvia | `http://127.0.0.1:8020/mcp` | Organizational memory (container-internal) |\n| davinci-resolve-mcp | `http://host.docker.internal:9090/mcp` | DaVinci Resolve API bridge (host) |\n| playwright | `http://127.0.0.1:8050/mcp` | Browser automation (container-internal) |\n\nAvailable corvia MCP tools (use `scope_id: \"dorea\"` for all calls):\n- `corvia_search` — semantic search across ingested knowledge\n- `corvia_write` — write knowledge entries (requires agent identity)\n- `corvia_history` — entry supersession history\n- `corvia_graph` — graph edges for an entry\n- `corvia_reason` — run health checks on a scope\n- `corvia_agent_status` — agent contribution summary\n- `corvia_context` — retrieve assembled context (RAG retrieval only)\n- `corvia_ask` — full RAG: question → AI-generated answer from knowledge\n- `corvia_system_status` — system status (entry counts, agents, sessions, queue)\n- `corvia_config_get` — read config section as JSON\n- `corvia_config_set` — update hot-reloadable config value (requires confirmation)\n- `corvia_adapters_list` — discovered adapter binaries\n- `corvia_agents_list` — all registered agents\n- `corvia_gc_run` — trigger garbage collection (requires confirmation)\n- `corvia_rebuild_index` — rebuild HNSW vector index (requires confirmation)\n- `corvia_agent_suspend` — suspend an agent (requires confirmation)\n- `corvia_merge_retry` — retry failed merge entries (requires confirmation)\n- `corvia_merge_queue` — inspect merge queue status\n\n**IMPORTANT:** The `scope_id` for this workspace is `\"dorea\"` (defined in `corvia.toml`).\nDo NOT use `\"corvia\"`, `\"dorea-workspace\"`, or any other variant.\n",
+  "source_version": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.739215758Z",
+  "valid_from": "2026-04-02T02:52:13.739215758Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 550,
+    "end_line": 580,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d4c19-c598-7391-b6d8-bad47097a2c1",
+  "content": "\n    // 4. Remaining common install paths\n    for candidate in &[\n        \"/usr/local/cuda/bin/nvcc\",\n        \"/usr/bin/nvcc\",\n    ] {\n        let p = PathBuf::from(candidate);\n        if p.exists() {\n            return Some(p);\n        }\n    }\n\n    None\n}\nfn main() {\n    let manifest_dir = PathBuf::from(std::env::var(\"CARGO_MANIFEST_DIR\").unwrap());\n    let kernels_dir = manifest_dir.join(\"src\").join(\"cuda\").join(\"kernels\");\n\n    // Tell cargo to re-run if any .cu file changes or CUDA env vars change\n    println!(\"cargo:rerun-if-changed=src/cuda/kernels/lut_apply.cu\");\n    println!(\"cargo:rerun-if-changed=src/cuda/kernels/hsl_correct.cu\");\n    println!(\"cargo:rerun-if-changed=src/cuda/kernels/clarity.cu\");\n    println!(\"cargo:rerun-if-changed=build.rs\");\n    println!(\"cargo:rerun-if-env-changed=CUDA_HOME\");\n    println!(\"cargo:rerun-if-env-changed=PATH\");\n\n    let Some(nvcc) = find_nvcc() else {\n        println!(\"cargo:warning=nvcc not found — building dorea-gpu with CPU-only fallback\");\n        println!(\"cargo:warning=Rebuild the devcontainer (Dockerfile adds CUDA 12.4 toolkit) to enable CUDA kernels\");\n        return;\n    };\n\n    println!(\"cargo:warning=Found nvcc at {}\", nvcc.display());\n\n    // Compile each .cu file to an object file, then link.\n    let out_dir = PathBuf::from(std::env::var(\"OUT_DIR\").unwrap());\n    let kernel_names = [\"lut_apply\", \"hsl_correct\", \"clarity\"];\n    let mut obj_files: Vec<PathBuf> = Vec::new();\n\n    for name in &kernel_names {\n        let src = kernels_dir.join(format!(\"{name}.cu\"));\n        let obj = out_dir.join(format!(\"{name}.o\"));\n\n        // Make CUDA includes take priority over system includes so that\n        // CUDA's crt/math_functions.h declarations (e.g. cospi) don't conflict\n        // with glibc 2.35+ mathcalls.h redeclaring them with noexcept(true).\n        let cuda_include = nvcc.parent()\n            .and_then(|p| p.parent())\n            .map(|p| p.join(\"targets/x86_64-linux/include\"))\n            .filter(|p| p.exists());\n        let mut args = vec![\n            \"-c\".to_string(),\n            \"-O2\".to_string(),\n            \"-arch=sm_86\".to_string(), // RTX 3060 is Ampere sm_86\n            \"--compiler-options=-fPIC\".to_string(),\n        ];\n        if let Some(ref inc) = cuda_include {",
+  "source_version": "crates/dorea-gpu/build.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:50:50.648446323Z",
+  "valid_from": "2026-04-02T02:50:50.648446323Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/build.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 52,
+    "end_line": 94,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

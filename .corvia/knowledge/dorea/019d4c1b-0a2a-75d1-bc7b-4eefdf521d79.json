@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2a-75d1-bc7b-4eefdf521d79",
+  "content": "# corvia-workspace — toggle optional devcontainer services\n# Usage: corvia-workspace {enable|disable|status} [ollama|surrealdb]\n\n# Ensure flags file exists with defaults\ninit_flags() {\n    if [ ! -f \"$FLAGS_FILE\" ]; then\n        cat > \"$FLAGS_FILE\" <<'EOF'\nollama=disabled\nsurrealdb=disabled\nEOF\n    fi\n}\n\nget_flag() {\n    init_flags\n    grep \"^$1=\" \"$FLAGS_FILE\" | cut -d= -f2\n}\n\nset_flag() {\n    init_flags\n    if grep -q \"^$1=\" \"$FLAGS_FILE\"; then\n        sed -i \"s/^$1=.*/$1=$2/\" \"$FLAGS_FILE\"\n    else\n        echo \"$1=$2\" >> \"$FLAGS_FILE\"\n    fi\n}\n\n\n# --- Ollama ---\n\nenable_ollama() {\n    echo \"Enabling Ollama...\"\n",
+  "source_version": "decisions/2026-03-03-optional-devcontainer-services.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.738997737Z",
+  "valid_from": "2026-04-02T02:52:13.738997737Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-03-03-optional-devcontainer-services.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 221,
+    "end_line": 249,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2b-7910-85bb-f504097cc052",
+  "content": "## VS Code Extension (Thin Skin)\n\n### Responsibilities (~200 lines)\n\n1. **Poll** — `corvia-dev status --json` every 10s\n2. **Display** — render JSON into webview dashboard\n3. **Command** — send user actions as `corvia-dev <command>` in terminal\n\n\n### Status bar\n\n- Green: all tier 0 services healthy\n- Yellow: tier 0 healthy, some tier 1/2 down\n- Red: tier 0 down\n",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-cli-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.739316936Z",
+  "valid_from": "2026-04-02T02:52:13.739316936Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-cli-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 171,
+    "end_line": 182,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

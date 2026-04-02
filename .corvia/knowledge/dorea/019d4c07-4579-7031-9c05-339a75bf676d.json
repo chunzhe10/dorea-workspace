@@ -1,0 +1,31 @@
+{
+  "id": "019d4c07-4579-7031-9c05-339a75bf676d",
+  "content": "### Graph-to-Document Navigation UX\n### Panel Pattern\n\n### Large Graph Handling\n\n- No special handling beyond the standard force-directed layout\n- Community complaints about the graph being \"useless\" for large vaults\n- Feature requests for additional layout algorithms (hierarchical, radial, etc.)\n- Users report that the graph view has never been practically useful even after years of use\n\n\n### What Works Well\n\n- Open-source and local-first (Markdown/Org-mode files)\n- Block-level bidirectional linking\n- PDF annotation integration\n- Plugin ecosystem\n",
+  "source_version": "decisions/graph-document-ux-research.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:30:38.201304030Z",
+  "valid_from": "2026-04-02T02:30:38.201304030Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/graph-document-ux-research.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 214,
+    "end_line": 227,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d4c06-15d1-7401-aaed-770b01d55f64",
+  "content": "fn upscale_depth_identity() {\n        let depth: Vec<f32> = vec![0.1, 0.2, 0.3, 0.4];\n        let out = InferenceServer::upscale_depth(&depth, 2, 2, 2, 2);\n        assert_eq!(out, depth, \"2x2→2x2 should be identity\");\n    }\nfn upscale_depth_bilinear() {\n        let depth: Vec<f32> = vec![0.0, 1.0, 0.0, 0.0];\n        // 2x2 → 3x3\n        let out = InferenceServer::upscale_depth(&depth, 2, 2, 3, 3);\n        assert_eq!(out.len(), 9);\n        // Top-left corner = 0.0\n        assert!((out[0] - 0.0).abs() < 1e-5, \"top-left should be 0.0\");\n        // Top-right corner = 1.0\n        assert!((out[2] - 1.0).abs() < 1e-5, \"top-right should be 1.0\");\n    }",
+  "source_version": "crates/dorea-video/src/inference.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:29:20.465978773Z",
+  "valid_from": "2026-04-02T02:29:20.465978773Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 617,
+    "end_line": 626,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

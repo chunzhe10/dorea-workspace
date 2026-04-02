@@ -1,0 +1,31 @@
+{
+  "id": "019d4c07-4579-7031-9c05-49d121238ae6",
+  "content": "### Health Check Protocols (2026-03-09)\n\n### Dashboard UX: Contextual Actions Over Command Palettes (2026-03-09)\n\n**Problem**: The initial extension dashboard had a \"Quick Actions\" grid — six CLI commands dumped as buttons (Status, Restart, Use Ollama, Use CI, Config, Logs). No hierarchy, no context. \"Use Ollama\" has nothing to do with \"Restart\" but they sit side by side.\n\n**Decision**: Kill the Quick Actions section entirely. Every action belongs inline where it's contextually meaningful:\n\n| Action | Where It Lives | Why |\n|--------|---------------|-----|\n| Restart service | Button on each health card | You restart *this* service, not \"services in general\" |\n| Restart all | Header toolbar (danger-styled) | Global action, lives at the top |\n| Switch provider | Pill buttons in Configuration card, next to the Embedding row | Provider switching is a config action |\n| Enable/disable | Toggle switch on each service row | Per-service control |\n| View full logs | Icon button on log panel header | Contextual to the log panel |\n| Start services | Offline banner CTA | Only shown when services are down |\n\n**Layout**: Two-column middle section (Services | Configuration) instead of stacked. Health banner at top. Collapsible log panel pinned at bottom.\n",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-cli-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:30:38.201536279Z",
+  "valid_from": "2026-04-02T02:30:38.201536279Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-cli-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 255,
+    "end_line": 271,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

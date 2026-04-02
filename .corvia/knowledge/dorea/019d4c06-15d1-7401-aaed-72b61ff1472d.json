@@ -1,0 +1,31 @@
+{
+  "id": "019d4c06-15d1-7401-aaed-72b61ff1472d",
+  "content": " /// Frames per second (rational rounded to f64).\n    pub fps: f64,\n    /// Duration in seconds.\n    pub duration_secs: f64,\n    /// Estimated frame count (may be 0 if unknown).\n    pub frame_count: u64,\n    /// Has audio stream.\n    pub has_audio: bool,\n}\npub fn probe(input: &Path) -> Result<VideoInfo, FfmpegError> {\n    let output = Command::new(\"ffprobe\")\n        .args([\n            \"-v\", \"quiet\",\n            \"-print_format\", \"json\",\n            \"-show_streams\",\n            \"-show_format\",\n            input.to_str().unwrap_or(\"\"),\n        ])\n        .output()\n        .map_err(FfmpegError::NotFound)?;\n\n    if !output.status.success() {\n        return Err(FfmpegError::ProbeFailed(\n            String::from_utf8_lossy(&output.stderr).to_string(),\n        ));\n    }\n\n    let json: serde_json::Value = serde_json::from_slice(&output.stdout)\n        .map_err(|e| FfmpegError::ProbeFailed(e.to_string()))?;\n\n    let streams = json[\"streams\"].as_array().ok_or_else(|| {\n        FfmpegError::InvalidMetadata(\"no streams found\".to_string())\n    })?;\n\n    let video = streams.iter()\n        .find(|s| s[\"codec_type\"].as_str() == Some(\"video\"))\n        .ok_or_else(|| FfmpegError::InvalidMetadata(\"no video stream\".to_string()))?;\n\n    let width = video[\"width\"].as_u64()\n        .ok_or_else(|| FfmpegError::InvalidMetadata(\"missing width\".to_string()))? as usize;\n    let height = video[\"height\"].as_u64()\n        .ok_or_else(|| FfmpegError::InvalidMetadata(\"missing height\".to_string()))? as usize;\n\n    // fps as rational string \"30000/1001\" or plain \"30\"\n    let fps = parse_rational(video[\"r_frame_rate\"].as_str().unwrap_or(\"30/1\"));\n\n    let duration_secs = json[\"format\"][\"duration\"]\n        .as_str()\n        .and_then(|s| s.parse::<f64>().ok())\n        .unwrap_or(0.0);\n\n    let frame_count = video[\"nb_frames\"]\n        .as_str()\n        .and_then(|s| s.parse::<u64>().ok())\n        .unwrap_or_else(|| (duration_secs * fps).round() as u64);\n\n    let has_audio = streams.iter().any(|s| s[\"codec_type\"].as_str() == Some(\"audio\"));\n\n    Ok(VideoInfo { width, height, fps, duration_secs, frame_count, has_audio })\n}",
+  "source_version": "crates/dorea-video/src/ffmpeg.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:29:20.465937527Z",
+  "valid_from": "2026-04-02T02:29:20.465937527Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/ffmpeg.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 39,
+    "end_line": 89,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

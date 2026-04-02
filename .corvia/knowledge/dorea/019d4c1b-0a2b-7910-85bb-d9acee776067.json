@@ -1,0 +1,31 @@
+{
+  "id": "019d4c1b-0a2b-7910-85bb-d9acee776067",
+  "content": "# Prebuilt Binaries Implementation Plan\n\n### Task 1: Create GitHub Actions release workflow\n\n**Files:**\n- Create: `repos/corvia/.github/workflows/release.yml`\n\n**Step 1: Create the workflow directory**\n\nRun: `mkdir -p repos/corvia/.github/workflows`\n\n**Step 2: Write the release workflow**\n\nCreate `repos/corvia/.github/workflows/release.yml`:\n\n```yaml\nname: Release\n\non:\n  push:\n    tags:\n      - 'v*'\n\npermissions:\n  contents: write\n\njobs:\n  build:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n\n      - name: Install system dependencies\n        run: |\n          sudo apt-get update\n          sudo apt-get install -y pkg-config libssl-dev cmake protobuf-compiler\n\n      - name: Install Rust toolchain\n        uses: dtolnay/rust-toolchain@stable\n\n      - name: Cache cargo registry and build\n        uses: actions/cache@v4",
+  "source_version": "decisions/2026-03-03-prebuilt-binaries.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:52:13.739019722Z",
+  "valid_from": "2026-04-02T02:52:13.739019722Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-03-03-prebuilt-binaries.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 16,
+    "end_line": 55,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

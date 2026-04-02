@@ -1,0 +1,31 @@
+{
+  "id": "019d4c19-c598-7391-b6d8-bc2927396043",
+  "content": "fn linear_to_srgb(v: f32) -> f32 {\n    if v <= 0.003_130_8 {\n        v * 12.92\n    } else {\n        1.055 * v.powf(1.0 / 2.4) - 0.055\n    }\n}\nfn f_lab(t: f32) -> f32 {\n    if t > DELTA_CUBED {\n        t.cbrt()\n    } else {\n        t / DELTA_SQ_3 + 4.0 / 29.0\n    }\n}",
+  "source_version": "crates/dorea-color/src/lab.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:50:50.648460568Z",
+  "valid_from": "2026-04-02T02:50:50.648460568Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-color/src/lab.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 36,
+    "end_line": 42,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

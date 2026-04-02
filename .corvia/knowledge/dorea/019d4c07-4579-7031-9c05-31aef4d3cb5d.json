@@ -1,0 +1,31 @@
+{
+  "id": "019d4c07-4579-7031-9c05-31aef4d3cb5d",
+  "content": "## Decision\n## Context\n\n## Consequences\n\n- Light mode default: ~1.5GB image (Rust toolchain + build deps). Ollama adds ~500MB.\n  SurrealDB runs as a separate Docker container.\n- Toggle script at `.devcontainer/scripts/corvia-workspace.sh`, installed to PATH during\n  `post-create.sh`. Commands: `enable/disable ollama|surrealdb`, `status`, `rebuild`.\n- State persisted in `.devcontainer/.corvia-workspace-flags` (gitignored). `post-start.sh`\n  reads flags on container restart and re-starts previously enabled services.\n- `enable ollama` installs binary, starts serve, pulls model, updates `corvia.toml`\n  embedding section. `disable ollama` reverts to corvia-inference provider.\n- `enable surrealdb` starts Docker container, updates `corvia.toml` to `store_type =\n  \"surrealdb\"`. `disable surrealdb` reverts to `store_type = \"lite\"`.\n- `corvia.toml` defaults: `provider = \"corvia\"`, `store_type = \"lite\"`.\n\n**Source:** `docs/decisions/2026-03-03-optional-devcontainer-services-design.md`",
+  "source_version": "decisions/d70-optional-services.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:30:38.201284452Z",
+  "valid_from": "2026-04-02T02:30:38.201284452Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/d70-optional-services.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 22,
+    "end_line": 36,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

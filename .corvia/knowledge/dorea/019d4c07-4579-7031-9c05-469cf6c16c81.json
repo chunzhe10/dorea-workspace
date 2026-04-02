@@ -1,0 +1,31 @@
+{
+  "id": "019d4c07-4579-7031-9c05-469cf6c16c81",
+  "content": "### Task 5: `dorea-cal` — calibration format\n### Task 6: `dorea-cli` — calibrate command\n\n### Task 7: Remove dead code + update README\n- Delete old Python scripts from main branch\n- Update README to describe v2 architecture\n\n---\n",
+  "source_version": "plans/2026-04-02-dorea-v2-phase1-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-02T02:30:38.201504294Z",
+  "valid_from": "2026-04-02T02:30:38.201504294Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-dorea-v2-phase1-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 289,
+    "end_line": 294,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

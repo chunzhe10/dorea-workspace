@@ -1,0 +1,31 @@
+{
+  "id": "019d4c06-15d2-7292-ad4e-22a0bd29a897",
+  "content": "def to_dict(self) -> dict:\n        return {\"type\": self.type, \"id\": self.id,\n                \"depth_f32_b64\": self.depth_f32_b64,\n                \"width\": self.width, \"height\": self.height}\ndef from_array(id: str, depth: \"np.ndarray\") -> \"DepthResult\":\n        \"\"\"Encode a 2-D float32 depth array as DepthResult.\"\"\"\n        import numpy as np\n        arr = np.ascontiguousarray(depth, dtype=\"<f4\")\n        raw = arr.tobytes()\n        return DepthResult(\n            id=id,\n            depth_f32_b64=base64.b64encode(raw).decode(\"ascii\"),\n            width=arr.shape[1],\n            height=arr.shape[0],\n        )",
+  "source_version": "python/dorea_inference/protocol.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-02T02:29:20.466061043Z",
+  "valid_from": "2026-04-02T02:29:20.466061043Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/protocol.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 103,
+    "end_line": 113,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}
