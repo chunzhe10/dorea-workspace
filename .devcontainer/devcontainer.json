@@ -29,7 +29,8 @@
                 "ms-python.python",
                 "tamasfe.even-better-toml",
                 "Continue.continue",
-                "ms-vscode.live-server"
+                "ms-vscode.live-server",
+                "sitefinitysteve.video-preview-xd"
             ],
             "settings": {
                 "corvia.serverUrl": "http://localhost:8020",
