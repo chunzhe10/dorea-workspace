@@ -1,0 +1,31 @@
+{
+  "id": "019d51db-8c37-74a0-abff-f74946f50c9f",
+  "content": "# Grading Pipeline Benchmark — v4 (GPU-space IPC, 2026-04-03)\n\n## Test\n\n- **Footage:** `DJI_20251101111428_0055_D.MP4` — 3840×2160, ~120fps, 1671 frames, 14s\n- **Calibration:** `/workspaces/dorea-workspace/working/2025-11-01/mvp/calibration.dorea-cal`\n- **Build:** release, cudarc PTX reuse (GPU-space IPC branch, commit 46efb1a)\n- **Command:** `dorea grade --input ... --calibration ... --depth-model .../depth_anything_v2_small --raune-weights .../weights_95.pth`\n\n## Result\n\n**Total wall time: 8 minutes 41 seconds (521s)**\n\n- ~36s per 100 frames = **360ms/frame average**\n- CUDA grader initialized once (PTX loaded at startup, reused for all 1671 frames)\n- Inference server + model load: ~3s (one-time)\n- Depth interpolation active (default N=12): most frames skip depth inference\n\n## Throughput progression\n\n| Version | Wall time | Notes |\n|---------|-----------|-------|\n| Before perfv3 | 30+ min | CPU grading, full depth inference every frame |\n| After perfv3 | ~11 min | Depth interpolation + fused LAB + raw IPC + GPU grading |\n| After GPU-space IPC (v4) | **8m 41s** | cudarc PTX reuse, flush_buffer_with_depth fixed |\n\n**21% improvement over v3** (11 min → 8m 41s).\n\n## Bottleneck analysis\n\nAt 4K (3840×2160 = 8.3 Mpx), GPU grading takes ~332ms/frame (Criterion bench: 83ms at 1080p × ~4× pixel count). With depth interpolation skipping ~12/13 frames' depth inference, grading is now the bottleneck — not inference IPC.\n\nPer-frame budget breakdown (estimated, 4K):\n- Non-keyframe (~92% of frames): grading only ≈ 332ms\n- Keyframe (~8% of frames): depth inference + grading ≈ 550ms\n- Weighted average ≈ 350ms/frame → 585s for 1671 frames (matches observed 521s)\n\n## Next optimization target\n\nGPU grading at 4K is 332ms/frame. Options:\n1. **Proxy-resolution grading** — grade at 1080p proxy, upscale (would ~4× GPU throughput)\n2. **Batch uploads** — pipeline htod/compute/dtoh to hide transfer latency\n3. **Process fewer keyframes** — increase `--depth-max-interval` from 12 to 24 (saves depth inference but doesn't help grading cost)\n\nThe PTX reuse fix (this PR) eliminated ~128ms of overhead per keyframe call and ~128ms per buffered frame call (flush_buffer_with_depth was re-creating CudaGrader). At 1671 frames, this saved ~213s vs the pre-fix path where per_call_init adds ~128ms overhead per frame.",
+  "source_version": "46efb1a",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-03T05:40:36.023393518Z",
+  "valid_from": "2026-04-03T05:40:36.023393518Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "finding",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

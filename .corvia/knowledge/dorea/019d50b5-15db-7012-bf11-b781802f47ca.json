@@ -1,0 +1,31 @@
+{
+  "id": "019d50b5-15db-7012-bf11-b781802f47ca",
+  "content": "# Perf v3 Render Speed — dorea grade (2026-04-03)\n\n## Test File\n- **Input**: `footage/raw/2025-11-01/DJI_20251101111428_0055_D.MP4`\n- **Resolution**: 3840x2160 @ 119.88fps, 14.0s duration, 1671 frames, 218MB\n\n## Output\n- **File**: `working/graded/DJI_20251101111428_0055_D_graded_perfv3.mp4`\n- **Codec**: H.264 (libx264, High 4:4:4 Predictive, gbrp) + AAC audio passthrough\n- **Size**: 198MB\n\n## Render Speed\n- **Total wall time**: 3m 33.1s\n- **Calibration phase** (RAUNE-Net + Depth Anything on 20 keyframes): ~46s\n- **Per-frame grading** (1671 frames): ~2m 47s\n- **Frame rate**: ~10.0 fps (100 frames per ~10s)\n- **Realtime ratio**: 0.066x (14s video / 213s processing)\n- **CPU time**: 10m 12s user, 1m 3s sys\n\n## Pipeline Config\n- **Binary**: dorea-cli @ commit 135f8df (perf v3: temporal interp + fused LAB + raw RGB IPC + HF bypass)\n- **Proxy size**: 518px (default) — frames downscaled before depth inference\n- **RAUNE-Net**: loaded from default path (weights_95.pth), ran on CUDA during calibration\n- **Depth Anything V2**: CUDA, keyframe-only inference at proxy resolution\n- **Grading**: CUDA (LUT + HSL + fused depth-aware ambiance+warmth)\n- **Temporal interpolation**: ON (MSE threshold 0.005, max interval 12)\n- **Encoder**: libx264 (NVENC not available in this container)\n- **GPU**: RTX 3060 6GB VRAM\n\n## Comparison vs Baseline (commit 7970229)\n\n| Metric | Baseline | Perf v3 | Speedup |\n|--------|----------|---------|---------|\n| Total wall time | 38m 0.6s | 3m 33.1s | **10.7x** |\n| Calibration | ~2m 53s | ~46s | 3.8x |\n| Per-frame grading | ~35m 7s | ~2m 47s | **12.6x** |\n| Throughput | 0.74 fps | ~10.0 fps | **13.5x** |\n| Realtime ratio | 0.006x | 0.066x | 11x |\n| CPU user time | 41m 39s | 10m 12s | 4.1x |\n| CPU sys time | 4m 0s | 1m 3s | 3.8x |\n\n## Bottleneck Shift\nPer-frame depth inference is no longer the bottleneck — temporal interpolation skips ~83% of frames (at max_interval=12 on 120fps content). Remaining cost is dominated by ffmpeg decode/encode and keyframe depth inference. Next potential speedups: NVENC encoding, binary IPC (eliminate base64), pre-allocated scratch buffers for lerp.\n\n## Quality\nVisual comparison (source vs graded at t=2s, 5s, 10s) shows proper color restoration: blue/cyan cast removed, reef warm tones recovered, depth-aware ambiance providing foreground/background separation. No visible interpolation artifacts on non-keyframe frames. Quantitative PSNR/SSIM pending (--no-depth-interp reference run in progress).\n",
+  "source_version": "135f8df",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-03T00:18:58.139307490Z",
+  "valid_from": "2026-04-03T00:18:58.139307490Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "finding",
+    "source_origin": "workspace"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

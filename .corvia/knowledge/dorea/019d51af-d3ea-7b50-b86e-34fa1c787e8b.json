@@ -1,0 +1,31 @@
+{
+  "id": "019d51af-d3ea-7b50-b86e-34fa1c787e8b",
+  "content": "# GPU-Space IPC & Adaptive Batching — Merged (issue #24, PR #26)\n\n**Merged:** 2026-04-03 into main at d61817c\n\n## What shipped\n\n### cudarc PTX migration (dorea-gpu)\n- `CudaGrader` loads lut_apply, hsl_correct, clarity PTX modules once on construction via `cudarc 0.12`\n- All device memory is RAII via `CudaSlice<T>` (drop = cudaFree) — no manual alloc/free\n- Replaced `extern \"C\"` static-lib FFI entirely; build.rs now compiles `.cu → .ptx` (not `.cu → .o → .a`)\n- cudarc dep: non-optional, `dynamic-linking` feature (dlopen at runtime), `cuda-12040` pinned version (avoids `cuda-version-from-build-system` which breaks CPU-only builds)\n- `d_depth` freed after LUT stage (not held for entire function); early drops use stream-ordered `cuMemFreeAsync` on sm_86\n\n### CLI grader reuse (dorea-cli)\n- One `CudaGrader` initialized at startup, threaded through `flush_buffer_with_depth` and keyframe loop\n- `AdaptiveBatcher::fixed(depth_max_interval)` initialized; `GpuError::Oom` → `report_oom()` → CPU fallback instead of pipeline abort\n- `grade_with_grader()` helper handles None grader (CUDA unavailable) by calling CPU path\n\n### PyO3 inference backend (dorea-video, feature = \"python\")\n- `InferenceServer` reimplemented behind `python` Cargo feature using embedded Python\n- Subprocess path renamed `inference_subprocess.rs`, remains as default (no breaking change)\n- `InferenceServer` caches `Py<PyModule>` for bridge module — no per-call `import_bound`\n- `DepthTensorGuard`: `!Send+!Sync` via `PhantomData<*const ()>`, `impl Drop` calls `release()`\n- `BorrowedDeviceSlice`: `pub(crate)`, `PhantomData<(&'a (), *mut T)>` (invariant), TODO for GPU tensor sharing spike\n\n### Python bridge (python/dorea_inference/bridge.py)\n- `TensorGuard`: holds tensor reference to prevent GC; `release()` zeros all fields\n- `load_depth_model`, `load_raune_model`, `run_depth_cpu`, `run_raune_cpu`, `run_depth_gpu`, `run_raune_gpu` entry points\n- `vram_free_bytes()`: calls `torch.cuda.empty_cache()` then `mem_get_info()`\n- `unload_models()`: clears global model references, called from `InferenceServer::shutdown()`\n\n### VRAM accounting (dorea-gpu/src/device.rs)\n- `per_frame_vram_bytes(w, h)`: accounts for 3 RGB planes + depth + 22 MB LUT budget (5 zones × 33³) + 3 proxy L planes\n- `verify_cuda_context(device)`: tiny alloc probe for context health check\n\n## Key architectural notes\n- `cargo:rustc-cfg=feature=\"cuda\"` sets raw rustc cfg but does NOT activate Cargo optional deps — making cudarc optional would break the dep activation chain\n- `#[cfg(feature = \"cuda\")]` on function parameters is valid Rust; rust-analyzer shows false positives when it can't evaluate build.rs — actual `cargo check` passes clean\n- GPU tensor sharing (run_depth_gpu → BorrowedDeviceSlice → grade_frame_cuda) is scaffolded but NOT integrated — requires spike to confirm cudarc/PyTorch context sharing before wiring\n\n## Files changed (21 files, +1764/-406)\n- NEW: `crates/dorea-gpu/src/batcher.rs`, `device.rs`\n- NEW: `crates/dorea-cli/build.rs`\n- NEW: `crates/dorea-video/src/inference/mod.rs`, `inference/pyo3_backend.rs`\n- NEW: `python/dorea_inference/bridge.py`\n- MODIFIED: `crates/dorea-gpu/src/cuda/mod.rs` (full rewrite), `lib.rs`, `Cargo.toml`, `build.rs`\n- MODIFIED: `crates/dorea-cli/src/grade.rs`, `Cargo.toml`\n- MODIFIED: `crates/dorea-video/src/lib.rs`, `Cargo.toml`\n- RENAMED: `inference.rs` → `inference_subprocess.rs`\n- MODIFIED: `python/dorea_inference/depth_anything.py`, `raune_net.py`",
+  "source_version": "d61817c",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-03T04:52:50.794379267Z",
+  "valid_from": "2026-04-03T04:52:50.794379267Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "decision",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d50e5-2523-7d43-9aac-9e3baf8d9c85",
+  "content": "# 3D LUT Temporal Interpolation Design (2026-04-03)\n\n## Decision\nReplace grade_frame on non-keyframe frames with a precomputed per-depth-band 3D color LUT. 33x33x33 grid × 8 depth bands, built once per clip (~3.3MB). Captures full per-pixel pipeline (LUT apply + HSL + fused ambiance + warmth + blend). Clarity skipped on non-keyframes (spatial, being replaced by Maxine).\n\n## Key Points\n- LUT is constant per clip — calibration and grade params don't change frame-to-frame\n- Non-keyframe cost: depth lerp (~12ms) + LUT trilinear lookup (~15ms rayon) = ~27ms vs ~40ms current\n- Future CUDA texture acceleration: ~5ms per non-keyframe\n- New module: dorea-gpu/src/lut3d.rs (GradeLut, Lut3D, build/apply functions)\n- New function: grade_pixel() — single-pixel pipeline without clarity\n- Keyframe path unchanged (full pipeline including clarity)\n\n## Supersedes\nTemporal grade interpolation (perf v3 opt 5) — reverted in PR #23 due to ghosting from pixel-wise RGB blending.\n\nSpec: docs/decisions/2026-04-03-3d-lut-temporal-interpolation.md",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-03T01:11:27.779865536Z",
+  "valid_from": "2026-04-03T01:11:27.779865536Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

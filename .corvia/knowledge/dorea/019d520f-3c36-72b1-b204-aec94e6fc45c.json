@@ -1,0 +1,31 @@
+{
+  "id": "019d520f-3c36-72b1-b204-aec94e6fc45c",
+  "content": "# 3D LUT Issue #25 — Closed as Superseded (2026-04-03)\n\n## What: CPU-side 3D LUT for non-keyframe grading was superseded by GPU grading in PR #26\n\n## Why Closed:\nIssue #25 targeted the CPU grading LAB roundtrip (~25ms/frame) on non-keyframes. PR #26 wired CudaGrader into flush_buffer_with_depth, so non-keyframes now run through the full GPU pipeline (LUT apply + HSL correct + clarity PTX). The CPU path the LUT was targeting is no longer on the hot path.\n\nAt 4K (8.3M pixels), a CPU rayon trilinear lookup would be slower than the GPU path, not faster. The 15-25ms estimate in the issue was for sub-4K resolutions.\n\n## Current bottleneck (v4, post PR #26):\nGPU grading at 4K = ~332ms/frame. Total wall time: 8m 41s for 1671-frame test clip.\n\n## Actual next optimization:\nProxy-resolution GPU grading (grade at 1080p, upscale result) → ~4× GPU throughput.\nThis addresses the real bottleneck, not the LAB roundtrip.\n\n## CUDA 3D texture (future):\nA CUDA 3D texture kernel for non-keyframe grading (~5ms/non-keyframe) remains viable but is a different design from the 7 CPU-focused tasks in issue #25. Should be opened as a separate issue.\n\n## No code was implemented (0 of 7 tasks). Closed as not planned.",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-03T06:37:03.414956269Z",
+  "valid_from": "2026-04-03T06:37:03.414956269Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "decision",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}
