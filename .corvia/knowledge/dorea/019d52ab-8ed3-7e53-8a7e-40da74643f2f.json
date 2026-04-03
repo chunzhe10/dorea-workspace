@@ -1,0 +1,31 @@
+{
+  "id": "019d52ab-8ed3-7e53-8a7e-40da74643f2f",
+  "content": "## Decision: CudaGrader device buffer pre-allocation — implementation complete (issue #27)\n\n### Status: MERGED (2026-04-03)\n\n### What was built\nCached device buffers inside `CudaGrader` using `RefCell<Option<ResolutionBuffers>>` and `RefCell<Option<CalibrationBuffers>>`. Buffers are allocated on first use and reused across frames; reallocated only when resolution or calibration shape changes. Upload uses `htod_sync_copy_into` (copy-only, no alloc).\n\nNew public API:\n- `CudaGrader::with_capacity(max_w, max_h)` — eagerly pre-allocates resolution buffers (8 CudaSlice<f32>). CalibrationBuffers remain lazy (one cudaMalloc per grader lifetime, NOT zero).\n- `grade_frames_with_capacity(frames, w, h, cal, params)` — batch wrapper; bears full PTX load cost per call. Pipeline callers processing multiple batches should hold CudaGrader directly and call grade_frame_with_grader.\n\n### Critical borrow discipline (for future contributors)\n`htod_sync_copy_into` panics inside a live RefMut on length mismatch → poisons the RefCell permanently. Ordering enforced structurally:\n1. All length guards BEFORE first borrow_mut (checked_mul for n, jagged-LUT guard, n_zones guard)\n2. Each borrow_mut scope is a distinct `{ }` block (closed before the next)\n3. Immutable borrow() for kernel launches only after all borrow_muts have dropped\n\n### Actual performance gain\n- 4K video (DJI_20251101111428_0055_D.MP4): 7.3% wall-clock improvement (8m3s vs 8m41s)\n- GPU SM utilization: 7-16% (PCIe bandwidth bottleneck, not compute)\n- Expected 80% gain did NOT materialize — cudarc 0.12.1 uses cudaMallocAsync pool (fast), not legacy synchronous cudaMalloc\n\n### Key guards in place\n- `width.checked_mul(height)` in grade_frame_cuda (overflow safety)\n- checked_mul chain for lut_size³*3*n_zones in alloc_calibration_buffers\n- with_capacity enforces EXACT dimension match (rejects both oversized AND undersized frames)\n- dtoh_sync_copy comment is NOTE: not SAFETY: (safe function)",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-03T09:27:48.179121341Z",
+  "valid_from": "2026-04-03T09:27:48.179121341Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "decision",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

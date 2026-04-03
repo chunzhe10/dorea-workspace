@@ -1,0 +1,31 @@
+{
+  "id": "019d52ac-bc68-70a2-b1ec-906af4426745",
+  "content": "## Issue #27 closed — PR #30 merged (2026-04-03)\n\nchunzhe10/dorea#27 \"perf(dorea-gpu): pre-allocate CudaGrader device buffers\" resolved by PR #30.\n\nResult: 7.3% wall-clock improvement (8m3s vs 8m41s on 4K footage). GPU SM utilization unchanged at 7-16% — bottleneck remains PCIe bandwidth, not cudaMalloc overhead. The cudarc 0.12.1 pool-based cudaMallocAsync allocation path is faster than anticipated from the prior design estimate.",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-03T09:29:05.384228108Z",
+  "valid_from": "2026-04-03T09:29:05.384228108Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "decision",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d5228-a075-7df1-8e32-38df93b806b8",
+  "content": "# CudaGrader Buffer Pre-Allocation — Implementation Plan Reference\n\nIssue: chunzhe10/dorea#27\nPlan file: `docs/plans/2026-04-03-cuda-grader-buffer-pre-allocation.md`\nBranch: implement from `master`\n\n## 8 tasks\n\n1. **Add regression tests** — `cuda::tests` block in `cuda/mod.rs`. Run with `cargo test -p dorea-gpu --features cuda -- cuda::tests`. Covers: determinism, resolution switch round-trip, calibration shape switch.\n2. **Add structs + helpers** — `ResolutionBuffers`, `CalibrationBuffers`, `alloc_resolution_buffers`, `alloc_calibration_buffers` in `cuda/mod.rs`\n3. **Update `CudaGrader` struct** — add `res_bufs: RefCell<Option<ResolutionBuffers>>`, `cal_bufs: RefCell<Option<CalibrationBuffers>>`, init both as `None` in `new()`\n4. **Refactor `grade_frame_cuda`** — replace 14 per-frame allocs with cached-buffer approach. Includes: input length guards, `n_zones==0` guard, `// SAFETY:` stream comment, `htod_sync_copy_into` for all copies\n5. **Update `per_frame_vram_bytes`** — change `3 * rgb_f32` → `4 * rgb_f32` in `device.rs` (4 RGB planes held simultaneously post-refactor)\n6. **Add `with_capacity`** — `CudaGrader::with_capacity(max_w, max_h)` in `cuda/mod.rs` + `grade_frames_with_capacity` in `lib.rs`. Tests: `with_capacity_rejects_oversized_frame`, `grade_frames_with_capacity_batches_correctly`\n7. Save Criterion baseline: `cargo bench -p dorea-gpu --features cuda -- --save-baseline before_prealloc`\n8. **Benchmark** — run with `--baseline before_prealloc`, verify ≥80% reduction on `grading/with_grader/1080p`, record result in corvia\n\n## Critical notes for implementer\n- ALL `cargo test` commands need `--features cuda`\n- `borrow_mut` blocks must close (`}`) before any `borrow()` on the same `RefCell`\n- `htod_sync_copy_into` asserts `src.len() == dst.len()` — length guards must come BEFORE `borrow_mut`\n- `CudaSlice<f32>` is `Send+Sync` — `CudaGrader` stays `!Send+!Sync` only via `PhantomData<*const ()>`",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-03T07:04:47.477847768Z",
+  "valid_from": "2026-04-03T07:04:47.477847768Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "plan",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}
