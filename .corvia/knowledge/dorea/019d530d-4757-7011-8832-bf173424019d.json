@@ -1,0 +1,31 @@
+{
+  "id": "019d530d-4757-7011-8832-bf173424019d",
+  "content": "# Combined LUT + CUDA 3D Texture Grading — SHIPPED (PR #33, 2026-04-03)\n\n## Status: MERGED\n\nIssue #28 is closed. PR #33 squash-merged to master.\n\n## Implementation Gotchas (learned during impl)\n\n- **14-arg kernel**: cudarc 0.12 `LaunchAsync` tuple limit is 12. `build_combined_lut_kernel` takes 14 args → use raw `&mut [*mut c_void]` array with `as_kernel_param()` calls. NOT unsafe in cudarc 0.12 (compiler confirmed).\n- **MaybeUninit for CUDA_MEMCPY3D**: `CUmemorytype` has no zero variant → `std::mem::zeroed()` panics in Rust debug mode. Use `MaybeUninit::<CUDA_MEMCPY3D>::zeroed().assume_init()`.\n- **Drop order critical**: `CombinedLut` must be declared BEFORE `CudaDevice` in `CudaGrader` struct. Rust drops fields in declaration order. Texture/array destruction requires live CUDA context.\n- **HSL qualifier hardcoding**: `GP_H_CENTERS`/`GP_H_WIDTHS` in `grade_pixel.cuh` must match `HSL_QUALIFIERS` in `dorea-hsl/src/qualifiers.rs`. Tests use `HSL_QUALIFIERS` directly to stay in sync.\n- **Accuracy tolerance**: Identity LUT ≤2/255, gamma-shifted LUT + active HSL ≤4/255 (trilinear quantization in high-curvature regions — acceptable at 8-bit).\n- **Axis ordering**: In `build_combined_lut.cu`, `ri=rem%N` is x/column (fastest), `bi=rem/(N*N)` is z/depth (slowest). This matches `cuMemcpy3D` `srcPitch=N*16` and `tex3D(tex, r*(N-1), g*(N-1), b*(N-1))` — no R↔B swap needed.\n\n## Performance (RTX 3060)\n\n`with_grader/1080p` = 3ms (was ~332ms, ~100× speedup). `with_grader/720p` = 1.3ms.\n\n## API after this PR\n\n```rust\n// Construction (once per calibration/params change)\nlet grader = CudaGrader::new(&calibration, &params)?;\n// Per frame (reuse grader)\nlet out: Vec<u8> = grader.grade_frame_cuda(&pixels, &depth, w, h)?;\n// Or via public API\nlet out = grade_frame_with_grader(&grader, &pixels, &depth, w, h)?;\n```\n",
+  "source_version": "PR #33 merged 2026-04-03",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-03T11:14:32.407048241Z",
+  "valid_from": "2026-04-03T11:14:32.407048241Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "decision",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

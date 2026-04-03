@@ -1,0 +1,31 @@
+{
+  "id": "019d5362-1d50-78a3-bb9d-420a9e0a1f3e",
+  "content": "# Batch Depth Inference — Decision Record (2026-04-03)\n\n## What\nReplaced per-keyframe sequential depth inference with two-pass batched inference in `dorea grade`.\nBranch: feat/batch-depth-inference. Closes issue #34.\n\n## Key Design Decisions\n\n1. **Two-pass instead of one-pass with lookahead buffer**: Eliminated `BufferedFrame` + `flush_buffer_with_depth` entirely. Pass 1 is a cheap proxy decode that only stores keyframe pixels; Pass 2 reads full-res and lookups pre-computed depths. Cleaner state machine, no buffer overflow risk.\n\n2. **DEPTH_BATCH_SIZE = 32**: Caps GPU memory per batch for the `--no-depth-interp` case where every frame becomes a keyframe. At proxy 518×291 f32 → ~590KB per map × 32 = ~19MB GPU peak, well under 6GB VRAM limit.\n\n3. **frame.index is a sequential counter (0, 1, 2...), NOT PTS**: Both proxy and full-res decoders use the same `FrameReader` counter, so indices are guaranteed to align. The `kf_cursor` advance loop in Pass 2 is safe.\n\n4. **HashMap keyed by frame_index (u64)**: O(1) depth lookup per frame. Ordered `kf_index_list: Vec<(u64, bool)>` maintained separately for lerp cursor traversal.\n\n5. **scene_cut_before on KeyframeEntry**: Pass 1 records whether a keyframe follows a scene cut. Pass 2 checks this flag to suppress lerp across scene boundaries (use prev_depth instead of interpolating).\n\n6. **Batch result count padding**: If server returns fewer results than items (partial failure), missing entries are padded with uniform depth 0.5 and a warn log — prevents `.expect()` panic in pass 2.\n\n7. **decode_frames_scaled delegates to spawn_decoder when same dims**: Avoids adding a scale filter when proxy_w == info.width, preserving exact bit-for-bit equivalence.\n\n## Review Findings Worth Remembering\n\n- The `zip()` trick for chunk iteration (`keyframes.chunks(N).zip(batch_items.chunks(N))`) is idiomatic Rust for parallel chunk processing without index arithmetic.\n- Python `infer_batch()` must return exactly `len(imgs)` results — validated on Rust side.\n- `DepthBatchItem.max_size` must be homogeneous within a batch (Python uses `items[0].max_size` for all). In practice guaranteed since all items come from the same video/pass.\n\n## What Blocked / Surprised\n\n- Nothing structurally surprising. The two-pass refactor was clean once `BufferedFrame` was eliminated — the old single-pass lookahead buffer was the source of complexity, not the depth inference itself.\n- clippy `type_complexity` lint fires on `Vec<(String, Vec<f32>, usize, usize)>` — suppressed with `#[allow]` since introducing a named tuple type was overkill for an internal API.\n",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-03T12:47:12.208497367Z",
+  "valid_from": "2026-04-03T12:47:12.208497367Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "decision",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d5351-43bb-7103-a4f0-1b7fb68ddfd6",
+  "content": "# Batch Depth Inference — Implementation Plan (issue #34)\n\n**Branch:** feat/batch-depth-inference  \n**Plan file:** docs/plans/2026-04-03-batch-depth-inference-plan.md\n\n## Why\n\nAfter PR #33 (combined LUT), GPU grading is <5s but depth inference is ~70–100s (300 sequential subprocess calls). Two-pass batching eliminates the per-call overhead.\n\n## Three tasks\n\n**Task A — Python (4 files):**\n- `depth_anything.py`: add `infer_batch(imgs, max_size)` — stack tensors, one forward pass, per-image normalize\n- `bridge.py`: add `run_depth_batch_cpu(imgs, max_size) -> list[np.ndarray]`\n- `protocol.py`: add `DepthBatchResult` dataclass (type=depth_batch_result, results=list)\n- `server.py`: add `depth_batch` handler calling `depth_model.infer_batch()`\n\n**Task B — Rust IPC (2 files):**\n- `inference_subprocess.rs`: add `DepthBatchItem` struct + `run_depth_batch(&mut self, items: &[DepthBatchItem]) -> Result<Vec<(String, Vec<f32>, usize, usize)>>`\n- `pyo3_backend.rs`: same public API, calls `bridge.run_depth_batch_cpu(imgs, max_size)`\n\n**Task C — Two-pass grade.rs (2 files):**\n- `ffmpeg.rs`: add `decode_frames_scaled(input, info, width, height)` — decode at proxy resolution\n- `grade.rs`: refactor `run()` to: proxy decode → MSE keyframe detection → batch depth (DEPTH_BATCH_SIZE=32) → full-res grade with depth lookup/lerp\n\n## Protocol\n\nRequest: `{\"type\": \"depth_batch\", \"items\": [{id, image_b64, format, width, height, max_size}, ...]}`  \nResponse: `{\"type\": \"depth_batch_result\", \"results\": [{id, depth_f32_b64, width, height}, ...]}`\n\n## Key design decisions\n\n- `BufferedFrame` and `flush_buffer_with_depth` removed from grade.rs (not needed in two-pass)\n- `DEPTH_BATCH_SIZE = 32` to cap GPU memory for `no_depth_interp` case (all frames are keyframes)\n- Scene cut handling: `scene_cut_before: bool` on `KeyframeEntry`; in pass 2 don't lerp across cuts\n- `auto_calibrate` NOT batched (not the bottleneck, uses both RAUNE+depth)\n- `DepthBatchItem` must be `pub` in both backends, re-exported via `inference/mod.rs`\n",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-03T12:28:47.931198877Z",
+  "valid_from": "2026-04-03T12:28:47.931198877Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "plan",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d5319-7188-7da3-a71c-d43ba9e09ffc",
+  "content": "# Real-world benchmark: combined LUT GPU grading pipeline (post-PR #33)\n\n**Date:** 2026-04-03\n**Pipeline version:** after issue #28 / PR #33 — combined 97³ CUDA 3D texture LUT replacing 3-kernel pipeline\n\n## Test clip\n\n- File: `DJI_20251101111428_0055_D.MP4`\n- Resolution: 3840×2160 (4K), HEVC 10-bit\n- Frame rate: 119.88 fps\n- Duration: 13.95 s → 1,671 frames\n\n## Results\n\n| Metric | Value |\n|--------|-------|\n| Total wall time | **2 min 6.859 s** |\n| User time | 5 min 31.739 s |\n| Sys time | 0 min 56.995 s |\n| Output size | 202 MB |\n| Output path | `/tmp/DJI_20251101111428_0055_D_graded.mp4` |\n\n## Approximate time breakdown\n\n| Stage | Time |\n|-------|------|\n| Auto-calibration (20 keyframes × RAUNE-Net + Depth Anything V2) | ~35 s |\n| Per-frame depth inference (keyframes) + temporal interpolation + GPU grading | ~1 min 49 s |\n| GPU grading kernel only (~3 ms/frame × 1,671 frames) | < 5 s |\n\n## Key finding\n\n**GPU grading is no longer the pipeline bottleneck.** The combined LUT kernel runs at ~3 ms/frame (vs. ~332 ms with the old 3-kernel pipeline — ~100× speedup). The bottleneck is now depth inference subprocess invocations per keyframe.\n\n## Next optimization target\n\nDepth inference (Depth Anything V2 subprocess, called per keyframe) dominates wall time. Batching keyframes into a single subprocess call or moving to an in-process inference model would be the highest-leverage improvement.\n",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-03T11:27:49.640259802Z",
+  "valid_from": "2026-04-03T11:27:49.640259802Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "finding",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}
