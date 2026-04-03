@@ -1,0 +1,31 @@
+{
+  "id": "019d4efd-5001-7382-9467-ce2a3e2626cc",
+  "content": "# Maxine Post-Grading Enhancement Stage Decision (2026-04-02)\n\n## Decision\nAdd an optional post-grading AI enhancement stage using NVIDIA Maxine Video Effects SDK. Injected between `grade_frame()` and `encoder.write_frame()` in the existing sequential frame loop. Performs an **in-resolution oversample**: 2x AI super-resolution → area downsample back to original resolution for cleaner, sharper output.\n\n## Key Design Elements\n\n### Pipeline Integration\n- Sequential call in `grade.rs` after `grade_frame()`, same pattern as `run_depth()`. No mutex needed — pipeline is single-threaded.\n- Extends existing `dorea_inference` Python server with `enhance` message type. Both depth and Maxine models share one Python process and one CUDA context (via `NvVFX_SetCudaStream`).\n- `--maxine` flag passed ONLY to the grading inference server, NOT the calibration server (avoids RAUNE + depth + Maxine VRAM conflict during calibration).\n\n### Temporal Interpolation\n- Maxine runs ONLY on keyframes (~17% of frames at N=6 interval).\n- Non-keyframes interpolate *enhanced* keyframe outputs — no flickering, no wasted Maxine inference.\n- Effective throughput impact: ~10-15% reduction (not per-frame 50-100ms).\n\n### Enhancement Chain\n1. Artifact reduction at original resolution (if enabled, capped at 1080p input)\n2. 2x VideoSuperRes → 2160p intermediate\n3. `cv2.resize` INTER_AREA downsample → original resolution\n4. Return enhanced RGB u8\n\n### IPC Protocol\n- Raw RGB format (`\"format\": \"raw_rgb\"`), consistent with existing depth/RAUNE protocol.\n- Error handling: Python catches internally, returns original frame as `enhance_result`. Rust needs zero special-casing. Passthrough counter logged at shutdown.\n- CI mock: `DOREA_MAXINE_MOCK=1` env var replaces nvvfx with passthrough for testing.\n\n### Configuration\n```yaml\nmaxine:\n  enabled: false\n  artifact_reduction: true\n  upscale_factor: 2  # Capped at 2 for ≤6GB VRAM\n```\nCLI: `dorea grade --maxine` / `--no-maxine`\n\n### VRAM Budget\nPeak ~4.9-5.7GB on RTX 3060 6GB (headroom ~0.3-1.1GB). Critical: must validate via nvidia-smi on first hardware test. Escape hatches: disable artifact_reduction (-500MB), reduce depth batch_size (-250MB), disable entirely (revert to 2.8GB).\n\n### Known Limitations\n- **8-bit bottleneck**: Maxine accepts only uint8. Graded f32 quantized to u8 before enhancement. Trades bit-depth precision for spatial quality improvement.\n- **H.264-trained artifact reduction on H.265 source**: Unvalidated but expected to work for common artifact types. A/B test needed.\n- **Post-grade processing order**: Grading may amplify artifacts before Maxine removes them. Pre-grade would avoid this but D-Log M is outside model's training distribution.\n\n### Licensing\nOptional external dependency. No bundling. Lazy import. `DOREA_MAXINE_MOCK=1` for CI. No license contamination.\n\n## Full spec\nSee `docs/decisions/2026-04-02-maxine-post-grading-enhancement.md`",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-02T16:18:37.185441075Z",
+  "valid_from": "2026-04-02T16:18:37.185441075Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

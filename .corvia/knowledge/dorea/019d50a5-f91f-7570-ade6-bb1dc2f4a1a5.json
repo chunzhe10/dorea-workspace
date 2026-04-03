@@ -1,0 +1,31 @@
+{
+  "id": "019d50a5-f91f-7570-ade6-bb1dc2f4a1a5",
+  "content": "# Grading Pipeline Perf v3 — Decision Record (2026-04-02)\n## What: Four performance optimizations for dorea grade targeting ~12 min savings on 1671-frame 4K clips\n## Key Design Decisions:\n1. Raw RGB IPC replaces PNG encode/decode — base64 overhead remains (~33%) but PNG construction/parsing eliminated. Binary IPC protocol deferred as future optimization.\n2. HF processor bypass with hardcoded ImageNet normalization — CUDA is now a hard requirement (no silent CPU fallback). Preview command noted as needing separate handling.\n3. Fused LAB pass — single sRGB↔LAB roundtrip instead of two. Not bit-exact (accepted ΔE < 2 tolerance, tested at 0.05 normalized RGB). Parallelized with rayon par_chunks_exact_mut.\n4. Temporal grade interpolation — MSE-based keyframe detection at proxy resolution. Non-keyframe frames interpolate graded RGB output (not depth). Scene cuts flush buffer without forward interpolation.\n5. --cpu-only flag now errors early for dorea grade (GPU required). Flag retained for other commands.\n## Review Findings Worth Remembering:\n- ptr::eq on Vec heap pointers works for detecting same-allocation but is fragile — use Option<&T> instead\n- np.frombuffer returns read-only arrays — always .copy() when downstream code might mutate\n- Fused ambiance duplicates ~80 lines of grading logic — extract shared grade_pixel_lab() in future\n- lerp_graded allocates per non-keyframe (~35GB transient at 4K) — pre-allocated scratch buffer is a follow-up\n## What Blocked / Surprised:\n- gh CLI defaulted to corvia-workspace upstream instead of dorea-workspace origin — required gh repo set-default fix\n- dorea code repo (repos/dorea/) is gitignored by workspace repo — separate git workflows needed",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-03T00:02:27.743876694Z",
+  "valid_from": "2026-04-03T00:02:27.743876694Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "decision",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

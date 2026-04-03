@@ -1,0 +1,31 @@
+{
+  "id": "019d4eda-448a-7d33-9b9f-07514e3f129d",
+  "content": "# 10-Bit Pipeline Design Decision (2026-04-02)\n\n## Decision\nUpgrade Dorea pipeline from 8-bit to 10-bit I/O (Approach A: 10-bit I/O, f32 internal) to support both DJI Action 4 D-Log M (10-bit H.265) and Insta360 X5 I-Log (10-bit ProRes 422 HQ). DaVinci Resolve owns final SDR tone mapping and 8-bit conversion.\n\n## Key Design Elements\n\n### Camera Input Abstraction\n- Trait-based `TransferFunction` with implementations: DLogM, ILog, Srgb, LutBased\n- I-Log starts as S-Log3 proxy; empirical extraction deferred (shoot grayscale chart, fit curve, drop into 1D .cube LutBased variant)\n- Camera-aware shoulder rolloff: D-Log M=0.85, I-Log=0.88, sRGB=0.95\n- `ClipMeta` struct with encoding, projection (Rectilinear|TinyPlanet), source_bit_depth, container_hint\n- Auto-detection via ffprobe with mismatch warnings\n- ProRes is all-intra: frame selection skips I-frame filter\n\n### 16-Bit I/O\n- ffmpeg extracts keyframes as 16-bit PNG (rgb48be) instead of JPEG\n- `load_rgb_image()` uses `.into_rgb16()` / 65535.0\n- `inference.rs` PNG codec supports both 8-bit and 16-bit\n- LUT size: 33^3 -> 65^3 for 10-bit input (configurable, auto-defaulting)\n\n### Performance Architecture\n- 3-stage pipelined frame loop: decode -> depth inference -> grade+encode (bounded channels, cap 3)\n- Inference stays 8-bit proxy (depth model doesn't benefit from 16-bit)\n- Persistent GPU LUT allocation (upload 16.5 MB once, not per-frame)\n- CUDA kernels: u8 -> f32 signature\n- Batched depth inference (2-3 frames per IPC call)\n- NVDEC for H.265 10-bit decode; CPU for ProRes\n- Output: ProRes 422 HQ 10-bit (default) or HEVC 10-bit NVENC\n\n### Tiny Planet\n- Skip depth estimation (model fails on stereographic projection)\n- Use zone 0 LUT with uniform depth=0.5\n- 2-stage pipeline (no Python subprocess), expected >15 fps\n- Heuristic warning for degenerate depth maps\n\n### Insta360 X5 Workflow\n- Shoot I-Log 5.7K HDR\n- Export from Insta360 Studio: Color Plus OFF, no LUTs, ProRes 422 HQ\n- Reframe to flat perspective (wide or tiny planet)\n- Verify: exported clip should look flat/washed out in Resolve (confirms I-Log preserved)\n\n## VRAM Budget\nPeak ~2.8 GB (depth batch=2) on RTX 3060 6GB. Stages 2 and 3 never share GPU simultaneously.\n\n## Full spec\nSee `docs/decisions/2026-04-02-10bit-pipeline-design.md`",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-02T15:40:20.490824376Z",
+  "valid_from": "2026-04-02T15:40:20.490824376Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}
