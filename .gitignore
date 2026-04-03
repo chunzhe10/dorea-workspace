@@ -46,3 +46,12 @@ node_modules/
 .fastembed_cache/
 .worktrees/
 .superpowers/
+
+# Stray screenshot/image files at workspace root
+*.jpeg
+*.jpg
+*.png
+Screenshot*
+
+# Work-in-progress tools (not ready to track)
+tools/corvia-dashboard/

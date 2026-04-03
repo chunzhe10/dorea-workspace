@@ -1,0 +1,31 @@
+{
+  "id": "019d52b4-e5e3-7123-84c7-bb2e858eba18",
+  "content": "## PCIe synchronization barrier analysis — issue #31\n\nRoot cause of 7.3% (not ~80%) gain from PR #30 buffer pre-allocation:\n`grade_frame_cuda` issues 9 synchronous PCIe operations per frame that each block the CPU thread.\n\n### The 9 barriers (1080p)\n- htod: d_rgb_in (24 MB), d_depth (8 MB), d_luts (2.2 MB), d_boundaries/h_offsets/s_ratios/v_offsets/weights (24 B each × 5)\n- dtoh: d_rgb_out (24 MB) — calls device.synchronize()\n\n### Key finding\nBarriers 3–8 (all 6 calibration uploads) fire unconditionally every frame even though calibration is fixed for an entire session. This is the most impactful waste.\n\n### 5 fixes (priority order)\n1. **Skip calibration re-uploads when unchanged** — eliminates 6/9 barriers in steady state, no streams needed\n2. **Merge 5 tiny calibration scalars into one transfer** — 5 driver calls → 1 for boundaries+hsl arrays\n3. **Host-pinned memory + async htod for d_rgb_in** — pageable Vec<f32> forces driver staging copy; use CudaHostSlice<f32> + htod_copy_into async\n4. **Deferred dtoh via stream-ordered batch readback** — keep results on device until batch end; BorrowedDeviceSlice in device.rs is already implemented for this\n5. **Copy-compute overlap with double-buffered streams** — upload frame N+1 while kernels process frame N; full architectural pipelining\n\nFix 1 + 2 are low-complexity, high-impact, can ship in one PR.\nFix 5 (double-buffered streams) is the architectural goal unlocking full PCIe bandwidth potential.\n\nGPU SM utilization at 7–16% confirms PCIe-bound, not compute-bound.",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-03T09:38:00.291838053Z",
+  "valid_from": "2026-04-03T09:38:00.291838053Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "decision",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}
