@@ -71,6 +71,13 @@ sessions close. A `SessionEnd` hook in `.claude/settings.json` auto-runs
 
 Do NOT create `docs/superpowers/` — that path is blocked by enforcement hooks.
 
+## GitHub Issue Routing
+
+- **Pipeline issues** (code, crates, GPU, inference): `chunzhe10/dorea`
+- **Workspace issues** (devcontainer, corvia config, docs tooling): `chunzhe10/dorea-workspace`
+
+The `gh` CLI defaults to `corvia-workspace` — always use `--repo` explicitly.
+
 ## Recording Decisions
 
 Use `corvia_write` with `content_role` and `source_origin` params:
