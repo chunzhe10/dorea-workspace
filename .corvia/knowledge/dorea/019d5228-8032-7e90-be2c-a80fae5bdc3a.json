@@ -1,0 +1,31 @@
+{
+  "id": "019d5228-8032-7e90-be2c-a80fae5bdc3a",
+  "content": "# CudaGrader Buffer Pre-Allocation Design (2026-04-03)\n\nIssue: chunzhe10/dorea#27\nDesign doc: `docs/decisions/2026-04-03-cuda-grader-buffer-pre-allocation.md`\nPlan: `docs/plans/2026-04-03-cuda-grader-buffer-pre-allocation.md`\n\n## Decision\nPre-allocate all device buffers in `CudaGrader` — two complementary constructors:\n\n### 1. `CudaGrader::new()` — dynamic (default)\nTwo `RefCell<Option<...>>` cached buffer structs keyed by shape:\n- `ResolutionBuffers` — keyed by (width, height). 8 slices.\n- `CalibrationBuffers` — keyed by (n_zones, lut_size). 6 slices.\nReuse via `htod_sync_copy_into` (no alloc). Reallocate only on shape change.\nZero `cudaMalloc` per frame in steady state. Handles 1080p/4K transparently.\n\n### 2. `CudaGrader::with_capacity(max_w, max_h)` — static\nPre-allocates `ResolutionBuffers` at construction. Zero `cudaMalloc` on every frame including the first. Frames exceeding `(max_w, max_h)` return `GpuError::InvalidInput`.\n`grade_frames_with_capacity()` batch wrapper in `lib.rs`.\n\n## Key safety notes\n- Input length guards before `borrow_mut` blocks — `htod_sync_copy_into` panics (not errors) on length mismatch inside a live `RefMut`, poisoning the `RefCell`\n- `n_zones == 0` returns `GpuError::InvalidInput` early\n- `// SAFETY:` comment at buffer invalidation: `dtoh_sync_copy` calls `device.synchronize()` at frame end, guaranteeing stream idle before next buffer realloc\n- `per_frame_vram_bytes` must use 4 RGB planes (not 3) — Task 5 in plan\n\n## VRAM held per grader\n- 1080p: ~89 MB\n- 4K: ~347 MB (~6% of 6 GB budget)\n\n## Files changed\n- `crates/dorea-gpu/src/cuda/mod.rs` — only file for core change\n- `crates/dorea-gpu/src/lib.rs` — `grade_frames_with_capacity` wrapper",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-03T07:04:39.218533956Z",
+  "valid_from": "2026-04-03T07:04:39.218533956Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "decision",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

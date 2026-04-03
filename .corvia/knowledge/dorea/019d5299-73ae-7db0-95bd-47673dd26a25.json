@@ -1,0 +1,31 @@
+{
+  "id": "019d5299-73ae-7db0-95bd-47673dd26a25",
+  "content": "# Combined LUT + CUDA 3D Texture Grading — Implementation Plan (Issue #29)\n\n## Status\nImplementation plan written, reviewed by 5 personas, and committed. GitHub issue #29 created.\nBranch: `feat/27-cuda-grader-buffer-prealloc` (plan committed here).\n\nPlan file: `docs/plans/2026-04-03-combined-lut-cuda-texture-plan.md`\nDesign file: `docs/decisions/2026-04-03-combined-lut-cuda-texture-design.md`\n\n## Summary\n\nReplaces 3-kernel GPU pipeline (lut_apply → hsl_correct → clarity) with a single combined LUT via CUDA 3D texture objects. ~22× speedup at 4K (332ms → 15ms). Clarity hard-deleted.\n\n## Critical implementation notes (from 5-persona review)\n\n**Axis ordering (build_combined_lut.cu):**\n```c\nint bi = rem / (N * N);   // z = slice (slowest)\nint gi = (rem / N) % N;   // y = row\nint ri = rem % N;          // x = column (fastest) — matches tex3D x axis\n```\n\n**Unnormalized texture coordinates (combined_lut.rs + combined_lut.cu):**\n- `tex_desc.flags = 0` (NOT 0x02)\n- Per-frame kernel: `tex3D(tex, r*(grid_size-1), g*(grid_size-1), b*(grid_size-1))`\n\n**cudarc 0.12 dynamic-linking — all driver calls via sys::lib():**\n```rust\nuse cudarc::driver::sys::{self, *};\nuse cudarc::driver::DevicePtr;\n// Then: sys::lib().cuArray3DCreate_v2(...), sys::lib().cuTexObjectCreate(...), etc.\n```\n\n**No auto lambda in __device__ fn:** inline with ternary instead of `auto apply_knee = [&]...`\n\n**device.synchronize() works in cudarc 0.12.1** — use directly after build kernel.\n\n## API changes\n\n```rust\n// AFTER\nCudaGrader::new(cal: &Calibration, params: &GradeParams) -> Result<Self>\ngrade_frame_cuda(&self, pixels: &[u8], depth: &[f32], w, h) -> Result<Vec<u8>>\ngrade_frame_with_grader(grader, pixels, depth, w, h) -> Result<Vec<u8>>  // no cal/params\n```\n\n## Acceptance criteria\n\n- `combined_lut_within_2_per_255_of_cpu` passes (identity LUT)\n- `combined_lut_non_trivial_lut_and_hsl_within_2_per_255` passes (gamma LUT + HSL)\n- `combined_lut_edge_case_pixels` passes (black/white, depth=0/1)\n- `combined_lut_zone_count_variants` passes (1, 3, 8 zones)\n- `grading/with_grader/1080p` < 25ms on RTX 3060",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-03T09:08:01.582097863Z",
+  "valid_from": "2026-04-03T09:08:01.582097863Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "plan",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

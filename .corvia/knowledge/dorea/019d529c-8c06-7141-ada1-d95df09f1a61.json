@@ -1,0 +1,31 @@
+{
+  "id": "019d529c-8c06-7141-ada1-d95df09f1a61",
+  "content": "# CudaGrader Buffer Pre-Allocation — Benchmark Results (2026-04-03)\n\nIssue: chunzhe10/dorea#27\nBranch: feat/27-cuda-grader-buffer-prealloc\n\n## Full Video Benchmark\n\n- **Input**: `footage/raw/2025-11-01/DJI_20251101111428_0055_D.MP4` — 3840×2160, 1671 frames\n- **Calibration**: `working/2025-11-01/mvp/calibration.dorea-cal`\n- **Before (GPU-space IPC, PR #26)**: 8m41s = 521s\n- **After (pre-alloc)**: 8m3s = 483s\n- **Improvement**: 38s saved = **7.3% faster** in production\n\n## Criterion Single-Frame Benchmark (1080p, with_grader path)\n\n- **Baseline** (`before_prealloc`, saved on unmodified code): ~64.5ms/frame\n- **After pre-alloc**: ~64ms/frame\n- **Criterion comparison**: +5.6% improvement (within noise at this scale)\n\n## GPU SM Utilisation (nvidia-smi dmon during benchmark)\n\n- SM utilisation: **7–16%** — unchanged from pre-refactor\n- GPU is still PCIe-bandwidth limited, not compute-bound\n- Bottleneck: multiple `htod_sync_copy_into` + `dtoh_sync_copy` sync barriers per frame\n\n## Why the Expected 80% Improvement Didn't Materialise in the Benchmark\n\nThe original estimate (83ms → 6–10ms) assumed `cudaMalloc` cost 3–8ms each × 14 = 42–112ms overhead.\nThe actual Criterion baseline was ~64ms (not 83ms), because the prior GPU-space IPC optimisation (PR #26)\nhad already reduced the baseline. In the warm Criterion loop, the CUDA driver uses `cudaMallocAsync`\n(stream-ordered pool allocation) — individual alloc calls are near-zero cost.\n\nThe measurable improvement appears in production (7.3% over the full video) where:\n1. First-frame allocation cost is real (cold pool)\n2. Allocation + deallocation churn across 1671 frames accumulates\n\n## What the Pre-Allocation IS Valuable For\n\n1. **Predictable latency**: no cudaMalloc spikes when VRAM is fragmented under other model load\n2. **VRAM accounting**: `per_frame_vram_bytes` now correctly reflects 4 RGB planes (was 3)\n3. **`with_capacity` API**: zero cudaMalloc even on first frame — useful for pure-4K batch sessions\n4. **Production correctness**: AdaptiveBatcher now uses accurate VRAM budget for batch scheduling\n",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-03T09:11:24.422360406Z",
+  "valid_from": "2026-04-03T09:11:24.422360406Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "finding",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

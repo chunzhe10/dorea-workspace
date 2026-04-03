@@ -1,0 +1,31 @@
+{
+  "id": "019d5233-36ae-7280-b311-906399afc4c6",
+  "content": "# Combined LUT + CUDA 3D Texture Grading — Design Decision (2026-04-03)\n\n## What\nReplace 3-kernel GPU grading pipeline (lut_apply → hsl_correct → clarity) with a single\nprecomputed combined LUT sampled via CUDA 3D texture objects. Clarity hard-deleted.\nExpected: ~15ms/frame at 4K vs 332ms current (~22× speedup on grading stage).\n\n## Key Decisions\n\n### Clarity: hard delete\nNo flag, no fallback. Maxine handles sharpening when implemented.\n\n### Grid size: 97³ (COMBINED_LUT_GRID constant)\nEmpirically anchored on issue #25 validation (65³: p99=0.81/255, max=2.61/255).\n97³ gives p99=0.36/255 = 1.4 10-bit LSBs — borderline-safe for future 10-bit footage.\n33³ fails 10-bit (p99=13 LSBs). 65³ risky (p99=3.2 LSBs). 129³ safe but 129MB VRAM.\nBump constant to 129 if empirical 10-bit testing reveals banding.\n\n### Depth bands: reuse calibration zones (5 adaptive)\nSame soft triangular blend as current lut_apply.cu. No resampling step, no extra error.\n\n### GPU LUT build (not CPU rayon)\nBuild kernel writes to device buffer → cudaMemcpy3D device→cudaArray3D.\nAvoids 55MB PCIe roundtrip. Build time <1ms GPU vs ~34ms CPU rayon.\ngrade_pixel.cuh: shared __device__ function used by build kernel only.\n\n### u8 I/O in per-frame kernel\nKernel reads u8 pixels directly, converts to f32 internally, writes u8 output.\nEliminates CPU u8→f32 expansion (~10ms) and 75MB htod overhead per frame.\n\n### float4 texture format\nSingle tex3D<float4> fetch returns all 3 channels from hardware-interpolated lookup.\n\n### Calibration + params baked at CudaGrader construction\nCudaGrader::new(calibration, params) — not passed per-call.\ngrade_frame_with_grader signature drops calibration + params arguments.\n\n## Per-frame data movement at 4K\nBefore: CPU expand 10ms + htod 133MB(9ms) + 3 kernels + 14 allocs + dtoh 100MB(7ms) = 332ms\nAfter:  htod 58MB(4ms) + 1 kernel + 3 allocs + dtoh 25MB(2ms) = ~15ms\n\n## Spec\ndocs/decisions/2026-04-03-combined-lut-cuda-texture-design.md",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-03T07:16:21.294385233Z",
+  "valid_from": "2026-04-03T07:16:21.294385233Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "decision",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}
