@@ -4,12 +4,12 @@
 
 [models]
 python          = "/opt/dorea-venv/bin/python"
-raune_weights   = ""          # fill in: /path/to/raune.pth
-raune_models_dir = ""         # fill in: /path/to/sea_thru_poc
-depth_model     = ""          # fill in: /path/to/depth-anything-v2-small
+raune_weights   = "/workspaces/dorea-workspace/working/sea_thru_poc/models/RAUNE-Net/pretrained/RAUNENet/test/weights_95.pth"
+raune_models_dir = "/workspaces/dorea-workspace/working/sea_thru_poc"
+depth_model     = "/workspaces/dorea-workspace/models/depth_anything_v2_small"
 
 [inference]
-proxy_size = 1080             # long-edge pixels for RAUNE + depth proxy decode
+proxy_size = 518              # long-edge pixels for RAUNE + depth proxy decode
 # device = "cuda"             # uncomment to force cpu/cuda; default: auto-detect
 
 [grade]
@@ -18,8 +18,12 @@ strength             = 0.8   # LUT/HSL blend [0.0–1.0]
 contrast             = 1.0   # ambiance contrast [0.0–1.0]
 depth_skip_threshold = 0.005 # MSE keyframe threshold (lower = more keyframes)
 depth_max_interval   = 12    # max frames between forced keyframes
-fused_batch_size     = 32    # frames per RAUNE+depth inference batch
-depth_zones          = 16    # adaptive depth zones for calibration LUT
+fused_batch_size     = 16    # frames per RAUNE+depth inference batch
+depth_zones          = 8    # adaptive depth zones for calibration LUT
+base_lut_zones       = 32   # fine zones for segment-level base LUT
+scene_threshold      = 0.15 # Wasserstein-1 distance for scene segment boundary
+min_segment_keyframes = 5   # minimum keyframes per segment before merge
+zone_smoothing_window = 3   # boundary smoothing kernel width (1 = off)
 
 [maxine]
 upscale_factor     = 2       # SR factor: 2, 3, or 4 (used when SR is re-enabled)
