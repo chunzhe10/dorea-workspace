@@ -1,0 +1,31 @@
+{
+  "id": "019d5635-7941-7f62-80a1-28ebf0c0e443",
+  "content": "# Real-world benchmark: combined LUT GPU grading pipeline — clip 0057 (2026-04-04)\n\n**Date:** 2026-04-04\n**Pipeline version:** after combined 97³ CUDA 3D texture LUT (PR #33)\n\n## Test clip\n\n- File: `DJI_20251101112849_0057_D.MP4`\n- Resolution: 3840×2160 (4K), HEVC\n- Frame rate: 119.88 fps\n- Duration: 41.3s → 4,943 frames (3× longer than clip 0055)\n\n## Results\n\n| Metric | Value |\n|--------|-------|\n| Total wall time | **13 min 42.888s** |\n| User time | 32 min 49.812s |\n| Sys time | 3 min 54.355s |\n| Output path | `working/graded/DJI_20251101112849_0057_D_graded_combined-lut-perf_20260404.mp4` |\n\n## Pipeline stages\n\n| Stage | Detail |\n|-------|--------|\n| Auto-calibration keyframes | 164 (30-frame interval) |\n| Depth keyframes detected (pass 1) | 560 |\n| Grading pass duration | ~7m 20s for 4,943 frames (~11.2 fps) |\n\n## Comparison vs clip 0055\n\n| Metric | Clip 0055 (1,671 frames) | Clip 0057 (4,943 frames) |\n|--------|--------------------------|--------------------------|\n| Wall time | 2 min 6.9s | 13 min 42.9s |\n| Overall fps | ~13.2 | ~6.0 |\n| Depth keyframe % | ~1.2% | 11.3% (560 keyframes) |\n\n**Key finding:** Clip 0057 has a much higher depth-keyframe rate (11.3% vs ~1.2%) due to more scene changes. This explains the lower overall fps — more depth inference invocations per frame. Depth inference remains the bottleneck; the combined LUT grading kernel itself is not the issue.\n",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-04T01:57:18.273567402Z",
+  "valid_from": "2026-04-04T01:57:18.273567402Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "finding",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

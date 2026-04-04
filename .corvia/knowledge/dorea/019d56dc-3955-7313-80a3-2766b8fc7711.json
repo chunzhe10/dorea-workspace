@@ -1,0 +1,31 @@
+{
+  "id": "019d56dc-3955-7313-80a3-2766b8fc7711",
+  "content": "# Benchmark: depth-max-interval=1 grading — clips 0055 and 0057 (2026-04-04)\n\n**Date:** 2026-04-04\n**Pipeline version:** unified keyframe sampling (post-PR)\n**Flag:** `--depth-max-interval 1`\n\n## Results\n\n| Clip | Frames | Keyframes | Wall time | Overall fps |\n|------|--------|-----------|-----------|-------------|\n| 0055 (14.0s) | 1,671 | 836 (50%) | **5m 1.824s** | 5.5 |\n| 0057 (41.3s) | 4,943 | 2,500 (50%) | **14m 29.115s** | 5.7 |\n\n## Stage breakdown — clip 0055\n\n| Stage | Time |\n|-------|------|\n| Pass 1 (836 keyframes detected) | 14s |\n| Fused inference (836 keyframes) | ~2m 4s |\n| Grading pass (1671 frames) | ~2m 33s |\n\n## Stage breakdown — clip 0057\n\n| Stage | Time |\n|-------|------|\n| Pass 1 (2500 keyframes detected) | 40s |\n| Fused inference (2500 keyframes) | ~6m 7s |\n| Grading pass (4943 frames) | ~7m 4s |\n\n## Key findings\n\n**~50% keyframe rate at interval=1 on 120fps footage.** Both clips yield exactly ~50% keyframes (836/1671, 2500/4943) despite `--depth-max-interval 1`. The MSE skip threshold still filters roughly half of consecutive 120fps frames as visually redundant — consecutive frames are too similar to exceed the threshold, so the max-interval safety valve only fires every other frame.\n\n**Grading pass is unaffected by keyframe density.** Grading pass for 0057 is ~7m 4s at interval=1 vs ~7m 9s at default — essentially identical. All extra cost is in pre-grading depth inference. This confirms the batch-then-grade architecture decouples depth density from grading throughput.\n\n**Throughput scales linearly with frame count.** 5.5–5.7 fps overall across both clips (3× difference in length) confirms predictable scaling.\n\n## Cost of interval=1 vs default\n\n| Clip | Default wall time | interval=1 wall time | Extra cost |\n|------|-------------------|---------------------|------------|\n| 0055 | ~2m 6.9s (combined-LUT baseline) | 5m 1.8s | +2m 55s (+138%) |\n| 0057 | 12m 12.3s (unified-keyframe) | 14m 29.1s | +2m 16.8s (+18%) |\n\nThe relative overhead is larger on the shorter clip (0055) because fixed startup/calibration costs dominate more at 1,671 frames.\n",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-04T04:59:26.421829575Z",
+  "valid_from": "2026-04-04T04:59:26.421829575Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "finding",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

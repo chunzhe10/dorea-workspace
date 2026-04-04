@@ -1,0 +1,31 @@
+{
+  "id": "019d566e-9e0e-7991-b2c0-bdfdbf50974f",
+  "content": "# Unified Keyframe Sampling — Implementation Complete (Issue #46)\n\n**Status:** PR #49 open against `feat/47-fused-raune-depth-batch`\n**Branch:** `feat/46-unified-keyframe-sampling`\n**Closes:** #46\n\n## What was built\n\nSingle proxy-decode pass replaces the two independent keyframe paths in `dorea grade`:\n\n- `crates/dorea-cli/src/change_detect.rs` (new): `ChangeDetector` trait + `MseDetector`\n  - `score(&self)` — read-only, returns f32::MAX when no reference set\n  - `set_reference(&mut self)` — explicit caller-controlled update\n  - `reset(&mut self)` — clears reference on scene cut\n  - `MseDetector` compares vs last *keyframe*, not last frame (reference updated only on keyframe push)\n  - `frame_mse` helper: normalized MSE in [0,1]\n  - 8 unit tests\n\n- `grade.rs` pass 1 loop: `Box<dyn ChangeDetector>` replaces `last_proxy: Option<Vec<u8>>`\n  - `detector.reset()` called on scene cut BEFORE `detector.set_reference()`\n  - `anyhow::ensure!(!keyframes.is_empty(), ...)` guard after pass 1\n  - `scene_cut_threshold` hoisted above loop\n\n- Unified calibration branch (else arm — no `--calibration` arg):\n  - One fused `InferenceServer` (skip_raune: false) — runs `run_raune_depth_batch`\n  - `depth_max_size: args.proxy_size.min(518)` — Depth Anything V2 Small VRAM cap\n  - `raune_max_size: proxy_w.max(proxy_h)` — portrait-safe long-edge\n  - Short-response padding: warning + actual padding loop (not warning-only)\n  - `store.push(..., proxy_w, proxy_h)` — dims consistent with proxy_pixels\n  - depth upscaled to proxy dims before store.push; raw depth moved into kf_depths\n  - `debug_assert_eq!(enh_w, proxy_w)` guards RAUNE output resolution\n  - `store.seal()` then inline 3-pass calibration (reservoir → LUT → HSL)\n\n- Deleted: `auto_calibrate()`, `keyframe_interval` field, `--keyframe-interval` CLI arg\n- `FUSED_BATCH_SIZE = 8` retained (issue #44 tracks tuning)\n\n## Key design decisions during implementation\n\n- `score(&self)` not `&mut self`: scoring is read-only; mutation is caller-controlled. This is intentional — the caller decides when to update the reference (only on keyframe, not every frame).\n- `depth.clone()` before `store.push` is necessary: `depth` is moved into `kf_depths.insert` immediately after; clone feeds `store.push` borrow.\n- `store.push` must use `(proxy_w, proxy_h)` not `(enh_w, enh_h)`: PagedCalibrationStore records one `(w,h)` per frame for BOTH pixel and depth slices. proxy_pixels is always proxy dims.\n- PR targets `feat/47-fused-raune-depth-batch` (not main) because `run_raune_depth_batch` and `RauneDepthBatchItem` are defined in #47, which is not yet merged.\n\n## Verification\n- 12 tests pass (8 change_detect + 4 grade lerp)\n- cargo check clean, cargo clippy -p dorea-cli clean\n- 5-persona review completed; all Critical/Important/Low issues fixed before merge\n",
+  "source_version": "7f90274",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-04T02:59:43.246189362Z",
+  "valid_from": "2026-04-04T02:59:43.246189362Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "decision",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}
