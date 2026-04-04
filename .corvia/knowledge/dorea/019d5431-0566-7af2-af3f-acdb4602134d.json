@@ -1,0 +1,31 @@
+{
+  "id": "019d5431-0566-7af2-af3f-acdb4602134d",
+  "content": "# OOM Fix Series — Streaming Calibration + VRAM Management (2026-04-03)\n\nPRs #36, #37, #38, #39 on chunzhe10/dorea\n\n## Root causes and fixes\n\n### PR #36 — Streaming paged calibration (RAM: ~27 GB → ~50 MB)\n`auto_calibrate` accumulated all `CalibrationInput` frames in RAM simultaneously.\nFor 988 keyframes at 1024px proxy: `Vec<CalibrationInput>` + `keyframe_data_vec` (f32) + `all_depths` = ~27 GB peak.\n\nFix: `PagedCalibrationStore` writes each frame to disk as it arrives from inference.\nThree streaming passes over mmapped files:\n1. Depth-only reservoir sample (1M values, 4 MB) → adaptive zone boundaries\n2. `StreamingLutBuilder::add_frame` one frame at a time → DepthLuts (~10 MB accumulators)\n3. Apply LUT + derive HSL corrections per frame\n\nAlso added `StreamingLutBuilder` to `dorea-lut`; `build_depth_luts` now delegates to it.\n\n### PR #37 — mmap packed files (I/O: 2964 syscalls → 2 mmap calls)\nPer-frame individual file reads (988 × 3 = 2964 open/read/close) replaced with two packed binary files:\n- `depths.bin` — all depth maps concatenated\n- `pixtar.bin` — all [pixels | target] pairs concatenated\n\nBoth mmapped after inference phase. Pass 3 (HSL) hits pixtar.bin from OS page cache — ~0 disk I/O.\n\n### PR #38 — Depth cache at proxy resolution (RAM: 29.7 GB → ~565 MB)\n`keyframe_depths` HashMap stored depth maps upscaled to full video resolution (3840×2160).\nWith `--depth-max-interval 5` on 41s 4K clip: 941 keyframes × 31 MB = 29.7 GB → OOM.\n\nFix: store raw inference output at proxy resolution (~518×291, ~0.6 MB each).\nLerp at proxy resolution in pass 2, upscale result once per frame before GPU grader.\nQuality identical — bilinear upscale commutes with linear interpolation.\n\n### PR #39 — Shut down inference before NVENC init (VRAM: freed 1.5 GB)\n`inf_server.shutdown()` was after pass 2, leaving Depth Anything V2 (~1.5 GB VRAM)\nloaded throughout the encoding loop. NVENC 4K input buffer allocation failed with OOM.\n\nFix: shut down inference server immediately after batch depth inference completes.\nAll depths are in `keyframe_depths` at that point; subprocess no longer needed.\n\n`shutdown()` is synchronous (blocks on `child.wait()`), so VRAM is guaranteed freed before returning.\n\n## VRAM budget in pass 2 (grading + encoding)\n- CUDA grader (PTX + LUT texture, pre-allocated buffers): ~300 MB\n- NVENC 4K encoder input buffers: ~500 MB\n- Total: ~800 MB — constant regardless of video length\n\n## Depth cache scaling concern\nAt `--depth-max-interval 5`, depth HashMap scales linearly with clip length:\n- 41s clip: 941 kf × 0.6 MB = ~565 MB ✓\n- 2-hour dive: ~26k kf × 0.6 MB = ~15 GB — would be the next RAM ceiling\n- Fix if needed: stream depth lookup in pass 2 (read from PagedCalibrationStore-style store)\n\n## Keyframe extraction boundary fix (also in PR #36)\n`ffprobe duration_secs` overshoots the last decodable frame. Fixed by computing\n`safe_duration = (frame_count - 1) / fps` instead of using `duration_secs`.\n",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-03T16:33:12.038817828Z",
+  "valid_from": "2026-04-03T16:33:12.038817828Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "finding",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

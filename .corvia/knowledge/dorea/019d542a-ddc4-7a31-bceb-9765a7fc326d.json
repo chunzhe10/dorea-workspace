@@ -1,0 +1,31 @@
+{
+  "id": "019d542a-ddc4-7a31-bceb-9765a7fc326d",
+  "content": "# Neural Network Batching vs. Producer-Consumer — Learning\n\n## What \"batching\" means in this codebase\n\nBatching = N frames stacked into one `(N, 3, H, W)` tensor passed through a **single forward pass**. The GPU's tensor cores execute this as one fused matrix operation across the batch dimension. It is NOT:\n- Multiple parallel processes\n- Multiple pipelines\n- Producer-consumer threading\n\nExample: `DEPTH_BATCH_SIZE=32` means 32 calibration frames go through Depth Anything in one `model(batch)` call. The GPU processes all 32 simultaneously.\n\n## Why N=1 starves the GPU\n\nThe RTX 3060 has 3584 CUDA cores. A single 518×294 depth inference uses ~20% of them — the tensor is too small to saturate the hardware. At N=32 the utilisation reaches ~80%+ because the tensor cores have enough work. This is the \"spiky\" pattern: GPU bursts during inference, idle during IPC.\n\n## What producer-consumer would address (different bottleneck)\n\nProducer-consumer = CPU threading to overlap decode/compute/encode in Pass 2:\n- Thread 1: ffmpeg decode → channel\n- Thread 2: channel → `grade_with_grader` (GPU) → channel  \n- Thread 3: channel → ffmpeg encode\n\nThis is the right optimization for the grading loop idle time (SM utilisation 7–16%, PCIe-bandwidth limited per v4 benchmark). It is NOT what inference batching addresses.\n\n## These are orthogonal optimizations\n\n| Technique | Bottleneck | Layer |\n|---|---|---|\n| Inference batching | GPU underutilisation (small tensors) | Python/torch |\n| Producer-consumer | CPU/GPU sync barriers in grading loop | Rust/grade.rs |\n| Fused RAUNE+depth call | IPC round-trips + unnecessary dtoh/htod | IPC boundary |\n",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-03T16:26:28.676482674Z",
+  "valid_from": "2026-04-03T16:26:28.676482674Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "learning",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d536a-de2c-7022-8607-99e0ae92fc67",
+  "content": "# Dorea Pipeline Run — 2026-04-03\n\n## Input\n- File: `footage/raw/2025-11-01/DJI_20251101111428_0055_D.MP4`\n- Resolution: 3840×2160 @ 119.88fps\n- Duration: 14.0s, 1671 frames\n\n## Output\n- File: `working/graded/DJI_20251101111428_0055_D_graded_20260403.mp4`\n\n## Parameters (defaults)\n- `--warmth 1.0`, `--strength 0.8`, `--contrast 1.0`\n- `--proxy-size 518`, `--keyframe-interval 30`\n- `--depth-skip-threshold 0.005`, `--depth-max-interval 12`\n- Auto-calibrated from 20 keyframes (no pre-computed .dorea-cal)\n\n## Model Paths\n- RAUNE weights: `working/sea_thru_poc/models/RAUNE-Net/pretrained/RAUNENet/test/weights_95.pth`\n- RAUNE models dir: `working/sea_thru_poc`\n- Depth model: `models/depth_anything_v2_small`\n- Inference device: CUDA (RTX 3060)\n\n## Timing\n- Wall time: **2m 17s** (2m16.927s)\n- CPU time: 5m 48s (multi-threaded)\n- Calibration phase: ~46s (CUDA inference subprocess, 20 keyframes)\n- Grading phase: ~91s (1671 frames, ~18 frames/sec wall-clock)\n\n## Notes\n- First end-to-end run on a real DJI Action 4 D-Log M clip\n- `dorea grade` auto-calibrate path works without pre-computed .dorea-cal\n- CUDA grader initialized successfully (cudarc + PTX modules)\n",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-03T12:56:45.868218984Z",
+  "valid_from": "2026-04-03T12:56:45.868218984Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "finding",
+    "source_origin": "workspace"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

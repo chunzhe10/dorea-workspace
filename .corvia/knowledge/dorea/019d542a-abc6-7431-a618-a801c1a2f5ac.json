@@ -1,0 +1,31 @@
+{
+  "id": "019d542a-abc6-7431-a618-a801c1a2f5ac",
+  "content": "# Fused RAUNE+Depth Batch — Design Decision\n\n## What\nReplaced two-phase sequential inference (all RAUNE, then all depth) with a single `raune_depth_batch` IPC call where the enhanced tensor stays on GPU between models. Depth estimation now runs on RAUNE-enhanced frames instead of the original. Plan: `docs/plans/2026-04-03-inference-gpu-saturation.md`.\n\n## Why\n\n**IPC data crossings (55 calibration frames):**\n- Sequential per-frame (before): 110 IPC round-trips, enhanced frame crosses wire 2× for nothing\n- Separate batches (intermediate): 9 round-trips, but enhanced frames still dtoh → pipe → htod between phases\n- Fused batch (final): 7 round-trips, enhanced tensor goes GPU → GPU (no dtoh between models)\n\n**GPU idle eliminated:** With separate batch phases, the GPU is idle during IPC while Rust re-serialises enhanced frames and sends them back. Fused call keeps the GPU busy through both forward passes.\n\n**Depth quality improvement:** RAUNE removes water column scattering and colour casts. Depth Anything operating on the dehaized frame sees better contrast and more accurate edges → better zone boundaries for LUT calibration.\n\n## Architecture\n\n```\noriginal_px ──htod──► RAUNE ──resize+renorm(GPU)──► Depth ──dtoh──► (enhanced_px + depths)\n```\n\nThe resize between models: RAUNE outputs at `max_size=1024` (no patch constraint); Depth Anything requires dimensions ≤ 518 that are **multiples of 14** (ViT patch size). GPU bilinear resize (`F.interpolate`) + re-normalise from [0,1] to ImageNet stats happens on-device.\n\n## Key constants\n- `FUSED_BATCH_SIZE = 8` — calibration images ~1024×577; 8 × ~57 MB GPU input safe under 6 GB with both models loaded\n- `DEPTH_BATCH_SIZE = 32` — unchanged for main grading pass (depth-only, no RAUNE)\n\n## New API surface\n- `RauneNetInference.infer_batch_gpu(imgs, max_size)` → `(Tensor(N,3,H,W) on device, w, h)`\n- `DepthAnythingInference.infer_batch_from_tensors(enhanced, depth_max_size)` → `list[ndarray]`\n- Server handler: `raune_depth_batch` → `raune_depth_batch_result`\n- Rust: `RauneDepthBatchItem`, `InferenceServer::run_raune_depth_batch`\n\n## What is NOT changed\n- Main grading pass (`run()` in grade.rs) — uses `skip_raune=true`, depth-only batch unchanged\n- `pyo3_backend.rs` (python Cargo feature path) — not updated, needs parity if feature ever enabled\n",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-03T16:26:15.878675510Z",
+  "valid_from": "2026-04-03T16:26:15.878675510Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "decision",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

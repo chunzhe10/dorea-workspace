@@ -1,0 +1,31 @@
+{
+  "id": "019d55f0-15aa-7552-8c9e-ba56bfbdefa8",
+  "content": "# Unified Keyframe Sampling — Design Decision (2026-04-04)\n\n## What\nReplaces two independent keyframe-selection paths in `dorea grade` with a single unified pass. Previously: calibration used uniform `--keyframe-interval` sampling (~988 keyframes), grading used MSE-adaptive `--depth-max-interval` sampling (~941 keyframes) — different frames, duplicate depth inference.\n\nNew flow:\n1. Pass 1: proxy decode → `ChangeDetector.score()` → one `Vec<KeyframeEntry>`\n2. Fused RAUNE+depth batch on those keyframes (single `InferenceServer` startup)\n3. Results split simultaneously: `(original, enhanced, depth)` → `PagedCalibrationStore` AND `depth` → `keyframe_depths` HashMap\n4. 3-pass calibration streaming (reservoir → LUT → HSL) runs inline → `Calibration`\n5. Pass 2: full-res grade using `Calibration` + `keyframe_depths` (unchanged)\n\n## Why\n- Duplicate depth inference eliminated — one fused batch feeds both outputs\n- `--keyframe-interval` vs `--depth-max-interval` divergence eliminated\n- Issue #45 (N ffmpeg seeks in auto_calibrate) eliminated — proxy decode already scans whole video\n- `ChangeDetector` trait unblocks optical flow replacement later without touching decision logic\n\n## Architecture — Change Detection Abstraction\nNew file: `crates/dorea-cli/src/change_detect.rs`\n\n```rust\npub trait ChangeDetector: Send {\n    fn score(&self, pixels: &[u8]) -> f32;       // vs stored reference; f32::MAX if no ref\n    fn set_reference(&mut self, pixels: &[u8]);  // update ref on keyframe detection\n    fn reset(&mut self);                          // clear ref on scene cut\n}\npub struct MseDetector { reference: Option<Vec<u8>> }\n```\n\nReference is updated only on keyframe detection — comparison is against the **last keyframe**, not the last frame (preserves existing MSE semantics).\n\n## Key Constants\n- `FUSED_BATCH_SIZE = 8` — conservative; retained from GPU saturation plan. Issue #44 tracks tuning.\n- `DEPTH_BATCH_SIZE = 32` — unchanged for `--calibration` (pre-computed) path, depth-only.\n\n## Resolution\nRAUNE runs at proxy resolution (`--proxy-size`, default 518px) in unified path. Previously calibration used 1024px for RAUNE. Quality delta tracked under issue #41. Architecture is resolution-agnostic; `--raune-proxy-size` override deferred.\n\n## What is removed\n- `auto_calibrate()` function in `grade.rs`\n- `--keyframe-interval` CLI arg from `GradeArgs`\n- Second `InferenceServer::spawn` for grading when auto-calibrating\n\n## Pre-computed calibration path (--calibration)\nUnchanged — depth-only server starts for grading depth cache, same as before.\n\n## Depends on\nGPU saturation plan (`docs/plans/2026-04-03-inference-gpu-saturation.md`) — `RauneDepthBatchItem` + `run_raune_depth_batch` in `inference_subprocess.rs` must exist first.\n\n## GitHub issue\nchunzhe10/dorea#46\n\n## Plan files\n- Design spec: `docs/plans/2026-04-04-unified-keyframe-sampling.md`\n- Implementation plan: `docs/plans/2026-04-04-unified-keyframe-sampling-impl.md`\n",
+  "source_version": "6fb049c",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-04T00:41:30.794225519Z",
+  "valid_from": "2026-04-04T00:41:30.794225519Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "decision",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d542a-fdd2-7193-9e92-2f19dbaa1d69",
+  "content": "# GPU Inference Saturation Plan — Reference\n\nPlan file: `docs/plans/2026-04-03-inference-gpu-saturation.md`\nBranch: not yet created — plan only, implementation pending\n\n## 5 tasks\n\n1. **`RauneNetInference.infer_batch` + `infer_batch_gpu`** — `raune_net.py`; building block; `infer_batch_gpu` returns `(Tensor(N,3,H,W), w, h)` on device, no dtoh\n2. **`DepthAnythingInference.infer_batch_from_tensors`** — `depth_anything.py`; accepts GPU tensor from RAUNE, GPU-resize+renorm on device, returns depth maps; also adds pinned memory to existing `infer_batch`\n3. **`raune_depth_batch` protocol + server handler** — `protocol.py` adds `RauneDepthBatchResult`; `server.py` adds handler calling `infer_batch_gpu` then `infer_batch_from_tensors`\n4. **`RauneDepthBatchItem` + `run_raune_depth_batch`** — `inference_subprocess.rs`; mirrors depth_batch pattern\n5. **`auto_calibrate` refactor** — `grade.rs`; three phases: collect pixels → fused batch (FUSED_BATCH_SIZE=8) → push to store; IPC drops from 110 to 7 round-trips\n\n## Test approach\npytest in `repos/dorea/python/tests/test_infer_batch.py` — CPU mode, mocked models, no GPU or weights required. Rust: compile-only struct tests in `#[cfg(test)]` block.\n",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-03T16:26:36.882842150Z",
+  "valid_from": "2026-04-03T16:26:36.882842150Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "plan",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

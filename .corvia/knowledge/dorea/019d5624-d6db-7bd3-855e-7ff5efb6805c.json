@@ -1,0 +1,31 @@
+{
+  "id": "019d5624-d6db-7bd3-855e-7ff5efb6805c",
+  "content": "## Implementation Record: Fused RAUNE+Depth Batch (PR #48 merged 2026-04-04)\n\nSupersedes design entry 019d542a-abc6-7431-a618-a801c1a2f5ac.\n\nPR #48 (feat/47-fused-raune-depth-batch) implements the fused RAUNE+depth design. All tests pass (7 Python + 22 Rust). Key correctness fixes applied during review before merge:\n\n1. **Device guard in `infer_batch_from_tensors`**: compare `.device.type` and `.device.index or 0` separately — `torch.device('cuda') != torch.device('cuda:0')` is always True (different objects), causing spurious ValueError on every CUDA call. Fix: `enhanced.device.type != self.device.type or (enhanced.device.index or 0) != (self.device.index or 0)`.\n\n2. **Empty-batch guard**: `if enhanced.numel() == 0: return []` before `max(H_r, W_r)` scale calculation — a `(0,3,0,0)` tensor has `H_r=W_r=0`, causing ZeroDivisionError.\n\n3. **`infer_batch_gpu` mixed-dims**: raises `ValueError` (clear message) instead of crashing in `torch.stack` with heterogeneous tensor shapes.\n\n4. **Batch assembly in server.py**: emit `depth_width=depth_result.width`, `depth_height=depth_result.height` explicitly. A whitelist spread from `DepthResult.to_dict()` silently dropped them because `.to_dict()` uses keys `\"width\"`/`\"height\"`, not `\"depth_width\"`/`\"depth_height\"`.\n\n5. **Release assertion**: `anyhow::ensure!` not `debug_assert_eq!` — debug assertions are stripped in `--release` builds.\n\n6. **raune_max_size**: `kf_w.max(kf_h)` (long edge) not `kf_w` — handles portrait footage.\n\nFUSED_BATCH_SIZE=8 chosen for RTX 3060 6GB (RAUNE ~3GB + Depth ~1.5GB = ~4.5GB loaded; 8 frames at ~57MB GPU input leaves safe headroom).\n",
+  "source_version": "PR #48 merged 2026-04-04",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-04T01:39:08.123302545Z",
+  "valid_from": "2026-04-04T01:39:08.123302545Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "decision",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}
