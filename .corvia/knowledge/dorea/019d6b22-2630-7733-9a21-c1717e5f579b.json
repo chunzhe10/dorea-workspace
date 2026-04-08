@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-c1717e5f579b",
+  "content": "ct CudaGrader {\n    combined_lut: CombinedLut,              // dropped first — CUDA APIs require live context\n    device:       Arc<CudaDevice>,          // dropped second — destroys CUDA context\n    _not_send:    std::marker::PhantomData<*const ()>,\n}\nimpl CudaGrader {\n    /// Initialise CUDA device 0, load per-frame kernel PTX, and build combined LUT textures.\n    pub fn new(calibration: &Calibration, params: &GradeParams) -> Result<Self, GpuError> {\n        let device = CudaDevice::new(0).map_err(|e| {\n            GpuError::ModuleLoad(format!(\"CudaDevice::new(0) failed: {e}\"))\n        })?;\n\n        // Load the per-frame lookup kernel PTX\n        device.load_ptx(\n            Ptx::from_src(COMBINED_LUT_PTX),\n            \"combined_lut\",\n            &[\"combined_lut_kernel\"],\n        ).map_err(|e| GpuError::ModuleLoad(format!(\"load combined_lut PTX: {e}\")))?;\n\n        // Build combined LUT textures (GPU build kernel runs here, ~<1ms)\n        let combined_lut = CombinedLut::build(&device, calibration, params)?;\n\n        Ok(Self {\n            device,\n            combined_lut,\n            _not_send: std::marker::PhantomData,\n        })\n    }\n\n    /// Run the combined LUT kernel on one frame.\n    ///\n    /// Returns graded sRGB u8 pixels (interleaved RGB, same dimensions as input).\n    pub fn grade_frame_cuda(\n        &self,\n        pixels: &[u8],\n        depth: &[f32],\n        width: usize,\n        height: usize,\n    ) -> Result<Vec<u8>, GpuError> {\n        let n = width.checked_mul(height).ok_or_else(|| {\n            GpuError::InvalidInput(\"frame dimensions overflow usize\".into())\n        })?;\n        if pixels.len() != n * 3 {\n            return Err(GpuError::InvalidInput(format!(\n                \"pixels len {} != width*height*3 {}\", pixels.len(), n * 3\n            )));\n        }\n        if depth.len() != n {\n            return Err(GpuError::InvalidInput(format!(\n                \"depth len {} != width*height {}\", depth.len(), n\n            )));\n        }\n        let dev = &self.device;\n\n        // Upload inputs",
+  "source_version": "crates/dorea-gpu/src/cuda/mod.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360456418Z",
+  "valid_from": "2026-04-08T03:28:13.360456418Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cuda/mod.rs",
+    "language": "rs",
+    "chunk_type": "impl_item",
+    "start_line": 49,
+    "end_line": 98,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

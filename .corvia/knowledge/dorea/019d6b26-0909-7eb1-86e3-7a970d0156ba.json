@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-0909-7eb1-86e3-7a970d0156ba",
+  "content": "## Zone Boundary Smoothing\n## Pipelined Combined Texture Build\n\n### Double-buffer mechanism\n\nTwo texture sets (A and B) are permanently allocated in VRAM (~182MB total). Two CUDA streams operate concurrently:\n\n```\nStream A (grading):   grade frames 0-5 ──────→ grade frames 6-11 ──────→ ...\n                      using texture set A       using sets A+B (blend)\n\nStream B (build):     build KF_2 into set B ──→ build KF_3 into set A ──→ ...\n                      (50ms, hidden behind       (50ms, hidden behind\n                       120-240ms of grading)      grading work)\n```\n\n\n### Timing\n\n- Frames between keyframes: ~6–12 frames × ~20ms grading = 120–240ms\n- Combined texture build: ~50ms (kernel <1ms + cuMemcpy3D ~20ms + overhead)\n- Build is fully hidden behind grading work — zero visible stall\n",
+  "source_version": "decisions/2026-04-04-per-keyframe-adaptive-depth-zones.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.041899453Z",
+  "valid_from": "2026-04-08T03:32:28.041899453Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-04-per-keyframe-adaptive-depth-zones.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 124,
+    "end_line": 142,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

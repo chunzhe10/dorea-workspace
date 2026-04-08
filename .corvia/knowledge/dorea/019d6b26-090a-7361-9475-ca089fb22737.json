@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-ca089fb22737",
+  "content": "cted: Compiles. Full integration test requires a video file — defer to manual testing.\n\n- [ ] **Step 5: Commit**\n\n```bash\ngit add crates/dorea-cli/src/grade.rs\ngit commit -m \"feat(cli): 3-stage pipelined frame loop (decode → depth → grade)\"\n```\n\n---\n\n### Task 14: Batched Depth Inference\n\n**Files:**\n- Modify: `python/dorea_inference/server.py`\n- Modify: `crates/dorea-video/src/inference.rs`\n\n- [ ] **Step 1: Add depth_batch handler to Python server**\n\nIn `python/dorea_inference/server.py`, add a new command handler in the main loop\n(alongside the existing `\"depth\"` handler):\n\n```python\nelif req_type == \"depth_batch\":\n    frames = req.get(\"frames\", [])\n    results = []\n    for frame_req in frames:\n        fid = frame_req[\"id\"]\n        img_b64 = frame_req[\"image\"]\n        proxy_size = frame_req.get(\"proxy_size\", 518)\n        img_bytes = base64.b64decode(img_b64)\n        img = decode_png(img_bytes)  # reuse existing decode\n        depth = depth_model.infer(img, proxy_size)\n        depth_b64 = base64.b64encode(depth.astype(np.float32).tobytes()).decode()\n        results.append({\"id\": fid, \"depth_f32_b64\": depth_b64,\n                        \"width\": depth.shape[1], \"height\": depth.shape[0]})\n    send_response({\"type\": \"depth_batch_result\", \"results\": results})\n```\n\n- [ ] **Step 2: Add run_depth_batch to Rust InferenceServer**\n\nIn `crates/dorea-video/src/inference.rs`, add:\n\n```rust\n/// Run depth inference on a batch of frames. Falls back to sequential\n/// single-frame calls if the server doesn't support batching.\npub fn run_depth_batch(\n    &mut self,\n    frames: &[(String, &[u8], usize, usize, usize)], // (id, pixels, w, h, proxy_size)\n) -> Result<Vec<(Vec<f32>, usize, usize)>, InferenceError> {\n    if frames.is_empty() {\n        return Ok(Vec::new());\n    }\n\n    // Build batch request\n    let batch_frames: Vec<serde_json::Value> = frames.iter().map(|(id, pixels, w, h, ps)| {\n        let png = encode_rgb_png(\n            &pixels.chunks(3).map(|c| [c[0] as f32 / 255.0, c[1] as f32 / 255.0, c[2] as f32 / 255.0]).collect::<Vec<_>>(),\n            *w, *h,\n        ).unwrap();",
+  "source_version": "plans/2026-04-02-10bit-pipeline-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042156949Z",
+  "valid_from": "2026-04-08T03:32:28.042156949Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-10bit-pipeline-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1888,
+    "end_line": 1936,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

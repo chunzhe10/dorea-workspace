@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-d022b31b96bc",
+  "content": "   let depth: Vec<f32> = vec![0.5; n];\n\n        // warmth_factor = 1.0 means no user warmth scaling\n        let mut rgb = original.clone();\n        fused_ambiance_warmth(&mut rgb, &depth, width, height, 1.0, 1.0);\n\n        // All values should be in [0, 1]\n        for &v in &rgb {\n            assert!((0.0..=1.0).contains(&v), \"out-of-range: {v}\");\n        }\n    }\n```\n\n- [ ] **Step 3: Run tests to confirm they fail**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ncargo test -p dorea-gpu fused_ambiance_warmth 2>&1 | tail -5\n```\n\nExpected: `error[E0425]: cannot find function 'fused_ambiance_warmth'`\n\n- [ ] **Step 4: Implement `fused_ambiance_warmth`**\n\nIn `crates/dorea-gpu/src/cpu.rs`, add `use rayon::prelude::*;` to the top imports (after line 9), then add the new function after `depth_aware_ambiance` (after line 110):\n\n```rust\n/// Fused ambiance + user warmth: single RGB→LAB→RGB roundtrip per pixel.\n///\n/// Combines all per-pixel LAB operations from `depth_aware_ambiance` and the\n/// warmth scaling that was previously a separate pass in `finish_grade`.\n/// Parallelized with rayon for multi-core throughput.\n///\n/// Note: output is NOT bit-exact with the old two-pass pipeline because\n/// the sRGB↔LAB conversion is nonlinear. Validated to produce ΔE < 2\n/// (imperceptible). This is an accepted color-science tradeoff for performance.\npub fn fused_ambiance_warmth(\n    rgb: &mut [f32],\n    depth: &[f32],\n    width: usize,",
+  "source_version": "plans/2026-04-02-grading-pipeline-perf-v3.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042214534Z",
+  "valid_from": "2026-04-08T03:32:28.042214534Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-grading-pipeline-perf-v3.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 438,
+    "end_line": 470,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

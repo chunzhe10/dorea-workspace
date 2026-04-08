@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-ecce0fe84b9c",
+  "content": "### Task 5: Health Checker\n\nRun: `cd /workspaces/corvia-workspace && python3 -m pytest tools/corvia-dev/tests/test_health.py -v`\nExpected: FAIL with `ModuleNotFoundError`\n\n**Step 3: Write the implementation**\n\n```python\n\"\"\"Health checking for services.\"\"\"\n\nfrom __future__ import annotations\n\nimport time\nimport urllib.request\nimport urllib.error\nfrom dataclasses import dataclass\n\nfrom corvia_dev.models import ServiceDefinition\n\n\n@dataclass\nclass HealthResult:\n    \"\"\"Result of a health check.\"\"\"\n\n    healthy: bool | None  # None = indeterminate (no port)\n    latency_ms: float  # -1 if unhealthy/indeterminate\n\n\ndef check_http(host: str, port: int, path: str, timeout: float = 3.0) -> HealthResult:\n    \"\"\"Check health via HTTP GET. Returns HealthResult, never raises.\"\"\"\n    url = f\"http://{host}:{port}{path}\"\n    start = time.monotonic()\n    try:\n        req = urllib.request.Request(url, method=\"GET\")\n        with urllib.request.urlopen(req, timeout=timeout):\n            elapsed = (time.monotonic() - start) * 1000\n            return HealthResult(healthy=True, latency_ms=round(elapsed, 1))\n    except (urllib.error.URLError, OSError, TimeoutError):\n        return HealthResult(healthy=False, latency_ms=-1)\n\n\ndef check_service(svc: ServiceDefinition, timeout: float = 3.0) -> HealthResult:\n    \"\"\"Check health of a service. Dispatches to appropriate check method.\"\"\"\n    if svc.port is None:\n        return HealthResult(healthy=None, latency_ms=-1)\n    return check_http(\"127.0.0.1\", svc.port, svc.health_path, timeout=timeout)\n```\n\n**Step 4: Run test to verify it passes**\n\nRun: `cd /workspaces/corvia-workspace && python3 -m pytest tools/corvia-dev/tests/test_health.py -v`\nExpected: All 3 tests PASS\n\n**Step 5: Commit**\n\n```bash\ngit add tools/corvia-dev/corvia_dev/health.py tools/corvia-dev/tests/test_health.py\ngit commit -m \"feat(corvia-dev): add HTTP health checker for services\"\n```\n\n---\n",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-cli.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042472021Z",
+  "valid_from": "2026-04-08T03:32:28.042472021Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-cli.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 871,
+    "end_line": 930,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-e674e2842128",
+  "content": "# Pipeline DAG Refactor Implementation Plan\n\n> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.\n\n**Goal:** Refactor `grade.rs` into four named DAG stages — Keyframe, Feature, LUT Calibration, Grading Render — each composed of typed nodes with explicit inputs and outputs, making individual components easy to address, test, and recompose.\n\n**Architecture:** A `Node` trait (`type Input`, `type Output`, `fn process`) and a `Stage` trait (`fn run`, `fn name`) live in `crates/dorea-cli/src/pipeline/mod.rs`. Each stage is a concrete struct in its own file under `pipeline/`. `grade.rs::run` becomes thin orchestration that constructs and chains the four stages. `PagedCalibrationStore` moves to `pipeline/feature.rs`. `KeyframeEntry` moves to `pipeline/keyframe.rs`. `lerp_depth` moves to `pipeline/grading.rs`. The proxy decoder streams frames one at a time — never materialises the full video into RAM. `FusedInferenceNode` fully owns its `InferenceServer` and implements `process()`. `HslAverageNode` is a stateful streaming accumulator. `LutBuildNode` is a free function.\n\n**Tech Stack:** Rust, anyhow, existing dorea-gpu / dorea-video / dorea-lut / dorea-hsl / dorea-cal crates.\n\n---\n",
+  "source_version": "plans/2026-04-05-pipeline-dag-refactor.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042416183Z",
+  "valid_from": "2026-04-08T03:32:28.042416183Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-05-pipeline-dag-refactor.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1,
+    "end_line": 12,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

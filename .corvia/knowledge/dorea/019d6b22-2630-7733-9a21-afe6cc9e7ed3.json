@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-afe6cc9e7ed3",
+  "content": "rence failed for {stem}: {e} — using uniform 0.5\");\n                    vec![0.5f32; kf_w * kf_h]\n                }\n            }\n        };\n\n        // Load or generate RAUNE-Net target\n        let tgt_pixels = if let Some(targets_dir) = &args.targets {\n            let target_path = targets_dir.join(format!(\"{stem}.png\"));\n            let (mut tgt, tw, th) = load_rgb_image(&target_path)\n                .with_context(|| format!(\"Failed to load target: {}\", target_path.display()))?;\n            if tw != kf_w || th != kf_h {\n                tgt = resize_rgb_nn(&tgt, tw, th, kf_w, kf_h);\n            }\n            tgt\n        } else {\n            // Use inference subprocess\n            let srv = inf_server.as_mut().unwrap();\n            let pixels_u8: Vec<u8> = kf_pixels.iter()\n                .flat_map(|p| [(p[0] * 255.0) as u8, (p[1] * 255.0) as u8, (p[2] * 255.0) as u8])\n                .collect();\n            match srv.run_raune(&stem, &pixels_u8, kf_w, kf_h, 1024) {\n                Ok((raune_u8, rw, rh)) => {\n                    let raune_f32: Vec<[f32; 3]> = raune_u8.chunks_exact(3)\n                        .map(|c| [c[0] as f32 / 255.0, c[1] as f32 / 255.0, c[2] as f32 / 255.0])\n                        .collect();\n                    if rw != kf_w || rh != kf_h {\n                        resize_rgb_nn(&raune_f32, rw, rh, kf_w, kf_h)\n                    } else {\n                        raune_f32\n                    }\n                }\n                Err(e) => {\n                    log::warn!(\"RAUNE-Net inference failed for {stem}: {e} — using original as target\");\n                    kf_pixels.clone()\n                }\n            }\n        };\n\n        // Compute importance\n        let importance = compute_importance(&depth_pixels, kf_w, kf_h);\n\n        keyframe_data_vec.push(KeyframeData {\n            original: kf_pixels,\n            target: tgt_pixels,\n            depth: depth_pixels,\n            importance,\n            width: kf_w,\n            height: kf_h,\n        });\n    }\n\n    // Shutdown inference server\n    if let Some(srv) = inf_server {\n        let _ = srv.shutdown();\n    }\n",
+  "source_version": "crates/dorea-cli/src/calibrate.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360262569Z",
+  "valid_from": "2026-04-08T03:28:13.360262569Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/calibrate.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 277,
+    "end_line": 325,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

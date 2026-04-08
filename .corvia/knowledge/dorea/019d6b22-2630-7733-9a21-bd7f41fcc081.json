@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-bd7f41fcc081",
+  "content": "d {\n                py_guard: guard_py.unbind(),\n                data_ptr,\n                numel,\n                width: guard_width,\n                height: guard_height,\n                _not_send: std::marker::PhantomData,\n            })\n        })\n    }\npub fn run_depth_batch(\n        &self,\n        items: &[DepthBatchItem],\n    ) -> Result<Vec<(String, Vec<f32>, usize, usize)>, InferenceError> {\n        if items.is_empty() {\n            return Ok(vec![]);\n        }\n\n        let max_size = items[0].max_size;\n\n        Python::with_gil(|py| {\n            let bridge = self.bridge.bind(py);\n\n            // Build Python list of (H, W, 3) numpy arrays\n            let py_list = pyo3::types::PyList::empty_bound(py);\n            for item in items {\n                let np_flat = numpy::PyArray1::from_slice_bound(py, &item.pixels);\n                let np_reshaped = np_flat\n                    .call_method1(\"reshape\", ((item.height, item.width, 3),))\n                    .map_err(|e| InferenceError::Ipc(format!(\"reshape for id={}: {e}\", item.id)))?;\n                py_list\n                    .append(np_reshaped)\n                    .map_err(|e| InferenceError::Ipc(format!(\"list append for id={}: {e}\", item.id)))?;\n            }\n\n            // Call bridge.run_depth_batch_cpu(imgs, max_size)\n            let result = bridge\n                .call_method1(\"run_depth_batch_cpu\", (py_list, max_size))\n                .map_err(|e| Self::map_python_error(py, e))?;\n\n            // Result is a Python list of (H, W) float32 numpy arrays\n            let result_list = result",
+  "source_version": "crates/dorea-video/src/inference/pyo3_backend.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360412185Z",
+  "valid_from": "2026-04-08T03:28:13.360412185Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference/pyo3_backend.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 338,
+    "end_line": 369,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-e5cc6cb3d729",
+  "content": "## Task 4: Delete `auto_calibrate` and remove `--keyframe-interval`\n## Task 5: Open GitHub issue + smoke test\n\n## Summary\n\nReplaces two independent keyframe-selection paths (uniform `--keyframe-interval` for calibration, MSE-adaptive `--depth-max-interval` for grading) with a single unified pass.\n\n\n## New flow\n\n1. Pass 1: proxy decode → `ChangeDetector.score()` → `Vec<KeyframeEntry>`\n2. Fused RAUNE+depth batch on those keyframes (single `InferenceServer`)\n3. Results split to `PagedCalibrationStore` (calibration) AND `keyframe_depths` HashMap (grading)\n4. 3-pass calibration runs inline → `Calibration`\n5. Pass 2: full-res grade using `Calibration` + `keyframe_depths`\n",
+  "source_version": "plans/2026-04-04-unified-keyframe-sampling-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042409890Z",
+  "valid_from": "2026-04-08T03:32:28.042409890Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-unified-keyframe-sampling-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 803,
+    "end_line": 814,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

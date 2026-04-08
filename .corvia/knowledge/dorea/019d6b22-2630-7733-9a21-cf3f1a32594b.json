@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-cf3f1a32594b",
+  "content": "ut = self.model(batch)  # (N, 3, H, W) in [-1, 1]\n\n        out = ((out + 1.0) / 2.0).clamp(0.0, 1.0)\n        out_np = out.cpu().numpy()  # (N, 3, H, W) float32\n        return [(out_np[i].transpose(1, 2, 0) * 255).astype(np.uint8) for i in range(len(imgs))]\ndef infer_batch_gpu(self, imgs: \"list[np.ndarray]\", max_size: int = 1080) -> \"tuple[torch.Tensor, int, int]\":\n        \"\"\"Run RAUNE-Net batch, returning enhanced tensors on device (no dtoh).\n\n        Returns (batch_tensor, out_w, out_h) where batch_tensor is (N, 3, H, W)\n        float32 in [0, 1], still on self.device. Caller must not let it be GC'd.\n        Falls back to sequential per-image forward passes (results stacked on device) if dims differ.\n        \"\"\"\n        import torch\n        import torchvision.transforms as transforms\n        from PIL import Image as _Image\n\n        if not imgs:\n            return torch.zeros(0, 3, 0, 0, device=self.device), 0, 0\n\n        normalize = transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))\n        tensors = []\n        wh_set = set()\n        out_w, out_h = 0, 0\n        for img in imgs:\n            r, tw, th = _resize_maintain_aspect(_Image.fromarray(img), max_size)\n            wh_set.add((tw, th))\n            out_w, out_h = tw, th\n            tensors.append(normalize(transforms.ToTensor()(r)))\n\n        if len(wh_set) > 1:\n            # Different post-resize dimensions: stacking is not possible.",
+  "source_version": "python/dorea_inference/raune_net.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360644509Z",
+  "valid_from": "2026-04-08T03:28:13.360644509Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/raune_net.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 181,
+    "end_line": 206,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

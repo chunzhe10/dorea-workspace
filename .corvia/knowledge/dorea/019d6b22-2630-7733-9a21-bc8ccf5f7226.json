@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-bc8ccf5f7226",
+  "content": "                .map_err(|e| InferenceError::Ipc(format!(\"get shape: {e}\")))?\n                .extract()\n                .map_err(|e| InferenceError::Ipc(format!(\"extract shape: {e}\")))?;\n\n            let guard_height = shape.first().copied().unwrap_or(0);\n            let guard_width = shape.get(1).copied().unwrap_or(0);\n\n            Ok(DepthTensorGuard {\n                py_guard: guard_py.unbind(),\n                data_ptr,\n                numel,\n                width: guard_width,\n                height: guard_height,\n                _not_send: std::marker::PhantomData,\n            })\n        })\n    }\n\n    /// Run Depth Anything V2 on a batch of images in a single Python call.\n    ///\n    /// Returns `Vec<(id, depth_f32, out_width, out_height)>` in the same order as `items`.\n    #[allow(clippy::type_complexity)]\n    pub fn run_depth_batch(\n        &self,\n        items: &[DepthBatchItem],\n    ) -> Result<Vec<(String, Vec<f32>, usize, usize)>, InferenceError> {\n        if items.is_empty() {\n            return Ok(vec![]);\n        }\n\n        let max_size = items[0].max_size;\n\n        Python::with_gil(|py| {\n            let bridge = self.bridge.bind(py);\n\n            // Build Python list of (H, W, 3) numpy arrays\n            let py_list = pyo3::types::PyList::empty_bound(py);",
+  "source_version": "crates/dorea-video/src/inference/pyo3_backend.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360399696Z",
+  "valid_from": "2026-04-08T03:28:13.360399696Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference/pyo3_backend.rs",
+    "language": "rs",
+    "chunk_type": "impl_item",
+    "start_line": 321,
+    "end_line": 352,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-cc1b61940c56",
+  "content": "### Task 1: Extract `finish_grade` helper in `cpu.rs`\n\nIn `cpu.rs`, after the closing `}` of `depth_aware_ambiance` (line 115) and before `apply_clarity`, add this function. Also add `use dorea_cal::Calibration;` to the imports if not already present (it is not — `grade_frame_cpu` uses it; check the top of the file).\n\nAdd `use dorea_cal::Calibration;` to the existing imports at the top of `cpu.rs` (it's already imported for `grade_frame_cpu` — verify it's there):\n\n```rust\n// cpu.rs top imports (verify these are already present — they are):\nuse dorea_cal::Calibration;\nuse dorea_color::lab::{srgb_to_lab, lab_to_srgb};\nuse dorea_lut::apply::apply_depth_luts;\nuse dorea_hsl::apply::apply_hsl_corrections;\nuse crate::GradeParams;\n```\n\nInsert `finish_grade` between `depth_aware_ambiance` and `apply_clarity` (after line 115, before line 117):\n\n```rust\n/// Apply depth_aware_ambiance, warmth, blend, and convert f32 → u8.\n///\n/// Called by both the CPU and CUDA code paths after LUT+HSL processing.\n/// `rgb_f32` is modified in place (ambiance + warmth applied).\n/// `orig_pixels` is the original u8 input used for the strength blend.\npub(crate) fn finish_grade(\n    rgb_f32: &mut Vec<f32>,\n    orig_pixels: &[u8],\n    depth: &[f32],\n    width: usize,\n    height: usize,\n    params: &GradeParams,\n    _cal: &Calibration,\n) -> Vec<u8> {\n    let n = width * height;\n\n    // 1. Depth-aware ambiance (shadow lift, S-curve, clarity, etc.)\n    depth_aware_ambiance(rgb_f32, depth, width, height, params.contrast);\n\n    // 2. Warmth (scale LAB a*/b*)\n    if (params.warmth - 1.0).abs() > 1e-4 {\n        let warmth_factor = 1.0 + (params.warmth - 1.0) * 0.3;\n        for i in 0..n {\n            let r = rgb_f32[i * 3];\n            let g = rgb_f32[i * 3 + 1];\n            let b = rgb_f32[i * 3 + 2];\n            let (l, a, b_ab) = srgb_to_lab(r, g, b);\n            let (ro, go, bo) = lab_to_srgb(l, a * warmth_factor, b_ab * warmth_factor);\n            rgb_f32[i * 3]     = ro.clamp(0.0, 1.0);\n            rgb_f32[i * 3 + 1] = go.clamp(0.0, 1.0);\n            rgb_f32[i * 3 + 2] = bo.clamp(0.0, 1.0);",
+  "source_version": "plans/2026-04-02-depth-aware-ambiance-cpu-move.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042179896Z",
+  "valid_from": "2026-04-08T03:32:28.042179896Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-depth-aware-ambiance-cpu-move.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 69,
+    "end_line": 115,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

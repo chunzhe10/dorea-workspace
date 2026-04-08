@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-c357583df3ff",
+  "content": ",\n        ).map_err(|e| GpuError::ModuleLoad(format!(\"load build_combined_lut PTX: {e}\")))?;\n\n        let adaptive_lut = combined_lut::AdaptiveLut::new(\n            &device,\n            base_luts_flat,\n            base_boundaries,\n            base_n_zones,\n            hsl_data,\n            (params.warmth, params.strength, params.contrast),\n            lut_size,\n            runtime_n_zones,\n        )?;\n\n        Ok(Self {\n            adaptive_lut,\n            device,\n            _not_send: std::marker::PhantomData,\n        })\n    }\n\n    /// Build runtime textures for the next keyframe into the inactive set.\n    pub fn prepare_keyframe(&mut self, runtime_boundaries: &[f32]) -> Result<(), GpuError> {\n        let inactive = 1 - self.adaptive_lut.active_index();\n        self.adaptive_lut.rebuild_set(&self.device, inactive, runtime_boundaries)\n    }\n\n    /// Swap active/inactive texture sets (call at keyframe boundary after prepare_keyframe).\n    pub fn swap_textures(&mut self) {\n        self.adaptive_lut.swap();\n    }\n\n    /// Load new segment base LUT + HSL corrections.\n    pub fn load_segment(\n        &mut self,\n        base_luts_flat: &[f32],\n        base_boundaries: &[f32],\n        hsl_data: (&[f32], &[f32], &[f32], &[f32]),\n    ) -> Result<(), GpuError> {\n        self.adaptive_lut.load_segment(\n            &self.device, base_luts_flat, base_boundaries, hsl_data,",
+  "source_version": "crates/dorea-gpu/src/cuda/mod.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360483677Z",
+  "valid_from": "2026-04-08T03:28:13.360483677Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cuda/mod.rs",
+    "language": "rs",
+    "chunk_type": "impl_item",
+    "start_line": 484,
+    "end_line": 516,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

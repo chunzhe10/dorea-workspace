@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-e7e67b7e1a24",
+  "content": "pected: all 3 feature tests pass.\n\n- [ ] **Step 5: Commit**\n\n```bash\ngit add crates/dorea-cli/src/pipeline/feature.rs\ngit commit -m \"feat(pipeline): FeatureStage — FusedInferenceNode (fully impl) + EnhancedDownscaleNode + PagedCalibrationStore\"\n```\n\n---\n\n### Task 4: LUT Calibration stage (`pipeline/calibration.rs`)\n\n**Files:**\n- Modify: `crates/dorea-cli/src/pipeline/calibration.rs`\n\nNodes:\n- `ZoneComputeNode`: `compute_per_kf_zones`\n- `SegmentDetectNode`: `detect_scene_segments`\n- `ZoneSmoothNode`: `smooth_zone_boundaries`\n- `HslAverageNode`: streaming per-KF accumulator; call `process((lut_out, target))` per keyframe, `finish()` after the segment, `reset()` between segments — **no Vec of pairs materialised**\n- `GraderInitNode`: conceptual name for the AdaptiveGrader init block in GradingStage\n\n`LutBuildNode` is replaced by a free function `build_segment_lut` — the borrow checker makes a `Node` implementation here unnecessarily awkward (the store must be borrowed while building), and a free function is simpler and equally testable.\n\n**Public type: `SegmentCalibration`** (moved out of the `run()` local scope in `grade.rs`).\n\n- [ ] **Step 1: Write failing tests**\n\n```rust\n#[cfg(test)]\nmod tests {\n    use super::*;\n    use crate::pipeline::Node;\n\n    #[test]\n    fn zone_compute_node_output_length_matches_keyframe_count() {",
+  "source_version": "plans/2026-04-05-pipeline-dag-refactor.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042428489Z",
+  "valid_from": "2026-04-08T03:32:28.042428489Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-05-pipeline-dag-refactor.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 858,
+    "end_line": 883,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

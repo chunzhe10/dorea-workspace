@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-c295273f7425",
+  "content": "# === Dorea Pipeline Python Environment ===\n# Isolated venv prevents CUDA runtime conflicts with corvia's ONNX inference\n\n# Install pipeline dependencies with CUDA 12.1 wheels\nRUN /opt/dorea-venv/bin/pip install --no-cache-dir \\\n    anthropic colour-science numpy Pillow opencv-python pyyaml \\\n    transformers\n\nRUN /opt/dorea-venv/bin/pip install --no-cache-dir \\\n    torch torchvision --index-url https://download.pytorch.org/whl/cu121\n\n\n# SAM2 — canonical install from GitHub (not on PyPI)\nRUN /opt/dorea-venv/bin/pip install --no-cache-dir \\\n    git+https://github.com/facebookresearch/sam2.git\n",
+  "source_version": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042089944Z",
+  "valid_from": "2026-04-08T03:32:28.042089944Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 945,
+    "end_line": 956,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

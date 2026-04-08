@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-bf576a3894a8",
+  "content": "fn proxy_dims_no_change_when_within_bounds() {\n        assert_eq!(proxy_dims(518, 292, 518), (518, 292));\n        assert_eq!(proxy_dims(100, 50, 1000), (100, 50));\n    }\nfn proxy_dims_scales_down_landscape() {\n        let (pw, ph) = proxy_dims(3840, 2160, 518);\n        assert!(pw.max(ph) <= 518, \"long edge {pw}×{ph} > 518\");\n        let ratio_orig = 3840.0f64 / 2160.0;\n        let ratio_proxy = pw as f64 / ph as f64;\n        assert!((ratio_proxy - ratio_orig).abs() < 0.1, \"aspect ratio {ratio_proxy} vs {ratio_orig}\");\n    }",
+  "source_version": "crates/dorea-video/src/resize.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360432587Z",
+  "valid_from": "2026-04-08T03:28:13.360432587Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/resize.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 71,
+    "end_line": 77,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

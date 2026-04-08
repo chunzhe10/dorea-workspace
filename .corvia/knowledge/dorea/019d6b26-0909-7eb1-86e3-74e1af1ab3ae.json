@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-0909-7eb1-86e3-74e1af1ab3ae",
+  "content": "### 1. `compute_importance` — row-parallel passes\n### 2. `apply_depth_luts` — pixel-parallel\n\n### 3. NN fill — empty-cell-parallel\n\n`populated` list is read-only; each empty cell search is independent. Extract the inner\nsearch into a `find_nearest` pure function, then:\n\n```rust\nlet filled: Vec<_> = empty.par_iter()\n    .map(|&ec| find_nearest(&ec, &populated))\n    .collect();\n// sequential write-back to lut\n```\n\n\n### 4. `derive_hsl_corrections` — parallel conversion + fold/reduce\n\nThe outer qualifier loop (6–8 items) stays serial.\n\n**Before the qualifier loop** (once): parallelize the two HSV conversion Vecs that the\ncurrent serial code already computes outside the loop:\n\n```rust\nlet lut_hsv: Vec<_> = lut_output.par_iter().map(|&[r,g,b]| rgb_to_hsv(r,g,b)).collect();\nlet tgt_hsv: Vec<_> = target.par_iter().map(|&[r,g,b]| rgb_to_hsv(r,g,b)).collect();\n```\n\n**Inside each qualifier**: fold the soft-mask weights build and weighted accumulation into\na single parallel pass (one scan over pixels instead of two):\n\n```rust\nlet (total_w, h_sum, lut_s_sum, tgt_s_sum, v_sum) =\n    lut_hsv.par_iter().zip(tgt_hsv.par_iter())\n           .fold(|| (0.0_f64, 0.0_f64, 0.0_f64, 0.0_f64, 0.0_f64), |acc, (lhsv, thsv)| {\n               // compute weight, accumulate\n           })\n           .reduce(|| (0.0, 0.0, 0.0, 0.0, 0.0), |a, b| (a.0+b.0, ...));\n```\n\nAccumulated in `f64`. Floating-point reduction order differs from the serial path by\n~1e-6 — within the existing test tolerances.\n",
+  "source_version": "decisions/2026-04-02-cpu-parallelization-rayon.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.041843116Z",
+  "valid_from": "2026-04-08T03:32:28.041843116Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-02-cpu-parallelization-rayon.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 59,
+    "end_line": 97,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

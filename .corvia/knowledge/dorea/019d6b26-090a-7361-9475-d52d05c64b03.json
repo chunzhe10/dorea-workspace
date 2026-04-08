@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-d52d05c64b03",
+  "content": "### `inference_subprocess.rs`: add `DepthBatchItem` + `run_depth_batch`\n### `pyo3_backend.rs`: add same `DepthBatchItem` + `run_depth_batch`\n\n## Task C — Two-pass refactor\n\n**Files:** `crates/dorea-video/src/ffmpeg.rs`, `crates/dorea-cli/src/grade.rs`\n",
+  "source_version": "plans/2026-04-03-batch-depth-inference-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042259540Z",
+  "valid_from": "2026-04-08T03:32:28.042259540Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-batch-depth-inference-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 170,
+    "end_line": 173,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

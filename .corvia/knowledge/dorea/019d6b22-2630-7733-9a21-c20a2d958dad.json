@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-c20a2d958dad",
+  "content": "(vec![QualifierCorrection {\n            h_center: 0.0,\n            h_width: 1.0,\n            h_offset: 0.0,\n            s_ratio: 1.0,\n            v_offset: 0.0,\n            weight: 0.0, // weight=0 → qualifier inactive, HSL stage is pass-through in tests\n        }]);\n        Calibration::new(depth_luts, hsl, 1)\n    }\n\n    /// Build synthetic pixel and depth data for a frame of size `w * h`.\n    fn make_frame(w: usize, h: usize) -> (Vec<u8>, Vec<f32>) {\n        let n = w * h;\n        let pixels: Vec<u8> = (0..n * 3).map(|i| ((i * 7 + 128) % 256) as u8).collect();\n        let depth: Vec<f32> = (0..n).map(|i| (i as f32) / n as f32 * 0.8 + 0.1).collect();\n        (pixels, depth)\n    }\n\n    #[test]\n    fn new_api_takes_calibration_and_params() {\n        let cal = make_calibration(5);\n        let params = crate::GradeParams::default();\n        match CudaGrader::new(&cal, &params) {\n            Ok(grader) => {\n                let (pixels, depth) = make_frame(4, 4);\n                let out: Vec<u8> = grader.grade_frame_cuda(&pixels, &depth, 4, 4)\n                    .expect(\"grade_frame_cuda failed\");\n                assert_eq!(out.len(), 4 * 4 * 3);\n            }\n            Err(e) => eprintln!(\"SKIP: no CUDA device ({e})\"),\n        }\n    }\n\n    /// Calling `grade_frame_cuda` twice with the same input must produce identical output.\n    ///\n    /// This verifies that the GPU pipeline is deterministic: no race conditions,\n    /// no uninitialized memory, no stale state between calls.\n    #[test]\n    fn determinism() {\n        let cal = make_calibration(5);",
+  "source_version": "crates/dorea-gpu/src/cuda/mod.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360465256Z",
+  "valid_from": "2026-04-08T03:28:13.360465256Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cuda/mod.rs",
+    "language": "rs",
+    "chunk_type": "mod_item",
+    "start_line": 202,
+    "end_line": 235,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

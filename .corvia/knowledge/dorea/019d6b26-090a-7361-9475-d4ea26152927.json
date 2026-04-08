@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-d4ea26152927",
+  "content": "## Protocol\n## Task A — Python side\n\n### `depth_anything.py`: add `infer_batch`\n\n```python\ndef infer_batch(self, imgs: list[np.ndarray], max_size: int = 518) -> list[np.ndarray]:\n    \"\"\"Run depth estimation on a batch of uint8 HxWx3 RGB images.\n\n    All images must have the same source dimensions (guaranteed when called\n    with proxy-size keyframes from a single video). Stacks into one\n    (N, 3, H, W) forward pass. Each output normalized independently to [0,1].\n\n    Returns list of (H, W) float32 depth maps at inference resolution.\n    Falls back to sequential infer() if images have different post-resize dims.\n    \"\"\"\n```\n\nImplementation:\n1. Resize all images with `_resize_for_depth(pil, max_size)`\n2. Check all have same (tw, th) — if not, fallback to `[self.infer(img, max_size) for img in imgs]`\n3. Stack: `tensor = torch.stack([...]).to(self.device)` shape `(N, 3, H, W)`\n4. One forward pass: `outputs = self.model(pixel_values=tensor)`\n5. Split + normalize each: `outputs.predicted_depth` is `(N, H, W)` — normalize each slice independently\n\n\n### `bridge.py`: add `run_depth_batch_cpu`\n\n```python\ndef run_depth_batch_cpu(imgs: list[np.ndarray], max_size: int = 518) -> list[np.ndarray]:\n    \"\"\"Run batch depth inference, returning list of numpy arrays.\"\"\"\n    if _depth_model is None:\n        raise RuntimeError(\"Depth model not loaded\")\n    return _depth_model.infer_batch(imgs, max_size=max_size)\n```\n",
+  "source_version": "plans/2026-04-03-batch-depth-inference-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042257282Z",
+  "valid_from": "2026-04-08T03:32:28.042257282Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-batch-depth-inference-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 59,
+    "end_line": 90,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

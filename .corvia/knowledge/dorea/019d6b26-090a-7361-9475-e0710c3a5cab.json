@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-e0710c3a5cab",
+  "content": " skip_depth: bool,\n```\n\nIn `impl Default for InferenceConfig`, add after `skip_raune: false`:\n\n```rust\n            skip_depth: false,\n```\n\nIn `impl InferenceConfig`, in `build_args()`, add after the `skip_raune` block:\n\n```rust\n        if self.skip_depth {\n            args.push(\"--no-depth\".to_string());\n        } else if let Some(p) = &self.depth_model {\n            args.push(\"--depth-model\".to_string());\n            args.push(p.to_str().unwrap_or(\"\").to_string());\n        }\n```\n\n**Important:** Remove the existing `if let Some(p) = &self.depth_model` block that pushes `--depth-model` (it's currently unconditional — this replaces it with the skip_depth guard).\n\n- [ ] **Step 4: Add unload_maxine, load_raune, load_depth methods**\n\nIn `impl InferenceServer`, add after the `enhance()` method (before `upscale_depth`):\n\n```rust\n    /// Unload Maxine model and free its VRAM without stopping the server.\n    pub fn unload_maxine(&mut self) -> Result<(), InferenceError> {\n        let req = serde_json::json!({\"type\": \"unload_maxine\"});\n        self.send_line(&req.to_string())?;\n        let resp = self.recv_line()?;\n        let v: serde_json::Value = serde_json::from_str(&resp)\n            .map_err(|e| InferenceError::Ipc(format!(\"unload_maxine response parse: {e}\")))?;\n        if v[\"type\"].as_str() == Some(\"error\") {\n            return Err(InferenceError::ServerError(\n                v[\"message\"].as_str().unwrap_or(\"unknown error\").to_string(),\n            ));\n        }\n        Ok(())\n    }\n\n    /// Load RAUNE-Net into the running server (after it was started without it).\n    pub fn load_raune(\n        &mut self,\n        weights: Option<&std::path::Path>,\n        models_dir: Option<&std::path::Path>,\n    ) -> Result<(), InferenceError> {\n        let req = serde_json::json!({\n            \"type\": \"load_raune\",\n            \"weights\": weights.and_then(|p| p.to_str()),\n            \"models_dir\": models_dir.and_then(|p| p.to_str()),\n        });\n        self.send_line(&req.to_string())?;\n        let resp = self.recv_line()?;\n        let v: serde_json::Value = serde_json::from_str(&resp)\n            .map_err(|e| InferenceError::Ipc(format!(\"load_raune response parse: {e}\")))?;\n        if v[\"type\"].as_str() == Some(\"error\") {\n            return Err(InferenceError::ServerError(",
+  "source_version": "plans/2026-04-04-maxine-pipeline-architecture.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042362336Z",
+  "valid_from": "2026-04-08T03:32:28.042362336Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-maxine-pipeline-architecture.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 441,
+    "end_line": 486,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

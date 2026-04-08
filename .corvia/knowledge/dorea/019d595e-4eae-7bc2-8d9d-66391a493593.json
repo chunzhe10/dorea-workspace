@@ -1,0 +1,31 @@
+{
+  "id": "019d595e-4eae-7bc2-8d9d-66391a493593",
+  "content": "## Removed hardcoded depth zone limit\n\n**Decision:** Removed the `MAX_ZONES = 8` constant and `.min(MAX_ZONES)` clamping in `crates/dorea-gpu/src/cuda/combined_lut.rs`.\n\n**Impact:** The `depth_zones` parameter in `dorea.toml` is now fully unconstrained. Previously, any value > 8 would be silently clamped to 8 by the CUDA grader. Now the pipeline dynamically allocates texture arrays for the configured zone count.\n\n**Files changed:**\n- `crates/dorea-gpu/src/cuda/combined_lut.rs:20` — removed `pub const MAX_ZONES: usize = 8`\n- `crates/dorea-gpu/src/cuda/combined_lut.rs:70` — removed `.min(MAX_ZONES)` clamping\n\n**Commit:** `6affd40` — \"refactor: remove hardcoded MAX_ZONES limit for depth zone count\"\n\nThis was a simple constraint removal that should enable higher-resolution depth stratification if needed in future calibrations.",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-04T16:40:45.998164577Z",
+  "valid_from": "2026-04-04T16:40:45.998164577Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "decision",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

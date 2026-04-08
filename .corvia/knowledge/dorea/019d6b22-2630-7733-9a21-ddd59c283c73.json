@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-ddd59c283c73",
+  "content": "# CudaGrader Buffer Pre-Allocation Implementation Plan\n\n> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.\n\n**Goal:** Eliminate per-frame `cudaMalloc` overhead in `CudaGrader::grade_frame_cuda` by pre-allocating device buffers keyed by resolution and calibration shape, reusing them across frames. Also add `CudaGrader::with_capacity(max_w, max_h)` for callers that know the maximum resolution upfront, enabling zero reallocation ever.\n\n**Architecture:** `CudaGrader` gains two `RefCell<Option<...>>` fields — `ResolutionBuffers` (8 slices, keyed by width×height) and `CalibrationBuffers` (6 slices, keyed by n_zones×lut_size). On each frame call, if the key matches the cached buffers they are reused via `htod_sync_copy_into` (copy only, no allocation); otherwise they are dropped and reallocated. Zero `cudaMalloc` calls per frame in steady state.\n\n**Expected throughput improvement:** ~83 ms/frame → ~6–10 ms/frame at 1080p. `cudaMalloc` overhead (~60–70 ms) is eliminated; 8 `htod_sync_copy_into` calls remain and each still calls `stream.synchronize()`, contributing ~3–6 ms. The ~5 ms figure in the design doc is aspirational — expect 6–10 ms in practice.\n\n**Tech Stack:** Rust, cudarc 0.12.1 (`htod_sync_copy_into`, `alloc_zeros`, `dtoh_sync_copy`), `RefCell` for interior mutability, `#[cfg(feature = \"cuda\")]` throughout.\n\n---\n",
+  "source_version": "docs/plans/2026-04-03-cuda-grader-buffer-pre-allocation.md",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360829881Z",
+  "valid_from": "2026-04-08T03:28:13.360829881Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "docs/plans/2026-04-03-cuda-grader-buffer-pre-allocation.md",
+    "language": "markdown",
+    "chunk_type": "heading_section",
+    "start_line": 1,
+    "end_line": 14,
+    "content_role": "plan",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

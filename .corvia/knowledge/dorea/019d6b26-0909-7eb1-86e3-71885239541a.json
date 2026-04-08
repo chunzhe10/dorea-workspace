@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-0909-7eb1-86e3-71885239541a",
+  "content": "### Core Interactions\n### Node Styling (data-driven)\n\n### Anti-Patterns Avoided\n\n- Click node NEVER replaces graph view (Logseq failure mode)\n- Graph is navigable, not decorative (Obsidian complaint)\n- Nodes visually differentiated by role (not uniform circles)\n- Graph state persists across navigation (no \"lost my place\")\n- Hover preview before committing to navigation\n\n\n### Replaces\n\nThe current `GraphView.tsx` (754 lines, cluster-based force simulation) is replaced by a\nnew split-panel graphed document reader. This is closer to a rewrite than an evolution —\nthe current component groups nodes into clusters and has no individual-entry interaction.\n\n**Technical approach:**\n- **New components:** `DocumentReader.tsx` (side panel), `EntryGraph.tsx` (node-level graph),\n  `NeighborCards.tsx` (clickable related entries), `GraphControls.tsx` (depth slider, filters)\n- **Cluster view:** Preserved as the initial zoom level. Clicking into a cluster transitions\n  to the entry-level graph for that cluster's entries.\n- **API endpoints needed:**\n  - `GET /v1/entries/{id}` — fetch full entry content for the reader panel (new)\n  - `GET /v1/entries/{id}/neighbors` — fetch graph-expanded neighbor entries (new, wraps existing `corvia_graph`)\n  - Existing `GET /v1/search` — extended with `content_role` and `source_origin` filter params\n- **Estimated scope:** 4-5 new React components, 2 new REST endpoints, refactored graph\n  rendering from cluster-level to entry-level with cluster as a zoom mode.\n\n---\n",
+  "source_version": "decisions/2026-03-13-docs-workflow-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.041815158Z",
+  "valid_from": "2026-04-08T03:32:28.041815158Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-03-13-docs-workflow-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 136,
+    "end_line": 163,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

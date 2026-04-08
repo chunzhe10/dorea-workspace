@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-ad2b0ecaf1f5",
+  "content": " // Spawn inference server with Maxine pre-loaded (used in fused RAUNE→Maxine→Depth batch).\n    // RAUNE and Depth are loaded lazily before the calibration batch.\n    let start_cfg = InferenceConfig {\n        skip_raune: true,\n        skip_depth: true,\n        ..build_inference_config(\n            &python,\n            raune_weights.as_deref(),\n            raune_models_dir.as_deref(),\n            depth_model.as_deref(),\n            device.clone(),\n            maxine_upscale_factor,\n        )\n    };\n    let mut inf_server = InferenceServer::spawn(&start_cfg)\n        .context(\"failed to spawn inference server\")?;\n\n    // -----------------------------------------------------------------------\n    // Pass 1: proxy decode + change detection + keyframe selection\n    // -----------------------------------------------------------------------\n    let (proxy_w, proxy_h) = dorea_video::resize::proxy_dims(info.width, info.height, proxy_size);\n\n    let mut keyframes: Vec<KeyframeEntry> = Vec::new();\n    let mut detector: Box<dyn ChangeDetector> = Box::new(MseDetector::default());\n    let mut frames_since_kf = 0usize;\n    let scene_cut_threshold = depth_skip_threshold * 10.0;\n\n    let proxy_frames = ffmpeg::decode_frames_scaled(&args.input, &info, proxy_w, proxy_h)\n        .context(\"failed to spawn ffmpeg proxy decoder\")?;\n\n    for frame_result in proxy_frames {\n        let frame = frame_result.context(\"proxy frame decode error\")?;\n        let change = detector.score(&frame.pixels);\n        let scene_cut = change < f32::MAX && change > scene_cut_threshold;\n        let is_keyframe = !interp_enabled\n            || keyframes.is_empty()\n            || scene_cut\n            || frames_since_kf >= depth_max_interval\n            || (change < f32::MAX && change > depth_skip_threshold);\n",
+  "source_version": "crates/dorea-cli/src/grade.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360233334Z",
+  "valid_from": "2026-04-08T03:28:13.360233334Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/grade.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 209,
+    "end_line": 243,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

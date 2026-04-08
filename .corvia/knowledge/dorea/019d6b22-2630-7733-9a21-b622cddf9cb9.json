@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-b622cddf9cb9",
+  "content": "coding. Must be called after all frames are written.\n    pub fn finish(mut self) -> Result<(), FfmpegError> {\n        drop(self.stdin); // close stdin → signal EOF to ffmpeg\n\n        // Drain stderr in a background thread to prevent pipe-buffer deadlock:\n        // if ffmpeg writes enough progress output to fill the 64KB pipe buffer\n        // it will block, and wait() below would deadlock.\n        let stderr_thread = self.stderr.take().map(|mut s| {\n            std::thread::spawn(move || {\n                let mut buf = String::new();\n                let _ = s.read_to_string(&mut buf);\n                buf\n            })\n        });\n\n        let status = self.child.wait()\n            .map_err(|e| FfmpegError::EncodeFailed(format!(\"failed to wait for encoder: {e}\")))?;\n\n        let stderr_msg = stderr_thread\n            .and_then(|t| t.join().ok())\n            .unwrap_or_default();\n\n        if !status.success() {\n            return Err(FfmpegError::EncodeFailed(format!(\n                \"ffmpeg encoder exited with code {:?}: {}\",\n                status.code(),\n                stderr_msg.trim()\n            )));\n        }\n        Ok(())\n    }\n}",
+  "source_version": "crates/dorea-video/src/ffmpeg.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360319906Z",
+  "valid_from": "2026-04-08T03:28:13.360319906Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/ffmpeg.rs",
+    "language": "rs",
+    "chunk_type": "impl_item",
+    "start_line": 533,
+    "end_line": 559,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

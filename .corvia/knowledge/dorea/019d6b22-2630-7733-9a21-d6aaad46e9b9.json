@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-d6aaad46e9b9",
+  "content": "def _run_server(requests: list, extra_argv: list = None) -> list:\n    from dorea_inference.server import main\n    lines = [json.dumps(r) for r in requests] + ['{\"type\": \"shutdown\"}']\n    stdin_data = \"\\n\".join(lines) + \"\\n\"\n    captured = io.StringIO()\n    old_stdin, old_stdout = sys.stdin, sys.stdout\n    sys.stdin = io.StringIO(stdin_data)\n    sys.stdout = captured\n    argv = [\"--no-raune\", \"--no-depth\"] + (extra_argv or [])\n    try:\n        main(argv=argv)\n    except SystemExit:\n        pass\n    finally:\n        sys.stdin, sys.stdout = old_stdin, old_stdout\n    output = captured.getvalue().strip()\n    return [json.loads(line) for line in output.split(\"\\n\") if line.strip()]",
+  "source_version": "python/tests/test_lifecycle_server.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360729231Z",
+  "valid_from": "2026-04-08T03:28:13.360729231Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/tests/test_lifecycle_server.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 14,
+    "end_line": 30,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

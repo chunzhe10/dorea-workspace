@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-bb71a1bd9f6d",
+  "content": "kernel test_misplaced_doc -- --nocapture`\n\n- [ ] **Step 4: Commit**\n\n```bash\ncd /workspaces/corvia-workspace/repos/corvia\ngit add crates/corvia-kernel/src/reasoner.rs\ngit commit -m \"feat(reasoner): implement MisplacedDoc check against docs rules\"\n```\n\n---\n\n### Task 3.3: Implement `CoverageGap` check\n\n**Files:**\n- Modify: `repos/corvia/crates/corvia-kernel/src/reasoner.rs`\n\n- [ ] **Step 1: Write failing test**\n\n```rust\n/// Test helper: create an entry with a given content_role\nfn make_entry_with_role(role: &str, content: &str) -> KnowledgeEntry {\n    let mut entry = KnowledgeEntry::new(content.into(), \"test\".into(), \"v1\".into());\n    entry.metadata.content_role = Some(role.into());\n    entry\n}\n\n#[test]\nfn test_coverage_gap_check() {\n    // All memory-role entries with no formal docs — should flag\n    let entries = vec![\n        make_entry_with_role(\"memory\", \"topic A discussion\"),\n        make_entry_with_role(\"memory\", \"topic A notes\"),\n    ];\n    let findings = check_coverage_gap(&entries);\n    assert_eq!(findings.len(), 1);\n    assert_eq!(findings[0].check_type, CheckType::CoverageGap);\n}\n\n#[test]\nfn test_coverage_gap_no_flag_when_design_exists() {\n    let entries = vec![\n        make_entry_with_role(\"memory\", \"topic A discussion\"),\n        make_entry_with_role(\"design\", \"topic A design spec\"),\n    ];\n    let findings = check_coverage_gap(&entries);\n    assert!(findings.is_empty());\n}\n```\n\n- [ ] **Step 2: Implement `check_coverage_gap`**\n\n**Simplified scope-level check:** Flags if a scope has memory-role entries but zero formal docs (design/decision/plan). The spec describes a cluster-based approach (\"Cluster by embedding, flag clusters with only memory role\"), but that requires embedding-based clustering which is complex. This Phase 1 implementation does a scope-global check; embedding-based per-topic clustering can be added as a follow-up optimization.",
+  "source_version": "plans/2026-03-13-docs-workflow-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042020692Z",
+  "valid_from": "2026-04-08T03:32:28.042020692Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-13-docs-workflow-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1639,
+    "end_line": 1679,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

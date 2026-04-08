@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-ad389f5bd066",
+  "content": " change > scene_cut_threshold;\n        let is_keyframe = !interp_enabled\n            || keyframes.is_empty()\n            || scene_cut\n            || frames_since_kf >= depth_max_interval\n            || (change < f32::MAX && change > depth_skip_threshold);\n\n        if is_keyframe {\n            if scene_cut {\n                log::info!(\"Scene cut at frame {} (change={:.6})\", frame.index, change);\n                detector.reset();\n            }\n            keyframes.push(KeyframeEntry {\n                frame_index: frame.index,\n                proxy_pixels: frame.pixels.clone(),\n                scene_cut_before: scene_cut,\n            });\n            detector.set_reference(&frame.pixels);\n            frames_since_kf = 0;\n        } else {\n            frames_since_kf += 1;\n        }\n    }\n    log::info!(\"Pass 1 complete: {} keyframes detected\", keyframes.len());\n\n    anyhow::ensure!(\n        !keyframes.is_empty(),\n        \"pass 1 detected no keyframes — video may be empty or undecodable\"\n    );\n\n    // -----------------------------------------------------------------------\n    // Calibration + depth cache\n    // -----------------------------------------------------------------------\n    // Load RAUNE+Depth alongside the already-loaded Maxine for the fused\n    // RAUNE→Maxine→Depth calibration batch. Server shuts down after calibration.\n    inf_server.load_raune(\n        raune_weights.as_deref(),\n        raune_models_dir.as_deref(),\n    ).context(\"failed to load RAUNE-Net for calibration\")?;\n    inf_server.load_depth(\n        depth_model.as_deref(),\n    ).context(\"failed to load Depth Anything for calibration\")?;",
+  "source_version": "crates/dorea-cli/src/grade.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360234082Z",
+  "valid_from": "2026-04-08T03:28:13.360234082Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/grade.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 244,
+    "end_line": 278,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

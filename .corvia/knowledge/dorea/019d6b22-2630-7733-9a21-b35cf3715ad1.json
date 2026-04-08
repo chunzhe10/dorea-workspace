@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-b35cf3715ad1",
+  "content": " i as f32 / 4.0;\n            assert!((zones[0][i] - expected).abs() < 0.05,\n                \"boundary {i}: expected ~{expected}, got {}\", zones[0][i]);\n        }\n        for i in 1..4 {\n            assert!((zones[1][i] - 0.5).abs() < 1e-6);\n        }\n    }\nfn smooth_zones_no_change_when_window_1() {\n        let raw = vec![\n            vec![0.0, 0.25, 0.5, 0.75, 1.0],\n            vec![0.0, 0.10, 0.20, 0.30, 1.0],\n        ];\n        let segments = vec![SegmentRange { start: 0, end: 2 }];\n        let smoothed = smooth_zone_boundaries(&raw, &segments, 1);\n        assert_eq!(smoothed, raw);\n    }",
+  "source_version": "crates/dorea-cli/src/change_detect.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360294867Z",
+  "valid_from": "2026-04-08T03:28:13.360294867Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/change_detect.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 376,
+    "end_line": 384,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

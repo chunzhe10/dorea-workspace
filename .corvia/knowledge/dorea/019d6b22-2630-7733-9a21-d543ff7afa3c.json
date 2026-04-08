@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-d543ff7afa3c",
+  "content": "def test_returns_same_count(self):\n        model = _fake_raune_model()\n        imgs = [_make_rgb(60, 80) for _ in range(5)]\n        results = model.infer_batch(imgs, max_size=80)\n        assert len(results) == 5\ndef test_output_dtype_and_channels(self):\n        model = _fake_raune_model()\n        results = model.infer_batch([_make_rgb(60, 80)], max_size=80)\n        assert results[0].dtype == np.uint8\n        assert results[0].ndim == 3\n        assert results[0].shape[2] == 3",
+  "source_version": "python/tests/test_infer_batch.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360714899Z",
+  "valid_from": "2026-04-08T03:28:13.360714899Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/tests/test_infer_batch.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 40,
+    "end_line": 45,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

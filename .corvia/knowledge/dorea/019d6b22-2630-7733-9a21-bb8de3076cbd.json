@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-bb8de3076cbd",
+  "content": "{\n    #[error(\"IPC error: {0}\")]\n    Ipc(String),\n    #[error(\"inference server error: {0}\")]\n    ServerError(String),\n    #[error(\"CUDA OOM during inference: {0}\")]\n    Oom(String),\n    #[error(\"PyO3 initialization failed: {0}\")]\n    InitFailed(String),\n}\npub struct InferenceConfig {\n    /// Python executable path (e.g. `/opt/dorea-venv/bin/python`).\n    pub python_exe: PathBuf,\n    /// Path to the RAUNE-Net weights .pth file.\n    pub raune_weights: Option<PathBuf>,\n    /// Path to the sea_thru_poc directory (contains models/raune_net.py).\n    pub raune_models_dir: Option<PathBuf>,\n    /// Skip RAUNE-Net entirely.\n    pub skip_raune: bool,\n    /// Path to Depth Anything V2 model directory.\n    pub depth_model: Option<PathBuf>,\n    /// Compute device: \"cpu\" or \"cuda\".\n    pub device: Option<String>,\n    /// Startup timeout (unused for PyO3, kept for API compat).\n    pub startup_timeout: Duration,\n    /// Enable Maxine enhancement.\n    pub maxine: bool,\n    /// Maxine super-resolution upscale factor (default 2).\n    pub maxine_upscale_factor: u32,\n    /// Skip Depth Anything at spawn (load on demand via load_depth()).\n    pub skip_depth: bool,\n}",
+  "source_version": "crates/dorea-video/src/inference/pyo3_backend.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360387296Z",
+  "valid_from": "2026-04-08T03:28:13.360387296Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference/pyo3_backend.rs",
+    "language": "rs",
+    "chunk_type": "struct_item",
+    "start_line": 30,
+    "end_line": 51,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

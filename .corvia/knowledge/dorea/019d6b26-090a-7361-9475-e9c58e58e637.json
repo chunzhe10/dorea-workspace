@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-e9c58e58e637",
+  "content": "ges:\n  KeyframeStage → FeatureStage → CalibrationStage → GradingStage\nEach stage owns its nodes with typed inputs/outputs. Deleted ~800 lines\nof monolithic run() body; logic preserved in pipeline/{keyframe,feature,\ncalibration,grading}.rs.\"\n```\n\n---\n\n## Self-Review\n\n**Spec coverage:**\n- ✅ Four named stages: Keyframe, Feature, LUT Calibration, Grading Render\n- ✅ `Node` trait with `type Input`, `type Output`, `fn process`, `fn name`\n- ✅ `Stage` trait with `fn run`, `fn name`\n- ✅ Typed I/O structs at every stage boundary\n- ✅ Nodes: `ProxyDecodeNode` (streaming), `ChangeDetectNode`, `KeyframeSelectNode`, `FusedInferenceNode` (fully implemented), `EnhancedDownscaleNode`, `ZoneComputeNode`, `SegmentDetectNode`, `ZoneSmoothNode`, `HslAverageNode` (streaming accumulator), `DepthInterpolateNode` (plain `lerp` method), `BlendTNode`\n- ✅ Free function: `build_segment_lut` (replaces phantom `LutBuildNode`)\n- ✅ `grade.rs` becomes thin orchestration (~60 lines)\n- ✅ Tests for all stateful/testable nodes\n\n**Review issue resolution:**\n- ✅ A: `FusedInferenceNode` fully implements `process()`; owns `InferenceServer`\n- ✅ B: `DepthCacheNode` removed; stage manages HashMap directly (documented)",
+  "source_version": "plans/2026-04-05-pipeline-dag-refactor.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042445336Z",
+  "valid_from": "2026-04-08T03:32:28.042445336Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-05-pipeline-dag-refactor.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1902,
+    "end_line": 1916,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

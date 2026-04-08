@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-b6cc9ee4b67d",
+  "content": "),\n    #[error(\"IPC error: {0}\")]\n    Ipc(String),\n    #[error(\"inference server error: {0}\")]\n    ServerError(String),\n    #[error(\"timeout waiting for inference server\")]\n    Timeout,\n    #[error(\"PNG encode/decode error: {0}\")]\n    ImageError(String),\n}\npub struct InferenceConfig {\n    /// Python executable path (e.g. `/opt/dorea-venv/bin/python`).\n    pub python_exe: PathBuf,\n    /// Path to the RAUNE-Net weights .pth file.\n    /// `None` = let Python use its built-in default path.\n    /// Set `skip_raune = true` to disable RAUNE entirely.\n    pub raune_weights: Option<PathBuf>,\n    /// Path to the sea_thru_poc directory (contains models/raune_net.py).\n    pub raune_models_dir: Option<PathBuf>,\n    /// Skip RAUNE-Net entirely (pass `--no-raune` to the server).\n    /// Use this for inference phases that only need depth (e.g. per-frame grading).\n    pub skip_raune: bool,\n    /// Skip Depth Anything entirely (pass `--no-depth` to the server).\n    /// Use this when spawning a Maxine-only server for Pass 1.\n    pub skip_depth: bool,\n    /// Path to Depth Anything V2 model directory. None = use Python default / HF.\n    pub depth_model: Option<PathBuf>,\n    /// Compute device: \"cpu\" or \"cuda\". None = auto-detect.\n    pub device: Option<String>,\n    /// Startup timeout.\n    pub startup_timeout: Duration,\n    /// Enable Maxine enhancement in the inference subprocess.\n    pub maxine: bool,\n    /// Maxine super-resolution upscale factor (default 2).\n    pub maxine_upscale_factor: u32,\n}",
+  "source_version": "crates/dorea-video/src/inference_subprocess.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360327905Z",
+  "valid_from": "2026-04-08T03:28:13.360327905Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference_subprocess.rs",
+    "language": "rs",
+    "chunk_type": "struct_item",
+    "start_line": 30,
+    "end_line": 55,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

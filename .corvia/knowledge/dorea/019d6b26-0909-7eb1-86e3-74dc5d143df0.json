@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-0909-7eb1-86e3-74dc5d143df0",
+  "content": "## Dependency wiring\n## Per-target strategy\n\n### 1. `compute_importance` — row-parallel passes\n\nThe Sobel kernel and both Gaussian blur passes (horizontal + vertical) are independent\nper output row. Replace the `for y in 0..height` loops with\n`output.par_chunks_mut(width).enumerate()`.\n\nThe box-filter integral image is O(n) and fast; left serial.\n\n\n### 2. `apply_depth_luts` — pixel-parallel\n\nEvery pixel is fully independent (LUT is read-only). Replace the flat pixel loop with:\n\n```rust\nresult.par_iter_mut()\n      .zip(pixels.par_iter().zip(depth.par_iter()))\n      .for_each(|(out, (&px, &d))| { /* trilinear + zone blend */ });\n```\n",
+  "source_version": "decisions/2026-04-02-cpu-parallelization-rayon.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.041842455Z",
+  "valid_from": "2026-04-08T03:32:28.041842455Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-02-cpu-parallelization-rayon.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 41,
+    "end_line": 58,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-d918a26276e4",
+  "content": "## Task 8: Integration Testing and Validation\n\n# Force no-cuda by hiding nvcc temporarily\nPATH_BACKUP=$PATH\nexport PATH=$(echo $PATH | tr ':' '\\n' | grep -v cuda | tr '\\n' ':')\ncargo build -p dorea-gpu 2>&1\nexport PATH=$PATH_BACKUP\n```\n\nExpected: Builds with CPU-only fallback.\n\n- [ ] **Step 4: Test Python bridge**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\nPYTHONPATH=python /opt/dorea-venv/bin/python -c \"\nfrom dorea_inference.bridge import TensorGuard, vram_free_bytes\nimport torch, numpy as np\n\n\n# TensorGuard with GPU tensor (if available)\nif torch.cuda.is_available():\n    t = torch.zeros(100, device='cuda', dtype=torch.float32)\n    g = TensorGuard(t)\n    assert g.data_ptr != 0\n    assert g.numel == 100\n    g.release()\n    assert g.tensor is None\n    print('GPU TensorGuard: OK')\n\n    free = vram_free_bytes()\n    assert free > 0\n    print(f'VRAM free: {free / 1e9:.2f} GB')\nelse:\n    print('No GPU — skipping GPU tests')\n\nprint('Python bridge tests: PASSED')\n\"\n```\n\n- [ ] **Step 5: Verify CUDA context sharing (spike)**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\nPYTHONPATH=python /opt/dorea-venv/bin/python -c \"\nimport torch\nif not torch.cuda.is_available():\n    print('No GPU — skipping context sharing spike')\n    exit(0)\n",
+  "source_version": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042296839Z",
+  "valid_from": "2026-04-08T03:32:28.042296839Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1917,
+    "end_line": 1963,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

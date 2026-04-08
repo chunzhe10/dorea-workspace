@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-acd101abc51b",
+  "content": "fn drop(&mut self) {\n        if let Some(ref p) = self.0 {\n            let _ = std::fs::remove_file(p);\n        }\n    }\nfn lerp_depth(a: &[f32], b: &[f32], t: f32) -> Vec<f32> {\n    let t = t.clamp(0.0, 1.0);\n    a.iter().zip(b.iter())\n        .map(|(&va, &vb)| va + (vb - va) * t)\n        .collect()\n}",
+  "source_version": "crates/dorea-cli/src/grade.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360230214Z",
+  "valid_from": "2026-04-08T03:28:13.360230214Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/grade.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 123,
+    "end_line": 128,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

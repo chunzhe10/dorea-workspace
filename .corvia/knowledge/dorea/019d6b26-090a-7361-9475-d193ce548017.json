@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-d193ce548017",
+  "content": " layout, \"rows\" are original columns → sequential access.\n    let mut transposed = vec![0.0f32; width * height];\n    for row in 0..height {\n        for col in 0..width {\n            transposed[col * height + row] = src[row * width + col];\n        }\n    }\n\n    // Row-blur on transposed array: dimensions are (width rows) × (height cols)\n    let mut blurred_t = vec![0.0f32; width * height];\n    box_blur_rows_sliding(&transposed, &mut blurred_t, height, width, radius);\n\n    // Transpose back\n    for row in 0..height {\n        for col in 0..width {\n            dst[row * width + col] = blurred_t[col * height + row];\n        }\n    }\n}\n```\n\n- [ ] **Step 8: Run tests to confirm both col tests pass**\n\n```bash\ncargo test -p dorea-gpu box_blur 2>&1 | tail -10\n```\nExpected: all 4 box_blur tests pass.\n\n- [ ] **Step 9: Update `three_pass_box_blur` to use the new functions**\n\nIn `cpu.rs`, replace the body of `three_pass_box_blur` (lines 207-212):\n\n```rust\nfn three_pass_box_blur(input: &[f32], width: usize, height: usize, radius: usize) -> Vec<f32> {\n    let mut buf_a = input.to_vec();\n    let mut buf_b = vec![0.0f32; input.len()];\n    for _ in 0..3 {\n        box_blur_rows_sliding(&buf_a, &mut buf_b, width, height, radius);\n        box_blur_cols_via_transpose(&buf_b, &mut buf_a, width, height, radius);\n    }\n    buf_a\n}\n```\n\n- [ ] **Step 10: Run all dorea-gpu tests**\n\n```bash\ncargo test -p dorea-gpu 2>&1 | tail -15\n```\nExpected: all tests pass (including existing `depth_aware_ambiance_deterministic`, `finish_grade_roundtrip`, etc.).\n\n- [ ] **Step 11: Commit**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ngit add crates/dorea-gpu/src/cpu.rs\ngit commit -m \"perf(dorea-gpu): sliding-window box blur + transpose-cols — O(N) vs O(N×radius)\"\n```\n\n---\n",
+  "source_version": "plans/2026-04-02-inference-perf-fix.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042227229Z",
+  "valid_from": "2026-04-08T03:32:28.042227229Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-inference-perf-fix.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 212,
+    "end_line": 265,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

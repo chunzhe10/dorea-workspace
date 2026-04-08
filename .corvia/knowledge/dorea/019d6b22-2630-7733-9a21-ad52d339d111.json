@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-ad52d339d111",
+  "content": "\n\n    let n_batches = keyframes.chunks(fused_batch_size).count();\n    for (batch_idx, (chunk_kfs, chunk_items)) in keyframes\n        .chunks(fused_batch_size)\n        .zip(fused_items.chunks(fused_batch_size))\n        .enumerate()\n    {\n        log::info!(\n            \"RAUNE+depth batch {}/{n_batches} ({} frames)\",\n            batch_idx + 1,\n            chunk_items.len(),\n        );\n        let mut results = inf_server.run_raune_depth_batch(chunk_items, maxine_in_fused_batch)\n            .context(format!(\"Fused RAUNE+depth batch {}/{n_batches} failed\", batch_idx + 1))?;\n\n        anyhow::ensure!(\n            results.len() == chunk_items.len(),\n            \"Fused batch {}/{n_batches} returned {} results for {} items — server returned incomplete results\",\n            batch_idx + 1, results.len(), chunk_items.len()\n        );\n\n        for (i, (kf, (_, enhanced, enh_w, enh_h, depth, dw, dh))) in\n            chunk_kfs.iter().zip(results.into_iter()).enumerate()\n        {\n            // enhanced may be Maxine-upscaled (e.g. 2× proxy). Downscale to proxy\n            // for LUT calibration — the LUT trains on proxy-resolution pixel pairs.\n            // The depth is kept at its native resolution (dw×dh) in kf_depths.\n            let enhanced_proxy = if enh_w == proxy_w && enh_h == proxy_h {\n                enhanced\n            } else {\n                dorea_video::resize::resize_rgb_bilinear(&enhanced, enh_w, enh_h, proxy_w, proxy_h)\n            };\n            let depth_for_store = if dw == proxy_w && dh == proxy_h {\n                depth.clone()\n            } else {\n                InferenceServer::upscale_depth(&depth, dw, dh, proxy_w, proxy_h)\n            };\n            store.push(&kf.proxy_pixels, &enhanced_proxy, &depth_for_store, proxy_w, proxy_h)\n                .context(\"failed to page fused result to store\")?;\n\n            // DEBUG: save first 3 keyframes as PNG for visual inspection\n            if batch_idx == 0 && i < 3 {\n                use image::{ImageBuffer, Luma, Rgb};",
+  "source_version": "crates/dorea-cli/src/grade.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360235712Z",
+  "valid_from": "2026-04-08T03:28:13.360235712Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/grade.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 313,
+    "end_line": 347,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

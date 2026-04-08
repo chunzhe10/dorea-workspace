@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-be64306a191f",
+  "content": "t should be close to top-left of input (0.0)\n        assert!(out[0] < 0.01, \"expected ~0.0, got {}\", out[0]);\n        // Top-right of output should be close to top-right of input (1.0)\n        assert!(out[3] > 0.9, \"expected ~1.0, got {}\", out[3]);\n    }\n}\nfn inference_config_default_has_maxine_fields() {\n        let cfg = InferenceConfig::default();\n        assert!(!cfg.maxine, \"maxine should default to false\");\n        assert_eq!(cfg.maxine_upscale_factor, 2);\n        assert!(!cfg.skip_depth, \"skip_depth should default to false\");\n    }",
+  "source_version": "crates/dorea-video/src/inference/pyo3_backend.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360422860Z",
+  "valid_from": "2026-04-08T03:28:13.360422860Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference/pyo3_backend.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 650,
+    "end_line": 655,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

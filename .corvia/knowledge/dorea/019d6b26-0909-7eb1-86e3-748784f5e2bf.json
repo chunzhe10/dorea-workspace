@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-0909-7eb1-86e3-748784f5e2bf",
+  "content": "### Section 1: Camera Input Abstraction\n### Section 2: 16-bit I/O and Performance\n\n### Section 3: Tiny Planet\n- `test_tiny_planet_skips_depth` -- no inference server spawned\n- `test_tiny_planet_uses_zone_0` -- zone 0 LUT only\n- `test_tiny_planet_uniform_depth` -- all pixels depth=0.5\n- `test_rectilinear_full_pipeline` -- normal path unchanged\n- `test_degenerate_depth_warning` -- low-variance depth -> warning\n- `test_lut_zone_override` -- --lut-zone 2 forces zone 2\n- `test_two_stage_pipeline_perf` -- tiny planet >15 fps\n\n\n### Section 4: Integration\n- `test_probe_dji_mp4` -- correct detection and suggestion\n- `test_probe_x5_prores` -- correct detection and suggestion\n- `test_config_camera_profiles` -- config.yaml loads, CLI overrides\n- `test_8bit_backward_compat_e2e` -- old 8-bit workflow still works\n- `test_dorea_cal_migration` -- old .dorea-cal loads with defaults\n- `test_vram_budget` -- peak VRAM under 4 GB\n",
+  "source_version": "decisions/2026-04-02-10bit-pipeline-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.041839824Z",
+  "valid_from": "2026-04-08T03:32:28.041839824Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-02-10bit-pipeline-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 372,
+    "end_line": 388,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

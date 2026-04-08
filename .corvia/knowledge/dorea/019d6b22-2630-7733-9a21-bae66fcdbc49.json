@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-bae66fcdbc49",
+  "content": "     parse_enhance_response(&resp.to_string(), \"test_001\", width, height).unwrap();\n        assert_eq!(rw, width);\n        assert_eq!(rh, height);\n        assert_eq!(result_pixels.len(), width * height * 3);\n        assert_eq!(result_pixels[0], 128);\n    }\nfn enhance_rejects_dimension_mismatch() {\n        let pixels: Vec<u8> = vec![0u8; 4 * 2 * 3];\n        let b64 = B64.encode(&pixels);\n        let resp = serde_json::json!({\n            \"type\": \"enhance_result\",\n            \"id\": \"test_001\",\n            \"image_b64\": b64,\n            \"width\": 8,   // mismatch: sent 4\n            \"height\": 4,  // mismatch: sent 2\n        });\n        let result = parse_enhance_response(&resp.to_string(), \"test_001\", 4, 2);\n        assert!(result.is_err(), \"should reject dimension mismatch\");\n    }",
+  "source_version": "crates/dorea-video/src/inference_subprocess.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360379891Z",
+  "valid_from": "2026-04-08T03:28:13.360379891Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference_subprocess.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 1086,
+    "end_line": 1098,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

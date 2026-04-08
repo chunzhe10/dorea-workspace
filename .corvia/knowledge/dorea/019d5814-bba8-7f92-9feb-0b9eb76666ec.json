@@ -1,0 +1,31 @@
+{
+  "id": "019d5814-bba8-7f92-9feb-0b9eb76666ec",
+  "content": "# Temporal Architecture Review — Gemini \"Ares\" Study (2026-04-04)\n\n## Context\n\nReviewed the temporal interpolation proposals from the Gemini \"Ares\" architecture study against the current Dorea pipeline state (MSE-based ChangeDetector, linear depth lerp, constant 3D LUT per clip). Quality baseline: 32.02 dB PSNR avg, SSIM 0.907, 97% frames >29 dB. Known weakness: red channel SSIM = 0.843 (depth-aware correction amplifies interpolation error in red).\n\n## Decisions\n\n### Adopt: Optical Flow via NVIDIA OFA SDK\nTwo uses from one OFA call:\n1. **Keyframe detection** — flow magnitude replaces MSE in ChangeDetector trait (already designed as a swap)\n2. **Depth map warping** — motion-compensated interpolation instead of linear lerp. Pushes keyframe depth map pixels to their new positions using motion vectors. Directly addresses red channel SSIM weakness (0.843) because red correction depends on depth accuracy, and linear lerp is least accurate where motion is highest (where the diver is).\n\n### Adopt: Guided Filter Snap\nAfter optical flow warping, a guided filter snaps warped depth boundaries back to current-frame edges. Uses per-frame YOLO-seg masks (decided earlier today) as the primary guide signal, with RGB as fallback. YOLO edges are semantically meaningful — strictly better than raw RGB edges (which are ambiguous underwater due to caustics).\n\nThree consumers of the snap mechanism:\n1. Depth warp correction — snap warped depth to current-frame YOLO boundaries\n2. Class mask consistency — if optical flow propagates masks later, snap corrects them\n3. Disocclusion fill — holes from warping filled using nearest same-class depth\n\n### Defer: 3D Temporal Stack + Median Voting\nNo visible flicker problem in current output. With optical flow warping + guided filter snap + per-frame YOLO masks, three layers of temporal stabilization exist already. Revisit only if depth flicker appears after those are implemented. Adds non-trivial complexity (circular buffer, voting, scene-cut flush, clip start/end edge cases) for an unproven benefit.\n\n### Reject: Coefficient LERP Between Keyframes\nNot applicable. Tied to the rejected \"Ares-RAUNE Solver\" concept. Current architecture uses a constant calibration LUT per clip — nothing to LERP in parameter space. Depth interpolation (improved by optical flow) is what varies between keyframes.\n\n### Defer: TensorRT Compilation\nOptimization pass, not architecture. Current bottleneck is IPC overhead (Rust → Python → CUDA), not model forward pass speed. Defer until IPC is minimized and forward pass becomes the bottleneck.\n\n## Updated Temporal Architecture\n\nKey insight: with per-frame YOLO-seg, class_id is NEVER interpolated. Only depth is warped/interpolated, and it gets snapped to per-frame YOLO boundaries. This is strictly better than the Gemini proposal where both depth and seg maps were warped from keyframes.\n\n```\nPass 1 (proxy decode):\n  NVIDIA OFA: motion vectors for every frame pair\n  ChangeDetector.score() using flow magnitude → keyframe selection\n  Fused RAUNE+depth batch on keyframes\n  YOLO-seg on ALL frames (5-15ms each, 0.5GB)\n\nPass 2 (full-res grade):\n  Keyframe: depth=inferred, class_id=YOLO, grade normally\n  Non-keyframe: depth=flow-warped from nearest KF → guided_filter_snap(depth, class_id, rgb) → grade with snapped depth + exact class_id\n```\n",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-04T10:40:47.016588102Z",
+  "valid_from": "2026-04-04T10:40:47.016588102Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

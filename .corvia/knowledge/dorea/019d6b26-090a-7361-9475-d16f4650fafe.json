@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-d16f4650fafe",
+  "content": "## File Map\n\n## Task 1: Fix O(N×radius) box blur with sliding window + transpose\n\n**Files:** Modify `crates/dorea-gpu/src/cpu.rs`\n\nThe replacement is two functions:\n- `box_blur_rows_sliding` — O(W) per row using a running sum\n- `box_blur_cols_via_transpose` — transposes the array, calls `box_blur_rows_sliding`, transposes back (fixes cache-miss problem for column access)\n\n- [ ] **Step 1: Write failing tests for `box_blur_rows_sliding`**\n\nAdd inside the existing `#[cfg(test)] mod tests` block at the bottom of `crates/dorea-gpu/src/cpu.rs`:\n\n```rust\n#[test]\nfn box_blur_rows_sliding_matches_naive_small() {\n    // 5-wide, 2-tall, radius 1\n    let src: Vec<f32> = vec![\n        1.0, 2.0, 3.0, 4.0, 5.0,\n        5.0, 4.0, 3.0, 2.0, 1.0,\n    ];\n    let mut dst_sliding = vec![0.0f32; 10];\n    let mut dst_naive   = vec![0.0f32; 10];\n    box_blur_rows_sliding(&src, &mut dst_sliding, 5, 2, 1);\n    box_blur_rows(&src, &mut dst_naive, 5, 2, 1);\n    for (a, b) in dst_sliding.iter().zip(dst_naive.iter()) {\n        assert!((a - b).abs() < 1e-5, \"mismatch: {a} vs {b}\");\n    }\n}\n\n#[test]\nfn box_blur_rows_sliding_radius_zero() {\n    let src: Vec<f32> = vec![1.0, 2.0, 3.0];\n    let mut dst = vec![0.0f32; 3];\n    box_blur_rows_sliding(&src, &mut dst, 3, 1, 0);\n    assert_eq!(dst, src, \"radius=0 should be identity\");\n}\n\n#[test]\nfn box_blur_rows_sliding_radius_exceeds_width() {\n    // radius > width: all pixels see the full row — each output = mean of whole row\n    let src: Vec<f32> = vec![1.0, 2.0, 3.0];\n    let expected_mean = 2.0f32;\n    let mut dst = vec![0.0f32; 3];\n    box_blur_rows_sliding(&src, &mut dst, 3, 1, 100);\n    for v in &dst {\n        assert!((v - expected_mean).abs() < 1e-5, \"expected {expected_mean}, got {v}\");\n    }\n}\n```\n\n- [ ] **Step 2: Run tests to confirm they fail (function not defined yet)**\n\n```bash",
+  "source_version": "plans/2026-04-02-inference-perf-fix.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042225836Z",
+  "valid_from": "2026-04-08T03:32:28.042225836Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-inference-perf-fix.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 53,
+    "end_line": 105,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

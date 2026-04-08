@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-e884efe06b56",
+  "content": "─────────────────────────\n\npub struct CalibrationStage {\n    zone_compute:   ZoneComputeNode,\n    segment_detect: SegmentDetectNode,\n    zone_smooth:    ZoneSmoothNode,\n    hsl_node:       HslAverageNode,\n}\n\nimpl CalibrationStage {\n    pub fn new(cfg: &CalibrationConfig) -> Self {\n        Self {\n            zone_compute:   ZoneComputeNode { depth_zones: cfg.depth_zones },\n            segment_detect: SegmentDetectNode {\n                scene_threshold:  cfg.scene_threshold,\n                min_segment_kfs:  cfg.min_segment_kfs,\n            },\n            zone_smooth: ZoneSmoothNode { window: cfg.zone_smoothing_w },\n            hsl_node:    HslAverageNode::new(),\n        }\n    }\n}\n\nimpl Stage for CalibrationStage {\n    type Input = CalibrationStageInput;\n    type Output = CalibrationStageOutput;\n\n    fn name(&self) -> &'static str { \"lut_calibration_stage\" }\n\n    fn run(&mut self, input: Self::Input) -> Result<Self::Output> {\n        log::info!(\"=== {} ===\", self.name());\n        let CalibrationStageInput { feature_output, config, .. } = input;\n        let FeatureStageOutput { store, keyframe_depths, keyframes } = feature_output;\n",
+  "source_version": "plans/2026-04-05-pipeline-dag-refactor.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042434543Z",
+  "valid_from": "2026-04-08T03:32:28.042434543Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-05-pipeline-dag-refactor.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1178,
+    "end_line": 1203,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

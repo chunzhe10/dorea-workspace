@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-c5a49d3ba200",
+  "content": "se_luts,\n            d_base_boundaries,\n            base_n_zones,\n            d_h_offsets,\n            d_s_ratios,\n            d_v_offsets,\n            d_weights,\n            warmth: params.0,\n            strength: params.1,\n            contrast: params.2,\n            lut_size,\n        })\n    }\n\n    /// Rebuild one texture set with new runtime zone boundaries.\n    ///\n    /// Launches `build_combined_lut_kernel` to fill a temp buffer, then\n    /// copies each zone's slice into the set's CUarrays via cuMemcpy3D.\n    pub(crate) fn rebuild_set(\n        &mut self,\n        device: &Arc<CudaDevice>,\n        set_index: usize,\n        runtime_boundaries: &[f32],\n    ) -> Result<(), GpuError> {\n        let n = self.grid_size;\n        let nz = self.runtime_n_zones;\n        let total = nz * n * n * n;\n\n        let d_runtime_bounds = device.htod_sync_copy(runtime_boundaries).map_err(map_cudarc_error)?;\n        let d_build: CudaSlice<f32> = device.alloc_zeros(total * 4).map_err(map_cudarc_error)?;\n\n        let func = device.get_func(\"build_combined_lut\", \"build_combined_lut_kernel\")\n            .ok_or_else(|| GpuError::ModuleLoad(\"build_combined_lut_kernel not found\".into()))?;\n        let cfg = LaunchConfig {\n            grid_dim: (((total as u32) + 255) / 256, 1, 1),\n            block_dim: (256, 1, 1),\n            shared_mem_bytes: 0,\n        };\n\n        let warmth   = self.warmth;\n        let strength = self.strength;\n        let contrast = self.contrast;\n        let n_i32        = n as i32;\n        let lut_size_i32 = self.lut_size as i32;\n        let base_n_zones_i32 = self.base_n_zones as i32;\n        let nz_i32       = nz as i32;\n        let total_i32    = total as i32;\n        let mut args: [*mut std::ffi::c_void; 16] = [\n            (&d_build)            .as_kernel_param(),\n            (&self.d_base_luts)   .as_kernel_param(),\n            (&self.d_base_boundaries).as_kernel_param(),\n            base_n_zones_i32      .as_kernel_param(),\n            (&d_runtime_bounds)   .as_kernel_param(),\n            nz_i32                .as_kernel_param(),\n            (&self.d_h_offsets)   .as_kernel_param(),\n            (&self.d_s_ratios)    .as_kernel_param(),",
+  "source_version": "crates/dorea-gpu/src/cuda/combined_lut.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360515263Z",
+  "valid_from": "2026-04-08T03:28:13.360515263Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cuda/combined_lut.rs",
+    "language": "rs",
+    "chunk_type": "impl_item",
+    "start_line": 410,
+    "end_line": 455,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

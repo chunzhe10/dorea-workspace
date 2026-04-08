@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-af7e6c7b324d",
+  "content": "              s_ratio: 1.0,\n                v_offset: 0.0,\n                weight: 0.0,\n            });\n        }\n    }\n\n    let cal = Calibration::new(\n        depth_luts,\n        HslCorrections(avg_corrections),\n        inputs.len(),\n    );\n    Ok(cal)\n}\npub struct CalibrateArgs {\n    /// Directory of sRGB PNG keyframe images\n    #[arg(long)]\n    pub keyframes: PathBuf,\n\n    /// Directory of 16-bit PNG depth maps (matched by filename stem).\n    /// If omitted, Depth Anything V2 is run via the inference subprocess.\n    #[arg(long)]\n    pub depth: Option<PathBuf>,\n\n    /// Directory of RAUNE-Net target PNGs (matched by filename stem).\n    /// If omitted, RAUNE-Net is run via the inference subprocess.\n    #[arg(long)]\n    pub targets: Option<PathBuf>,\n\n    /// Output .dorea-cal file path\n    #[arg(long, default_value = \"calibration.dorea-cal\")]\n    pub output: PathBuf,\n\n    /// CPU-only mode (forces --device cpu in inference subprocess)\n    #[arg(long)]\n    pub cpu_only: bool,\n\n    /// Verbose logging\n    #[arg(short, long)]\n    pub verbose: bool,\n\n    /// Encoding of the input keyframe images.\n    ///\n    /// Use `srgb` (default) for standard sRGB PNGs.\n    /// Use `dlog_m` if keyframes are D-Log M encoded (DJI Action 4).\n    #[arg(long, default_value = \"srgb\", value_parser = parse_input_encoding)]\n    pub input_encoding: InputEncoding,\n\n    /// Path to RAUNE-Net weights .pth (used when --targets is omitted)\n    #[arg(long)]\n    pub raune_weights: Option<PathBuf>,\n\n    /// Path to sea_thru_poc directory (contains models/raune_net.py)\n    #[arg(long)]\n    pub raune_models_dir: Option<PathBuf>,\n\n    /// Path to Depth Anything V2 model directory (used when --depth is omitted)\n    #[arg(long)]\n    pub depth_model: Option<PathBuf>,\n\n    /// Python executable (config: [models].python, built-in default: /opt/dorea-venv/bin/python)\n    #[arg(long)]\n    pub python: Option<PathBuf>,\n}",
+  "source_version": "crates/dorea-cli/src/calibrate.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360257993Z",
+  "valid_from": "2026-04-08T03:28:13.360257993Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/calibrate.rs",
+    "language": "rs",
+    "chunk_type": "struct_item",
+    "start_line": 112,
+    "end_line": 161,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

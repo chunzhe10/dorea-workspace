@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-e465fdfa0fe5",
+  "content": "els, &depth, frame.width, frame.height, &calibration, &params)\n                .map_err(|e| anyhow::anyhow!(\"Grading failed for frame {fi}: {e}\"))?\n        };\n\n        encoder.write_frame(&graded).context(\"encoder write failed\")?;\n        frame_count += 1;\n\n        if frame_count % 100 == 0 {\n            let pct = frame_count as f64 / info.frame_count.max(1) as f64 * 100.0;\n            log::info!(\"Progress: {frame_count}/{} frames ({:.1}%)\", info.frame_count, pct);\n        }\n    }\n```\n\n- [ ] **Step 5: Remove old grade_with_grader function**\n\nDelete the `grade_with_grader` function (lines 139–154) and the `#[cfg(feature = \"cuda\")] use dorea_gpu::cuda::CudaGrader;` import (line 15–16) since they are no longer used.\n\n- [ ] **Step 6: Verify it compiles**\n\nRun: `cd /workspaces/dorea-workspace/repos/dorea && cargo check -p dorea-cli --features cuda`\nExpected: compiles. There may be warnings about unused imports from the removed code path — clean those up.\n\n- [ ] **Step 7: Integration test with a real clip**\n\nRun: `cd /workspaces/dorea-workspace && dorea grade --input footage/flattened/DJI_20251101111428_0055_D.MP4 --output /tmp/test_adaptive.mp4 --verbose 2>&1 | tee /tmp/adaptive_grade.log`\n\nCheck log for:\n- \"Scene segments: N\" line\n- \"Segment switch\" lines (if any)\n- \"Adaptive CUDA grader initialized (32 base zones, 8 runtime zones)\"\n- Successful completion with output file\n\n- [ ] **Step 8: Commit**\n\n```bash\ngit add crates/dorea-cli/src/grade.rs\ngit commit -m \"feat(grade): per-keyframe adaptive depth zones integration\n\nReplace global reservoir/LUT/HSL with per-segment pre-compute phase.\nGrading pass uses AdaptiveGrader with dual-texture temporal blending,\ntexture swaps at keyframe boundaries, and segment loading at scene cuts.\"\n```\n\n- [ ] **Step 9: Update dorea.toml with final config**\n\n```bash\ngit add dorea.toml\ngit commit -m \"chore: update dorea.toml with adaptive depth zone defaults\"\n```\n\n---\n",
+  "source_version": "plans/2026-04-04-per-keyframe-adaptive-depth-zones-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042397267Z",
+  "valid_from": "2026-04-08T03:32:28.042397267Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-per-keyframe-adaptive-depth-zones-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1711,
+    "end_line": 1757,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

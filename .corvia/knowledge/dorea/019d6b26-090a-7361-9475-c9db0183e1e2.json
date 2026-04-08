@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-c9db0183e1e2",
+  "content": "### Task 13: 3-Stage Pipelined Frame Loop\n\n\n- [ ] **Step 3: Refactor run() into 3-stage pipeline**\n\nReplace the `for frame_result in frames` loop in `run()` with:\n\n```rust\nlet (tx_decoded, rx_decoded) = sync_channel::<DecodedFrame>(3);\nlet (tx_depth, rx_depth) = sync_channel::<DepthFrame>(3);\n\nlet input_path = args.input.clone();\nlet proxy_size = args.proxy_size;\nlet info_clone = info.clone();\n\n// Stage 1: Decode thread\nlet decode_handle = thread::spawn(move || -> Result<()> {\n    let frames = ffmpeg::decode_frames(&input_path, &info_clone)\n        .context(\"failed to spawn ffmpeg decoder\")?;\n    for frame_result in frames {\n        let frame = frame_result.context(\"frame decode error\")?;\n        let pixels_f32: Vec<f32> = frame.pixels.iter()\n            .map(|&b| b as f32 / 255.0)\n            .collect();\n        let (pw, ph) = dorea_video::resize::proxy_dims(frame.width, frame.height, proxy_size);\n        let proxy_u8 = if pw != frame.width || ph != frame.height {\n            dorea_video::resize::resize_rgb_bilinear(\n                &frame.pixels, frame.width, frame.height, pw, ph,\n            )\n        } else {\n            frame.pixels.clone()\n        };\n        if tx_decoded.send(DecodedFrame {\n            index: frame.index,\n            pixels_f32,\n            proxy_u8,\n            proxy_w: pw,\n            proxy_h: ph,\n            width: frame.width,\n            height: frame.height,\n        }).is_err() {\n            break; // receiver dropped\n        }\n    }\n    Ok(())\n});\n",
+  "source_version": "plans/2026-04-02-10bit-pipeline-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042155315Z",
+  "valid_from": "2026-04-08T03:32:28.042155315Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-10bit-pipeline-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1754,
+    "end_line": 1798,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

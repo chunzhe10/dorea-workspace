@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-d805ac9c9b8b",
+  "content": "### `CombinedLut` (combined_lut.rs)\n### `combined_lut.cu` — per-frame kernel\n\n### `CudaGrader` API changes\n\n```rust\n// BEFORE\npub fn new() -> Result<Self, GpuError>\npub fn grade_frame_cuda(&self, pixels, depth, w, h, calibration, params) -> Result<Vec<u8>>\n\n// AFTER\npub fn new(calibration: &Calibration, params: &GradeParams) -> Result<Self, GpuError>\npub fn grade_frame_cuda(&self, pixels: &[u8], depth: &[f32], w: usize, h: usize)\n    -> Result<Vec<u8>, GpuError>\n```\n\nPublic `grade_frame_with_grader` in `lib.rs` mirrors this — calibration + params removed\nfrom per-call signature, baked into textures at construction.\n\n\n### Per-frame data movement at 4K\n\n| Step | Before | After |\n|------|--------|-------|\n| CPU u8→f32 expand | ~10ms | 0ms (in-kernel) |\n| htod (pixels + depth) | 133MB / ~9ms | 58MB / ~4ms |\n| GPU kernels | 3 kernels + 5 intermediate allocs | 1 kernel, 0 intermediate |\n| dtoh | 100MB / ~7ms | 25MB / ~2ms |\n| Per-frame allocs | 14 cuMalloc/cuFree | 3 cuMalloc/cuFree |\n| **Estimated total** | **~332ms** | **~15ms** |\n",
+  "source_version": "docs/decisions/2026-04-03-combined-lut-cuda-texture-design.md",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360745826Z",
+  "valid_from": "2026-04-08T03:28:13.360745826Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "docs/decisions/2026-04-03-combined-lut-cuda-texture-design.md",
+    "language": "markdown",
+    "chunk_type": "heading_section",
+    "start_line": 135,
+    "end_line": 161,
+    "content_role": "decision",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

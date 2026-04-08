@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-dc010076e12a",
+  "content": "lers hold it inside CudaGrader which is also !Send.\nimpl Drop for CombinedLut {\n    fn drop(&mut self) {\n        // cudarc 0.12 dynamic-linking: driver calls go through sys::lib(), not bare symbols.\n        unsafe {\n            for &tex in &self.textures {\n                let _ = sys::lib().cuTexObjectDestroy(tex);\n            }\n            for &arr in &self.arrays {\n                let _ = sys::lib().cuArrayDestroy(arr);\n            }\n        }\n    }\n}\n\nimpl CombinedLut {\n    /// Build the combined LUT textures from calibration data.\n    ///\n    /// Call once at grader construction. This:\n    ///   1. Uploads calibration to device\n    ///   2. Launches build_combined_lut_kernel (fills float4 device buffer)\n    ///   3. Copies each zone's slice into a CUarray (device-to-device via cuMemcpy3D)\n    ///   4. Creates an unnormalized-coordinate linear texture object per zone\n    ///   5. Frees the build buffer (73MB freed after this fn returns)\n    pub(crate) fn build(\n        device: &Arc<CudaDevice>,\n        calibration: &Calibration,\n        params: &GradeParams,\n    ) -> Result<Self, GpuError> {\n        let n_zones = calibration.depth_luts.n_zones();\n        if n_zones == 0 {\n            return Err(GpuError::InvalidInput(\"n_zones must be >= 1\".into()));\n        }\n        let n_zones = n_zones.min(MAX_ZONES);\n        let N = COMBINED_LUT_GRID;\n        let lut_size = calibration.depth_luts.luts[0].size;\n\n        // --- Upload calibration data ---\n        let luts_flat: Vec<f32> = calibration.depth_luts.luts.iter()\n            .flat_map(|lg| lg.data.iter().copied())\n            .collect();\n        let d_luts = device.htod_sync_copy(&luts_flat).map_err(map_cudarc_error)?;\n        let d_boundaries = device.htod_sync_copy(&calibration.depth_luts.zone_boundaries)",
+  "source_version": "docs/plans/2026-04-03-combined-lut-cuda-texture-plan.md",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360802870Z",
+  "valid_from": "2026-04-08T03:28:13.360802870Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "docs/plans/2026-04-03-combined-lut-cuda-texture-plan.md",
+    "language": "markdown",
+    "chunk_type": "heading_section",
+    "start_line": 1124,
+    "end_line": 1160,
+    "content_role": "plan",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

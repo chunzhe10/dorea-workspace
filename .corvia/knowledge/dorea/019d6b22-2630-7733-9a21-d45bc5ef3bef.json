@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-d45bc5ef3bef",
+  "content": "i].shape} dtype={enhanced_np[di].dtype}\", file=sys.stderr, flush=True)\n\n                results = []\n                for i, (item, depth) in enumerate(zip(items, all_depths)):\n                    depth_result = DepthResult.from_array(item.get(\"id\"), depth)\n                    results.append({\n                        \"id\": item.get(\"id\"),\n                        \"image_b64\": encode_png(enhanced_np[i]),\n                        \"enhanced_width\": int(enh_w),\n                        \"enhanced_height\": int(enh_h),\n                        \"depth_f32_b64\": depth_result.depth_f32_b64,\n                        \"depth_width\": depth_result.width,\n                        \"depth_height\": depth_result.height,\n                    })\n                resp = RauneDepthBatchResult(results=results)\n            elif req_type == \"enhance\":\n                fmt = req.get(\"format\", \"raw_rgb\")\n                if fmt == \"raw_rgb\":\n                    img = decode_raw_rgb(req[\"image_b64\"], int(req[\"width\"]), int(req[\"height\"]))\n                else:\n                    img = decode_png(req[\"image_b64\"])\n                if maxine_enhancer is None:\n                    # Maxine not available — return original frame unchanged\n                    resp = EnhanceResult.from_array(req_id, img)\n                else:\n                    enhanced = maxine_enhancer.enhance(",
+  "source_version": "python/dorea_inference/server.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360704201Z",
+  "valid_from": "2026-04-08T03:28:13.360704201Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/server.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 306,
+    "end_line": 326,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

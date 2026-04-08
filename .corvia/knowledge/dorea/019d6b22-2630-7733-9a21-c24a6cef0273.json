@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-c24a6cef0273",
+  "content": "h, w, h, &cal, &params)\n            .expect(\"grade_frame_cpu failed\");\n\n        assert_eq!(gpu_out.len(), cpu_out.len());\n        let mut diffs: Vec<u32> = gpu_out.iter().zip(cpu_out.iter())\n            .map(|(&g, &c)| (g as i32 - c as i32).unsigned_abs())\n            .collect();\n        diffs.sort_unstable();\n        let max_diff = *diffs.last().unwrap_or(&0);\n        let p99_idx  = (diffs.len() as f32 * 0.99) as usize;\n        let p99_diff = diffs.get(p99_idx).copied().unwrap_or(0);\n        eprintln!(\"GPU/CPU diff — max: {max_diff}/255, p99: {p99_diff}/255\");\n\n        assert!(max_diff <= 2,\n            \"GPU/CPU max diff {max_diff}/255 exceeds 2/255 tolerance.\");\n    }\n\n    #[test]\n    fn combined_lut_non_trivial_lut_and_hsl_within_2_per_255() {\n        let cal = make_shifted_calibration(3);\n        let params = GradeParams { warmth: 1.1, strength: 0.9, contrast: 1.1 };\n        let (w, h) = (16, 16);\n        let (pixels, depth) = make_frame(w, h);\n\n        let grader = match CudaGrader::new(&cal, &params) {\n            Ok(g) => g,\n            Err(e) => { eprintln!(\"SKIP: {e}\"); return; }\n        };\n        let gpu_out = grader.grade_frame_cuda(&pixels, &depth, w, h)\n            .expect(\"grade_frame_cuda failed\");\n        let cpu_out = crate::cpu::grade_frame_cpu(&pixels, &depth, w, h, &cal, &params)\n            .expect(\"grade_frame_cpu failed\");\n\n        let max_diff = gpu_out.iter().zip(cpu_out.iter())\n            .map(|(&g, &c)| (g as i32 - c as i32).unsigned_abs())\n            .max().unwrap_or(0);\n        eprintln!(\"Non-trivial GPU/CPU diff — max: {max_diff}/255\");\n        // 4/255 tolerance (not 2) for nonlinear LUT + active HSL: the GPU hardware\n        // trilinear interpolation of the baked pipeline introduces ~4/255 quantization\n        // error in regions of high curvature (gamma LUT + LAB + HSL combined).",
+  "source_version": "crates/dorea-gpu/src/cuda/mod.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360468092Z",
+  "valid_from": "2026-04-08T03:28:13.360468092Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cuda/mod.rs",
+    "language": "rs",
+    "chunk_type": "mod_item",
+    "start_line": 338,
+    "end_line": 371,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

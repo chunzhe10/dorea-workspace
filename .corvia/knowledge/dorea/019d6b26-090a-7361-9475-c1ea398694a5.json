@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-c1ea398694a5",
+  "content": "### Option 1: Devcontainer (recommended)\n### Option 2: Local\n\n## What's inside\n\n- **[dorea](repos/dorea)** (namespace: `pipeline`) — underwater video AI editing\n  pipeline using SAM2, Depth Anything V2, Claude API, and DaVinci Resolve\n\n\n## Pipeline\n\nDorea automates underwater video post-production:\n\n1. **Frame extraction** — ffmpeg pulls keyframes from dive footage\n2. **Scene analysis** — Claude API identifies subjects (fish, divers, coral)\n3. **Subject tracking** — SAM2 generates per-subject mask sequences\n4. **Depth estimation** — Depth Anything V2 creates depth maps\n5. **Resolve setup** — Python API imports footage, deploys DRX template, attaches mattes\n6. **Creative grading** — Human editor grades in Resolve with Claude Desktop for consultation\n",
+  "source_version": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042082148Z",
+  "valid_from": "2026-04-08T03:32:28.042082148Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 679,
+    "end_line": 694,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

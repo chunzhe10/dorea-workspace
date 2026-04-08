@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-c7078947c7d0",
+  "content": "             } else {\n                    v\n                }\n            };\n\n            pixel[0] = apply_knee(ro).clamp(0.0, 1.0);\n            pixel[1] = apply_knee(go).clamp(0.0, 1.0);\n            pixel[2] = apply_knee(bo).clamp(0.0, 1.0);\n        });\n}\npub(crate) fn finish_grade(\n    rgb_f32: &mut [f32],\n    orig_pixels: &[u8],\n    depth: &[f32],\n    width: usize,\n    height: usize,\n    params: &GradeParams,\n    _cal: &Calibration,\n) -> Vec<u8> {\n    // 1. Fused ambiance + warmth (single LAB roundtrip, rayon-parallelized)\n    let warmth_factor = 1.0 + (params.warmth - 1.0) * 0.3;\n    fused_ambiance_warmth(rgb_f32, depth, width, height, params.contrast, warmth_factor);\n\n    // 2. Blend with original using strength\n    if params.strength < 1.0 - 1e-4 {\n        for i in 0..rgb_f32.len() {\n            let orig = orig_pixels[i] as f32 / 255.0;\n            rgb_f32[i] = orig * (1.0 - params.strength) + rgb_f32[i] * params.strength;\n        }\n    }\n\n    // 3. f32 → u8\n    rgb_f32.iter().map(|&v| (v.clamp(0.0, 1.0) * 255.0).round() as u8).collect()\n}",
+  "source_version": "crates/dorea-gpu/src/cpu.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360534203Z",
+  "valid_from": "2026-04-08T03:28:13.360534203Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cpu.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 222,
+    "end_line": 245,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

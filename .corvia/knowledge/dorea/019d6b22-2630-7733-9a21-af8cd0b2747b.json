@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-af8cd0b2747b",
+  "content": " V2 model directory (used when --depth is omitted)\n    #[arg(long)]\n    pub depth_model: Option<PathBuf>,\n\n    /// Python executable (config: [models].python, built-in default: /opt/dorea-venv/bin/python)\n    #[arg(long)]\n    pub python: Option<PathBuf>,\n}\npub enum InputEncoding {\n    Srgb,\n    DlogM,\n}",
+  "source_version": "crates/dorea-cli/src/calibrate.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360258831Z",
+  "valid_from": "2026-04-08T03:28:13.360258831Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/calibrate.rs",
+    "language": "rs",
+    "chunk_type": "enum_item",
+    "start_line": 165,
+    "end_line": 168,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

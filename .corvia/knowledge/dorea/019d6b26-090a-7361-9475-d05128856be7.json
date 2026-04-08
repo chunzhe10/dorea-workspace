@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-d05128856be7",
+  "content": "            a_ab *= 1.0 + boost;\n            b_ab *= 1.0 + boost;\n\n            // 6. User warmth scaling (fused — was separate pass)\n            if apply_warmth {\n                a_ab *= warmth_factor;\n                b_ab *= warmth_factor;\n            }\n\n            // Clamp LAB\n            let l_out = (l_norm * 100.0).clamp(0.0, 100.0);\n            let a_out = a_ab.clamp(-128.0, 127.0);\n            let b_out = b_ab.clamp(-128.0, 127.0);\n\n            // --- LAB → RGB (once) ---\n            let (ro, go, bo) = lab_to_srgb(l_out, a_out, b_out);\n\n            // Final highlight knee\n            let knee = 0.92_f32;\n            let apply_knee = |v: f32| -> f32 {\n                if v > knee {\n                    let over = v - knee;\n                    let room = 1.0 - knee;\n                    knee + room * ((over / room).tanh())\n                } else {\n                    v\n                }\n            };\n\n            pixel[0] = apply_knee(ro).clamp(0.0, 1.0);\n            pixel[1] = apply_knee(go).clamp(0.0, 1.0);\n            pixel[2] = apply_knee(bo).clamp(0.0, 1.0);\n        });\n}\n```\n\n- [ ] **Step 5: Run tests to confirm they pass**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ncargo test -p dorea-gpu fused_ambiance_warmth 2>&1 | tail -10\n```",
+  "source_version": "plans/2026-04-02-grading-pipeline-perf-v3.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042216337Z",
+  "valid_from": "2026-04-08T03:32:28.042216337Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-grading-pipeline-perf-v3.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 538,
+    "end_line": 571,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-bdc6735ba376",
+  "content": "## Section 2: Workspace Adaptations\n\n### corvia.toml\n\nUpdate the workspace configuration for dorea:\n\n```toml\n[project]\nname = \"dorea\"\nscope_id = \"dorea\"\n\n[[workspace.repos]]\nname = \"dorea\"\nurl = \"https://github.com/chunzhe10/dorea\"\nnamespace = \"pipeline\"\n```\n\n- `scope_id = \"dorea\"` — all MCP calls use this scope (not \"corvia\")\n- `namespace = \"pipeline\"` — distinguishes dorea's knowledge from other repos\n- Keep all other settings unchanged: storage, embedding, server, merge, rag, chunking, telemetry\n- **VRAM note**: Set `[inference] device = \"cpu\"` — corvia-inference must not compete with SAM2/Depth Anything for the 6GB VRAM. The overnight pipeline needs full GPU access. Corvia embedding on CPU is acceptable for a single-repo workspace.\n\n\n### .mcp.json\n\nThree MCP servers. Container-internal ports stay at base values (8020, 8050). The `davinci-resolve-mcp` connects to the host.\n\n```json\n{\n  \"mcpServers\": {\n    \"corvia\": {\n      \"type\": \"http\",\n      \"url\": \"http://127.0.0.1:8020/mcp\"\n    },\n    \"davinci-resolve-mcp\": {\n      \"type\": \"http\",\n      \"url\": \"http://host.docker.internal:9090/mcp\"\n    },\n    \"playwright\": {\n      \"type\": \"http\",\n      \"url\": \"http://127.0.0.1:8050/mcp\"\n    }\n  }\n}\n```\n\n**Note on davinci-resolve-mcp**: This is `github.com/samuelgursky/davinci-resolve-mcp` — an open-source MCP server that exposes 342 DaVinci Resolve API methods. It runs on the **host** (not in the container) because it needs direct IPC with Resolve. The container reaches it via `host.docker.internal`. The host-side setup is:\n\n```bash",
+  "source_version": "plans/2026-03-17-dorea-underwater-pipeline-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042042248Z",
+  "valid_from": "2026-04-08T03:32:28.042042248Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-17-dorea-underwater-pipeline-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 65,
+    "end_line": 110,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

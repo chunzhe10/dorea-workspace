@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-ce998eb7efdc",
+  "content": "o.\"\"\"\n    from PIL import Image as _Image\n    w, h = img.size\n    scale = min(max_size / max(w, h), 1.0)\n    tw = int(round(w * scale))\n    th = int(round(h * scale))\n    resized = img.resize((tw, th), _Image.Resampling.BILINEAR)\n    return resized, tw, th\nclass RauneNetInference:\n    \"\"\"Run RAUNE-Net underwater image enhancement.\"\"\"\n\n    def __init__(\n        self,\n        weights_path: Optional[str] = None,\n        device: str = \"cpu\",\n        raune_models_dir: Optional[str] = None,\n    ) -> None:\n        import torch\n\n        self.device = torch.device(device if torch.cuda.is_available() or device == \"cpu\" else \"cpu\")\n\n        # Add the RAUNE-Net directory to sys.path so we can import models.raune_net.\n        # Accepts either the RAUNE-Net dir directly (has models/raune_net.py) or the\n        # parent sea_thru_poc dir (auto-descends to models/RAUNE-Net/).\n        given = Path(raune_models_dir) if raune_models_dir else _DEFAULT_RAUNE_MODELS_DIR\n        if (given / \"models\" / \"raune_net.py\").exists():\n            models_dir = given\n        elif (given / \"models\" / \"RAUNE-Net\" / \"models\" / \"raune_net.py\").exists():\n            models_dir = given / \"models\" / \"RAUNE-Net\"\n        else:\n            models_dir = given  # let the import fail with a clear error below\n",
+  "source_version": "python/dorea_inference/raune_net.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360635406Z",
+  "valid_from": "2026-04-08T03:28:13.360635406Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/raune_net.py",
+    "language": "py",
+    "chunk_type": "class_definition",
+    "start_line": 41,
+    "end_line": 64,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

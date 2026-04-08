@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-0909-7eb1-86e3-73a18d961e0e",
+  "content": "### load_rgb_image upgrade\n### inference.rs PNG codec\n\n### LUT size: 33^3 -> 65^3\n\n| Input bits | Standard LUT size | Grid points |\n|------------|-------------------|-------------|\n| 8-bit | 33^3 | 35,937 |\n| 10-bit | 65^3 | 274,625 |\n\nConfigurable via `--lut-size 33|65`. Auto-defaults based on `source_bit_depth`.\nDaVinci Resolve handles 65^3 .cube files natively.\n",
+  "source_version": "decisions/2026-04-02-10bit-pipeline-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.041832607Z",
+  "valid_from": "2026-04-08T03:32:28.041832607Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-02-10bit-pipeline-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 143,
+    "end_line": 152,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

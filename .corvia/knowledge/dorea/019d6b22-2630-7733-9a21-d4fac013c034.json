@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-d4fac013c034",
+  "content": "def _make_rgb(h: int, w: int) -> np.ndarray:\n    return np.random.default_rng(42).integers(0, 256, (h, w, 3), dtype=np.uint8)\ndef _fake_raune_model():\n    \"\"\"Identity RauneNetInference on CPU, no weights file needed.\"\"\"\n    import types, sys\n    fake_mod = types.ModuleType(\"models\")\n    fake_mod.raune_net = types.ModuleType(\"models.raune_net\")\n\n    class _IdentityNet(torch.nn.Module):\n        def forward(self, x):\n            return x  # identity; output in same range as input ([-1,1] after normalize)\n\n    fake_mod.raune_net.RauneNet = lambda **_: _IdentityNet()\n    sys.modules.setdefault(\"models\", fake_mod)\n    sys.modules.setdefault(\"models.raune_net\", fake_mod.raune_net)\n\n    from dorea_inference.raune_net import RauneNetInference\n    m = RauneNetInference.__new__(RauneNetInference)\n    m.device = torch.device(\"cpu\")\n    m.model = _IdentityNet()\n    m.model.eval()\n    return m",
+  "source_version": "python/tests/test_infer_batch.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360711145Z",
+  "valid_from": "2026-04-08T03:28:13.360711145Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/tests/test_infer_batch.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 11,
+    "end_line": 30,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

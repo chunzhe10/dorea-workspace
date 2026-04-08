@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-0909-7eb1-86e3-70d6bfff47df",
+  "content": "### Task 3: Add `rebuild` command to corvia-workspace.sh\n\n# --- Rebuild ---\n\nrebuild_binaries() {\n    echo \"Rebuilding Corvia binaries from local source...\"\n\n    local corvia_src=\"$WORKSPACE_ROOT/repos/corvia\"\n\n    if [ ! -d \"$corvia_src\" ]; then\n        echo \"  Error: corvia source not found at $corvia_src\"\n        exit 1\n    fi\n\n    cd \"$corvia_src\"\n    cargo install --path crates/corvia-cli\n    cargo install --path crates/corvia-inference\n    cd \"$WORKSPACE_ROOT\"\n\n    echo \"  Binaries rebuilt from local source.\"\n}\n```\n\n**Step 2: Add the `rebuild` case to the main dispatch**\n\nIn the main `case` block (line 182), add after the `status)` case and before the `*)` default:\n\n```bash\n    rebuild)\n        rebuild_binaries\n        ;;\n```\n\n**Step 3: Update the help text**\n\nIn the `*)` default case, add the rebuild line to the usage output:\n\n```bash\n    *)\n        echo \"corvia-workspace — toggle optional devcontainer services\"\n        echo \"\"\n        echo \"Usage:\"\n        echo \"  corvia-workspace enable {ollama|surrealdb}\"\n        echo \"  corvia-workspace disable {ollama|surrealdb}\"\n        echo \"  corvia-workspace status\"\n        echo \"  corvia-workspace rebuild\"\n        exit 1\n        ;;\n```\n\n**Step 4: Verify syntax**\n\nRun: `bash -n .devcontainer/scripts/corvia-workspace.sh`\nExpected: No output.\n\n**Step 5: Test help output**\n\nRun: `bash .devcontainer/scripts/corvia-workspace.sh`\nExpected: Shows usage including the new `rebuild` line.\n\n**Step 6: Commit**\n\n```bash\ngit add .devcontainer/scripts/corvia-workspace.sh\ngit commit -m \"feat: add corvia-workspace rebuild command (D71)\"\n```\n\n---\n",
+  "source_version": "decisions/2026-03-03-prebuilt-binaries.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.041808963Z",
+  "valid_from": "2026-04-08T03:32:28.041808963Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-03-03-prebuilt-binaries.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 177,
+    "end_line": 243,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-dea7a4ed0b07",
+  "content": "### Task 4: Refactor `grade_frame_cuda` to use cached buffers\n\n        // --- u8 -> f32 (host side, no allocation cost) ---\n        let rgb_f32: Vec<f32> = pixels.iter().map(|&p| p as f32 / 255.0).collect();\n\n        // =====================================================================\n        // ENSURE RESOLUTION BUFFERS  (reallocate only on resolution change)\n        // =====================================================================\n        // SAFETY: dtoh_sync_copy at the end of every frame calls device.synchronize(),\n        // which guarantees the CUDA stream is idle before this borrow_mut runs.\n        // Dropping old ResolutionBuffers triggers cuMemFreeAsync (stream-ordered on\n        // sm_86). The synchronize() above ensures no kernel is reading the old buffers\n        // when they are freed. Partial OOM in alloc_resolution_buffers propagates via ?\n        // and partially-constructed ResolutionBuffers are dropped correctly — cudarc's\n        // CudaSlice::Drop calls cuMemFreeAsync for each successfully allocated slice.\n        {\n            let mut slot = self.res_bufs.borrow_mut();\n            let needs = slot.as_ref().map_or(true, |b| b.width != width || b.height != height);\n            if needs {\n                *slot = Some(alloc_resolution_buffers(dev, width, height)?);\n            }\n        }\n\n        // =====================================================================\n        // ENSURE CALIBRATION BUFFERS  (reallocate only on shape change)",
+  "source_version": "docs/plans/2026-04-03-cuda-grader-buffer-pre-allocation.md",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360842382Z",
+  "valid_from": "2026-04-08T03:28:13.360842382Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "docs/plans/2026-04-03-cuda-grader-buffer-pre-allocation.md",
+    "language": "markdown",
+    "chunk_type": "heading_section",
+    "start_line": 446,
+    "end_line": 468,
+    "content_role": "plan",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

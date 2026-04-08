@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-ae33a4b75244",
+  "content": "       for f in depth {\n            dw.write_all(&f.to_le_bytes()).context(\"write depth\")?;\n        }\n        pw.write_all(pixels).context(\"write pixels\")?;\n        pw.write_all(target).context(\"write target\")?;\n\n        self.depth_offsets.push(depth_off);\n        self.pixtar_offsets.push(pixtar_off);\n        self.widths.push(width);\n        self.heights.push(height);\n        Ok(())\n    }\n\n    /// Flush writers and memory-map both files for fast read access.\n    fn seal(&mut self) -> Result<()> {\n        use std::io::Write;\n        if let Some(mut dw) = self.depth_writer.take() { dw.flush().context(\"flush depths\")?; }\n        if let Some(mut pw) = self.pixtar_writer.take() { pw.flush().context(\"flush pixtar\")?; }\n        let df = std::fs::File::open(self.dir.join(\"depths.bin\")).context(\"open depths.bin\")?;\n        let pf = std::fs::File::open(self.dir.join(\"pixtar.bin\")).context(\"open pixtar.bin\")?;\n        // SAFETY: files are written once, sealed, and never modified again.\n        self.depth_mmap = Some(unsafe { memmap2::Mmap::map(&df) }.context(\"mmap depths\")?);\n        self.pixtar_mmap = Some(unsafe { memmap2::Mmap::map(&pf) }.context(\"mmap pixtar\")?);\n        Ok(())\n    }\n\n    fn len(&self) -> usize { self.widths.len() }\n\n    /// Raw f32 LE bytes for frame i's depth map — zero-copy mmap slice.\n    fn depth_bytes(&self, i: usize) -> &[u8] {\n        let mmap = self.depth_mmap.as_ref().expect(\"call seal() before reading\");\n        let off = self.depth_offsets[i];\n        let len = self.widths[i] * self.heights[i] * 4;\n        &mmap[off..off + len]\n    }\n\n    /// Decode depth for frame i into a Vec<f32>.\n    fn read_depth(&self, i: usize) -> Vec<f32> {\n        self.depth_bytes(i).chunks_exact(4)\n            .map(|b| f32::from_le_bytes([b[0], b[1], b[2], b[3]]))\n            .collect()\n    }\n\n    /// Zero-copy mmap slices for pixels and target for frame i.\n    fn pixtar_slices(&self, i: usize) -> (&[u8], &[u8]) {\n        let mmap = self.pixtar_mmap.as_ref().expect(\"call seal() before reading\");\n        let off = self.pixtar_offsets[i];\n        let n = self.widths[i] * self.heights[i] * 3;\n        (&mmap[off..off + n], &mmap[off + n..off + n * 2])\n    }\n\n    fn dims(&self, i: usize) -> (usize, usize) { (self.widths[i], self.heights[i]) }\n}",
+  "source_version": "crates/dorea-cli/src/grade.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360245268Z",
+  "valid_from": "2026-04-08T03:28:13.360245268Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/grade.rs",
+    "language": "rs",
+    "chunk_type": "impl_item",
+    "start_line": 768,
+    "end_line": 813,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

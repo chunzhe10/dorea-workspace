@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-effaa06241df",
+  "content": "    # Restart services if manager is running\n\n### Task 5: Integrate staleness check into `up` command\n\n**Files:**\n- Modify: `tools/corvia-dev/corvia_dev/cli.py`\n\n**Step 1: Add staleness prompt to `up` command**\n\nIn `cli.py`, modify the `up` function. Insert staleness check after loading config and before creating the ProcessManager (after line 177, before line 179):\n\n```python",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-rebuild.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042500669Z",
+  "valid_from": "2026-04-08T03:32:28.042500669Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-rebuild.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 408,
+    "end_line": 417,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

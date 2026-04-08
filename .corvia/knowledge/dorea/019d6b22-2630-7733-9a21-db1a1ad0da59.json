@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-db1a1ad0da59",
+  "content": "xel_cpu(\n    r: f32, g: f32, b: f32,\n    depth: f32,\n    calibration: &Calibration,\n    params: &GradeParams,\n) -> [f32; 3] {\n    use dorea_lut::apply::apply_depth_luts;\n    use dorea_hsl::apply::apply_hsl_corrections;\n\n    // 1. Depth-stratified LUT apply\n    let lut_out = apply_depth_luts(&[[r, g, b]], &[depth], &calibration.depth_luts);\n    let [r1, g1, b1] = lut_out[0];\n\n    // 2. HSL qualifier corrections\n    let hsl_out = apply_hsl_corrections(&[[r1, g1, b1]], &calibration.hsl_corrections);\n    let [r2, g2, b2] = hsl_out[0];\n\n    // 3. Fused ambiance + warmth (single LAB roundtrip)\n    let mut px = [r2, g2, b2];\n    let warmth_factor = 1.0 + (params.warmth - 1.0) * 0.3;\n    let d = depth;\n\n    let (mut l_norm, mut a_ab, mut b_ab) = {\n        let (l, a, b_l) = dorea_color::lab::srgb_to_lab(px[0], px[1], px[2]);\n        (l / 100.0, a, b_l)\n    };\n\n    // Shadow lift\n    let lift_amount = 0.2 + 0.15 * d;\n    let toe = 0.15_f32;\n    let shadow_mask = ((toe - l_norm) / toe).clamp(0.0, 1.0);\n    l_norm += shadow_mask * lift_amount * toe;\n\n    // S-curve contrast\n    let contrast_strength = (0.3 + 0.3 * d) * params.contrast;\n    let slope = 4.0 + 4.0 * contrast_strength;\n    let s_curve = 1.0 / (1.0 + (-(l_norm - 0.5) * slope).exp());\n    l_norm += (s_curve - l_norm) * contrast_strength;\n\n    // Highlight compress\n    let compress = 0.4 + 0.2 * (1.0 - d);\n    let knee_h = 0.88_f32;\n    if l_norm > knee_h {\n        let over = l_norm - knee_h;\n        let headroom = 1.0 - knee_h;\n        l_norm = knee_h + headroom * ((over / headroom * (1.0 + compress)).tanh());\n    }\n\n    // Warmth (LAB a*/b* push)\n    let lum_weight = 4.0 * l_norm * (1.0 - l_norm);\n    a_ab += (1.0 + 5.0 * d) * lum_weight;\n    b_ab += 4.0 * d * lum_weight;\n\n    // Vibrance\n    let vibrance = 0.4 + 0.5 * d;\n    let chroma = (a_ab * a_ab + b_ab * b_ab + 1e-8).sqrt();\n    let chroma_norm = (chroma / 40.0).clamp(0.0, 1.0);\n    let boost = vibrance * (1.0 - chroma_norm) * (l_norm / 0.25).clamp(0.0, 1.0);\n    a_ab *= 1.0 + boost;\n    b_ab *= 1.0 + boost;\n",
+  "source_version": "docs/plans/2026-04-03-combined-lut-cuda-texture-plan.md",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360788711Z",
+  "valid_from": "2026-04-08T03:28:13.360788711Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "docs/plans/2026-04-03-combined-lut-cuda-texture-plan.md",
+    "language": "markdown",
+    "chunk_type": "heading_section",
+    "start_line": 454,
+    "end_line": 504,
+    "content_role": "plan",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

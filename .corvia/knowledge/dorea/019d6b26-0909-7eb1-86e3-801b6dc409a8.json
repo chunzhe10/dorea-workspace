@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-0909-7eb1-86e3-801b6dc409a8",
+  "content": "### Pattern 3: Large Graph Handling Strategies\n### Pattern 4: Filtering Mechanisms\n\n## Top Patterns to Adopt for corvia Dashboard\n",
+  "source_version": "decisions/graph-document-ux-research.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.041978640Z",
+  "valid_from": "2026-04-08T03:32:28.041978640Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/graph-document-ux-research.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 681,
+    "end_line": 682,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

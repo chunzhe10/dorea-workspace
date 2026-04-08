@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-e3e4e11810a8",
+  "content": "### Task 7: grade.rs integration — pre-compute + restructured grading pass\n\n        log::info!(\"  segment {si}: keyframes {}..{} ({} KFs)\", seg.start, seg.end, seg.end - seg.start);\n    }\n\n    // Step 4: Smooth zone boundaries (respecting segment boundaries)\n    let smoothed_kf_zones = smooth_zone_boundaries(&raw_kf_zones, &segments, zone_smoothing_w);\n\n    // Step 5: Build per-segment base LUTs + HSL corrections\n    struct SegmentCalibration {\n        depth_luts: dorea_lut::types::DepthLuts,\n        hsl_corrections: HslCorrections,\n    }\n    let n_quals = HSL_QUALIFIERS.len();\n\n    let segment_calibrations: Vec<SegmentCalibration> = segments.iter().map(|seg| {\n        // Collect depths from this segment's keyframes → base zone boundaries (32 fine zones)\n        let seg_depths: Vec<f32> = (seg.start..seg.end)\n            .flat_map(|i| kf_depths[i].iter().cloned())\n            .collect();\n        let base_boundaries = adaptive_zone_boundaries(&seg_depths, base_lut_zones);\n\n        // Build streaming LUT for this segment\n        let mut lut_builder = StreamingLutBuilder::new(base_boundaries);\n        for i in seg.start..seg.end {",
+  "source_version": "plans/2026-04-04-per-keyframe-adaptive-depth-zones-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042392701Z",
+  "valid_from": "2026-04-08T03:32:28.042392701Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-per-keyframe-adaptive-depth-zones-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1432,
+    "end_line": 1454,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-cf279fd38387",
+  "content": "### `dorea preview`\n\n## User Parameter Scaling\n\nApplied after LUT+HSL+ambiance:\n\n- **warmth** multiplier: scale a* and b* channels in LAB space by (1 + (warmth-1)*0.3)\n- **strength** multiplier: linear blend between original and graded: `out = orig * (1-strength) + graded * strength`\n- **contrast** multiplier: scale ambiance `strength` param by contrast value\n\n---\n\n\n## Testing Strategy\n",
+  "source_version": "plans/2026-04-02-dorea-v2-phase2-3-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042205614Z",
+  "valid_from": "2026-04-08T03:32:28.042205614Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-dorea-v2-phase2-3-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 289,
+    "end_line": 300,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

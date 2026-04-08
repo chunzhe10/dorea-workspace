@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-e2d97852f6a9",
+  "content": "l now accepts base_luts + base_zone_boundaries + base_n_zones\n(for grade_pixel_device internal lookup) separately from\nruntime_zone_boundaries + runtime_n_zones (for output indexing\nand depth center computation). grade_pixel_device is unchanged.\"\n```\n\n---\n\n### Task 5: CombinedLut restructure — double-buffer + per-KF rebuild\n\n**Files:**\n- Modify: `crates/dorea-gpu/src/cuda/combined_lut.rs`\n\nThis is the largest single change. We replace the single-shot `CombinedLut::build()` with a struct that:\n1. Holds two texture sets (double buffer)\n2. Can load base LUT data per-segment\n3. Can rebuild one texture set per-keyframe with new runtime zone boundaries\n4. Tracks which set is \"active\" for grading\n\n- [ ] **Step 1: Restructure CombinedLut into AdaptiveLut**\n\nReplace the existing `CombinedLut` struct definition and impl with:\n\n```rust\nuse std::sync::Arc;\nuse cudarc::driver::{CudaDevice, CudaSlice, LaunchAsync, LaunchConfig, sys};\nuse crate::GpuError;\nuse super::map_cudarc_error;\n\npub(crate) const COMBINED_LUT_GRID: usize = 97;\n\n/// One set of per-zone 3D textures (CUarray + CUtexObject per zone).\nstruct TextureSet {\n    arrays: Vec<sys::CUarray>,\n    textures: Vec<u64>, // CUtexObject = u64\n    n_zones: usize,\n    zone_boundaries: Vec<f32>,\n}\n\n/// Double-buffered adaptive LUT with per-keyframe texture rebuilds.\n///\n/// Holds two `TextureSet`s. One is \"active\" (used for grading), the other can\n/// be rebuilt in the background for the next keyframe. Swapping is a pointer\n/// toggle — no copies, no stalls.\npub(crate) struct AdaptiveLut {\n    sets: [TextureSet; 2],\n    /// Index of the set currently used for grading (0 or 1).\n    pub active: usize,\n    pub grid_size: usize,\n    pub runtime_n_zones: usize,\n\n    // Base LUT data resident on device (per-segment, rarely changes)\n    d_base_luts: CudaSlice<f32>,\n    d_base_boundaries: CudaSlice<f32>,",
+  "source_version": "plans/2026-04-04-per-keyframe-adaptive-depth-zones-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042383497Z",
+  "valid_from": "2026-04-08T03:32:28.042383497Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-per-keyframe-adaptive-depth-zones-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 640,
+    "end_line": 685,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

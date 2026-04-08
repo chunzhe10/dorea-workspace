@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-d2c05ce8b8e5",
+  "content": "uding `test_apply_identity_lut` and all `test_adaptive_zone_boundaries_*`.\n\n- [ ] **Step 4: Commit**\n\n```bash\ncd repos/dorea\ngit add crates/dorea-lut/src/apply.rs\ngit commit -m \"perf(dorea-lut): parallelize apply_depth_luts pixel loop with rayon\"\n```\n\n---\n\n## Task 3: Parallelize NN fill in `build_depth_luts` (empty-cell-parallel)\n\n**Files:**\n- Modify: `repos/dorea/crates/dorea-lut/src/build.rs`\n\nExtract the inner O(E) search into a `find_nearest` pure function, then replace the serial `for &ec in &empty` loop with `par_iter().map().collect()` + serial write-back.\n\n- [ ] **Step 1: Run the existing test to confirm baseline**\n\n```bash\ncd repos/dorea && cargo test -p dorea-lut test_nn_fill_no_identity -- --nocapture 2>&1\n```\n\nExpected: `test test_nn_fill_no_identity ... ok`\n\n- [ ] **Step 2: Add rayon import to build.rs**\n\nAt the top of `crates/dorea-lut/src/build.rs`, after the existing `use crate::types::{DepthLuts, LutGrid};` line, add:\n\n```rust\nuse rayon::prelude::*;\n```\n\n- [ ] **Step 3: Add `find_nearest` helper function**\n\nInsert the following function anywhere before `build_depth_luts` in `build.rs` (e.g., right before the function at line ~200):\n\n```rust\n/// Find the nearest populated LUT cell to `empty_cell` by brute-force L2 in index space.\n///\n/// `populated` must be non-empty.\nfn find_nearest(empty_cell: &[usize; 3], populated: &[[usize; 3]]) -> ([usize; 3], [usize; 3]) {\n    let mut best_dist = u64::MAX;\n    let mut best_pop = populated[0];\n    for &pc in populated {\n        let dr = (empty_cell[0] as i64 - pc[0] as i64).pow(2) as u64;\n        let dg = (empty_cell[1] as i64 - pc[1] as i64).pow(2) as u64;\n        let db = (empty_cell[2] as i64 - pc[2] as i64).pow(2) as u64;\n        let dist = dr + dg + db;\n        if dist < best_dist {\n            best_dist = dist;\n            best_pop = pc;\n        }\n    }\n    (*empty_cell, best_pop)\n}\n```\n\n- [ ] **Step 4: Replace the serial NN fill loop with parallel version**\n\nFind the serial NN fill block in `build_depth_luts` (the comment `// NN fill: brute-force L2 in index space` around line 288). Replace:\n\n```rust\n        // NN fill: brute-force L2 in index space\n        // TODO: parallelize with rayon (O(E×P) brute force, acceptable for LUT_SIZE=33 but slow for sparse footage)",
+  "source_version": "plans/2026-04-02-rayon-cpu-parallelization-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042238242Z",
+  "valid_from": "2026-04-08T03:32:28.042238242Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-rayon-cpu-parallelization-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 237,
+    "end_line": 291,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

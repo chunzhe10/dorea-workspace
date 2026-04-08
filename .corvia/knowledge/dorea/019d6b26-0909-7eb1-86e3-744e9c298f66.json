@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-0909-7eb1-86e3-744e9c298f66",
+  "content": "## CLI Interface\n\n### Extended commands\n\n```\ndorea calibrate --input-encoding ilog --projection rectilinear --lut-size 65\ndorea grade --input clip.mov --input-encoding ilog --output-codec prores --batch-size 2\ndorea probe --input clip.mov   # NEW: sniff container, suggest flags\n```\n\n\n### Config file (config.yaml)\n\n```yaml\ncameras:\n  dji_action4:\n    encoding: dlog_m\n    shoulder: 0.85\n    source_bit_depth: 10\n    container_hint: mp4\n    frame_selection: keyframe\n  insta360_x5:\n    encoding: ilog\n    shoulder: 0.88\n    source_bit_depth: 10\n    container_hint: mov\n    frame_selection: interval\n\npipeline:\n  lut_size: auto\n  output_codec: prores\n  batch_size: 2\n  proxy_size: 518\n\ngpu_device: cuda:0\n```\n\nCLI flags override config.yaml.\n",
+  "source_version": "decisions/2026-04-02-10bit-pipeline-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.041837378Z",
+  "valid_from": "2026-04-08T03:32:28.041837378Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-02-10bit-pipeline-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 258,
+    "end_line": 293,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

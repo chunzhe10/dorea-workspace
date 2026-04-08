@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-bb7064960c28",
+  "content": "pub enum InferenceError {\n    #[error(\"IPC error: {0}\")]\n    Ipc(String),\n    #[error(\"inference server error: {0}\")]\n    ServerError(String),\n    #[error(\"CUDA OOM during inference: {0}\")]\n    Oom(String),\n    #[error(\"PyO3 initialization failed: {0}\")]\n    InitFailed(String),\n}",
+  "source_version": "crates/dorea-video/src/inference/pyo3_backend.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360386222Z",
+  "valid_from": "2026-04-08T03:28:13.360386222Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference/pyo3_backend.rs",
+    "language": "rs",
+    "chunk_type": "enum_item",
+    "start_line": 17,
+    "end_line": 26,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

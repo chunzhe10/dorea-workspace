@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-eb860b310864",
+  "content": "# corvia-dev CLI Implementation Plan\n\n### Task 1: Project Scaffolding & Package Setup\n\n**Files:**\n- Create: `tools/corvia-dev/pyproject.toml`\n- Create: `tools/corvia-dev/corvia_dev/__init__.py`\n- Create: `tools/corvia-dev/corvia_dev/cli.py`\n\n**Step 1: Create pyproject.toml**\n\n```toml\n[build-system]\nrequires = [\"setuptools>=68.0\"]\nbuild-backend = \"setuptools.backends._legacy:_Backend\"\n\n[project]\nname = \"corvia-dev\"\nversion = \"0.1.0\"\ndescription = \"Dev environment orchestration for corvia-workspace\"\nrequires-python = \">=3.11\"\ndependencies = [\n    \"click>=8.1\",\n    \"pydantic>=2.0\",\n    \"tomli_w>=1.0\",\n]\n\n[project.scripts]\ncorvia-dev = \"corvia_dev.cli:main\"\n\n[tool.pytest.ini_options]\ntestpaths = [\"tests\"]\n```\n\n**Step 2: Create `__init__.py`**\n\n```python\n\"\"\"corvia-dev: Dev environment orchestration for corvia-workspace.\"\"\"\n```\n\n**Step 3: Create minimal CLI entry point**\n\n```python\n\"\"\"CLI entry point for corvia-dev.\"\"\"\n\nimport click\n\n\n@click.group()\ndef main() -> None:\n    \"\"\"Dev environment orchestration for corvia-workspace.\"\"\"\n\n\n@main.command()\ndef status() -> None:\n    \"\"\"Show service health and config summary.\"\"\"\n    click.echo(\"corvia-dev status: not yet implemented\")\n\n\nif __name__ == \"__main__\":\n    main()\n```\n\n**Step 4: Install and verify**\n\nRun:\n```bash\ncd /workspaces/corvia-workspace && python3 -m pip install -e tools/corvia-dev\ncorvia-dev --help\ncorvia-dev status\n```\n\nExpected: Help text shows `status` command. `status` prints placeholder message.\n\n**Step 5: Commit**\n\n```bash\ngit add tools/corvia-dev/\ngit commit -m \"feat(corvia-dev): scaffold Python CLI package with click\"\n```\n\n---\n",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-cli.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042460968Z",
+  "valid_from": "2026-04-08T03:32:28.042460968Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-cli.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 15,
+    "end_line": 95,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

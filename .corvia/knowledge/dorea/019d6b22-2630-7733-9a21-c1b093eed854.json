@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-c1b093eed854",
+  "content": "UT textures (GPU build kernel runs here, ~<1ms)\n        let combined_lut = CombinedLut::build(&device, calibration, params)?;\n\n        Ok(Self {\n            device,\n            combined_lut,\n            _not_send: std::marker::PhantomData,\n        })\n    }\npub fn grade_frame_cuda(\n        &self,\n        pixels: &[u8],\n        depth: &[f32],\n        width: usize,\n        height: usize,\n    ) -> Result<Vec<u8>, GpuError> {\n        let n = width.checked_mul(height).ok_or_else(|| {\n            GpuError::InvalidInput(\"frame dimensions overflow usize\".into())\n        })?;\n        if pixels.len() != n * 3 {\n            return Err(GpuError::InvalidInput(format!(\n                \"pixels len {} != width*height*3 {}\", pixels.len(), n * 3\n            )));\n        }\n        if depth.len() != n {\n            return Err(GpuError::InvalidInput(format!(\n                \"depth len {} != width*height {}\", depth.len(), n\n            )));\n        }\n        let dev = &self.device;\n\n        // Upload inputs\n        let d_pixels_in = dev.htod_sync_copy(pixels).map_err(map_cudarc_error)?;\n        let d_depth     = dev.htod_sync_copy(depth).map_err(map_cudarc_error)?;\n\n        // Upload texture handles (CUtexObject = u64) to device\n        // For the single-texture CudaGrader, pass the same set for both A and B\n        // with blend_t=0.0 so set B is never sampled.\n        let d_textures: CudaSlice<u64> = dev\n            .htod_sync_copy(&self.combined_lut.textures)\n            .map_err(map_cudarc_error)?;\n\n        // Upload zone boundaries\n        let d_boundaries = dev\n            .htod_sync_copy(&self.combined_lut.zone_boundaries)",
+  "source_version": "crates/dorea-gpu/src/cuda/mod.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360458875Z",
+  "valid_from": "2026-04-08T03:28:13.360458875Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cuda/mod.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 76,
+    "end_line": 111,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

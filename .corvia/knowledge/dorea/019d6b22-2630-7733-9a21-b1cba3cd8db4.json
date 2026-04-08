@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-b1cba3cd8db4",
+  "content": "for seg in segments.drain(..) {\n        let len = seg.end - seg.start;\n        if len < min_keyframes && !merged.is_empty() {\n            merged.last_mut().unwrap().end = seg.end;\n        } else {\n            merged.push(seg);\n        }\n    }\n\n    merged\n}\npub fn compute_per_kf_zones(\n    keyframe_depths: &[Vec<f32>],\n    n_zones: usize,\n) -> Vec<Vec<f32>> {\n    keyframe_depths.iter()\n        .map(|depths| adaptive_zone_boundaries(depths, n_zones))\n        .collect()\n}",
+  "source_version": "crates/dorea-cli/src/change_detect.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360281125Z",
+  "valid_from": "2026-04-08T03:28:13.360281125Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/change_detect.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 141,
+    "end_line": 148,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

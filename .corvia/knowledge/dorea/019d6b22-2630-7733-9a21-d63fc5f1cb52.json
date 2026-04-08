@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-d63fc5f1cb52",
+  "content": "d_maxine_model(upscale_factor=2)\n    frame = np.zeros((8, 10, 3), dtype=np.uint8)\n    result = bridge.run_maxine(frame, artifact_reduce=True)\n    assert result.shape == (8, 10, 3)\n    assert result.dtype == np.uint8\n    # cleanup\n    bridge.unload_maxine()\ndef test_unload_maxine_clears_model():\n    from dorea_inference import bridge\n    bridge.load_maxine_model(upscale_factor=2)\n    bridge.unload_maxine()\n    with pytest.raises(RuntimeError, match=\"not loaded\"):\n        frame = np.zeros((4, 4, 3), dtype=np.uint8)\n        bridge.run_maxine(frame)",
+  "source_version": "python/tests/test_bridge_maxine.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360725274Z",
+  "valid_from": "2026-04-08T03:28:13.360725274Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/tests/test_bridge_maxine.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 20,
+    "end_line": 26,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

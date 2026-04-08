@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-0909-7eb1-86e3-70a42ec6d49d",
+  "content": "### Task 2: Update post-create.sh with download-first logic\n\n# Capture workspace root (where devcontainer mounts the workspace)\nWORKSPACE_ROOT=\"$(pwd)\"\n\n\n# Install Corvia binaries (prebuilt from GitHub release, or build from source)\nRELEASE_URL=\"https://github.com/chunzhe10/corvia/releases/latest/download\"\n\necho \"Downloading prebuilt binaries...\"\nif curl -fsSL -o /usr/local/bin/corvia \"$RELEASE_URL/corvia-cli-linux-amd64\" && \\\n   curl -fsSL -o /usr/local/bin/corvia-inference \"$RELEASE_URL/corvia-inference-linux-amd64\"; then\n    chmod +x /usr/local/bin/corvia /usr/local/bin/corvia-inference\n    echo \"  Binaries installed from latest release.\"\nelse\n    echo \"  Download failed — building from source...\"\n    git clone https://github.com/chunzhe10/corvia repos/corvia 2>/dev/null || true\n    cd \"$WORKSPACE_ROOT/repos/corvia\"\n    cargo install --path crates/corvia-cli\n    cargo install --path crates/corvia-inference\n    cd \"$WORKSPACE_ROOT\"\nfi\n",
+  "source_version": "decisions/2026-03-03-prebuilt-binaries.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.041807133Z",
+  "valid_from": "2026-04-08T03:32:28.041807133Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-03-03-prebuilt-binaries.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 112,
+    "end_line": 131,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

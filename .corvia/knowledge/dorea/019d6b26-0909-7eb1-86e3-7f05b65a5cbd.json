@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-0909-7eb1-86e3-7f05b65a5cbd",
+  "content": "## 9. Heptabase\n\n### Graph-to-Document Navigation UX\n\n- **Whiteboard as workspace**: Cards are placed on infinite whiteboards. Connections are\n  drawn between cards as visual edges.\n- **Click card to open in side panel**: Clicking a card on the whiteboard opens it in the\n  right side panel for reading. The whiteboard stays visible. This is the key interaction.\n- **Alt+Click**: Alternative way to open a card in the side panel.\n- **Block link navigation**: Clicking a block link inside a card opens the target card in\n  the side panel.\n- **Tab system**: Cards can also be opened as full tabs (like browser tabs) in the left sidebar.\n- **Focus Mode**: Minimizes UI distractions when editing a card on the whiteboard.\n\n\n### Panel Pattern\n\n**Whiteboard + right side panel (reader) + left sidebar (tabs/navigation)**.\n\nThree-zone layout:\n1. **Left sidebar**: Tab system with pinned tabs, tab folders/groups, card library\n2. **Center**: Whiteboard canvas with cards and connections\n3. **Right sidebar**: Context panel showing card content, PDF highlights, table of contents,\n   metadata, AI summaries, chat\n\nThe right sidebar is the \"reader\" -- you click a card on the whiteboard and read it on\nthe right while keeping the visual context. Multiple sidebar panels available: Chat, Card\nLibrary, Highlight, Info, Table of Contents, Insight (AI summary).\n",
+  "source_version": "decisions/graph-document-ux-research.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.041969464Z",
+  "valid_from": "2026-04-08T03:32:28.041969464Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/graph-document-ux-research.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 417,
+    "end_line": 442,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-cb0da52b6d91",
+  "content": "*Step 5: Commit**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ngit add crates/dorea-gpu/src/cpu.rs crates/dorea-gpu/src/lib.rs\ngit commit -m \"refactor(dorea-gpu): extract clarity from depth_aware_ambiance; add skip_clarity to finish_grade\"\n```\n\n---\n\n## Task 2: Write `clarity.cu`\n\n**Files:** Create `crates/dorea-gpu/src/cuda/kernels/clarity.cu`\n\n- [ ] **Step 1: Create the kernel file**\n\nCreate `crates/dorea-gpu/src/cuda/kernels/clarity.cu` with the following content:\n\n```c\n/**\n * clarity.cu — GPU clarity enhancement kernel.\n *\n * Clarity = high-frequency luminance detail boost, computed at proxy resolution\n * to avoid the O(N×radius) CPU box blur at 4K.\n *\n * Algorithm (3 passes):\n *   Pass A: Downsample full-res f32 RGB → proxy-res L channel (bilinear, sRGB→LAB)\n *   Pass B: 3-pass separable box blur on proxy L (naive O(N×r) — fast at proxy size)\n *   Pass C: For each full-res pixel: upsample blurred L, compute detail, apply to RGB\n *\n * Host entry point: dorea_clarity_gpu(h_rgb_in, h_rgb_out, full_w, full_h,\n *                                      proxy_w, proxy_h, blur_radius, clarity_amount)\n * Returns cudaError_t as int; 0 = success.\n */\n\n#include <cuda_runtime.h>\n#include <math.h>\n\n// ---------------------------------------------------------------------------\n// sRGB ↔ CIE LAB device helpers (D65 illuminant)\n// ---------------------------------------------------------------------------\n\n__device__ static float srgb_to_linear_d(float c) {\n    return (c <= 0.04045f)\n        ? (c / 12.92f)\n        : powf((c + 0.055f) / 1.055f, 2.4f);\n}\n\n__device__ static float linear_to_srgb_d(float c) {\n    c = fmaxf(0.0f, fminf(1.0f, c));\n    return (c <= 0.0031308f)\n        ? (12.92f * c)\n        : (1.055f * powf(c, 1.0f / 2.4f) - 0.055f);\n}\n",
+  "source_version": "plans/2026-04-02-clarity-cuda-kernel.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042170562Z",
+  "valid_from": "2026-04-08T03:32:28.042170562Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-clarity-cuda-kernel.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 246,
+    "end_line": 290,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-e06358daa7e7",
+  "content": "### Task 3: Subprocess backend — skip_depth + lifecycle methods\n\n        assert_eq!(req[\"type\"].as_str().unwrap(), \"load_raune\");\n        assert_eq!(req[\"weights\"].as_str().unwrap(), \"/path/to/weights.pth\");\n    }\n\n    #[test]\n    fn load_depth_sends_correct_json() {\n        use std::path::Path;\n        let model = Path::new(\"/models/depth_anything\");\n        let req = serde_json::json!({\n            \"type\": \"load_depth\",\n            \"model_path\": model.to_str(),\n        });\n        assert_eq!(req[\"type\"].as_str().unwrap(), \"load_depth\");\n        assert_eq!(req[\"model_path\"].as_str().unwrap(), \"/models/depth_anything\");\n    }\n```\n\n- [ ] **Step 2: Run tests to verify they fail**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ncargo test -p dorea-video -- inference_subprocess::tests::spawn_command_includes_no_depth 2>&1 | tail -10\n```\n\nExpected: compile error — `skip_depth` field does not exist on `InferenceConfig`\n\n- [ ] **Step 3: Add skip_depth to InferenceConfig**\n\nIn `inference_subprocess.rs`, in the `InferenceConfig` struct, add after `pub skip_raune: bool`:\n\n```rust\n    /// Skip Depth Anything entirely (pass `--no-depth` to the server).\n    /// Use this when spawning a Maxine-only server for Pass 1.\n    pub skip_depth: bool,\n```\n\nIn `impl Default for InferenceConfig`, add after `skip_raune: false`:\n\n```rust\n            skip_depth: false,\n```\n\nIn `impl InferenceConfig`, in `build_args()`, add after the `skip_raune` block:\n\n```rust\n        if self.skip_depth {",
+  "source_version": "plans/2026-04-04-maxine-pipeline-architecture.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042361762Z",
+  "valid_from": "2026-04-08T03:32:28.042361762Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-maxine-pipeline-architecture.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 395,
+    "end_line": 440,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

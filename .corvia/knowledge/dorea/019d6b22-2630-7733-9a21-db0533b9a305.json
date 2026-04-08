@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-db0533b9a305",
+  "content": "### Task 3: Extract grade_pixel_cpu\n\n    let pixels = vec![r_u8, g_u8, b_u8];\n    let depth_val = 0.5f32;\n    let depth = vec![depth_val];\n\n    // Full pipeline\n    let frame_out = grade_frame_cpu(&pixels, &depth, 1, 1, &cal, &params).unwrap();\n\n    // Single-pixel path (uses same u8-rounded inputs)\n    let r_f32 = r_u8 as f32 / 255.0;\n    let g_f32 = g_u8 as f32 / 255.0;\n    let b_f32 = b_u8 as f32 / 255.0;\n    let px_out = grade_pixel_cpu(r_f32, g_f32, b_f32, depth_val, &cal, &params);\n    let r_out = (px_out[0].clamp(0.0, 1.0) * 255.0).round() as u8;\n    let g_out = (px_out[1].clamp(0.0, 1.0) * 255.0).round() as u8;\n    let b_out = (px_out[2].clamp(0.0, 1.0) * 255.0).round() as u8;\n\n    assert_eq!([r_out, g_out, b_out], [frame_out[0], frame_out[1], frame_out[2]],\n        \"grade_pixel_cpu must match grade_frame_cpu to within 1/255 rounding\");\n}\n```\n\n- [ ] **Step 3: Run test — expect compile failure** (grade_pixel_cpu not yet defined)\n\n```bash\ncd repos/dorea && cargo test -p dorea-gpu grade_pixel_cpu_matches_grade_frame_cpu 2>&1 | head -10\n```\n\nExpected: `error[E0425]: cannot find function grade_pixel_cpu`.\n\n- [ ] **Step 4: Implement grade_pixel_cpu in cpu.rs**\n\nAdd this function to `crates/dorea-gpu/src/cpu.rs` (before the `grade_frame_cpu` function):\n\n```rust\n/// Grade a single pixel through the full CPU pipeline.\n///\n/// Equivalent to running `grade_frame_cpu` on a 1×1 frame with the given pixel,\n/// but without heap allocation. Used as a CPU oracle for combined LUT accuracy tests,\n/// and mirrors the logic in `grade_pixel_device` (grade_pixel.cuh).\n///\n/// Returns graded f32 RGB [0,1] (caller converts to u8 as needed).\npub fn grade_pixel_cpu(\n    r: f32, g: f32, b: f32,\n    depth: f32,\n    calibration: &Calibration,\n    params: &GradeParams,\n) -> [f32; 3] {\n    use dorea_lut::apply::apply_depth_luts;\n    use dorea_hsl::apply::apply_hsl_corrections;\n\n    // 1. Depth-stratified LUT apply",
+  "source_version": "docs/plans/2026-04-03-combined-lut-cuda-texture-plan.md",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360788100Z",
+  "valid_from": "2026-04-08T03:28:13.360788100Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "docs/plans/2026-04-03-combined-lut-cuda-texture-plan.md",
+    "language": "markdown",
+    "chunk_type": "heading_section",
+    "start_line": 403,
+    "end_line": 453,
+    "content_role": "plan",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

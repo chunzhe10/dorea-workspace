@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-d7ca2d9a62bf",
+  "content": "### New files\n### Deleted files\n\n### Modified files\n\n```\ncrates/dorea-gpu/build.rs              — remove clarity PTX compilation\ncrates/dorea-gpu/src/cuda/mod.rs       — replace 3-kernel pipeline with combined_lut call\ncrates/dorea-gpu/src/cpu.rs            — remove skip_clarity, add grade_pixel_cpu (test baseline)\ncrates/dorea-gpu/src/lib.rs            — update public API signatures\ncrates/dorea-cli/src/grade.rs          — update CudaGrader::new() call site\n```\n",
+  "source_version": "docs/decisions/2026-04-03-combined-lut-cuda-texture-design.md",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360742333Z",
+  "valid_from": "2026-04-08T03:28:13.360742333Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "docs/decisions/2026-04-03-combined-lut-cuda-texture-design.md",
+    "language": "markdown",
+    "chunk_type": "heading_section",
+    "start_line": 59,
+    "end_line": 68,
+    "content_role": "decision",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-0909-7eb1-86e3-73c849aeed49",
+  "content": "## Performance Architecture\n\n### 3-Stage pipelined frame loop\n\nReplace the serial `for frame in frames` loop with bounded-channel pipeline:\n\n```\nStage 1 (CPU thread)        Stage 2 (GPU + Python)       Stage 3 (GPU, main thread)\nffmpeg decode               batch depth inference         grade_frame_cuda\n  NVDEC 10-bit (H.265)       2-3 frames/call               persistent LUT (65^3)\n  CPU (ProRes)                8-bit proxy IPC               f32 throughout\nproxy resize (u8)             depth upscale                10-bit encode (ProRes/HEVC)\n        |                          |                          |\n        v                          v                          v\n   channel A (cap 3)          channel B (cap 3)           output file\n```\n\n**Why 3 stages:** Depth inference (~1.3s/frame) dominates. While Stage 2 processes\nframe N, Stage 1 decodes N+1 and Stage 3 encodes N-1. Grading (~50ms) is hidden\nbehind inference latency. Expected ~2x throughput improvement.\n\n\n### Persistent GPU LUT allocation\n\nThe 65^3 LUT is constant across all frames. Upload once (16.5 MB), reuse across all\nframes. Eliminates 27.6 GB of redundant cudaMemcpy for a 1671-frame clip.\n\n```rust\nstruct GpuResources {\n    d_luts: *mut f32,\n    d_zone_boundaries: *mut f32,\n    lut_size: usize,\n}\nimpl Drop for GpuResources {\n    fn drop(&mut self) { /* cudaFree */ }\n}\n```\n",
+  "source_version": "decisions/2026-04-02-10bit-pipeline-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.041833541Z",
+  "valid_from": "2026-04-08T03:32:28.041833541Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-02-10bit-pipeline-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 155,
+    "end_line": 189,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

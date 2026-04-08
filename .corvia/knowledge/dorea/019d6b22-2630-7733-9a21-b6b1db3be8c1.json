@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-b6b1db3be8c1",
+  "content": "pub enum InferenceError {\n    #[error(\"failed to spawn inference server: {0}\")]\n    SpawnFailed(#[from] io::Error),\n    #[error(\"IPC error: {0}\")]\n    Ipc(String),\n    #[error(\"inference server error: {0}\")]\n    ServerError(String),\n    #[error(\"timeout waiting for inference server\")]\n    Timeout,\n    #[error(\"PNG encode/decode error: {0}\")]\n    ImageError(String),\n}",
+  "source_version": "crates/dorea-video/src/inference_subprocess.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360326452Z",
+  "valid_from": "2026-04-08T03:28:13.360326452Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference_subprocess.rs",
+    "language": "rs",
+    "chunk_type": "enum_item",
+    "start_line": 15,
+    "end_line": 26,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

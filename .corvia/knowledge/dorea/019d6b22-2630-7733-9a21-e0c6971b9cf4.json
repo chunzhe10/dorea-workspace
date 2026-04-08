@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-e0c6971b9cf4",
+  "content": "[workspace.package]\nversion = \"0.1.0\"\nedition = \"2021\"\nlicense = \"MIT\"\n\n[workspace.dependencies]\ndorea-color = { path = \"crates/dorea-color\" }\ndorea-lut = { path = \"crates/dorea-lut\" }\ndorea-hsl = { path = \"crates/dorea-hsl\" }\ndorea-cal = { path = \"crates/dorea-cal\" }\ndorea-gpu = { path = \"crates/dorea-gpu\" }\ndorea-video = { path = \"crates/dorea-video\" }\nserde = { version = \"1\", features = [\"derive\"] }\nbincode = \"1\"\nthiserror = \"1\"\nanyhow = \"1\"\nlog = \"0.4\"\nrayon = \"1\"\ntoml = \"0.8\"",
+  "source_version": "Cargo.toml",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360867934Z",
+  "valid_from": "2026-04-08T03:28:13.360867934Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "Cargo.toml",
+    "language": "toml",
+    "chunk_type": "section",
+    "start_line": 18,
+    "end_line": 31,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

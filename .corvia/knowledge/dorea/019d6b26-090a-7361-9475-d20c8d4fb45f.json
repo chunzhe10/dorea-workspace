@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-d20c8d4fb45f",
+  "content": "t --workspace 2>&1 | tail -20\n```\nExpected: all tests pass.\n\n- [ ] **Step 5: Commit**\n\n```bash\ngit add crates/dorea-cli/src/grade.rs\ngit commit -m \"perf(dorea-cli): downscale frames to proxy res before depth inference — 160x pipe I/O reduction\"\n```\n\n---\n\n## Task 4: End-to-end smoke test on the real video\n\n- [ ] **Step 1: Run grade on the test clip with timing**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ntime cargo run --release --bin dorea -- grade \\\n  --input /workspaces/dorea-workspace/footage/raw/2025-11-01/DJI_20251101111428_0055_D.MP4 \\\n  --output /workspaces/dorea-workspace/working/DJI_20251101111428_0055_D_graded_v2.mp4 \\\n  --raune-weights /workspaces/dorea-workspace/working/sea_thru_poc/models/RAUNE-Net/pretrained/RAUNENet/test/weights_95.pth \\\n  --raune-models-dir /workspaces/dorea-workspace/working/sea_thru_poc \\\n  --depth-model /workspaces/dorea-workspace/models/depth_anything_v2_small \\\n  --verbose 2>&1\n```\n\nNote: `--release` matters here — debug build is ~5–10× slower for the Rust grading code.\n\nExpected: completes in under 30 minutes. Progress lines should appear every 100 frames:\n```\n[INFO  dorea_cli::grade] Progress: 100/1671 frames (6.0%)\n[INFO  dorea_cli::grade] Progress: 200/1671 frames (12.0%)\n...\n[INFO  dorea_cli::grade] Done. Graded 1671 frames → .../DJI_20251101111428_0055_D_graded_v2.mp4\n```\n\n- [ ] **Step 2: Verify output is a valid video**\n\n```bash\nffprobe -v quiet -print_format json -show_streams \\\n  /workspaces/dorea-workspace/working/DJI_20251101111428_0055_D_graded_v2.mp4 \\",
+  "source_version": "plans/2026-04-02-inference-perf-fix.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042231139Z",
+  "valid_from": "2026-04-08T03:32:28.042231139Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-inference-perf-fix.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 511,
+    "end_line": 540,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

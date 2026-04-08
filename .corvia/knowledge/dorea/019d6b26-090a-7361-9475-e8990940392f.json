@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-e8990940392f",
+  "content": ", input: Self::Input) -> Result<Self::Output> {\n        log::info!(\"=== {} ===\", self.name());\n        let CalibrationStageInput { feature_output, config, .. } = input;\n        let FeatureStageOutput { store, keyframe_depths, keyframes } = feature_output;\n\n        let kf_depths_store: Vec<Vec<f32>> = (0..store.len())\n            .map(|i| store.read_depth(i))\n            .collect();\n\n        let raw_kf_zones = self.zone_compute.process(kf_depths_store.clone())?;\n        let segments     = self.segment_detect.process(kf_depths_store.clone())?;\n        log::info!(\"{}: {} segments from {} keyframes\", self.name(), segments.len(), store.len());\n        for (si, seg) in segments.iter().enumerate() {\n            log::info!(\"  segment {si}: KFs {}..{}\", seg.start, seg.end);\n        }\n        let smoothed_kf_zones = self.zone_smooth.process((raw_kf_zones, segments.clone()))?;\n\n        let mut segment_calibrations: Vec<SegmentCalibration> = Vec::with_capacity(segments.len());\n\n        for seg in &segments {\n            let kf_indices: Vec<usize> = (seg.start..seg.end).collect();\n\n            // LUT build via free function — store borrowed for the duration of the loop.\n            let depth_luts = build_segment_lut(&store, &kf_indices, &kf_depths_store, config.base_lut_zones);\n\n            // HSL streaming accumulation — no Vec<pairs> allocation.\n            self.hsl_node.reset();\n            for &i in &kf_indices {\n                let (pixels_u8, target_u8) = store.pixtar_slices(i);\n                let depth = store.read_depth(i);\n                let original: Vec<[f32; 3]> = pixels_u8.chunks_exact(3)\n                    .map(|c| [c[0] as f32 / 255.0, c[1] as f32 / 255.0, c[2] as f32 / 255.0])",
+  "source_version": "plans/2026-04-05-pipeline-dag-refactor.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042435049Z",
+  "valid_from": "2026-04-08T03:32:28.042435049Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-05-pipeline-dag-refactor.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1204,
+    "end_line": 1230,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

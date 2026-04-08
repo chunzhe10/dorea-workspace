@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-e0298f00e5d8",
+  "content": "        # Server should start and respond to ping without crashing\n\n                )\n                print(\"[dorea-inference] RAUNE-Net loaded (on demand)\", file=sys.stderr, flush=True)\n                resp = OkResponse()\n\n            elif req_type == \"load_depth\":\n                from .depth_anything import DepthAnythingInference\n                depth_model = DepthAnythingInference(\n                    model_path=req.get(\"model_path\"),\n                    device=device,\n                )\n                print(\"[dorea-inference] Depth Anything V2 loaded (on demand)\", file=sys.stderr, flush=True)\n                resp = OkResponse()\n```\n\n- [ ] **Step 4: Change Maxine startup from FATAL to WARNING**\n\nFind the block in `server.py` that starts with `if args.maxine:` and loads MaxineEnhancer. It currently ends with `raise`. Change it to log a warning instead:\n\n```python\n    if args.maxine:\n        try:\n            from .maxine_enhancer import MaxineEnhancer\n            maxine_enhancer = MaxineEnhancer(upscale_factor=args.maxine_upscale_factor)\n            print(\n                f\"[dorea-inference] Maxine enhancer loaded \"\n                f\"(upscale_factor={args.maxine_upscale_factor}, \"\n                f\"artifact_reduction={not args.no_maxine_artifact_reduction})\",\n                file=sys.stderr, flush=True,\n            )\n        except Exception as e:\n            print(\n                f\"[dorea-inference] WARNING: Maxine enhancer failed to load: {e} \"\n                f\"— running without Maxine (enhance requests will return original frame). \"\n                f\"Set DOREA_MAXINE_MOCK=1 for testing without nvvfx SDK.\",\n                file=sys.stderr, flush=True,\n            )",
+  "source_version": "plans/2026-04-04-maxine-pipeline-architecture.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042359443Z",
+  "valid_from": "2026-04-08T03:32:28.042359443Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-maxine-pipeline-architecture.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 257,
+    "end_line": 292,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

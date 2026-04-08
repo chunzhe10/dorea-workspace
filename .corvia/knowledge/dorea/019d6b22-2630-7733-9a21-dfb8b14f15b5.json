@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-dfb8b14f15b5",
+  "content": "/workspaces/dorea-workspace/working/sea_thru_poc/models/RAUNE-Net/pretrained/RAUNENet/test/weights_95.pth\"\nraune_models_dir = \"/workspaces/dorea-workspace/working/sea_thru_poc\"\ndepth_model     = \"/workspaces/dorea-workspace/models/depth_anything_v2_small\"\n\n[inference]\nproxy_size = 518              # long-edge pixels for RAUNE + depth proxy decode\n# device = \"cuda\"             # uncomment to force cpu/cuda; default: auto-detect\n",
+  "source_version": "dorea.toml",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360858295Z",
+  "valid_from": "2026-04-08T03:28:13.360858295Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "dorea.toml",
+    "language": "toml",
+    "chunk_type": "section",
+    "start_line": 11,
+    "end_line": 14,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

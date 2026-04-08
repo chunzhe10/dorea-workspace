@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-e4768be066b3",
+  "content": " blending,\ntexture swaps at keyframe boundaries, and segment loading at scene cuts.\"\n```\n\n- [ ] **Step 9: Update dorea.toml with final config**\n\n```bash\ngit add dorea.toml\ngit commit -m \"chore: update dorea.toml with adaptive depth zone defaults\"\n```\n\n---\n\n## Accessor Methods (may be needed by Task 6/7)\n\nIf `DepthLuts` or `Calibration` don't already expose the needed data, add these:\n\n**In `crates/dorea-lut/src/types.rs`:**\n```rust\nimpl DepthLuts {\n    /// Flatten all zone LUTs into a contiguous f32 buffer: [n_zones][lut_size^3][3]\n    pub fn flat_data(&self) -> Vec<f32> {\n        self.luts.iter().flat_map(|lut| lut.flat_data()).collect()\n    }\n\n    pub fn zone_boundaries(&self) -> &[f32] {\n        &self.boundaries\n    }\n}\n\nimpl LutGrid {\n    pub fn flat_data(&self) -> &[f32] {\n        &self.data\n    }\n}\n```\n\n**In `crates/dorea-cal/src/lib.rs`:**\n```rust\nimpl Calibration {\n    pub fn depth_luts(&self) -> &DepthLuts { &self.depth_luts }\n    pub fn hsl_corrections(&self) -> &HslCorrections { &self.hsl }\n}\n```\n\nThese should be added as needed when the compiler reports missing methods.\n\n---\n\n\n## Self-Review Checklist\n\n1. **Spec coverage:** All spec sections mapped to tasks:\n   - Two-tier architecture → Tasks 4, 5, 6\n   - Scene segmentation → Task 2\n   - Zone smoothing → Task 3\n   - Pre-compute phase → Task 7 Step 2\n   - Pipelined double-buffer → Task 5\n   - Dual-texture blending → Task 6\n   - Config → Task 1\n\n2. **Placeholder scan:** No TBDs, TODOs, or \"implement later\". All steps have code.\n\n3. **Type consistency:** Verified:\n   - `AdaptiveLut` (combined_lut.rs) ↔ `AdaptiveGrader` (mod.rs) ↔ `grade.rs` integration\n   - `SegmentRange` (change_detect.rs) ↔ `detect_scene_segments` ↔ grade.rs usage\n   - `smoothed_kf_zones: Vec<Vec<f32>>` consistent everywhere\n   - Kernel parameter ordering matches Rust launch calls",
+  "source_version": "plans/2026-04-04-per-keyframe-adaptive-depth-zones-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042397792Z",
+  "valid_from": "2026-04-08T03:32:28.042397792Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-per-keyframe-adaptive-depth-zones-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1758,
+    "end_line": 1811,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-0909-7eb1-86e3-79f4291bc4fa",
+  "content": "## Temp File\n## Performance\n\n## Testing\n\n- `DOREA_MAXINE_MOCK=1`: identity passthrough — full IPC and temp-file path exercised without SDK\n- Unit tests (Rust): `spawn_command_includes_maxine_flags`, `spawn_command_omits_maxine_when_disabled`,\n  `enhance_parses_valid_response`, `enhance_rejects_dimension_mismatch`\n- E2E smoke: `DOREA_MAXINE_MOCK=1 dorea grade --input test.mp4 --maxine` completes,\n  temp file created and deleted, output produced\n- Regression: `dorea grade --input test.mp4` produces byte-identical output (no `--maxine`)\n\n---\n\n\n## CLI\n\n```bash\ndorea grade --input footage.mp4 --maxine\ndorea grade --input footage.mp4 --maxine --maxine-upscale-factor 2\ndorea grade --input footage.mp4 --maxine --no-maxine-artifact-reduction\ndorea grade --input footage.mp4   # Maxine disabled, zero overhead\n```\n\n---\n",
+  "source_version": "decisions/2026-04-04-maxine-preprocessor-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.041893619Z",
+  "valid_from": "2026-04-08T03:32:28.041893619Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-04-maxine-preprocessor-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 225,
+    "end_line": 246,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

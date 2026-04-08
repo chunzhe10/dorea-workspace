@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-0909-7eb1-86e3-7c4e14098a38",
+  "content": "# D71: Prebuilt Binaries via GitHub Releases\n\n## Decision\n\nGitHub releases provide prebuilt binaries (`corvia-cli-linux-amd64`,\n`corvia-inference-linux-amd64`) for fast container startup. `post-create.sh` downloads\nbinaries first (~5 seconds) and falls back to `cargo install` from source (~5 minutes)\nif the download fails or no release exists.\n\n\n## Context\n\n`post-create.sh` compiled corvia-cli and corvia-inference from source (~600 crates, ~5\nminutes) on every devcontainer creation. This ran every time the container was rebuilt,\ncreating significant friction during development. Prebuilt binaries eliminate this\ncompile step for the common case while preserving the source-build path as a fallback.\n",
+  "source_version": "decisions/d71-prebuilt-binaries.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.041914302Z",
+  "valid_from": "2026-04-08T03:32:28.041914302Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/d71-prebuilt-binaries.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 7,
+    "end_line": 20,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

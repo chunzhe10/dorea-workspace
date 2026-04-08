@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-cc2676f99c6f",
+  "content": "r, g, b);\n            let (ro, go, bo) = lab_to_srgb(l, a * warmth_factor, b_ab * warmth_factor);\n            rgb_f32[i * 3]     = ro.clamp(0.0, 1.0);\n            rgb_f32[i * 3 + 1] = go.clamp(0.0, 1.0);\n            rgb_f32[i * 3 + 2] = bo.clamp(0.0, 1.0);\n        }\n    }\n\n    // 3. Blend with original using strength\n    if params.strength < 1.0 - 1e-4 {\n        for i in 0..rgb_f32.len() {\n            let orig = orig_pixels[i] as f32 / 255.0;\n            rgb_f32[i] = orig * (1.0 - params.strength) + rgb_f32[i] * params.strength;\n        }\n    }\n\n    // 4. f32 → u8\n    rgb_f32.iter().map(|&v| (v.clamp(0.0, 1.0) * 255.0).round() as u8).collect()\n}\n```\n\n- [ ] **Step 4: Run test to verify it passes**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ncargo test -p dorea-gpu finish_grade_roundtrip 2>&1 | tail -20\n```\n\nExpected: `test tests::finish_grade_roundtrip ... ok`\n\n- [ ] **Step 5: Refactor `grade_frame_cpu` to use `finish_grade`**\n\nReplace the body of `grade_frame_cpu` in `cpu.rs`. The current code (lines 201–272) does LUT, HSL, ambiance, warmth, blend, u8. After the refactor it does LUT+HSL then calls `finish_grade`:\n\n```rust\n/// Full CPU grading pipeline: LUT apply → HSL correct → depth_aware_ambiance → user params.\npub fn grade_frame_cpu(\n    pixels: &[u8],\n    depth: &[f32],\n    width: usize,\n    height: usize,\n    calibration: &Calibration,\n    params: &GradeParams,\n) -> Result<Vec<u8>, String> {\n    // Convert u8 → f32\n    let mut rgb_f32: Vec<f32> = pixels.iter().map(|&p| p as f32 / 255.0).collect();\n\n    // 1. Apply depth-stratified LUT\n    let lut_result = apply_depth_luts(\n        &rgb_f32\n            .chunks_exact(3)",
+  "source_version": "plans/2026-04-02-depth-aware-ambiance-cpu-move.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042180404Z",
+  "valid_from": "2026-04-08T03:32:28.042180404Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-depth-aware-ambiance-cpu-move.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 116,
+    "end_line": 161,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

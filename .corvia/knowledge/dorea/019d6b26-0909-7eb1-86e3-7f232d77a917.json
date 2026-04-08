@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-0909-7eb1-86e3-7f232d77a917",
+  "content": "### Large Graph Handling\n### What Works Well\n\n### Common Complaints\n\n- Performance slowdowns on large boards (mentioned in multiple reviews)\n- Mobile experience is limited\n- Collaboration features still maturing\n- UI has \"rough edges\" according to reviewers\n- Pricing can be a barrier\n\n\n### Innovative Patterns to Steal\n\n- **Click card on canvas, read in side panel**: The cleanest graph-to-content pattern found\n- **Card on multiple whiteboards**: Same content in different visual contexts\n- **AI Insight panel**: Auto-summarizes long content into digestible chunks\n- **Right sidebar as multi-purpose reader**: Switches between content, metadata, highlights, TOC\n- **Tag tables**: Automatic aggregation view that gathers tagged cards across all whiteboards\n- **Focus mode**: Strips UI when editing a card on the whiteboard\n\n---\n",
+  "source_version": "decisions/graph-document-ux-research.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.041970728Z",
+  "valid_from": "2026-04-08T03:32:28.041970728Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/graph-document-ux-research.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 462,
+    "end_line": 480,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-b5af2d050fc2",
+  "content": " format!(\"partial frame: got {pos}/{} bytes\", buf.len()),\n                ));\n            }\n            Ok(n) => pos += n,\n            Err(e) if e.kind() == io::ErrorKind::Interrupted => {}\n            Err(e) => return Err(e),\n        }\n    }\n    Ok(pos)\n}\npub fn decode_frames_scaled(\n    input: &Path,\n    info: &VideoInfo,\n    width: usize,\n    height: usize,\n) -> Result<impl Iterator<Item = Result<Frame, FfmpegError>>, FfmpegError> {\n    let child = if width == info.width && height == info.height {\n        spawn_decoder(input, info)?\n    } else {\n        spawn_decoder_at(input, width, height)?\n    };\n    Ok(FrameReader::new(child, width, height))\n}",
+  "source_version": "crates/dorea-video/src/ffmpeg.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360315392Z",
+  "valid_from": "2026-04-08T03:28:13.360315392Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/ffmpeg.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 248,
+    "end_line": 260,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

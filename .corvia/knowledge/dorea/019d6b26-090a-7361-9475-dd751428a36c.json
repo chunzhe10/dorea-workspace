@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-dd751428a36c",
+  "content": "        # 2. Super-resolution → upscaled intermediate\n        # 3. Download and downsample back to original resolution\n\n        # BGRA → RGB\n        downscaled_bgr = cv2.cvtColor(downscaled_bgra, cv2.COLOR_BGRA2BGR)\n        return cv2.cvtColor(downscaled_bgr, cv2.COLOR_BGR2RGB)\n\n    def stats(self) -> str:\n        \"\"\"Return summary string for shutdown logging.\"\"\"\n        if self._total_count == 0:\n            return \"Maxine: no frames processed\"\n        return (\n            f\"Maxine: enhanced {self._total_count} frames\"\n            + (f\", {self._passthrough_count} passthrough failures\"\n               if self._passthrough_count > 0 else \"\")\n        )\n```\n\n- [ ] **Step 2: Verify mock mode works (no nvvfx SDK needed)**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\nDOREA_MAXINE_MOCK=1 python -c \"\nimport numpy as np\nfrom dorea_inference.maxine_enhancer import MaxineEnhancer\nm = MaxineEnhancer(upscale_factor=2)\nimg = np.zeros((4, 6, 3), dtype=np.uint8)\nout = m.enhance(img, 6, 4)\nassert out.shape == (4, 6, 3), f'shape mismatch: {out.shape}'\nprint('mock mode OK:', m.stats())\n\"\n```\n\nExpected: `mock mode OK: Maxine: enhanced 1 frames`\n\n- [ ] **Step 3: Commit**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ngit add python/dorea_inference/maxine_enhancer.py\ngit commit -m \"feat(inference): add MaxineEnhancer class with nvvfx wrapper and mock mode\"\n```\n\n---\n",
+  "source_version": "plans/2026-04-04-maxine-enhancement-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042335469Z",
+  "valid_from": "2026-04-08T03:32:28.042335469Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-maxine-enhancement-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 323,
+    "end_line": 364,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

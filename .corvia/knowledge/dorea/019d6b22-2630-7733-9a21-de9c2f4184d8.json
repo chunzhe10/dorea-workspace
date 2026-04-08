@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-de9c2f4184d8",
+  "content": "rkspace/repos/dorea\ncargo check -p dorea-gpu 2>&1 | tail -20\n```\n\nExpected: no errors.\n\n- [ ] **Step 5: Commit**\n\n```bash\ngit add crates/dorea-gpu/src/cuda/mod.rs\ngit commit -m \"feat(dorea-gpu): add res_bufs/cal_bufs RefCell fields to CudaGrader\"\n```\n\n---\n\n### Task 4: Refactor `grade_frame_cuda` to use cached buffers\n\n**Files:**\n- Modify: `crates/dorea-gpu/src/cuda/mod.rs` — replace `grade_frame_cuda` body\n\nThis is the core change. The method signature is unchanged. The entire body is replaced with the version below.\n\n- [ ] **Step 1: Replace the entire `grade_frame_cuda` body**\n\n  The current body spans lines ~103–391. Replace everything between the opening `{` and closing `}` of the method with:\n\n```rust\n    pub fn grade_frame_cuda(\n        &self,\n        pixels: &[u8],\n        depth: &[f32],\n        width: usize,\n        height: usize,\n        calibration: &Calibration,\n        params: &GradeParams,\n    ) -> Result<Vec<f32>, GpuError> {\n        let n = width * height;\n        let dev = &self.device;\n\n        // Input length guards — must be checked BEFORE any borrow_mut, because\n        // htod_sync_copy_into asserts src.len() == dst.len() and panics (not Err)\n        // if they differ while a RefMut is live, permanently poisoning the RefCell.\n        if pixels.len() != n * 3 {\n            return Err(GpuError::InvalidInput(format!(\n                \"pixels length {} != width*height*3 = {}\", pixels.len(), n * 3\n            )));\n        }\n        if depth.len() != n {\n            return Err(GpuError::InvalidInput(format!(\n                \"depth length {} != width*height = {}\", depth.len(), n\n            )));\n        }\n\n        let depth_luts = &calibration.depth_luts;\n        let n_zones = depth_luts.n_zones();\n        if n_zones == 0 {\n            return Err(GpuError::InvalidInput(\n                \"calibration has n_zones=0; GPU LUT stage requires at least 1 zone\".into()\n            ));\n        }\n",
+  "source_version": "docs/plans/2026-04-03-cuda-grader-buffer-pre-allocation.md",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360841238Z",
+  "valid_from": "2026-04-08T03:28:13.360841238Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "docs/plans/2026-04-03-cuda-grader-buffer-pre-allocation.md",
+    "language": "markdown",
+    "chunk_type": "heading_section",
+    "start_line": 400,
+    "end_line": 445,
+    "content_role": "plan",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-d24737fa6938",
+  "content": "_effect.run(tensor)\n\n        # DLPack capsule → torch tensor, clone before next call invalidates it\n        upscaled = torch.from_dlpack(output.image).clone()\n        _log(\n            f\"DEBUG: input shape={tensor.shape} upscaled shape={upscaled.shape} \"\n            f\"dtype={upscaled.dtype} min={float(upscaled.min()):.4f} max={float(upscaled.max()):.4f} \"\n            f\"contiguous={upscaled.is_contiguous()} strides={upscaled.stride()}\"\n        )\n\n        # Convert to uint8 RGB (H', W', 3)\n        upscaled_hwc = upscaled.permute(1, 2, 0).cpu().numpy()\n        upscaled_rgb = (np.clip(upscaled_hwc, 0.0, 1.0) * 255).astype(np.uint8)\n\n        # DEBUG: save upscaled before resize\n        if self._total_count == 0:\n            from PIL import Image as _DebugImg\n            _DebugImg.fromarray(upscaled_rgb).save(\"/tmp/dorea_debug_py/maxine_upscaled_0.png\")\n\n        # Downsample back to original resolution\n        result = cv2.resize(\n            upscaled_rgb, (width, height), interpolation=cv2.INTER_AREA,\n        )\n\n        self._total_count += 1\n        return result\n\n    def stats(self) -> str:\n        \"\"\"Return summary string for shutdown logging.\"\"\"\n        if self._total_count == 0:\n            return \"Maxine: no frames processed\"\n        return f\"Maxine: enhanced {self._total_count} frames\"",
+  "source_version": "python/dorea_inference/maxine_enhancer.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360678927Z",
+  "valid_from": "2026-04-08T03:28:13.360678927Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/maxine_enhancer.py",
+    "language": "py",
+    "chunk_type": "class_definition",
+    "start_line": 108,
+    "end_line": 133,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

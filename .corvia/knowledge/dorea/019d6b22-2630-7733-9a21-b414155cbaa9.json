@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-b414155cbaa9",
+  "content": "save(&self, path: &Path) -> Result<(), CalError> {\n        let bytes = bincode::serialize(self).map_err(|e| CalError::Serialization(e.to_string()))?;\n        let mut file = std::fs::File::create(path)?;\n        file.write_all(&bytes)?;\n        Ok(())\n    }\npub fn load(path: &Path) -> Result<Self, CalError> {\n        let mut file = std::fs::File::open(path)?;\n        let mut bytes = Vec::new();\n        file.read_to_end(&mut bytes)?;\n\n        // L2: check version byte before full deserialization to give a clear error.\n        let version_byte = bytes\n            .first()\n            .copied()\n            .ok_or_else(|| CalError::Serialization(\"empty file\".into()))?;\n        if version_byte != FORMAT_VERSION {\n            return Err(CalError::UnsupportedVersion(version_byte));\n        }\n\n        let cal: Calibration =\n            bincode::deserialize(&bytes).map_err(|e| CalError::Serialization(e.to_string()))?;\n        Ok(cal)\n    }",
+  "source_version": "crates/dorea-cal/src/format.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360302014Z",
+  "valid_from": "2026-04-08T03:28:13.360302014Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cal/src/format.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 53,
+    "end_line": 70,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

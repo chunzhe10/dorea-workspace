@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-d398ec4acd5b",
+  "content": "def unload_models() -> None:\n    \"\"\"Release model references so they can be garbage-collected.\"\"\"\n    global _depth_model, _raune_model, _maxine_model\n    _depth_model = None\n    _raune_model = None\n    _maxine_model = None\ndef vram_free_bytes() -> int:\n    \"\"\"Return free VRAM in bytes after flushing PyTorch's cache.\n\n    Uses torch.cuda.mem_get_info() which accounts for the caching allocator.\n    \"\"\"\n    import torch\n    if not torch.cuda.is_available():\n        return 0\n    torch.cuda.empty_cache()\n    free, _total = torch.cuda.mem_get_info()\n    return free",
+  "source_version": "python/dorea_inference/bridge.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360695087Z",
+  "valid_from": "2026-04-08T03:28:13.360695087Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/bridge.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 153,
+    "end_line": 163,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

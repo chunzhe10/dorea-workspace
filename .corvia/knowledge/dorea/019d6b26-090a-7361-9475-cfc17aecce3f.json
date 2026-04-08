@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-cfc17aecce3f",
+  "content": "## Task 2: HF Processor Bypass + GPU-Required Runtime\n\n        )\n\n        path = Path(model_path) if model_path else _DEFAULT_DEPTH_MODEL\n        model_id_or_path = str(path)\n        has_local = path.is_dir() and any(\n            (path / f).exists() for f in (\"config.json\", \"pytorch_model.bin\", \"model.safetensors\")\n        )\n        if not has_local:\n            import sys\n            print(\n                f\"[dorea_inference] WARNING: local depth model not found at {path}; \"\n                \"falling back to HuggingFace hub download (requires internet access). \"\n                \"Pass --depth-model to suppress this.\",\n                file=sys.stderr,\n            )\n            model_id_or_path = \"depth-anything/Depth-Anything-V2-Small-hf\"\n\n        self.model = AutoModelForDepthEstimation.from_pretrained(model_id_or_path)\n        self.model = self.model.to(self.device)\n        self.model.eval()\n```\n\nNote: `AutoImageProcessor` import and `self.processor` are removed entirely.\n\n- [ ] **Step 2: Replace the `infer` method with direct tensor construction**\n\nReplace the `infer` method (lines 77-106) with:\n\n```python",
+  "source_version": "plans/2026-04-02-grading-pipeline-perf-v3.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042211395Z",
+  "valid_from": "2026-04-08T03:32:28.042211395Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-grading-pipeline-perf-v3.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 214,
+    "end_line": 242,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

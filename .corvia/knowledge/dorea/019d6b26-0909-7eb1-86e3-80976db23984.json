@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-0909-7eb1-86e3-80976db23984",
+  "content": "## Problems\n\n### 1. `uv` install fails during Docker build\n\n**Symptom:** `post-create.sh` fails with \"Neither uv nor pip available\" despite\nthe Dockerfile installing `uv`.\n\n**Root cause:** The Dockerfile used `curl https://astral.sh/uv/install.sh | sh`\nwhich is unreliable in Docker builds (connection resets, rate limits). The entire\n`RUN` block was chained with `|| echo \"WARNING: ...\"` which silently swallowed\nthe failure.\n\n**Fix:** Multi-stage `COPY --from=ghcr.io/astral-sh/uv:latest` — copies the `uv`\nbinary directly from the official image. No network call during build, no failure\nmodes.\n\n```dockerfile\nFROM ghcr.io/astral-sh/uv:latest AS uv\nFROM rust:1.88-trixie\nCOPY --from=uv /uv /usr/local/bin/uv\nCOPY --from=uv /uvx /usr/local/bin/uvx\n```\n\n**Additional safeguard:** `lib.sh` adds `/root/.local/bin` to PATH so `uv` is\nfound even if it ends up in the default install location instead of `/usr/local/bin`.\n\n\n### 2. `corvia-dev` not installed (cascade from #1)\n\n**Symptom:** `post-create.sh` → `ensure_tooling` → `install_python_editable`\nfails because `uv` is missing. Then `post-start.sh` also fails trying to run\n`corvia-dev up`.\n\n**Root cause:** Same as #1. `install_python_editable` had a pip fallback that\nalso failed because `python3-pip` wasn't in the Dockerfile's apt packages.\n\n**Fix:** Removed pip fallback entirely — `uv`-only. With the multi-stage uv\ninstall, this path is reliable.\n",
+  "source_version": "learnings/2026-03-10-devcontainer-setup-fixes.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.041983718Z",
+  "valid_from": "2026-04-08T03:32:28.041983718Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "learnings/2026-03-10-devcontainer-setup-fixes.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 7,
+    "end_line": 42,
+    "content_role": "learning",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

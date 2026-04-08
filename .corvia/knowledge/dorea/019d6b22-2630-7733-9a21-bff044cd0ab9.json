@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-bff044cd0ab9",
+  "content": "ng the frame genuinely cannot fit).\n    pub fn report_oom(&mut self) -> bool {\n        let was_min = self.batch_size <= self.min_batch;\n        self.successes = 0;\n        self.batch_size = (self.batch_size / 2).max(self.min_batch);\n        was_min\n    }\n}\npub fn new(vram_free: usize, per_frame_bytes: usize, safety_margin: f64) -> Self {\n        let usable = (vram_free as f64 * (1.0 - safety_margin)) as usize;\n        let max_batch = if per_frame_bytes > 0 {\n            (usable / per_frame_bytes).max(1)\n        } else {\n            1\n        };\n        Self {\n            batch_size: max_batch,\n            max_batch,\n            min_batch: 1,\n            successes: 0,\n            grow_threshold: 10,\n        }\n    }",
+  "source_version": "crates/dorea-gpu/src/batcher.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360438705Z",
+  "valid_from": "2026-04-08T03:28:13.360438705Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/batcher.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 21,
+    "end_line": 35,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

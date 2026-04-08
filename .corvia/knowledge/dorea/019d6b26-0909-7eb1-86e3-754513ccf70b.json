@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-0909-7eb1-86e3-754513ccf70b",
+  "content": "depth as a smooth continuous parameter —\nsub-1% depth errors are invisible in the 8-bit RGB output. Validate with ΔE comparison\non test footage during implementation.\n\n**Expected savings:** 4-12x reduction in depth inference calls depending on content.\n\n### Optimization 2: Fused LAB Pass (Ambiance + Warmth)\n\nMerge the per-pixel work from `depth_aware_ambiance` and `finish_grade`'s warmth scaling\ninto a single RGB-to-LAB-to-RGB roundtrip, parallelized with rayon.\n\n**Current flow (3 LAB roundtrips for ambiance+warmth):**\n```\n1. depth_aware_ambiance:  RGB → LAB → [shadow, s-curve, compress, warmth, vibrance] → LAB → RGB\n2. apply_cpu_clarity:     RGB → LAB (L only) → blur → detail → LAB → RGB   [separate pass, unchanged]\n3. warmth in finish_grade: RGB → LAB → scale a*/b* → LAB → RGB\n```\n\n**New flow (1 LAB roundtrip for ambiance+warmth, rayon-parallelized):**\n```\n1. fused_ambiance_warmth: RGB → LAB → [shadow, s-curve, compress, warmth push, vibrance, user warmth scale] → LAB → RGB\n   (parallelized over pixel chunks via rayon par_chunks_exact_mut)\n2. apply_cpu_clarity:     RGB → LAB (L only) → blur → detail → LAB → RGB   [unchanged]\n```\n\n**What changes:**\n- New function `fused_ambiance_warmth(rgb, depth, width, height, contrast_scale, warmth_factor)`\n  in `cpu.rs` that does all per-pixel LAB work in one pass using `par_chunks_exact_mut`\n- `finish_grade` calls `fused_ambiance_warmth` instead of `depth_aware_ambiance` + separate warmth loop\n- The clarity pass remains separate because (a) it requires a full-image box blur between\n  per-pixel operations, and (b) the CUDA path already handles clarity via `clarity.cu`\n\n**Color science note:** Fusing the LAB operations changes the order of operations compared\nto the three-pass pipeline. Because sRGB↔LAB conversions are nonlinear, the output will\nNOT be bit-exact with the old pipeline. This is an accepted tradeoff — the old output was\nfrom a POC, not a golden reference. Validate that ΔE < 2 on test footage (imperceptible\nto human vision). Document the change.\n\n**Savings:** Eliminates ~1.45 billion redundant FLOPs per 4K frame (~0.25s on single core).\nWith rayon parallelism across available CPU cores, expect 4-6x additional speedup on the\nfused pass itself.\n",
+  "source_version": "decisions/2026-04-02-grading-pipeline-perf-v3.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.041846600Z",
+  "valid_from": "2026-04-08T03:32:28.041846600Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-02-grading-pipeline-perf-v3.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 83,
+    "end_line": 118,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

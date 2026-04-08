@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-df8ec88a0958",
+  "content": "## Disk space\n## VRAM budget\n\n## Known limitations\n\n- **8-bit bottleneck**: Maxine accepts only uint8 input. Full pipeline operates in 8-bit\n  color depth when Maxine is enabled (vs 10-bit without Maxine).\n- **H.265 source**: Artifact reduction is trained for H.264. Effectiveness on H.265/HEVC\n  footage is unvalidated, but expected to reduce common blocking/ringing artifacts.\n- **Supported scale factors**: 2, 3, 4 only (`--maxine-upscale-factor`).\n  Factors 3 and 4 require more VRAM — validate with `nvidia-smi` on first use.\n\n\n## CI / Testing without the SDK\n\nSet `DOREA_MAXINE_MOCK=1` to enable passthrough mode (identity transform — no nvvfx needed):\n\n```bash\nDOREA_MAXINE_MOCK=1 dorea grade --input test.mp4 --maxine\n```\n\nAll IPC paths, the temp file creation/deletion lifecycle, and keyframe detection on\nMaxine-proxied frames are exercised even in mock mode.\n```\n\n- [ ] **Step 2: Commit**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ngit add docs/guides/maxine-setup.md\ngit commit -m \"docs: add Maxine VFX SDK setup guide (pre-processing role, temp file)\"\n```\n\n---\n",
+  "source_version": "plans/2026-04-04-maxine-enhancement-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042353102Z",
+  "valid_from": "2026-04-08T03:32:28.042353102Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-maxine-enhancement-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1523,
+    "end_line": 1553,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-dfb8ce2130df",
+  "content": "# Maxine Pipeline Architecture Implementation Plan\n\n## File Map\n\n| File | Change |\n|------|--------|\n| `python/dorea_inference/bridge.py` | Add `_maxine_model`, `load_maxine_model`, `unload_maxine`, `run_maxine_cpu`; update `unload_models` |\n| `python/dorea_inference/server.py` | Add `unload_maxine`, `load_raune`, `load_depth` IPC handlers; change Maxine startup from FATAL to WARNING |\n| `python/tests/test_lifecycle_server.py` | New: tests for lifecycle IPC commands |\n| `crates/dorea-video/src/inference_subprocess.rs` | Add `skip_depth: bool` to `InferenceConfig`; add `unload_maxine`, `load_raune`, `load_depth` methods; update `build_args` |\n| `crates/dorea-video/src/inference/pyo3_backend.rs` | Add `maxine`, `maxine_upscale_factor`, `skip_depth` to `InferenceConfig`; add `device` field to `InferenceServer`; add `enhance`, `unload_maxine`, `load_raune`, `load_depth` methods |\n| `crates/dorea-cli/src/grade.rs` | Remove `--calibration` Path B; remove `--maxine` (replace with `--no-maxine`); restructure to single-server lifecycle |\n\n---\n",
+  "source_version": "plans/2026-04-04-maxine-pipeline-architecture.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042354983Z",
+  "valid_from": "2026-04-08T03:32:28.042354983Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-maxine-pipeline-architecture.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 13,
+    "end_line": 25,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

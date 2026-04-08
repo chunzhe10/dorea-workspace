@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-d84a4fc97c1e",
+  "content": "## Problem\n## Decision\n\n## Rejected Alternatives\n\n**Two-slot resolution cache** — Keeps buffers for the two most-recent resolutions\nsimultaneously. Eliminates realloc even when alternating between 1080p and 4K.\nRejected: holds ~440 MB of VRAM for a case the user confirmed is rare. Not worth\nthe complexity.\n\n**Max-resolution static pre-allocation** — Allocate once for the largest known\nresolution. Rejected: requires knowing max resolution at construction time and\npermanently wastes ~250 MB when processing 1080p-only sessions.\n\n\n## Architecture\n",
+  "source_version": "docs/decisions/2026-04-03-cuda-grader-buffer-pre-allocation.md",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360748166Z",
+  "valid_from": "2026-04-08T03:28:13.360748166Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "docs/decisions/2026-04-03-cuda-grader-buffer-pre-allocation.md",
+    "language": "markdown",
+    "chunk_type": "heading_section",
+    "start_line": 37,
+    "end_line": 49,
+    "content_role": "decision",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

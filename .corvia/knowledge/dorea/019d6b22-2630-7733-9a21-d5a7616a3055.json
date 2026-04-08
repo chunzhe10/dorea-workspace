@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-d5a7616a3055",
+  "content": "     class _Out:\n                def __init__(self, t): self.predicted_depth = t\n            def forward(self, pixel_values=None):\n                N, _, H, W = pixel_values.shape\n                return self._Out(pixel_values[:, 0, :, :])  # (N, H, W) dummy\nclass _Out:\n                def __init__(self, t): self.predicted_depth = t",
+  "source_version": "python/tests/test_infer_batch.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360719399Z",
+  "valid_from": "2026-04-08T03:28:13.360719399Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/tests/test_infer_batch.py",
+    "language": "py",
+    "chunk_type": "class_definition",
+    "start_line": 64,
+    "end_line": 65,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

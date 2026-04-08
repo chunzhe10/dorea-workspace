@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-c2c8b6e17c86",
+  "content": "t1 = grader.grade_frame_cuda(&pixels, &depth, w, h).expect(\"first call failed\");\n        let out2 = grader.grade_frame_cuda(&pixels, &depth, w, h).expect(\"second call failed\");\n        assert_eq!(out1, out2, \"grade_frame_cuda must be deterministic\");\n    }\nfn resolution_switch_round_trip() {\n        let cal = make_calibration(5);\n        let params = crate::GradeParams::default();\n        let grader = match CudaGrader::new(&cal, &params) {\n            Ok(g) => g,\n            Err(e) => { eprintln!(\"SKIP: {e}\"); return; }\n        };\n\n        let resolutions: &[(usize, usize)] = &[(1280, 720), (1920, 1080), (1280, 720)];\n\n        for &(w, h) in resolutions {\n            let (pixels, depth) = make_frame(w, h);\n            let out = grader.grade_frame_cuda(&pixels, &depth, w, h)\n                .unwrap_or_else(|e| panic!(\"grade_frame_cuda failed at {w}×{h}: {e}\"));\n            let expected_len = w * h * 3;\n            assert_eq!(out.len(), expected_len,\n                \"output length for {w}×{h} should be {expected_len}, got {}\", out.len());\n        }\n    }",
+  "source_version": "crates/dorea-gpu/src/cuda/mod.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360475433Z",
+  "valid_from": "2026-04-08T03:28:13.360475433Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cuda/mod.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 253,
+    "end_line": 271,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

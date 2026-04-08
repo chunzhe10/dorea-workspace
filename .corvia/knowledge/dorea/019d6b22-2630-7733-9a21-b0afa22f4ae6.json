@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-b0afa22f4ae6",
+  "content": "pub struct DoreaConfig {\n    #[serde(default)]\n    pub models: ModelsConfig,\n    #[serde(default)]\n    pub inference: InferDefaults,\n    #[serde(default)]\n    pub grade: GradeDefaults,\n    #[serde(default)]\n    pub maxine: MaxineDefaults,\n    #[serde(default)]\n    pub preview: PreviewDefaults,\n}",
+  "source_version": "crates/dorea-cli/src/config.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360270069Z",
+  "valid_from": "2026-04-08T03:28:13.360270069Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/config.rs",
+    "language": "rs",
+    "chunk_type": "struct_item",
+    "start_line": 16,
+    "end_line": 27,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

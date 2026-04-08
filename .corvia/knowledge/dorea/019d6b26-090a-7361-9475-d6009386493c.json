@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-d6009386493c",
+  "content": "# ---------------------------------------------------------------------------\n# GPU inference (returns TensorGuard with on-device tensor)\n\n# ---------------------------------------------------------------------------\n\ndef run_depth_gpu(frame_rgb: np.ndarray, max_size: int = 518) -> TensorGuard:\n    \"\"\"Run depth inference, return TensorGuard holding the on-device result.\"\"\"\n    if _depth_model is None:\n        raise RuntimeError(\"Depth model not loaded — call load_depth_model() first\")\n    tensor = _depth_model.infer_gpu(frame_rgb, max_size=max_size)\n    return TensorGuard(tensor)\n\n\ndef run_raune_gpu(frame_rgb: np.ndarray, max_size: int = 1024) -> TensorGuard:\n    \"\"\"Run RAUNE-Net inference, return TensorGuard holding the on-device result.\"\"\"\n    if _raune_model is None:\n        raise RuntimeError(\"RAUNE-Net model not loaded — call load_raune_model() first\")\n    tensor = _raune_model.infer_gpu(frame_rgb, max_size=max_size)\n    return TensorGuard(tensor)\n\n\n\n# ---------------------------------------------------------------------------",
+  "source_version": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042267458Z",
+  "valid_from": "2026-04-08T03:32:28.042267458Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 126,
+    "end_line": 144,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

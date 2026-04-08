@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-d4c5bc62bade",
+  "content": "id == \"frame_001\"\n    assert result.type == \"enhance_result\"\n    # Decode the b64 to verify pixel data\n    raw = base64.b64decode(result.image_b64)\n    assert len(raw) == 10 * 20 * 3\n    assert raw[0] == 255\n    assert raw[1] == 128\n    assert raw[2] == 64\ndef test_enhance_result_to_dict_fields():\n    \"\"\"to_dict must include all required fields.\"\"\"\n    img = np.zeros((4, 6, 3), dtype=np.uint8)\n    d = EnhanceResult.from_array(\"x\", img).to_dict()\n    assert d[\"type\"] == \"enhance_result\"\n    assert d[\"id\"] == \"x\"\n    assert d[\"width\"] == 6\n    assert d[\"height\"] == 4\n    assert \"image_b64\" in d",
+  "source_version": "python/tests/test_maxine_protocol.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360709754Z",
+  "valid_from": "2026-04-08T03:28:13.360709754Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/tests/test_maxine_protocol.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 43,
+    "end_line": 51,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

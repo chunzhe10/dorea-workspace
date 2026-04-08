@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-0909-7eb1-86e3-7a800fd7b133",
+  "content": "### What is rebuilt at segment boundaries\n\n## Zone Boundary Smoothing\n\nWeighted moving average over 3 consecutive keyframes:\n\n```\nsmoothed[n] = 0.6 × raw[n] + 0.2 × raw[n-1] + 0.2 × raw[n+1]\n```\n\n- Center keyframe gets dominant weight (0.6) — stays adaptive to local scene\n- Adjacent keyframes dampen single-frame outliers (e.g., fish darting in front of camera)\n- At segment boundaries: don't smooth across segments. Use only same-segment neighbors with re-normalized weights\n- First/last keyframe in segment: use available neighbors only, re-normalize\n\nAt 120fps with ~6–12 frame keyframe intervals, 3 keyframes spans ~150–300ms — enough to filter outliers without lagging real scene evolution.\n\n\n## Pipelined Combined Texture Build\n\nCombined GPU textures (8 zones × 97³ × float4 = ~91MB each) cannot all be pre-stored in VRAM. Instead, use double-buffered pipelining:\n",
+  "source_version": "decisions/2026-04-04-per-keyframe-adaptive-depth-zones.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.041898879Z",
+  "valid_from": "2026-04-08T03:32:28.041898879Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-04-per-keyframe-adaptive-depth-zones.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 105,
+    "end_line": 123,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-0909-7eb1-86e3-715b790ab8fc",
+  "content": "### UX Model\n\n### Layout\n\n```\n┌──────────────────────────────────────────────────────────────────┐\n│ corvia                    [search ________] [repo ▾] [role ▾]   │\n├──────────────────────────────────────────────────────────────────┤\n│                           │                                      │\n│   Interactive Graph       │   Document Reader (side panel)       │\n│                           │                                      │\n│      ●──────●             │   ┌─ Adapter Plugin System ────────┐│\n│     /│\\    /              │   │ repo:corvia · design · Mar 3   ││\n│    ● ● ●  ●              │   │                                 ││",
+  "source_version": "decisions/2026-03-13-docs-workflow-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.041813475Z",
+  "valid_from": "2026-04-08T03:32:28.041813475Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-03-13-docs-workflow-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 91,
+    "end_line": 102,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

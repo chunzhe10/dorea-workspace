@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-e86df5f326ea",
+  "content": " = 0.0;\n            self.active[qi] = false;\n        }\n    }\n\n    /// Return the weighted-average HslCorrections from accumulated state.\n    /// Call after all keyframes in a segment have been fed via `process`.\n    pub fn finish(&self) -> HslCorrections {\n        let corrections: Vec<QualifierCorrection> = (0..HSL_QUALIFIERS.len()).map(|qi| {\n            let qual = &HSL_QUALIFIERS[qi];\n            if self.active[qi] {\n                let tw = self.tw_acc[qi];\n                QualifierCorrection {\n                    h_center: qual.h_center, h_width: qual.h_width,\n                    h_offset: (self.h_acc[qi] / tw) as f32,\n                    s_ratio:  (self.s_acc[qi] / tw) as f32,\n                    v_offset: (self.v_acc[qi] / tw) as f32,\n                    weight: tw as f32,\n                }\n            } else {\n                QualifierCorrection {\n                    h_center: qual.h_center, h_width: qual.h_width,\n                    h_offset: 0.0, s_ratio: 1.0, v_offset: 0.0, weight: 0.0,\n                }\n            }\n        }).collect();\n        HslCorrections(corrections)\n    }\n}\n\nimpl Node for HslAverageNode {\n    /// Input: one (lut_output, target) pair for a single keyframe.\n    type Input = (Vec<[f32; 3]>, Vec<[f32; 3]>);\n    /// Output: () — state is accumulated internally; call `finish()` after the segment.\n    type Output = ();",
+  "source_version": "plans/2026-04-05-pipeline-dag-refactor.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042433262Z",
+  "valid_from": "2026-04-08T03:32:28.042433262Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-05-pipeline-dag-refactor.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1124,
+    "end_line": 1150,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

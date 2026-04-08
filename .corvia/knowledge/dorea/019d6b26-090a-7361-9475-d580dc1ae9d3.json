@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-d580dc1ae9d3",
+  "content": "nt.max(1) as f64 * 100.0;\n        log::info!(\"Progress: {frame_count}/{} frames ({:.1}%)\", info.frame_count, pct);\n    }\n}\n\ninf_server.shutdown();\nencoder.finish()?;\nlog::info!(\"Done. Graded {frame_count} frames → {}\", output.display());\nOk(())\n```\n\n---\n\n## Notes\n\n- `auto_calibrate` is NOT batched (uses both RAUNE+depth, n_kf ≤ 20, not the bottleneck)\n- `no_depth_interp` case: every frame becomes a keyframe in pass 1; chunked batching handles memory\n- `BufferedFrame` and `flush_buffer_with_depth` are removed entirely\n- `DepthBatchItem` must be `pub` and re-exported via `inference/mod.rs`\n- Both `inference_subprocess.rs` AND `pyo3_backend.rs` must implement `run_depth_batch` with the same signature\n- `decode_frames_scaled` should handle the edge case where proxy_w == info.width (call existing `decode_frames`)\n\n\n## Expected outcome\n\n- Depth inference: ~0.5s (one batched forward pass) vs ~70–100s (sequential)  \n- Total pipeline: ~45–60s vs 2m7s for the 4K 120fps 14s benchmark clip",
+  "source_version": "plans/2026-04-03-batch-depth-inference-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042262785Z",
+  "valid_from": "2026-04-08T03:32:28.042262785Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-batch-depth-inference-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 343,
+    "end_line": 355,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

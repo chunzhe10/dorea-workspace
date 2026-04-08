@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-d65ad60473ec",
+  "content": "        # Direct tensor construction — bypass AutoImageProcessor\n\n        # De-normalize: model output in [-1, 1], convert to [0, 255] uint8\n        out = ((out.squeeze(0) + 1.0) / 2.0).clamp(0.0, 1.0)\n        result = (out.permute(1, 2, 0) * 255).to(torch.uint8).contiguous()\n\n        return result  # stays on device\n```\n\n- [ ] **Step 4: Test the Python bridge**\n\nRun from workspace root:\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\n/opt/dorea-venv/bin/python -c \"\nfrom dorea_inference.bridge import TensorGuard, vram_free_bytes\nimport numpy as np\n\n\n# Test TensorGuard with a CPU tensor (no GPU needed for this)\nimport torch\nt = torch.zeros(10, dtype=torch.float32)\ng = TensorGuard(t)\nassert g.numel == 10\nassert g.shape == (10,)\nassert g.dtype == 'torch.float32'\ng.release()\nassert g.tensor is None\nassert g.data_ptr == 0\nprint('TensorGuard: OK')\n",
+  "source_version": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042270315Z",
+  "valid_from": "2026-04-08T03:32:28.042270315Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 240,
+    "end_line": 267,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

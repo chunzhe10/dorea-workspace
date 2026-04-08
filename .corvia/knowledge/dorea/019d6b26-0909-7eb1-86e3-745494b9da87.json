@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-0909-7eb1-86e3-745494b9da87",
+  "content": "### Extended commands\n### Config file (config.yaml)\n\n## Module Changes\n\n```\ndorea-color/\n  src/dlog_m.rs          -- unchanged\n  src/ilog.rs            -- NEW: I-Log transfer function (trait-based)\n  src/lut_transfer.rs    -- NEW: LutBased transfer function (1D .cube)\n  src/lib.rs             -- NEW: TransferFunction trait\n\ndorea-video/\n  src/inference.rs       -- 16-bit PNG encode/decode (accept both 8/16)\n  src/ffmpeg.rs          -- NVDEC 10-bit, ProRes decode, 10-bit encode\n  src/probe.rs           -- NEW: container/codec sniffing\n\ndorea-lut/\n  src/build.rs           -- configurable LUT size (33/65)\n  src/apply.rs           -- accept f32 pixels\n\ndorea-gpu/\n  src/lib.rs             -- grade_frame: &[u8] -> &[f32]\n  src/cpu.rs             -- same signature change\n  src/cuda/mod.rs        -- persistent GpuResources, f32 I/O\n  src/cuda/kernels/*.cu  -- unsigned char* -> float*\n\ndorea-cli/\n  src/calibrate.rs       -- load_rgb_image -> into_rgb16, InputEncoding extended\n  src/grade.rs           -- 3-stage pipeline, ClipMeta, output-codec\n  src/probe.rs           -- NEW: dorea probe subcommand\n\nconfig.yaml              -- camera profiles, pipeline defaults\n```\n\n\n## Backward Compatibility\n\n| Scenario | Behavior |\n|----------|----------|\n| Existing 8-bit JPEG keyframes | into_rgb16() upsamples (values at multiples of 257) |\n| Existing 33^3 .cube LUTs | Still valid in Resolve. New calibrations default to 65^3 |\n| Existing .dorea-cal files | Load normally. Missing camera profile defaults to dji_action4 |\n| --input-encoding srgb | Works as before. Shoulder=0.95, LUT size defaults to 33 |\n| CUDA not available | CPU fallback unchanged, same f32 signature |\n| Old inference server protocol | Single-frame still works. Batch is additive |\n",
+  "source_version": "decisions/2026-04-02-10bit-pipeline-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.041838176Z",
+  "valid_from": "2026-04-08T03:32:28.041838176Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-02-10bit-pipeline-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 294,
+    "end_line": 336,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

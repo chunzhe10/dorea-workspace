@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-dfa6bb48c97e",
+  "content": "# Maxine Pipeline Architecture Implementation Plan\n\n> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.\n\n**Goal:** Restructure the Maxine enhancement pipeline so one server handles the full lifecycle — Maxine-only at startup, then RAUNE+Depth loaded lazily after Pass 1 — eliminating the two-server VRAM bug and removing the unused `--calibration` Path B.\n\n**Architecture:** A single inference server is spawned per `dorea grade` run. During Pass 1 it runs Maxine on every full-res frame. After Pass 1, `unload_maxine()` frees Maxine VRAM, then `load_raune()` + `load_depth()` loads calibration models into the same process. Pass 2 decodes from the lossless temp file with no models active. VRAM peak is max(Maxine, RAUNE+Depth) — never all three simultaneously.\n\n**Tech Stack:** Rust (dorea-cli, dorea-video), Python (PyO3 bridge, subprocess IPC server), nvvfx SDK via DOREA_MAXINE_MOCK=1 for CI, cargo test, pytest\n\n---\n",
+  "source_version": "plans/2026-04-04-maxine-pipeline-architecture.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042354260Z",
+  "valid_from": "2026-04-08T03:32:28.042354260Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-maxine-pipeline-architecture.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1,
+    "end_line": 12,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

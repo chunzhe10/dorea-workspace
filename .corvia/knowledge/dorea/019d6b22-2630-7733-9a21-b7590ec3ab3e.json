@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-b7590ec3ab3e",
+  "content": "pub struct InferenceServer {\n    child: Child,\n    stdin: ChildStdin,\n    stdout_reader: BufReader<std::process::ChildStdout>,\n}\nimpl InferenceServer {\n    /// Spawn the inference server and wait for it to signal readiness.\n    ///\n    /// Enforces `config.startup_timeout`: returns `InferenceError::Timeout` if the\n    /// Python process does not respond to the initial ping within the deadline.\n    pub fn spawn(config: &InferenceConfig) -> Result<Self, InferenceError> {\n        let mut cmd = Command::new(&config.python_exe);\n        cmd.args(config.build_args());\n\n        // Set PYTHONPATH to the python/ dir adjacent to the target/ build directory.\n        // Binary lives at <workspace>/target/{debug,release}/dorea; python/ is a sibling of target/.\n        let pythonpath = std::env::current_exe().ok()\n            .and_then(|exe| {\n                // .parent() = target/debug|release, .parent() = target, .parent() = workspace root\n                exe.parent().and_then(|p| p.parent()).and_then(|p| p.parent())\n                    .map(|root| root.join(\"python\"))\n            })\n            .filter(|p| p.exists());\n        if let Some(ref p) = pythonpath {\n            cmd.env(\"PYTHONPATH\", p);\n        } else {\n            log::debug!(\n                \"PYTHONPATH not set: could not derive python/ dir from binary path; \\\n                 ensure dorea_inference is installed in the Python environment\"\n            );\n        }\n\n        cmd.stdin(Stdio::piped())\n            .stdout(Stdio::piped())\n            .stderr(Stdio::inherit()); // let stderr pass through for diagnostics\n\n        let mut child = cmd.spawn()?;\n        let mut stdin = child.stdin.take().ok_or_else(|| {",
+  "source_version": "crates/dorea-video/src/inference_subprocess.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360336314Z",
+  "valid_from": "2026-04-08T03:28:13.360336314Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference_subprocess.rs",
+    "language": "rs",
+    "chunk_type": "impl_item",
+    "start_line": 196,
+    "end_line": 228,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

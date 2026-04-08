@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-cd759dc8165e",
+  "content": " let idx = (z * n) / n_zones;\n        // C2: use saturating_sub to avoid underflow if n == 0 (already guarded above).\n        let idx = idx.min(n.saturating_sub(1));\n        boundaries.push(sorted[idx]);\n    }\n    boundaries.push(1.0_f32);\n    boundaries\n}\npub struct StreamingLutBuilder {\n    zone_boundaries: Vec<f32>,\n    n_zones: usize,\n    /// Per-zone weighted RGB sums: lut_wsums[z][cell * 3 + c]\n    lut_wsums: Vec<Vec<f64>>,\n    /// Per-zone weighted counts: lut_wcounts[z][cell]\n    lut_wcounts: Vec<Vec<f64>>,\n}",
+  "source_version": "crates/dorea-lut/src/build.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360614156Z",
+  "valid_from": "2026-04-08T03:28:13.360614156Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-lut/src/build.rs",
+    "language": "rs",
+    "chunk_type": "struct_item",
+    "start_line": 235,
+    "end_line": 242,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

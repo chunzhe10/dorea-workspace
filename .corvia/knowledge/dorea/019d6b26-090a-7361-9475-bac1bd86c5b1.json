@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-bac1bd86c5b1",
+  "content": "\n  );\n}\n```\n\n- [ ] **Step 2: Commit**\n\n```bash\ncd /workspaces/corvia-workspace\ngit add tools/corvia-dashboard/src/components/DocumentReader.tsx\ngit commit -m \"feat(dashboard): add DocumentReader side panel with metadata badges and neighbor cards\"\n```\n\n---\n\n### Task 2.7: Refactor `GraphView` to split-panel layout with entry-level interaction\n\n**Files:**\n- Modify: `tools/corvia-dashboard/src/components/GraphView.tsx`\n\nThis is the largest task. The current `GraphView.tsx` (754 lines) renders cluster-based force simulation. We need to:\n\n1. Add a split-panel layout (graph left, reader right)\n2. Add entry-level node rendering inside clusters\n3. Wire click/hover interactions\n4. Integrate `GraphControls`, `DocumentReader`\n\n- [ ] **Step 1: Add imports and state for the new components**\n\nAt the top of `GraphView.tsx`, add:\n\n```tsx\nimport { DocumentReader } from \"./DocumentReader\";\nimport { GraphControls } from \"./GraphControls\";\n```\n\nAdd new state variables in the component:\n\n```tsx\nconst [selectedEntryId, setSelectedEntryId] = useState<string | null>(null);\nconst [hoveredNodeId, setHoveredNodeId] = useState<string | null>(null);\nconst [filters, setFilters] = useState<{\n  contentRole: string | null;\n  sourceOrigin: string | null;\n  depth: number;\n}>({ contentRole: null, sourceOrigin: null, depth: 2 });\n```\n\n- [ ] **Step 2: Wrap the canvas in a split-panel layout**\n\nChange the component's return JSX to use a two-column layout:\n\n```tsx\nreturn (\n  <div class=\"graph-split-panel\">\n    <div class={`graph-panel ${selectedEntryId ? \"graph-panel--narrow\" : \"\"}`}>\n      <GraphControls\n        onFilterChange={setFilters}\n        availableRoles={[...new Set(data?.nodes.map(n => n.content_role).filter(Boolean) as string[])]}",
+  "source_version": "plans/2026-03-13-docs-workflow-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042014244Z",
+  "valid_from": "2026-04-08T03:32:28.042014244Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-13-docs-workflow-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1273,
+    "end_line": 1316,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

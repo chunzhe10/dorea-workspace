@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-c7094a0e9ea2",
+  "content": "## Chunk 7: Data Directories, Transfer Docs & Final Verification\n\n### Task 26: Create workspace data directories\n\n**Files:**\n- Create: directory placeholders\n\n- [ ] **Step 1: Create gitignored data directories with .gitkeep**\n\n```bash\ncd /home/chunzhe/corvia-project/dorea-workspace\nmkdir -p footage/raw footage/flat\nmkdir -p working/keyframes working/scene_analysis working/masks working/depth\nmkdir -p models/sam2 models/depth_anything_v2_small\n```\n\nNote: These directories are gitignored. They exist on the local filesystem only.\n\n\n### Task 27: Transfer design spec and plan\n\n**Files:**\n- Move from temp to workspace\n\n- [ ] **Step 1: Copy docs from temp directory**\n\n```bash\ncd /home/chunzhe/corvia-project/dorea-workspace\nmkdir -p docs/plans\ncp /home/chunzhe/dorea-temp/docs/plans/2026-03-17-dorea-underwater-pipeline-design.md docs/plans/\ncp /home/chunzhe/dorea-temp/docs/plans/2026-03-17-dorea-workspace-impl-plan.md docs/plans/\n```\n\n- [ ] **Step 2: Copy architecture document**\n\n```bash\ncp /home/chunzhe/Downloads/underwater_pipeline_architecture.docx /home/chunzhe/corvia-project/dorea-workspace/docs/\n```\n\n- [ ] **Step 3: Commit docs**\n\n```bash\ncd /home/chunzhe/corvia-project/dorea-workspace\ngit add docs/\ngit commit -m \"docs: add design spec, implementation plan, and architecture document\"\n```\n",
+  "source_version": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042128326Z",
+  "valid_from": "2026-04-08T03:32:28.042128326Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1678,
+    "end_line": 1721,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

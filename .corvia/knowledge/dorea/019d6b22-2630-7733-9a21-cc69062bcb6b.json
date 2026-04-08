@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-cc69062bcb6b",
+  "content": "fn trilinear(lut: &LutGrid, rgb: [f32; 3]) -> [f32; 3] {\n    // L8: LUT must have at least 2 entries per axis for interpolation.\n    debug_assert!(lut.size >= 2, \"LutGrid must have size >= 2 for trilinear interpolation\");\n    let size = lut.size;\n    let scale = (size - 1) as f32;\n\n    let sr = (rgb[0] * scale).clamp(0.0, scale);\n    let sg = (rgb[1] * scale).clamp(0.0, scale);\n    let sb = (rgb[2] * scale).clamp(0.0, scale);\n\n    let i0 = (sr.floor() as usize).min(size - 2);\n    let j0 = (sg.floor() as usize).min(size - 2);\n    let k0 = (sb.floor() as usize).min(size - 2);\n\n    let fr = (sr - i0 as f32).clamp(0.0, 1.0);\n    let fg = (sg - j0 as f32).clamp(0.0, 1.0);\n    let fb = (sb - k0 as f32).clamp(0.0, 1.0);\n\n    let i1 = i0 + 1;\n    let j1 = j0 + 1;\n    let k1 = k0 + 1;\n\n    // 8 corners\n    let c000 = lut.get(i0, j0, k0);\n    let c001 = lut.get(i0, j0, k1);\n    let c010 = lut.get(i0, j1, k0);\n    let c011 = lut.get(i0, j1, k1);\n    let c100 = lut.get(i1, j0, k0);\n    let c101 = lut.get(i1, j0, k1);\n    let c110 = lut.get(i1, j1, k0);\n    let c111 = lut.get(i1, j1, k1);\n\n    // Trilinear blend\n    let mut out = [0.0_f32; 3];\n    for c in 0..3 {\n        let v00 = c000[c] * (1.0 - fb) + c001[c] * fb;\n        let v01 = c010[c] * (1.0 - fb) + c011[c] * fb;\n        let v10 = c100[c] * (1.0 - fb) + c101[c] * fb;\n        let v11 = c110[c] * (1.0 - fb) + c111[c] * fb;\n\n        let v0 = v00 * (1.0 - fg) + v01 * fg;\n        let v1 = v10 * (1.0 - fg) + v11 * fg;\n\n        out[c] = v0 * (1.0 - fr) + v1 * fr;\n    }\n    out\n}",
+  "source_version": "crates/dorea-lut/src/apply.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360600321Z",
+  "valid_from": "2026-04-08T03:28:13.360600321Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-lut/src/apply.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 9,
+    "end_line": 55,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-cb6181ae8809",
+  "content": "udaFree(d_l_proxy); cudaFree(d_blur_a); cudaFree(d_blur_b); \\\n        return (int)_e;                                            \\\n    }                                                              \\\n} while(0)\n\n    CK(cudaMalloc(&d_rgb_in,   full_bytes));\n    CK(cudaMalloc(&d_rgb_out,  full_bytes));\n    CK(cudaMalloc(&d_l_proxy,  proxy_bytes));\n    CK(cudaMalloc(&d_blur_a,   proxy_bytes));\n    CK(cudaMalloc(&d_blur_b,   proxy_bytes));\n\n    CK(cudaMemcpy(d_rgb_in, h_rgb_in, full_bytes, cudaMemcpyHostToDevice));\n\n    // Kernel A: full-res RGB → proxy L\n    {\n        dim3 block(16, 16);\n        dim3 grid((proxy_w + 15) / 16, (proxy_h + 15) / 16);\n        clarity_extract_L_proxy<<<grid, block>>>(\n            d_rgb_in, d_l_proxy, full_w, full_h, proxy_w, proxy_h\n        );\n        CK(cudaGetLastError());\n    }\n\n    // Kernel B: 3-pass separable box blur on proxy L\n    // Each pass: row blur → col blur. d_l_proxy ↔ d_blur_a (ping-pong via d_blur_b as temp)\n    for (int pass = 0; pass < 3; pass++) {\n        dim3 block(32, 8);\n        dim3 grid((proxy_w + 31) / 32, (proxy_h + 7) / 8);\n\n        // Row blur: d_l_proxy → d_blur_a\n        clarity_box_blur_rows<<<grid, block>>>(\n            d_l_proxy, d_blur_a, proxy_w, proxy_h, blur_radius\n        );\n        CK(cudaGetLastError());\n\n        // Col blur: d_blur_a → d_blur_b\n        clarity_box_blur_cols<<<grid, block>>>(\n            d_blur_a, d_blur_b, proxy_w, proxy_h, blur_radius\n        );\n        CK(cudaGetLastError());\n\n        // Swap so d_l_proxy holds the result for next pass (or for kernel C)\n        float* tmp = d_l_proxy;\n        d_l_proxy = d_blur_b;\n        d_blur_b  = tmp;\n    }\n    // After 3 passes, d_l_proxy holds the 3×-blurred proxy L channel.\n\n    // Kernel C: apply clarity at full res\n    {\n        int blocks = (n_full + 255) / 256;",
+  "source_version": "plans/2026-04-02-clarity-cuda-kernel.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042173977Z",
+  "valid_from": "2026-04-08T03:32:28.042173977Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-clarity-cuda-kernel.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 516,
+    "end_line": 560,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

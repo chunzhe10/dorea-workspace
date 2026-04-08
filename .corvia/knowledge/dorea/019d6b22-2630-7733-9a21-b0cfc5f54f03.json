@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-b0cfc5f54f03",
+  "content": "  pub raune_weights: Option<PathBuf>,\n    /// `sea_thru_poc` checkout directory (contains `models/raune_net.py`)\n    pub raune_models_dir: Option<PathBuf>,\n    /// Depth Anything V2 model directory or Hugging Face ID\n    pub depth_model: Option<PathBuf>,\n}\npub struct InferDefaults {\n    /// Proxy long-edge resolution for RAUNE + depth inference (default: 1080)\n    pub proxy_size: Option<usize>,\n    /// Compute device: `\"cuda\"` or `\"cpu\"` (default: auto-detect)\n    pub device: Option<String>,\n}",
+  "source_version": "crates/dorea-cli/src/config.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360271266Z",
+  "valid_from": "2026-04-08T03:28:13.360271266Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/config.rs",
+    "language": "rs",
+    "chunk_type": "struct_item",
+    "start_line": 44,
+    "end_line": 49,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

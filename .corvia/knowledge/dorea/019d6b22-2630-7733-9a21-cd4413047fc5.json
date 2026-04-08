@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-cd4413047fc5",
+  "content": "\n    let mut importance = vec![0.0_f32; n];\n    for i in 0..n {\n        let imp = depth[i]\n            * (1.0 + EDGE_SCALE * edge_norm[i])\n            * (1.0 + CONTRAST_SCALE * contrast_norm[i]);\n        importance[i] = imp.max(0.1);\n    }\n    importance\n}\nfn local_variance_box(data: &[f32], width: usize, height: usize, radius: usize) -> Vec<f32> {\n    let n = width * height;\n    // Build integral images for sum and sum-of-squares\n    let mut isum = vec![0.0_f64; (width + 1) * (height + 1)];\n    let mut isumsq = vec![0.0_f64; (width + 1) * (height + 1)];\n    let w1 = width + 1;\n\n    for y in 0..height {\n        for x in 0..width {\n            let v = data[y * width + x] as f64;\n            isum[(y + 1) * w1 + (x + 1)] = v\n                + isum[y * w1 + (x + 1)]\n                + isum[(y + 1) * w1 + x]\n                - isum[y * w1 + x];\n            isumsq[(y + 1) * w1 + (x + 1)] = v * v\n                + isumsq[y * w1 + (x + 1)]\n                + isumsq[(y + 1) * w1 + x]\n                - isumsq[y * w1 + x];\n        }\n    }\n\n    let mut var_out = vec![0.0_f32; n];\n    for y in 0..height {\n        for x in 0..width {\n            let y0 = y.saturating_sub(radius);\n            let x0 = x.saturating_sub(radius);\n            let y1 = (y + radius + 1).min(height);\n            let x1 = (x + radius + 1).min(width);\n            let count = ((y1 - y0) * (x1 - x0)) as f64;\n\n            let s = isum[y1 * w1 + x1] - isum[y0 * w1 + x1]\n                - isum[y1 * w1 + x0] + isum[y0 * w1 + x0];\n            let sq = isumsq[y1 * w1 + x1] - isumsq[y0 * w1 + x1]\n                - isumsq[y1 * w1 + x0] + isumsq[y0 * w1 + x0];\n\n            let mean = s / count;\n            let var = (sq / count - mean * mean).max(0.0);\n            var_out[y * width + x] = var as f32;\n        }\n    }\n    var_out\n}",
+  "source_version": "crates/dorea-lut/src/build.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360610894Z",
+  "valid_from": "2026-04-08T03:28:13.360610894Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-lut/src/build.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 137,
+    "end_line": 178,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

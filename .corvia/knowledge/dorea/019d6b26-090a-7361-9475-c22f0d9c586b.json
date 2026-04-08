@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-c22f0d9c586b",
+  "content": "## Chunk 4: Claude Code Integration\n\n### Task 12: Update .claude/settings.json\n\n**Files:**\n- Modify: `.claude/settings.json`\n\n- [ ] **Step 1: Update settings.json**\n\n```json\n{\n  \"hooks\": {\n    \"PostToolUse\": [\n      {\n        \"_comment\": \"After git commits, remind to persist decisions/learnings to corvia knowledge base.\",\n        \"hooks\": [\n          {\n            \"command\": \"bash .claude/hooks/corvia-write-reminder.sh\",\n            \"timeout\": 10000,\n            \"type\": \"command\"\n          }\n        ],\n        \"matcher\": \"Bash\"\n      }\n    ],\n    \"PreToolUse\": [\n      {\n        \"hooks\": [\n          {\n            \"command\": \"echo 'REMINDER: Have you called corvia_search or corvia_ask first? Per CLAUDE.md, you MUST query corvia MCP tools (scope_id: dorea) before using Grep/Glob for any new task or question. If you already called corvia this session, proceed.'\",\n            \"type\": \"command\"\n          }\n        ],\n        \"matcher\": \"Grep|Glob\"\n      },\n      {\n        \"hooks\": [\n          {\n            \"command\": \"bash .corvia/hooks/doc-placement-check.sh\",\n            \"type\": \"command\"\n          }\n        ],\n        \"matcher\": \"Write|Edit\"\n      }\n    ],\n    \"SessionEnd\": [\n      {\n        \"_comment\": \"WORKAROUND: Claude Code leaks memory via orphaned node processes in WSL. Kills orphans on session exit. Remove when upstream fix lands.\",\n        \"hooks\": [\n          {\n            \"command\": \"bash \\\"$CORVIA_WORKSPACE/.devcontainer/scripts/cleanup-orphans.sh\\\" --quiet 2>/dev/null || true\",\n            \"type\": \"command\"\n          }\n        ]\n      }\n    ],\n    \"SessionStart\": [\n      {\n        \"_comment\": \"Display-only reminder for agent identity selection.\",\n        \"hooks\": [\n          {\n            \"command\": \"bash .claude/hooks/agent-check.sh\",\n            \"timeout\": 5000,\n            \"type\": \"command\"\n          }\n        ]\n      }\n    ]\n  }\n}\n```\n\nKey change: PreToolUse Grep|Glob reminder now says `scope_id: dorea`.\n",
+  "source_version": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042084357Z",
+  "valid_from": "2026-04-08T03:32:28.042084357Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 724,
+    "end_line": 795,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

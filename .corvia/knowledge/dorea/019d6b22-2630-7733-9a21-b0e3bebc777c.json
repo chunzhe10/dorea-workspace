@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-b0e3bebc777c",
+  "content": "ld: Option<f32>,\n    /// Minimum keyframes per scene segment before merge (default: 5)\n    pub min_segment_keyframes: Option<usize>,\n    /// Zone boundary smoothing window width; 1 = no smoothing (default: 3)\n    pub zone_smoothing_window: Option<usize>,\n}\npub struct MaxineDefaults {\n    /// Super-resolution upscale factor: 2, 3, or 4 (default: 2)\n    pub upscale_factor: Option<u32>,\n    /// Run artifact reduction before upscale (default: true)\n    pub artifact_reduction: Option<bool>,\n}",
+  "source_version": "crates/dorea-cli/src/config.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360272470Z",
+  "valid_from": "2026-04-08T03:28:13.360272470Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/config.rs",
+    "language": "rs",
+    "chunk_type": "struct_item",
+    "start_line": 80,
+    "end_line": 85,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-bf796b4e6228",
+  "content": "## Chunk 1: GitHub Setup & Local Clone\n\n### Task 1: Mark corvia-workspace as GitHub Template\n\n**Files:** None (GitHub API call)\n\n- [ ] **Step 1: Mark repo as template**\n\n```bash\ngh api -X PATCH repos/chunzhe10/corvia-workspace -f is_template=true\n```\n\nExpected: `\"is_template\": true` in response JSON.\n\n- [ ] **Step 2: Verify template status**\n\n```bash\ngh api repos/chunzhe10/corvia-workspace --jq '.is_template'\n```\n\nExpected: `true`\n\n\n### Task 2: Create dorea-workspace from template\n\n**Files:** None (GitHub operations)\n\n- [ ] **Step 1: Create dorea-workspace from template**\n\n```bash\ngh repo create chunzhe10/dorea-workspace --template chunzhe10/corvia-workspace --public --clone=false\n```\n\nExpected: Repository created message.\n\n- [ ] **Step 2: Create dorea repo (empty)**\n\n```bash\ngh repo create chunzhe10/dorea --public --clone=false\n```\n\nExpected: Repository created message.\n\n- [ ] **Step 3: Clone dorea-workspace locally**\n\n```bash\ncd /home/chunzhe/corvia-project\ngit clone https://github.com/chunzhe10/dorea-workspace.git\ncd dorea-workspace\n```\n\n- [ ] **Step 4: Add upstream remote**\n\n```bash\ncd /home/chunzhe/corvia-project/dorea-workspace\ngit remote add upstream https://github.com/chunzhe10/corvia-workspace.git\ngit fetch upstream\n```\n\n- [ ] **Step 5: Verify remotes**\n\n```bash\ncd /home/chunzhe/corvia-project/dorea-workspace\ngit remote -v\n```\n\nExpected: Both `origin` (dorea-workspace) and `upstream` (corvia-workspace).\n\n- [ ] **Step 6: Remove repos/corvia if present**\n\n```bash\ncd /home/chunzhe/corvia-project/dorea-workspace\nrm -rf repos/corvia 2>/dev/null",
+  "source_version": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042057749Z",
+  "valid_from": "2026-04-08T03:32:28.042057749Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 65,
+    "end_line": 134,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-d221833ed08c",
+  "content": "def _log(msg: str) -> None:\n    print(f\"[dorea-inference] {msg}\", file=sys.stderr, flush=True)\nclass MaxineEnhancer:\n    \"\"\"AI enhancement via Maxine VideoSuperRes.\n\n    If DOREA_MAXINE_MOCK=1 is set, all enhance() calls return the input unchanged.\n    \"\"\"\n\n    def __init__(self, upscale_factor: int = 2) -> None:\n        self.upscale_factor = upscale_factor\n        self._mock = _MOCK_MODE\n        self._total_count = 0\n        self._sr_effect = None\n\n        if self._mock:\n            _log(\"Maxine mock mode enabled (DOREA_MAXINE_MOCK=1)\")\n            return\n\n        if _nvvfx is None:\n            raise RuntimeError(\n                \"Maxine SDK not found. Install from NGC (nvidia-maxine-vfx-sdk): \"\n                \"see docs/guides/maxine-setup.md, or unset --maxine\"\n            )\n\n        _log(f\"Maxine VideoSuperRes initialized (upscale_factor={upscale_factor})\")\n\n    def _init_effects(self, width: int, height: int) -> None:\n        \"\"\"Lazily initialize Maxine VideoSuperRes with known input dimensions.\"\"\"\n        out_w = width * self.upscale_factor\n        out_h = height * self.upscale_factor\n\n        self._sr_effect = _nvvfx.VideoSuperRes()\n        self._sr_effect.output_width = out_w\n        self._sr_effect.output_height = out_h\n        self._sr_effect.load()\n\n        _log(f\"Maxine VideoSuperRes loaded: {width}x{height}→{out_w}x{out_h}\")\n\n    def enhance(\n        self,\n        rgb_u8: np.ndarray,\n        width: int,\n        height: int,\n        artifact_reduce: bool = True,\n    ) -> np.ndarray:\n        \"\"\"Enhance a single RGB u8 frame via VideoSuperRes. Returns RGB u8 at original resolution.\n\n        Raises on failure — callers must not swallow errors.\n        \"\"\"\n        if self._mock:\n            self._total_count += 1\n            return rgb_u8\n",
+  "source_version": "python/dorea_inference/maxine_enhancer.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360677476Z",
+  "valid_from": "2026-04-08T03:28:13.360677476Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/maxine_enhancer.py",
+    "language": "py",
+    "chunk_type": "class_definition",
+    "start_line": 31,
+    "end_line": 81,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

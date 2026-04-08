@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-ccbc2bc58823",
+  "content": "# Dorea v2 — Phase 1 Implementation Plan\n\n## Goal\n\nImplement a working `dorea calibrate` command that:\n1. Accepts keyframe images + depth maps + RAUNE-Net target images\n2. Builds depth-stratified LUTs (σ=0, NN fill, importance-weighted, adaptive zone boundaries)\n3. Derives global HSL qualifier corrections\n4. Saves a `.dorea-cal` calibration file\n\nAll CPU-only. No CUDA, no Python inference, no video I/O in Phase 1.\n\n---\n",
+  "source_version": "plans/2026-04-02-dorea-v2-phase1-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042185092Z",
+  "valid_from": "2026-04-08T03:32:28.042185092Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-dorea-v2-phase1-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 9,
+    "end_line": 20,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

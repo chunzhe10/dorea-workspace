@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-b7dddcb7d69a",
+  "content": "(|e| InferenceError::Ipc(format!(\"base64 decode for id={id}: {e}\")))?;\n\n            if raw.len() != w * h * 4 {\n                return Err(InferenceError::Ipc(format!(\n                    \"depth buffer size mismatch for id={id}: got {} bytes, expected {}\",\n                    raw.len(), w * h * 4\n                )));\n            }\n\n            let depth: Vec<f32> = raw.chunks_exact(4)\n                .map(|b| f32::from_le_bytes([b[0], b[1], b[2], b[3]]))\n                .collect();\n\n            out.push((id, depth, w, h));\n        }\n\n        Ok(out)\n    }\n\n    /// Run RAUNE then Depth Anything on a batch, with the enhanced tensor staying on GPU\n    /// between the two models. Returns enhanced RGB and depth map for each item.\n    ///\n    /// Returns `Vec<(id, enhanced_rgb_u8, enh_w, enh_h, depth_f32, depth_w, depth_h)>`.\n    #[allow(clippy::type_complexity)]\n    pub fn run_raune_depth_batch(\n        &mut self,\n        items: &[RauneDepthBatchItem],\n        enable_maxine: bool,\n    ) -> Result<Vec<(String, Vec<u8>, usize, usize, Vec<f32>, usize, usize)>, InferenceError> {\n        if items.is_empty() {\n            return Ok(vec![]);\n        }\n\n        let json_items: Vec<serde_json::Value> = items.iter().map(|item| {\n            serde_json::json!({\n                \"id\": item.id,\n                \"image_b64\": B64.encode(&item.pixels),\n                \"format\": \"raw_rgb\",",
+  "source_version": "crates/dorea-video/src/inference_subprocess.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360343131Z",
+  "valid_from": "2026-04-08T03:28:13.360343131Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference_subprocess.rs",
+    "language": "rs",
+    "chunk_type": "impl_item",
+    "start_line": 463,
+    "end_line": 495,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-e280e9422d2e",
+  "content": "er_kf_zones(\n    keyframe_depths: &[Vec<f32>],\n    n_zones: usize,\n) -> Vec<Vec<f32>> {\n    keyframe_depths.iter()\n        .map(|depths| adaptive_zone_boundaries(depths, n_zones))\n        .collect()\n}\n```\n\n- [ ] **Step 4: Implement smooth_zone_boundaries**\n\nAdd after `compute_per_kf_zones`:\n\n```rust\n/// Smooth per-keyframe zone boundaries using a weighted moving average.\n///\n/// Center keyframe gets weight 0.6, each neighbor gets 0.2.\n/// Does NOT smooth across segment boundaries.\n/// `window` must be odd and >= 1. Window of 1 means no smoothing.\npub fn smooth_zone_boundaries(\n    raw: &[Vec<f32>],\n    segments: &[SegmentRange],\n    window: usize,\n) -> Vec<Vec<f32>> {\n    if window <= 1 || raw.is_empty() {\n        return raw.to_vec();\n    }\n\n    let n_kf = raw.len();\n    let n_bounds = raw[0].len();\n    let mut smoothed = raw.to_vec();\n\n    for seg in segments {\n        let seg_len = seg.end - seg.start;\n        if seg_len <= 1 {\n            continue; // Single-KF segment, nothing to smooth\n        }\n\n        for ki in seg.start..seg.end {\n            // Gather same-segment neighbors\n            let prev = if ki > seg.start { Some(ki - 1) } else { None };\n            let next = if ki + 1 < seg.end { Some(ki + 1) } else { None };\n\n            // Weights: center = 0.6, each neighbor = 0.2 (re-normalize if missing)\n            let mut total_w = 0.6_f32;\n            let mut result = vec![0.0_f32; n_bounds];\n            for j in 0..n_bounds {\n                result[j] = raw[ki][j] * 0.6;\n            }\n\n            if let Some(pi) = prev {\n                total_w += 0.2;\n                for j in 0..n_bounds {\n                    result[j] += raw[pi][j] * 0.2;\n                }\n            }\n            if let Some(ni) = next {\n                total_w += 0.2;\n                for j in 0..n_bounds {\n                    result[j] += raw[ni][j] * 0.2;\n                }",
+  "source_version": "plans/2026-04-04-per-keyframe-adaptive-depth-zones-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042380754Z",
+  "valid_from": "2026-04-08T03:32:28.042380754Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-per-keyframe-adaptive-depth-zones-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 438,
+    "end_line": 488,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

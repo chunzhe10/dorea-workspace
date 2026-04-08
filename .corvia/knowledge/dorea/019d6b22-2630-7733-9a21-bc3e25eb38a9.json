@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-bc3e25eb38a9",
+  "content": "ormat!(\"sys.path.insert: {e}\")))?;\n                }\n            } else {\n                log::debug!(\n                    \"Could not derive python/ dir from binary path; \\\n                     ensure dorea_inference is installed in the Python environment\"\n                );\n            }\n\n            // Import the bridge module.\n            let bridge = py.import_bound(\"dorea_inference.bridge\")\n                .map_err(|e| InferenceError::InitFailed(format!(\"import dorea_inference.bridge: {e}\")))?;\n\n            // Load depth model (unless skipped).\n            let device = config.device.as_deref().unwrap_or(\"cuda\");\n            let depth_path = config.depth_model.as_ref().map(|p| p.to_str().unwrap_or(\"\"));\n\n            if !config.skip_depth {\n                Self::call_load_depth(py, &bridge, depth_path, device)?;\n            }\n\n            // Load RAUNE model if not skipped.\n            if !config.skip_raune {\n                let weights = config.raune_weights.as_ref().map(|p| p.to_str().unwrap_or(\"\"));\n                let models_dir = config.raune_models_dir.as_ref().map(|p| p.to_str().unwrap_or(\"\"));\n                Self::call_load_raune(py, &bridge, weights, device, models_dir)?;\n            }\n\n            // Load Maxine if requested.\n            if config.maxine {\n                Self::call_load_maxine(py, &bridge, config.maxine_upscale_factor, device)?;\n            }\n\n            Ok(Self {\n                bridge: bridge.unbind(),\n                device: device.to_string(),\n                _not_send: PhantomData,\n            })",
+  "source_version": "crates/dorea-video/src/inference/pyo3_backend.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360395014Z",
+  "valid_from": "2026-04-08T03:28:13.360395014Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference/pyo3_backend.rs",
+    "language": "rs",
+    "chunk_type": "impl_item",
+    "start_line": 160,
+    "end_line": 191,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

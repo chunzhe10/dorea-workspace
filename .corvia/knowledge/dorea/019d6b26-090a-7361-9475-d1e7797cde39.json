@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-d1e7797cde39",
+  "content": "deo resize 2>&1 | tail -15\n```\nExpected: `5 tests passed`.\n\n- [ ] **Step 6: Commit**\n\n```bash\ngit add crates/dorea-video/src/resize.rs crates/dorea-video/src/lib.rs\ngit commit -m \"feat(dorea-video): add resize_rgb_bilinear + proxy_dims utilities\"\n```\n\n---\n\n## Task 3: Wire proxy downscale into `grade.rs`\n\n**Files:** Modify `crates/dorea-cli/src/grade.rs`\n\nThe grading loop currently sends `frame.pixels` (full 4K, 24 MB) to Python. Replace with a proxy-sized copy.\n\n- [ ] **Step 1: Add the proxy downscale in `grade.rs`**\n\nIn `grade.rs`, locate the depth inference call at line 141–154. Replace the entire block from `// Run depth inference at proxy resolution` to the closing `.unwrap_or_else(...)` with:\n\n```rust\n// Downscale to proxy resolution before sending to inference.\n// Avoids serializing 24 MB/frame over the pipe when Python resizes to 518 px anyway.\nlet (proxy_w, proxy_h) =\n    dorea_video::resize::proxy_dims(frame.width, frame.height, args.proxy_size);\nlet proxy_pixels = if proxy_w != frame.width || proxy_h != frame.height {\n    dorea_video::resize::resize_rgb_bilinear(\n        &frame.pixels,\n        frame.width,\n        frame.height,\n        proxy_w,\n        proxy_h,\n    )\n} else {\n    frame.pixels.clone()\n};\n\n// Run depth inference at proxy resolution\nlet (depth_proxy, dw, dh) = inf_server\n    .run_depth(\n        &frame.index.to_string(),\n        &proxy_pixels,\n        proxy_w,\n        proxy_h,\n        args.proxy_size,",
+  "source_version": "plans/2026-04-02-inference-perf-fix.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042230066Z",
+  "valid_from": "2026-04-08T03:32:28.042230066Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-inference-perf-fix.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 441,
+    "end_line": 475,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

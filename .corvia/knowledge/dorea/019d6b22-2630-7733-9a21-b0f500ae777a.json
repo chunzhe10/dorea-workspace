@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-b0f500ae777a",
+  "content": "pub struct MaxineDefaults {\n    /// Super-resolution upscale factor: 2, 3, or 4 (default: 2)\n    pub upscale_factor: Option<u32>,\n    /// Run artifact reduction before upscale (default: true)\n    pub artifact_reduction: Option<bool>,\n}\npub struct PreviewDefaults {\n    /// Number of frames to sample (default: 8)\n    pub frames: Option<usize>,\n    /// Warmth multiplier — falls back to `[grade].warmth` if unset\n    pub warmth: Option<f32>,\n    /// Blend strength — falls back to `[grade].strength` if unset\n    pub strength: Option<f32>,\n    /// Contrast multiplier — falls back to `[grade].contrast` if unset\n    pub contrast: Option<f32>,\n}",
+  "source_version": "crates/dorea-cli/src/config.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360273017Z",
+  "valid_from": "2026-04-08T03:28:13.360273017Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/config.rs",
+    "language": "rs",
+    "chunk_type": "struct_item",
+    "start_line": 89,
+    "end_line": 98,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

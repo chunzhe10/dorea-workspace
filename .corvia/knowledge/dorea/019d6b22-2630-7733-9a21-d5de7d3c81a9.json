@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-d5de7d3c81a9",
+  "content": "h.rand(1, 3, 100, 180)\n        depths = model.infer_batch_from_tensors(fake_enhanced, depth_max_size=98)\n        H, W = depths[0].shape\n        assert H % 14 == 0, f\"height {H} not multiple of 14\"\n        assert W % 14 == 0, f\"width {W} not multiple of 14\"\nclass _FakeDepthModel(torch.nn.Module):\n            class _Out:\n                def __init__(self, t): self.predicted_depth = t\n            def forward(self, pixel_values=None):\n                N, _, H, W = pixel_values.shape\n                return self._Out(pixel_values[:, 0, :, :])",
+  "source_version": "python/tests/test_infer_batch.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360721086Z",
+  "valid_from": "2026-04-08T03:28:13.360721086Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/tests/test_infer_batch.py",
+    "language": "py",
+    "chunk_type": "class_definition",
+    "start_line": 85,
+    "end_line": 90,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

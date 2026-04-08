@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-c40c49540820",
+  "content": "      unsafe {\n            for &tex in &self.textures {\n                let _ = sys::lib().cuTexObjectDestroy(tex);\n            }\n            for &arr in &self.arrays {\n                let _ = sys::lib().cuArrayDestroy(arr);\n            }\n        }\n    }\n}\nfn drop(&mut self) {\n        unsafe {\n            for &tex in &self.textures {\n                let _ = sys::lib().cuTexObjectDestroy(tex);\n            }\n            for &arr in &self.arrays {\n                let _ = sys::lib().cuArrayDestroy(arr);\n            }\n        }\n    }",
+  "source_version": "crates/dorea-gpu/src/cuda/combined_lut.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360492803Z",
+  "valid_from": "2026-04-08T03:28:13.360492803Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cuda/combined_lut.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 37,
+    "end_line": 46,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

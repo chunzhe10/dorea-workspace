@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-de629924f08d",
+  "content": " alloc_calibration_buffers(\n      dev: &Arc<CudaDevice>,\n      n_zones: usize,\n      lut_size: usize,\n  ) -> Result<CalibrationBuffers, GpuError> {\n      let lut_n = n_zones * lut_size * lut_size * lut_size * 3;\n      let boundary_n = (n_zones + 1).max(1);\n      Ok(CalibrationBuffers {\n          n_zones,\n          lut_size,\n          d_luts: dev.alloc_zeros(lut_n).map_err(map_cudarc_error)?,\n          d_boundaries: dev.alloc_zeros(boundary_n).map_err(map_cudarc_error)?,\n          d_h_offsets: dev.alloc_zeros(6).map_err(map_cudarc_error)?,\n          d_s_ratios: dev.alloc_zeros(6).map_err(map_cudarc_error)?,\n          d_v_offsets: dev.alloc_zeros(6).map_err(map_cudarc_error)?,\n          d_weights: dev.alloc_zeros(6).map_err(map_cudarc_error)?,\n      })\n  }\n  ```\n\n- [ ] **Step 3: Verify it compiles (structs and helpers only — `CudaGrader` not yet changed)**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ncargo check -p dorea-gpu 2>&1 | tail -20\n```\n\nExpected: no errors. If errors appear, fix them before continuing.\n\n- [ ] **Step 4: Commit**\n\n```bash\ngit add crates/dorea-gpu/src/cuda/mod.rs\ngit commit -m \"feat(dorea-gpu): add ResolutionBuffers and CalibrationBuffers structs with alloc helpers\"\n```\n\n---\n",
+  "source_version": "docs/plans/2026-04-03-cuda-grader-buffer-pre-allocation.md",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360838645Z",
+  "valid_from": "2026-04-08T03:28:13.360838645Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "docs/plans/2026-04-03-cuda-grader-buffer-pre-allocation.md",
+    "language": "markdown",
+    "chunk_type": "heading_section",
+    "start_line": 281,
+    "end_line": 311,
+    "content_role": "plan",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

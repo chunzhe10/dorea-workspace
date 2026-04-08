@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-dd97a79f5c1a",
+  "content": "make_calibration(n_zones);\n            let params = crate::GradeParams::default();\n            let grader = match CudaGrader::new(&cal, &params) {\n                Ok(g) => g,\n                Err(e) => { eprintln!(\"SKIP n_zones={n_zones}: {e}\"); continue; }\n            };\n            let (pixels, depth) = make_frame(8, 8);\n            let gpu_out = grader.grade_frame_cuda(&pixels, &depth, 8, 8)\n                .expect(&format!(\"grade_frame_cuda failed for n_zones={n_zones}\"));\n            assert_eq!(gpu_out.len(), 8 * 8 * 3,\n                \"n_zones={n_zones}: output length mismatch\");\n        }\n    }\n```\n\n- [ ] **Step 2: Run tests — expect either pass or a diff > 2 (which reveals a mismatch)**\n\n```bash\ncd repos/dorea && cargo test -p dorea-gpu combined_lut 2>&1 | tail -20\n```\n\nIf diff > 2: compare `grade_pixel_cpu` vs `grade_pixel_device` step-by-step on one pixel — the mismatch will be in a specific pipeline stage. Common causes: missing clamp, wrong constant, axis swap (R↔B). Fix `grade_pixel.cuh` and re-run.\n\n- [ ] **Step 3: Run the full test suite**\n\n```bash\ncd repos/dorea && cargo test 2>&1 | tail -20\n```\n\nExpected: all pass.\n\n- [ ] **Step 4: Run criterion benchmark**\n\n```bash\ncd repos/dorea && cargo bench -p dorea-gpu 2>&1 | grep -E \"with_grader|cpu\" | head -20\n```\n\nExpected output (on RTX 3060):\n- `grading/with_grader/1080p`: ~15–25ms (combined LUT, no intermediate allocs)\n- `grading/cpu/1080p`: ~500ms–2s (CPU reference, much slower)\n- `grading/per_call_init/1080p`: ~15–50ms + LUT build overhead\n\n**Pass criteria:** `grading/with_grader/1080p` must be below 25ms. If it exceeds 25ms, see Task 9 Step 5 for diagnosis guidance.\n\n- [ ] **Step 5: Commit**\n\n```bash\ncd repos/dorea && git add -u crates/dorea-gpu/\ngit commit -m \"test: add combined LUT accuracy integration tests (4 variants) + benchmark (Task 10)\"\n```\n\n---\n",
+  "source_version": "docs/plans/2026-04-03-combined-lut-cuda-texture-plan.md",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360826967Z",
+  "valid_from": "2026-04-08T03:28:13.360826967Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "docs/plans/2026-04-03-combined-lut-cuda-texture-plan.md",
+    "language": "markdown",
+    "chunk_type": "heading_section",
+    "start_line": 2079,
+    "end_line": 2126,
+    "content_role": "plan",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-cd1b7a606c08",
+  "content": "### 5. LUT Application (`dorea-lut/src/apply.rs`)\n### 6. HSL Qualifier Derivation (`dorea-hsl/src/derive.rs`)\n\n### 7. HSL Qualifier Application (`dorea-hsl/src/apply.rs`)\n\nPort from `run_fixed_hsl_lut_poc.py::apply_hsl_corrections()`.\n\nFor each pixel:\n1. Convert to HSV\n2. For each qualifier with weight ≥ 100:\n   - Compute soft mask (same as derivation)\n   - `H += h_offset × mask`\n   - `S = S × (1 + (s_ratio - 1) × mask)`, clamped [0,1]\n   - `V += v_offset × mask`, clamped [0,1]\n3. Wrap H to [0,360), clamp S and V\n4. Convert back to RGB\n\n\n### 8. Calibration Format (`dorea-cal/src/format.rs`)\n\nBinary format via `bincode` + `serde`:\n\n```rust\nstruct Calibration {\n    version: u8,           // format version (current: 1)\n    lut_size: u8,          // 33\n    n_zones: u8,           // 5\n    zone_boundaries: [f32; 6],  // adaptive zone edges [0,1]\n    depth_luts: Vec<LutGrid>,   // n_zones LUTs, each 33³×3\n    hsl_corrections: HslCorrections,\n    created_at: String,    // ISO 8601\n    keyframe_count: u8,\n}\n```\n\nFile extension: `.dorea-cal`\n",
+  "source_version": "plans/2026-04-02-dorea-v2-phase1-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042188799Z",
+  "valid_from": "2026-04-08T03:32:28.042188799Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-dorea-v2-phase1-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 188,
+    "end_line": 220,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

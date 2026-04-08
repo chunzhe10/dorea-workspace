@@ -1,0 +1,31 @@
+{
+  "id": "019d597b-357e-7d93-96d3-91e765b17edf",
+  "content": "# Per-Keyframe Adaptive Depth Zones — Design Decision (2026-04-04)\n\n## What\nReplaces global depth zone computation (single `adaptive_zone_boundaries` call per clip) with a two-tier architecture:\n\n**Tier 1 — Base LUT (32 fine zones, per-segment):** Built from all keyframes within a scene segment. 32 zones give fine depth resolution across [0.0–1.0]. Many keyframes contribute → good 33³ LUT cell coverage. Rebuilt only at scene segment boundaries. Encodes color science.\n\n**Tier 2 — Runtime Zones (8 adaptive zones, per-keyframe):** Computed from each keyframe's own depth map. Places zone centers where depth values actually ARE in each frame. Combined GPU texture rebuilt per-keyframe at local zone centers, reading from 32-zone base LUT. Encodes depth context.\n\n## Why\nGlobal zones average depth distributions across disparate scenes (reef close-up vs open water). This causes: (1) LUT calibration trained on wrong depth partitions, (2) per-frame grading applied at wrong depth sample points. Both problems compound when camera moves significantly or subjects shift depth.\n\n## Key Architecture\n- Scene segments detected via Wasserstein-1 distance on depth histograms between consecutive keyframes\n- All per-KF zone boundaries pre-computed after Pass 0 (all depth maps known upfront), smoothed over 3-KF window\n- Per-segment base LUTs + HSL corrections built in pre-compute phase (~500ms total)\n- Pipelined double-buffer GPU texture build: Stream B builds next KF's combined texture while Stream A grades current frames — zero visible stall\n- Dual-texture temporal blending in grading kernel: non-KF frames sample both adjacent KF textures, lerp by temporal position\n- VRAM: ~246MB total for grading (32-zone base LUT + 2 × combined texture sets), fits easily in 6GB after models unloaded\n\n## Performance Impact\n- Pre-compute: +500ms one-time\n- Per non-KF frame: ~50-70% slower (dual texture sampling)\n- Per KF frame (t=0): unchanged (skip second texture)\n- Texture rebuilds: hidden behind grading work via CUDA stream pipelining\n\n## Spec\n`docs/decisions/2026-04-04-per-keyframe-adaptive-depth-zones.md`\n",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-04T17:12:20.094480846Z",
+  "valid_from": "2026-04-04T17:12:20.094480846Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

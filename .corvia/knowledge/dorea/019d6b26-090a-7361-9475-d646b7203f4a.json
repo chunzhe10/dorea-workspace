@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-d646b7203f4a",
+  "content": "# ---------------------------------------------------------------------------\n\n        # Direct tensor construction — bypass AutoImageProcessor\n        arr = np.array(capped).astype(np.float32) / 255.0\n        arr = (arr - self._MEAN) / self._STD\n        tensor = torch.from_numpy(arr).permute(2, 0, 1).unsqueeze(0).to(self.device)\n\n        with torch.no_grad():\n            outputs = self.model(pixel_values=tensor)\n\n        depth = outputs.predicted_depth.squeeze(0)  # stays on device\n\n        d_min = float(depth.min())\n        d_max = float(depth.max())\n        if d_max - d_min < 1e-6:\n            depth = torch.zeros_like(depth)\n        else:\n            depth = (depth - d_min) / (d_max - d_min)\n\n        return depth.to(torch.float32).contiguous()\n```\n\n- [ ] **Step 3: Add `infer_gpu()` to `raune_net.py`**\n\nAdd this method to the `RauneNetInference` class, after the existing `infer()` method at line 110:\n\n```python\n    def infer_gpu(self, img_rgb: np.ndarray, max_size: int = 1024) -> \"torch.Tensor\":\n        \"\"\"Run RAUNE-Net, return on-device uint8 tensor (not copied to CPU).\n\n        Returns a 3D uint8 CUDA tensor (HxWx3) at inference resolution.\n        The caller must keep a reference to prevent GC.\n        \"\"\"\n        import torch\n        import torchvision.transforms as transforms\n        from PIL import Image as _Image\n\n        pil = _Image.fromarray(img_rgb)\n        resized, tw, th = _resize_maintain_aspect(pil, max_size)\n\n        normalize = transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))\n        tensor = normalize(transforms.ToTensor()(resized)).unsqueeze(0).to(self.device)\n\n        with torch.no_grad():\n            out = self.model(tensor)\n",
+  "source_version": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042269703Z",
+  "valid_from": "2026-04-08T03:32:28.042269703Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 196,
+    "end_line": 239,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

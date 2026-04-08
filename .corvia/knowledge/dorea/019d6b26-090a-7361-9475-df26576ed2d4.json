@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-df26576ed2d4",
+  "content": "------------------------------------------------\n    let decode_source = maxine_temp_path.as_deref().unwrap_or(args.input.as_path());\n    let frames = ffmpeg::decode_frames(decode_source, &info)\n        .context(\"failed to spawn ffmpeg full-res decoder\")?;\n```\n\nNo other changes to Pass 2 — `frame.pixels` already contains the correct data (Maxine-enhanced from temp file, or raw from original).\n\n- [ ] **Step 8: Build**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ncargo build 2>&1 | tail -30\n```\n\nExpected: clean build. Fix any compile errors (missing imports, type mismatches) before proceeding.\n\nAdd any missing imports at the top of grade.rs:\n```rust\nuse dorea_video::inference::InferenceServer;\n```\n(if not already present — check existing imports at line 12).\n\n- [ ] **Step 9: Run full test suite**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ncargo test 2>&1 | tail -30\n```\n\nExpected: all tests pass.\n\n- [ ] **Step 10: Commit**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ngit add crates/dorea-cli/src/grade.rs\ngit commit -m \"feat(grade): Maxine preprocessing — full-res Pass 1, temp-file reuse in Pass 2\"\n```\n\n---\n",
+  "source_version": "plans/2026-04-04-maxine-enhancement-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042349785Z",
+  "valid_from": "2026-04-08T03:32:28.042349785Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-maxine-enhancement-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1390,
+    "end_line": 1427,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

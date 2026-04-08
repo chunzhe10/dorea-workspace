@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-e4cd8e6e1fc2",
+  "content": "      let a: Vec<u8> = vec![100, 150, 200, 50, 75, 125];\n        assert_eq!(frame_mse(&a, &a), 0.0);\n    }\n\n    #[test]\n    fn frame_mse_empty_is_zero() {\n        assert_eq!(frame_mse(&[], &[]), 0.0);\n    }\n\n    #[test]\n    fn frame_mse_opposite_is_one() {\n        let a: Vec<u8> = vec![0, 0, 0];\n        let b: Vec<u8> = vec![255, 255, 255];\n        let mse = frame_mse(&a, &b);\n        assert!((mse - 1.0).abs() < 1e-5, \"expected ~1.0, got {mse}\");\n    }\n\n    #[test]\n    fn frame_mse_known_value() {\n        let a: Vec<u8> = vec![100, 100, 100];\n        let b: Vec<u8> = vec![101, 101, 101];\n        let mse = frame_mse(&a, &b);\n        let expected = 1.0 / (255.0 * 255.0);\n        assert!((mse as f64 - expected).abs() < 1e-8, \"expected {expected}, got {mse}\");\n    }\n\n    #[test]\n    fn mse_detector_no_reference_returns_max() {\n        let det = MseDetector::default();\n        let pixels = vec![128u8; 100];\n        assert_eq!(det.score(&pixels), f32::MAX);\n    }\n\n    #[test]\n    fn mse_detector_same_as_reference_returns_zero() {\n        let mut det = MseDetector::default();\n        let pixels = vec![200u8; 300];\n        det.set_reference(&pixels);\n        assert_eq!(det.score(&pixels), 0.0);\n    }\n\n    #[test]\n    fn mse_detector_set_reference_compares_to_set_frame_not_latest() {\n        let mut det = MseDetector::default();\n        let ref_frame = vec![0u8; 3];\n        let other_frame = vec![255u8; 3];\n        det.set_reference(&ref_frame);\n\n        // score returns MSE vs ref_frame — not updated by calling score itself\n        let s1 = det.score(&other_frame);\n        let s2 = det.score(&other_frame);\n        assert_eq!(s1, s2, \"score should be deterministic without set_reference\");\n        assert!((s1 - 1.0).abs() < 1e-5);\n    }\n\n    #[test]",
+  "source_version": "plans/2026-04-04-unified-keyframe-sampling-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042401063Z",
+  "valid_from": "2026-04-08T03:32:28.042401063Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-unified-keyframe-sampling-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 133,
+    "end_line": 177,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

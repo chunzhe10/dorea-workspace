@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-ebe48c19ca35",
+  "content": "### Task 3: Service Registry\n\n    # corvia-inference should NOT be in the list\n    assert \"corvia-inference\" not in names\n\n\ndef test_resolve_startup_order_surrealdb() -> None:\n    \"\"\"SurrealDB enabled: corvia-inference → surrealdb → corvia-server.\"\"\"\n    order = resolve_startup_order(\n        embedding_provider=\"corvia\",\n        storage=\"surrealdb\",\n        enabled_services=[\"surrealdb\"],\n    )\n    names = [s.name for s in order]\n    assert \"surrealdb\" in names\n    assert names.index(\"surrealdb\") < names.index(\"corvia-server\")\n\n\ndef test_resolve_startup_order_coding_llm() -> None:\n    \"\"\"coding-llm adds ollama after corvia-server (even if corvia uses corvia-inference).\"\"\"\n    order = resolve_startup_order(\n        embedding_provider=\"corvia\",\n        storage=\"lite\",\n        enabled_services=[\"coding-llm\"],\n    )\n    names = [s.name for s in order]\n    assert \"corvia-inference\" in names\n    assert \"ollama\" in names  # needed for coding-llm\n    assert names.index(\"corvia-server\") < names.index(\"ollama\")\n\n\ndef test_resolve_startup_order_ollama_plus_coding_llm() -> None:\n    \"\"\"Ollama for corvia + coding-llm: ollama only appears once.\"\"\"\n    order = resolve_startup_order(\n        embedding_provider=\"ollama\",\n        storage=\"lite\",\n        enabled_services=[\"coding-llm\"],\n    )\n    names = [s.name for s in order]\n    assert names.count(\"ollama\") == 1\n    assert names.index(\"ollama\") < names.index(\"corvia-server\")\n```\n\n**Step 2: Run test to verify it fails**\n\nRun: `cd /workspaces/corvia-workspace && python3 -m pytest tools/corvia-dev/tests/test_services.py -v`\nExpected: FAIL with `ModuleNotFoundError`\n\n**Step 3: Write the implementation**\n\n```python\n\"\"\"Service registry and dependency resolution.\"\"\"\n\nfrom __future__ import annotations\n\nfrom corvia_dev.models import ServiceDefinition\n",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-cli.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042464780Z",
+  "valid_from": "2026-04-08T03:32:28.042464780Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-cli.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 342,
+    "end_line": 396,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

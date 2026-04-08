@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-d37dd812fc77",
+  "content": "# 3D LUT Temporal Interpolation — Implementation Plan\n\n### Task 1: Add `skip_clarity` parameter to `grade_frame_cpu`\n\n**Files:**\n- Modify: `crates/dorea-gpu/src/cpu.rs:409-449`\n\n- [ ] **Step 1: Add `skip_clarity` param to `grade_frame_cpu`**\n\nChange the signature and pass it through to `finish_grade`:\n\n```rust\n/// Full CPU grading pipeline: LUT apply → HSL correct → depth_aware_ambiance → user params.\n///\n/// When `skip_clarity` is true, the clarity pass (box blur detail extraction) is skipped.\n/// Used by the 3D LUT build phase to capture only per-pixel operations.\npub fn grade_frame_cpu(\n    pixels: &[u8],\n    depth: &[f32],\n    width: usize,\n    height: usize,\n    calibration: &Calibration,\n    params: &GradeParams,\n    skip_clarity: bool,\n) -> Result<Vec<u8>, String> {\n    // Convert u8 → f32\n    let mut rgb_f32: Vec<f32> = pixels.iter().map(|&p| p as f32 / 255.0).collect();\n\n    // 1. Apply depth-stratified LUT\n    let lut_result = apply_depth_luts(\n        &rgb_f32\n            .chunks_exact(3)\n            .map(|c| [c[0], c[1], c[2]])\n            .collect::<Vec<_>>(),\n        depth,\n        &calibration.depth_luts,\n    );\n    for (i, px) in lut_result.iter().enumerate() {\n        rgb_f32[i * 3]     = px[0];\n        rgb_f32[i * 3 + 1] = px[1];\n        rgb_f32[i * 3 + 2] = px[2];\n    }\n\n    // 2. Apply HSL qualifier corrections\n    let pixels_arr: Vec<[f32; 3]> = rgb_f32\n        .chunks_exact(3)\n        .map(|c| [c[0], c[1], c[2]])",
+  "source_version": "plans/2026-04-03-3d-lut-temporal-interpolation.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042244074Z",
+  "valid_from": "2026-04-08T03:32:28.042244074Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-3d-lut-temporal-interpolation.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 15,
+    "end_line": 59,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

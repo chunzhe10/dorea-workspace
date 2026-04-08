@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-0909-7eb1-86e3-746752ee1acb",
+  "content": "## Module Changes\n## Backward Compatibility\n\n## Expected Performance\n\n| Metric | Current | After |\n|--------|---------|-------|\n| Frame rate (rectilinear) | 0.74 fps | ~1.4 fps |\n| Frame rate (tiny planet) | 0.74 fps | ~20+ fps |\n| VRAM peak | ~1.5 GB | ~2.8 GB (batch=2) |\n| LUT generation | ~0.5s | ~3-4s (65^3) |\n| IPC bandwidth | 24.9 MB/frame | 24.9 MB/frame (stays 8-bit proxy) |\n| GPU idle time | ~95% | ~50% (pipelined) |\n\n\n## Test Plan\n",
+  "source_version": "decisions/2026-04-02-10bit-pipeline-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.041838907Z",
+  "valid_from": "2026-04-08T03:32:28.041838907Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-02-10bit-pipeline-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 337,
+    "end_line": 349,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

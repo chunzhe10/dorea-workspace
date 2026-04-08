@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-c29a5ab5e28a",
+  "content": "   h_width: 1.0,\n            h_offset: 0.0,\n            s_ratio: 1.0,\n            v_offset: 0.0,\n            weight: 0.0, // weight=0 → qualifier inactive, HSL stage is pass-through in tests\n        }]);\n        Calibration::new(depth_luts, hsl, 1)\n    }\nfn make_frame(w: usize, h: usize) -> (Vec<u8>, Vec<f32>) {\n        let n = w * h;\n        let pixels: Vec<u8> = (0..n * 3).map(|i| ((i * 7 + 128) % 256) as u8).collect();\n        let depth: Vec<f32> = (0..n).map(|i| (i as f32) / n as f32 * 0.8 + 0.1).collect();\n        (pixels, depth)\n    }",
+  "source_version": "crates/dorea-gpu/src/cuda/mod.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360473743Z",
+  "valid_from": "2026-04-08T03:28:13.360473743Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cuda/mod.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 207,
+    "end_line": 212,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

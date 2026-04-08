@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-0909-7eb1-86e3-790d04a31eb5",
+  "content": "## CUDA Context Sharing\n\n## Scope and Non-Goals\n\n**In scope:**\n- PyO3 embedding replacing subprocess IPC in dorea-video (behind `python` feature)\n- cudarc migration replacing extern C FFI in dorea-gpu (behind `cuda` feature)\n- Adaptive batch sizing for video grading\n- GPU tensor sharing between inference and grading\n- OOM recovery and CPU fallback chain\n\n**Not in scope:**\n- Batching inference calls (model architecture change, separate concern)\n- Persisting batch size across runs\n- Multi-GPU support (single RTX 3060)\n- Streaming/async kernel execution (CUDA streams — future optimization)\n- Changes to ffmpeg decode/encode path\n- Changes to calibration algorithms (dorea-lut, dorea-hsl, dorea-cal)\n\n\n## Build and CI\n",
+  "source_version": "decisions/2026-04-03-gpu-space-ipc-adaptive-batching-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.041881103Z",
+  "valid_from": "2026-04-08T03:32:28.041881103Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-03-gpu-space-ipc-adaptive-batching-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 631,
+    "end_line": 649,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

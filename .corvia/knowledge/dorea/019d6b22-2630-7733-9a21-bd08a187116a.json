@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-bd08a187116a",
+  "content": "      bridge: &Bound<'_, PyModule>,\n        model_path: Option<&str>,\n        device: &str,\n    ) -> Result<(), InferenceError> {\n        let py_model_path = match model_path {\n            Some(p) => p.into_py(py),\n            None => py.None(),\n        };\n        bridge.call_method1(\"load_depth_model\", (py_model_path, device))\n            .map_err(|e| InferenceError::InitFailed(format!(\"load_depth_model: {e}\")))?;\n        Ok(())\n    }\n\n    /// Load the RAUNE model via the Python bridge.\n    fn call_load_raune(\n        py: Python<'_>,\n        bridge: &Bound<'_, PyModule>,\n        weights_path: Option<&str>,\n        device: &str,\n        models_dir: Option<&str>,\n    ) -> Result<(), InferenceError> {\n        let py_weights = match weights_path {\n            Some(p) => p.into_py(py),\n            None => py.None(),\n        };\n        let py_models_dir = match models_dir {\n            Some(p) => p.into_py(py),\n            None => py.None(),\n        };\n        bridge.call_method1(\"load_raune_model\", (py_weights, device, py_models_dir))\n            .map_err(|e| InferenceError::InitFailed(format!(\"load_raune_model: {e}\")))?;\n        Ok(())\n    }\n\n    /// Load the Maxine model via the Python bridge.\n    fn call_load_maxine(\n        py: Python<'_>,\n        bridge: &Bound<'_, PyModule>,\n        upscale_factor: u32,\n        _device: &str,  // Reserved for future multi-GPU support; Python bridge is CUDA-only today",
+  "source_version": "crates/dorea-video/src/inference/pyo3_backend.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360406358Z",
+  "valid_from": "2026-04-08T03:28:13.360406358Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference/pyo3_backend.rs",
+    "language": "rs",
+    "chunk_type": "impl_item",
+    "start_line": 579,
+    "end_line": 610,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

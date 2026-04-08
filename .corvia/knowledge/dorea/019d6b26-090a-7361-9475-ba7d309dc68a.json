@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-ba7d309dc68a",
+  "content": "### Task 2.3: Add dashboard API functions\n\n### Task 2.4: Create `GraphControls` component\n\n**Files:**\n- Create: `tools/corvia-dashboard/src/components/GraphControls.tsx`\n\n- [ ] **Step 1: Create the filter controls component**\n\n```tsx\nimport { useState } from \"preact/hooks\";\n\ninterface GraphControlsProps {\n  onFilterChange: (filters: {\n    contentRole: string | null;\n    sourceOrigin: string | null;\n    depth: number;\n  }) => void;\n  availableRoles: string[];\n  availableOrigins: string[];\n}\n\nconst ROLE_LABELS: Record<string, string> = {\n  design: \"Design\",\n  decision: \"Decision\",\n  plan: \"Plan\",\n  code: \"Code\",\n  memory: \"Memory\",\n  finding: \"Finding\",\n  instruction: \"Instruction\",\n  learning: \"Learning\",\n};\n\nexport function GraphControls({\n  onFilterChange,\n  availableRoles,\n  availableOrigins,\n}: GraphControlsProps) {\n  const [role, setRole] = useState<string | null>(null);\n  const [origin, setOrigin] = useState<string | null>(null);\n  const [depth, setDepth] = useState(2);\n\n  const handleRoleChange = (e: Event) => {\n    const val = (e.target as HTMLSelectElement).value || null;\n    setRole(val);\n    onFilterChange({ contentRole: val, sourceOrigin: origin, depth });\n  };\n\n  const handleOriginChange = (e: Event) => {\n    const val = (e.target as HTMLSelectElement).value || null;\n    setOrigin(val);",
+  "source_version": "plans/2026-03-13-docs-workflow-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042011289Z",
+  "valid_from": "2026-04-08T03:32:28.042011289Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-13-docs-workflow-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1012,
+    "end_line": 1060,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

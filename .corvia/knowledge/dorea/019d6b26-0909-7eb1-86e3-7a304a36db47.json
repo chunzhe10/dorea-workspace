@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-0909-7eb1-86e3-7a304a36db47",
+  "content": "## Problem\n## Solution: Two-Tier Zone Architecture\n\n### Tier 1 — Base LUT (32 fine zones, per-segment)\n\n- Built from all keyframes within a scene segment\n- 32 zones provide fine depth resolution across the full [0.0–1.0] range\n- Many keyframes contribute → good color cell coverage in the 33³ grid\n- Rebuilt only at scene segment boundaries\n- Encodes the **color science**: \"at depth X, what RGB correction do we apply?\"\n\n\n### Tier 2 — Runtime Zones (8 adaptive zones, per-keyframe)\n\n- Computed from each keyframe's own depth map via `adaptive_zone_boundaries(kf_depth, 8)`\n- Places zone centers where the depth values actually ARE in this frame\n- Combined GPU texture rebuilt per-keyframe at these 8 local zone centers, reading from the 32-zone base LUT\n- Encodes the **depth context**: \"which depths matter for this frame?\"\n",
+  "source_version": "decisions/2026-04-04-per-keyframe-adaptive-depth-zones.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.041895852Z",
+  "valid_from": "2026-04-08T03:32:28.041895852Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-04-per-keyframe-adaptive-depth-zones.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 21,
+    "end_line": 35,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

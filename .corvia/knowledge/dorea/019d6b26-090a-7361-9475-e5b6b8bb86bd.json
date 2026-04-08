@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-e5b6b8bb86bd",
+  "content": "ass.\n\n- [ ] **Step 3.5: Commit**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ngit add crates/dorea-cli/src/grade.rs\ngit commit -m \"feat(grade): unified keyframe sampling — fused RAUNE+depth fills both calibration and grading depth cache\"\n```\n\n---\n\n## Task 4: Delete `auto_calibrate` and remove `--keyframe-interval`\n\n**Files:**\n- Modify: `crates/dorea-cli/src/grade.rs`\n\n- [ ] **Step 4.1: Delete the `auto_calibrate` function**\n\nDelete the entire function from `fn auto_calibrate(args: &GradeArgs, info: &ffmpeg::VideoInfo) -> Result<Calibration> {` through its closing `}` (currently lines ~522–691). All of its logic is now inline in `run()`.\n\n- [ ] **Step 4.2: Remove `--keyframe-interval` from `GradeArgs`**\n\nIn the `GradeArgs` struct, delete:\n\n```rust\n    /// Frames between keyframe samples for auto-calibration\n    #[arg(long, default_value = \"30\")]\n    pub keyframe_interval: usize,\n```\n\n- [ ] **Step 4.3: Remove any remaining `use` imports that were only used by `auto_calibrate`**\n\nThe `auto_calibrate` function had local `use` declarations inside it. Since those are now inline in `run()` in the `else` branch, nothing needs to change in the top-level imports. Verify no dead `use` warnings:\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ncargo check -p dorea-cli 2>&1 | grep \"unused import\\|warning\"\n```\n\n- [ ] **Step 4.4: Cargo check + test**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ncargo check -p dorea-cli 2>&1 | tail -10\ncargo test -p dorea-cli 2>&1 | tail -15\n```\nExpected: clean build, all tests pass.\n\n- [ ] **Step 4.5: Commit**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ngit add crates/dorea-cli/src/grade.rs\ngit commit -m \"feat(grade): delete auto_calibrate(), remove --keyframe-interval — subsumed by unified pass\"\n```\n\n---\n\n\n## Task 5: Open GitHub issue + smoke test\n\n- [ ] **Step 5.1: Open GitHub issue**\n\n```bash\ngh issue create \\\n  --repo chunzhe10/dorea \\\n  --title \"feat(grade): unified keyframe sampling — single MSE pass for calibration + grading\" \\\n  --body \"$(cat <<'EOF'",
+  "source_version": "plans/2026-04-04-unified-keyframe-sampling-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042409411Z",
+  "valid_from": "2026-04-08T03:32:28.042409411Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-unified-keyframe-sampling-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 747,
+    "end_line": 802,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

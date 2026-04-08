@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-c9c0c98bb2c0",
+  "content": "## Phase C: Pipeline + Tiny Planet + Integration\n\n### Task 13: 3-Stage Pipelined Frame Loop\n\n**Files:**\n- Modify: `crates/dorea-cli/src/grade.rs:75-209`\n\nThis is the largest task. Replace the serial `for frame in frames` loop with\na 3-stage bounded-channel pipeline.\n\n- [ ] **Step 1: Add sync_channel imports**\n\nAt the top of `crates/dorea-cli/src/grade.rs`:\n\n```rust\nuse std::sync::mpsc::{sync_channel, SyncSender, Receiver};\nuse std::thread;\n```\n\n- [ ] **Step 2: Define inter-stage message types**\n\nAdd in `grade.rs`:\n\n```rust\n/// Message from Stage 1 (decode) to Stage 2 (depth).\nstruct DecodedFrame {\n    index: u64,\n    /// f32 RGB pixels [0,1], length = width * height * 3\n    pixels_f32: Vec<f32>,\n    /// u8 proxy pixels for inference, length = proxy_w * proxy_h * 3\n    proxy_u8: Vec<u8>,\n    proxy_w: usize,\n    proxy_h: usize,\n    width: usize,\n    height: usize,\n}\n\n/// Message from Stage 2 (depth) to Stage 3 (grade+encode).\nstruct DepthFrame {\n    index: u64,\n    pixels_f32: Vec<f32>,\n    depth: Vec<f32>,\n    width: usize,\n    height: usize,\n}\n```",
+  "source_version": "plans/2026-04-02-10bit-pipeline-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042154799Z",
+  "valid_from": "2026-04-08T03:32:28.042154799Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-10bit-pipeline-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1710,
+    "end_line": 1753,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

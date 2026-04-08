@@ -1,0 +1,31 @@
+{
+  "id": "019d58d7-4c4e-76d3-a93a-b5fe17cbe0ef",
+  "content": "## Maxine Pipeline Architecture — Merged (PR #55, 2026-04-04)\n\nArchitectural improvements on top of initial Maxine integration (PR #53).\n\n### Key Changes\n\n**Single-server VRAM lifecycle** (eliminates two-server bug):\n- One `InferenceServer` spawned Maxine-only (`skip_raune: true, skip_depth: true`)\n- After Pass 1: `unload_maxine()` → `load_raune()` → `load_depth()` in-place\n- VRAM peak: max(Maxine ≤ 2 GB, RAUNE+Depth ≤ 4 GB) — never all three simultaneously\n\n**Dynamic model lifecycle IPC** (both backends):\n- New request types: `unload_maxine`, `load_raune`, `load_depth`\n- `server.py`: Maxine load failure → WARNING + passthrough (not crash)\n- `inference_subprocess.rs`: three new methods matching the IPC types\n- `pyo3_backend.rs`: four new methods calling through PyO3 bridge\n\n**Path B removal**:\n- `--calibration` flag removed from `grade.rs`; auto-calibrate is the only path\n- RAUNE output varies per clip — pre-computed LUT reuse was invalid\n\n**Maxine opt-out default**:\n- Replaced `--maxine` (opt-in) with `--no-maxine` (opt-out)\n- `build_inference_config()` defaults `maxine: true`\n\n**pyo3 backend feature-parity**:\n- Added `maxine`, `skip_depth`, `maxine_upscale_factor` to `InferenceConfig`\n- Added `enhance`, `unload_maxine`, `load_raune`, `load_depth` methods\n- Added `load_maxine_model`, `unload_maxine`, `run_maxine` to `bridge.py`\n\n### Tests\n- Rust: 25 passed (`cargo test -p dorea-cli -p dorea-video`)\n- Python: 21 passed (`pytest python/tests/`)\n- Mock mode: `DOREA_MAXINE_MOCK=1` covers full orchestration in CI\n",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-04T14:13:18.030057628Z",
+  "valid_from": "2026-04-04T14:13:18.030057628Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "decision",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

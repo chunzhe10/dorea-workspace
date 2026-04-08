@@ -1,0 +1,31 @@
+{
+  "id": "019d6b43-53e5-7302-bde4-d4938a4f612f",
+  "content": "# PCIe Barrier Reduction — Decision Record (2026-04-08)\n\n## What\nEliminated per-frame cudaMalloc calls in CudaGrader and AdaptiveGrader by caching constant device data and pre-allocating resolution-keyed FrameBuffers. Steady-state barriers reduced from 6→3 (CudaGrader) and 8→3 (AdaptiveGrader).\n\n## Key Design Decisions\n1. **Adapted design to CombinedLut architecture.** The original plan (2026-04-03) was stale — written for separate LUT/HSL/clarity kernels. The current CombinedLut texture architecture has different per-frame uploads (texture handles + boundaries instead of calibration buffers + HSL params). Redesigned from scratch.\n2. **CUtexObject handles are stable after TextureSet::allocate().** CUDA texture objects are opaque handles bound to a CUarray; rebuilding array content via cuMemcpy3D does not change the handle. This allows caching texture handles for the grader's lifetime.\n3. **RefCell<Option<FrameBuffers>> for interior mutability.** grade_frame_cuda/grade_frame_blended take &self (shared reference) but need to lazily allocate and reuse GPU buffers. RefCell is sound because both graders are !Send + !Sync.\n4. **Boundary slices use htod_sync_copy_into in prepare_keyframe.** runtime_n_zones is fixed at construction, so boundary size is constant — no need to reallocate.\n\n## Review Findings Worth Remembering\n- load_segment must be followed by prepare_keyframe + swap for both sets before grading — cached boundaries become stale otherwise. Documented as invariant.\n- Three distinct RefCells can be borrowed concurrently in grade_frame_blended (frame_bufs, d_bounds_active, d_bounds_inactive) — safe because they are independent fields, but needs clarifying comment.\n- dtoh_sync_copy still allocates a host Vec per frame — deferred to follow-up.\n\n## What Blocked / Surprised\n- The stale implementation plan was the biggest surprise. The code had evolved from separate kernels to CombinedLut textures, invalidating all specific implementation steps. Required complete redesign.\n- CUDA compiler not available in devcontainer (GCC/CUDA version mismatch) — CUDA-gated code could not be compiled or tested. Relied on code review and existing CPU test suite for validation.\n",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-08T04:04:27.749418480Z",
+  "valid_from": "2026-04-08T04:04:27.749418480Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "decision",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

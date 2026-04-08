@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-cd581ec4483d",
+  "content": "isumsq[y0 * w1 + x1]\n                - isumsq[y1 * w1 + x0] + isumsq[y0 * w1 + x0];\n\n            let mean = s / count;\n            let var = (sq / count - mean * mean).max(0.0);\n            var_out[y * width + x] = var as f32;\n        }\n    }\n    var_out\n}\nfn find_nearest(empty_cell: &CellIdx, populated: &[CellIdx]) -> (CellIdx, CellIdx) {\n    let mut best_dist = u64::MAX;\n    let mut best_pop = populated[0];\n    for &pc in populated {\n        let dr = (empty_cell[0] as i64 - pc[0] as i64).pow(2) as u64;\n        let dg = (empty_cell[1] as i64 - pc[1] as i64).pow(2) as u64;\n        let db = (empty_cell[2] as i64 - pc[2] as i64).pow(2) as u64;\n        let dist = dr + dg + db;\n        if dist < best_dist {\n            best_dist = dist;\n            best_pop = pc;\n        }\n    }\n    (*empty_cell, best_pop)\n}",
+  "source_version": "crates/dorea-lut/src/build.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360611343Z",
+  "valid_from": "2026-04-08T03:28:13.360611343Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-lut/src/build.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 186,
+    "end_line": 200,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

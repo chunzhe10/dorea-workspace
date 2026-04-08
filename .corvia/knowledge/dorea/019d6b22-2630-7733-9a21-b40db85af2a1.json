@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-b40db85af2a1",
+  "content": "f {\n            version: FORMAT_VERSION,\n            depth_luts,\n            hsl_corrections,\n            created_at_unix_secs: unix_now(),\n            keyframe_count,\n            source_description: format!(\"{keyframe_count} keyframe(s)\"),\n        }\n    }\npub fn save(&self, path: &Path) -> Result<(), CalError> {\n        let bytes = bincode::serialize(self).map_err(|e| CalError::Serialization(e.to_string()))?;\n        let mut file = std::fs::File::create(path)?;\n        file.write_all(&bytes)?;\n        Ok(())\n    }",
+  "source_version": "crates/dorea-cal/src/format.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360301521Z",
+  "valid_from": "2026-04-08T03:28:13.360301521Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cal/src/format.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 45,
+    "end_line": 50,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

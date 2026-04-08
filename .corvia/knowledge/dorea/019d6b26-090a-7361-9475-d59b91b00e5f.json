@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-d59b91b00e5f",
+  "content": "# GPU-Space IPC & Adaptive Batching Implementation Plan\n\n> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.\n\n**Goal:** Replace subprocess JSON-lines IPC and `extern \"C\"` CUDA FFI with PyO3 zero-copy embedding and cudarc RAII device memory, adding adaptive batch sizing for the grading pipeline.\n\n**Architecture:** PyO3 embeds the Python interpreter in-process behind a `python` Cargo feature flag on dorea-video. cudarc replaces the static-linked C launcher pattern in dorea-gpu with PTX module loading and typed kernel launches. An AdaptiveBatcher probes VRAM and adjusts batch size at runtime. GPU tensor sharing eliminates host round-trips for inference-to-grading data flow.\n\n**Tech Stack:** Rust (cudarc 0.12, pyo3 0.22, numpy 0.22), Python (PyTorch, NumPy), CUDA PTX\n\n**Design Spec:** `docs/decisions/2026-04-03-gpu-space-ipc-adaptive-batching-design.md`\n\n**Issue:** chunzhe10/dorea#24\n\n---\n",
+  "source_version": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042263334Z",
+  "valid_from": "2026-04-08T03:32:28.042263334Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1,
+    "end_line": 16,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

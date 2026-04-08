@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-b8caae35d9cf",
+  "content": "         )));\n            }\n\n            let depth: Vec<f32> = raw.chunks_exact(4)\n                .map(|b| f32::from_le_bytes([b[0], b[1], b[2], b[3]]))\n                .collect();\n\n            out.push((id, depth, w, h));\n        }\n\n        Ok(out)\n    }\npub fn run_raune_depth_batch(\n        &mut self,\n        items: &[RauneDepthBatchItem],\n        enable_maxine: bool,\n    ) -> Result<Vec<(String, Vec<u8>, usize, usize, Vec<f32>, usize, usize)>, InferenceError> {\n        if items.is_empty() {\n            return Ok(vec![]);\n        }\n\n        let json_items: Vec<serde_json::Value> = items.iter().map(|item| {\n            serde_json::json!({\n                \"id\": item.id,\n                \"image_b64\": B64.encode(&item.pixels),\n                \"format\": \"raw_rgb\",\n                \"width\": item.width,\n                \"height\": item.height,\n                \"raune_max_size\": item.raune_max_size,\n                \"depth_max_size\": item.depth_max_size,\n            })\n        }).collect();\n\n        let req = serde_json::json!({\n            \"type\": \"raune_depth_batch\",\n            \"items\": json_items,\n            \"enable_maxine\": enable_maxine,\n        });\n        self.send_line(&req.to_string())?;\n\n        let resp = self.recv_line()?;\n        let v: serde_json::Value = serde_json::from_str(&resp)\n            .map_err(|e| InferenceError::Ipc(format!(\"raune_depth_batch parse: {e}\")))?;\n\n        if v[\"type\"].as_str() == Some(\"error\") {\n            return Err(InferenceError::ServerError(\n                v[\"message\"].as_str().unwrap_or(\"unknown error\").to_string(),\n            ));\n        }\n        if v[\"type\"].as_str() != Some(\"raune_depth_batch_result\") {\n            return Err(InferenceError::Ipc(format!(\"unexpected response type: {resp}\")));\n        }\n\n        let results = v[\"results\"].as_array()",
+  "source_version": "crates/dorea-video/src/inference_subprocess.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360356009Z",
+  "valid_from": "2026-04-08T03:28:13.360356009Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference_subprocess.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 482,
+    "end_line": 523,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

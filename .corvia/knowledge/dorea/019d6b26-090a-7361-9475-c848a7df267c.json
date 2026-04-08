@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-c848a7df267c",
+  "content": "or_type} interlace={interlace}\"\n    ));\n}\n```\n\nTo:\n\n```rust\nif (bit_depth != 8 && bit_depth != 16) || color_type != 2 || interlace != 0 {\n    return Err(format!(\n        \"unsupported PNG: bit_depth={bit_depth} color_type={color_type} interlace={interlace}\"\n    ));\n}\nlet bytes_per_channel: usize = bit_depth as usize / 8; // 1 for 8-bit, 2 for 16-bit\n```\n\nThen update the scanline pixel parsing. Find the loop that reads pixel data from\ndecompressed scanlines and replace the per-pixel decode with:\n\n```rust\n// For 8-bit: 1 byte per channel, normalize by /255.0\n// For 16-bit: 2 bytes big-endian per channel, normalize by /65535.0\nlet bytes_per_pixel = bytes_per_channel * 3;\nlet expected_row = 1 + width * bytes_per_pixel; // filter byte + pixel data\n```\n\nAnd in the pixel reading loop, branch on `bytes_per_channel`:\n\n```rust\nif bytes_per_channel == 1 {\n    let r = row_data[1 + x * 3] as f32 / 255.0;\n    let g = row_data[1 + x * 3 + 1] as f32 / 255.0;\n    let b = row_data[1 + x * 3 + 2] as f32 / 255.0;\n    pixels.push([r, g, b]);\n} else {\n    let off = 1 + x * 6;\n    let r = u16::from_be_bytes([row_data[off], row_data[off + 1]]) as f32 / 65535.0;\n    let g = u16::from_be_bytes([row_data[off + 2], row_data[off + 3]]) as f32 / 65535.0;\n    let b = u16::from_be_bytes([row_data[off + 4], row_data[off + 5]]) as f32 / 65535.0;\n    pixels.push([r, g, b]);\n}\n```\n\n- [ ] **Step 5: Run tests**\n\nRun: `cd /workspaces/dorea-workspace/repos/dorea && cargo test -p dorea-video`\nExpected: All pass (including new 16-bit test and existing 8-bit tests).\n\n- [ ] **Step 6: Commit**\n\n```bash\ngit add crates/dorea-video/src/inference.rs\ngit commit -m \"feat(video): 16-bit PNG encode/decode in inference codec\"\n```\n\n---\n",
+  "source_version": "plans/2026-04-02-10bit-pipeline-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042141352Z",
+  "valid_from": "2026-04-08T03:32:28.042141352Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-10bit-pipeline-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 671,
+    "end_line": 716,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

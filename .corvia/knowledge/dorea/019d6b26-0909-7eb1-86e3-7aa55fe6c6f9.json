@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-0909-7eb1-86e3-7aa55fe6c6f9",
+  "content": "### Double-buffer mechanism\n### Timing\n\n### At keyframe boundaries\n\n1. Swap active texture designation (pointer swap, instant)\n2. Upload new zone boundaries to device (9 floats, instant)\n3. If entering new segment: upload new 32-zone base LUT to device (~14MB, ~2ms)\n4. Stream B begins building next keyframe's combined texture\n",
+  "source_version": "decisions/2026-04-04-per-keyframe-adaptive-depth-zones.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.041899950Z",
+  "valid_from": "2026-04-08T03:32:28.041899950Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-04-per-keyframe-adaptive-depth-zones.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 143,
+    "end_line": 149,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

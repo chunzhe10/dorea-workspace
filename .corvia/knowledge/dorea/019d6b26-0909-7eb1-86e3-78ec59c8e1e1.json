@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-0909-7eb1-86e3-78ec59c8e1e1",
+  "content": "### Borrowed device pointer safety\n\n### Fallback chain\n\n```\nGrade frame attempt:\n  0. Module load (PTX -> cudarc)\n     +-- ModuleLoad error -> log error, skip GPU entirely, use CPU for all frames\n         (this is a build/deployment issue, not a per-frame error)\n\n  1. GPU batched (cudarc + PyO3 on-device inference)\n     +-- OOM -> empty_cache, verify context health, adaptive batcher shrinks, retry\n     +-- CUDA error -> fall to (2)\n     +-- Python error -> fall to (2)\n\n  2. GPU single-frame (batch_size=1, fresh CUDA state)\n     +-- OOM -> verify context, fall to (3) if unhealthy\n     +-- CUDA error -> fall to (3)\n     +-- Success -> continue, don't grow batch\n\n  3. CPU fallback (cpu.rs, pure Rust, no CUDA)\n     +-- Always works (no external dependencies)\n     +-- Log warning: \"GPU grading failed, using CPU fallback for frame N\"\n```\n",
+  "source_version": "decisions/2026-04-03-gpu-space-ipc-adaptive-batching-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.041879683Z",
+  "valid_from": "2026-04-08T03:32:28.041879683Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-03-gpu-space-ipc-adaptive-batching-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 565,
+    "end_line": 587,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

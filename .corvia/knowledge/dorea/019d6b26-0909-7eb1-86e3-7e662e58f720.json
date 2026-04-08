@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-0909-7eb1-86e3-7e662e58f720",
+  "content": "### Large Graph Handling\n### What Works Well\n\n### Common Complaints\n\n- Enterprise-focused pricing\n- Requires Neo4j database (not a general-purpose tool)\n- Scene can still become cluttered without discipline\n\n\n### Innovative Patterns to Steal\n\n- **Double-click Inspector with navigable neighbor cards**: Clicking a neighbor card in the\n  inspector navigates to that node, creating seamless graph traversal from a detail panel\n- **Bidirectional card list <-> graph selection**: Selecting in either view highlights in both\n- **Advanced Expansion dialog**: Choose relationship types and limits before expanding\n- **Right-click context menu** with graph-specific actions (expand, dismiss, group, shortest path)\n\n---\n",
+  "source_version": "decisions/graph-document-ux-research.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.041963411Z",
+  "valid_from": "2026-04-08T03:32:28.041963411Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/graph-document-ux-research.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 294,
+    "end_line": 309,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

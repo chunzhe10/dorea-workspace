@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-cb6aa6b4b24e",
+  "content": "\n            h_offset_sum: self.h_offset_sum + other.h_offset_sum,\n            lut_s_sum: self.lut_s_sum + other.lut_s_sum,\n            tgt_s_sum: self.tgt_s_sum + other.tgt_s_sum,\n            v_diff_sum: self.v_diff_sum + other.v_diff_sum,\n        }\n    }\npub fn derive_hsl_corrections(\n    lut_output: &[[f32; 3]],\n    target: &[[f32; 3]],\n) -> HslCorrections {\n    assert_eq!(\n        lut_output.len(),\n        target.len(),\n        \"lut_output ({}) and target ({}) must have the same length\",\n        lut_output.len(),\n        target.len()\n    );\n\n    // Convert to HSV (parallel — each pixel is independent).\n    // Note: materialises two Vecs of (n_pixels × 12 bytes) before the qualifier loop.\n    // For 4K images this is ~200 MB peak; acceptable for a batch calibration tool.\n    let lut_hsv: Vec<(f32, f32, f32)> = lut_output\n        .par_iter()\n        .map(|&[r, g, b]| rgb_to_hsv(r, g, b))\n        .collect();\n    let tgt_hsv: Vec<(f32, f32, f32)> = target\n        .par_iter()\n        .map(|&[r, g, b]| rgb_to_hsv(r, g, b))\n        .collect();\n\n    let mut corrections = Vec::with_capacity(HSL_QUALIFIERS.len());\n\n    for qual in HSL_QUALIFIERS {\n        let hc = qual.h_center;\n        let hw = qual.h_width;\n\n        // Single parallel pass: compute weight and accumulate in one scan.\n        // fold() builds partial sums per rayon thread; reduce() merges them.\n        // Outer qualifier loop stays serial — inner par_iter already saturates the thread pool.\n        let accum: QualifierAccum = lut_hsv\n            .par_iter()\n            .zip(tgt_hsv.par_iter())\n            .fold(QualifierAccum::zero, |mut acc, (&(lh, ls, lv), &(th, ts, tv))| {\n                let h_dist = angular_dist(lh, hc);\n                let mask = (1.0 - h_dist / hw).max(0.0)\n                    * if ls > MIN_SATURATION { 1.0_f32 } else { 0.0_f32 };\n                if mask < 1e-7 {\n                    return acc;",
+  "source_version": "crates/dorea-hsl/src/derive.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360588346Z",
+  "valid_from": "2026-04-08T03:28:13.360588346Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-hsl/src/derive.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 59,
+    "end_line": 100,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-da97eb28ec03",
+  "content": "### Task 1: Capture regression baseline\n\n    let params = crate::GradeParams::default();\n\n    // Input: r=0.6, g=0.3, b=0.2, depth=0.5\n    // Use exact u8 → f32 round-trip to avoid floating-point inconsistency\n    let r_u8 = 153u8; let g_u8 = 77u8; let b_u8 = 51u8;\n    let pixels = vec![r_u8, g_u8, b_u8];\n    let depth = vec![0.5f32];\n\n    // Full pipeline baseline\n    let out = grade_frame_cpu(&pixels, &depth, 1, 1, &cal, &params).unwrap();\n    assert_eq!(out.len(), 3);\n    // All in range\n    for &v in &out { assert!(v <= 255, \"out of range\"); }\n\n    // Baseline values are pinned here (update this comment if params change):\n    // This will be verified against grade_pixel_cpu in Task 3.\n    // Print for reference during development:\n    // eprintln!(\"baseline: {:?}\", out);\n}\n```\n\n- [ ] **Step 2: Run the test — expect it to compile and pass**\n\n```bash\ncd repos/dorea && cargo test -p dorea-gpu grade_pixel_cpu_matches_grade_frame_cpu_baseline 2>&1 | tail -5\n```\n\nExpected: PASS (the test only verifies grade_frame_cpu works, not grade_pixel_cpu yet).\n\n- [ ] **Step 3: Commit**\n\n```bash\ncd repos/dorea && git add crates/dorea-gpu/src/cpu.rs\ngit commit -m \"test: add baseline regression test for grade_pixel_cpu (Task 1)\"\n```\n\n---\n",
+  "source_version": "docs/plans/2026-04-03-combined-lut-cuda-texture-plan.md",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360781081Z",
+  "valid_from": "2026-04-08T03:28:13.360781081Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "docs/plans/2026-04-03-combined-lut-cuda-texture-plan.md",
+    "language": "markdown",
+    "chunk_type": "heading_section",
+    "start_line": 83,
+    "end_line": 120,
+    "content_role": "plan",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

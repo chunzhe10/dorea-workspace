@@ -1,0 +1,31 @@
+{
+  "id": "019d59c8-8dd8-7e53-b025-ef8ae837aed4",
+  "content": "## Per-Keyframe Adaptive Depth Zones — Implementation Complete (2026-04-04)\n\n### Decision\nReplace global depth zone averaging with a two-tier architecture for the grading pipeline.\n\n**Tier 1:** 32 fine zones per scene segment — base LUT for color science (stable across segment).\n**Tier 2:** 8 adaptive runtime zones per keyframe — local depth context per keyframe.\n\nResult: dual-texture temporal blending between adjacent keyframe textures with texture swaps at keyframe boundaries and segment reloading at scene cuts.\n\n### Architecture\n\n**Pre-compute phase** (after Pass 0, before grading):\n1. Collect per-KF depth maps from store\n2. `compute_per_kf_zones` → raw per-KF 8-zone boundaries\n3. `detect_scene_segments` (Wasserstein-1 distance, threshold=0.15) → scene segment ranges\n4. `smooth_zone_boundaries` (3-point weighted average 0.6/0.2/0.2, respects segment boundaries)\n5. Per-segment `StreamingLutBuilder` (all KFs in segment) + HSL weighted average → `SegmentCalibration`\n\n**CUDA pipeline:**\n- `build_combined_lut_kernel`: takes 32-zone base LUT (for `grade_pixel_device`) + 8-zone runtime boundaries (for output indexing) — 16 args total\n- `combined_lut_kernel`: dual-texture lookup with `blend_t` lerp; early-out when `blend_t < 1e-4`\n- `AdaptiveLut`: double-buffer; `rebuild_set` builds into inactive slot; `swap` flips\n- `AdaptiveGrader`: wraps `AdaptiveLut` + `Arc<CudaDevice>`; exposes `prepare_keyframe`, `swap_textures`, `load_segment`, `grade_frame_blended`\n\n**Grading loop:**\n- At segment boundary: `load_segment` + `prepare_keyframe(opening_kf)` THEN `swap_textures` — ensures first frame of new segment uses the correct color science\n- At regular keyframe boundary: `swap_textures` (activates pipelined texture), then `prepare_keyframe(kf+1)`\n- `blend_t` = 0.0 at keyframe, clamped proportional between keyframes, 0.0 across scene cuts\n\n### Critical Implementation Notes\n- `CombinedLut::build` (legacy CudaGrader path) must pass 16 args to match updated kernel; passes same boundaries for both base and runtime slots\n- CUDA drop order: `adaptive_lut` declared before `device` in `AdaptiveGrader` struct (Rust drops in declaration order)\n- `CUDA_MEMCPY3D` must be initialized with `MaybeUninit::zeroed().assume_init()` to avoid debug-mode validity check failure on `CUmemorytype` (no zero variant)\n- `cudarc 0.12` tuple launch limit is 12 args; 16-arg kernel uses raw `[*mut c_void; 16]` array pattern\n\n### Config (dorea.toml [grade] section)\n- `depth_zones = 8` — runtime zones per keyframe\n- `base_lut_zones = 32` — base LUT zones per segment\n- `scene_threshold = 0.15` — Wasserstein-1 threshold for segment splits\n- `min_segment_keyframes = 3` — minimum KFs per segment before merging\n- `zone_smoothing_window = 3` — moving-average window for zone boundaries\n\n### Files Modified\n- `crates/dorea-cli/src/change_detect.rs` — `detect_scene_segments`, `compute_per_kf_zones`, `smooth_zone_boundaries`\n- `crates/dorea-gpu/src/cuda/kernels/build_combined_lut.cu` — separate base/runtime zone params\n- `crates/dorea-gpu/src/cuda/kernels/combined_lut.cu` — dual-texture with blend_t\n- `crates/dorea-gpu/src/cuda/combined_lut.rs` — `TextureSet`, `AdaptiveLut`\n- `crates/dorea-gpu/src/cuda/mod.rs` — `AdaptiveGrader`\n- `crates/dorea-gpu/src/lib.rs` — `grade_frame_with_adaptive_grader`\n- `crates/dorea-cli/src/grade.rs` — full pipeline integration\n- `dorea.toml` — new config keys documented",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-04T18:36:48.984267891Z",
+  "valid_from": "2026-04-04T18:36:48.984267891Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "decision",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

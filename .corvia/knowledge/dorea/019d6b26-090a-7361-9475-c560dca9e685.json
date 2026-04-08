@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-c560dca9e685",
+  "content": "# Dorea Pipeline Configuration\n# Paths resolve relative to workspace root ($CORVIA_WORKSPACE)\n\n# Footage paths\nfootage_raw: footage/raw\nfootage_flat: footage/flat\nworking_dir: working\npipeline_dir: repos/dorea\n\n\n# Claude API (for overnight batch scene analysis only)",
+  "source_version": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042115608Z",
+  "valid_from": "2026-04-08T03:32:28.042115608Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1502,
+    "end_line": 1508,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-da472dcb00f7",
+  "content": "# Combined LUT + CUDA 3D Texture Grading — Implementation Plan\n\n> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.\n\n**Goal:** Replace the 3-kernel GPU pipeline (lut_apply → hsl_correct → clarity) with a single precomputed combined LUT sampled via CUDA 3D texture objects, baking the full grading pipeline including ambiance, warmth, and strength blend.\n\n**Architecture:** At `CudaGrader::new(calibration, params)`, a GPU kernel samples the complete pipeline at every lattice point of a 97³ grid (per zone), storing results as `float4` CUDA 3D texture arrays. Per-frame, a single kernel reads u8 pixels, samples two zone textures, depth-lerps, and writes u8 output. Clarity is hard-deleted.\n\n**Tech Stack:** Rust (cudarc 0.12, rayon), CUDA C++ (nvcc -arch=sm_86), cudarc::driver::sys raw FFI for CUarray/CUtexObject.\n\n---\n",
+  "source_version": "docs/plans/2026-04-03-combined-lut-cuda-texture-plan.md",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360776968Z",
+  "valid_from": "2026-04-08T03:28:13.360776968Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "docs/plans/2026-04-03-combined-lut-cuda-texture-plan.md",
+    "language": "markdown",
+    "chunk_type": "heading_section",
+    "start_line": 1,
+    "end_line": 12,
+    "content_role": "plan",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

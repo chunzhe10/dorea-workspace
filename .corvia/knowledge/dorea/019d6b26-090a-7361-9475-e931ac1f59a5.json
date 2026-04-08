@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-e931ac1f59a5",
+  "content": "_list.len() && kf_index_list[kf_cursor + 1].0 <= fi {\n                kf_cursor += 1;\n                #[cfg(feature = \"cuda\")]\n                {\n                    let new_seg = kf_to_segment[kf_cursor];\n                    if new_seg != current_segment {\n                        let seg_cal = &segment_calibrations[new_seg];\n                        let base_flat: Vec<f32> = seg_cal.depth_luts.luts.iter()\n                            .flat_map(|lut| lut.data.iter().copied())\n                            .collect();\n                        let hsl = &seg_cal.hsl_corrections;\n                        let h_offsets: Vec<f32> = hsl.0.iter().map(|q| q.h_offset).collect();\n                        let s_ratios:  Vec<f32> = hsl.0.iter().map(|q| q.s_ratio).collect();\n                        let v_offsets: Vec<f32> = hsl.0.iter().map(|q| q.v_offset).collect();\n                        let weights:   Vec<f32> = hsl.0.iter().map(|q| q.weight).collect();\n                        // Correct order: load_segment + prepare_keyframe BEFORE swap_textures\n                        // so the first frame of the new segment uses the correct color science.\n                        adaptive_grader.load_segment(\n                            &base_flat, &seg_cal.depth_luts.zone_boundaries,\n                            (&h_offsets, &s_ratios, &v_offsets, &weights),\n                        ).context(\"load_segment failed\")?;\n                        adaptive_grader.prepare_keyframe(&smoothed_kf_zones[kf_cursor])\n                            .context(\"prepare_keyframe at segment boundary failed\")?;\n                        current_segment = new_seg;\n                        log::info!(\"{}: segment switch to {new_seg} at KF {kf_cursor}\", self.name());\n                    }\n                    adaptive_grader.swap_textures();\n                    if kf_cursor + 1 < smoothed_kf_zones.len() {\n                        adaptive_grader.prepare_keyframe(&smoothed_kf_zones[kf_cursor + 1])\n                            .context(\"prepare_keyframe failed\")?;\n                    }\n                }\n            }",
+  "source_version": "plans/2026-04-05-pipeline-dag-refactor.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042440105Z",
+  "valid_from": "2026-04-08T03:32:28.042440105Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-05-pipeline-dag-refactor.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1615,
+    "end_line": 1641,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

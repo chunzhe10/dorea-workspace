@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-d09a3e295064",
+  "content": "def to_dict(self) -> dict:\n        return {\"type\": self.type, \"results\": self.results}\nclass ErrorResponse:\n    id: Optional[str]\n    message: str\n    type: str = \"error\"\n\n    def to_dict(self) -> dict:\n        return {\"type\": self.type, \"id\": self.id, \"message\": self.message}",
+  "source_version": "python/dorea_inference/protocol.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360657636Z",
+  "valid_from": "2026-04-08T03:28:13.360657636Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/protocol.py",
+    "language": "py",
+    "chunk_type": "class_definition",
+    "start_line": 166,
+    "end_line": 172,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

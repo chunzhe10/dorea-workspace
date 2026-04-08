@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-c96e6ea645ce",
+  "content": "&& cargo test`\nExpected: Compiles and all tests pass.\n\n- [ ] **Step 7: Commit**\n\n```bash\ngit add crates/dorea-cli/src/calibrate.rs crates/dorea-cli/src/grade.rs\ngit commit -m \"feat(cli): extend InputEncoding with ILog/Custom, add Projection enum\"\n```\n\n---\n\n### Task 11: Container Auto-Detection (dorea probe)\n\n**Files:**\n- Create: `crates/dorea-video/src/probe.rs`\n- Modify: `crates/dorea-video/src/lib.rs`\n- Create: `crates/dorea-cli/src/probe.rs`\n- Modify: `crates/dorea-cli/src/main.rs`\n\n- [ ] **Step 1: Create probe module in dorea-video**\n\nCreate `crates/dorea-video/src/probe.rs`:\n\n```rust\n//! Container/codec sniffing for auto-detection of input encoding.\n\nuse crate::ffmpeg;\nuse std::path::Path;\n\n/// Detected container type.\n#[derive(Debug, Clone, Copy, PartialEq)]\npub enum ContainerHint {\n    Mov,\n    Mp4,\n    Other,\n}\n\n/// Suggested input encoding based on container/codec analysis.\n#[derive(Debug)]\npub struct ProbeResult {\n    pub info: ffmpeg::VideoInfo,\n    pub container: ContainerHint,\n    pub codec_name: String,\n    pub bit_depth: Option<u8>,\n    pub suggested_encoding: String,\n    pub suggested_lut_size: usize,\n    pub suggested_output_codec: String,\n}\n",
+  "source_version": "plans/2026-04-02-10bit-pipeline-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042151266Z",
+  "valid_from": "2026-04-08T03:32:28.042151266Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-10bit-pipeline-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1436,
+    "end_line": 1473,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

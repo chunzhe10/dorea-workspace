@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-0909-7eb1-86e3-76ac789e182f",
+  "content": "### VRAM Budget\n\n### Configuration\n\nNew section in `repos/dorea/config.yaml`:\n\n```yaml\nmaxine:\n  enabled: false            # Master switch — false = zero overhead\n  artifact_reduction: true  # Clean compression artifacts before upscale\n  upscale_factor: 2         # Supported: 2 (default). 1.33, 1.5, 3, 4 require >8GB VRAM.\n```\n\n**CLI overrides:** `dorea grade --maxine` / `--no-maxine` to toggle per-run without editing config.\n\n**Validation at startup:**\n- `upscale_factor` not in `[1.33, 1.5, 2, 3, 4]` → hard error\n- `upscale_factor > 2` on GPU with ≤6GB VRAM → hard error with explanation\n- `enabled: true` + `nvvfx` not importable → hard error:\n  \"Maxine SDK not found. Install from NGC (nvidia-maxine-vfx-sdk): see docs/guides/maxine-setup.md,\n  or set maxine.enabled: false\"\n- Log nvvfx version at startup for debugging SDK compatibility issues\n\n\n### User Experience\n\n**Throughput impact:** Maxine enhancement adds 50-100ms per *keyframe*. With temporal interpolation\n(~17% keyframes at N=6 interval), the effective per-frame overhead is ~8-17ms averaged. For a\n1080p/30fps clip where the current pipeline runs at 6-12 fps:\n- Without Maxine: ~80-180ms/frame → 6-12 fps\n- With Maxine: ~90-200ms/frame (averaged) → 5-11 fps (~10-15% throughput reduction)\n\n**Progress feedback:**\n- Startup log: \"Maxine enhancement enabled: upscale_factor=2, artifact_reduction=on (nvvfx v1.x.x)\"\n- Per-frame timing in verbose mode includes enhancement duration\n- Shutdown summary: \"Enhanced N keyframes, M passthrough failures\" (if any)\n\n**Expected visual quality:** Most noticeable on gradient regions (water column, blue backgrounds),\nfine detail (coral texture, fish scales), and compression artifact zones (blocking in low-light\nareas). Visually similar to a moderate sharpening pass with artifact cleanup. The oversample\ntechnique recovers detail that was lost to compression and quantization.\n",
+  "source_version": "decisions/2026-04-02-maxine-post-grading-enhancement.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.041859483Z",
+  "valid_from": "2026-04-08T03:32:28.041859483Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-02-maxine-post-grading-enhancement.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 191,
+    "end_line": 229,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

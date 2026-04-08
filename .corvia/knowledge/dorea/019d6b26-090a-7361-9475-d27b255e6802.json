@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-d27b255e6802",
+  "content": "# Rayon CPU Parallelization Implementation Plan\n\n## File Map\n\n| File | Change |\n|------|--------|\n| `repos/dorea/Cargo.toml` | Add `rayon = \"1\"` to `[workspace.dependencies]` |\n| `repos/dorea/crates/dorea-lut/Cargo.toml` | Add `rayon.workspace = true` to `[dependencies]` |\n| `repos/dorea/crates/dorea-hsl/Cargo.toml` | Add `rayon.workspace = true` to `[dependencies]` |\n| `repos/dorea/crates/dorea-lut/src/build.rs` | Parallelize Sobel row loops, Gaussian blur passes, and NN fill |\n| `repos/dorea/crates/dorea-lut/src/apply.rs` | Parallelize pixel loop in `apply_depth_luts` |\n| `repos/dorea/crates/dorea-hsl/src/derive.rs` | Parallelize HSV conversion + fold/reduce accumulation |\n\n---\n",
+  "source_version": "plans/2026-04-02-rayon-cpu-parallelization-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042235221Z",
+  "valid_from": "2026-04-08T03:32:28.042235221Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-rayon-cpu-parallelization-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 13,
+    "end_line": 25,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

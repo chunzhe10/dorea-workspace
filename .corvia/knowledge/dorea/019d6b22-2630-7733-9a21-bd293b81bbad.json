@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-bd293b81bbad",
+  "content": "          let err_value = err.value_bound(py);\n            Ok(err_value.is_instance(&oom_type)?)\n        })();\n\n        if matches!(is_oom, Ok(true)) {\n            return InferenceError::Oom(msg);\n        }\n\n        InferenceError::ServerError(msg)\n    }\n}\npub fn spawn(config: &InferenceConfig) -> Result<Self, InferenceError> {\n        pyo3::prepare_freethreaded_python();\n\n        Python::with_gil(|py| {\n            // Add python/ dir to sys.path so `dorea_inference` is importable.\n            let python_dir = Self::find_python_dir();\n            if let Some(ref p) = python_dir {\n                let sys = py.import_bound(\"sys\")\n                    .map_err(|e| InferenceError::InitFailed(format!(\"import sys: {e}\")))?;\n                let path = sys.getattr(\"path\")\n                    .map_err(|e| InferenceError::InitFailed(format!(\"sys.path: {e}\")))?;\n                let p_str = p.to_str().unwrap_or(\"\");\n                let already_present = path\n                    .call_method1(\"__contains__\", (p_str,))\n                    .map_err(|e| InferenceError::InitFailed(format!(\"sys.path.__contains__: {e}\")))?\n                    .is_truthy()\n                    .map_err(|e| InferenceError::InitFailed(format!(\"sys.path.__contains__ truthy: {e}\")))?;\n                if !already_present {\n                    path.call_method1(\"insert\", (0, p_str))\n                        .map_err(|e| InferenceError::InitFailed(format!(\"sys.path.insert: {e}\")))?;\n                }\n            } else {\n                log::debug!(\n                    \"Could not derive python/ dir from binary path; \\\n                     ensure dorea_inference is installed in the Python environment\"\n                );\n            }\n\n            // Import the bridge module.",
+  "source_version": "crates/dorea-video/src/inference/pyo3_backend.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360408039Z",
+  "valid_from": "2026-04-08T03:28:13.360408039Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference/pyo3_backend.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 135,
+    "end_line": 163,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

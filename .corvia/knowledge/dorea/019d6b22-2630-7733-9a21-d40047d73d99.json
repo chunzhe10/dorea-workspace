@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-d40047d73d99",
+  "content": " pass --raune-weights\")\n                if depth_model is None:\n                    raise RuntimeError(\"Depth Anything not loaded — pass --depth-model\")\n\n                import torch\n\n                items = req.get(\"items\", [])\n                imgs = []\n                for item in items:\n                    fmt = item.get(\"format\", \"png\")\n                    if fmt == \"raw_rgb\":\n                        imgs.append(decode_raw_rgb(item[\"image_b64\"], int(item[\"width\"]), int(item[\"height\"])))\n                    else:\n                        imgs.append(decode_png(item[\"image_b64\"]))\n\n                raune_max = int(items[0].get(\"raune_max_size\", 1080)) if items else 1080\n                depth_max = int(items[0].get(\"depth_max_size\", 518)) if items else 518\n\n                # Sub-batch to avoid GPU OOM: process in smaller chunks even if the request is larger\n                # RTX 3060 6GB: safe limit ~4-6 images per batch at 1024p\n                sub_batch_size = 4\n\n                # Process RAUNE + Depth in sub-batches, accumulate results\n                all_enhanced_np = []\n                all_depths = []\n                enh_w, enh_h = 0, 0\n\n                for batch_start in range(0, len(imgs), sub_batch_size):\n                    batch_end = min(batch_start + sub_batch_size, len(imgs))",
+  "source_version": "python/dorea_inference/server.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360700429Z",
+  "valid_from": "2026-04-08T03:28:13.360700429Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/server.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 201,
+    "end_line": 221,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

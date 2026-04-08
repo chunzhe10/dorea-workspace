@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-c9f2c4820a99",
+  "content": "ght;\n            if tx_depth.send(DepthFrame {\n                index: df.index,\n                pixels_f32: df.pixels_f32,\n                depth: vec![0.5f32; n],\n                width: df.width,\n                height: df.height,\n            }).is_err() {\n                break;\n            }\n        }\n    }\n    Ok(())\n});\n\n// Stage 3: Grade + encode (main thread, owns CUDA context)\nlet mut frame_count = 0u64;\nfor df in rx_depth {\n    let graded = grade_frame(\n        &df.pixels_f32, &df.depth, df.width, df.height, &calibration, &params,\n    ).unwrap_or_else(|e| {\n        log::warn!(\"Grade failed frame {}: {e}\", df.index);\n        df.pixels_f32.clone()\n    });\n    encoder.write_frame_f32(&graded).context(\"encoder write failed\")?;\n    frame_count += 1;\n    if frame_count % 100 == 0 {\n        let pct = frame_count as f64 / info.frame_count.max(1) as f64 * 100.0;\n        log::info!(\"Progress: {frame_count}/{} ({:.1}%)\", info.frame_count, pct);\n    }\n}\n\n// Join worker threads\ndecode_handle.join().map_err(|_| anyhow::anyhow!(\"decode thread panicked\"))??;\ndepth_handle.join().map_err(|_| anyhow::anyhow!(\"depth thread panicked\"))??;\n\nencoder.finish().context(\"encoder failed to finalize\")?;\n```\n\n- [ ] **Step 4: Build and test**\n\nRun: `cd /workspaces/dorea-workspace/repos/dorea && cargo build -p dorea-cli`\nExpected: Compiles. Full integration test requires a video file — defer to manual testing.\n\n- [ ] **Step 5: Commit**\n\n```bash\ngit add crates/dorea-cli/src/grade.rs\ngit commit -m \"feat(cli): 3-stage pipelined frame loop (decode → depth → grade)\"\n```\n\n---\n",
+  "source_version": "plans/2026-04-02-10bit-pipeline-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042156543Z",
+  "valid_from": "2026-04-08T03:32:28.042156543Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-10bit-pipeline-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1843,
+    "end_line": 1887,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

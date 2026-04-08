@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-c95232ebe799",
+  "content": "`\n\n- [ ] **Step 5: Wire up D-Log M decode to use the trait**\n\nIn `crates/dorea-cli/src/calibrate.rs`, update the D-Log M decode block to use the\n`TransferFunction` trait. Replace the direct `dlog_m_to_linear` calls with a\ntrait-dispatched decoder:\n\n```rust\nuse dorea_color::{TransferFunction, DLogM, ILog, LutBased};\n\n// Build transfer function from encoding\nlet transfer_fn: Box<dyn TransferFunction> = match &args.input_encoding {\n    InputEncoding::DlogM => Box::new(DLogM),\n    InputEncoding::ILog => Box::new(ILog),\n    InputEncoding::Custom(path) => {\n        let shoulder = args.shoulder.unwrap_or(0.88);\n        Box::new(LutBased::from_cube_file(path, shoulder)\n            .with_context(|| format!(\"Failed to load custom transfer function from {}\", path.display()))?)\n    }\n    InputEncoding::Srgb => {\n        // No decode needed for sRGB — skip the block below\n        // Use a no-op marker\n        Box::new(DLogM) // placeholder, won't be used\n    }\n};\n\n// Apply log decode\nif args.input_encoding != InputEncoding::Srgb {\n    log::debug!(\"Applying {} decode to keyframe {kf_path:?}\", transfer_fn.name());\n    for px in kf_pixels.iter_mut() {\n        px[0] = transfer_fn.to_linear(px[0]);\n        px[1] = transfer_fn.to_linear(px[1]);\n        px[2] = transfer_fn.to_linear(px[2]);\n    }\n}\n```\n\n- [ ] **Step 6: Build and test**\n\nRun: `cd /workspaces/dorea-workspace/repos/dorea && cargo build && cargo test`\nExpected: Compiles and all tests pass.\n\n- [ ] **Step 7: Commit**\n\n```bash\ngit add crates/dorea-cli/src/calibrate.rs crates/dorea-cli/src/grade.rs\ngit commit -m \"feat(cli): extend InputEncoding with ILog/Custom, add Projection enum\"\n```\n\n---\n",
+  "source_version": "plans/2026-04-02-10bit-pipeline-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042150585Z",
+  "valid_from": "2026-04-08T03:32:28.042150585Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-10bit-pipeline-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1393,
+    "end_line": 1435,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

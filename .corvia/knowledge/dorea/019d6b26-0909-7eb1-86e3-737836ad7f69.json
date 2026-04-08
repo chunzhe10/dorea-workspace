@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-0909-7eb1-86e3-737836ad7f69",
+  "content": "## 16-Bit I/O and f32 Internal Pipeline\n\n### Precision zones\n\nNot every stage needs 16-bit precision. The pipeline splits into zones:\n\n- **HIGH PRECISION (f32):** Transfer function decode, LUT build/apply, HSL correct,\n  highlight rolloff, grade output. This is the color-critical path.\n- **LOW PRECISION (8-bit proxy):** Depth inference only. Depth Anything V2 quantizes\n  to fp16 tensors internally. Sending 16-bit pixels doubles IPC for zero quality gain.\n\n\n### Keyframe extraction\n\n```bash",
+  "source_version": "decisions/2026-04-02-10bit-pipeline-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.041831091Z",
+  "valid_from": "2026-04-08T03:32:28.041831091Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-02-10bit-pipeline-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 103,
+    "end_line": 114,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

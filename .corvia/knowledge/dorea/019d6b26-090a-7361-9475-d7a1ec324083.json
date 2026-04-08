@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-d7a1ec324083",
+  "content": ").max(1);\n        let cfg = LaunchConfig {\n            grid_dim: (grid, 1, 1),\n            block_dim: (block, 1, 1),\n            shared_mem_bytes: 0,\n        };\n\n        unsafe {\n            func.launch(cfg, (\n                d_rgb,\n                &d_out,\n                &d_h,\n                &d_s,\n                &d_v,\n                &d_w,\n                n_pixels as i32,\n            )).map_err(|e| map_cudarc_error(e))?;\n        }\n\n        Ok(d_out)\n    }\n\n    fn launch_clarity(\n        &self,\n        d_rgb: &CudaSlice<f32>,\n        width: usize,\n        height: usize,\n        depth: &[f32],\n        params: &GradeParams,\n    ) -> Result<CudaSlice<f32>, GpuError> {\n        let n = width * height;\n        let mean_d = depth.iter().sum::<f32>() / depth.len().max(1) as f32;\n        let clarity_amount = (0.2 + 0.25 * mean_d) * params.contrast;\n\n        let (proxy_w, proxy_h) = proxy_dims(width, height, 518);\n        let proxy_n = proxy_w * proxy_h;\n        const BLUR_RADIUS: i32 = 30;\n\n        // Allocate proxy and output buffers\n        let d_proxy_l: CudaSlice<f32> = self.device.alloc_zeros(proxy_n)\n            .map_err(|e| map_cudarc_error(e))?;\n        let d_blur_a: CudaSlice<f32> = self.device.alloc_zeros(proxy_n)",
+  "source_version": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042283344Z",
+  "valid_from": "2026-04-08T03:32:28.042283344Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1099,
+    "end_line": 1129,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-ba2f8e6eb5f5",
+  "content": "a as i32;\n    let b = b as i32;\n    let c = c as i32;\n    let p = a + b - c;\n    let pa = (p - a).abs();\n    let pb = (p - b).abs();\n    let pc = (p - c).abs();\n    if pa <= pb && pa <= pc { a as u8 }\n    else if pb <= pc { b as u8 }\n    else { c as u8 }\n}\nfn inflate_zlib(data: &[u8]) -> Result<Vec<u8>, String> {\n    use flate2::read::ZlibDecoder;\n    use std::io::Read;\n    let mut out = Vec::new();\n    ZlibDecoder::new(data)\n        .read_to_end(&mut out)\n        .map_err(|e| e.to_string())?;\n    Ok(out)\n}",
+  "source_version": "crates/dorea-video/src/inference_subprocess.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360371800Z",
+  "valid_from": "2026-04-08T03:28:13.360371800Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference_subprocess.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 984,
+    "end_line": 992,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

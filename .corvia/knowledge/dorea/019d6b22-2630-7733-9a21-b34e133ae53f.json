@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-b34e133ae53f",
+  "content": "     for _ in 0..2 { depths.push(vec![0.9; 100]); }\n        for _ in 0..5 { depths.push(vec![0.1; 100]); }\n        let segs = detect_scene_segments(&depths, 0.15, 5);\n        assert!(segs.len() <= 2, \"short segment should be merged, got {:?}\", segs);\n    }\nfn per_kf_zones_basic() {\n        let depths: Vec<Vec<f32>> = vec![\n            (0..100).map(|i| i as f32 / 100.0).collect(),\n            vec![0.5; 100],\n        ];\n        let zones = compute_per_kf_zones(&depths, 4);\n        assert_eq!(zones.len(), 2);\n        assert_eq!(zones[0].len(), 5); // 4 zones → 5 boundaries\n        assert!((zones[0][0] - 0.0).abs() < 1e-6);\n        assert!((zones[0][4] - 1.0).abs() < 1e-6);\n        for i in 1..4 {\n            let expected = i as f32 / 4.0;\n            assert!((zones[0][i] - expected).abs() < 0.05,\n                \"boundary {i}: expected ~{expected}, got {}\", zones[0][i]);\n        }\n        for i in 1..4 {\n            assert!((zones[1][i] - 0.5).abs() < 1e-6);\n        }\n    }",
+  "source_version": "crates/dorea-cli/src/change_detect.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360294374Z",
+  "valid_from": "2026-04-08T03:28:13.360294374Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/change_detect.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 355,
+    "end_line": 373,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

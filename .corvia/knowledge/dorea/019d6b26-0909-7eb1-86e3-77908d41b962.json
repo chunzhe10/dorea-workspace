@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-0909-7eb1-86e3-77908d41b962",
+  "content": "## Alternatives Considered\n\n### 4D Tetrahedral LUT\nSingle monolithic 4D array with tetrahedral interpolation. Same memory, slightly\nfewer lookups, but 4D tetrahedral is exotic — harder to implement, debug, and\noptimize. No CUDA texture hardware support for 4D. Rejected.\n\n\n### Depth-Parameterized Polynomial Fit\nFit low-order polynomials to the grading function per grid point. Fewer memory\nreads but the nonlinear LAB transforms (tanh, exp) risk polynomial\nringing/overshoot. More complex build. Rejected.\n",
+  "source_version": "decisions/2026-04-03-3d-lut-temporal-interpolation.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.041867462Z",
+  "valid_from": "2026-04-08T03:32:28.041867462Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-03-3d-lut-temporal-interpolation.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 223,
+    "end_line": 232,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

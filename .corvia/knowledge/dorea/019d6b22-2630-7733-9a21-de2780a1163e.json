@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-de2780a1163e",
+  "content": "_error() {\n        let grader = CudaGrader::new().expect(\"CudaGrader::new failed — no GPU?\");\n        let params = crate::GradeParams::default();\n        let (w, h) = (64, 36);\n        let pixels = make_pixels(w, h);\n        let depth = make_depth(w, h);\n\n        let cal1 = make_calibration(3, 17);\n        let out1 = grader\n            .grade_frame_cuda(&pixels, &depth, w, h, &cal1, &params)\n            .expect(\"call with 3-zone cal failed\");\n        assert_eq!(out1.len(), w * h * 3);\n\n        let cal2 = make_calibration(5, 33);\n        let out2 = grader\n            .grade_frame_cuda(&pixels, &depth, w, h, &cal2, &params)\n            .expect(\"call with 5-zone cal failed\");\n        assert_eq!(out2.len(), w * h * 3);\n\n        // Back to original calibration — must still work.\n        let out3 = grader\n            .grade_frame_cuda(&pixels, &depth, w, h, &cal1, &params)\n            .expect(\"return to 3-zone cal failed\");\n        assert_eq!(out1, out3, \"output after calibration switch back must equal original\");\n    }\n}\n```\n\n- [ ] **Step 2: Run the tests to confirm they pass with the current (pre-refactor) code**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ncargo test -p dorea-gpu --features cuda -- cuda::tests 2>&1 | tail -20\n```\n\nNote: `--features cuda` is required — the test block is gated on `#[cfg(all(test, feature = \"cuda\"))]` and will silently be absent without it.\n\nExpected: all 3 tests PASS. If any fail, the current implementation has a bug — do not proceed until they pass.\n\n- [ ] **Step 3: Commit**\n\n```bash\ngit add crates/dorea-gpu/src/cuda/mod.rs\ngit commit -m \"test(dorea-gpu): regression tests for CudaGrader resolution/calibration switching\"\n```\n\n---\n",
+  "source_version": "docs/plans/2026-04-03-cuda-grader-buffer-pre-allocation.md",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360834992Z",
+  "valid_from": "2026-04-08T03:28:13.360834992Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "docs/plans/2026-04-03-cuda-grader-buffer-pre-allocation.md",
+    "language": "markdown",
+    "chunk_type": "heading_section",
+    "start_line": 149,
+    "end_line": 190,
+    "content_role": "plan",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

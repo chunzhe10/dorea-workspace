@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-c278e3fde1c5",
+  "content": "ained zones, tight accuracy.\n            let tol = if n_zones == 1 { 12 } else if n_zones <= 3 { 4 } else { 2 };\n            assert!(max_diff <= tol,\n                \"n_zones={n_zones}: GPU/CPU max diff {max_diff}/255 exceeds {tol}/255\");\n        }\n    }\n}\nfn identity_lut(size: usize) -> LutGrid {\n        let mut lut = LutGrid::new(size);\n        for ri in 0..size {\n            for gi in 0..size {\n                for bi in 0..size {\n                    let r = ri as f32 / (size - 1) as f32;\n                    let g = gi as f32 / (size - 1) as f32;\n                    let b = bi as f32 / (size - 1) as f32;\n                    lut.set(ri, gi, bi, [r, g, b]);\n                }\n            }\n        }\n        lut\n    }",
+  "source_version": "crates/dorea-gpu/src/cuda/mod.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360472790Z",
+  "valid_from": "2026-04-08T03:28:13.360472790Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cuda/mod.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 175,
+    "end_line": 188,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

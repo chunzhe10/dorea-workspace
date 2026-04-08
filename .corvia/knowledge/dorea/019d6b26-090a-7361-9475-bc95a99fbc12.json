@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-bc95a99fbc12",
+  "content": "data\n- Entry count in the store matches chunk count\n\n- [ ] **Step 6: Commit**\n\n```bash\ncd /workspaces/corvia-workspace/repos/corvia\ngit add crates/corvia-cli/src/main.rs\ngit commit -m \"feat(cli): add --incremental --files flags to ingest command\"\n```\n\n---\n\n### Task 4.2: Create hook generator CLI command\n\n**Files:**\n- Create: `repos/corvia/crates/corvia-cli/src/hooks.rs`\n- Modify: `repos/corvia/crates/corvia-cli/src/main.rs`\n\n- [ ] **Step 1: Add `InitHooks` to `WorkspaceCommands`**\n\n```rust\nenum WorkspaceCommands {\n    // ... existing variants ...\n    /// Generate enforcement hooks from corvia.toml config\n    InitHooks,\n}\n```\n\n- [ ] **Step 2: Create `hooks.rs` module**\n\n```rust\n//! Hook generation for workspace doc enforcement.\n//!\n//! Reads [workspace.docs.rules] from corvia.toml and generates:\n//! - .corvia/hooks/doc-placement-check.sh (PreToolUse validation)\n//! - repos/*/.git/hooks/post-commit (git-triggered incremental re-index)\n//! - .claude/settings.json merge (hook registration)\n\nuse corvia_common::config::{CorviaConfig, DocsRulesConfig};\nuse corvia_common::errors::Result;\nuse std::path::Path;\n\npub fn generate_hooks(root: &Path, config: &CorviaConfig) -> Result<()> {\n    let ws = config.workspace.as_ref()\n        .ok_or_else(|| corvia_common::errors::CorviaError::Config(\"Not a workspace\".into()))?;\n\n    let rules = ws.docs.as_ref()\n        .and_then(|d| d.rules.as_ref())\n        .cloned()\n        .unwrap_or_default();\n\n    generate_placement_hook(root, &rules)?;\n    generate_post_commit_hooks(root, ws, config)?;\n    merge_claude_settings(root)?;\n\n    println!(\"Generated enforcement hooks from corvia.toml\");\n    Ok(())\n}\n\nfn generate_placement_hook(root: &Path, rules: &DocsRulesConfig) -> Result<()> {\n    let hook_dir = root.join(\".corvia/hooks\");\n    std::fs::create_dir_all(&hook_dir)",
+  "source_version": "plans/2026-03-13-docs-workflow-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042031383Z",
+  "valid_from": "2026-04-08T03:32:28.042031383Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-13-docs-workflow-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 2277,
+    "end_line": 2326,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

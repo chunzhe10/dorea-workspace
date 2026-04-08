@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-c58947716580",
+  "content": "fn drop(&mut self) {\n        unsafe {\n            for &tex in &self.textures { let _ = sys::lib().cuTexObjectDestroy(tex); }\n            for &arr in &self.arrays   { let _ = sys::lib().cuArrayDestroy(arr); }\n        }\n    }\npub(crate) struct AdaptiveLut {\n    sets: [TextureSet; 2],\n    /// Index of the set currently used for grading (0 or 1). Private — mutate only via `swap()`.\n    active: usize,\n    pub grid_size: usize,\n    pub runtime_n_zones: usize,\n\n    // Base LUT data on device (per-segment, rarely changes)\n    d_base_luts: CudaSlice<f32>,\n    d_base_boundaries: CudaSlice<f32>,\n    base_n_zones: usize,\n\n    // HSL + grade params on device (constant per clip)\n    d_h_offsets: CudaSlice<f32>,\n    d_s_ratios: CudaSlice<f32>,\n    d_v_offsets: CudaSlice<f32>,\n    d_weights: CudaSlice<f32>,\n    warmth: f32,\n    strength: f32,\n    contrast: f32,\n    lut_size: usize,\n}",
+  "source_version": "crates/dorea-gpu/src/cuda/combined_lut.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360512229Z",
+  "valid_from": "2026-04-08T03:28:13.360512229Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cuda/combined_lut.rs",
+    "language": "rs",
+    "chunk_type": "struct_item",
+    "start_line": 341,
+    "end_line": 362,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

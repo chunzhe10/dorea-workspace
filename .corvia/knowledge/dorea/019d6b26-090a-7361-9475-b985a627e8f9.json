@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-b985a627e8f9",
+  "content": "workspace/repos/corvia && cargo test -p corvia-kernel filter_tests -- --nocapture`\nExpected: FAIL — `post_filter_metadata` function doesn't exist\n\n- [ ] **Step 3: Implement `post_filter_metadata` function**\n\nAdd to `retriever.rs` (above the test module):\n\n```rust\n/// Post-filter search results by metadata fields (Option A from docs workflow spec).\n/// Applied after vector search, before returning to caller.\npub fn post_filter_metadata(\n    results: Vec<SearchResult>,\n    content_role: Option<&str>,\n    source_origin: Option<&str>,\n) -> Vec<SearchResult> {\n    if content_role.is_none() && source_origin.is_none() {\n        return results;\n    }\n    results.into_iter().filter(|r| {\n        if let Some(role) = content_role {\n            if r.entry.metadata.content_role.as_deref() != Some(role) {\n                return false;\n            }\n        }\n        if let Some(origin) = source_origin {\n            if r.entry.metadata.source_origin.as_deref() != Some(origin) {\n                return false;\n            }\n        }\n        true\n    }).collect()\n}\n```\n\n- [ ] **Step 4: Run tests to verify they pass**\n\nRun: `cd /workspaces/corvia-workspace/repos/corvia && cargo test -p corvia-kernel filter_tests -- --nocapture`\nExpected: PASS\n\n- [ ] **Step 5: Wire post-filter into `VectorRetriever` and `GraphExpandRetriever`**\n\nIn each retriever's `retrieve` method, after the visibility/RBAC filtering and before returning, add:",
+  "source_version": "plans/2026-03-13-docs-workflow-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042001363Z",
+  "valid_from": "2026-04-08T03:32:28.042001363Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-13-docs-workflow-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 412,
+    "end_line": 447,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

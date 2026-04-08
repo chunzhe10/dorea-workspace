@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-ee04cc2ae2d9",
+  "content": "        # Child: detach\n\n    click.echo(f\"  merge.provider = {provider}\")\n    click.echo(\"\\nRestart corvia-server for changes to take effect:\")\n    click.echo(\"  corvia-dev restart corvia-server\")\n\n\n@main.command()\n@click.argument(\"service\", type=click.Choice([\"coding-llm\", \"surrealdb\", \"postgres\"]))\ndef enable(service: str) -> None:\n    \"\"\"Enable and start an optional service.\"\"\"\n    set_enabled_service(service, True, _flags_path())\n    click.echo(f\"Enabled {service}\")\n\n    svc = get_service(service)\n    if svc and svc.depends_on:\n        for dep in svc.depends_on:\n            dep_svc = get_service(dep)\n            if dep_svc:\n                result = check_service(dep_svc)\n                if not result.healthy:\n                    click.echo(f\"  Note: dependency '{dep}' is not running\")\n\n    click.echo(\"Run 'corvia-dev up' to start all enabled services.\")\n\n\n@main.command()\n@click.argument(\"service\", type=click.Choice([\"coding-llm\", \"surrealdb\", \"postgres\"]))\ndef disable(service: str) -> None:\n    \"\"\"Disable an optional service.\"\"\"\n    set_enabled_service(service, False, _flags_path())\n    click.echo(f\"Disabled {service}\")\n\n\n@main.command()\n@click.argument(\"service\", required=False)\ndef restart(service: str | None) -> None:\n    \"\"\"Restart a service or all services.\"\"\"\n    if not DEFAULT_STATE_PATH.exists():\n        click.echo(\"No running manager. Use 'corvia-dev up' to start.\")\n        return\n",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-cli.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042483038Z",
+  "valid_from": "2026-04-08T03:32:28.042483038Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-cli.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1504,
+    "end_line": 1543,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

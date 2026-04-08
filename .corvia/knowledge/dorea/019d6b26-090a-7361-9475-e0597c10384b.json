@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-e0597c10384b",
+  "content": "                    # Graceful passthrough: return original frame unchanged\n\n### Task 3: Subprocess backend — skip_depth + lifecycle methods\n\n**Files:**\n- Modify: `crates/dorea-video/src/inference_subprocess.rs`\n\nAdd `skip_depth: bool` to `InferenceConfig` (so we can start a Maxine-only server with `--no-depth`), and add `unload_maxine`, `load_raune`, `load_depth` methods to `InferenceServer`.\n\n- [ ] **Step 1: Write the failing tests**\n\nIn `crates/dorea-video/src/inference_subprocess.rs`, inside `mod tests { ... }`, add:\n\n```rust\n    #[test]\n    fn spawn_command_includes_no_depth_when_skip_depth() {\n        let config = InferenceConfig {\n            skip_depth: true,\n            ..InferenceConfig::default()\n        };\n        let args = config.build_args();\n        assert!(args.contains(&\"--no-depth\".to_string()), \"missing --no-depth\");\n    }\n\n    #[test]\n    fn spawn_command_omits_no_depth_by_default() {\n        let config = InferenceConfig::default();\n        let args = config.build_args();\n        assert!(!args.contains(&\"--no-depth\".to_string()), \"--no-depth should be absent by default\");\n    }\n\n    #[test]\n    fn unload_maxine_sends_correct_json() {\n        // Test that the JSON we'd send is correct — verify the structure without live server.\n        let req = serde_json::json!({\"type\": \"unload_maxine\"});\n        assert_eq!(req[\"type\"].as_str().unwrap(), \"unload_maxine\");\n    }\n\n    #[test]\n    fn load_raune_sends_correct_json() {\n        use std::path::Path;\n        let weights = Path::new(\"/path/to/weights.pth\");\n        let models_dir = Path::new(\"/path/to/raune\");\n        let req = serde_json::json!({\n            \"type\": \"load_raune\",\n            \"weights\": weights.to_str(),\n            \"models_dir\": models_dir.to_str(),\n        });",
+  "source_version": "plans/2026-04-04-maxine-pipeline-architecture.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042361282Z",
+  "valid_from": "2026-04-08T03:32:28.042361282Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-maxine-pipeline-architecture.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 349,
+    "end_line": 394,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-c4eff674334f",
+  "content": "ESCRIPTOR {\n                Width:       n,\n                Height:      n,\n                Depth:       n,\n                Format:      CUarray_format_enum::CU_AD_FORMAT_FLOAT,\n                NumChannels: 4,\n                Flags:       0,\n            };\n            let mut arr: CUarray = std::ptr::null_mut();\n            unsafe {\n                let rc = sys::lib().cuArray3DCreate_v2(&mut arr, &arr_desc);\n                if rc != cudaError_enum::CUDA_SUCCESS {\n                    return Err(GpuError::CudaFail(format!(\"cuArray3DCreate zone {zone}: {rc:?}\")));\n                }\n            }\n            arrays.push(arr);\n\n            // --- cuMemcpy3D: linear device buffer → CUarray (device-to-device) ---\n            let zone_ptr = build_base + zone as u64 * zone_bytes;\n            // Use MaybeUninit::zeroed() to avoid Rust's debug-mode zero-init validity\n            // checks on enums (CUmemorytype has no zero variant).\n            let mut cpy: CUDA_MEMCPY3D =\n                unsafe { std::mem::MaybeUninit::<CUDA_MEMCPY3D>::zeroed().assume_init() };\n            cpy.srcMemoryType = CUmemorytype_enum::CU_MEMORYTYPE_DEVICE;\n            cpy.srcDevice     = zone_ptr;\n            cpy.srcPitch      = width_in_bytes;\n            cpy.srcHeight     = n;\n            cpy.dstMemoryType = CUmemorytype_enum::CU_MEMORYTYPE_ARRAY;\n            cpy.dstArray      = arr;\n            cpy.WidthInBytes  = width_in_bytes;\n            cpy.Height        = n;",
+  "source_version": "crates/dorea-gpu/src/cuda/combined_lut.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360505261Z",
+  "valid_from": "2026-04-08T03:28:13.360505261Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cuda/combined_lut.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 173,
+    "end_line": 195,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

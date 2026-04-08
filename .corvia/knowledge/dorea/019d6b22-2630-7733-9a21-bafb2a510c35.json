@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-bafb2a510c35",
+  "content": "       \"width\": 8,   // mismatch: sent 4\n            \"height\": 4,  // mismatch: sent 2\n        });\n        let result = parse_enhance_response(&resp.to_string(), \"test_001\", 4, 2);\n        assert!(result.is_err(), \"should reject dimension mismatch\");\n    }\nfn spawn_command_includes_no_depth_when_skip_depth() {\n        let config = InferenceConfig {\n            skip_depth: true,\n            ..InferenceConfig::default()\n        };\n        let args = config.build_args();\n        assert!(args.contains(&\"--no-depth\".to_string()), \"missing --no-depth\");\n    }",
+  "source_version": "crates/dorea-video/src/inference_subprocess.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360381068Z",
+  "valid_from": "2026-04-08T03:28:13.360381068Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference_subprocess.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 1101,
+    "end_line": 1108,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-d1c3e1cd654b",
+  "content": "ze() {\n        let src: Vec<u8> = (0u8..48).collect(); // 4×4×3\n        let dst = resize_rgb_bilinear(&src, 4, 4, 4, 4);\n        assert_eq!(dst, src, \"same-size resize should be identity\");\n    }\n}\n```\n\n- [ ] **Step 2: Add `pub mod resize;` to `lib.rs`**\n\nIn `crates/dorea-video/src/lib.rs`, add after the existing `pub mod scene;` line:\n\n```rust\npub mod resize;\n```\n\n- [ ] **Step 3: Run to confirm tests fail**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ncargo test -p dorea-video resize 2>&1 | tail -10\n```\nExpected: compile error or panics from `todo!()`.\n\n- [ ] **Step 4: Implement `proxy_dims` and `resize_rgb_bilinear`**\n\nReplace the `todo!()` bodies in `resize.rs`:\n\n```rust\npub fn proxy_dims(src_w: usize, src_h: usize, max_size: usize) -> (usize, usize) {\n    let long_edge = src_w.max(src_h);\n    if long_edge <= max_size {\n        return (src_w, src_h);\n    }\n    let scale = max_size as f64 / long_edge as f64;\n    let pw = ((src_w as f64 * scale).round() as usize).max(1);\n    let ph = ((src_h as f64 * scale).round() as usize).max(1);\n    (pw, ph)\n}\n\npub fn resize_rgb_bilinear(\n    src: &[u8],\n    src_w: usize,\n    src_h: usize,\n    dst_w: usize,\n    dst_h: usize,\n) -> Vec<u8> {\n    assert_eq!(src.len(), src_w * src_h * 3, \"src length mismatch\");\n    let mut out = vec![0u8; dst_w * dst_h * 3];\n    let sw = (src_w as f32 - 1.0).max(0.0);\n    let sh = (src_h as f32 - 1.0).max(0.0);\n    let dw = (dst_w as f32 - 1.0).max(1.0);\n    let dh = (dst_h as f32 - 1.0).max(1.0);",
+  "source_version": "plans/2026-04-02-inference-perf-fix.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042228998Z",
+  "valid_from": "2026-04-08T03:32:28.042228998Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-inference-perf-fix.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 353,
+    "end_line": 396,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

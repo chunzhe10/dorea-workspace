@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-c82ce5a3df46",
+  "content": "### Task 4: 16-Bit PNG Encode/Decode in inference.rs\n\n    assert_eq!((w, h), (2, 1));\n    for (orig, dec) in pixels.iter().zip(decoded.iter()) {\n        for c in 0..3 {\n            assert!(\n                (orig[c] - dec[c]).abs() < 1.0 / 255.0 + 1e-6,\n                \"8-bit round-trip: orig={}, decoded={}\",\n                orig[c], dec[c]\n            );\n        }\n    }\n}\n```\n\n- [ ] **Step 2: Run tests to verify they fail**\n\nRun: `cd /workspaces/dorea-workspace/repos/dorea && cargo test -p dorea-video test_16bit`\nExpected: FAIL — `encode_rgb_png_16bit` not found.\n\n- [ ] **Step 3: Add encode_rgb_png_16bit function**\n\nAdd alongside the existing `encode_rgb_png` (which stays unchanged for 8-bit proxy path).\nIn `crates/dorea-video/src/inference.rs`, after the existing `encode_rgb_png` function:\n\n```rust\n/// Encode f32 RGB pixels as a 16-bit PNG (rgb48be).\n/// Used for high-precision keyframe I/O. The 8-bit `encode_rgb_png`\n/// remains for inference proxy frames.\npub(crate) fn encode_rgb_png_16bit(\n    pixels: &[[f32; 3]],\n    width: usize,\n    height: usize,\n) -> Result<Vec<u8>, String> {\n    if pixels.len() != width * height {\n        return Err(format!(\n            \"pixel count {} != {}x{}\", pixels.len(), width, height\n        ));\n    }\n\n    // Build raw scanlines: filter byte (0x00) + 6 bytes per pixel (RGB16 big-endian)\n    let row_bytes = 1 + width * 6;\n    let mut raw = Vec::with_capacity(row_bytes * height);\n    for y in 0..height {\n        raw.push(0x00); // filter: None\n        for x in 0..width {\n            let px = &pixels[y * width + x];\n            for c in 0..3 {",
+  "source_version": "plans/2026-04-02-10bit-pipeline-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042140105Z",
+  "valid_from": "2026-04-08T03:32:28.042140105Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-10bit-pipeline-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 579,
+    "end_line": 624,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

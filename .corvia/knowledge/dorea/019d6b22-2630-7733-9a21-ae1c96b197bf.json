@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-ae1c96b197bf",
+  "content": "struct SegmentCalibration {\n        depth_luts: dorea_lut::types::DepthLuts,\n        hsl_corrections: HslCorrections,\n    }\nstruct PagedCalibrationStore {\n    dir: std::path::PathBuf,\n    widths: Vec<usize>,\n    heights: Vec<usize>,\n    /// Byte offset in depths.bin for each frame's depth region\n    depth_offsets: Vec<usize>,\n    /// Byte offset in pixtar.bin for each frame's pixels region (target follows immediately)\n    pixtar_offsets: Vec<usize>,\n    /// Write handles — None after seal()\n    depth_writer: Option<std::io::BufWriter<std::fs::File>>,\n    pixtar_writer: Option<std::io::BufWriter<std::fs::File>>,\n    /// Read-only mmaps — Some after seal()\n    depth_mmap: Option<memmap2::Mmap>,\n    pixtar_mmap: Option<memmap2::Mmap>,\n}",
+  "source_version": "crates/dorea-cli/src/grade.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360243847Z",
+  "valid_from": "2026-04-08T03:28:13.360243847Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/grade.rs",
+    "language": "rs",
+    "chunk_type": "struct_item",
+    "start_line": 706,
+    "end_line": 720,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-ed9964547d97",
+  "content": "        # Shutdown: stop all services in reverse order\n\n### Task 7: Wire Up CLI Commands\n\n**Files:**\n- Modify: `tools/corvia-dev/corvia_dev/cli.py`\n\n**Step 1: Write the full CLI**\n\n```python\n\"\"\"CLI entry point for corvia-dev.\"\"\"\n\nfrom __future__ import annotations\n\nimport asyncio\nimport json\nimport os\nimport signal\nimport sys\nfrom pathlib import Path\n\nimport click\n\nfrom corvia_dev.config import (\n    load_config,\n    read_enabled_services,\n    set_enabled_service,\n    use_provider,\n)\nfrom corvia_dev.health import check_service\nfrom corvia_dev.manager import DEFAULT_STATE_PATH, ProcessManager\nfrom corvia_dev.models import ConfigSummary, ServiceState, StatusResponse\nfrom corvia_dev.services import get_service, resolve_startup_order\n\n\ndef _workspace_root() -> Path:\n    return Path(os.environ.get(\"CORVIA_WORKSPACE\", os.getcwd()))\n\n\ndef _config_path() -> Path:\n    return _workspace_root() / \"corvia.toml\"\n\n\ndef _flags_path() -> Path:\n    return _workspace_root() / \".devcontainer\" / \".corvia-workspace-flags\"\n\n\n@click.group()\ndef main() -> None:\n    \"\"\"Dev environment orchestration for corvia-workspace.\"\"\"\n\n\n@main.command()\n@click.option(\"--json\", \"as_json\", is_flag=True, help=\"Output as JSON\")\ndef status(as_json: bool) -> None:\n    \"\"\"Show service health and config summary.\"\"\"",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-cli.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042479076Z",
+  "valid_from": "2026-04-08T03:32:28.042479076Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-cli.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1283,
+    "end_line": 1336,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

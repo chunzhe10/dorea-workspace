@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-cfae70cd9d20",
+  "content": "ze=max_size)\n```\n\n- [ ] **Step 3: Switch Rust `run_depth` to raw RGB encoding**\n\nIn `crates/dorea-video/src/inference.rs`, replace the body of `run_depth` (lines 242-249). Change from:\n\n```rust\n        let png = encode_png_bytes(image_rgb, width, height)?;\n        let b64 = B64.encode(&png);\n\n        let req = serde_json::json!({\n            \"type\": \"depth\",\n            \"id\": id,\n            \"image_b64\": b64,\n            \"max_size\": max_size\n        });\n```\n\nTo:\n\n```rust\n        let b64 = B64.encode(image_rgb);\n\n        let req = serde_json::json!({\n            \"type\": \"depth\",\n            \"id\": id,\n            \"image_b64\": b64,\n            \"format\": \"raw_rgb\",\n            \"width\": width,\n            \"height\": height,\n            \"max_size\": max_size\n        });\n```\n\n- [ ] **Step 4: Switch Rust `run_raune` to raw RGB encoding**\n\nIn `crates/dorea-video/src/inference.rs`, replace the body of `run_raune` (lines 195-203). Change from:\n\n```rust\n        let png = encode_png_bytes(image_rgb, width, height)?;\n        let b64 = B64.encode(&png);\n\n        let req = serde_json::json!({\n            \"type\": \"raune\",\n            \"id\": id,\n            \"image_b64\": b64,\n            \"max_size\": max_size\n        });\n```\n\nTo:\n\n```rust\n        let b64 = B64.encode(image_rgb);\n\n        let req = serde_json::json!({\n            \"type\": \"raune\",\n            \"id\": id,\n            \"image_b64\": b64,\n            \"format\": \"raw_rgb\",\n            \"width\": width,\n            \"height\": height,\n            \"max_size\": max_size\n        });\n```\n\n- [ ] **Step 5: Build and test**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ncargo build -p dorea-video 2>&1 | tail -5\ncargo test -p dorea-video 2>&1 | tail -10\n```\n\nExpected: compiles cleanly, all tests pass. The `encode_png_bytes` function is now unused by `run_depth`/`run_raune` but may still be used elsewhere — do NOT delete it yet.\n\n- [ ] **Step 6: Commit**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ngit add crates/dorea-video/src/inference.rs python/dorea_inference/protocol.py python/dorea_inference/server.py\ngit commit -m \"perf(inference): switch IPC to raw RGB bytes, skip PNG encode/decode\"\n```\n\n---\n",
+  "source_version": "plans/2026-04-02-grading-pipeline-perf-v3.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042210105Z",
+  "valid_from": "2026-04-08T03:32:28.042210105Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-grading-pipeline-perf-v3.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 108,
+    "end_line": 185,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

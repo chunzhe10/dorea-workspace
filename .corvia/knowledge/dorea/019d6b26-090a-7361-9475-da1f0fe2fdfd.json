@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-da1f0fe2fdfd",
+  "content": "        # Re-normalise [0,1] → ImageNet stats Depth Anything expects\n\n## Task 3: Add `RauneDepthBatchResult` to protocol + fused server handler\n\n**Files:**\n- Modify: `repos/dorea/python/dorea_inference/protocol.py`\n- Modify: `repos/dorea/python/dorea_inference/server.py`\n- Modify: `repos/dorea/python/tests/test_infer_batch.py`\n\n- [ ] **Step 3.1: Write failing test**\n\nAppend to `repos/dorea/python/tests/test_infer_batch.py`:\n\n```python\nclass TestRauneDepthBatchProtocol:\n    def test_raune_depth_batch_result_roundtrip(self):\n        \"\"\"RauneDepthBatchResult serialises/deserialises correctly.\"\"\"\n        from dorea_inference.protocol import RauneDepthBatchResult, DepthResult, RauneResult, encode_png\n        import json\n\n        dummy_img = np.zeros((14, 14, 3), dtype=np.uint8)\n        dummy_depth = np.zeros((14, 14), dtype=np.float32)\n\n        item = {\n            \"id\": \"kf0000\",\n            \"image_b64\": encode_png(dummy_img),\n            \"enhanced_width\": 14,\n            \"enhanced_height\": 14,\n            **DepthResult.from_array(\"kf0000\", dummy_depth).to_dict(),\n        }\n        resp = RauneDepthBatchResult(results=[item])\n        d = resp.to_dict()\n        assert d[\"type\"] == \"raune_depth_batch_result\"\n        assert len(d[\"results\"]) == 1\n        assert d[\"results\"][0][\"id\"] == \"kf0000\"",
+  "source_version": "plans/2026-04-03-inference-gpu-saturation.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042305824Z",
+  "valid_from": "2026-04-08T03:32:28.042305824Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-inference-gpu-saturation.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 428,
+    "end_line": 460,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

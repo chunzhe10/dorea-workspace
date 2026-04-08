@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-dce3be369a55",
+  "content": "# Maxine Pre-Processing Integration — Implementation Plan\n\n## File Map\n\n| File | Action | Task |\n|------|--------|------|\n| `python/dorea_inference/protocol.py` | Modify — add `EnhanceResult` + `encode_raw_rgb` | 1 |\n| `python/dorea_inference/maxine_enhancer.py` | Create — MaxineEnhancer class | 2 |\n| `python/dorea_inference/server.py` | Modify — `--maxine` flag + enhance handler | 3 |\n| `python/tests/test_maxine_protocol.py` | Create — protocol tests | 1 |\n| `python/tests/test_maxine_server.py` | Create — server mock-mode tests | 3 |\n| `crates/dorea-video/src/inference_subprocess.rs` | Modify — InferenceConfig fields, build_args(), enhance() IPC | 4, 5 |\n| `crates/dorea-video/src/ffmpeg.rs` | Modify — FrameEncoder::new_lossless_temp() | 6 |\n| `crates/dorea-cli/src/grade.rs` | Modify — major restructure for Maxine integration | 7 |\n| `crates/dorea-cli/src/calibrate.rs` | Modify — add maxine fields to InferenceConfig literal | 4 |\n| `crates/dorea-cli/src/preview.rs` | Modify — add maxine fields to InferenceConfig literal | 4 |\n| `docs/guides/maxine-setup.md` | Create — SDK install guide | 8 |\n\n---\n",
+  "source_version": "plans/2026-04-04-maxine-enhancement-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042330935Z",
+  "valid_from": "2026-04-08T03:32:28.042330935Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-maxine-enhancement-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 15,
+    "end_line": 32,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

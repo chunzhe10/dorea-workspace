@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-ba03cb2d8fb8",
+  "content": ";\n    let expected_decompressed = height * (stride + 1);\n    if decompressed.len() < expected_decompressed {\n        return Err(format!(\n            \"decompressed PNG data too short: {} < {expected_decompressed}\",\n            decompressed.len()\n        ));\n    }\n\n    let mut rgb = vec![0u8; width * height * 3];\n\n    for row in 0..height {\n        let src_off = row * (stride + 1);\n        let filter = decompressed[src_off];\n        let src = &decompressed[src_off+1..src_off+1+stride];\n        let dst_start = row * stride;\n\n        // Copy prior row before writing current row (avoids borrow-checker conflict between\n        // reading the prior row and writing the current row within the same `rgb` slice).\n        let prior: Vec<u8> = if row > 0 {\n            rgb[(row - 1) * stride..row * stride].to_vec()\n        } else {\n            vec![0u8; stride]\n        };\n\n        match filter {\n            0 => { // None\n                rgb[dst_start..dst_start+stride].copy_from_slice(src);\n            }\n            1 => { // Sub\n                for i in 0..stride {\n                    let a = if i >= 3 { rgb[dst_start + i - 3] } else { 0 };\n                    rgb[dst_start + i] = src[i].wrapping_add(a);\n                }\n            }\n            2 => { // Up\n                for i in 0..stride {\n                    rgb[dst_start + i] = src[i].wrapping_add(prior[i]);\n                }\n            }\n            3 => { // Average\n                for i in 0..stride {\n                    let a = if i >= 3 { rgb[dst_start + i - 3] as u16 } else { 0u16 };\n                    let b = prior[i] as u16;\n                    rgb[dst_start + i] = src[i].wrapping_add(((a + b) / 2) as u8);\n                }\n            }\n            4 => { // Paeth\n                for i in 0..stride {\n                    let a = if i >= 3 { rgb[dst_start + i - 3] } else { 0 };\n                    let b = prior[i];\n                    let c = if i >= 3 { prior[i - 3] } else { 0 };\n                    rgb[dst_start + i] = src[i].wrapping_add(paeth_predictor(a, b, c));\n                }\n            }\n            _ => return Err(format!(\"unsupported PNG filter type {filter} at row {row}\")),\n        }\n    }\n\n    Ok(rgb)\n}",
+  "source_version": "crates/dorea-video/src/inference_subprocess.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360370254Z",
+  "valid_from": "2026-04-08T03:28:13.360370254Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference_subprocess.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 915,
+    "end_line": 968,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

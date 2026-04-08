@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-d2a6cf5e6463",
+  "content": "## Task 2: Parallelize `apply_depth_luts` (pixel-parallel)\n\n    let mut result = vec![[0.0_f32; 3]; pixels.len()];\n\n    result\n        .par_iter_mut()\n        .zip(pixels.par_iter().zip(depth.par_iter()))\n        .for_each(|(out, (&px, &d))| {\n            let mut acc = [0.0_f32; 3];\n            let mut total_w = 0.0_f32;\n\n            for z in 0..n_zones {\n                // I1: use actual adaptive zone width from boundaries, not a fixed 1/n_zones.\n                let zone_width = luts.zone_boundaries[z + 1] - luts.zone_boundaries[z];\n                let dist = (d - luts.zone_centers[z]).abs();\n                let w = (1.0 - dist / zone_width.max(1e-6)).max(0.0);\n                if w < 1e-7 {\n                    continue;\n                }\n                let lut_out = trilinear(&luts.luts[z], px);\n                for (c, lo) in lut_out.iter().enumerate() {\n                    acc[c] += lo * w;\n                }\n                total_w += w;\n            }\n\n            if total_w > 1e-6 {\n                for c in 0..3 {\n                    out[c] = (acc[c] / total_w).clamp(0.0, 1.0);\n                }\n            } else {\n                *out = px;\n            }\n        });\n\n    result\n```\n",
+  "source_version": "plans/2026-04-02-rayon-cpu-parallelization-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042236766Z",
+  "valid_from": "2026-04-08T03:32:28.042236766Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-rayon-cpu-parallelization-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 129,
+    "end_line": 164,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

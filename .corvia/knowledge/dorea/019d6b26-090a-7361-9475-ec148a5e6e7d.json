@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-ec148a5e6e7d",
+  "content": "# Maps provider config value to service name\n        # Add dependencies first\n\n    # 1. Active embedding provider\n    emb_service = EMBEDDING_PROVIDERS.get(embedding_provider, \"corvia-inference\")\n    _add(emb_service)\n\n\n    # 2. Active storage backend (if not lite)\n    storage_service = STORAGE_BACKENDS.get(storage)\n    if storage_service:\n        _add(storage_service)\n",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-cli.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042466193Z",
+  "valid_from": "2026-04-08T03:32:28.042466193Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-cli.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 512,
+    "end_line": 520,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

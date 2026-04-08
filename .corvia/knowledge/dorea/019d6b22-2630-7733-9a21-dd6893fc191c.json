@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-dd6893fc191c",
+  "content": "rade_frame_cpu (CPU reference) within 2/255 on a synthetic frame.\n        let cal = make_calibration(5);\n        let params = crate::GradeParams::default();\n        let (w, h) = (32, 32);\n        let (pixels, depth) = make_frame(w, h);\n\n        // GPU path\n        let grader = match CudaGrader::new(&cal, &params) {\n            Ok(g) => g,\n            Err(e) => { eprintln!(\"SKIP: {e}\"); return; }\n        };\n        let gpu_out = grader.grade_frame_cuda(&pixels, &depth, w, h)\n            .expect(\"grade_frame_cuda failed\");\n\n        // CPU reference path\n        let cpu_out = crate::cpu::grade_frame_cpu(&pixels, &depth, w, h, &cal, &params)\n            .expect(\"grade_frame_cpu failed\");\n\n        assert_eq!(gpu_out.len(), cpu_out.len());\n\n        // Collect per-channel diffs and report p99\n        let mut diffs: Vec<u32> = gpu_out.iter().zip(cpu_out.iter())\n            .map(|(&g, &c)| (g as i32 - c as i32).unsigned_abs())\n            .collect();\n        diffs.sort_unstable();\n        let max_diff = *diffs.last().unwrap_or(&0);\n        let p99_idx  = (diffs.len() as f32 * 0.99) as usize;\n        let p99_diff = diffs.get(p99_idx).copied().unwrap_or(0);\n        eprintln!(\"GPU/CPU diff — max: {max_diff}/255, p99: {p99_diff}/255\");\n\n        assert!(max_diff <= 2,",
+  "source_version": "docs/plans/2026-04-03-combined-lut-cuda-texture-plan.md",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360824803Z",
+  "valid_from": "2026-04-08T03:28:13.360824803Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "docs/plans/2026-04-03-combined-lut-cuda-texture-plan.md",
+    "language": "markdown",
+    "chunk_type": "heading_section",
+    "start_line": 1983,
+    "end_line": 2006,
+    "content_role": "plan",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-c36f4d5d6b90",
+  "content": "       base_luts_flat: &[f32],\n        base_boundaries: &[f32],\n        hsl_data: (&[f32], &[f32], &[f32], &[f32]),\n    ) -> Result<(), GpuError> {\n        self.adaptive_lut.load_segment(\n            &self.device, base_luts_flat, base_boundaries, hsl_data,\n        )\n    }\n\n    /// Grade one frame with dual-texture temporal blending.\n    ///\n    /// `blend_t`: 0.0 = keyframe (uses active set only), 0.0–1.0 between keyframes.\n    pub fn grade_frame_blended(\n        &self,\n        pixels: &[u8],\n        depth: &[f32],\n        width: usize,\n        height: usize,\n        blend_t: f32,\n    ) -> Result<Vec<u8>, GpuError> {\n        let n = width * height;\n        if pixels.len() != n * 3 {\n            return Err(GpuError::InvalidInput(format!(\n                \"pixels len {} != {}*3\", pixels.len(), n\n            )));\n        }\n        if depth.len() != n {\n            return Err(GpuError::InvalidInput(format!(\n                \"depth len {} != {}\", depth.len(), n\n            )));\n        }\n        let dev = &self.device;\n\n        let d_pixels_in  = dev.htod_sync_copy(pixels).map_err(map_cudarc_error)?;\n        let d_depth      = dev.htod_sync_copy(depth).map_err(map_cudarc_error)?;\n        // TODO(perf): texture handles and boundaries are stable between swap_textures() calls.\n        // Cache them as device slices in AdaptiveLut and update only on prepare_keyframe/swap.\n        // Current cost: 4 × ~128 bytes per frame — negligible but worth fixing in Task 7.\n        let d_textures_a = dev.htod_sync_copy(self.adaptive_lut.active_textures()).map_err(map_cudarc_error)?;",
+  "source_version": "crates/dorea-gpu/src/cuda/mod.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360484274Z",
+  "valid_from": "2026-04-08T03:28:13.360484274Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cuda/mod.rs",
+    "language": "rs",
+    "chunk_type": "impl_item",
+    "start_line": 517,
+    "end_line": 549,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

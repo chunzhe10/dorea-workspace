@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-dfc35e88f3bf",
+  "content": "[inference]\nproxy_size = 518              # long-edge pixels for RAUNE + depth proxy decode\n# device = \"cuda\"             # uncomment to force cpu/cuda; default: auto-detect\n\n[grade]\nwarmth               = 1.0   # [0.0–2.0]\nstrength             = 0.8   # LUT/HSL blend [0.0–1.0]\ncontrast             = 1.0   # ambiance contrast [0.0–1.0]\ndepth_skip_threshold = 0.005 # MSE keyframe threshold (lower = more keyframes)\ndepth_max_interval   = 12    # max frames between forced keyframes\nfused_batch_size     = 32    # frames per RAUNE+depth inference batch\ndepth_zones          = 8     # runtime adaptive zones per keyframe (LUT output indexing)\nbase_lut_zones       = 32    # base LUT zones per scene segment (color science)\nscene_threshold      = 0.15  # Wasserstein-1 depth distance to split scene segments [0.0–1.0]\nmin_segment_keyframes = 3    # merge segments shorter than this into the previous one\nzone_smoothing_window = 3    # moving-average window for per-KF zone boundary smoothing\n",
+  "source_version": "dorea.toml",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360858802Z",
+  "valid_from": "2026-04-08T03:28:13.360858802Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "dorea.toml",
+    "language": "toml",
+    "chunk_type": "section",
+    "start_line": 15,
+    "end_line": 27,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-c9a68b8fef4c",
+  "content": "### Task 12: 10-Bit Output Encoding\n\n    pub fn file_extension(&self) -> &'static str {\n        match self {\n            Self::ProRes => \"mov\",\n            Self::Hevc10 | Self::H264 => \"mp4\",\n        }\n    }\n}\n```\n\n- [ ] **Step 2: Add FfmpegError::UnsupportedFormat variant if needed**\n\nCheck if `FfmpegError` already has an appropriate variant. If not, add:\n\n```rust\n#[error(\"unsupported format: {0}\")]\nUnsupportedFormat(String),\n```\n\n- [ ] **Step 3: Update FrameEncoder to accept OutputCodec**\n\nModify `FrameEncoder::new` to accept an `OutputCodec` parameter and use its\n`ffmpeg_args()` instead of the hardcoded NVENC/libx264 detection.\n\nFor ProRes output, the encoder must accept **f32 pixel data** and pipe it as\n`-f rawvideo -pix_fmt gbrpf32le` (planar float) or convert to 16-bit on the Rust\nside before piping. The simplest approach: convert f32 → u16 in Rust, pipe as\n`-f rawvideo -pix_fmt rgb48le`, and let ffmpeg handle the yuv422p10le conversion.\n\nAdd a new method:\n\n```rust\n/// Write a frame from f32 RGB data [0,1]. Converts to 16-bit for the pipe.\npub fn write_frame_f32(&mut self, pixels: &[f32]) -> Result<(), FfmpegError> {\n    let u16_data: Vec<u8> = pixels.iter().flat_map(|&v| {\n        let val = (v.clamp(0.0, 1.0) * 65535.0).round() as u16;\n        val.to_le_bytes()\n    }).collect();\n    self.write_raw(&u16_data)\n}\n```\n\nUpdate the ffmpeg input format from `-pix_fmt rgb24` to `-pix_fmt rgb48le` when\nthe encoder is created with a 10-bit output codec.\n\n- [ ] **Step 4: Build**\n\nRun: `cd /workspaces/dorea-workspace/repos/dorea && cargo build -p dorea-video`\nExpected: Compiles.\n\n- [ ] **Step 5: Commit**\n\n```bash\ngit add crates/dorea-video/src/ffmpeg.rs\ngit commit -m \"feat(video): 10-bit output encoding (ProRes HQ, HEVC NVENC, H.264)\"\n```\n\n---\n",
+  "source_version": "plans/2026-04-02-10bit-pipeline-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042153578Z",
+  "valid_from": "2026-04-08T03:32:28.042153578Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-10bit-pipeline-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1648,
+    "end_line": 1705,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

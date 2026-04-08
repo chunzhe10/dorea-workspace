@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-c7b6b05d3b98",
+  "content": "go test -p dorea-color`\nExpected: All pass (including new ilog tests).\n\n- [ ] **Step 4: Commit**\n\n```bash\ngit add crates/dorea-color/src/ilog.rs crates/dorea-color/src/lib.rs\ngit commit -m \"feat(color): add I-Log transfer function (S-Log3 proxy)\"\n```\n\n---\n\n### Task 3: LutBased Transfer Function\n\n**Files:**\n- Create: `crates/dorea-color/src/lut_transfer.rs`\n- Modify: `crates/dorea-color/src/lib.rs`\n- Modify: `crates/dorea-color/Cargo.toml`\n\nThis enables swapping in an empirically-extracted I-Log curve from a 1D .cube file\nwithout touching code. The .cube format stores a 1D LUT as a list of output values\nfor evenly-spaced input values.\n\n- [ ] **Step 1: Create lut_transfer.rs with tests**\n\nCreate `crates/dorea-color/src/lut_transfer.rs`:\n\n```rust\n//! 1D LUT-based transfer function.\n//!\n//! Loads a 1D .cube file as a transfer function for cameras whose exact\n//! log curve is unknown. Drop in an empirical extraction to replace the\n//! S-Log3 proxy for I-Log.\n\nuse crate::TransferFunction;\nuse std::path::Path;\n\n/// A transfer function defined by a 1D lookup table.\n///\n/// The forward table maps evenly-spaced encoded values [0,1] to linear light.\n/// The inverse table maps evenly-spaced linear values [0,1] to encoded.\npub struct LutBased {\n    /// Forward LUT: encoded → linear. Length = LUT size.\n    forward: Vec<f32>,",
+  "source_version": "plans/2026-04-02-10bit-pipeline-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042135670Z",
+  "valid_from": "2026-04-08T03:32:28.042135670Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-10bit-pipeline-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 278,
+    "end_line": 309,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

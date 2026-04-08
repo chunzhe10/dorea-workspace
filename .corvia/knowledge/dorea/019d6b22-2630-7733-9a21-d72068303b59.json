@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-d72068303b59",
+  "content": "def __init__(self, **kwargs):\n            pass  # no-op — avoid real weight loading in test environment\ndef test_maxine_graceful_skip_when_unavailable():\n    \"\"\"Server should start successfully even if Maxine fails to load.\"\"\"\n    import dorea_inference.maxine_enhancer as me_mod\n    original_class = me_mod.MaxineEnhancer\n\n    class BrokenMaxine:\n        def __init__(self, **kwargs):\n            raise RuntimeError(\"nvvfx not found — simulated\")\n\n    me_mod.MaxineEnhancer = BrokenMaxine\n    try:\n        responses = _run_server([{\"type\": \"ping\"}], extra_argv=[\"--maxine\"])\n        assert responses[0][\"type\"] == \"pong\"\n    finally:\n        me_mod.MaxineEnhancer = original_class",
+  "source_version": "python/tests/test_lifecycle_server.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360734616Z",
+  "valid_from": "2026-04-08T03:28:13.360734616Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/tests/test_lifecycle_server.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 70,
+    "end_line": 84,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

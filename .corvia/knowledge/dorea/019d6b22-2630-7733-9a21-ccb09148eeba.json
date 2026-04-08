@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-ccb09148eeba",
+  "content": "s f32 / (size - 1) as f32;\n                    let g = gi as f32 / (size - 1) as f32;\n                    let b = bi as f32 / (size - 1) as f32;\n                    lut.set(ri, gi, bi, [r, g, b]);\n                }\n            }\n        }\n        lut\n    }\nfn test_apply_identity_lut() {\n        // Build DepthLuts with 5 identity zones.\n        let n_zones = 5;\n        let luts: Vec<LutGrid> = (0..n_zones).map(|_| identity_lut(17)).collect();\n        let boundaries: Vec<f32> = (0..=n_zones).map(|i| i as f32 / n_zones as f32).collect();\n        let depth_luts = DepthLuts::new(luts, boundaries);\n\n        let pixels: Vec<[f32; 3]> = vec![\n            [0.0, 0.0, 0.0],\n            [1.0, 0.0, 0.0],\n            [0.0, 1.0, 0.0],\n            [0.0, 0.0, 1.0],\n            [0.5, 0.3, 0.8],\n            [0.25, 0.75, 0.1],\n            [1.0, 1.0, 1.0],\n        ];\n        // Place each pixel at the center of its zone so blending is deterministic.\n        let depth: Vec<f32> = pixels.iter().enumerate().map(|(i, _)| {\n            let z = i % n_zones;\n            (depth_luts.zone_boundaries[z] + depth_luts.zone_boundaries[z + 1]) / 2.0\n        }).collect();\n\n        let result = apply_depth_luts(&pixels, &depth, &depth_luts);\n\n        for (i, (orig, out)) in pixels.iter().zip(result.iter()).enumerate() {\n            for c in 0..3 {\n                assert!(\n                    (orig[c] - out[c]).abs() < 1e-4,\n                    \"pixel {i} channel {c}: expected {:.4} got {:.4}\",\n                    orig[c],\n                    out[c]\n                );\n            }\n        }\n    }",
+  "source_version": "crates/dorea-lut/src/apply.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360604399Z",
+  "valid_from": "2026-04-08T03:28:13.360604399Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-lut/src/apply.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 144,
+    "end_line": 178,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

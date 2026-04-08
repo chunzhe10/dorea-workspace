@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-d79b8691552d",
+  "content": "  = [1.0f32; 6];\n        let mut v_offsets = [0.0f32; 6];\n        let mut weights   = [0.0f32; 6];\n        for (i, q) in calibration.hsl_corrections.0.iter().enumerate().take(6) {\n            h_offsets[i] = q.h_offset;\n            s_ratios[i]  = q.s_ratio;\n            v_offsets[i] = q.v_offset;\n            weights[i]   = q.weight;\n        }\n\n        let d_h = self.device.htod_sync_copy(&h_offsets)\n            .map_err(|e| map_cudarc_error(e))?;\n        let d_s = self.device.htod_sync_copy(&s_ratios)\n            .map_err(|e| map_cudarc_error(e))?;\n        let d_v = self.device.htod_sync_copy(&v_offsets)\n            .map_err(|e| map_cudarc_error(e))?;\n        let d_w = self.device.htod_sync_copy(&weights)\n            .map_err(|e| map_cudarc_error(e))?;\n        let d_out: CudaSlice<f32> = self.device.alloc_zeros(n_pixels * 3)\n            .map_err(|e| map_cudarc_error(e))?;\n\n        let func = self.device.get_func(\"hsl_correct\", \"hsl_correct_kernel\")\n            .ok_or_else(|| GpuError::ModuleLoad(\"hsl_correct_kernel not found\".to_string()))?;\n\n        let block = 256u32;\n        let grid = ((n_pixels as u32 + block - 1) / block).max(1);\n        let cfg = LaunchConfig {\n            grid_dim: (grid, 1, 1),\n            block_dim: (block, 1, 1),\n            shared_mem_bytes: 0,\n        };\n\n        unsafe {\n            func.launch(cfg, (\n                d_rgb,\n                &d_out,",
+  "source_version": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042282639Z",
+  "valid_from": "2026-04-08T03:32:28.042282639Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1069,
+    "end_line": 1098,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

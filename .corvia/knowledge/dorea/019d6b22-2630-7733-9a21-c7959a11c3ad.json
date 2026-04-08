@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-c7959a11c3ad",
+  "content": "0, h_width: 1.0, h_offset: 0.0,\n            s_ratio: 1.0, v_offset: 0.0, weight: 0.0,\n        }]);\n        let cal = Calibration::new(depth_luts, hsl, 1);\n        let params = crate::GradeParams::default();\n\n        // Input: r=0.6, g=0.3, b=0.2, depth=0.5\n        // Use exact u8 → f32 round-trip to avoid floating-point inconsistency\n        let r_u8 = 153u8; let g_u8 = 77u8; let b_u8 = 51u8;\n        let pixels = vec![r_u8, g_u8, b_u8];\n        let depth = vec![0.5f32];\n\n        // Full pipeline baseline\n        let out = grade_frame_cpu(&pixels, &depth, 1, 1, &cal, &params).unwrap();\n        assert_eq!(out.len(), 3);\n        // All in range\n        for &v in &out { assert!(v <= 255, \"out of range\"); }\n\n        // Baseline values are pinned here (update this comment if params change):\n        // This will be verified against grade_pixel_cpu in Task 3.\n        // Print for reference during development:\n        // eprintln!(\"baseline: {:?}\", out);\n    }\n\n    #[test]\n    fn grade_pixel_cpu_matches_grade_frame_cpu() {\n        use dorea_cal::Calibration;\n        use dorea_hsl::derive::{HslCorrections, QualifierCorrection};\n        use dorea_lut::types::{DepthLuts, LutGrid};\n\n        fn identity_lut(size: usize) -> LutGrid {\n            let mut lut = LutGrid::new(size);\n            for ri in 0..size { for gi in 0..size { for bi in 0..size {\n                let r = ri as f32 / (size - 1) as f32;\n                let g = gi as f32 / (size - 1) as f32;\n                let b = bi as f32 / (size - 1) as f32;\n                lut.set(ri, gi, bi, [r, g, b]);\n            }}}\n            lut\n        }\n",
+  "source_version": "crates/dorea-gpu/src/cpu.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360543390Z",
+  "valid_from": "2026-04-08T03:28:13.360543390Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cpu.rs",
+    "language": "rs",
+    "chunk_type": "mod_item",
+    "start_line": 559,
+    "end_line": 592,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

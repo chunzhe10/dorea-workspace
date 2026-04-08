@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-d6d2896ef0fd",
+  "content": "# Activation is driven by build.rs (nvcc detection), NOT by Cargo feature flags.\n\n# Do NOT pass --features cuda manually; build.rs handles it.\ncuda = [\"dep:cudarc\"]\n```\n\n- [ ] **Step 2: Rewrite `build.rs` for PTX compilation**\n\nReplace `crates/dorea-gpu/build.rs`:\n\n```rust\n// Build script for dorea-gpu.\n// Detects nvcc and, if found, compiles CUDA kernels to PTX for embedding.\n// If nvcc is not found, builds with CPU-only fallback.\n\nuse std::path::PathBuf;\n\nfn find_nvcc() -> Option<PathBuf> {\n    // 1. Check PATH — resolve to full path via `which` so parent-based include lookup works\n    if let Ok(output) = std::process::Command::new(\"nvcc\").arg(\"--version\").output() {\n        if output.status.success() {\n            if let Ok(which_out) = std::process::Command::new(\"which\").arg(\"nvcc\").output() {\n                if which_out.status.success() {\n                    let resolved = PathBuf::from(\n                        std::str::from_utf8(&which_out.stdout).unwrap_or(\"\").trim()\n                    );\n                    if resolved.exists() {\n                        return Some(resolved);\n                    }\n                }\n            }\n            // Fallback: nvcc is on PATH but `which` unavailable; return relative name\n            return Some(PathBuf::from(\"nvcc\"));\n        }\n    }\n\n    // 2. Check CUDA_HOME/bin/nvcc\n    if let Ok(cuda_home) = std::env::var(\"CUDA_HOME\") {\n        let nvcc = PathBuf::from(cuda_home).join(\"bin\").join(\"nvcc\");\n        if nvcc.exists() {\n            return Some(nvcc);\n        }\n    }\n\n    // 3. Scan /usr/local/cuda-* (any version) — handles e.g. cuda-12.8, cuda-12.4\n    if let Ok(entries) = std::fs::read_dir(\"/usr/local\") {\n        let mut cuda_dirs: Vec<_> = entries\n            .flatten()\n            .filter(|e| e.file_name().to_string_lossy().starts_with(\"cuda-\"))",
+  "source_version": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042275101Z",
+  "valid_from": "2026-04-08T03:32:28.042275101Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 564,
+    "end_line": 610,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

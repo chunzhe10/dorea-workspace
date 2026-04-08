@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-bf3c76989161",
+  "content": ") * (1.0 - fy)\n                      + v10 * fx * (1.0 - fy)\n                      + v01 * (1.0 - fx) * fy\n                      + v11 * fx * fy;\n                out[out_base + c] = v.round().clamp(0.0, 255.0) as u8;\n            }\n        }\n    }\n    out\n}\nmod tests {\n    use super::*;\n\n    #[test]\n    fn proxy_dims_no_change_when_within_bounds() {\n        assert_eq!(proxy_dims(518, 292, 518), (518, 292));\n        assert_eq!(proxy_dims(100, 50, 1000), (100, 50));\n    }\n\n    #[test]\n    fn proxy_dims_scales_down_landscape() {\n        let (pw, ph) = proxy_dims(3840, 2160, 518);\n        assert!(pw.max(ph) <= 518, \"long edge {pw}×{ph} > 518\");\n        let ratio_orig = 3840.0f64 / 2160.0;\n        let ratio_proxy = pw as f64 / ph as f64;\n        assert!((ratio_proxy - ratio_orig).abs() < 0.1, \"aspect ratio {ratio_proxy} vs {ratio_orig}\");\n    }\n\n    #[test]\n    fn proxy_dims_scales_down_portrait() {\n        let (pw, ph) = proxy_dims(1080, 1920, 518);\n        assert!(pw.max(ph) <= 518);\n    }\n\n    #[test]\n    fn resize_rgb_bilinear_dimensions() {\n        let src = vec![128u8; 4 * 4 * 3];\n        let dst = resize_rgb_bilinear(&src, 4, 4, 2, 2);\n        assert_eq!(dst.len(), 2 * 2 * 3);\n    }\n\n    #[test]\n    fn resize_rgb_bilinear_solid_color_preserved() {\n        let src = vec![200u8, 100u8, 50u8].repeat(16);\n        let dst = resize_rgb_bilinear(&src, 4, 4, 2, 2);\n        for chunk in dst.chunks_exact(3) {\n            assert_eq!(chunk[0], 200, \"R channel changed\");\n            assert_eq!(chunk[1], 100, \"G channel changed\");\n            assert_eq!(chunk[2], 50,  \"B channel changed\");\n        }\n    }\n\n    #[test]\n    fn resize_rgb_bilinear_identity_same_size() {\n        let src: Vec<u8> = (0u8..48).collect();\n        let dst = resize_rgb_bilinear(&src, 4, 4, 4, 4);\n        assert_eq!(dst, src, \"same-size resize should be identity\");\n    }\n}",
+  "source_version": "crates/dorea-video/src/resize.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360431222Z",
+  "valid_from": "2026-04-08T03:28:13.360431222Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/resize.rs",
+    "language": "rs",
+    "chunk_type": "mod_item",
+    "start_line": 61,
+    "end_line": 109,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

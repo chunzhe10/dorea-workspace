@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-d2b50368fef4",
+  "content": "class TensorGuard:\n    \"\"\"Prevent GC of a GPU tensor while Rust holds its device pointer.\n\n    Rust holds a Py<TensorGuard> which prevents Python from collecting\n    this object. Call release() explicitly when Rust is done with the pointer.\n    \"\"\"\n\n    def __init__(self, tensor: \"torch.Tensor\") -> None:\n        self.tensor = tensor\n        self.data_ptr = tensor.data_ptr()\n        self.numel = tensor.numel()\n        self.shape = tuple(tensor.shape)\n        self.dtype = str(tensor.dtype)\n\n    def release(self) -> None:\n        \"\"\"Explicitly release the tensor. Called by Rust when done.\"\"\"\n        self.tensor = None\n        self.data_ptr = 0\n        self.numel = 0",
+  "source_version": "python/dorea_inference/bridge.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360684222Z",
+  "valid_from": "2026-04-08T03:28:13.360684222Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/bridge.py",
+    "language": "py",
+    "chunk_type": "class_definition",
+    "start_line": 15,
+    "end_line": 33,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

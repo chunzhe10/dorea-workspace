@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-c760d6ebcaad",
+  "content": " [ri as f32, gi as f32, bi as f32]);\n        }}}\n        let cal = Calibration::new(\n            DepthLuts::new(vec![lut], vec![0.0, 1.0]),\n            HslCorrections(vec![]),\n            0,\n        );\n\n        let mut rgb_f32: Vec<f32> = vec![0.5; n * 3];\n        let orig: Vec<u8>  = vec![128u8; n * 3];\n        let depth: Vec<f32> = vec![0.5; n];\n\n        // must not panic, output must be in [0,255]\n        let out = finish_grade(&mut rgb_f32, &orig, &depth, width, height,\n                               &GradeParams::default(), &cal);\n        assert_eq!(out.len(), n * 3);\n        for &v in &out { assert!(v <= 255, \"out of range: {v}\"); }\n\n        // second call: same shape, must not panic\n        let mut rgb_f32b: Vec<f32> = vec![0.5; n * 3];\n        let out2 = finish_grade(&mut rgb_f32b, &orig, &depth, width, height,\n                                &GradeParams::default(), &cal);\n        assert_eq!(out2.len(), n * 3);\n    }\n\n    #[test]\n    fn fused_ambiance_warmth_matches_separate_passes() {\n        let width = 4;\n        let height = 4;\n        let n = width * height;\n        let original: Vec<f32> = (0..n * 3).map(|i| (i as f32 % 256.0) / 255.0).collect();\n        let depth: Vec<f32> = (0..n).map(|i| i as f32 / n as f32).collect();\n\n        // Old path: separate depth_aware_ambiance + warmth\n        let mut rgb_old = original.clone();\n        depth_aware_ambiance(&mut rgb_old, &depth, width, height, 1.0);\n        let warmth_factor = 1.0 + (1.2 - 1.0) * 0.3;\n        for i in 0..n {\n            let r = rgb_old[i * 3];\n            let g = rgb_old[i * 3 + 1];\n            let b = rgb_old[i * 3 + 2];\n            let (l, a, b_ab) = srgb_to_lab(r, g, b);",
+  "source_version": "crates/dorea-gpu/src/cpu.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360540955Z",
+  "valid_from": "2026-04-08T03:28:13.360540955Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cpu.rs",
+    "language": "rs",
+    "chunk_type": "mod_item",
+    "start_line": 459,
+    "end_line": 491,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

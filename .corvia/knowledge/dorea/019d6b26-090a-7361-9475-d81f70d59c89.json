@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-d81f70d59c89",
+  "content": "sting CPU tests pass. CUDA tests only run if GPU is available.\n\n- [ ] **Step 5: Commit**\n\n```bash\ngit add crates/dorea-gpu/src/cuda/mod.rs crates/dorea-gpu/src/lib.rs\ngit commit -m \"feat(dorea-gpu): rewrite CUDA launching with cudarc PTX modules\"\n```\n\n---\n\n## Task 6: PyO3 Inference in dorea-video\n\n**Files:**\n- Modify: `crates/dorea-video/Cargo.toml`\n- Rename: `crates/dorea-video/src/inference.rs` → `crates/dorea-video/src/inference_subprocess.rs`\n- Create: `crates/dorea-video/src/inference.rs` (new PyO3-based implementation)\n- Modify: `crates/dorea-video/src/lib.rs`\n- Test: `cargo build -p dorea-video`\n\n- [ ] **Step 1: Update `Cargo.toml`**\n\nReplace `crates/dorea-video/Cargo.toml`:\n\n```toml\n[package]\nname = \"dorea-video\"\nversion.workspace = true\nedition.workspace = true\n\n[dependencies]\nlog.workspace = true\nthiserror.workspace = true\nanyhow.workspace = true\nserde = { workspace = true }\nserde_json = \"1\"",
+  "source_version": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042287562Z",
+  "valid_from": "2026-04-08T03:32:28.042287562Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1371,
+    "end_line": 1395,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

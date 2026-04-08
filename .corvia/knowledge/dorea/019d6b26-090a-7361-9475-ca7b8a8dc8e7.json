@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-ca7b8a8dc8e7",
+  "content": "### Task 18: Integration — Wire Everything Together\n\n         Use --force to suppress this warning.\",\n        probe_result.suggested_encoding,\n        args.input_encoding.to_string()\n    );\n}\n```\n\nAdd a `to_string()` method on `InputEncoding` for display.\n\n- [ ] **Step 3: Wire LUT size auto-default in calibrate.rs**\n\nIn the calibration path:\n\n```rust\nlet lut_size = args.lut_size.unwrap_or_else(|| {\n    match &args.input_encoding {\n        InputEncoding::DlogM | InputEncoding::ILog | InputEncoding::Custom(_) => 65,\n        InputEncoding::Srgb => 33,\n    }\n});\n```\n\nPass `lut_size` to `build_depth_luts`.\n\n- [ ] **Step 4: Build and test**\n\nRun: `cd /workspaces/dorea-workspace/repos/dorea && cargo build && cargo test`\nExpected: All pass.\n\n- [ ] **Step 5: Commit**\n\n```bash\ngit add crates/dorea-cli/src/grade.rs crates/dorea-cli/src/calibrate.rs\ngit commit -m \"feat(cli): wire 10-bit pipeline end-to-end (codec, detection, LUT size)\"\n```\n\n---\n",
+  "source_version": "plans/2026-04-02-10bit-pipeline-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042164620Z",
+  "valid_from": "2026-04-08T03:32:28.042164620Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-10bit-pipeline-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 2216,
+    "end_line": 2253,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

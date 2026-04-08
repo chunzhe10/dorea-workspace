@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-b075650a85c4",
+  "content": " 2,\n        skip_depth: false,\n    };\n    let mut inf_server = InferenceServer::spawn(&inf_cfg)\n        .context(\"failed to spawn inference server\")?;\n\n    // Load or auto-derive calibration\n    let calibration = if let Some(cal_path) = &args.calibration {\n        Calibration::load(cal_path).context(\"failed to load .dorea-cal\")?\n    } else {\n        log::info!(\"Auto-deriving calibration from sampled frames...\");\n        use crate::calibrate::{run_calibration_from_frames, CalibrationInput};\n        let mut inputs = Vec::new();\n        for (i, &ts) in timestamps.iter().enumerate() {\n            let pixels = ffmpeg::extract_frame_at(&args.input, ts, tile_w, tile_h)\n                .with_context(|| format!(\"extract frame at {ts:.2}s failed\"))?;\n            let id = format!(\"p{i:02}\");\n            let target = inf_server.run_raune(&id, &pixels, tile_w, tile_h, 1024)\n                .map(|(t, _, _)| t)\n                .unwrap_or_else(|_| pixels.clone());\n            let (depth_proxy, dw, dh) = inf_server.run_depth(&id, &pixels, tile_w, tile_h, 518)\n                .unwrap_or_else(|_| (vec![0.5f32; tile_w * tile_h], tile_w, tile_h));\n            let depth = InferenceServer::upscale_depth(&depth_proxy, dw, dh, tile_w, tile_h);\n            inputs.push(CalibrationInput { pixels, target, depth, width: tile_w, height: tile_h });\n        }\n        run_calibration_from_frames(&inputs).context(\"auto-calibration failed\")?\n    };\n\n    // Build contact sheet: 2 rows (original / graded), n columns\n    let sheet_w = tile_w * n;\n    let sheet_h = tile_h * 2;\n    let mut sheet = RgbImage::new(sheet_w as u32, sheet_h as u32);\n",
+  "source_version": "crates/dorea-cli/src/preview.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360268275Z",
+  "valid_from": "2026-04-08T03:28:13.360268275Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/preview.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 120,
+    "end_line": 144,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

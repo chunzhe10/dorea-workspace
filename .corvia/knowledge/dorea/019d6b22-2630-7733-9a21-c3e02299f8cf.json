@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-c3e02299f8cf",
+  "content": "pub(crate) struct CombinedLut {\n    /// One CUarray per zone (float4, N×N×N).\n    arrays:          Vec<CUarray>,\n    /// One texture object per zone.\n    pub textures:    Vec<CUtexObject>,\n    pub n_zones:     usize,\n    pub grid_size:   usize,\n    /// Zone boundary values [n_zones + 1], kept for the per-frame kernel.\n    pub zone_boundaries: Vec<f32>,\n}",
+  "source_version": "crates/dorea-gpu/src/cuda/combined_lut.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360490650Z",
+  "valid_from": "2026-04-08T03:28:13.360490650Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cuda/combined_lut.rs",
+    "language": "rs",
+    "chunk_type": "struct_item",
+    "start_line": 23,
+    "end_line": 32,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

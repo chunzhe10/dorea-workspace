@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-dd2518f09ddb",
+  "content": " [ ] **Step 6: Commit**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ngit add python/dorea_inference/protocol.py python/tests/test_maxine_protocol.py\ngit commit -m \"feat(inference): add EnhanceResult protocol type and encode_raw_rgb helper\"\n```\n\n---\n\n### Task 2: Python MaxineEnhancer Class (issue #17)\n\n**Files:**\n- Create: `python/dorea_inference/maxine_enhancer.py`\n\n- [ ] **Step 1: Create `maxine_enhancer.py`**\n\nCreate `python/dorea_inference/maxine_enhancer.py` with this content:\n\n```python\n\"\"\"NVIDIA Maxine VFX SDK wrapper for AI enhancement (super-resolution + artifact reduction).\n\nRequires the nvvfx package (NVIDIA Maxine Video Effects SDK Python bindings).\nInstall separately from NGC — not bundled with dorea. See docs/guides/maxine-setup.md.\n\nSet DOREA_MAXINE_MOCK=1 to enable mock mode for CI testing without the SDK.\n\"\"\"\nfrom __future__ import annotations\n\nimport logging\nimport os\nfrom typing import Optional\n\nimport cv2\nimport numpy as np\n\nlog = logging.getLogger(\"dorea-inference\")\n\n_MOCK_MODE = os.environ.get(\"DOREA_MAXINE_MOCK\", \"\") == \"1\"\n",
+  "source_version": "plans/2026-04-04-maxine-enhancement-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042333024Z",
+  "valid_from": "2026-04-08T03:32:28.042333024Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-maxine-enhancement-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 169,
+    "end_line": 198,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

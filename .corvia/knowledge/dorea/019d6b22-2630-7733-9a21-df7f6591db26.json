@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-df7f6591db26",
+  "content": "pacity_batches_correctly` PASS.\n\n- [ ] **Step 7: Commit**\n\n```bash\ngit add crates/dorea-gpu/src/cuda/mod.rs crates/dorea-gpu/src/lib.rs\ngit commit -m \"feat(dorea-gpu): add CudaGrader::with_capacity for zero-reallocation fixed-resolution sessions\"\n```\n\n---\n\n### Task 8: Run the benchmark and record the improvement\n\n**Files:**\n- No code changes — benchmark run only.\n\n- [ ] **Step 0: Save a pre-refactor baseline (run this before Task 4, after Task 3)**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ncargo bench -p dorea-gpu --features cuda -- --save-baseline before_prealloc 2>&1 | tail -10\n```\n\n- [ ] **Step 1: Run the Criterion benchmark against baseline**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ncargo bench -p dorea-gpu --features cuda -- --baseline before_prealloc 2>&1 | tee /tmp/bench_after_prealloc.txt\n```\n\nExpected: `grading/with_grader/1080p` shows at least **80% reduction** from the 83 ms baseline (≤ 16 ms). If the improvement is less than 80%, do not mark this task complete — investigate before merging. The `grading/cpu/1080p` path must be unchanged.\n\n- [ ] **Step 2: Check Criterion comparison output**\n\n  Criterion will print something like:\n  ```\n  grading/with_grader/1080p\n                          time:   [6.1 ms 6.3 ms 6.5 ms]\n                  change: [-92.3% -91.8% -91.1%] (p = 0.00 < 0.05)\n                  Performance has improved.\n  ```\n\n- [ ] **Step 3: Record the result in corvia**\n\n  Use the `corvia_write` MCP tool with:\n  - `scope_id`: `\"dorea\"`\n  - `source_origin`: `\"repo:dorea\"`\n  - `content_role`: `\"finding\"`\n  - Title: `\"CudaGrader buffer pre-allocation benchmark result\"`\n  - Body: include the before (83 ms/frame) and after times from Criterion output, note whether the ≥80% threshold was met.\n\n---\n",
+  "source_version": "docs/plans/2026-04-03-cuda-grader-buffer-pre-allocation.md",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360853922Z",
+  "valid_from": "2026-04-08T03:28:13.360853922Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "docs/plans/2026-04-03-cuda-grader-buffer-pre-allocation.md",
+    "language": "markdown",
+    "chunk_type": "heading_section",
+    "start_line": 1015,
+    "end_line": 1056,
+    "content_role": "plan",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

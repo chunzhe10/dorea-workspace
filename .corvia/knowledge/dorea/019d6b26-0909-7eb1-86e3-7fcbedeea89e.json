@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-0909-7eb1-86e3-7fcbedeea89e",
+  "content": "## 12. Developer Documentation Tools (Dendron, Foam, TheBrain)\n\n### Dendron (VS Code extension, discontinued active development)\n\n- Graph view built with Cytoscape.js\n- Keyboard navigation: up/down between hierarchies, cycle between children, open notes\n- Hierarchical note organization (dot-separated paths like `project.module.component`)\n- Graph as supplementary view within VS Code's panel system\n- **Status**: No longer actively maintained but still usable\n\n\n### Foam (VS Code extension, active)\n\n- **Graph visualization**: `Foam: Show Graph` command opens a graph panel in VS Code\n- Nodes represent files and tags, edges represent links\n- Node size scales with connection count (visual importance indicator)\n- Integrates with VS Code's native split-pane system\n- [[wikilinks]] for linking, automatic backlinks\n- **Limitation**: Graph is view-only, no interaction details documented for clicking to navigate\n- **Key value**: Runs inside VS Code, so developers don't leave their editor\n",
+  "source_version": "decisions/graph-document-ux-research.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.041975889Z",
+  "valid_from": "2026-04-08T03:32:28.041975889Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/graph-document-ux-research.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 587,
+    "end_line": 604,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

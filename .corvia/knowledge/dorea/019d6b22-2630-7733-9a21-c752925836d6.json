@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-c752925836d6",
+  "content": ", &depth, width, height, 1.0);\n        for (a, b) in rgb.iter().zip(rgb2.iter()) {\n            assert!((a - b).abs() < 1e-5, \"not deterministic: {a} vs {b}\");\n        }\n    }\n\n    #[test]\n    fn depth_aware_ambiance_zero_contrast() {\n        let width = 2;\n        let height = 2;\n        let n = width * height;\n        let rgb_orig: Vec<f32> = vec![0.5; n * 3];\n        let mut rgb = rgb_orig.clone();\n        let depth: Vec<f32> = vec![0.5; n];\n\n        // contrast_scale = 0 should still run without panic\n        depth_aware_ambiance(&mut rgb, &depth, width, height, 0.0);\n\n        // Values should remain in [0, 1]\n        for &v in &rgb {\n            assert!((0.0..=1.0).contains(&v), \"out-of-range: {v}\");\n        }\n    }\n\n    #[test]\n    fn finish_grade_runs_without_panic() {\n        use crate::GradeParams;\n        use dorea_cal::Calibration;\n        use dorea_hsl::HslCorrections;\n        use dorea_lut::types::{DepthLuts, LutGrid};\n\n        let width = 4; let height = 4; let n = width * height;\n        let mut lut = LutGrid::new(2);\n        for ri in 0..2usize { for gi in 0..2usize { for bi in 0..2usize {\n            lut.set(ri, gi, bi, [ri as f32, gi as f32, bi as f32]);\n        }}}\n        let cal = Calibration::new(\n            DepthLuts::new(vec![lut], vec![0.0, 1.0]),\n            HslCorrections(vec![]),\n            0,\n        );\n\n        let mut rgb_f32: Vec<f32> = vec![0.5; n * 3];",
+  "source_version": "crates/dorea-gpu/src/cpu.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360540496Z",
+  "valid_from": "2026-04-08T03:28:13.360540496Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cpu.rs",
+    "language": "rs",
+    "chunk_type": "mod_item",
+    "start_line": 425,
+    "end_line": 458,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

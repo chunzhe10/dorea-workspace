@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-dfdff4b4a1ae",
+  "content": "d      = 0.15  # Wasserstein-1 depth distance to split scene segments [0.0–1.0]\nmin_segment_keyframes = 3    # merge segments shorter than this into the previous one\nzone_smoothing_window = 3    # moving-average window for per-KF zone boundary smoothing\n\n[maxine]\nupscale_factor     = 2       # SR factor: 2, 3, or 4 (used when SR is re-enabled)\nartifact_reduction = true    # artifact reduction before upscale\n",
+  "source_version": "dorea.toml",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360859326Z",
+  "valid_from": "2026-04-08T03:28:13.360859326Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "dorea.toml",
+    "language": "toml",
+    "chunk_type": "section",
+    "start_line": 28,
+    "end_line": 31,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-0909-7eb1-86e3-75645288524c",
+  "content": "### Optimization 3: Raw RGB IPC Protocol\n\n### Optimization 4: Bypass HuggingFace Processor + GPU-Required Runtime\n\n**4a. Direct tensor construction:**\n\nReplace `AutoImageProcessor(images=..., return_tensors=\"pt\")` with direct numpy/torch\noperations using known Depth Anything V2 normalization constants:\n\n```python\nIMAGENET_MEAN = np.array([0.485, 0.456, 0.406], dtype=np.float32)\nIMAGENET_STD  = np.array([0.229, 0.224, 0.225], dtype=np.float32)\n\narr = img_rgb.astype(np.float32) / 255.0\narr = (arr - IMAGENET_MEAN) / IMAGENET_STD\ntensor = torch.from_numpy(arr).permute(2, 0, 1).unsqueeze(0).to(device)\n```\n\nThe ViT patch-alignment resize (`_resize_for_depth`) is already handled. The processor's\nonly remaining job is normalize + tensorize, which the above replaces.\nRemove `AutoImageProcessor` import and `self.processor` attribute entirely.\n\n**Savings:** ~5-10ms/frame (revised estimate after perf review — original 20ms was high).\n\n**4b. GPU-required runtime:**\n\nMake CUDA a hard requirement for `dorea grade` at runtime:\n- `grade_frame()` in `lib.rs`: if `cuda` feature is not compiled, return an error\n  immediately (not a silent fallback)\n- If `grade_frame_cuda()` returns a CUDA error, propagate it to the caller as a hard\n  error — no CPU fallback. This includes clarity kernel failures (currently swallowed\n  with a `log::warn` in `cuda/mod.rs:164-167` — change to hard error).\n- CPU grading code (`grade_frame_cpu`, `finish_grade`, `apply_cpu_clarity`) remains\n  available for `cargo test` — tests don't require a GPU\n- `depth_aware_ambiance` and clarity CPU functions remain as reference implementations\n  and for test use\n- Python `DepthAnythingInference` should also hard-error if `device=\"cuda\"` but\n  `torch.cuda.is_available()` is false (currently silently falls back to CPU at\n  `depth_anything.py:51-52`)\n\n**Affected files:**\n- `crates/dorea-gpu/src/lib.rs` — remove CPU fallback in `grade_frame()`\n- `crates/dorea-gpu/src/cuda/mod.rs` — clarity failure becomes hard error\n- `python/dorea_inference/depth_anything.py` — hard error on CUDA unavailable\n",
+  "source_version": "decisions/2026-04-02-grading-pipeline-perf-v3.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.041847812Z",
+  "valid_from": "2026-04-08T03:32:28.041847812Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-02-grading-pipeline-perf-v3.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 152,
+    "end_line": 194,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

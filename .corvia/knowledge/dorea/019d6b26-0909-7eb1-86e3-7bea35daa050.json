@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-0909-7eb1-86e3-7bea35daa050",
+  "content": "# D60: gRPC Inference Server (corvia-inference)\n\n## Decision\n\nCustom gRPC inference server (`corvia-inference`) using ONNX Runtime replaces Ollama as\nthe default embedding provider. The server handles both embedding (via ONNX Runtime /\nfastembed) and chat inference (via candle / llama-cpp-2), communicated over protobuf on\nHTTP/2. Ollama remains available as an opt-in alternative backend.\n\n\n## Context\n\nOllama adds ~500MB binary size and requires separate installation, contradicting the\nzero-Docker, zero-dependency promise of LiteStore (D35). For embeddings (a single forward\npass), most of Ollama's LLM-serving features are dead weight. The HTTP/JSON layer adds\nnetwork latency and 2x serialization overhead for float vectors -- a 768-dim f32 vector\nis 3,072 bytes in packed protobuf vs ~6,000 bytes in JSON. Direct ONNX Runtime also\nunlocks hardware-specific execution providers (CoreML, OpenVINO, CUDA, TensorRT) that\nOllama's llama.cpp does not support for encoder models.\n",
+  "source_version": "decisions/d60-grpc-inference.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.041910984Z",
+  "valid_from": "2026-04-08T03:32:28.041910984Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/d60-grpc-inference.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 7,
+    "end_line": 23,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

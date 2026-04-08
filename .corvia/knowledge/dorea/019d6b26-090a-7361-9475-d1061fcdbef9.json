@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-d1061fcdbef9",
+  "content": "(depth + grade). Non-keyframe frames interpolate the\ngraded RGB output between bracketing keyframes — skipping depth inference\nAND grading entirely. Scene cuts force keyframes (MSE > 10x threshold).\nBuffer overflow safety at 1.5x max_interval.\"\n```\n\n---\n\n## Task 5: End-to-End Smoke Test\n\n- [ ] **Step 1: Build release binary**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ncargo build --release --bin dorea 2>&1 | tail -10\n```\n\nExpected: `Finished release profile`.\n\n- [ ] **Step 2: Run grade on test clip with timing**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ntime cargo run --release --bin dorea -- grade \\\n  --input /workspaces/dorea-workspace/footage/raw/2025-11-01/DJI_20251101111428_0055_D.MP4 \\\n  --output /workspaces/dorea-workspace/working/DJI_0055_graded_v3.mp4 \\\n  --depth-model /workspaces/dorea-workspace/models/depth_anything_v2_small \\\n  --verbose 2>&1\n```\n\nWatch for:\n- Keyframe detection log lines: `\"Scene cut at frame...\"` or progress lines\n- No CPU fallback warnings\n- Completion without errors\n\n- [ ] **Step 3: Verify output is a valid video**\n\n```bash\nffprobe -v quiet -print_format json -show_streams \\\n  /workspaces/dorea-workspace/working/DJI_0055_graded_v3.mp4 \\\n  | python3 -c \"\nimport json, sys\nd = json.load(sys.stdin)\nfor s in d.get('streams', []):\n    if s.get('codec_type') == 'video':\n        print(f'frames: {s.get(\\\"nb_frames\\\", \\\"?\\\")}')\n        print(f'duration: {s.get(\\\"duration\\\", \\\"?\\\")}s')\n        print(f'codec: {s.get(\\\"codec_name\\\", \\\"?\\\")}')\n\"\n```\n\nExpected: frame count matches source (~1671), duration ~13.9s, codec h264.\n\n- [ ] **Step 4: Record timing and write to corvia**\n\nAfter a successful run, record the wall time. Use `corvia_write` with `scope_id=\"dorea\"`, `source_origin=\"repo:dorea\"` to record:\n\n```\nGrading pipeline perf v3 results:\n- Motion-adaptive depth interpolation: [keyframe%] of frames needed inference\n- Wall time for DJI_20251101111428_0055_D.MP4 (4K, 14s, 1671 frames): [actual time]\n- Previous wall time (pre-v3): [compare if available]\n- Optimizations applied: fused LAB+rayon, raw RGB IPC, HF bypass, depth interpolation\n```\n\n---\n",
+  "source_version": "plans/2026-04-02-grading-pipeline-perf-v3.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042221999Z",
+  "valid_from": "2026-04-08T03:32:28.042221999Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-grading-pipeline-perf-v3.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 931,
+    "end_line": 989,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

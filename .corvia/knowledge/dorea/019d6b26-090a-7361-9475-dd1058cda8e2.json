@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-dd1058cda8e2",
+  "content": "    # Decode the b64 to verify pixel data\n\n\n```python\n@dataclass\nclass EnhanceResult:\n    \"\"\"Enhanced RGB frame returned from Maxine pipeline.\"\"\"\n    id: Optional[str]\n    image_b64: str   # base64-encoded raw RGB u8 bytes\n    width: int\n    height: int\n    type: str = \"enhance_result\"\n\n    def to_dict(self) -> dict:\n        return {\"type\": self.type, \"id\": self.id,\n                \"image_b64\": self.image_b64,\n                \"width\": self.width, \"height\": self.height}\n\n    @staticmethod\n    def from_array(id: Optional[str], img: \"np.ndarray\") -> \"EnhanceResult\":\n        \"\"\"Encode an HxWx3 uint8 RGB array as EnhanceResult.\"\"\"\n        return EnhanceResult(\n            id=id,\n            image_b64=encode_raw_rgb(img),\n            width=img.shape[1],\n            height=img.shape[0],\n        )\n```\n\n- [ ] **Step 5: Run tests to verify they pass**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\npython -m pytest python/tests/test_maxine_protocol.py -v 2>&1 | tail -20\n```\n\nExpected: All 4 tests PASS.\n\n- [ ] **Step 6: Commit**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ngit add python/dorea_inference/protocol.py python/tests/test_maxine_protocol.py\ngit commit -m \"feat(inference): add EnhanceResult protocol type and encode_raw_rgb helper\"\n```\n\n---\n",
+  "source_version": "plans/2026-04-04-maxine-enhancement-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042332512Z",
+  "valid_from": "2026-04-08T03:32:28.042332512Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-maxine-enhancement-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 123,
+    "end_line": 168,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

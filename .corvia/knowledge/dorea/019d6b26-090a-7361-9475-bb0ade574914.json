@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-bb0ade574914",
+  "content": "d: var(--surface-2); }\n.role-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }\n.graph-controls { display: flex; gap: 0.75rem; padding: 0.5rem; align-items: center; }\n.depth-control { display: flex; align-items: center; gap: 0.5rem; }\n```\n\n- [ ] **Step 7: Manual verification**\n\nStart the dashboard dev server and verify:\n- Cluster view loads as before (initial state)\n- Clicking a cluster transitions to entry-level view\n- Clicking an entry opens the reader panel\n- Hover highlights connected nodes, fades others\n- Reader panel shows content, metadata badges, neighbor cards\n- Clicking a neighbor card navigates graph + updates reader\n- Filters narrow visible nodes\n- Depth slider works\n\n- [ ] **Step 8: Commit**\n\n```bash\ncd /workspaces/corvia-workspace\ngit add tools/corvia-dashboard/src/\ngit commit -m \"feat(dashboard): split-panel graphed document reader with entry-level interaction\"\n```\n\n---\n",
+  "source_version": "plans/2026-03-13-docs-workflow-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042016228Z",
+  "valid_from": "2026-04-08T03:32:28.042016228Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-13-docs-workflow-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1429,
+    "end_line": 1451,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

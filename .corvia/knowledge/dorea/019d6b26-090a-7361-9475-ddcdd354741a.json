@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-ddcdd354741a",
+  "content": "Maxine super-resolution upscale factor (default: 2)\")\n    p.add_argument(\"--no-maxine-artifact-reduction\", action=\"store_true\",\n                   help=\"Disable artifact reduction before upscale\")\n```\n\n- [ ] **Step 5: Add Maxine model loading in `main()`**\n\nIn `main()`, after the depth model loading block (after line 97, before `print(\"[dorea-inference] ready\"`), add:\n\n```python\n    maxine_enhancer = None\n    if args.maxine:\n        from .maxine_enhancer import MaxineEnhancer\n        maxine_enhancer = MaxineEnhancer(upscale_factor=args.maxine_upscale_factor)\n        print(\n            f\"[dorea-inference] Maxine enhancer loaded \"\n            f\"(upscale_factor={args.maxine_upscale_factor}, \"\n            f\"artifact_reduction={not args.no_maxine_artifact_reduction})\",\n            file=sys.stderr, flush=True,\n        )\n```\n\n- [ ] **Step 6: Add `enhance` request handler**\n\nIn the request dispatch chain, before the `elif req_type == \"shutdown\":` block (before line 218), add:\n\n```python\n            elif req_type == \"enhance\":\n                if maxine_enhancer is None:\n                    raise RuntimeError(\n                        \"Maxine enhancer not loaded — pass --maxine to the server\"\n                    )\n                fmt = req.get(\"format\", \"raw_rgb\")\n                if fmt == \"raw_rgb\":\n                    img = decode_raw_rgb(req[\"image_b64\"], int(req[\"width\"]), int(req[\"height\"]))\n                else:\n                    img = decode_png(req[\"image_b64\"])\n                enhanced = maxine_enhancer.enhance(\n                    img,\n                    width=int(req[\"width\"]),\n                    height=int(req[\"height\"]),\n                    artifact_reduce=not req.get(\"no_artifact_reduce\", False),",
+  "source_version": "plans/2026-04-04-maxine-enhancement-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042338167Z",
+  "valid_from": "2026-04-08T03:32:28.042338167Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-maxine-enhancement-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 504,
+    "end_line": 539,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

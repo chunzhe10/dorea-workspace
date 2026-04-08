@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-b269d90a5b00",
+  "content": "fn frame_mse_identical_is_zero() {\n        let a: Vec<u8> = vec![100, 150, 200, 50, 75, 125];\n        assert_eq!(frame_mse(&a, &a), 0.0);\n    }\nfn frame_mse_empty_is_zero() {\n        assert_eq!(frame_mse(&[], &[]), 0.0);\n    }",
+  "source_version": "crates/dorea-cli/src/change_detect.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360286827Z",
+  "valid_from": "2026-04-08T03:28:13.360286827Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/change_detect.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 236,
+    "end_line": 238,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

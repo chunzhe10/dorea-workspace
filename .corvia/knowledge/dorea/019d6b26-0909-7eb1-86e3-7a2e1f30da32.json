@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-0909-7eb1-86e3-7a2e1f30da32",
+  "content": "# Per-Keyframe Adaptive Depth Zones — Design Spec\n\n## Problem\n\nThe current pipeline computes one set of depth zone boundaries from a reservoir sample of ALL keyframe depths across the entire clip. This produces a single global depth distribution that feeds both LUT calibration and per-frame grading. When the camera moves significantly (reef close-up → open water) or subjects shift depth (diver ascending), the global zones are a compromise that serves no scene well:\n\n1. **LUT calibration quality degrades.** Zone boundaries averaged across disparate scenes place correction samples at depths that don't match any individual scene. A close-up reef (depths 0.05–0.35) and open water (depths 0.40–0.95) produce zones centered around 0.45 — relevant to neither.\n\n2. **Per-frame depth-aware grading is inaccurate.** The combined GPU texture evaluates `grade_pixel_device` at zone center depths. With global zones, center depths don't align with the actual depth distribution of the frame being graded. Soft zone blending interpolates between irrelevant depth samples.\n\nBoth problems compound: the LUT is trained on wrong depth partitions, AND it's applied at wrong depth sample points.\n\n\n## Solution: Two-Tier Zone Architecture\n\nSplit depth zones into two tiers with different lifetimes and granularity:\n",
+  "source_version": "decisions/2026-04-04-per-keyframe-adaptive-depth-zones.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.041895217Z",
+  "valid_from": "2026-04-08T03:32:28.041895217Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-04-per-keyframe-adaptive-depth-zones.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 7,
+    "end_line": 20,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

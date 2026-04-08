@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-e6d357fa2ac3",
+  "content": "| grep -E \"FAILED|^test result\"\n```\nExpected: `test result: ok. N passed`\n\n- [ ] **Step 6: Commit**\n\n```bash\ngit add crates/dorea-cli/src/pipeline/ crates/dorea-cli/src/lib.rs\ngit commit -m \"feat(pipeline): Node + Stage traits + shared I/O types\"\n```\n\n---\n\n### Task 2: Keyframe stage (`pipeline/keyframe.rs`)\n\n**Files:**\n- Modify: `crates/dorea-cli/src/pipeline/keyframe.rs`\n\nThe Keyframe stage contains three nodes executed in sequence:\n- `ProxyDecodeNode`: spawns the ffmpeg proxy-scaled decoder; returns a streaming `ProxyDecoder` handle — **never collects frames into a Vec**\n- `ChangeDetectNode`: standalone node for scoring (frame, pixels) pairs — used externally; inside the stage, `KeyframeSelectNode` owns the detector directly to avoid pixel copies\n- `KeyframeSelectNode`: applies threshold rules and emits `KeyframeEntry` items\n\nThe stage input carries everything needed to run (video path, info, config). The stage output is `KeyframeStageOutput` (defined in `mod.rs`).\n\n**Memory contract:** At any point during the Keyframe stage, at most one decoded frame is in memory. Non-keyframe pixels are moved into `FrameScore` and dropped by `KeyframeSelectNode::process` without copying. Keyframe pixels are moved into `KeyframeEntry` and stored.\n\n- [ ] **Step 1: Write failing tests**\n\n```rust\n// In pipeline/keyframe.rs\n#[cfg(test)]\nmod tests {\n    use super::*;\n    use crate::pipeline::Node;\n\n    #[test]\n    fn keyframe_select_node_first_frame_always_keyframe() {\n        let cfg = KeyframeConfig {\n            depth_skip_threshold: 0.005,\n            depth_max_interval: 12,\n            interp_enabled: true,\n            scene_cut_threshold: 0.05,\n        };\n        let mut node = KeyframeSelectNode::new(cfg);\n        let out = node.process(FrameScore {\n            frame_index: 0,\n            pixels: vec![128u8; 3],\n            change_score: f32::MAX, // no reference yet\n        }).unwrap();\n        assert!(out.is_some(), \"first frame must always be a keyframe\");\n    }\n",
+  "source_version": "plans/2026-04-05-pipeline-dag-refactor.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042419624Z",
+  "valid_from": "2026-04-08T03:32:28.042419624Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-05-pipeline-dag-refactor.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 187,
+    "end_line": 226,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

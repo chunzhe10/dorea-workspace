@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-cdd9541548b5",
+  "content": "## Phase 2: GPU Grading + Python Inference Bridge\n\n### Goal\n- Automate depth + RAUNE-Net generation via Python subprocess (no pre-computed inputs required)\n- CPU `depth_aware_ambiance` ported from POC script\n- CUDA kernel stubs for fused LUT+HSL+clarity grading (compiled when nvcc present)\n\n---\n",
+  "source_version": "plans/2026-04-02-dorea-v2-phase2-3-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042194559Z",
+  "valid_from": "2026-04-08T03:32:28.042194559Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-dorea-v2-phase2-3-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 11,
+    "end_line": 17,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

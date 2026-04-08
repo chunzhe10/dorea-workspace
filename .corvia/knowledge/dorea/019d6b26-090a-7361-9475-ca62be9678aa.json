@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-ca62be9678aa",
+  "content": "### Task 17: ProRes Frame Selection (All-Intra)\n\n### Task 18: Integration — Wire Everything Together\n\n**Files:**\n- Modify: `crates/dorea-cli/src/grade.rs`\n- Modify: `crates/dorea-cli/src/calibrate.rs`\n\nThis task connects all the pieces: CLI flags flow through to the pipeline, auto-detection\nprints mismatch warnings, output codec is respected, LUT size is auto-defaulted.\n\n- [ ] **Step 1: Wire output codec in grade.rs**\n\nIn `run()`, use `args.output_codec` to create the encoder:\n\n```rust\nlet output_codec = ffmpeg::OutputCodec::from_str(&args.output_codec)\n    .context(\"invalid output codec\")?;\n\nlet output = args.output.clone().unwrap_or_else(|| {\n    let stem = args.input.file_stem().unwrap_or_default().to_string_lossy();\n    args.input.with_file_name(format!(\"{stem}_graded.{}\", output_codec.file_extension()))\n});\n\nlet mut encoder = FrameEncoder::new_with_codec(\n    &output, info.width, info.height, info.fps, audio_src, output_codec\n).context(\"failed to spawn encoder\")?;\n```\n\n- [ ] **Step 2: Wire auto-detection mismatch warning**\n\nAt the start of `run()`, after probing:\n\n```rust\nlet probe_result = dorea_video::probe::probe_file(&args.input)\n    .context(\"probe failed\")?;\n\nif probe_result.suggested_encoding != args.input_encoding.to_string() {\n    log::warn!(\n        \"Container suggests --input-encoding {} but you specified {}. \\",
+  "source_version": "plans/2026-04-02-10bit-pipeline-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042163685Z",
+  "valid_from": "2026-04-08T03:32:28.042163685Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-10bit-pipeline-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 2178,
+    "end_line": 2215,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

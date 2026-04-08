@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-bf84e759e9fe",
+  "content": "fn resize_rgb_bilinear_dimensions() {\n        let src = vec![128u8; 4 * 4 * 3];\n        let dst = resize_rgb_bilinear(&src, 4, 4, 2, 2);\n        assert_eq!(dst.len(), 2 * 2 * 3);\n    }\nfn resize_rgb_bilinear_solid_color_preserved() {\n        let src = vec![200u8, 100u8, 50u8].repeat(16);\n        let dst = resize_rgb_bilinear(&src, 4, 4, 2, 2);\n        for chunk in dst.chunks_exact(3) {\n            assert_eq!(chunk[0], 200, \"R channel changed\");\n            assert_eq!(chunk[1], 100, \"G channel changed\");\n            assert_eq!(chunk[2], 50,  \"B channel changed\");\n        }\n    }",
+  "source_version": "crates/dorea-video/src/resize.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360434079Z",
+  "valid_from": "2026-04-08T03:28:13.360434079Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/resize.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 93,
+    "end_line": 101,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

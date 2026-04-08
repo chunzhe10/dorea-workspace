@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-bfb760a71eda",
+  "content": "[package]\nname = \"dorea-video\"\nversion.workspace = true\nedition.workspace = true\n\n[dependencies]\nlog.workspace = true\nthiserror.workspace = true\nanyhow.workspace = true\nserde = { workspace = true }\nserde_json = \"1\"\nbase64 = \"0.22\"\nflate2 = \"1\"\npyo3 = { version = \"0.22\", optional = true }\nnumpy = { version = \"0.22\", optional = true }\n",
+  "source_version": "crates/dorea-video/Cargo.toml",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360435808Z",
+  "valid_from": "2026-04-08T03:28:13.360435808Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/Cargo.toml",
+    "language": "toml",
+    "chunk_type": "section",
+    "start_line": 6,
+    "end_line": 16,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

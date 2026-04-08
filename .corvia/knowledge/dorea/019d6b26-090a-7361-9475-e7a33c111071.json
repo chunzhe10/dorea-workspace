@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-e7a33c111071",
+  "content": "= EnhancedFrame;\n\n    fn name(&self) -> &'static str { \"enhanced_downscale\" }\n\n    fn process(&mut self, frame: EnhancedFrame) -> Result<EnhancedFrame> {\n        if frame.width == self.proxy_w && frame.height == self.proxy_h {\n            return Ok(frame);\n        }\n        let pixels = dorea_video::resize::resize_rgb_bilinear(\n            &frame.pixels, frame.width, frame.height, self.proxy_w, self.proxy_h,\n        );\n        Ok(EnhancedFrame { pixels, width: self.proxy_w, height: self.proxy_h })\n    }\n}\n\n// ── Stage: FeatureStage ───────────────────────────────────────────────────────\n\npub struct FeatureStage {\n    downscale_node: EnhancedDownscaleNode,\n}\n\nimpl FeatureStage {\n    pub fn new(proxy_w: usize, proxy_h: usize) -> Self {\n        Self {\n            downscale_node: EnhancedDownscaleNode { proxy_w, proxy_h },\n        }\n    }\n}\n\nimpl Stage for FeatureStage {\n    type Input = FeatureStageInput;\n    type Output = FeatureStageOutput;\n\n    fn name(&self) -> &'static str { \"feature_stage\" }\n\n    fn run(&mut self, input: Self::Input) -> Result<Self::Output> {\n        log::info!(\"=== {} ===\", self.name());\n        let FeatureStageInput {\n            keyframe_output,\n            inf_server,\n            fused_batch_size,\n            proxy_size,\n            enable_maxine,\n            raune_weights,\n            raune_models_dir,\n            depth_model,\n        } = input;\n\n        let KeyframeStageOutput { keyframes, proxy_dims: (proxy_w, proxy_h) } = keyframe_output;\n\n        // Load models using configured paths before handing the server to the node.",
+  "source_version": "plans/2026-04-05-pipeline-dag-refactor.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042426079Z",
+  "valid_from": "2026-04-08T03:32:28.042426079Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-05-pipeline-dag-refactor.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 727,
+    "end_line": 770,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-0909-7eb1-86e3-6e20714ab7f7",
+  "content": "# Optional Devcontainer Services — Light Default with Toggle\n\n## Problem\n\nThe devcontainer unconditionally installs Ollama (~500MB), pulls a model (~274MB), and auto-starts both Ollama and the Corvia server. This is heavy for development and code review where full experimentation isn't needed.\n\n\n## Design\n\nDefault to a **light mode** — Rust toolchain + `corvia-inference` (fastembed/ONNX for CPU embeddings) + LiteStore. Ollama and SurrealDB become independently toggleable after entering the container.\n",
+  "source_version": "decisions/2026-03-03-optional-devcontainer-services-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.041785001Z",
+  "valid_from": "2026-04-08T03:32:28.041785001Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-03-03-optional-devcontainer-services-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 9,
+    "end_line": 16,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

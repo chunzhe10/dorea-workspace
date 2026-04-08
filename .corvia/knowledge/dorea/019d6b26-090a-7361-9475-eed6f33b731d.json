@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-eed6f33b731d",
+  "content": "# Otherwise just update the raw files — the extension is loaded from source\n\n### Task 10: Delete Old Scripts & Final Cleanup\n\n**Files:**\n- Delete: `.devcontainer/scripts/corvia-workspace.sh`\n- Delete: `.devcontainer/scripts/corvia-supervisor.sh`\n\n**Step 1: Remove old scripts**\n\n```bash\ngit rm .devcontainer/scripts/corvia-workspace.sh\ngit rm .devcontainer/scripts/corvia-supervisor.sh\n```\n\n**Step 2: Remove the symlink if it exists**\n\n```bash\nrm -f /usr/local/bin/corvia-workspace\n```\n\n**Step 3: Verify corvia-dev works end-to-end**\n\nRun:\n```bash\ncorvia-dev config\ncorvia-dev status\ncorvia-dev status --json\ncorvia-dev use ollama\ncorvia-dev config  # verify it switched\ncorvia-dev use corvia-inference  # switch back\ncorvia-dev enable coding-llm\ncorvia-dev status\n```\n\nExpected: All commands work. Config mutation round-trips correctly. Status shows service health.\n\n**Step 4: Run all tests**\n\nRun: `cd /workspaces/corvia-workspace && python3 -m pytest tools/corvia-dev/tests/ -v`\nExpected: All tests pass.\n\n**Step 5: Commit**\n\n```bash\ngit rm .devcontainer/scripts/corvia-workspace.sh .devcontainer/scripts/corvia-supervisor.sh\ngit add -A\ngit commit -m \"chore: remove old bash scripts replaced by corvia-dev CLI\"\n```\n\n---\n\n\n### Summary\n\n| Task | What | Files | Tests |\n|------|------|-------|-------|\n| 1 | Scaffolding | pyproject.toml, __init__.py, cli.py | manual |\n| 2 | Pydantic models | models.py | 5 tests |\n| 3 | Service registry | services.py | 7 tests |\n| 4 | Config mutator | config.py | 6 tests |\n| 5 | Health checker | health.py | 3 tests |\n| 6 | Process manager | manager.py | 4 tests |\n| 7 | CLI wiring | cli.py (rewrite) | manual |\n| 8 | Devcontainer integration | post-create.sh, post-start.sh | manual |\n| 9 | VS Code extension rewrite | extension.js | manual |\n| 10 | Delete old scripts | remove 2 files | full suite |\n\nTotal: 10 tasks, ~25 tests, 10 commits.",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-cli.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042489909Z",
+  "valid_from": "2026-04-08T03:32:28.042489909Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-cli.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1925,
+    "end_line": 1990,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

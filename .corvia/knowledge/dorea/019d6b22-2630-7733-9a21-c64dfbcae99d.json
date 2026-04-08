@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-c64dfbcae99d",
+  "content": "pub(crate) struct BorrowedDeviceSlice<'a, T> {\n    ptr: *mut T,\n    len: usize,\n    _phantom: PhantomData<(&'a (), *mut T)>,\n}",
+  "source_version": "crates/dorea-gpu/src/device.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360524049Z",
+  "valid_from": "2026-04-08T03:28:13.360524049Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/device.rs",
+    "language": "rs",
+    "chunk_type": "struct_item",
+    "start_line": 21,
+    "end_line": 25,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

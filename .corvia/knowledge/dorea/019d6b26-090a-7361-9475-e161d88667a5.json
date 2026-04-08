@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-e161d88667a5",
+  "content": "if scene_cut {\n                    log::info!(\"Scene cut at frame {} (change={:.6})\", frame.index, change);\n                    detector.reset();\n                }\n                keyframes.push(KeyframeEntry {\n                    frame_index: frame.index,\n                    proxy_pixels: frame.pixels.clone(),\n                    scene_cut_before: scene_cut,\n                });\n                detector.set_reference(&frame.pixels);\n                frames_since_kf = 0;\n            } else {\n                frames_since_kf += 1;\n            }\n        }\n        log::info!(\"Pass 1 complete: {} keyframes detected\", keyframes.len());\n    }\n```\n\n**Replace the calibration block — remove Path B entirely, reuse `inf_server` for fused RAUNE+depth:**\n\n```rust\n    // -----------------------------------------------------------------------\n    // Model lifecycle transition: Maxine → RAUNE + Depth\n    // -----------------------------------------------------------------------\n    // Free Maxine VRAM, then load RAUNE and Depth into the same server process.\n    // VRAM peak across the run is max(Maxine, RAUNE+Depth) — never all three.\n    if use_maxine {\n        inf_server.unload_maxine()\n            .unwrap_or_else(|e| log::warn!(\"unload_maxine failed (non-fatal): {e}\"));\n        log::info!(\"Maxine unloaded — loading RAUNE+Depth for calibration\");\n    }\n    inf_server.load_raune(\n        args.raune_weights.as_deref(),\n        args.raune_models_dir.as_deref(),\n    ).context(\"failed to load RAUNE-Net for calibration\")?;",
+  "source_version": "plans/2026-04-04-maxine-pipeline-architecture.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042370719Z",
+  "valid_from": "2026-04-08T03:32:28.042370719Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-maxine-pipeline-architecture.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1098,
+    "end_line": 1127,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

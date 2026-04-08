@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-e45e73e76ded",
+  "content": "ut_before_next)) = kf_index_list.get(kf_cursor + 1) {\n            if scene_cut_before_next {\n                prev_depth_proxy.clone()\n            } else {\n                let (next_depth_proxy, _, _) = keyframe_depths\n                    .get(&next_kf_idx)\n                    .expect(\"next keyframe depth missing\");\n                let t = (fi - prev_kf_idx) as f32 / (next_kf_idx - prev_kf_idx) as f32;\n                lerp_depth(prev_depth_proxy, next_depth_proxy, t)\n            }\n        } else {\n            prev_depth_proxy.clone()\n        };\n\n        let depth = if dpw == frame.width && dph == frame.height {\n            depth_proxy\n        } else {\n            InferenceServer::upscale_depth(&depth_proxy, dpw, dph, frame.width, frame.height)\n        };\n\n        // Compute blend_t: temporal position between keyframes\n        let blend_t = if fi == prev_kf_idx {\n            0.0_f32\n        } else if let Some(&(next_kf_idx, scene_cut)) = kf_index_list.get(kf_cursor + 1) {\n            if scene_cut {\n                0.0 // Don't blend across scene cut\n            } else {\n                (fi - prev_kf_idx) as f32 / (next_kf_idx - prev_kf_idx) as f32\n            }\n        } else {\n            0.0 // Past last keyframe\n        };\n\n        #[cfg(feature = \"cuda\")]\n        let graded = adaptive_grader.grade_frame_blended(\n            &frame.pixels, &depth, frame.width, frame.height, blend_t,\n        ).map_err(|e| anyhow::anyhow!(\"Grading failed for frame {fi}: {e}\"))?;\n\n        #[cfg(not(feature = \"cuda\"))]\n        let graded = {\n            // CPU fallback: use first segment's calibration (no adaptive zones on CPU path)\n            let seg_idx = kf_to_segment.get(kf_cursor).copied().unwrap_or(0);\n            let cal = &segment_calibrations[seg_idx];\n            let calibration = Calibration::new(\n                cal.depth_luts.clone(), cal.hsl_corrections.clone(), store.len(),\n            );\n            grade_frame(&frame.pixels, &depth, frame.width, frame.height, &calibration, &params)\n                .map_err(|e| anyhow::anyhow!(\"Grading failed for frame {fi}: {e}\"))?\n        };\n\n        encoder.write_frame(&graded).context(\"encoder write failed\")?;\n        frame_count += 1;",
+  "source_version": "plans/2026-04-04-per-keyframe-adaptive-depth-zones-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042396717Z",
+  "valid_from": "2026-04-08T03:32:28.042396717Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-per-keyframe-adaptive-depth-zones-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1665,
+    "end_line": 1710,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-d3939aa4ae62",
+  "content": "a-gpu/src/lib.rs\ngit commit -m \"refactor(dorea-gpu): add skip_clarity param to grade_frame_cpu\n\nEnables the 3D LUT build phase to evaluate the per-pixel pipeline without\nthe spatial clarity pass. Existing callers pass false to preserve behavior.\"\n```\n\n---\n\n### Task 2: Create `lut3d` module with `GradeLut` struct\n\n**Files:**\n- Create: `crates/dorea-gpu/src/lut3d.rs`\n- Modify: `crates/dorea-gpu/src/lib.rs` (add `pub mod lut3d;`)\n\n- [ ] **Step 1: Create `lut3d.rs` with struct definitions**\n\n```rust\n//! Per-depth-band 3D color LUT for fast non-keyframe grading.\n//!\n//! Captures the full per-pixel grading pipeline (LUT apply + HSL + ambiance +\n//! warmth + blend) in a set of 65x65x65 3D LUTs, one per depth sample point.\n//! Non-keyframe pixels are graded via trilinear lookup instead of running the\n//! full pipeline, eliminating the expensive sRGB↔LAB roundtrip.\n\nuse dorea_cal::Calibration;\nuse dorea_lut::types::LutGrid;\nuse rayon::prelude::*;\n\nuse crate::cpu::grade_frame_cpu;\nuse crate::GradeParams;\n\n/// Grid resolution for the grade LUT. 65x65x65 validated to produce\n/// max error < 3/255, p99 < 1/255 against the direct pipeline.\n/// Upgrade to 129 when 10-bit pipeline lands.\npub const GRADE_LUT_SIZE: usize = 65;\n\n/// Precomputed grade LUT: array of 3D LUTs, one per depth sample point.\npub struct GradeLut {\n    /// One 65x65x65 LUT per depth sample.\n    luts: Vec<LutGrid>,\n    /// Depth values at which each LUT was evaluated.\n    /// Typically [0.0] + calibration.zone_centers + [1.0].\n    depth_samples: Vec<f32>,\n    /// Hash of (calibration + params) used to build this LUT.",
+  "source_version": "plans/2026-04-03-3d-lut-temporal-interpolation.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042245281Z",
+  "valid_from": "2026-04-08T03:32:28.042245281Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-3d-lut-temporal-interpolation.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 106,
+    "end_line": 141,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

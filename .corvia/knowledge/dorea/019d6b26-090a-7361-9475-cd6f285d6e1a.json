@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-cd6f285d6e1a",
+  "content": "## Tasks\n\n### Task 1: Workspace manifest + crate scaffolding\n- Create `Cargo.toml` (workspace)\n- Scaffold all 6 crate `Cargo.toml` files and `src/lib.rs` stubs\n\n\n### Task 2: `dorea-color` — color math\n- `dlog_m.rs`: D-Log M encode/decode\n- `lab.rs`: RGB↔LAB\n- `hsv.rs`: RGB↔HSV\n- Unit tests for round-trips\n",
+  "source_version": "plans/2026-04-02-dorea-v2-phase1-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042191175Z",
+  "valid_from": "2026-04-08T03:32:28.042191175Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-dorea-v2-phase1-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 258,
+    "end_line": 267,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

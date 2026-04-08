@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-e1bf79bc12a9",
+  "content": "xine-upscale-factor` visible\n\n- [ ] **Step 8: Commit**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ngit add crates/dorea-cli/src/grade.rs\ngit commit -m \"refactor(grade): single-server lifecycle, remove --calibration Path B, default Maxine\"\n```\n\n---\n\n## Self-Review\n\n**1. Spec coverage check:**\n\n| Requirement | Task |\n|-------------|------|\n| `unload_maxine` IPC in server.py | Task 2 |\n| `load_raune` IPC in server.py | Task 2 |\n| `load_depth` IPC in server.py | Task 2 |\n| Maxine FATAL → WARNING graceful skip | Task 2 |\n| `skip_depth` in subprocess `InferenceConfig` | Task 3 |\n| `unload_maxine` method in subprocess backend | Task 3 |\n| `load_raune` method in subprocess backend | Task 3 |\n| `load_depth` method in subprocess backend | Task 3 |\n| Maxine + lifecycle in pyo3 backend | Task 4 |\n| Remove `--calibration` Path B | Task 5 |\n| `--no-maxine` opt-out (was opt-in `--maxine`) | Task 5 |\n| Single-server lifecycle in grade.rs | Task 5 |\n| `build_inference_config` sets `maxine: true` by default | Task 5 |\n| VRAM peak never exceeds max(Maxine, RAUNE+Depth) | Task 5 |\n\n**2. Placeholder scan:** No TBDs. All code blocks are complete.\n\n**3. Type consistency:**\n- `InferenceConfig.skip_depth: bool` — added in Task 3 (subprocess) and Task 4 (pyo3). Default `false` in both.\n- `InferenceConfig.maxine: bool` — in subprocess since before; added to pyo3 in Task 4. Default `false` in both.\n- `InferenceServer.unload_maxine()` — added to subprocess (Task 3) and pyo3 (Task 4). Both return `Result<(), InferenceError>`.\n- `InferenceServer.load_raune(weights: Option<&Path>, models_dir: Option<&Path>)` — same signature in both backends.\n- `InferenceServer.load_depth(model_path: Option<&Path>)` — same signature in both backends.\n- `GradeArgs.no_maxine: bool` — replaces `maxine: bool`. Test struct literals in Task 5 use `no_maxine`.\n- `build_inference_config` sets `maxine: !args.no_maxine` — consistent with `GradeArgs.no_maxine`.",
+  "source_version": "plans/2026-04-04-maxine-pipeline-architecture.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042373080Z",
+  "valid_from": "2026-04-08T03:32:28.042373080Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-maxine-pipeline-architecture.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1247,
+    "end_line": 1277,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

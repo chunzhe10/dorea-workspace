@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-ecda21ff09be",
+  "content": "corvia-dev/tests/test_health.py -v`\nExpected: All 3 tests PASS\n\n**Step 5: Commit**\n\n```bash\ngit add tools/corvia-dev/corvia_dev/health.py tools/corvia-dev/tests/test_health.py\ngit commit -m \"feat(corvia-dev): add HTTP health checker for services\"\n```\n\n---\n\n### Task 6: Process Manager (Core Supervision)\n\n**Files:**\n- Create: `tools/corvia-dev/corvia_dev/manager.py`\n- Create: `tools/corvia-dev/tests/test_manager.py`\n\n**Step 1: Write the failing test**\n\n```python\n\"\"\"Tests for process manager.\"\"\"\n\nimport asyncio\nimport json\nimport signal\nimport sys\nfrom pathlib import Path\nfrom unittest.mock import AsyncMock, patch\n\nfrom corvia_dev.manager import ProcessManager, ManagedProcess\nfrom corvia_dev.models import ServiceDefinition, ServiceState\n\n\ndef test_managed_process_initial_state() -> None:\n    svc = ServiceDefinition(name=\"test\", tier=0, port=9999, start_cmd=[\"echo\", \"hi\"])\n    mp = ManagedProcess(service=svc)\n    assert mp.state == ServiceState.STOPPED\n    assert mp.pid is None\n    assert mp.restart_count == 0\n    assert mp.backoff_s == 1.0\n\n\ndef test_managed_process_backoff_escalation() -> None:\n    svc = ServiceDefinition(name=\"test\", tier=0, port=9999, start_cmd=[\"echo\", \"hi\"])\n    mp = ManagedProcess(service=svc)\n    mp.escalate_backoff()\n    assert mp.backoff_s == 2.0\n    mp.escalate_backoff()\n    assert mp.backoff_s == 4.0\n    for _ in range(10):\n        mp.escalate_backoff()\n    assert mp.backoff_s == 60.0  # capped\n",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-cli.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042472479Z",
+  "valid_from": "2026-04-08T03:32:28.042472479Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-cli.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 931,
+    "end_line": 972,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

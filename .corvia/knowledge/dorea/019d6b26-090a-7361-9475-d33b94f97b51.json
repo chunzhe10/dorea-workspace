@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-d33b94f97b51",
+  "content": "ead; reduce() merges them.\n        // Tuple: (total_w, h_sum, lut_s_sum, tgt_s_sum, v_sum)\n        let (total_weight, h_offset_sum, lut_s_sum, tgt_s_sum, v_diff_sum) =\n            lut_hsv\n                .par_iter()\n                .zip(tgt_hsv.par_iter())\n                .fold(\n                    || (0.0_f64, 0.0_f64, 0.0_f64, 0.0_f64, 0.0_f64),\n                    |acc, (&(lh, ls, lv), &(th, ts, tv))| {\n                        let h_dist = angular_dist(lh, hc);\n                        let mask = (1.0 - h_dist / hw).max(0.0)\n                            * if ls > MIN_SATURATION { 1.0_f32 } else { 0.0_f32 };\n                        if mask < 1e-7 {\n                            return acc;\n                        }\n                        let w = mask as f64;\n                        let h_diff = wrap_hue_diff(th - lh) as f64;\n                        (\n                            acc.0 + w,\n                            acc.1 + h_diff * w,\n                            acc.2 + ls as f64 * w,\n                            acc.3 + ts as f64 * w,\n                            acc.4 + (tv - lv) as f64 * w,\n                        )\n                    },\n                )\n                .reduce(\n                    || (0.0_f64, 0.0_f64, 0.0_f64, 0.0_f64, 0.0_f64),\n                    |a, b| (a.0 + b.0, a.1 + b.1, a.2 + b.2, a.3 + b.3, a.4 + b.4),\n                );\n\n        if total_weight < MIN_WEIGHT as f64 {\n            corrections.push(QualifierCorrection {\n                h_center: hc,\n                h_width: hw,\n                h_offset: 0.0,\n                s_ratio: 1.0,\n                v_offset: 0.0,\n                weight: 0.0,\n            });\n            continue;\n        }\n\n        let h_offset = (h_offset_sum / total_weight) as f32;\n        let lut_s_mean = (lut_s_sum / total_weight) as f32;\n        let tgt_s_mean = (tgt_s_sum / total_weight) as f32;\n        let s_ratio = tgt_s_mean / lut_s_mean.max(1e-6);\n        let v_offset = (v_diff_sum / total_weight) as f32;\n\n        corrections.push(QualifierCorrection {\n            h_center: hc,",
+  "source_version": "plans/2026-04-02-rayon-cpu-parallelization-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042241722Z",
+  "valid_from": "2026-04-08T03:32:28.042241722Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-rayon-cpu-parallelization-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 599,
+    "end_line": 643,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

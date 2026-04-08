@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-d3cb3a635e5c",
+  "content": "g, b];\n                let depth = vec![depth_val];\n\n                let graded = grade_frame_cpu(\n                    &pixels, &depth, 1, 1, calibration, params, true, // skip_clarity\n                ).expect(\"grade_frame_cpu failed on synthetic pixel\");\n\n                let out = [\n                    graded[0] as f32 / 255.0,\n                    graded[1] as f32 / 255.0,\n                    graded[2] as f32 / 255.0,\n                ];\n                (out, ri, gi, bi)\n            })\n            .collect();\n\n        for (out, ri, gi, bi) in results {\n            lut.set(ri, gi, bi, out);\n        }\n\n        lut\n    }\n\n    fn compute_hash(calibration: &Calibration, params: &GradeParams) -> u64 {\n        use std::hash::{Hash, Hasher};\n        use std::collections::hash_map::DefaultHasher;\n        let mut hasher = DefaultHasher::new();\n        // Hash params\n        params.warmth.to_bits().hash(&mut hasher);\n        params.strength.to_bits().hash(&mut hasher);\n        params.contrast.to_bits().hash(&mut hasher);\n        // Hash calibration identity (zone count + boundaries)\n        calibration.depth_luts.n_zones().hash(&mut hasher);\n        for &b in &calibration.depth_luts.zone_boundaries {\n            b.to_bits().hash(&mut hasher);\n        }\n        calibration.hsl_corrections.0.len().hash(&mut hasher);\n        hasher.finish()\n    }\n\n    /// Check that this LUT is still valid for the given calibration and params.\n    pub fn is_valid_for(&self, calibration: &Calibration, params: &GradeParams) -> bool {\n        self.build_hash == Self::compute_hash(calibration, params)\n    }",
+  "source_version": "plans/2026-04-03-3d-lut-temporal-interpolation.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042246984Z",
+  "valid_from": "2026-04-08T03:32:28.042246984Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-3d-lut-temporal-interpolation.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 214,
+    "end_line": 250,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

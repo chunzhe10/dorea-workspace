@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-c6acd908a974",
+  "content": "ify_cuda_context(device: &std::sync::Arc<cudarc::driver::CudaDevice>) -> Result<(), crate::GpuError> {\n    let _probe = device.alloc_zeros::<f32>(1)\n        .map_err(|e| crate::GpuError::CudaFail(format!(\"context health check failed: {e}\")))?;\n    Ok(())\n}\nmod tests {\n    #[test]\n    fn per_frame_vram_1080p() {\n        #[cfg(feature = \"cuda\")]\n        {\n            use super::per_frame_vram_bytes;\n            let bytes = per_frame_vram_bytes(1920, 1080);\n            // 1920*1080 = 2073600 pixels\n            // long_edge = 1920 > 518, scale = 518/1920 ≈ 0.26979\n            // pw = round(1920 * 0.26979) = round(518) = 518\n            // ph = round(1080 * 0.26979) = round(291.37) = 291\n            // proxy_n = 518 * 291 = 150738\n            // rgb_f32 = 2073600 * 3 * 4 = 24883200\n            // depth_f32 = 2073600 * 4 = 8294400\n            // lut_budget = 5 * 33 * 33 * 33 * 3 * 4 = 21,781,620 ... actually 5*35937*12 = 2155620 ... recalc\n            // 33^3 = 35937, 5 * 35937 * 3 * 4 = 5 * 35937 * 12 = 2,156,220\n            // proxy_f32 = 150738 * 4 = 602952\n            // total = 3*24883200 + 8294400 + 2156220 + 3*602952\n            //       = 74649600 + 8294400 + 2156220 + 1808856\n            //       = 86909076\n            let n = 1920usize * 1080;\n            let scale = 518.0_f64 / 1920.0_f64;\n            let pw = ((1920.0_f64 * scale).round() as usize).max(1);\n            let ph = ((1080.0_f64 * scale).round() as usize).max(1);\n            let proxy_n = pw * ph;\n            let rgb_f32 = n * 3 * 4;\n            let depth_f32 = n * 4;\n            let lut_budget = 5 * 33 * 33 * 33 * 3 * 4;\n            let proxy_f32 = proxy_n * 4;\n            let expected = 4 * rgb_f32 + depth_f32 + lut_budget + 3 * proxy_f32;\n            assert_eq!(bytes, expected, \"per_frame_vram_bytes mismatch\");\n        }\n    }\n}",
+  "source_version": "crates/dorea-gpu/src/device.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360527511Z",
+  "valid_from": "2026-04-08T03:28:13.360527511Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/device.rs",
+    "language": "rs",
+    "chunk_type": "mod_item",
+    "start_line": 98,
+    "end_line": 131,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

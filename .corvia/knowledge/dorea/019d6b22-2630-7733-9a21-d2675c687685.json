@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-d2675c687685",
+  "content": "rror(\n                \"Maxine SDK not found. Install from NGC (nvidia-maxine-vfx-sdk): \"\n                \"see docs/guides/maxine-setup.md, or unset --maxine\"\n            )\n\n        _log(f\"Maxine VideoSuperRes initialized (upscale_factor={upscale_factor})\")\ndef _init_effects(self, width: int, height: int) -> None:\n        \"\"\"Lazily initialize Maxine VideoSuperRes with known input dimensions.\"\"\"\n        out_w = width * self.upscale_factor\n        out_h = height * self.upscale_factor\n\n        self._sr_effect = _nvvfx.VideoSuperRes()\n        self._sr_effect.output_width = out_w\n        self._sr_effect.output_height = out_h\n        self._sr_effect.load()\n\n        _log(f\"Maxine VideoSuperRes loaded: {width}x{height}→{out_w}x{out_h}\")",
+  "source_version": "python/dorea_inference/maxine_enhancer.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360680952Z",
+  "valid_from": "2026-04-08T03:28:13.360680952Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/maxine_enhancer.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 55,
+    "end_line": 65,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

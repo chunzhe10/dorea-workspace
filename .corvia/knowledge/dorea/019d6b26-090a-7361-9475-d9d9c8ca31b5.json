@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-d9d9c8ca31b5",
+  "content": "            # Different sizes: run sequentially, collect results as GPU tensors\n\n## Task 2: Add `infer_batch_from_tensors` to `DepthAnythingInference` + pinned memory\n\nThe fused server handler needs depth to accept GPU tensors directly (skipping PIL → numpy → htod). Also add pinned memory to the existing `infer_batch`.\n\n**Files:**\n- Modify: `repos/dorea/python/dorea_inference/depth_anything.py`\n- Modify: `repos/dorea/python/tests/test_infer_batch.py`\n\n- [ ] **Step 2.1: Write failing tests**\n\nAppend to `repos/dorea/python/tests/test_infer_batch.py`:\n\n```python\nclass TestDepthInferBatchFromTensors:\n    def test_accepts_gpu_tensor_shape(self):\n        \"\"\"infer_batch_from_tensors returns one depth map per input tensor.\"\"\"\n        from dorea_inference.depth_anything import DepthAnythingInference\n\n        class _FakeDepthModel(torch.nn.Module):\n            class _Out:\n                def __init__(self, t): self.predicted_depth = t\n            def forward(self, pixel_values=None):\n                N, _, H, W = pixel_values.shape\n                return self._Out(pixel_values[:, 0, :, :])  # (N, H, W) dummy\n\n        model = DepthAnythingInference.__new__(DepthAnythingInference)\n        model.device = torch.device(\"cpu\")\n        model.model = _FakeDepthModel()\n",
+  "source_version": "plans/2026-04-03-inference-gpu-saturation.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042303674Z",
+  "valid_from": "2026-04-08T03:32:28.042303674Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-inference-gpu-saturation.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 276,
+    "end_line": 304,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

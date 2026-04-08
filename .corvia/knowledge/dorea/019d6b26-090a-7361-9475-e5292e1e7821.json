@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-e5292e1e7821",
+  "content": "pected: all existing tests pass.\n\n- [ ] **Step 2.6: Commit**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ngit add crates/dorea-cli/src/grade.rs\ngit commit -m \"refactor(grade): wire ChangeDetector in pass 1; move frame_mse to change_detect\"\n```\n\n---\n\n## Task 3: Restructure `run()` — unified inference block\n\nThis is the core of the plan. It rewires the control flow of `run()` so that:\n1. Pass 1 runs first (already done in Task 2)\n2. After pass 1: a branch on `args.calibration` drives either the fused RAUNE+depth path or the legacy depth-only path\n3. The calibration 3-pass streaming runs inline (replacing the `auto_calibrate` call)\n4. The second `InferenceServer::spawn` for depth-only grading is removed when auto-calibrating\n\n**Requires:** GPU saturation plan fully implemented (see Prerequisites).\n\n**Files:**\n- Modify: `crates/dorea-cli/src/grade.rs`\n\n- [ ] **Step 3.1: Move pass 1 before calibration derivation**\n\nCurrently in `run()`, the order is:\n1. Setup (output path, probe, params, encoder) — lines ~158–183\n2. Calibration load/derive — lines ~185–192\n3. Inference server (depth-only) spawn — lines ~194–200\n4. CUDA grader init — lines ~202–213\n5. Pass 1 (proxy decode + change detection) — lines ~215–258\n6. Batch depth inference — lines ~260–309\n7. `inf_server.shutdown()` — line 309\n8. `kf_index_list` — lines 312–314\n9. Pass 2 — lines 316–393\n\nThe new order is:\n1. Setup (unchanged)\n2. Pass 1 (unchanged from Task 2)\n3. Calibration + depth cache block (new unified branch)\n4. CUDA grader init (unchanged, just moved down)\n5. `kf_index_list` (unchanged)\n6. Pass 2 (unchanged)\n\nFind and **move** the entire pass 1 block (from the `let interp_enabled =` line through `log::info!(\"Pass 1 complete: {} keyframes detected\", keyframes.len());`) to **after** the encoder initialisation (`let mut encoder = ...`) and **before** the calibration block. The simplest way: cut lines 215–258, paste before line 185.\n\nAfter moving, `run()` structure becomes:\n\n```\n... setup → encoder init ...\nlet interp_enabled = ...;\n// Pass 1 (moved here)\nlet (proxy_w, proxy_h) = ...;\n// ...",
+  "source_version": "plans/2026-04-04-unified-keyframe-sampling-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042404384Z",
+  "valid_from": "2026-04-08T03:32:28.042404384Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-unified-keyframe-sampling-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 390,
+    "end_line": 433,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-c87076587793",
+  "content": "{\n                let r = ri as f32 / (size - 1) as f32;\n                let g = gi as f32 / (size - 1) as f32;\n                let b = bi as f32 / (size - 1) as f32;\n                lut.set(ri, gi, bi, [r, g, b]);\n            }}}\n            lut\n        }\nfn finish_grade_roundtrip() {\n        use crate::GradeParams;\n        use dorea_cal::Calibration;\n        use dorea_hsl::HslCorrections;\n        use dorea_lut::types::{DepthLuts, LutGrid};\n\n        let width = 2;\n        let height = 2;\n        let n = width * height;\n\n        // Build a minimal identity calibration (1 zone, 2x2x2 identity LUT).\n        let mut lut = LutGrid::new(2);\n        for ri in 0..2usize {\n            for gi in 0..2usize {\n                for bi in 0..2usize {\n                    lut.set(ri, gi, bi, [ri as f32, gi as f32, bi as f32]);\n                }\n            }\n        }\n        let depth_luts = DepthLuts::new(vec![lut], vec![0.0, 1.0]);\n        let hsl_corrections = HslCorrections(vec![]);\n        let cal = Calibration::new(depth_luts, hsl_corrections, 0);\n\n        // Grey pixels, f32\n        let mut rgb_f32: Vec<f32> = vec![0.5; n * 3];\n        let orig_pixels: Vec<u8> = vec![128u8; n * 3];\n        let depth: Vec<f32> = vec![0.5; n];\n        let params = GradeParams::default();\n\n        let out = finish_grade(&mut rgb_f32, &orig_pixels, &depth, width, height, &params, &cal);\n        assert_eq!(out.len(), n * 3);\n    }",
+  "source_version": "crates/dorea-gpu/src/cpu.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360554533Z",
+  "valid_from": "2026-04-08T03:28:13.360554533Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cpu.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 628,
+    "end_line": 659,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

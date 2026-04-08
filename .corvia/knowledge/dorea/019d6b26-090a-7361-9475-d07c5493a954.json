@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-d07c5493a954",
+  "content": "go, bo) = lab_to_srgb(l, a * warmth_factor, b_ab * warmth_factor);\n            rgb_f32[i * 3]     = ro.clamp(0.0, 1.0);\n            rgb_f32[i * 3 + 1] = go.clamp(0.0, 1.0);\n            rgb_f32[i * 3 + 2] = bo.clamp(0.0, 1.0);\n        }\n    }\n```\n\nNew code:\n```rust\n    // 1. Fused ambiance + warmth (single LAB roundtrip, rayon-parallelized)\n    let warmth_factor = 1.0 + (params.warmth - 1.0) * 0.3;\n    fused_ambiance_warmth(rgb_f32, depth, width, height, params.contrast, warmth_factor);\n\n    // 1b. Clarity — skip when the CUDA path already ran the GPU clarity kernel.\n    if !skip_clarity {\n        apply_cpu_clarity(rgb_f32, depth, width, height, params.contrast);\n    }\n```\n\n- [ ] **Step 7: Run all dorea-gpu tests**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ncargo test -p dorea-gpu 2>&1 | tail -20\n```\n\nExpected: all tests pass. The `finish_grade_roundtrip` and `finish_grade_skip_clarity_runs_without_panic` tests exercise the updated `finish_grade` path.\n\n- [ ] **Step 8: Commit**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ngit add crates/dorea-gpu/Cargo.toml crates/dorea-gpu/src/cpu.rs\ngit commit -m \"perf(dorea-gpu): fused ambiance+warmth in single LAB roundtrip with rayon\n\nMerges depth_aware_ambiance per-pixel work and user warmth scaling into\none RGB→LAB→RGB pass. Parallelized with rayon par_chunks_exact_mut.\nEliminates ~1.45B redundant FLOPs per 4K frame.\"\n```\n\n---\n",
+  "source_version": "plans/2026-04-02-grading-pipeline-perf-v3.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042217396Z",
+  "valid_from": "2026-04-08T03:32:28.042217396Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-grading-pipeline-perf-v3.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 606,
+    "end_line": 639,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

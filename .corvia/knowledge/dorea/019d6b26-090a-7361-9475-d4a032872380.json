@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-d4a032872380",
+  "content": "### Task 7: Full pipeline benchmark and verify\n\n# Extract frames at t=2s, 5s, 10s from both outputs\nfor t in 2 5 10; do\n  ffmpeg -y -ss $t -i working/graded/DJI_20251101111428_0055_D_graded_lut3d.mp4 \\\n    -vframes 1 -update 1 /tmp/lut_compare/lut3d_${t}s.png 2>/dev/null\n  ffmpeg -y -ss $t -i working/graded/DJI_20251101111428_0055_D_graded_nolut.mp4 \\\n    -vframes 1 -update 1 /tmp/lut_compare/nolut_${t}s.png 2>/dev/null\ndone\n```\n\nCompare visually — should be imperceptibly different.\n\n- [ ] **Step 4: PSNR/SSIM comparison between LUT and no-LUT outputs**\n\n```bash\nffmpeg -i working/graded/DJI_20251101111428_0055_D_graded_lut3d.mp4 \\\n  -i working/graded/DJI_20251101111428_0055_D_graded_nolut.mp4 \\\n  -lavfi \"ssim;[0:v][1:v]psnr\" -f null - 2>&1 | grep -E 'SSIM|PSNR'\n```\n\nExpected: PSNR > 40 dB, SSIM > 0.99 (very high similarity).\n\n- [ ] **Step 5: Record results to corvia**\n\nUse `corvia_write` to record the benchmark finding with build time, wall time, fps, and quality metrics.",
+  "source_version": "plans/2026-04-03-3d-lut-temporal-interpolation.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042255085Z",
+  "valid_from": "2026-04-08T03:32:28.042255085Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-3d-lut-temporal-interpolation.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 808,
+    "end_line": 831,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

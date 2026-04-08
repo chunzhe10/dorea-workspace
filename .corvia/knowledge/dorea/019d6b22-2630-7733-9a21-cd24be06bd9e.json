@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-cd24be06bd9e",
+  "content": "igma)).exp();\n        *slot = v;\n        kernel_sum += v;\n    }\n    for k in kernel.iter_mut() {\n        *k /= kernel_sum;\n    }\n\n    // Horizontal pass (row-parallel)\n    let mut temp = vec![0.0_f32; n];\n    temp.par_chunks_mut(width)\n        .enumerate()\n        .for_each(|(y, row)| {\n            for (x, out) in row.iter_mut().enumerate() {\n                let mut acc = 0.0_f32;\n                for (ki, &kv) in kernel.iter().enumerate() {\n                    let nx = (x as i32 + ki as i32 - radius as i32)\n                        .clamp(0, width as i32 - 1) as usize;\n                    acc += edge_mag[y * width + nx] * kv;\n                }\n                *out = acc;\n            }\n        });\n    // Vertical pass (row-parallel).\n    // IMPORTANT: Must stay sequential with the H-pass above — `temp` is fully written\n    // by H-pass `for_each` (which blocks) before this begins. Do NOT run H+V concurrently\n    // (e.g. via rayon::join) — that would race on `temp`.\n    let mut edge_dilated = vec![0.0_f32; n];\n    edge_dilated\n        .par_chunks_mut(width)\n        .enumerate()\n        .for_each(|(y, row)| {\n            for x in 0..width {\n                let mut acc = 0.0_f32;\n                for (ki, &kv) in kernel.iter().enumerate() {\n                    let ny = (y as i32 + ki as i32 - radius as i32)\n                        .clamp(0, height as i32 - 1) as usize;\n                    acc += temp[ny * width + x] * kv;",
+  "source_version": "crates/dorea-lut/src/build.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360609859Z",
+  "valid_from": "2026-04-08T03:28:13.360609859Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-lut/src/build.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 83,
+    "end_line": 108,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

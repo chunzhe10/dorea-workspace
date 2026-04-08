@@ -1,0 +1,31 @@
+{
+  "id": "019d5b12-10fb-7b83-a229-29dfcb3de5b5",
+  "content": "# Fused RAUNE+Depth Sub-batching for GPU Memory Management\n\n## Problem\nDuring calibration (Pass 1), when `fused_batch_size` is reduced to avoid OOM (e.g., from 32 to 8), the Python inference server still allocates the **entire batch in GPU memory at once**, defeating the batch size limit.\n\n### Root Cause\n- Rust chunks keyframes by `fused_batch_size` and sends batches to the Python server\n- Python's `raune_model.infer_batch_gpu()` does `torch.stack(tensors)` for all N images simultaneously\n- This allocates memory for the entire batch at once, even if the request contains (say) 32 images\n- GPU OOM occurs because the full batch is in VRAM, not just the chunked portion\n\n## Solution\nAdded sub-batching inside the Python inference server (`server.py`). When processing a `raune_depth_batch` request:\n\n1. Split the request into smaller sub-batches (configurable, currently 4 images per sub-batch on RTX 3060)\n2. Process each sub-batch independently: RAUNE → Maxine → Depth\n3. Accumulate results and clear GPU cache between sub-batches\n4. Return concatenated results to the caller\n\n### Implementation\nModified `python/dorea_inference/server.py`:\n- Added `sub_batch_size = 4` constant (tunable per GPU)\n- Loop over request items in chunks of `sub_batch_size`\n- For each sub-batch:\n  - Call `raune_model.infer_batch_gpu(imgs_chunk)`\n  - Apply Maxine if enabled\n  - Call `depth_model.infer_batch_from_tensors(enhanced_batch)`\n  - Collect results and free GPU memory via `torch.cuda.empty_cache()`\n- Concatenate all sub-batch results before returning\n\n### Behavior\n- `fused_batch_size` in Rust now has a meaningful effect (controls Rust-side chunking)\n- Python server respects the chunk size by internally sub-batching\n- VRAM peak = max(RAUNE, Depth) on a single sub-batch, not the entire request\n- For RTX 3060 (6GB): safe to process ~4 images per sub-batch at 1024p proxy resolution\n\n### Testing\n- Verify with reduced `fused_batch_size` during calibration\n- Monitor VRAM via `nvidia-smi dmon` during inference\n- Expect no OOM even with 32-frame requests if sub-batch size ≤ 4\n\n",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-05T00:36:43.899635241Z",
+  "valid_from": "2026-04-05T00:36:43.899635241Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "decision",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

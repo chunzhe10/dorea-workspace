@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-0909-7eb1-86e3-8177f9de5490",
+  "content": "# RAG Modes: search vs context vs ask\n\n## Overview\n\nThe RAG pipeline (`corvia-kernel/src/rag_pipeline.rs`) has three modes with\nincreasing cost and capability:\n\n| | search | context | ask |\n|---|---|---|---|\n| **Stage 1: Retrieval** | Vector search | Vector search + optional graph expansion | Vector search + optional graph expansion |\n| **Stage 2: Augmentation** | No | Yes — assembles sources into structured context with token budgets, skill injection | Same as context |\n| **Stage 3: Generation** | No | No | Yes — sends assembled context to LLM for a synthesized answer |\n| **Returns** | Raw matching entries with scores | Assembled context document + sources + trace | Context + LLM-generated answer + trace |\n| **Requires LLM** | No | No | Yes (GenerationEngine) |\n\n\n## Summary\n\n- **`search`** — raw entries matching the query (cheapest, fastest)\n- **`context`** — structured context assembled from retrieved entries (no LLM needed)\n- **`ask`** — full RAG: context assembly + LLM-generated answer (requires GenerationEngine)\n",
+  "source_version": "learnings/rag-modes-search-context-ask.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.041992022Z",
+  "valid_from": "2026-04-08T03:32:28.041992022Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "learnings/rag-modes-search-context-ask.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 5,
+    "end_line": 23,
+    "content_role": "learning",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

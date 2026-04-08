@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-b3cc95a03ea4",
+  "content": " true }\ndorea-video = { workspace = true }\nclap = { version = \"4\", features = [\"derive\"] }\nimage = \"0.25\"\nanyhow = { workspace = true }\nlog = { workspace = true }\nenv_logger = \"0.11\"\nmemmap2 = \"0.9\"\nserde = { workspace = true }\ntoml = { workspace = true }\n\n[features]\n# Mirrors dorea-gpu: activated by build.rs (nvcc detection), not manually.\n# Declared here so Cargo recognises `#[cfg(feature = \"cuda\")]` as a valid condition.\ncuda = []",
+  "source_version": "crates/dorea-cli/Cargo.toml",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360298990Z",
+  "valid_from": "2026-04-08T03:28:13.360298990Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/Cargo.toml",
+    "language": "toml",
+    "chunk_type": "section",
+    "start_line": 26,
+    "end_line": 29,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

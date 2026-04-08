@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-c1577dc85f2e",
+  "content": "en() != width * height {\n        return Err(GpuError::InvalidInput(format!(\n            \"depth length {} != width*height {}\",\n            depth.len(),\n            width * height\n        )));\n    }\n    grader.grade_frame_cuda(pixels, depth, width, height)\n}\npub fn grade_frame_with_adaptive_grader(\n    grader: &cuda::AdaptiveGrader,\n    pixels: &[u8],\n    depth: &[f32],\n    width: usize,\n    height: usize,\n    blend_t: f32,\n) -> Result<Vec<u8>, GpuError> {\n    if pixels.len() != width * height * 3 {\n        return Err(GpuError::InvalidInput(format!(\n            \"pixels length {} != width*height*3 {}\",\n            pixels.len(),\n            width * height * 3\n        )));\n    }\n    if depth.len() != width * height {\n        return Err(GpuError::InvalidInput(format!(\n            \"depth length {} != width*height {}\",\n            depth.len(),\n            width * height\n        )));\n    }\n    grader.grade_frame_blended(pixels, depth, width, height, blend_t)\n}",
+  "source_version": "crates/dorea-gpu/src/lib.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360454761Z",
+  "valid_from": "2026-04-08T03:28:13.360454761Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/lib.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 180,
+    "end_line": 203,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

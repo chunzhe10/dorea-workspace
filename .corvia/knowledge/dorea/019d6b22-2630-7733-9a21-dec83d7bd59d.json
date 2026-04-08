@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-dec83d7bd59d",
+  "content": ".htod_sync_copy_into(&rgb_f32, &mut res.d_rgb_in)\n                .map_err(map_cudarc_error)?;\n            dev.htod_sync_copy_into(depth, &mut res.d_depth)\n                .map_err(map_cudarc_error)?;\n        }\n\n        let luts_flat: Vec<f32> = depth_luts\n            .luts\n            .iter()\n            .flat_map(|lg| lg.data.iter().copied())\n            .collect();\n\n        let mut h_offsets = [0.0f32; 6];\n        let mut s_ratios = [1.0f32; 6];\n        let mut v_offsets = [0.0f32; 6];\n        let mut weights = [0.0f32; 6];\n        for (i, q) in calibration.hsl_corrections.0.iter().enumerate().take(6) {\n            h_offsets[i] = q.h_offset;\n            s_ratios[i] = q.s_ratio;\n            v_offsets[i] = q.v_offset;\n            weights[i] = q.weight;\n        }\n\n        {\n            let mut cal = self.cal_bufs.borrow_mut();\n            let cal = cal.as_mut().unwrap();\n            dev.htod_sync_copy_into(&luts_flat, &mut cal.d_luts)\n                .map_err(map_cudarc_error)?;\n            dev.htod_sync_copy_into(&depth_luts.zone_boundaries, &mut cal.d_boundaries)\n                .map_err(map_cudarc_error)?;\n            dev.htod_sync_copy_into(&h_offsets, &mut cal.d_h_offsets)\n                .map_err(map_cudarc_error)?;\n            dev.htod_sync_copy_into(&s_ratios, &mut cal.d_s_ratios)\n                .map_err(map_cudarc_error)?;\n            dev.htod_sync_copy_into(&v_offsets, &mut cal.d_v_offsets)\n                .map_err(map_cudarc_error)?;\n            dev.htod_sync_copy_into(&weights, &mut cal.d_weights)\n                .map_err(map_cudarc_error)?;\n        }\n\n        // =====================================================================\n        // KERNEL STAGES  (all reads from pre-allocated buffers)\n        // =====================================================================\n\n        // --- LUT APPLY ---\n        {\n            let res = self.res_bufs.borrow();\n            let res = res.as_ref().unwrap();\n            let cal = self.cal_bufs.borrow();\n            let cal = cal.as_ref().unwrap();\n\n            let func = dev\n                .get_func(\"lut_apply\", \"lut_apply_kernel\")",
+  "source_version": "docs/plans/2026-04-03-cuda-grader-buffer-pre-allocation.md",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360843611Z",
+  "valid_from": "2026-04-08T03:28:13.360843611Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "docs/plans/2026-04-03-cuda-grader-buffer-pre-allocation.md",
+    "language": "markdown",
+    "chunk_type": "heading_section",
+    "start_line": 492,
+    "end_line": 537,
+    "content_role": "plan",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

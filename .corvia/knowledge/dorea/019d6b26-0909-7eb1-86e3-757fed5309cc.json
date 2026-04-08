@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-0909-7eb1-86e3-757fed5309cc",
+  "content": "### Optimization 4: Bypass HuggingFace Processor + GPU-Required Runtime\n\n### Optimization 5: Temporal Grade Interpolation\n\nExtend the motion-adaptive keyframe concept from depth-only (Opt 1) to the **entire\ngrading pipeline**. For non-keyframe frames, skip depth inference AND grading entirely —\ninterpolate the final graded RGB output between bracketing keyframe graded outputs.\n\n**How it works:** The depth interpolation lookahead buffer (Opt 1) already identifies\nkeyframes and buffers intermediate frames. Instead of running `grade_frame()` on every\nbuffered frame with interpolated depth, we:\n\n1. Grade keyframe frames fully (depth inference + LUT + HSL + ambiance + clarity)\n2. Cache the graded u8 output for each keyframe\n3. For buffered (non-keyframe) frames: `graded[i] = lerp(graded[k_before], graded[k_after], t)`\n4. The lerp operates on the final u8 RGB pixels — just a weighted average per channel\n\n**Per non-keyframe frame cost:**\n```\nffmpeg decode:    ~5ms   (still needed — source pixels required for MSE check)\nProxy resize:     ~1ms   (needed for MSE)\nMSE computation:  ~0.1ms\nGraded frame lerp: ~1ms  (4K u8: 8.3M × 3 channels × 1 multiply+add = ~25M ops)\nffmpeg encode:    ~5ms\nTotal:            ~12ms\n```\n\nCompare to **full pipeline per frame**: ~80-180ms (depth + grade).\n\n**This subsumes Opt 1:** Depth interpolation (Opt 1) becomes unnecessary for non-keyframe\nframes because we skip grading entirely. Depth is only needed for keyframes. The MSE-based\nkeyframe detection, scene-cut handling, buffer overflow safety, and edge cases from Opt 1\nall still apply — they just gate the full pipeline vs. a simple lerp instead of gating",
+  "source_version": "decisions/2026-04-02-grading-pipeline-perf-v3.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.041848603Z",
+  "valid_from": "2026-04-08T03:32:28.041848603Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-02-grading-pipeline-perf-v3.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 195,
+    "end_line": 225,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

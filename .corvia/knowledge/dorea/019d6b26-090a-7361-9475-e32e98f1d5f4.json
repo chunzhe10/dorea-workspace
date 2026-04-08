@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-e32e98f1d5f4",
+  "content": "// Allocate temp build buffer\n        let d_build: CudaSlice<f32> = device.alloc_zeros(total * 4)\n            .map_err(map_cudarc_error)?;\n\n        // Launch build kernel\n        let func = device.get_func(\"build_combined_lut\", \"build_combined_lut_kernel\")\n            .ok_or_else(|| GpuError::ModuleLoad(\"build_combined_lut_kernel not found\".into()))?;\n        let cfg = LaunchConfig {\n            grid_dim: (((total as u32) + 255) / 256, 1, 1),\n            block_dim: (256, 1, 1),\n            shared_mem_bytes: 0,\n        };\n        unsafe {\n            func.launch(cfg, (\n                &d_build,\n                &self.d_base_luts,\n                &self.d_base_boundaries,\n                self.base_n_zones as i32,\n                &d_runtime_bounds,\n                nz as i32,\n                &self.d_h_offsets,\n                &self.d_s_ratios,\n                &self.d_v_offsets,\n                &self.d_weights,\n                self.warmth,\n                self.strength,\n                self.contrast,\n                n as i32,\n                self.lut_size as i32,\n                total as i32,\n            ))\n        }.map_err(map_cudarc_error)?;\n\n        // Copy build buffer → CUarrays (one per runtime zone)\n        let zone_floats = n * n * n * 4; // float4 per texel\n        let d_build_ptr = *d_build.device_ptr() as sys::CUdeviceptr;\n\n        for z in 0..nz {\n            let src_offset = (z * zone_floats * std::mem::size_of::<f32>()) as u64;\n            let copy_params = sys::CUDA_MEMCPY3D {\n                srcMemoryType: sys::CUmemorytype::CU_MEMORYTYPE_DEVICE,\n                srcDevice: d_build_ptr + src_offset,\n                srcPitch: n * 4 * std::mem::size_of::<f32>(),       // row pitch in bytes\n                srcHeight: n,\n                srcXInBytes: 0, srcY: 0, srcZ: 0,\n                srcHost: std::ptr::null(),\n                srcArray: std::ptr::null_mut(),\n                srcLOD: 0,\n                dstMemoryType: sys::CUmemorytype::CU_MEMORYTYPE_ARRAY,\n                dstArray: self.sets[set_index].arrays[z],\n                dstXInBytes: 0, dstY: 0, dstZ: 0,\n                dstHost: std::ptr::null_mut(),\n                dstDevice: 0,",
+  "source_version": "plans/2026-04-04-per-keyframe-adaptive-depth-zones-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042386473Z",
+  "valid_from": "2026-04-08T03:32:28.042386473Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-per-keyframe-adaptive-depth-zones-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 874,
+    "end_line": 920,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

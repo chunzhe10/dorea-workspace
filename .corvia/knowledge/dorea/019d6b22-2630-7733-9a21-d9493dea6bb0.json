@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-d9493dea6bb0",
+  "content": "sync_copy_into(&v_offsets,                          &mut bufs.d_v_offsets ).map_err(map_cudarc_error)?;\n        dev.htod_sync_copy_into(&weights,                            &mut bufs.d_weights   ).map_err(map_cudarc_error)?;\n        bufs.data_valid = true;\n    }\n}\n```\n\n**Borrow discipline note:** `needs_cal_upload` uses an immutable borrow that is dropped at the `}` before `if needs_cal_upload`. The `borrow_mut` inside the `if` therefore cannot conflict. The borrow sequence for this frame:\n1. Immutable `borrow()` → drops → `needs_cal_upload` set\n2. If needed: `borrow_mut()` → upload → set `data_valid = true` → drops\n3. Existing `borrow()` for kernel launches (after this block)\n\n- [ ] **Step 6: Run tests**\n\n```bash\ncargo test -p dorea-gpu --test-threads=1 2>&1 | grep -E \"test .* (ok|FAILED)\"\n```\n\nExpected: 27 tests pass, 0 fail. The new `calibration_cache_correctness` test is one of them.\n\n- [ ] **Step 7: Commit**\n\n```bash\ngit add crates/dorea-gpu/src/cuda/mod.rs\ngit commit -m \"perf(dorea-gpu): skip calibration re-uploads when data_valid (eliminates 6/9 PCIe barriers in steady state)\"\n```\n\n---\n",
+  "source_version": "docs/plans/2026-04-03-pcie-sync-barrier-reduction.md",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360763447Z",
+  "valid_from": "2026-04-08T03:28:13.360763447Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "docs/plans/2026-04-03-pcie-sync-barrier-reduction.md",
+    "language": "markdown",
+    "chunk_type": "heading_section",
+    "start_line": 233,
+    "end_line": 258,
+    "content_role": "plan",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

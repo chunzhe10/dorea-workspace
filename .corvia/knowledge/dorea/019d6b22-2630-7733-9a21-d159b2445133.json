@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-d159b2445133",
+  "content": "at inference resolution.\n        \"\"\"\n        import torch\n        from PIL import Image as _Image\n\n        pil = _Image.fromarray(img_rgb)\n        capped = _resize_for_depth(pil, max_size)\n\n        # Direct tensor construction — bypass AutoImageProcessor\n        arr = np.array(capped).astype(np.float32) / 255.0\n        arr = (arr - self._MEAN) / self._STD\n        tensor = torch.from_numpy(arr).permute(2, 0, 1).unsqueeze(0).to(self.device)\n\n        with torch.no_grad():\n            outputs = self.model(pixel_values=tensor)\n\n        depth = outputs.predicted_depth.squeeze(0).cpu().numpy()\n\n        d_min, d_max = float(depth.min()), float(depth.max())\n        if d_max - d_min < 1e-6:\n            depth = np.zeros_like(depth, dtype=np.float32)\n        else:\n            depth = ((depth - d_min) / (d_max - d_min)).astype(np.float32)\n\n        return depth\n\n    def infer_batch(self, imgs: \"list[np.ndarray]\", max_size: int = 518) -> \"list[np.ndarray]\":\n        \"\"\"Run depth estimation on a batch of uint8 HxWx3 RGB images.\n\n        All images must have the same source dimensions (guaranteed when called\n        with proxy-size keyframes from a single video). Stacks into one\n        (N, 3, H, W) forward pass. Each output normalized independently to [0,1].\n\n        Returns list of (H, W) float32 depth maps at inference resolution.\n        Falls back to sequential infer() if images have different post-resize dims.\n        \"\"\"",
+  "source_version": "python/dorea_inference/depth_anything.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360667685Z",
+  "valid_from": "2026-04-08T03:28:13.360667685Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/depth_anything.py",
+    "language": "py",
+    "chunk_type": "class_definition",
+    "start_line": 94,
+    "end_line": 120,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

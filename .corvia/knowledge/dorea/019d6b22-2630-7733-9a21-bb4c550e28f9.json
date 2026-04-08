@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-bb4c550e28f9",
+  "content": "_json::json!({\n            \"type\": \"load_depth\",\n            \"model_path\": model.to_str(),\n        });\n        assert_eq!(req[\"type\"].as_str().unwrap(), \"load_depth\");\n        assert_eq!(req[\"model_path\"].as_str().unwrap(), \"/models/depth_anything\");\n    }\nfn skip_depth_takes_precedence_over_depth_model() {\n        let config = InferenceConfig {\n            skip_depth: true,\n            depth_model: Some(std::path::PathBuf::from(\"/some/model\")),\n            ..InferenceConfig::default()\n        };\n        let args = config.build_args();\n        assert!(args.contains(&\"--no-depth\".to_string()), \"skip_depth should emit --no-depth\");\n        assert!(\n            !args.contains(&\"--depth-model\".to_string()),\n            \"--depth-model should NOT appear when skip_depth is true\"\n        );\n    }",
+  "source_version": "crates/dorea-video/src/inference_subprocess.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360384311Z",
+  "valid_from": "2026-04-08T03:28:13.360384311Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference_subprocess.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 1150,
+    "end_line": 1162,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

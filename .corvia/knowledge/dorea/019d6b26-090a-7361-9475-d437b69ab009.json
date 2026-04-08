@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-d437b69ab009",
+  "content": "7;\n            rng_state ^= rng_state << 17;\n            (rng_state as f32 / u64::MAX as f32).clamp(0.0, 1.0)\n        };\n\n        let n_samples = 10_000;\n        let mut max_err: f32 = 0.0;\n        let mut errors: Vec<f32> = Vec::with_capacity(n_samples);\n\n        for _ in 0..n_samples {\n            let r = next_f32();\n            let g = next_f32();\n            let b = next_f32();\n            let d = next_f32();\n\n            // Direct pipeline\n            let px = [\n                (r * 255.0).round() as u8,\n                (g * 255.0).round() as u8,\n                (b * 255.0).round() as u8,\n            ];\n            let direct = grade_frame_cpu(&px, &[d], 1, 1, &cal, &params, true)\n                .expect(\"grade_frame_cpu failed\");\n\n            // LUT lookup\n            let [lo, go, bo] = grade_lut.lookup(r, g, b, d);\n            let lut_result = [\n                (lo.clamp(0.0, 1.0) * 255.0).round() as u8,\n                (go.clamp(0.0, 1.0) * 255.0).round() as u8,\n                (bo.clamp(0.0, 1.0) * 255.0).round() as u8,\n            ];\n\n            let err = (0..3)\n                .map(|c| (direct[c] as f32 - lut_result[c] as f32).abs())\n                .fold(0.0_f32, f32::max);\n            errors.push(err);\n            max_err = max_err.max(err);\n        }\n\n        errors.sort_by(|a, b| a.partial_cmp(b).unwrap());\n        let p99 = errors[(n_samples as f32 * 0.99) as usize];\n\n        eprintln!(\"trilinear accuracy: max={max_err:.1}/255, p99={p99:.1}/255\");\n        assert!(max_err < 3.0, \"max error {max_err}/255 exceeds 3/255 threshold\");\n        assert!(p99 < 1.5, \"p99 error {p99}/255 exceeds 1.5/255 threshold\");\n    }\n}\n```\n\n- [ ] **Step 2: Run test**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ncargo test -p dorea-gpu -- lut3d::tests::trilinear_accuracy --nocapture 2>&1 | tail -15\n```\n\nExpected: PASS with max < 3/255, p99 < 1.5/255.\n\nNote: This test builds a full 65^3 × 7 LUT, so it takes ~5-10 seconds.\n\n- [ ] **Step 3: Commit**\n\n```bash\ngit add crates/dorea-gpu/src/lut3d.rs\ngit commit -m \"test(dorea-gpu): trilinear accuracy validation for 3D grade LUT\n\n10K random (R,G,B,d) samples compared against direct pipeline.\nAsserts max error < 3/255 and p99 < 1.5/255 at 65x65x65 grid.\"\n```\n\n---\n",
+  "source_version": "plans/2026-04-03-3d-lut-temporal-interpolation.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042250838Z",
+  "valid_from": "2026-04-08T03:32:28.042250838Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-3d-lut-temporal-interpolation.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 458,
+    "end_line": 520,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

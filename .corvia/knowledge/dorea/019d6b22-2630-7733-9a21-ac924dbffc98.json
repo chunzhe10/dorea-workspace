@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-ac924dbffc98",
+  "content": "e].fused_batch_size, built-in default: 32)\n    #[arg(long)]\n    pub fused_batch_size: Option<usize>,\n\n    /// Adaptive depth zones for calibration LUT (config: [grade].depth_zones, built-in default: 16)\n    #[arg(long)]\n    pub depth_zones: Option<usize>,\n\n    /// Fine zones for segment-level base LUT (config: [grade].base_lut_zones, built-in default: 32)\n    #[arg(long)]\n    pub base_lut_zones: Option<usize>,\n\n    /// Wasserstein-1 threshold for scene segment detection (config: [grade].scene_threshold, built-in default: 0.15)\n    #[arg(long)]\n    pub scene_threshold: Option<f32>,\n\n    /// Disable temporal interpolation — run full pipeline on every frame\n    #[arg(long)]\n    pub no_depth_interp: bool,\n\n    /// Path to RAUNE-Net weights .pth (config: [models].raune_weights)\n    #[arg(long)]\n    pub raune_weights: Option<PathBuf>,\n\n    /// Path to RAUNE-Net checkout directory (config: [models].raune_models_dir)\n    #[arg(long)]\n    pub raune_models_dir: Option<PathBuf>,\n\n    /// Path to Depth Anything V2 model directory (config: [models].depth_model)\n    #[arg(long)]\n    pub depth_model: Option<PathBuf>,\n\n    /// Python executable (config: [models].python, built-in default: /opt/dorea-venv/bin/python)\n    #[arg(long)]\n    pub python: Option<PathBuf>,\n\n    /// Force CPU-only mode (no CUDA)\n    #[arg(long)]\n    pub cpu_only: bool,\n\n    /// Enable verbose logging\n    #[arg(short, long)]\n    pub verbose: bool,\n\n    /// Maxine super-resolution upscale factor for RAUNE→Maxine→Depth fused batch\n    /// (config: [maxine].upscale_factor, built-in default: 2)\n    #[arg(long)]\n    pub maxine_upscale_factor: Option<u32>,\n}",
+  "source_version": "crates/dorea-cli/src/grade.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360227909Z",
+  "valid_from": "2026-04-08T03:28:13.360227909Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/grade.rs",
+    "language": "rs",
+    "chunk_type": "struct_item",
+    "start_line": 63,
+    "end_line": 103,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

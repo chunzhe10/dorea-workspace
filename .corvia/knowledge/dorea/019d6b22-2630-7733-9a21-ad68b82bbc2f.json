@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-ad68b82bbc2f",
+  "content": "e, proxy_w, proxy_h)\n                .context(\"failed to page fused result to store\")?;\n\n            // DEBUG: save first 3 keyframes as PNG for visual inspection\n            if batch_idx == 0 && i < 3 {\n                use image::{ImageBuffer, Luma, Rgb};\n\n                // Original proxy pixels (RGB u8)\n                if let Some(img) = ImageBuffer::<Rgb<u8>, _>::from_raw(proxy_w as u32, proxy_h as u32, kf.proxy_pixels.clone()) {\n                    let _ = img.save(format!(\"/tmp/dorea_debug/kf{i}_original.png\"));\n                }\n\n                // RAUNE-enhanced target (RGB u8)\n                if let Some(img) = ImageBuffer::<Rgb<u8>, _>::from_raw(proxy_w as u32, proxy_h as u32, enhanced_proxy.clone()) {\n                    let _ = img.save(format!(\"/tmp/dorea_debug/kf{i}_target.png\"));\n                }\n\n                // Depth map (f32 → grayscale u8, min-max normalized to 0-255)\n                let (d_min, d_max) = depth_for_store.iter().fold((f32::MAX, f32::MIN), |(mn, mx), &v| (mn.min(v), mx.max(v)));\n                let range = (d_max - d_min).max(1e-6);\n                let gray_pixels: Vec<u8> = depth_for_store.iter().map(|&v| ((v - d_min) / range * 255.0) as u8).collect();\n                if let Some(img) = ImageBuffer::<Luma<u8>, _>::from_raw(proxy_w as u32, proxy_h as u32, gray_pixels) {\n                    let _ = img.save(format!(\"/tmp/dorea_debug/kf{i}_depth.png\"));\n                }\n\n                log::info!(\"DEBUG: saved /tmp/dorea_debug/kf{i}_*.png\");\n            }\n\n            kf_depths.insert(kf.frame_index, (depth, dw, dh));\n        }\n    }\n    log::info!(\"Fused inference complete ({} keyframes)\", keyframes.len());\n    debug_assert_eq!(store.len(), keyframes.len(), \"store/keyframes length diverged after fused inference\");\n    let _ = inf_server.shutdown();\n\n    let keyframe_depths: HashMap<u64, (Vec<f32>, usize, usize)> = kf_depths;\n\n    store.seal().context(\"failed to seal calibration store\")?;\n\n    // ---- Pre-compute depth timeline ----\n    use dorea_hsl::derive::{derive_hsl_corrections, HslCorrections, QualifierCorrection};",
+  "source_version": "crates/dorea-cli/src/grade.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360236276Z",
+  "valid_from": "2026-04-08T03:28:13.360236276Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/grade.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 348,
+    "end_line": 382,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

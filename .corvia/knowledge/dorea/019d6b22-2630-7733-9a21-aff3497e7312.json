@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-aff3497e7312",
+  "content": "  target: tgt_pixels,\n            depth: depth_pixels,\n            importance,\n            width: kf_w,\n            height: kf_h,\n        });\n    }\n\n    // Shutdown inference server\n    if let Some(srv) = inf_server {\n        let _ = srv.shutdown();\n    }\n\n    // 3+4. Build LUTs + HSL corrections via shared helper, then set source description\n    log::info!(\"Building depth-stratified LUTs and HSL corrections...\");\n    let cal_inputs: Vec<CalibrationInput> = keyframe_data_vec.iter()\n        .map(|kd| CalibrationInput {\n            pixels: kd.original.iter()\n                .flat_map(|p| {\n                    [\n                        (p[0].clamp(0.0, 1.0) * 255.0).round() as u8,\n                        (p[1].clamp(0.0, 1.0) * 255.0).round() as u8,\n                        (p[2].clamp(0.0, 1.0) * 255.0).round() as u8,\n                    ]\n                })\n                .collect(),\n            target: kd.target.iter()\n                .flat_map(|p| {\n                    [\n                        (p[0].clamp(0.0, 1.0) * 255.0).round() as u8,\n                        (p[1].clamp(0.0, 1.0) * 255.0).round() as u8,\n                        (p[2].clamp(0.0, 1.0) * 255.0).round() as u8,\n                    ]\n                })\n                .collect(),\n            depth: kd.depth.clone(),\n            width: kd.width,\n            height: kd.height,\n        })\n        .collect();\n    let mut cal = run_calibration_from_frames(&cal_inputs)?;\n    log::info!(\"LUTs built ({} zones), HSL corrections derived\", cal.depth_luts.n_zones());\n\n    // 5. Set source description and save\n    cal.source_description = format!(\n        \"{} keyframe(s) from {}\",\n        keyframe_data_vec.len(),\n        args.keyframes.display()\n    );\n\n    cal.save(&args.output)\n        .with_context(|| format!(\"Failed to save calibration to {:?}\", args.output))?;\n\n    log::info!(\"Calibration saved to {:?}\", args.output);\n    println!(\n        \"Calibration saved to {} ({} zones, {} keyframes)\",\n        args.output.display(),\n        cal.depth_luts.n_zones(),\n        cal.keyframe_count\n    );\n\n    Ok(())\n}",
+  "source_version": "crates/dorea-cli/src/calibrate.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360263185Z",
+  "valid_from": "2026-04-08T03:28:13.360263185Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/calibrate.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 326,
+    "end_line": 375,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

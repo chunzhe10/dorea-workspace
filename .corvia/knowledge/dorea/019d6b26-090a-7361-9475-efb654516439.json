@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-efb654516439",
+  "content": "    # Only create corvia, not corvia-inference\n\n### Task 3: Add `cargo_build` to `rebuild.py`\n\n**Files:**\n- Modify: `tools/corvia-dev/corvia_dev/rebuild.py`\n- Test: `tools/corvia-dev/tests/test_rebuild.py`\n\n**Step 1: Write the failing test**\n\nAppend to `tools/corvia-dev/tests/test_rebuild.py`:\n\n```python\nfrom unittest.mock import patch, MagicMock\nfrom corvia_dev.rebuild import cargo_build\n\n\ndef test_cargo_build_runs_debug(tmp_path: Path) -> None:\n    \"\"\"cargo_build calls cargo build in the corvia repo.\"\"\"\n    with patch(\"corvia_dev.rebuild.subprocess.run\") as mock_run:\n        mock_run.return_value = MagicMock(returncode=0)\n        result = cargo_build(workspace_root=tmp_path, release=False)\n        assert result is True\n        mock_run.assert_called_once()\n        args = mock_run.call_args\n        assert args[0][0] == [\"cargo\", \"build\", \"-p\", \"corvia-cli\", \"-p\", \"corvia-inference\"]\n        assert args[1][\"cwd\"] == tmp_path / \"repos\" / \"corvia\"\n\n\ndef test_cargo_build_release_flag(tmp_path: Path) -> None:\n    \"\"\"cargo_build passes --release when requested.\"\"\"\n    with patch(\"corvia_dev.rebuild.subprocess.run\") as mock_run:\n        mock_run.return_value = MagicMock(returncode=0)\n        cargo_build(workspace_root=tmp_path, release=True)\n        cmd = mock_run.call_args[0][0]\n        assert \"--release\" in cmd\n\n\ndef test_cargo_build_returns_false_on_failure(tmp_path: Path) -> None:\n    \"\"\"cargo_build returns False when cargo fails.\"\"\"\n    with patch(\"corvia_dev.rebuild.subprocess.run\") as mock_run:\n        mock_run.return_value = MagicMock(returncode=1)\n        result = cargo_build(workspace_root=tmp_path, release=False)\n        assert result is False\n```",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-rebuild.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042498267Z",
+  "valid_from": "2026-04-08T03:32:28.042498267Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-rebuild.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 246,
+    "end_line": 288,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

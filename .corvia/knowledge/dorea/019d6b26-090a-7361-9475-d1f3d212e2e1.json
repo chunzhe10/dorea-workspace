@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-d1f3d212e2e1",
+  "content": "## Task 3: Wire proxy downscale into `grade.rs`\n\n    )\n    .unwrap_or_else(|e| {\n        log::warn!(\"Depth inference failed for frame {}: {e} — using uniform depth\", frame.index);\n        let n = frame.width * frame.height;\n        (vec![0.5f32; n], frame.width, frame.height)\n    });\n```\n\n- [ ] **Step 2: Add `dorea-video` import at the top of the function (it's already a dep, just use the path)**\n\nVerify `dorea-video` is already in `crates/dorea-cli/Cargo.toml` as a dependency — it should be since `grade.rs` already uses `dorea_video::ffmpeg` and `dorea_video::inference`. No Cargo.toml change needed.\n\n- [ ] **Step 3: Build to confirm it compiles**\n\n```bash\ncargo build -p dorea-cli 2>&1 | tail -15\n```\nExpected: `Finished dev profile`.\n\n- [ ] **Step 4: Run all workspace tests**\n\n```bash\ncargo test --workspace 2>&1 | tail -20\n```\nExpected: all tests pass.\n\n- [ ] **Step 5: Commit**\n\n```bash\ngit add crates/dorea-cli/src/grade.rs\ngit commit -m \"perf(dorea-cli): downscale frames to proxy res before depth inference — 160x pipe I/O reduction\"\n```\n\n---\n",
+  "source_version": "plans/2026-04-02-inference-perf-fix.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042230627Z",
+  "valid_from": "2026-04-08T03:32:28.042230627Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-inference-perf-fix.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 476,
+    "end_line": 510,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-0909-7eb1-86e3-6e6c7e7495ba",
+  "content": "### Config Switching\n### Enable Ollama Flow\n\n### Enable SurrealDB Flow\n\n1. Run `docker compose -f repos/corvia/docker/docker-compose.yml up -d`\n2. Wait for readiness (poll port 8000)\n3. Update `corvia.toml` storage section\n4. Write `surrealdb=enabled` to flags file\n\n\n### User Flow\n\n```\n1. Open devcontainer → light mode, CPU embeddings, instant startup\n2. corvia-workspace status → shows ollama=off, surrealdb=off\n3. corvia-workspace enable ollama → ~2-3 min first time, instant after\n4. corvia-workspace enable surrealdb → ~10s (container pull cached)\n5. Container restart → both auto-start (flags persist)\n6. corvia-workspace disable ollama → stops, reverts to CPU embeddings\n```",
+  "source_version": "decisions/2026-03-03-optional-devcontainer-services-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.041788088Z",
+  "valid_from": "2026-04-08T03:32:28.041788088Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-03-03-optional-devcontainer-services-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 80,
+    "end_line": 96,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

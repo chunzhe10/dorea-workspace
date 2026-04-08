@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-afcb0f547e46",
+  "content": "scii_case(\"png\")).unwrap_or(false))\n        .collect();\n    keyframe_paths.sort();\n\n    if keyframe_paths.is_empty() {\n        anyhow::bail!(\"No PNG files found in {:?}\", args.keyframes);\n    }\n\n    log::info!(\"Found {} keyframe(s)\", keyframe_paths.len());\n\n    // 2. Load each keyframe + matching depth + target\n    let mut keyframe_data_vec: Vec<KeyframeData> = Vec::new();\n\n    for kf_path in &keyframe_paths {\n        let stem = kf_path.file_stem().context(\"keyframe has no stem\")?.to_string_lossy().to_string();\n\n        log::info!(\"Processing keyframe: {}\", kf_path.display());\n\n        let (mut kf_pixels, kf_w, kf_h) = load_rgb_image(kf_path)\n            .with_context(|| format!(\"Failed to load keyframe: {}\", kf_path.display()))?;\n\n        // Apply D-Log M → linear decode if requested\n        if args.input_encoding == InputEncoding::DlogM {\n            log::debug!(\"Applying D-Log M decode to keyframe {kf_path:?}\");\n            for px in kf_pixels.iter_mut() {\n                px[0] = dlog_m_to_linear(px[0]);\n                px[1] = dlog_m_to_linear(px[1]);\n                px[2] = dlog_m_to_linear(px[2]);\n            }\n        }\n\n        // Load or generate depth map\n        let depth_pixels = if let Some(depth_dir) = &args.depth {\n            let depth_path = depth_dir.join(format!(\"{stem}.png\"));",
+  "source_version": "crates/dorea-cli/src/calibrate.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360261198Z",
+  "valid_from": "2026-04-08T03:28:13.360261198Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/calibrate.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 227,
+    "end_line": 251,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

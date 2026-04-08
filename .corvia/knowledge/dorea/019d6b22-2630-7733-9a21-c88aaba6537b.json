@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-c88aaba6537b",
+  "content": "fn find_nvcc() -> Option<PathBuf> {\n    // 1. Check PATH — resolve to full path via `which` so parent-based include lookup works\n    if let Ok(output) = std::process::Command::new(\"nvcc\").arg(\"--version\").output() {\n        if output.status.success() {\n            if let Ok(which_out) = std::process::Command::new(\"which\").arg(\"nvcc\").output() {\n                if which_out.status.success() {\n                    let resolved = PathBuf::from(\n                        std::str::from_utf8(&which_out.stdout).unwrap_or(\"\").trim()\n                    );\n                    if resolved.exists() {\n                        return Some(resolved);\n                    }\n                }\n            }\n            // Fallback: nvcc is on PATH but `which` unavailable; return relative name\n            return Some(PathBuf::from(\"nvcc\"));\n        }\n    }\n\n    // 2. Check CUDA_HOME/bin/nvcc\n    if let Ok(cuda_home) = std::env::var(\"CUDA_HOME\") {\n        let nvcc = PathBuf::from(cuda_home).join(\"bin\").join(\"nvcc\");\n        if nvcc.exists() {\n            return Some(nvcc);\n        }\n    }\n\n    // 3. Scan /usr/local/cuda-* (any version) — handles e.g. cuda-12.8, cuda-12.4\n    if let Ok(entries) = std::fs::read_dir(\"/usr/local\") {\n        let mut cuda_dirs: Vec<_> = entries\n            .flatten()\n            .filter(|e| e.file_name().to_string_lossy().starts_with(\"cuda-\"))\n            .map(|e| e.path().join(\"bin\").join(\"nvcc\"))\n            .filter(|p| p.exists())\n            .collect();\n        // Prefer highest version (sort descending by path string)\n        cuda_dirs.sort_by(|a, b| b.cmp(a));\n        if let Some(p) = cuda_dirs.into_iter().next() {\n            return Some(p);\n        }\n    }\n\n    // 4. Remaining common install paths\n    for candidate in &[\n        \"/usr/local/cuda/bin/nvcc\",\n        \"/usr/bin/nvcc\",\n    ] {\n        let p = PathBuf::from(candidate);\n        if p.exists() {\n            return Some(p);\n        }\n    }\n\n    None\n}",
+  "source_version": "crates/dorea-gpu/build.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360554956Z",
+  "valid_from": "2026-04-08T03:28:13.360554956Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/build.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 7,
+    "end_line": 61,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

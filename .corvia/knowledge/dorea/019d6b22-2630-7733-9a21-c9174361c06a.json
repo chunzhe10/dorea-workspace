@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-c9174361c06a",
+  "content": "= { workspace = true }\ndorea-hsl = { workspace = true }\ndorea-cal = { workspace = true }\nlog.workspace = true\nrayon.workspace = true\nthiserror.workspace = true\n\ncudarc = { version = \"0.12\", features = [\"driver\", \"nvrtc\", \"dynamic-linking\", \"cuda-12040\"] }\n\n[dev-dependencies]\ncriterion = { version = \"0.5\", features = [\"html_reports\"] }\n\n[[bench]]\nname = \"grade_bench\"\nharness = false\n",
+  "source_version": "crates/dorea-gpu/Cargo.toml",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360562660Z",
+  "valid_from": "2026-04-08T03:28:13.360562660Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/Cargo.toml",
+    "language": "toml",
+    "chunk_type": "section",
+    "start_line": 17,
+    "end_line": 23,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

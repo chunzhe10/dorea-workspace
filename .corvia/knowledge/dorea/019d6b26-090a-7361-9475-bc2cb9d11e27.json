@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-bc2cb9d11e27",
+  "content": "rvia workspace docs check --help` shows the new command.\n\n- [ ] **Step 5: Commit**\n\n```bash\ncd /workspaces/corvia-workspace/repos/corvia\ngit add crates/corvia-cli/src/main.rs\ngit commit -m \"feat(cli): add 'corvia workspace docs check' subcommand\"\n```\n\n---\n\n### Task 3.7: Update dashboard `HealthPanel` for new finding types\n\n**Files:**\n- Modify: `tools/corvia-dashboard/src/components/HealthPanel.tsx`\n\n- [ ] **Step 1: Add styling/labels for new check types**\n\nAdd entries to the `CHECK_LABELS` map using the full `as_str()` keys (matching server output from `CheckType::as_str()`). Note: the existing labels use shortened keys that rely on the fallback — this is a pre-existing issue not addressed here.\n\nThe existing `CHECK_LABELS` type is `Record<string, { label: string; icon: string }>` — match that shape (no `color` property; severity colors are computed from `confidence` via `severityColor()`):\n\n```typescript\n// In CHECK_LABELS map:\nmisplaced_doc: { label: \"Misplaced Doc\", icon: \"📁\" },\ntemporal_contradiction: { label: \"Temporal Contradiction\", icon: \"⚡\" },\ncoverage_gap: { label: \"Coverage Gap\", icon: \"📝\" },\n```\n\n- [ ] **Step 2: Commit**\n\n```bash\ncd /workspaces/corvia-workspace\ngit add tools/corvia-dashboard/src/components/HealthPanel.tsx\ngit commit -m \"feat(dashboard): render new docs check finding types in HealthPanel\"\n```\n\n---\n\n\n### Task 3.8: Run full test suite and push\n\n- [ ] **Step 1: Run all tests**\n\nRun: `cd /workspaces/corvia-workspace/repos/corvia && cargo test --workspace`\nExpected: All tests pass\n\n- [ ] **Step 2: Push both repos**\n\n```bash\ncd /workspaces/corvia-workspace/repos/corvia && git push\ncd /workspaces/corvia-workspace && git push\n```\n\n---\n",
+  "source_version": "plans/2026-03-13-docs-workflow-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042027393Z",
+  "valid_from": "2026-04-08T03:32:28.042027393Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-13-docs-workflow-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 2053,
+    "end_line": 2096,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

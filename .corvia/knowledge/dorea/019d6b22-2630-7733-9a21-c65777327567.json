@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-c65777327567",
+  "content": "pub(crate) struct BorrowedDeviceSlice<'a, T> {\n    ptr: *mut T,\n    len: usize,\n    _phantom: PhantomData<(&'a (), *mut T)>,\n}\nimpl<'a, T> BorrowedDeviceSlice<'a, T> {\n    /// Create a borrowed device slice from a raw device pointer.\n    ///\n    /// # Safety\n    /// - `ptr` must be a valid device pointer with at least `len` elements of type T.\n    /// - The pointer must remain valid for lifetime `'a`.\n    /// - The caller must ensure no concurrent writes to this memory.\n    pub(crate) unsafe fn from_raw(ptr: *mut T, len: usize) -> Self {\n        Self { ptr, len, _phantom: PhantomData }\n    }\n\n    /// Raw device pointer (for passing to cudarc kernel launches).\n    pub fn as_device_ptr(&self) -> *const T {\n        self.ptr as *const T\n    }\n\n    /// Number of elements.\n    pub fn len(&self) -> usize {\n        self.len\n    }\n\n    /// Whether the slice is empty.\n    pub fn is_empty(&self) -> bool {\n        self.len == 0\n    }\n}",
+  "source_version": "crates/dorea-gpu/src/device.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360524608Z",
+  "valid_from": "2026-04-08T03:28:13.360524608Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/device.rs",
+    "language": "rs",
+    "chunk_type": "impl_item",
+    "start_line": 28,
+    "end_line": 53,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

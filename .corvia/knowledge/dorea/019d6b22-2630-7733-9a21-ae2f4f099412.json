@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-ae2f4f099412",
+  "content": "seal()\n    depth_writer: Option<std::io::BufWriter<std::fs::File>>,\n    pixtar_writer: Option<std::io::BufWriter<std::fs::File>>,\n    /// Read-only mmaps — Some after seal()\n    depth_mmap: Option<memmap2::Mmap>,\n    pixtar_mmap: Option<memmap2::Mmap>,\n}\nimpl PagedCalibrationStore {\n    fn new() -> Result<Self> {\n        use std::io::BufWriter;\n        let dir = std::env::temp_dir()\n            .join(format!(\"dorea_cal_{}\", std::process::id()));\n        std::fs::create_dir_all(&dir)\n            .with_context(|| format!(\"failed to create calibration temp dir {:?}\", dir))?;\n        let dw = BufWriter::new(\n            std::fs::File::create(dir.join(\"depths.bin\")).context(\"create depths.bin\")?\n        );\n        let pw = BufWriter::new(\n            std::fs::File::create(dir.join(\"pixtar.bin\")).context(\"create pixtar.bin\")?\n        );\n        Ok(Self {\n            dir,\n            widths: Vec::new(),\n            heights: Vec::new(),\n            depth_offsets: Vec::new(),\n            pixtar_offsets: Vec::new(),\n            depth_writer: Some(dw),\n            pixtar_writer: Some(pw),\n            depth_mmap: None,\n            pixtar_mmap: None,\n        })\n    }\n\n    fn push(&mut self, pixels: &[u8], target: &[u8], depth: &[f32], width: usize, height: usize) -> Result<()> {\n        use std::io::Write;\n        let dw = self.depth_writer.as_mut().context(\"store already sealed\")?;\n        let pw = self.pixtar_writer.as_mut().context(\"store already sealed\")?;\n\n        let depth_off = self.depth_offsets.last().copied().unwrap_or(0)\n            + self.widths.last().copied().unwrap_or(0)\n            * self.heights.last().copied().unwrap_or(0) * 4;\n        let pixtar_off = self.pixtar_offsets.last().copied().unwrap_or(0)\n            + self.widths.last().copied().unwrap_or(0)\n            * self.heights.last().copied().unwrap_or(0) * 6; // pixels + target = 3+3 bytes/px\n\n        // Write depth as raw f32 LE\n        for f in depth {\n            dw.write_all(&f.to_le_bytes()).context(\"write depth\")?;\n        }\n        pw.write_all(pixels).context(\"write pixels\")?;\n        pw.write_all(target).context(\"write target\")?;\n\n        self.depth_offsets.push(depth_off);",
+  "source_version": "crates/dorea-cli/src/grade.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360244623Z",
+  "valid_from": "2026-04-08T03:28:13.360244623Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/grade.rs",
+    "language": "rs",
+    "chunk_type": "impl_item",
+    "start_line": 722,
+    "end_line": 767,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-ad40798e72cb",
+  "content": "(\n        raune_weights.as_deref(),\n        raune_models_dir.as_deref(),\n    ).context(\"failed to load RAUNE-Net for calibration\")?;\n    inf_server.load_depth(\n        depth_model.as_deref(),\n    ).context(\"failed to load Depth Anything for calibration\")?;\n\n    // -----------------------------------------------------------------------\n    // Auto-calibrate: fused RAUNE+depth, dual output\n    // -----------------------------------------------------------------------\n    log::info!(\n        \"Auto-calibrating from {} keyframes (fused RAUNE+depth)\",\n        keyframes.len()\n    );\n\n    let fused_items: Vec<RauneDepthBatchItem> = keyframes.iter().map(|kf| {\n        RauneDepthBatchItem {\n            id: format!(\"kf_f{}\", kf.frame_index),\n            pixels: kf.proxy_pixels.clone(),\n            width: proxy_w,\n            height: proxy_h,\n            raune_max_size: proxy_w.max(proxy_h),\n            depth_max_size: proxy_size.min(1036),\n        }\n    }).collect();\n\n    let mut store = PagedCalibrationStore::new()\n        .context(\"failed to create paged calibration store\")?;\n    let mut kf_depths: HashMap<u64, (Vec<f32>, usize, usize)> = HashMap::new();\n\n    // DEBUG: dump first 3 keyframes' calibration data as PNGs\n    fs::create_dir_all(\"/tmp/dorea_debug\").ok();\n\n    let n_batches = keyframes.chunks(fused_batch_size).count();\n    for (batch_idx, (chunk_kfs, chunk_items)) in keyframes\n        .chunks(fused_batch_size)\n        .zip(fused_items.chunks(fused_batch_size))\n        .enumerate()\n    {\n        log::info!(",
+  "source_version": "crates/dorea-cli/src/grade.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360234939Z",
+  "valid_from": "2026-04-08T03:28:13.360234939Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/grade.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 279,
+    "end_line": 312,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

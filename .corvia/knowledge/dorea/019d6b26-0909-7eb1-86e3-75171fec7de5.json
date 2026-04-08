@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-0909-7eb1-86e3-75171fec7de5",
+  "content": "# Grading Pipeline Performance v3 — Design Spec\n\n## Problem\n\nAfter the box blur (sliding window) and proxy resize fixes landed, three compounding\nbottlenecks remain in the per-frame grading pipeline, plus a silent CPU fallback that\ncan cause a 50x performance degradation without warning:\n\n1. **Redundant depth inference at high FPS** — Depth Anything V2 runs on every frame,\n   even at 120fps slow-mo where consecutive frames differ by sub-pixel amounts.\n2. **Triple LAB roundtrip** — `depth_aware_ambiance`, clarity, and warmth each do\n   independent RGB-to-LAB-to-RGB conversions (~7 conversion calls per pixel at 8.3M pixels).\n3. **PNG encode/decode in IPC** — Frames are PNG-compressed, base64-encoded, piped to\n   Python, then PNG-decompressed — all unnecessary at proxy resolution (453KB raw).\n4. **HuggingFace processor overhead + silent CPU fallback** — The HF `AutoImageProcessor`\n   adds ~30ms of redundant resize/normalize per frame. Separately, if CUDA fails at\n   runtime, grading silently falls back to CPU with no user indication.\n\n\n## Decision\n\nImplement four targeted optimizations:\n",
+  "source_version": "decisions/2026-04-02-grading-pipeline-perf-v3.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.041844997Z",
+  "valid_from": "2026-04-08T03:32:28.041844997Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-02-grading-pipeline-perf-v3.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 9,
+    "end_line": 28,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

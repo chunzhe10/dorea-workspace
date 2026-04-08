@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-cc574e91cf71",
+  "content": "### Task 2: Make `grade_frame_cuda` GPU-only (return `Vec<f32>`)\n\n    let status = unsafe {\n        dorea_lut_apply_gpu(\n            rgb_f32.as_ptr(),\n            depth.as_ptr(),\n            luts_flat.as_ptr(),\n            depth_luts.zone_boundaries.as_ptr(),\n            rgb_after_lut.as_mut_ptr(),\n            n as i32,\n            lut_size as i32,\n            n_zones as i32,\n        )\n    };\n    if status != 0 {\n        return Err(GpuError::Cuda(format!(\"dorea_lut_apply_gpu returned CUDA error {status}\")));\n    }\n\n    // --- Extract HSL arrays (6 qualifiers) ---\n    let mut h_offsets = [0.0f32; 6];\n    let mut s_ratios  = [1.0f32; 6];\n    let mut v_offsets = [0.0f32; 6];\n    let mut weights   = [0.0f32; 6];\n    for (i, q) in calibration.hsl_corrections.0.iter().enumerate().take(6) {\n        h_offsets[i] = q.h_offset;\n        s_ratios[i]  = q.s_ratio;\n        v_offsets[i] = q.v_offset;\n        weights[i]   = q.weight;\n    }\n\n    // --- GPU: HSL correct ---\n    let mut rgb_after_hsl = vec![0.0f32; n * 3];\n    let status = unsafe {\n        dorea_hsl_correct_gpu(\n            rgb_after_lut.as_ptr(),\n            rgb_after_hsl.as_mut_ptr(),\n            h_offsets.as_ptr(),\n            s_ratios.as_ptr(),\n            v_offsets.as_ptr(),\n            weights.as_ptr(),\n            n as i32,\n        )\n    };\n    if status != 0 {\n        return Err(GpuError::Cuda(format!(\"dorea_hsl_correct_gpu returned CUDA error {status}\")));\n    }\n\n    // GPU work done. Return f32 intermediate — caller applies CPU finish pass.\n    Ok(rgb_after_hsl)\n}\n```\n",
+  "source_version": "plans/2026-04-02-depth-aware-ambiance-cpu-move.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042182078Z",
+  "valid_from": "2026-04-08T03:32:28.042182078Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-depth-aware-ambiance-cpu-move.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 258,
+    "end_line": 307,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

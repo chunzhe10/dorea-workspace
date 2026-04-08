@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-b7fa48a2a0a0",
+  "content": "   .ok_or_else(|| InferenceError::Ipc(\"missing results array in raune_depth_batch_result\".to_string()))?;\n\n        let mut out = Vec::with_capacity(results.len());\n        for r in results {\n            let id = r[\"id\"].as_str().unwrap_or(\"\").to_string();\n\n            // Enhanced image (PNG-encoded)\n            let enh_w = r[\"enhanced_width\"].as_u64().unwrap_or(0) as usize;\n            let enh_h = r[\"enhanced_height\"].as_u64().unwrap_or(0) as usize;\n            let enh_b64 = r[\"image_b64\"].as_str()\n                .ok_or_else(|| InferenceError::Ipc(format!(\"missing image_b64 for {id}\")))?;\n            let enh_png = B64.decode(enh_b64)\n                .map_err(|e| InferenceError::Ipc(format!(\"base64 enh for {id}: {e}\")))?;\n            let enh_rgb = decode_png_bytes(&enh_png)?;\n            if enh_rgb.len() != enh_w * enh_h * 3 {\n                return Err(InferenceError::Ipc(format!(\n                    \"enhanced image size mismatch for {id}: got {} want {}\",\n                    enh_rgb.len(), enh_w * enh_h * 3\n                )));\n            }\n\n            // Depth map (raw f32 LE)\n            let depth_w = r[\"depth_width\"].as_u64().unwrap_or(0) as usize;\n            let depth_h = r[\"depth_height\"].as_u64().unwrap_or(0) as usize;\n            let depth_b64 = r[\"depth_f32_b64\"].as_str()\n                .ok_or_else(|| InferenceError::Ipc(format!(\"missing depth_f32_b64 for {id}\")))?;\n            let raw = B64.decode(depth_b64)\n                .map_err(|e| InferenceError::Ipc(format!(\"base64 depth for {id}: {e}\")))?;\n            if raw.len() != depth_w * depth_h * 4 {\n                return Err(InferenceError::Ipc(format!(\n                    \"depth size mismatch for {id}: got {} want {}\",\n                    raw.len(), depth_w * depth_h * 4\n                )));\n            }\n            let depth: Vec<f32> = raw.chunks_exact(4)\n                .map(|b| f32::from_le_bytes([b[0], b[1], b[2], b[3]]))\n                .collect();\n\n            out.push((id, enh_rgb, enh_w, enh_h, depth, depth_w, depth_h));",
+  "source_version": "crates/dorea-video/src/inference_subprocess.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360345017Z",
+  "valid_from": "2026-04-08T03:28:13.360345017Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference_subprocess.rs",
+    "language": "rs",
+    "chunk_type": "impl_item",
+    "start_line": 530,
+    "end_line": 562,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-c8dd1cfb9300",
+  "content": "ll qualifiers)\n    let hsl = HslCorrections(vec![QualifierCorrection {\n        h_center: 0.0,\n        h_width: 1.0,\n        h_offset: 0.0,\n        s_ratio: 1.0,\n        v_offset: 0.0,\n        weight: 0.0,\n    }]);\n    Calibration::new(depth_luts, hsl, 1)\n}\nfn bench_grade(c: &mut Criterion) {\n    let params = GradeParams::default();\n    let calibration = make_calibration();\n\n    let mut group = c.benchmark_group(\"grading\");\n    // Fewer samples for GPU paths (each call is ~10-50 ms)\n    group.sample_size(20);\n\n    for (label, w, h) in [(\"720p\", 1280usize, 720usize), (\"1080p\", 1920usize, 1080usize)] {\n        let n = w * h;\n        // Synthetic mid-range pixels and depth\n        let pixels: Vec<u8> = (0..n * 3).map(|i| ((i * 7 + 128) % 256) as u8).collect();\n        let depth: Vec<f32> = (0..n).map(|i| (i as f32) / n as f32 * 0.8 + 0.1).collect();\n\n        group.throughput(Throughput::Elements(n as u64));\n\n        // --- Path A: grade_frame_with_grader (PTX reuse) ---\n        #[cfg(feature = \"cuda\")]\n        {\n            use dorea_gpu::{cuda::CudaGrader, grade_frame_with_grader};\n            match CudaGrader::new(&calibration, &params) {\n                Ok(grader) => {\n                    group.bench_with_input(\n                        BenchmarkId::new(\"with_grader\", label),\n                        &(w, h),\n                        |b, _| {\n                            b.iter(|| {\n                                grade_frame_with_grader(\n                                    &grader, &pixels, &depth, w, h,\n                                )\n                                .expect(\"grade_frame_with_grader failed\")\n                            });\n                        },\n                    );\n                }\n                Err(e) => {\n                    eprintln!(\"SKIP with_grader/{label}: CudaGrader::new failed: {e}\");",
+  "source_version": "crates/dorea-gpu/benches/grade_bench.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360559348Z",
+  "valid_from": "2026-04-08T03:28:13.360559348Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/benches/grade_bench.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 58,
+    "end_line": 94,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

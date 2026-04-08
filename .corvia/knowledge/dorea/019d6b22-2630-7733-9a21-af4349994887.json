@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-af4349994887",
+  "content": "pub struct CalibrationInput {\n    /// sRGB pixels f32 [0,1] in row-major order, length = width * height * 3 (as u8 RGB)\n    pub pixels: Vec<u8>,\n    /// RAUNE-Net enhanced target, same size, RGB u8\n    pub target: Vec<u8>,\n    /// Depth map f32 [0,1], length = width * height\n    pub depth: Vec<f32>,\n    pub width: usize,\n    pub height: usize,\n}",
+  "source_version": "crates/dorea-cli/src/calibrate.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360255816Z",
+  "valid_from": "2026-04-08T03:28:13.360255816Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/calibrate.rs",
+    "language": "rs",
+    "chunk_type": "struct_item",
+    "start_line": 17,
+    "end_line": 26,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

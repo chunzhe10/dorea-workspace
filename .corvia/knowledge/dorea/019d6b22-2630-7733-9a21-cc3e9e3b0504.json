@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-cc3e9e3b0504",
+  "content": "pub struct DepthLuts {\n    pub luts: Vec<LutGrid>,\n    /// Length = n_zones + 1, values in [0, 1]\n    pub zone_boundaries: Vec<f32>,\n    /// Length = n_zones — midpoint of each zone\n    pub zone_centers: Vec<f32>,\n}\nimpl DepthLuts {\n    pub fn new(luts: Vec<LutGrid>, zone_boundaries: Vec<f32>) -> Self {\n        // L7: validate that zone_boundaries has exactly luts.len() + 1 entries.\n        assert_eq!(\n            zone_boundaries.len(),\n            luts.len() + 1,\n            \"zone_boundaries length ({}) must be luts.len() + 1 ({})\",\n            zone_boundaries.len(),\n            luts.len() + 1\n        );\n        let n = luts.len();\n        let zone_centers = (0..n)\n            .map(|i| (zone_boundaries[i] + zone_boundaries[i + 1]) / 2.0)\n            .collect();\n        Self {\n            luts,\n            zone_boundaries,\n            zone_centers,\n        }\n    }\n\n    pub fn n_zones(&self) -> usize {\n        self.luts.len()\n    }\n}",
+  "source_version": "crates/dorea-lut/src/types.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360597624Z",
+  "valid_from": "2026-04-08T03:28:13.360597624Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-lut/src/types.rs",
+    "language": "rs",
+    "chunk_type": "impl_item",
+    "start_line": 55,
+    "end_line": 79,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

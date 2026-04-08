@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-e3d392d34a91",
+  "content": "(cuda): dual-texture grading kernel + AdaptiveGrader\n\ncombined_lut_kernel now samples two texture sets with blend factor t.\nAdaptiveGrader wraps AdaptiveLut with prepare_keyframe(), swap_textures(),\nload_segment(), and grade_frame_blended() API.\"\n```\n\n---\n\n### Task 7: grade.rs integration — pre-compute + restructured grading pass\n\n**Files:**\n- Modify: `crates/dorea-cli/src/grade.rs`\n\nThis is the integration task that wires everything together. It replaces:\n- Global reservoir sampling (lines 488–514)\n- Single StreamingLutBuilder pass (lines 516–531)\n- Single HSL correction pass (lines 533–593)\n- Single CudaGrader init (lines 595–606)\n- Static grading loop (lines 613–679)\n\n- [ ] **Step 1: Add imports**\n\nAt the top of `grade.rs`, add to existing imports:\n\n```rust\nuse crate::change_detect::{\n    depth_distribution_distance, detect_scene_segments, compute_per_kf_zones,\n    smooth_zone_boundaries, SegmentRange,\n};\n```\n\n- [ ] **Step 2: Replace reservoir sampling + LUT + HSL with pre-compute phase**\n\nReplace lines 488–593 (the 3-pass calibration block) with:\n\n```rust\n    // ---- Pre-compute depth timeline ----\n    use dorea_hsl::derive::{derive_hsl_corrections, HslCorrections, QualifierCorrection};\n    use dorea_hsl::{HSL_QUALIFIERS, MIN_WEIGHT};\n    use dorea_lut::apply::apply_depth_luts;\n    use dorea_lut::build::{adaptive_zone_boundaries, compute_importance, StreamingLutBuilder};\n\n    // Step 1: Collect per-keyframe depth maps\n    let kf_depths: Vec<Vec<f32>> = (0..store.len())\n        .map(|i| store.read_depth(i))\n        .collect();\n\n    // Step 2: Compute per-keyframe zone boundaries (runtime zones)\n    let raw_kf_zones = compute_per_kf_zones(&kf_depths, depth_zones);\n\n    // Step 3: Detect scene segments\n    let segments = detect_scene_segments(&kf_depths, scene_threshold, min_segment_kfs);\n    log::info!(\"Scene segments: {} (from {} keyframes)\", segments.len(), store.len());\n    for (si, seg) in segments.iter().enumerate() {",
+  "source_version": "plans/2026-04-04-per-keyframe-adaptive-depth-zones-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042392020Z",
+  "valid_from": "2026-04-08T03:32:28.042392020Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-per-keyframe-adaptive-depth-zones-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1386,
+    "end_line": 1431,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

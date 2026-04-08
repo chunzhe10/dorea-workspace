@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-d2e1ae497aa2",
+  "content": "def release(self) -> None:\n        \"\"\"Explicitly release the tensor. Called by Rust when done.\"\"\"\n        self.tensor = None\n        self.data_ptr = 0\n        self.numel = 0\ndef load_depth_model(model_path: Optional[str] = None, device: str = \"cuda\") -> None:\n    \"\"\"Load the Depth Anything V2 model. Called once at init.\"\"\"\n    global _depth_model\n    from .depth_anything import DepthAnythingInference\n    _depth_model = DepthAnythingInference(model_path=model_path, device=device)",
+  "source_version": "python/dorea_inference/bridge.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360686633Z",
+  "valid_from": "2026-04-08T03:28:13.360686633Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/bridge.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 45,
+    "end_line": 49,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

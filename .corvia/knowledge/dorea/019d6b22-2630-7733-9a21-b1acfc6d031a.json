@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-b1acfc6d031a",
+  "content": "    let mut cdf_b = 0.0_f64;\n    let mut distance = 0.0_f64;\n\n    for i in 0..n_bins {\n        cdf_a += hist_a[i] as f64 / na;\n        cdf_b += hist_b[i] as f64 / nb;\n        distance += (cdf_a - cdf_b).abs();\n    }\n\n    (distance / n_bins as f64) as f32\n}\npub struct SegmentRange {\n    /// Inclusive start keyframe index (into the keyframe Vec, not frame index).\n    pub start: usize,\n    /// Exclusive end keyframe index.\n    pub end: usize,\n}",
+  "source_version": "crates/dorea-cli/src/change_detect.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360279704Z",
+  "valid_from": "2026-04-08T03:28:13.360279704Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/change_detect.rs",
+    "language": "rs",
+    "chunk_type": "struct_item",
+    "start_line": 83,
+    "end_line": 88,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

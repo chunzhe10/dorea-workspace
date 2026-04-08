@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-e98ff1affda8",
+  "content": "    cfg.inference.device.clone()\n    };\n\n    if args.cpu_only {\n        anyhow::bail!(\"--cpu-only not supported for dorea grade; use dorea preview.\");\n    }\n    if depth_max_interval == 0 {\n        anyhow::bail!(\"--depth-max-interval must be >= 1\");\n    }\n\n    let output = args.output.clone().unwrap_or_else(|| {\n        let stem = args.input.file_stem().unwrap_or_default().to_string_lossy();\n        args.input.with_file_name(format!(\"{stem}_graded.mp4\"))\n    });\n    log::info!(\"Grading: {} → {}\", args.input.display(), output.display());\n\n    let info = ffmpeg::probe(&args.input).context(\"ffprobe failed\")?;\n    log::info!(\n        \"Input: {}x{} @ {:.3}fps, {:.1}s ({} frames)\",\n        info.width, info.height, info.fps, info.duration_secs, info.frame_count\n    );\n\n    let params = GradeParams { warmth, strength, contrast };\n    let audio_src = if info.has_audio { Some(args.input.as_path()) } else { None };\n    let encoder = FrameEncoder::new(&output, info.width, info.height, info.fps, audio_src)\n        .context(\"failed to spawn ffmpeg encoder\")?;\n\n    let (proxy_w, proxy_h) = dorea_video::resize::proxy_dims(info.width, info.height, proxy_size);\n\n    let start_cfg = InferenceConfig {\n        skip_raune: true,\n        skip_depth: true,",
+  "source_version": "plans/2026-04-05-pipeline-dag-refactor.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042443011Z",
+  "valid_from": "2026-04-08T03:32:28.042443011Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-05-pipeline-dag-refactor.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1770,
+    "end_line": 1791,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

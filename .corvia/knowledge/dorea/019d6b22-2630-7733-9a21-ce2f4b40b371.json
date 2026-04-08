@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-ce2f4b40b371",
+  "content": "he same zone.\n        // Find the zone that actually has data (populated cells) by checking which has non-zero\n        // values distinct from the identity mapping.\n        // With adaptive quantiles and all depths equal, zone 4 (last) captures all pixels.\n        // Search all zones for the populated one.\n        let populated_zone = (0..N_DEPTH_ZONES)\n            .find(|&z| {\n                // A populated zone will have r ≈ 0.867 for cell [21,0,0] (boosted from 2/3).\n                // An identity-filled zone will have cell[21,0,0][0] ≈ 21/32 ≈ 0.656.\n                let v = depth_luts.luts[z].get(21, 0, 0)[0];\n                (v - 0.656).abs() > 0.1\n            })\n            .expect(\"No populated zone found — all zones appear to be identity\");\n\n        let lut = &depth_luts.luts[populated_zone];\n\n        // Check populated cell at index 21 (input r ≈ 2/3 = 0.6667, g=0, b=0)\n        // Target r = min(0.6667 + 0.2, 1.0) = 0.8667\n        let cell_21 = lut.get(21, 0, 0);\n        let input_r_21 = 2.0_f32 / 3.0;\n        let expected_r_21 = (input_r_21 + 0.2).min(1.0); // ≈ 0.867\n        assert!(\n            (cell_21[0] - expected_r_21).abs() < 0.05,\n            \"Zone {populated_zone} cell[21,0,0] output_r: expected ≈ {expected_r_21:.3}, got {:.3}\",\n            cell_21[0]\n        );\n        // Verify it's not identity\n        assert!(\n            (cell_21[0] - input_r_21).abs() > 0.1,\n            \"Zone {populated_zone} cell[21,0,0] appears to be identity: input {input_r_21:.3}, output {:.3}\",\n            cell_21[0]\n        );\n\n        // Check pure-red cell (index 32): input r=1.0, target r=min(1.2, 1.0)=1.0\n        let cell_32 = lut.get(LUT_SIZE - 1, 0, 0);\n        assert!(\n            (cell_32[0] - 1.0_f32).abs() < 0.05,\n            \"Zone {populated_zone} cell[32,0,0] output_r: expected ≈ 1.0, got {:.3}\",\n            cell_32[0]\n        );\n        // Green/blue channels should be ~0 for pure-red variants\n        assert!(\n            cell_32[1].abs() < 0.05,\n            \"Green should be ~0 for all-red input, got {:.3}\",\n            cell_32[1]\n        );\n    }\n}",
+  "source_version": "crates/dorea-lut/src/build.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360628519Z",
+  "valid_from": "2026-04-08T03:28:13.360628519Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-lut/src/build.rs",
+    "language": "rs",
+    "chunk_type": "mod_item",
+    "start_line": 421,
+    "end_line": 464,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

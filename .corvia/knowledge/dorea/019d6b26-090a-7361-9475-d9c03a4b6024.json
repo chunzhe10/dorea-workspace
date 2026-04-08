@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-d9c03a4b6024",
+  "content": "or img in imgs:\n            r, tw, th = _resize_maintain_aspect(_Image.fromarray(img), max_size)\n            wh_set.add((tw, th))\n            out_w, out_h = tw, th\n            tensors.append(normalize(transforms.ToTensor()(r)))\n\n        if len(wh_set) > 1:\n            # Different sizes: run sequentially, collect results as GPU tensors\n            results = []\n            for img in imgs:\n                r, tw, th = _resize_maintain_aspect(_Image.fromarray(img), max_size)\n                t = normalize(transforms.ToTensor()(r)).unsqueeze(0).to(self.device)\n                with torch.no_grad():\n                    out = self.model(t)\n                out = ((out.squeeze(0) + 1.0) / 2.0).clamp(0.0, 1.0)\n                results.append(out)\n            stacked = torch.stack(results)\n            _, _, H, W = stacked.shape\n            return stacked, W, H\n\n        batch = torch.stack(tensors)\n        if self.device.type == \"cuda\":\n            batch = batch.pin_memory().to(self.device, non_blocking=True)\n        else:\n            batch = batch.to(self.device)\n\n        with torch.no_grad():\n            out = self.model(batch)  # (N, 3, H, W) in [-1, 1]\n\n        out = ((out + 1.0) / 2.0).clamp(0.0, 1.0)  # [0, 1], still on device\n        return out, out_w, out_h\n```\n\n- [ ] **Step 1.3: Run tests**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea/python\n/opt/dorea-venv/bin/pytest tests/test_infer_batch.py::TestRauneInferBatch -v\n```\nExpected: 4 tests PASS.\n\n- [ ] **Step 1.4: Commit**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ngit add python/dorea_inference/raune_net.py python/tests/__init__.py python/tests/test_infer_batch.py\ngit commit -m \"feat(inference): add RauneNetInference.infer_batch + infer_batch_gpu\"\n```\n\n---\n",
+  "source_version": "plans/2026-04-03-inference-gpu-saturation.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042303091Z",
+  "valid_from": "2026-04-08T03:32:28.042303091Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-inference-gpu-saturation.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 232,
+    "end_line": 275,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-c686844e889d",
+  "content": "pub fn len(&self) -> usize {\n        self.len\n    }\npub fn is_empty(&self) -> bool {\n        self.len == 0\n    }\npub fn per_frame_vram_bytes(width: usize, height: usize) -> usize {\n    let n = width * height;\n    // Proxy dims for clarity stage\n    let long_edge = width.max(height);\n    let proxy_n = if long_edge <= 518 {\n        n\n    } else {\n        let scale = 518.0_f64 / long_edge as f64;\n        let pw = ((width as f64 * scale).round() as usize).max(1);\n        let ph = ((height as f64 * scale).round() as usize).max(1);\n        pw * ph\n    };\n\n    let rgb_f32 = n * 3 * 4;    // one RGB plane (n pixels × 3 channels × 4 bytes)\n    let depth_f32 = n * 4;       // depth plane\n    let lut_budget = 5 * 33 * 33 * 33 * 3 * 4;  // 5 zones × 33³ × 3ch × 4 bytes ≈ 22 MB\n    let proxy_f32 = proxy_n * 4; // one proxy L plane\n\n    // With pre-allocated buffers: d_rgb_in + d_rgb_after_lut + d_rgb_after_hsl + d_rgb_out held simultaneously.\n    // Conservative: 4 RGB planes + depth + LUT budget + 3 proxy planes\n    4 * rgb_f32 + depth_f32 + lut_budget + 3 * proxy_f32\n}",
+  "source_version": "crates/dorea-gpu/src/device.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360526545Z",
+  "valid_from": "2026-04-08T03:28:13.360526545Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/device.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 63,
+    "end_line": 84,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

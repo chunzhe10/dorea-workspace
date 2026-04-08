@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-c19e92752f38",
+  "content": "   let func = dev.get_func(\"combined_lut\", \"combined_lut_kernel\")\n                .ok_or_else(|| GpuError::ModuleLoad(\"combined_lut_kernel not found\".into()))?;\n            let cfg = LaunchConfig {\n                grid_dim: (div_ceil(n as u32, 256), 1, 1),\n                block_dim: (256, 1, 1),\n                shared_mem_bytes: 0,\n            };\n            unsafe {\n                func.launch(cfg, (\n                    &d_pixels_in,\n                    &d_depth,\n                    &d_textures,       // textures_a\n                    &d_boundaries,     // zone_boundaries_a\n                    &d_textures,       // textures_b (same — never sampled when blend_t=0)\n                    &d_boundaries,     // zone_boundaries_b (same)\n                    0.0f32,            // blend_t = 0.0\n                    &d_pixels_out,\n                    n as i32,\n                    self.combined_lut.n_zones as i32,\n                    self.combined_lut.grid_size as i32,\n                ))\n            }.map_err(map_cudarc_error)?;\n        }\n\n        // Download result\n        let result = dev.dtoh_sync_copy(&d_pixels_out).map_err(map_cudarc_error)?;\n        Ok(result)\n    }\n}",
+  "source_version": "crates/dorea-gpu/src/cuda/mod.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360457780Z",
+  "valid_from": "2026-04-08T03:28:13.360457780Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cuda/mod.rs",
+    "language": "rs",
+    "chunk_type": "impl_item",
+    "start_line": 124,
+    "end_line": 148,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

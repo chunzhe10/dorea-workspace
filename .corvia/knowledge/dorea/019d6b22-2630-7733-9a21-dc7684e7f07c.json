@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-dc7684e7f07c",
+  "content": "### Task 7: Write combined_lut.cu + update build.rs\n\n\nextern \"C\"\n__global__ void combined_lut_kernel(\n    const unsigned char* __restrict__ pixels_in,\n    const float*         __restrict__ depth,\n    const unsigned long long* __restrict__ textures,   // CUtexObject array\n    const float*         __restrict__ zone_boundaries,\n    unsigned char*       __restrict__ pixels_out,\n    int n_pixels,\n    int n_zones,\n    int grid_size   // COMBINED_LUT_GRID = 97; used for unnormalized texture coords\n) {\n    int idx = blockIdx.x * blockDim.x + threadIdx.x;\n    if (idx >= n_pixels) return;\n\n    // u8 → f32\n    float r = pixels_in[idx * 3 + 0] * (1.0f / 255.0f);\n    float g = pixels_in[idx * 3 + 1] * (1.0f / 255.0f);\n    float b = pixels_in[idx * 3 + 2] * (1.0f / 255.0f);\n    float d = depth[idx];\n\n    // Find the two bounding zones and their weights\n    // using the same soft triangular logic as lut_apply.cu\n    float total_w = 0.0f;\n    float4 blended = {0.0f, 0.0f, 0.0f, 0.0f};\n\n    for (int z = 0; z < n_zones; z++) {\n        float z_lo = zone_boundaries[z];\n        float z_hi = zone_boundaries[z + 1];\n        float z_width = z_hi - z_lo;\n        if (z_width < 1e-6f) continue;\n        float z_center = 0.5f * (z_lo + z_hi);\n        float dist = fabsf(d - z_center);",
+  "source_version": "docs/plans/2026-04-03-combined-lut-cuda-texture-plan.md",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360810300Z",
+  "valid_from": "2026-04-08T03:28:13.360810300Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "docs/plans/2026-04-03-combined-lut-cuda-texture-plan.md",
+    "language": "markdown",
+    "chunk_type": "heading_section",
+    "start_line": 1381,
+    "end_line": 1413,
+    "content_role": "plan",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

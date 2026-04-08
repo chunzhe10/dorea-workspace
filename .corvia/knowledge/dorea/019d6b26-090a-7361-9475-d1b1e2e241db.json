@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-d1b1e2e241db",
+  "content": "## Task 2: Add proxy resize utilities to `dorea-video`\n\n        // 3840×2160 with max_size=518: long edge (3840) → 518\n        let (pw, ph) = proxy_dims(3840, 2160, 518);\n        assert!(pw.max(ph) <= 518, \"long edge {pw}×{ph} > 518\");\n        // Aspect ratio preserved to within 1 pixel rounding\n        let ratio_orig = 3840.0f64 / 2160.0;\n        let ratio_proxy = pw as f64 / ph as f64;\n        assert!((ratio_proxy - ratio_orig).abs() < 0.1, \"aspect ratio {ratio_proxy} vs {ratio_orig}\");\n    }\n\n    #[test]\n    fn proxy_dims_scales_down_portrait() {\n        let (pw, ph) = proxy_dims(1080, 1920, 518);\n        assert!(pw.max(ph) <= 518);\n    }\n\n    #[test]\n    fn resize_rgb_bilinear_dimensions() {\n        let src = vec![128u8; 4 * 4 * 3];\n        let dst = resize_rgb_bilinear(&src, 4, 4, 2, 2);\n        assert_eq!(dst.len(), 2 * 2 * 3);\n    }\n\n    #[test]\n    fn resize_rgb_bilinear_solid_color_preserved() {\n        // A solid-color image should stay the same color after resizing\n        let src = vec![200u8, 100u8, 50u8].repeat(16); // 4×4 all same color\n        let dst = resize_rgb_bilinear(&src, 4, 4, 2, 2);\n        for chunk in dst.chunks_exact(3) {\n            assert_eq!(chunk[0], 200, \"R channel changed\");\n            assert_eq!(chunk[1], 100, \"G channel changed\");\n            assert_eq!(chunk[2], 50,  \"B channel changed\");\n        }\n    }\n\n    #[test]\n    fn resize_rgb_bilinear_identity_same_size() {\n        let src: Vec<u8> = (0u8..48).collect(); // 4×4×3\n        let dst = resize_rgb_bilinear(&src, 4, 4, 4, 4);\n        assert_eq!(dst, src, \"same-size resize should be identity\");\n    }\n}\n```\n\n- [ ] **Step 2: Add `pub mod resize;` to `lib.rs`**",
+  "source_version": "plans/2026-04-02-inference-perf-fix.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042228610Z",
+  "valid_from": "2026-04-08T03:32:28.042228610Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-inference-perf-fix.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 309,
+    "end_line": 352,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

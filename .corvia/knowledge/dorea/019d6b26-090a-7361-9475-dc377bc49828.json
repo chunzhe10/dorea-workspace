@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-dc377bc49828",
+  "content": "**\n\nAdd to the `impl InferenceServer` block, following the pattern of `run_depth()`:\n\n```rust\n    /// Send a graded RGB u8 frame for Maxine enhancement.\n    /// Returns enhanced RGB u8 at the same resolution as input.\n    pub fn enhance(\n        &mut self,\n        id: &str,\n        image_rgb: &[u8],\n        width: usize,\n        height: usize,\n        artifact_reduce: bool,\n        upscale_factor: u32,\n    ) -> Result<Vec<u8>, InferenceError> {\n        let b64 = B64.encode(image_rgb);\n\n        let req = serde_json::json!({\n            \"type\": \"enhance\",\n            \"id\": id,\n            \"format\": \"raw_rgb\",\n            \"image_b64\": b64,\n            \"width\": width,\n            \"height\": height,\n            \"artifact_reduce\": artifact_reduce,\n            \"upscale_factor\": upscale_factor,\n        });\n\n        self.send_line(&req.to_string())?;\n        let resp = self.recv_line()?;\n\n        let (pixels, _w, _h) = parse_enhance_response(&resp, id, width, height)?;\n        Ok(pixels)\n    }\n```\n\n- [ ] **Step 6: Verify full test suite passes**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ncargo test -p dorea-video 2>&1 | tail -20\n```\n\nExpected: all existing tests + new enhance tests PASS.\n\n- [ ] **Step 7: Commit**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ngit add crates/dorea-video/src/inference.rs\ngit commit -m \"feat(inference): add enhance() IPC method with dimension validation\"\n```\n\n---\n",
+  "source_version": "plans/2026-04-03-maxine-enhancement-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042324438Z",
+  "valid_from": "2026-04-08T03:32:28.042324438Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-maxine-enhancement-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 652,
+    "end_line": 698,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

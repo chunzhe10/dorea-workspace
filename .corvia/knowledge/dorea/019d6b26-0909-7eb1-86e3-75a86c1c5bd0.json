@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-0909-7eb1-86e3-75a86c1c5bd0",
+  "content": "## File Map\n## Instrumentation\n\n## Expected Impact\n\n| Optimization | Savings/frame (4K) | For 1671 frames |\n|-------------|-------------------|-----------------|\n| Temporal grade interpolation (Opt 5, avg N=6) | ~120-170ms on non-KF frames | ~2.5-4 min |\n| Fused LAB pass + rayon (Opt 2, keyframes only) | ~250ms on KF frames | ~1.2 min (278 KFs) |\n| Raw RGB IPC (Opt 3, keyframes only) | ~25ms on KF frames | ~7s (278 KFs) |\n| Bypass HF processor (Opt 4a, keyframes only) | ~5-10ms on KF frames | ~1-3s (278 KFs) |\n| GPU-required (Opt 4b) | risk elimination | N/A |\n| **Combined** | | **~4-5.5 min** |\n\nNote: With Opt 5 (temporal grade interpolation), Opts 2-4 only apply to keyframe\nframes (~278 of 1671 at N=6). The dominant savings come from skipping the full pipeline\non ~83% of frames. Total per-frame cost: keyframes ~50-80ms, non-keyframes ~12ms.\nAverage: ~18-23ms/frame → **~30-38s total** for 1671 frames (vs hours before all fixes).\n\n\n## Non-Goals\n\n- CUDA kernel for fused ambiance+warmth (future Phase 3 work)\n- Optical flow-guided depth warping (overkill for current use case)\n- Batch depth inference (VRAM constraint: 6GB RTX 3060)\n- Changes to the calibration pipeline (`dorea calibrate`, `dorea preview`)\n- Bit-exact color reproduction vs the old three-pass LAB pipeline (accepted tradeoff)\n",
+  "source_version": "decisions/2026-04-02-grading-pipeline-perf-v3.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.041850443Z",
+  "valid_from": "2026-04-08T03:32:28.041850443Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-02-grading-pipeline-perf-v3.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 285,
+    "end_line": 308,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

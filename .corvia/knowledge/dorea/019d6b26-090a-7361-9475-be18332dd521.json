@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-be18332dd521",
+  "content": "## Section 3: Pipeline Scaffolding\n\n### repos/dorea structure\n\n```\ndorea/\n├── scripts/\n│   ├── 00_generate_lut.py           # One-time: reference images → .cube LUT\n│   ├── 01_extract_frames.py         # ffmpeg keyframe extraction per clip\n│   ├── 02_claude_scene_analysis.py  # Claude API scene scanning → JSON\n│   ├── 03_run_sam2.py               # SAM2 subject tracking from Claude prompts\n│   ├── 04_run_depth.py              # Depth Anything V2 depth map generation\n│   ├── 05_resolve_setup.py          # Resolve API: import, DRX deploy, mattes (HOST ONLY)\n│   └── run_all.sh                   # Master overnight batch script\n├── config.yaml                      # Paths, API keys, model choices\n├── luts/                            # Generated .cube LUT files\n├── templates/                       # DRX node graph templates\n├── references/                      # Reference images for LUT generation\n├── requirements.txt                 # Python dependencies\n├── README.md                        # Project overview and quick start\n└── .gitignore\n```\n\nScripts are **stubs with docstrings** describing:\n- Purpose and phase number\n- Inputs and outputs (file paths, formats)\n- Key logic from the architecture document\n- Dependencies and VRAM requirements\n\n**Execution model**: Scripts 00–04 run inside the devcontainer (Python + CUDA). Script 05 runs on the **host** because it imports `fusionscript` (Resolve's Python API), which requires Resolve to be running locally. `run_all.sh` handles this split — it runs 00–04 in the container, then prompts the user to run 05 on the host (or uses SSH/exec to bridge).\n",
+  "source_version": "plans/2026-03-17-dorea-underwater-pipeline-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042044901Z",
+  "valid_from": "2026-04-08T03:32:28.042044901Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-17-dorea-underwater-pipeline-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 224,
+    "end_line": 252,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

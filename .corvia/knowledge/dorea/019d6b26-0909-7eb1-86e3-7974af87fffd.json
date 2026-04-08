@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-0909-7eb1-86e3-7974af87fffd",
+  "content": "## Summary\n## Architecture\n\n### Pipeline (Approach B — single server, temp-file reuse)\n\n```\n[spawn server: Maxine + RAUNE + Depth]\n\nPass 1 — full-res decode, Maxine per frame, write temp:\n  decode_frames(raw_input)\n    → enhance(frame)           [IPC — Maxine, once per frame]\n    → maxine_full_res\n    → write to temp_encoder    [lossless ffv1/mkv temp file]\n    → resize_rgb_bilinear → maxine_proxy\n    → MSE change detection\n    → if keyframe: store maxine_proxy in KeyframeEntry\n\nCalibration (after Pass 1):\n  raune_depth_batch(maxine_proxy_pixels) → depth cache + calibration\n  [shutdown server]            ← VRAM freed here\n\nPass 2 — decode temp file, grade:\n  decode_frames(temp_file)     [no Maxine, no inference server]\n    → maxine_full_res from temp\n    → depth lookup + lerp\n    → grade_with_grader(maxine_full_res, depth)\n    → encoder.write_frame\n\n[delete temp file]\n```\n\n**Key properties:**\n- Maxine runs exactly **once** per frame (Pass 1 only)\n- Inference server shuts down after calibration — full 6 GB VRAM available to CUDA grader in Pass 2\n- Pass 2 is: decode + CPU lerp + CUDA grade. No Python subprocess.\n- Without `--maxine`: zero overhead. Pass 1 reverts to proxy decode; Pass 2 grades raw frames.\n\n---\n",
+  "source_version": "decisions/2026-04-04-maxine-preprocessor-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.041884721Z",
+  "valid_from": "2026-04-08T03:32:28.041884721Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-04-maxine-preprocessor-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 27,
+    "end_line": 62,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

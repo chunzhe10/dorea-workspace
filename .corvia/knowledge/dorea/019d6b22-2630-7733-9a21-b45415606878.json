@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-b45415606878",
+  "content": "UT data integrity\n        let orig_cell = cal.depth_luts.luts[0].get(1, 1, 1);\n        let load_cell = loaded.depth_luts.luts[0].get(1, 1, 1);\n        assert_eq!(orig_cell, load_cell);\n\n        // Cleanup\n        let _ = std::fs::remove_file(&tmp);\n    }\n}\nfn dummy_lut() -> LutGrid {\n        let mut lut = LutGrid::new(3);\n        for ri in 0..3 {\n            for gi in 0..3 {\n                for bi in 0..3 {\n                    lut.set(ri, gi, bi, [ri as f32 / 2.0, gi as f32 / 2.0, bi as f32 / 2.0]);\n                }\n            }\n        }\n        lut\n    }",
+  "source_version": "crates/dorea-cal/src/format.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360304282Z",
+  "valid_from": "2026-04-08T03:28:13.360304282Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cal/src/format.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 98,
+    "end_line": 108,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

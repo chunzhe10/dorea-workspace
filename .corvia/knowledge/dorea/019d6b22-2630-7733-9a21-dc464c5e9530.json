@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-dc464c5e9530",
+  "content": " {zone}: {rc:?}\")));\n                }\n            }\n\n            // --- Create texture object ---\n            let mut res_desc: CUDA_RESOURCE_DESC = unsafe { std::mem::zeroed() };\n            res_desc.resType = CUresourcetype_enum::CU_RESOURCE_TYPE_ARRAY;\n            // SAFETY: The res union field for array is hArray\n            unsafe { res_desc.res.array.hArray = arr; }\n\n            let mut tex_desc: CUDA_TEXTURE_DESC = unsafe { std::mem::zeroed() };\n            tex_desc.addressMode[0] = CUaddress_mode_enum::CU_TR_ADDRESS_MODE_CLAMP;\n            tex_desc.addressMode[1] = CUaddress_mode_enum::CU_TR_ADDRESS_MODE_CLAMP;\n            tex_desc.addressMode[2] = CUaddress_mode_enum::CU_TR_ADDRESS_MODE_CLAMP;\n            tex_desc.filterMode     = CUfilter_mode_enum::CU_TR_FILTER_MODE_LINEAR;\n            tex_desc.flags          = 0;    // unnormalized coords — sample with r*(N-1) not r\n\n            let mut tex: CUtexObject = 0;\n            unsafe {\n                let rc = sys::lib().cuTexObjectCreate(&mut tex, &res_desc, &tex_desc, std::ptr::null());\n                if rc != CUresult::CUDA_SUCCESS {\n                    return Err(GpuError::CudaFail(format!(\"cuTexObjectCreate zone {zone}: {rc:?}\")));\n                }\n            }\n            textures.push(tex);\n        }\n\n        // d_build drops here — 73MB freed\n        Ok(Self {\n            arrays,\n            textures,\n            n_zones,\n            grid_size: N,\n            zone_boundaries: calibration.depth_luts.zone_boundaries.clone(),\n        })\n    }\n}\n```\n\n- [ ] **Step 3: Add module declaration to cuda/mod.rs**\n\nAt the top of `crates/dorea-gpu/src/cuda/mod.rs`, add:\n\n```rust",
+  "source_version": "docs/plans/2026-04-03-combined-lut-cuda-texture-plan.md",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360807868Z",
+  "valid_from": "2026-04-08T03:28:13.360807868Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "docs/plans/2026-04-03-combined-lut-cuda-texture-plan.md",
+    "language": "markdown",
+    "chunk_type": "heading_section",
+    "start_line": 1274,
+    "end_line": 1310,
+    "content_role": "plan",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

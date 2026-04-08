@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-dba7d14d92e3",
+  "content": "        # BGRA → RGB\n\n### Task 3: Python Server Enhancement Handler\n\nExtend `server.py` to accept `--maxine` flag and handle `enhance` requests.\n\n**Files:**\n- Modify: `python/dorea_inference/server.py`\n\n- [ ] **Step 1: Add `--maxine` and `--maxine-upscale-factor` args to `_parse_args()`**\n\nIn `server.py`, find the `_parse_args()` function (line ~39) and add after the existing `--no-depth` argument:\n\n```python\n    p.add_argument(\"--maxine\", action=\"store_true\",\n                   help=\"Enable Maxine enhancement (requires nvvfx SDK)\")\n    p.add_argument(\"--maxine-upscale-factor\", type=int, default=2,\n                   help=\"Maxine super-resolution upscale factor (default: 2)\")\n```\n\n- [ ] **Step 2: Add Maxine model loading in `main()`**\n\nAfter the existing depth model loading block (line ~95), add:\n\n```python\n    maxine_enhancer = None\n    if args.maxine:\n        from .maxine_enhancer import MaxineEnhancer\n        maxine_enhancer = MaxineEnhancer(upscale_factor=args.maxine_upscale_factor)\n        print(f\"[dorea-inference] Maxine enhancer loaded (upscale_factor={args.maxine_upscale_factor})\",\n              file=sys.stderr, flush=True)\n```\n\nNote: `MaxineEnhancer.__init__()` raises `RuntimeError` if nvvfx is unavailable and `DOREA_MAXINE_MOCK` is not set. This is the \"hard error at startup\" behavior — the server process exits with a traceback before the IPC loop starts.\n\n- [ ] **Step 3: Add `enhance` request handler in the request loop**\n\nIn the request dispatch chain (after the `elif req_type == \"depth\":` block, before the `elif req_type == \"shutdown\":` block), add:\n\n```python\n        elif req_type == \"enhance\":\n            if maxine_enhancer is None:\n                raise RuntimeError(\"Maxine enhancer not loaded (missing --maxine flag)\")\n            fmt = req.get(\"format\", \"raw_rgb\")\n            if fmt == \"raw_rgb\":",
+  "source_version": "plans/2026-04-03-maxine-enhancement-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042319676Z",
+  "valid_from": "2026-04-08T03:32:28.042319676Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-maxine-enhancement-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 280,
+    "end_line": 322,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

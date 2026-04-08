@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-d6c978f6ad6d",
+  "content": "## Task 3: Build System — PTX Compilation and cudarc Dependency\n\n# Activation is driven by build.rs (nvcc detection), NOT by Cargo feature flags.",
+  "source_version": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042274496Z",
+  "valid_from": "2026-04-08T03:32:28.042274496Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 563,
+    "end_line": 563,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

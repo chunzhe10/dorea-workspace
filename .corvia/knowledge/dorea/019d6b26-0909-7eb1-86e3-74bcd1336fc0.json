@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-0909-7eb1-86e3-74bcd1336fc0",
+  "content": "# CPU Parallelization — rayon\n\n## Problem\n\nThe `dorea calibrate` pipeline has four CPU-bound operations that run single-threaded.\nFor a 5-keyframe FHD run they account for ~2–4s of wall clock time; at 4K they scale\nto ~12–15s. All four are embarrassingly parallel and have no inter-pixel dependencies.\n\n| Operation | Location | Estimated time (5× FHD) |\n|---|---|---|\n| `compute_importance` Gaussian blur σ=8 | `dorea-lut/src/build.rs:30` | 0.5–1.5s |\n| `apply_depth_luts` trilinear + blend | `dorea-lut/src/apply.rs:81` | 1–1.75s |\n| NN fill (brute-force L2) | `dorea-lut/src/build.rs:290` | 0.3–1s |\n| `derive_hsl_corrections` RGB→HSV + accumulation | `dorea-hsl/src/derive.rs:44` | 0.4–0.75s |\n\nThe Python inference subprocess (RAUNE-Net, Depth Anything) is intentionally sequential\ndue to the 6 GB VRAM constraint and is excluded from this work.\n\n\n## Decision\n\nAdd `rayon` as a workspace-level dependency and parallelize all four operations using\n`par_iter` on the outermost pixel/cell loops. Three approaches were considered: tile-based\nparallelism (rejected — premature, adds boundary complexity) and a `parallel` Cargo feature\nflag (rejected — unnecessary for a desktop pipeline tool).\n",
+  "source_version": "decisions/2026-04-02-cpu-parallelization-rayon.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.041841451Z",
+  "valid_from": "2026-04-08T03:32:28.041841451Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-02-cpu-parallelization-rayon.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 7,
+    "end_line": 29,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

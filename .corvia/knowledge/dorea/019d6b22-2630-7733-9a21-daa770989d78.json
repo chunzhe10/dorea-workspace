@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-daa770989d78",
+  "content": "PASS (the test only verifies grade_frame_cpu works, not grade_pixel_cpu yet).\n\n- [ ] **Step 3: Commit**\n\n```bash\ncd repos/dorea && git add crates/dorea-gpu/src/cpu.rs\ngit commit -m \"test: add baseline regression test for grade_pixel_cpu (Task 1)\"\n```\n\n---\n\n### Task 2: Remove clarity from the pipeline\n\n**Files:**\n- Delete: `crates/dorea-gpu/src/cuda/kernels/clarity.cu`\n- Modify: `crates/dorea-gpu/build.rs`\n- Modify: `crates/dorea-gpu/src/cuda/mod.rs`\n- Modify: `crates/dorea-gpu/src/cpu.rs`\n- Modify: `crates/dorea-gpu/src/lib.rs`\n\n- [ ] **Step 1: Write failing test**\n\nIn `crates/dorea-gpu/src/cpu.rs` tests, add:\n\n```rust\n#[test]\nfn finish_grade_has_no_skip_clarity_param() {\n    // This test verifies finish_grade compiles without skip_clarity.\n    // Will fail until Task 2 removes the param.\n    use crate::GradeParams;\n    use dorea_cal::Calibration;\n    use dorea_hsl::HslCorrections;\n    use dorea_lut::types::{DepthLuts, LutGrid};\n\n    let mut lut = LutGrid::new(2);\n    for ri in 0..2usize { for gi in 0..2usize { for bi in 0..2usize {\n        lut.set(ri, gi, bi, [ri as f32, gi as f32, bi as f32]);\n    }}}\n    let cal = Calibration::new(\n        DepthLuts::new(vec![lut], vec![0.0, 1.0]),\n        HslCorrections(vec![]),\n        0,\n    );\n    let mut rgb_f32 = vec![0.5f32; 4 * 3];\n    let orig = vec![128u8; 4 * 3];\n    let depth = vec![0.5f32; 4];\n    // After Task 2: finish_grade takes no skip_clarity param\n    let out = finish_grade(&mut rgb_f32, &orig, &depth, 2, 2, &GradeParams::default(), &cal);\n    assert_eq!(out.len(), 12);\n}\n```\n\n- [ ] **Step 2: Run test — expect compile failure** (skip_clarity param still present)\n\n```bash\ncd repos/dorea && cargo test -p dorea-gpu finish_grade_has_no_skip_clarity_param 2>&1 | head -20\n```\n\nExpected: compile error about wrong number of arguments to finish_grade.\n\n- [ ] **Step 3: Delete clarity.cu**\n\n```bash\nrm repos/dorea/crates/dorea-gpu/src/cuda/kernels/clarity.cu\n```\n\n- [ ] **Step 4: Update build.rs — remove clarity, update rerun-if-changed**\n",
+  "source_version": "docs/plans/2026-04-03-combined-lut-cuda-texture-plan.md",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360782456Z",
+  "valid_from": "2026-04-08T03:28:13.360782456Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "docs/plans/2026-04-03-combined-lut-cuda-texture-plan.md",
+    "language": "markdown",
+    "chunk_type": "heading_section",
+    "start_line": 121,
+    "end_line": 177,
+    "content_role": "plan",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

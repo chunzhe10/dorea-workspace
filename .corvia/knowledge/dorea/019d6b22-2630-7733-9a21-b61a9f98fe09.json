@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-b61a9f98fe09",
+  "content": "ror> {\n        if pixels.len() != self.frame_bytes {\n            return Err(FfmpegError::EncodeFailed(format!(\n                \"frame size mismatch: expected {} bytes, got {}\",\n                self.frame_bytes,\n                pixels.len()\n            )));\n        }\n        if let Err(e) = self.stdin.write_all(pixels) {\n            // Broken pipe means ffmpeg exited — check its stderr for a real error message.\n            let stderr_msg = self.stderr.as_mut().map(|s| {\n                let mut buf = String::new();\n                let _ = s.read_to_string(&mut buf);\n                buf\n            }).unwrap_or_default();\n            let exit_code = self.child.try_wait().ok().flatten()\n                .and_then(|s| s.code())\n                .map(|c| format!(\" (exit code {c})\"))\n                .unwrap_or_default();\n            let detail = if stderr_msg.trim().is_empty() {\n                format!(\"{e}{exit_code}\")\n            } else {\n                format!(\"{}{exit_code}: {}\", e, stderr_msg.trim())\n            };\n            return Err(FfmpegError::EncodeFailed(format!(\"ffmpeg encoder died: {detail}\")));\n        }\n        Ok(())\n    }\n\n    /// Finalize encoding. Must be called after all frames are written.\n    pub fn finish(mut self) -> Result<(), FfmpegError> {\n        drop(self.stdin); // close stdin → signal EOF to ffmpeg\n\n        // Drain stderr in a background thread to prevent pipe-buffer deadlock:",
+  "source_version": "crates/dorea-video/src/ffmpeg.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360319306Z",
+  "valid_from": "2026-04-08T03:28:13.360319306Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/ffmpeg.rs",
+    "language": "rs",
+    "chunk_type": "impl_item",
+    "start_line": 506,
+    "end_line": 532,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-c317d5f03322",
+  "content": "ions of high curvature (gamma LUT + LAB + HSL combined).\n        // Identity-LUT case (combined_lut_within_2_per_255_of_cpu) verifies 2/255.\n        assert!(max_diff <= 4,\n            \"Non-trivial LUT: GPU/CPU max diff {max_diff}/255 exceeds 4/255\");\n    }\nfn combined_lut_edge_case_pixels() {\n        let cal = make_calibration(5);\n        let params = crate::GradeParams::default();\n        let grader = match CudaGrader::new(&cal, &params) {\n            Ok(g) => g,\n            Err(e) => { eprintln!(\"SKIP: {e}\"); return; }\n        };\n\n        let pixels: Vec<u8> = vec![\n            0, 0, 0,\n            255, 255, 255,\n            128, 64, 32,\n            128, 64, 32,\n        ];\n        let depth = vec![0.0f32, 1.0f32, 0.0f32, 1.0f32];\n\n        let gpu_out = grader.grade_frame_cuda(&pixels, &depth, 4, 1)\n            .expect(\"grade_frame_cuda failed\");\n        let cpu_out = crate::cpu::grade_frame_cpu(&pixels, &depth, 4, 1, &cal, &params)\n            .expect(\"grade_frame_cpu failed\");\n\n        assert_eq!(gpu_out.len(), cpu_out.len());\n        let max_diff = gpu_out.iter().zip(cpu_out.iter())\n            .map(|(&g, &c)| (g as i32 - c as i32).unsigned_abs())\n            .max().unwrap_or(0);\n        assert!(max_diff <= 2,\n            \"Edge-case pixels: GPU/CPU max diff {max_diff}/255 exceeds 2/255\");\n    }",
+  "source_version": "crates/dorea-gpu/src/cuda/mod.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360480137Z",
+  "valid_from": "2026-04-08T03:28:13.360480137Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cuda/mod.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 378,
+    "end_line": 405,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

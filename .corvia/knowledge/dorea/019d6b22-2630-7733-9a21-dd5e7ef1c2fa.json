@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-dd5e7ef1c2fa",
+  "content": "### Task 10: Integration test + performance benchmark\n\n                let b = (bi as f32 / (size - 1) as f32).powf(0.8);\n                lut.set(ri, gi, bi, [r, g, b]);\n            }}}\n            lut\n        }).collect();\n        let boundaries: Vec<f32> = (0..=n_zones).map(|i| i as f32 / n_zones as f32).collect();\n        // Active green qualifier: push saturation 20%\n        let hsl = HslCorrections(vec![QualifierCorrection {\n            h_center: 120.0, h_width: 40.0, h_offset: 0.0,\n            s_ratio: 1.2, v_offset: 0.0, weight: 200.0,  // weight >= 100 → active\n        }]);\n        Calibration::new(DepthLuts::new(luts, boundaries), hsl, 1)\n    }\n\n    #[test]\n    fn combined_lut_within_2_per_255_of_cpu() {\n        // Validates that grade_frame_with_grader (GPU combined LUT) matches\n        // grade_frame_cpu (CPU reference) within 2/255 on a synthetic frame.\n        let cal = make_calibration(5);\n        let params = crate::GradeParams::default();\n        let (w, h) = (32, 32);\n        let (pixels, depth) = make_frame(w, h);\n\n        // GPU path",
+  "source_version": "docs/plans/2026-04-03-combined-lut-cuda-texture-plan.md",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360823386Z",
+  "valid_from": "2026-04-08T03:28:13.360823386Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "docs/plans/2026-04-03-combined-lut-cuda-texture-plan.md",
+    "language": "markdown",
+    "chunk_type": "heading_section",
+    "start_line": 1959,
+    "end_line": 1982,
+    "content_role": "plan",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

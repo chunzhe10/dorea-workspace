@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-ed3aef0ed6fd",
+  "content": "            # Virtual service (e.g., coding-llm) — mark as healthy\n\n        \"\"\"Stop a single service process.\"\"\"\n        mp = self.processes.get(name)\n        if mp is None or mp.process is None:\n            return\n\n        self._log(f\"{name}: stopping (pid {mp.pid})\")\n        try:\n            mp.process.terminate()\n            try:\n                await asyncio.wait_for(mp.process.wait(), timeout=10.0)\n            except asyncio.TimeoutError:\n                mp.process.kill()\n                await mp.process.wait()\n        except ProcessLookupError:\n            pass  # already dead\n\n        mp.state = ServiceState.STOPPED\n        mp.pid = None\n        mp.process = None\n        mp.started_at = None\n        self._log(f\"{name}: stopped\")\n\n    async def health_check_all(self) -> None:\n        \"\"\"Run health checks on all managed processes.\"\"\"\n        for name, mp in self.processes.items():\n            if mp.state in (ServiceState.STOPPED,):\n                continue\n\n            if mp.process is not None and mp.process.returncode is not None:",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-cli.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042475657Z",
+  "valid_from": "2026-04-08T03:32:28.042475657Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-cli.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1143,
+    "end_line": 1171,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

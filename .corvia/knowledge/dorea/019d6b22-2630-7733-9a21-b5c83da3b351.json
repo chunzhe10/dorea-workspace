@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-b5c83da3b351",
+  "content": "ale_str,\n            \"-f\", \"rawvideo\",\n            \"-pix_fmt\", \"rgb24\",\n            \"pipe:1\",\n        ])\n        .stdin(Stdio::null())\n        .stdout(Stdio::piped())\n        .stderr(Stdio::null())\n        .spawn()\n        .map_err(FfmpegError::NotFound)\n}\npub fn extract_frame_at(\n    input: &Path,\n    timestamp_secs: f64,\n    width: usize,\n    height: usize,\n) -> Result<Vec<u8>, FfmpegError> {\n    let ts_str = format!(\"{timestamp_secs:.3}\");\n    let scale_str = format!(\"scale={width}x{height}\");\n\n    let output = Command::new(\"ffmpeg\")\n        .args([\n            \"-ss\", &ts_str,\n            \"-i\", input.to_str().unwrap_or(\"\"),\n            \"-vframes\", \"1\",\n            \"-vf\", &scale_str,\n            \"-f\", \"rawvideo\",\n            \"-pix_fmt\", \"rgb24\",\n            \"pipe:1\",\n        ])\n        .stdin(Stdio::null())\n        .stdout(Stdio::piped())\n        .stderr(Stdio::null())\n        .output()\n        .map_err(FfmpegError::NotFound)?;\n\n    let expected = width * height * 3;\n    if output.stdout.len() < expected {\n        return Err(FfmpegError::DecodeFailed(format!(\n            \"expected {expected} bytes, got {} at ts={timestamp_secs:.3}\",\n            output.stdout.len()\n        )));\n    }\n    Ok(output.stdout[..expected].to_vec())\n}",
+  "source_version": "crates/dorea-video/src/ffmpeg.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360316548Z",
+  "valid_from": "2026-04-08T03:28:13.360316548Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/ffmpeg.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 302,
+    "end_line": 335,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

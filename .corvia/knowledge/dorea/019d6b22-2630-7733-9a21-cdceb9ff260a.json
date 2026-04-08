@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-cdceb9ff260a",
+  "content": "SIZE - 1) as f32;\n                            lut.set(ri, gi, bi, [r, g, b]);\n                        }\n                    }\n                }\n            }\n\n            luts.push(lut);\n        }\n\n        DepthLuts::new(luts, self.zone_boundaries)\n    }\n}\npub fn new(zone_boundaries: Vec<f32>) -> Self {\n        let n_zones = zone_boundaries.len().saturating_sub(1);\n        let n_cells = LUT_SIZE * LUT_SIZE * LUT_SIZE;\n        Self {\n            zone_boundaries,\n            n_zones,\n            lut_wsums: vec![vec![0.0_f64; n_cells * 3]; n_zones],\n            lut_wcounts: vec![vec![0.0_f64; n_cells]; n_zones],\n        }\n    }",
+  "source_version": "crates/dorea-lut/src/build.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360617878Z",
+  "valid_from": "2026-04-08T03:28:13.360617878Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-lut/src/build.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 245,
+    "end_line": 254,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

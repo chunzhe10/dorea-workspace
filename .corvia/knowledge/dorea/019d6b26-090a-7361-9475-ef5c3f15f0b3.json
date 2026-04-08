@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-ef5c3f15f0b3",
+  "content": "### Prompt behavior on `corvia-dev up`\n\n## Files Changed\n\n| File | Change |\n|------|--------|\n| `tools/corvia-dev/corvia_dev/rebuild.py` | New module (~80 lines): build, install, staleness check |\n| `tools/corvia-dev/corvia_dev/cli.py` | Add `rebuild` command, integrate staleness check into `up` |\n| `tools/corvia-dev/corvia_dev/manager.py` | Add staleness check before service start |\n\n\n## Non-Goals\n\n- Version pinning or rollback support\n- Git hash embedding in binaries\n- Pulling updates from GitHub releases (`corvia-dev update`)\n- Checking source file changes (only checks built artifacts)",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-rebuild-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042494289Z",
+  "valid_from": "2026-04-08T03:32:28.042494289Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-rebuild-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 66,
+    "end_line": 79,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-0909-7eb1-86e3-79312bb60df2",
+  "content": "### PTX compilation\n\n## Testing Strategy\n\n- **Unit**: cudarc kernel launches with known input/output (port existing\n  `grade_frame` tests)\n- **Integration**: PyO3 inference -> cudarc grading end-to-end on a test frame\n- **Spike** (blocking prerequisite): CUDA context sharing validation — cudarc\n  alloc readable by PyTorch and vice versa\n- **Benchmark**: before/after PCIe transfer measurement, batch size sweep\n- **Fault injection**: deliberately trigger each fallback transition:\n  - OOM at various batch sizes (artificially limit VRAM allocation)\n  - Force `CudaFail` (invalid kernel parameters) -> verify single-frame retry\n  - Force `ModuleLoad` error (corrupt PTX) -> verify CPU fallback for entire run\n  - Force Python exception (mock model) -> verify CPU fallback for that frame\n  - Verify CPU fallback produces correct output (compare against GPU output)\n- **Context health**: OOM -> verify_cuda_context -> confirm recovery or\n  graceful degradation to CPU\n",
+  "source_version": "decisions/2026-04-03-gpu-space-ipc-adaptive-batching-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.041882678Z",
+  "valid_from": "2026-04-08T03:32:28.041882678Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-03-gpu-space-ipc-adaptive-batching-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 687,
+    "end_line": 703,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

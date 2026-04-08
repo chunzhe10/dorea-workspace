@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-bf28f5b46edd",
+  "content": "# Dorea Workspace Implementation Plan\n\n> **For agentic workers:** REQUIRED: Use superpowers:subagent-driven-development (if subagents available) or superpowers:executing-plans to implement this plan. Steps use checkbox (`- [ ]`) syntax for tracking.\n\n**Goal:** Set up a corvia-workspace for Dorea (underwater video AI editing pipeline) by templating from corvia-workspace, adapting configs, and scaffolding the pipeline project.\n\n**Architecture:** Create dorea-workspace from corvia-workspace GitHub template, swap repos/corvia for repos/dorea, adapt all configs/docs for dorea's Python pipeline, and scaffold the 6 pipeline script stubs with supporting files. Devcontainer adapted for Python/CUDA workload with port offset +100 for coexistence.\n\n**Tech Stack:** Python, PyTorch, SAM2, Depth Anything V2, DaVinci Resolve API, corvia (organizational memory), Docker devcontainer\n\n**Spec:** `docs/plans/2026-03-17-dorea-underwater-pipeline-design.md`\n\n---\n",
+  "source_version": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042054655Z",
+  "valid_from": "2026-04-08T03:32:28.042054655Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1,
+    "end_line": 14,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

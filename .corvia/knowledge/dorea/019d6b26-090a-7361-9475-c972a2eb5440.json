@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-c972a2eb5440",
+  "content": "### Task 11: Container Auto-Detection (dorea probe)\n\n/// Probe a video file and suggest pipeline settings.\npub fn probe_file(path: &Path) -> Result<ProbeResult, crate::ffmpeg::FfmpegError> {\n    let info = ffmpeg::probe(path)?;\n\n    let ext = path.extension()\n        .map(|e| e.to_string_lossy().to_lowercase())\n        .unwrap_or_default();\n\n    let container = match ext.as_str() {\n        \"mov\" => ContainerHint::Mov,\n        \"mp4\" | \"m4v\" => ContainerHint::Mp4,\n        _ => ContainerHint::Other,\n    };\n\n    // Sniff codec via ffprobe -show_streams\n    let output = std::process::Command::new(\"ffprobe\")\n        .args([\n            \"-v\", \"quiet\",\n            \"-select_streams\", \"v:0\",\n            \"-show_entries\", \"stream=codec_name,bits_per_raw_sample,pix_fmt\",\n            \"-of\", \"csv=p=0\",\n        ])\n        .arg(path)\n        .output()\n        .map_err(|e| crate::ffmpeg::FfmpegError::NotFound(e))?;\n\n    let probe_line = String::from_utf8_lossy(&output.stdout);\n    let fields: Vec<&str> = probe_line.trim().split(',').collect();\n\n    let codec_name = fields.first().unwrap_or(&\"unknown\").to_string();\n    let bit_depth = fields.get(1).and_then(|s| s.parse::<u8>().ok());\n\n    let (suggested_encoding, suggested_lut_size, suggested_output_codec) =\n        match (container, codec_name.as_str()) {\n            (ContainerHint::Mov, \"prores\") => (\"ilog\".to_string(), 65, \"prores\".to_string()),\n            (ContainerHint::Mp4, \"hevc\") | (ContainerHint::Mp4, \"h265\") =>\n                (\"dlog_m\".to_string(), 65, \"prores\".to_string()),\n            _ => (\"srgb\".to_string(), 33, \"h264\".to_string()),\n        };",
+  "source_version": "plans/2026-04-02-10bit-pipeline-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042152036Z",
+  "valid_from": "2026-04-08T03:32:28.042152036Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-10bit-pipeline-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1474,
+    "end_line": 1512,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

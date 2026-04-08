@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-c06d337c982d",
+  "content": "    assert_eq!(b.batch_size(), max);\n    }\n\n    #[test]\n    fn fixed_batcher_does_not_grow() {\n        let mut b = AdaptiveBatcher::fixed(4);\n        for _ in 0..100 {\n            b.report_success();\n        }\n        assert_eq!(b.batch_size(), 4);\n    }\n}\nfn new_computes_max_batch_from_vram() {\n        let b = AdaptiveBatcher::new(1_000_000_000, 56_000_000, 0.15);\n        assert_eq!(b.batch_size(), 15);\n        assert_eq!(b.max_batch, 15);\n    }",
+  "source_version": "crates/dorea-gpu/src/batcher.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360444502Z",
+  "valid_from": "2026-04-08T03:28:13.360444502Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/batcher.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 77,
+    "end_line": 81,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

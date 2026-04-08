@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-c3b5ccdeefbe",
+  "content": "pub fn swap_textures(&mut self) {\n        self.adaptive_lut.swap();\n    }\npub fn load_segment(\n        &mut self,\n        base_luts_flat: &[f32],\n        base_boundaries: &[f32],\n        hsl_data: (&[f32], &[f32], &[f32], &[f32]),\n    ) -> Result<(), GpuError> {\n        self.adaptive_lut.load_segment(\n            &self.device, base_luts_flat, base_boundaries, hsl_data,\n        )\n    }",
+  "source_version": "crates/dorea-gpu/src/cuda/mod.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360488302Z",
+  "valid_from": "2026-04-08T03:28:13.360488302Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cuda/mod.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 509,
+    "end_line": 518,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

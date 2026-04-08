@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-d247555f43c1",
+  "content": "# content: \"Fixed two performance bugs in dorea grade:\n#   1. Box blur sliding window: O(N×radius) → O(N), ~180x speedup on clarity pass\n\n#   2. Proxy downscale before depth inference: 24 MB/frame → ~200 KB/frame\n\n#   Measured wall time for DJI_20251101111428_0055_D.MP4 (4K, 14s, 1671 frames): <actual time>\"\n```\n\n---\n",
+  "source_version": "plans/2026-04-02-inference-perf-fix.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042233291Z",
+  "valid_from": "2026-04-08T03:32:28.042233291Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-inference-perf-fix.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 576,
+    "end_line": 581,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

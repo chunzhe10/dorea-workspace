@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-ca2f29d71a87",
+  "content": " && cargo build -p dorea-video`\nExpected: Compiles.\n\n- [ ] **Step 4: Commit**\n\n```bash\ngit add python/dorea_inference/server.py crates/dorea-video/src/inference.rs\ngit commit -m \"feat(video): batched depth inference (Python server + Rust client)\"\n```\n\n---\n\n### Task 15: Tiny Planet Depth-Skip Path\n\n**Files:**\n- Modify: `crates/dorea-cli/src/grade.rs`\n\nThe 3-stage pipeline from Task 13 already branches on `projection.needs_depth()`.\nThis task adds the degenerate depth map warning heuristic and zone-0 LUT forcing.\n\n- [ ] **Step 1: Add depth map variance check**\n\nIn `crates/dorea-cli/src/grade.rs`, add a helper:\n\n```rust\n/// Check if a depth map looks degenerate (possible tiny planet).\n/// Returns true if variance is suspiciously low.\nfn depth_looks_degenerate(depth: &[f32]) -> bool {\n    if depth.is_empty() { return false; }\n    let mean = depth.iter().sum::<f32>() / depth.len() as f32;\n    let variance = depth.iter().map(|&d| (d - mean).powi(2)).sum::<f32>() / depth.len() as f32;\n    // Threshold: typical underwater depth maps have variance > 0.01.\n    // Tiny planet or flat scenes have variance < 0.005.\n    variance < 0.005\n}\n```\n\n- [ ] **Step 2: Add warning after first depth inference**\n\nIn the Stage 2 depth thread (from Task 13), after the first frame's depth is computed,\ncheck:\n\n```rust\nif frame_count_stage2 == 0 && depth_looks_degenerate(&depth) {\n    log::warn!(\n        \"Depth map has very low variance — is this a tiny planet shot? \\\n         Use --projection tiny-planet to skip depth estimation.\"\n    );\n}\n```\n\n- [ ] **Step 3: Wire lut_zone override into grading**\n\nWhen `projection == TinyPlanet` or `--lut-zone N` is set, the grading path should\nuse only the specified zone. This means passing a `force_zone: Option<usize>` through\nto the LUT apply function. In the grading call:\n",
+  "source_version": "plans/2026-04-02-10bit-pipeline-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042158198Z",
+  "valid_from": "2026-04-08T03:32:28.042158198Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-10bit-pipeline-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1987,
+    "end_line": 2031,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

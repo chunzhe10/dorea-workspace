@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-cae189422eb7",
+  "content": "      v = (v + corr.v_offset * soft_mask).clamp(0.0, 1.0);\n            }\n\n            // Wrap hue to [0, 360)\n            h = h.rem_euclid(360.0);\n\n            let (ro, go, bo) = hsv_to_rgb(h, s, v);\n            [ro, go, bo]\n        })\n        .collect()\n}\nmod tests {\n    use super::*;\n    use crate::derive::{HslCorrections, QualifierCorrection};\n    use crate::qualifiers::HSL_QUALIFIERS;\n\n    /// I5d: apply_hsl_corrections with all-zero/identity corrections passes image through unchanged.\n    #[test]\n    fn test_apply_zero_corrections() {\n        let pixels: Vec<[f32; 3]> = vec![\n            [1.0, 0.0, 0.0],\n            [0.0, 1.0, 0.0],\n            [0.0, 0.0, 1.0],\n            [0.5, 0.5, 0.5],\n            [0.3, 0.7, 0.2],\n            [0.0, 0.0, 0.0],\n            [1.0, 1.0, 1.0],\n        ];\n\n        // Build identity corrections: h_offset=0, s_ratio=1.0, v_offset=0, weight=0 (inactive).\n        let corrections = HslCorrections(\n            HSL_QUALIFIERS\n                .iter()\n                .map(|q| QualifierCorrection {\n                    h_center: q.h_center,\n                    h_width: q.h_width,\n                    h_offset: 0.0,\n                    s_ratio: 1.0,\n                    v_offset: 0.0,\n                    weight: 0.0, // inactive — weight < MIN_WEIGHT\n                })\n                .collect(),\n        );\n\n        let result = apply_hsl_corrections(&pixels, &corrections);\n\n        assert_eq!(result.len(), pixels.len());\n        for (i, (orig, out)) in pixels.iter().zip(result.iter()).enumerate() {\n            for c in 0..3 {\n                assert!(\n                    (orig[c] - out[c]).abs() < 1e-5,\n                    \"pixel {i} channel {c}: expected {:.5} got {:.5}\",\n                    orig[c],\n                    out[c]\n                );\n            }\n        }\n    }\n}",
+  "source_version": "crates/dorea-hsl/src/apply.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360582396Z",
+  "valid_from": "2026-04-08T03:28:13.360582396Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-hsl/src/apply.rs",
+    "language": "rs",
+    "chunk_type": "mod_item",
+    "start_line": 53,
+    "end_line": 100,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-d44a4ae75f8b",
+  "content": "sh\ngit add crates/dorea-gpu/src/lut3d.rs\ngit commit -m \"test(dorea-gpu): trilinear accuracy validation for 3D grade LUT\n\n10K random (R,G,B,d) samples compared against direct pipeline.\nAsserts max error < 3/255 and p99 < 1.5/255 at 65x65x65 grid.\"\n```\n\n---\n\n### Task 4: Unit tests — boundary conditions and validity check\n\n**Files:**\n- Modify: `crates/dorea-gpu/src/lut3d.rs` (add tests to existing test module)\n\n- [ ] **Step 1: Add boundary condition test**\n\nAdd to the `tests` module in `lut3d.rs`:\n\n```rust\n    #[test]\n    fn boundary_conditions_exact_at_grid_nodes() {\n        let cal = test_calibration();\n        let params = GradeParams::default();\n        let grade_lut = GradeLut::build(&cal, &params);\n\n        // Test at grid nodes: LUT lookup should exactly match stored value.\n        // Use first depth sample (d=0.0) for simplicity.\n        let d = grade_lut.depth_samples[0];\n        let scale = (GRADE_LUT_SIZE - 1) as f32;\n\n        // Test corners: black, white, midgray, and primary/secondary colors\n        let test_points: Vec<[f32; 3]> = vec![\n            [0.0, 0.0, 0.0],   // black\n            [1.0, 1.0, 1.0],   // white\n            [0.5, 0.5, 0.5],   // midgray (not exact grid node at 65, but close)\n            [1.0, 0.0, 0.0],   // red\n            [0.0, 1.0, 0.0],   // green\n            [0.0, 0.0, 1.0],   // blue\n            [0.0, 1.0, 1.0],   // cyan\n            [1.0, 0.0, 1.0],   // magenta\n            [1.0, 1.0, 0.0],   // yellow\n        ];\n\n        for rgb in &test_points {\n            // Quantize to grid node\n            let ri = (rgb[0] * scale).round() as usize;\n            let gi = (rgb[1] * scale).round() as usize;\n            let bi = (rgb[2] * scale).round() as usize;\n            let r = ri as f32 / scale;\n            let g = gi as f32 / scale;\n            let b = bi as f32 / scale;\n\n            // Direct pipeline\n            let px = [\n                (r * 255.0).round() as u8,\n                (g * 255.0).round() as u8,\n                (b * 255.0).round() as u8,\n            ];\n            let direct = grade_frame_cpu(&px, &[d], 1, 1, &cal, &params, true)\n                .expect(\"grade_frame_cpu failed\");\n",
+  "source_version": "plans/2026-04-03-3d-lut-temporal-interpolation.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042251636Z",
+  "valid_from": "2026-04-08T03:32:28.042251636Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-3d-lut-temporal-interpolation.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 521,
+    "end_line": 572,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

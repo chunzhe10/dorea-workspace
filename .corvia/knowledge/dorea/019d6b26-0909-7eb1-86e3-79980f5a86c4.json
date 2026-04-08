@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-0909-7eb1-86e3-79980f5a86c4",
+  "content": "## Component Design\n\n### Python: MaxineEnhancer (`maxine_enhancer.py`)\n\nWraps nvvfx with:\n- Lazy effect init on first `enhance()` call (needs input dimensions)\n- Shared PyTorch CUDA stream: `NvVFX_SetCudaStream(effect, torch.cuda.current_stream().cuda_stream)`\n- Pipeline: RGB u8 → BGRA → (ArtifactReduction if ≤1080p) → 2× VideoSuperRes → INTER_AREA\n  downsample → BGRA → RGB u8 at original resolution\n- Error handling: exceptions caught, returns original frame, increments passthrough counter\n- Mock mode: `DOREA_MAXINE_MOCK=1` replaces nvvfx with identity passthrough\n\n\n### Python: server.py\n\nNew args: `--maxine`, `--maxine-upscale-factor <N>` (default 2).\n\nWhen `--maxine` is set, `MaxineEnhancer` is loaded at startup (hard error if nvvfx unavailable\nand not in mock mode). The `enhance` request handler:\n\n```\nreq:  { type: \"enhance\", id, format: \"raw_rgb\", image_b64, width, height,\n        artifact_reduce, upscale_factor }\nresp: { type: \"enhance_result\", id, image_b64, width, height }\n```\n",
+  "source_version": "decisions/2026-04-04-maxine-preprocessor-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.041885952Z",
+  "valid_from": "2026-04-08T03:32:28.041885952Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-04-maxine-preprocessor-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 65,
+    "end_line": 87,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

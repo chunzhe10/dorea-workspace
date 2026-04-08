@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-c7a119205196",
+  "content": "\n                let r = ri as f32 / (size - 1) as f32;\n                let g = gi as f32 / (size - 1) as f32;\n                let b = bi as f32 / (size - 1) as f32;\n                lut.set(ri, gi, bi, [r, g, b]);\n            }}}\n            lut\n        }\n\n        let n_zones = 5;\n        let luts: Vec<LutGrid> = (0..n_zones).map(|_| identity_lut(17)).collect();\n        let boundaries: Vec<f32> = (0..=n_zones).map(|i| i as f32 / n_zones as f32).collect();\n        let cal = Calibration::new(\n            DepthLuts::new(luts, boundaries),\n            HslCorrections(vec![QualifierCorrection {\n                h_center: 0.0, h_width: 1.0, h_offset: 0.0,\n                s_ratio: 1.0, v_offset: 0.0, weight: 0.0,\n            }]),\n            1,\n        );\n        let params = crate::GradeParams::default();\n\n        let r_u8 = 153u8; let g_u8 = 77u8; let b_u8 = 51u8;\n        let pixels = vec![r_u8, g_u8, b_u8];\n        let depth_val = 0.5f32;\n        let depth = vec![depth_val];\n\n        // Full pipeline\n        let frame_out = grade_frame_cpu(&pixels, &depth, 1, 1, &cal, &params).unwrap();\n\n        // Single-pixel path (uses same u8-rounded inputs)\n        let r_f32 = r_u8 as f32 / 255.0;\n        let g_f32 = g_u8 as f32 / 255.0;\n        let b_f32 = b_u8 as f32 / 255.0;\n        let px_out = grade_pixel_cpu(r_f32, g_f32, b_f32, depth_val, &cal, &params);\n        let r_out = (px_out[0].clamp(0.0, 1.0) * 255.0).round() as u8;\n        let g_out = (px_out[1].clamp(0.0, 1.0) * 255.0).round() as u8;\n        let b_out = (px_out[2].clamp(0.0, 1.0) * 255.0).round() as u8;\n\n        assert_eq!([r_out, g_out, b_out], [frame_out[0], frame_out[1], frame_out[2]],\n            \"grade_pixel_cpu must match grade_frame_cpu to within 1/255 rounding\");\n    }\n",
+  "source_version": "crates/dorea-gpu/src/cpu.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360544517Z",
+  "valid_from": "2026-04-08T03:28:13.360544517Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cpu.rs",
+    "language": "rs",
+    "chunk_type": "mod_item",
+    "start_line": 593,
+    "end_line": 626,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

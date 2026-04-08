@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-e5ac72384b14",
+  "content": "fset_acc[qi] / tw) as f32,\n                    weight:   tw as f32,\n                });\n            } else {\n                avg_corrections.push(QualifierCorrection {\n                    h_center: qual.h_center,\n                    h_width:  qual.h_width,\n                    h_offset: 0.0,\n                    s_ratio:  1.0,\n                    v_offset: 0.0,\n                    weight:   0.0,\n                });\n            }\n        }\n\n        calibration = Calibration::new(depth_luts, HslCorrections(avg_corrections), store.len());\n        keyframe_depths = kf_depths;\n        log::info!(\n            \"Auto-calibration complete ({} keyframes → {} depth zones)\",\n            store.len(), N_DEPTH_ZONES\n        );\n    }\n```\n\n- [ ] **Step 3.3: Cargo check**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ncargo check -p dorea-cli 2>&1 | tail -15\n```\nExpected: `Finished` with no errors. If there are type errors:\n- `Calibration::new` signature: check `crates/dorea-cal/src/lib.rs` — it takes `(depth_luts, hsl_corrections, keyframe_count: usize)`.\n- If `dorea_cal::Calibration` needs `use dorea_cal::Calibration as _Calibration;` (the existing alias), use the same pattern already in `auto_calibrate` (soon to be deleted).\n\n- [ ] **Step 3.4: Cargo test**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ncargo test -p dorea-cli 2>&1 | tail -15\n```\nExpected: all tests pass.\n\n- [ ] **Step 3.5: Commit**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ngit add crates/dorea-cli/src/grade.rs\ngit commit -m \"feat(grade): unified keyframe sampling — fused RAUNE+depth fills both calibration and grading depth cache\"\n```\n\n---\n",
+  "source_version": "plans/2026-04-04-unified-keyframe-sampling-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042408908Z",
+  "valid_from": "2026-04-08T03:32:28.042408908Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-unified-keyframe-sampling-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 702,
+    "end_line": 746,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

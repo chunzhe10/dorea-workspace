@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-d638f1edcf17",
+  "content": "# ---------------------------------------------------------------------------\n# VRAM query (called by Rust for adaptive batching)\n\n# ---------------------------------------------------------------------------\n\ndef vram_free_bytes() -> int:\n    \"\"\"Return free VRAM in bytes after flushing PyTorch's cache.\n\n    Uses torch.cuda.mem_get_info() which accounts for the caching allocator.\n    \"\"\"\n    import torch\n    if not torch.cuda.is_available():\n        return 0\n    torch.cuda.empty_cache()\n    free, _total = torch.cuda.mem_get_info()\n    return free\n```\n\n- [ ] **Step 2: Add `infer_gpu()` to `depth_anything.py`**\n\nAdd this method to the `DepthAnythingInference` class, after the existing `infer()` method at line 109:\n\n```python\n    def infer_gpu(self, img_rgb: np.ndarray, max_size: int = 518) -> \"torch.Tensor\":\n        \"\"\"Run depth estimation, return on-device f32 tensor (not copied to CPU).\n\n        Returns a 2D float32 CUDA tensor normalized to [0, 1] at inference resolution.\n        The caller must keep a reference to prevent GC.\n        \"\"\"\n        import torch\n        from PIL import Image as _Image\n\n        pil = _Image.fromarray(img_rgb)\n        capped = _resize_for_depth(pil, max_size)\n",
+  "source_version": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042269209Z",
+  "valid_from": "2026-04-08T03:32:28.042269209Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 164,
+    "end_line": 195,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-d31fccc2d18a",
+  "content": "& cargo test -p dorea-lut 2>&1\n```\n\nExpected: all tests pass.\n\n- [ ] **Step 5: Commit**\n\n```bash\ncd repos/dorea\ngit add crates/dorea-lut/src/build.rs\ngit commit -m \"perf(dorea-lut): parallelize compute_importance Sobel + Gaussian blur with rayon\"\n```\n\n---\n\n## Task 5: Parallelize `derive_hsl_corrections` (HSV conversion + fold/reduce)\n\n**Files:**\n- Modify: `repos/dorea/crates/dorea-hsl/src/derive.rs`\n\nTwo changes:\n1. Convert the two serial `lut_hsv` / `tgt_hsv` Vec builds to `par_iter().map().collect()`.\n2. Inside each qualifier, replace the two serial passes (weight build + accumulation) with a single `fold/reduce` parallel pass.\n\nThe outer `for qual in HSL_QUALIFIERS` loop (6–8 items) stays serial — not worth parallelizing.\n\n- [ ] **Step 1: Run the existing test to confirm baseline**\n\n```bash\ncd repos/dorea && cargo test -p dorea-hsl test_derive_same_image -- --nocapture 2>&1\n```\n\nExpected: `test test_derive_same_image ... ok`\n\n- [ ] **Step 2: Add rayon import to derive.rs**\n\nAt the top of `crates/dorea-hsl/src/derive.rs`, after the existing use statements, add:\n\n```rust\nuse rayon::prelude::*;\n```\n\nSo the top of the file becomes:\n\n```rust\n//! Derive per-qualifier HSL corrections from (lut_output, raune_target) pair.\n//!\n//! Ported from `run_fixed_hsl_lut_poc.py::derive_hsl_corrections`.\n\nuse rayon::prelude::*;\n\nuse dorea_color::hsv::rgb_to_hsv;\n\nuse crate::qualifiers::{HSL_QUALIFIERS, MIN_SATURATION, MIN_WEIGHT};\n```\n\n- [ ] **Step 3: Parallelize the HSV conversion Vecs**\n\nReplace:",
+  "source_version": "plans/2026-04-02-rayon-cpu-parallelization-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042240710Z",
+  "valid_from": "2026-04-08T03:32:28.042240710Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-rayon-cpu-parallelization-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 510,
+    "end_line": 553,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

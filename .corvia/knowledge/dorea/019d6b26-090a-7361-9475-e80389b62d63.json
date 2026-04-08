@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-e80389b62d63",
+  "content": "  fn zone_smooth_node_noop_at_window_1() {\n        let raw = vec![\n            vec![0.0f32, 0.25, 0.5, 0.75, 1.0],\n            vec![0.0f32, 0.10, 0.20, 0.30, 1.0],\n        ];\n        let segs = vec![crate::change_detect::SegmentRange { start: 0, end: 2 }];\n        let mut node = ZoneSmoothNode { window: 1 };\n        let smoothed = node.process((raw.clone(), segs)).unwrap();\n        assert_eq!(smoothed, raw);\n    }\n\n    #[test]\n    fn hsl_average_node_identity_when_source_equals_target() {\n        let mut node = HslAverageNode::new();\n        // Feed pairs where source == target (identity correction).\n        let pixels: Vec<[f32; 3]> = vec![[0.5, 0.3, 0.2]; 16];\n        node.process((pixels.clone(), pixels.clone())).unwrap();\n        node.process((pixels.clone(), pixels.clone())).unwrap();\n        let corrections = node.finish();\n        for q in &corrections.0 {\n            assert!((q.h_offset).abs() < 0.15, \"h_offset should be near 0: {}\", q.h_offset);\n            assert!((q.s_ratio - 1.0).abs() < 0.15 || q.weight == 0.0,\n                \"s_ratio should be near 1.0: {}\", q.s_ratio);\n        }\n    }\n\n    #[test]\n    fn hsl_average_node_reset_clears_state() {\n        let mut node = HslAverageNode::new();\n        let pixels: Vec<[f32; 3]> = vec![[0.9, 0.1, 0.1]; 16];\n        node.process((pixels.clone(), pixels.clone())).unwrap();\n        node.reset();\n        let corrs = node.finish();\n        for q in &corrs.0 {\n            assert_eq!(q.weight, 0.0, \"weight must be 0 after reset\");\n        }\n    }\n}\n```\n\n- [ ] **Step 2: Run — verify FAIL**\n\n```bash\ncargo test -p dorea-cli --features cuda pipeline::calibration 2>&1 | grep -E \"error|FAILED\"\n```\n\n- [ ] **Step 3: Implement `calibration.rs`**\n\n```rust\n//! LUT Calibration stage: depth timeline → per-segment LUTs + HSL + AdaptiveGrader.\n//!\n//! Nodes:\n//!   ZoneComputeNode   — compute per-KF adaptive zone boundaries\n//!   SegmentDetectNode — Wasserstein-1 scene segmentation\n//!   ZoneSmoothNode    — weighted moving-average zone smoothing\n//!   HslAverageNode    — streaming per-segment HSL accumulator (process + finish + reset)\n//!\n//! Free function:\n//!   build_segment_lut — builds DepthLuts for one segment from the calibration store",
+  "source_version": "plans/2026-04-05-pipeline-dag-refactor.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042429769Z",
+  "valid_from": "2026-04-08T03:32:28.042429769Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-05-pipeline-dag-refactor.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 911,
+    "end_line": 963,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

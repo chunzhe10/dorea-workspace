@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-d0342379b7b8",
+  "content": "ray\") -> \"EnhanceResult\":\n        \"\"\"Encode an HxWx3 uint8 RGB array as EnhanceResult.\"\"\"\n        return EnhanceResult(\n            id=id,\n            image_b64=encode_raw_rgb(img),\n            width=img.shape[1],\n            height=img.shape[0],\n        )\ndef to_dict(self) -> dict:\n        return {\"type\": self.type, \"id\": self.id,\n                \"image_b64\": self.image_b64,\n                \"width\": self.width, \"height\": self.height}",
+  "source_version": "python/dorea_inference/protocol.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360654410Z",
+  "valid_from": "2026-04-08T03:28:13.360654410Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/protocol.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 125,
+    "end_line": 128,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

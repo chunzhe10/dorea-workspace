@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-d443e2f20458",
+  "content": "ced_batch, depth_max_size=depth_max)\n                    all_depths.extend(depth_maps)\n\n                    # dtoh enhanced frames for output\n                    enhanced_np = (\n                        enhanced_batch.permute(0, 2, 3, 1).cpu().numpy() * 255\n                    ).astype(\"uint8\")  # (N, H, W, 3)\n                    all_enhanced_np.append(enhanced_np)\n\n                    # Free GPU memory before next iteration\n                    del enhanced_batch\n                    torch.cuda.empty_cache()\n\n                # Concatenate all sub-batches\n                enhanced_np = np.concatenate(all_enhanced_np, axis=0)\n\n                # DEBUG: save first 3 enhanced frames on Python side\n                import os\n                os.makedirs(\"/tmp/dorea_debug_py\", exist_ok=True)\n                for di in range(min(3, len(enhanced_np))):\n                    from PIL import Image as _DebugImage\n                    _DebugImage.fromarray(enhanced_np[di]).save(f\"/tmp/dorea_debug_py/enh_{di}.png\")\n                    print(f\"[dorea-inference] DEBUG: saved /tmp/dorea_debug_py/enh_{di}.png shape={enhanced_np[di].shape} dtype={enhanced_np[di].dtype}\", file=sys.stderr, flush=True)\n\n                results = []\n                for i, (item, depth) in enumerate(zip(items, all_depths)):\n                    depth_result = DepthResult.from_array(item.get(\"id\"), depth)",
+  "source_version": "python/dorea_inference/server.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360703777Z",
+  "valid_from": "2026-04-08T03:28:13.360703777Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/server.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 285,
+    "end_line": 305,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

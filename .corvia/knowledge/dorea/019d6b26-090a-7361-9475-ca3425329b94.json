@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-ca3425329b94",
+  "content": "### Task 15: Tiny Planet Depth-Skip Path\n\n```rust\nlet graded = if let Some(zone) = args.projection.default_lut_zone().or(args.lut_zone) {\n    grade_frame_single_zone(&df.pixels_f32, zone, df.width, df.height, &calibration, &params)\n} else {\n    grade_frame(&df.pixels_f32, &df.depth, df.width, df.height, &calibration, &params)\n};\n```\n\nThe `grade_frame_single_zone` function applies one LUT zone uniformly (no depth blending).\nAdd this to `dorea-gpu/src/lib.rs`:\n\n```rust\npub fn grade_frame_single_zone(\n    pixels: &[f32],\n    zone: usize,\n    width: usize,\n    height: usize,\n    calibration: &Calibration,\n    params: &GradeParams,\n) -> Result<Vec<f32>, GpuError> {\n    // Create uniform depth at the zone center\n    let n = width * height;\n    let zone_center = calibration.depth_luts.zone_centers\n        .get(zone)\n        .copied()\n        .unwrap_or(0.5);\n    let uniform_depth = vec![zone_center; n];\n    grade_frame(pixels, &uniform_depth, width, height, calibration, params)\n}\n```\n\n- [ ] **Step 4: Build and test**\n\nRun: `cd /workspaces/dorea-workspace/repos/dorea && cargo build && cargo test`\nExpected: Compiles, all tests pass.\n\n- [ ] **Step 5: Commit**\n\n```bash\ngit add crates/dorea-cli/src/grade.rs crates/dorea-gpu/src/lib.rs\ngit commit -m \"feat(cli): tiny planet depth-skip path with degenerate depth warning\"\n```\n\n---\n",
+  "source_version": "plans/2026-04-02-10bit-pipeline-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042158760Z",
+  "valid_from": "2026-04-08T03:32:28.042158760Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-10bit-pipeline-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 2032,
+    "end_line": 2076,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

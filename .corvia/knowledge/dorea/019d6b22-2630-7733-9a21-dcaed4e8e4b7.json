@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-dcaed4e8e4b7",
+  "content": "\n```\n\nExpected: no errors.\n\n- [ ] **Step 4: Commit**\n\n```bash\ncd repos/dorea && git add crates/dorea-gpu/src/cuda/kernels/combined_lut.cu crates/dorea-gpu/build.rs\ngit commit -m \"feat: add combined_lut.cu per-frame texture-lookup kernel (Task 7)\"\n```\n\n---\n\n### Task 8: Wire CombinedLut into CudaGrader\n\n**Files:**\n- Modify: `crates/dorea-gpu/src/cuda/mod.rs`\n- Delete: `crates/dorea-gpu/src/cuda/kernels/lut_apply.cu`\n- Delete: `crates/dorea-gpu/src/cuda/kernels/hsl_correct.cu`\n- Modify: `crates/dorea-gpu/build.rs`\n\n- [ ] **Step 1: Write the test that validates the new API shape**\n\nAdd to the `#[cfg(all(feature = \"cuda\", test))] mod tests` in `cuda/mod.rs`:\n\n```rust\n    #[test]\n    fn new_api_takes_calibration_and_params() {\n        // Will compile-error until CudaGrader::new takes (cal, params).\n        let cal = make_calibration(5);\n        let params = crate::GradeParams::default();\n        match CudaGrader::new(&cal, &params) {\n            Ok(grader) => {\n                let (pixels, depth) = make_frame(4, 4);\n                // grade_frame_cuda returns Vec<u8> directly\n                let out: Vec<u8> = grader.grade_frame_cuda(&pixels, &depth, 4, 4)\n                    .expect(\"grade_frame_cuda failed\");\n                assert_eq!(out.len(), 4 * 4 * 3);\n            }\n            Err(e) => eprintln!(\"SKIP: no CUDA device ({e})\"),\n        }\n    }\n```\n\n- [ ] **Step 2: Run the test — expect compile failure** (CudaGrader::new still takes no args)\n\n```bash\ncd repos/dorea && cargo test -p dorea-gpu new_api_takes_calibration_and_params 2>&1 | head -10\n```\n\nExpected: compile error.\n\n- [ ] **Step 3: Rewrite CudaGrader in cuda/mod.rs**\n\nReplace the `CudaGrader` struct and its `impl` block with:\n\n```rust\n/// CUDA grader: holds a device handle and the precomputed combined LUT textures.\n///\n/// Create once via `CudaGrader::new(calibration, params)`, reuse across frames.\n/// `!Send + !Sync` — CUDA contexts are thread-local.\n#[cfg(feature = \"cuda\")]\npub struct CudaGrader {\n    device:       Arc<CudaDevice>,\n    combined_lut: CombinedLut,\n    _not_send:    std::marker::PhantomData<*const ()>,\n}\n\n#[cfg(feature = \"cuda\")]\nimpl CudaGrader {\n    /// Initialise CUDA device 0, load per-frame kernel PTX, and build combined LUT textures.",
+  "source_version": "docs/plans/2026-04-03-combined-lut-cuda-texture-plan.md",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360812678Z",
+  "valid_from": "2026-04-08T03:28:13.360812678Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "docs/plans/2026-04-03-combined-lut-cuda-texture-plan.md",
+    "language": "markdown",
+    "chunk_type": "heading_section",
+    "start_line": 1480,
+    "end_line": 1537,
+    "content_role": "plan",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

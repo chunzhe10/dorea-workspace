@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-e94a212c6db2",
+  "content": "if kf_cursor + 1 < smoothed_kf_zones.len() {\n                        adaptive_grader.prepare_keyframe(&smoothed_kf_zones[kf_cursor + 1])\n                            .context(\"prepare_keyframe failed\")?;\n                    }\n                }\n            }\n\n            let (prev_kf_idx, _) = kf_index_list[kf_cursor];\n            let (prev_depth_vec, dpw, dph) = keyframe_depths\n                .get(&prev_kf_idx)\n                .expect(\"prev keyframe depth missing\");\n            let (dpw, dph) = (*dpw, *dph);\n\n            let next_kf = kf_index_list.get(kf_cursor + 1).copied();\n            let next_entry = next_kf.and_then(|(nkf, _)| keyframe_depths.get(&nkf));\n\n            // DepthInterpolateNode: borrows HashMap entries — no per-frame depth clones.\n            let depth_proxy = self.depth_interp.lerp(\n                fi,\n                prev_kf_idx,\n                prev_depth_vec,\n                next_kf.zip(next_entry).map(|((nkf, sc), nd)| (nkf, sc, nd.0.as_slice())),\n            );\n\n            let depth = if dpw == frame.width && dph == frame.height {\n                depth_proxy\n            } else {\n                InferenceServer::upscale_depth(&depth_proxy, dpw, dph, frame.width, frame.height)\n            };\n\n            let blend_t = self.blend_t.process(BlendTInput {\n                fi,\n                prev_kf_idx,\n                next: next_kf,",
+  "source_version": "plans/2026-04-05-pipeline-dag-refactor.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042440645Z",
+  "valid_from": "2026-04-08T03:32:28.042440645Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-05-pipeline-dag-refactor.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1642,
+    "end_line": 1669,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

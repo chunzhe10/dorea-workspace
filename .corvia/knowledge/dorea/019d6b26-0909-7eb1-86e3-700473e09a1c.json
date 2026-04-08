@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-0909-7eb1-86e3-700473e09a1c",
+  "content": "### Components\n\n#### 1. GitHub Actions Release Workflow\n\n**File**: `repos/corvia/.github/workflows/release.yml`\n**Trigger**: Push of tags matching `v*` (e.g., `v0.2.0`)\n\nSteps:\n1. Checkout code\n2. Install system deps (`pkg-config libssl-dev cmake protobuf-compiler`)\n3. `cargo build --release -p corvia-cli -p corvia-inference`\n4. Upload as release assets: `corvia-cli-linux-amd64`, `corvia-inference-linux-amd64`\n\n\n#### 2. Updated post-create.sh\n\nDownload-first with source fallback:\n\n```bash\nRELEASE_URL=\"https://github.com/chunzhe10/corvia/releases/latest/download\"\nif curl -fsSL -o /usr/local/bin/corvia \"$RELEASE_URL/corvia-cli-linux-amd64\" && \\\n   curl -fsSL -o /usr/local/bin/corvia-inference \"$RELEASE_URL/corvia-inference-linux-amd64\"; then\n    chmod +x /usr/local/bin/corvia /usr/local/bin/corvia-inference\nelse",
+  "source_version": "decisions/2026-03-03-prebuilt-binaries-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.041802077Z",
+  "valid_from": "2026-04-08T03:32:28.041802077Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-03-03-prebuilt-binaries-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 19,
+    "end_line": 39,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-b711d7d8c328",
+  "content": "s.push(d.clone());\n        }\n\n        if self.maxine {\n            args.push(\"--maxine\".to_string());\n            args.push(\"--maxine-upscale-factor\".to_string());\n            args.push(self.maxine_upscale_factor.to_string());\n        }\n\n        args\n    }\npub struct DepthBatchItem {\n    /// Unique identifier (e.g. \"kf_000042\") returned in the response for correlation.\n    pub id: String,\n    /// Raw RGB24 pixels, row-major.\n    pub pixels: Vec<u8>,\n    pub width: usize,\n    pub height: usize,\n    /// Max dimension for depth model resize (passed to Python as `max_size`).\n    pub max_size: usize,\n}",
+  "source_version": "crates/dorea-video/src/inference_subprocess.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360331383Z",
+  "valid_from": "2026-04-08T03:28:13.360331383Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference_subprocess.rs",
+    "language": "rs",
+    "chunk_type": "struct_item",
+    "start_line": 116,
+    "end_line": 125,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

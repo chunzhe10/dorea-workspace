@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-cf2ad8ac6998",
+  "content": "r)\n\n        # De-normalize: model output in [-1, 1], convert to [0, 255] uint8\n        out = ((out.squeeze(0) + 1.0) / 2.0).clamp(0.0, 1.0)\n        result = (out.permute(1, 2, 0) * 255).to(torch.uint8).contiguous()\n\n        return result  # stays on device\ndef infer_batch(self, imgs: \"list[np.ndarray]\", max_size: int = 1080) -> \"list[np.ndarray]\":\n        \"\"\"Run RAUNE-Net on a batch of uint8 HxWx3 RGB images.\n\n        All images must resize to the same dims (guaranteed for frames from one video).\n        Falls back to sequential infer() if post-resize dims differ.\n        Returns list of uint8 HxWx3 arrays.\n        \"\"\"\n        if not imgs:\n            return []\n\n        import torch\n        import torchvision.transforms as transforms\n        from PIL import Image as _Image\n\n        normalize = transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))\n        tensors = []\n        wh_set = set()\n        for img in imgs:\n            r, tw, th = _resize_maintain_aspect(_Image.fromarray(img), max_size)\n            wh_set.add((tw, th))\n            tensors.append(normalize(transforms.ToTensor()(r)))\n\n        if len(wh_set) > 1:\n            import sys\n            print(\n                f\"[dorea_inference] WARNING: infer_batch(raune): mixed post-resize dims \"\n                f\"{wh_set}; falling back to sequential\",\n                file=sys.stderr,\n            )\n            return [self.infer(img, max_size) for img in imgs]\n\n        batch = torch.stack(tensors)  # (N, 3, H, W)\n        if self.device.type == \"cuda\":\n            batch = batch.pin_memory().to(self.device, non_blocking=True)\n        else:\n            batch = batch.to(self.device)\n\n        with torch.no_grad():\n            out = self.model(batch)  # (N, 3, H, W) in [-1, 1]\n\n        out = ((out + 1.0) / 2.0).clamp(0.0, 1.0)\n        out_np = out.cpu().numpy()  # (N, 3, H, W) float32\n        return [(out_np[i].transpose(1, 2, 0) * 255).astype(np.uint8) for i in range(len(imgs))]",
+  "source_version": "python/dorea_inference/raune_net.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360643961Z",
+  "valid_from": "2026-04-08T03:28:13.360643961Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/raune_net.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 137,
+    "end_line": 179,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

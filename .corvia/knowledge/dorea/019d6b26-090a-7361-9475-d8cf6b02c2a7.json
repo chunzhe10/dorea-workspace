@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-d8cf6b02c2a7",
+  "content": "as f32 - 1.0).max(1.0);\n                let sy = dy as f32 * (src_h as f32 - 1.0) / (dst_h as f32 - 1.0).max(1.0);\n                let x0 = sx.floor() as usize;\n                let y0 = sy.floor() as usize;\n                let x1 = (x0 + 1).min(src_w - 1);\n                let y1 = (y0 + 1).min(src_h - 1);\n                let fx = sx - x0 as f32;\n                let fy = sy - y0 as f32;\n\n                let v00 = depth[y0 * src_w + x0];\n                let v10 = depth[y0 * src_w + x1];\n                let v01 = depth[y1 * src_w + x0];\n                let v11 = depth[y1 * src_w + x1];\n\n                out[dy * dst_w + dx] = v00 * (1.0 - fx) * (1.0 - fy)\n                    + v10 * fx * (1.0 - fy)\n                    + v01 * (1.0 - fx) * fy\n                    + v11 * fx * fy;\n            }\n        }\n        out\n    }\n\n    /// Graceful shutdown.\n    pub fn shutdown(self) -> Result<(), InferenceError> {\n        // Python cleanup happens via GIL when PyO3 drops\n        Ok(())\n    }\n}\n\n/// Holds a reference to a Python TensorGuard, keeping the GPU tensor alive.\npub struct DepthTensorGuard {\n    py_guard: Py<PyAny>,\n    pub data_ptr: usize,\n    pub numel: usize,\n    pub width: usize,\n    pub height: usize,\n}\n\nimpl DepthTensorGuard {\n    /// Release the GPU tensor. Must be called when Rust is done with the pointer.\n    pub fn release(self) {\n        Python::with_gil(|py| {\n            let guard = self.py_guard.bind(py);\n            let _ = guard.call_method0(\"release\");\n        });\n    }\n}\n\n/// Map Python exceptions to InferenceError, detecting OOM specifically.\nfn map_python_error(py: Python<'_>, err: PyErr) -> InferenceError {\n    // Check for torch.cuda.OutOfMemoryError\n    if let Ok(torch_cuda) = py.import(\"torch.cuda\") {\n        if let Ok(oom_type) = torch_cuda.getattr(\"OutOfMemoryError\") {",
+  "source_version": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042294294Z",
+  "valid_from": "2026-04-08T03:32:28.042294294Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1696,
+    "end_line": 1744,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

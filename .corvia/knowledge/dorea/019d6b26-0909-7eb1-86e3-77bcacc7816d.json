@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-0909-7eb1-86e3-77bcacc7816d",
+  "content": "### 33x33x33 Grid\n### Interpolate graded RGB (status quo ante)\n\n## Review Panel Findings Addressed\n\n5-persona review (Senior Rust/GPU Engineer, Color Science Specialist, QA Engineer,\nPerformance Engineer, Video Pipeline Architect):\n\n| # | Finding | Resolution |\n|---|---------|------------|\n| 1 | Adaptive zone boundaries vs even spacing | Zone-aligned depth sampling using calibration.zone_centers |\n| 2 | Trilinear error exceeds 0.5/255 | Upgraded to 65x65x65 grid; validated at p99=0.81/255 |\n| 3 | No acceptance test plan | Unit tests + integration test defined (see Test Plan) |\n| 4 | Maxine interaction undefined | Maxine runs on ALL frames post-grade; doc update required |\n| 5 | grade_pixel divergence risk | Uses grade_frame_inner (real pipeline), not separate function |\n| 6 | 8 depth bands may cause banding | Zone-aligned sampling eliminates banding at zone transitions |\n| 7 | HSV hue shift in RGB trilinear | Known LUT property; validated for saturated primaries in tests |\n| 8 | Maxine doc stale | Will update when Maxine is implemented |\n| 9 | No --no-grade-lut flag | Added to CLI flags |\n| 10 | 15ms estimate optimistic | Marked as estimate, benchmark on real footage required |\n| 11 | Quality asymmetry at low fps | Added recommendation: reduce keyframe interval below 60fps |\n| 12 | Performance table lacks breakdown | Added timing breakdown per stage |\n| 13 | GradeParams not enforced constant | Added hash-based validity check on GradeLut |",
+  "source_version": "decisions/2026-04-03-3d-lut-temporal-interpolation.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.041868597Z",
+  "valid_from": "2026-04-08T03:32:28.041868597Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-03-3d-lut-temporal-interpolation.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 242,
+    "end_line": 261,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

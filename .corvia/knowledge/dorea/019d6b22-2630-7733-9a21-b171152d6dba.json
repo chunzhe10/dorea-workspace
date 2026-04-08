@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-b171152d6dba",
+  "content": "score(&self, pixels: &[u8]) -> f32;\n\n    /// Accept `pixels` as the new reference for future `score()` calls.\n    fn set_reference(&mut self, pixels: &[u8]);\n\n    /// Clear the reference — next `score()` will return `f32::MAX`.\n    fn reset(&mut self);\n}\npub struct MseDetector {\n    reference: Option<Vec<u8>>,\n}",
+  "source_version": "crates/dorea-cli/src/change_detect.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360277983Z",
+  "valid_from": "2026-04-08T03:28:13.360277983Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/change_detect.rs",
+    "language": "rs",
+    "chunk_type": "struct_item",
+    "start_line": 23,
+    "end_line": 25,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

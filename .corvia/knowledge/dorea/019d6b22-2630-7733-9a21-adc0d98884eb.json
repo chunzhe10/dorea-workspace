@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-adc0d98884eb",
+  "content": "_zones} runtime zones)\"\n        );\n    }\n\n    // Ordered list of (frame_index, scene_cut_before) for pass-2 lerp lookup.\n    let kf_index_list: Vec<(u64, bool)> = keyframes.iter()\n        .map(|kf| (kf.frame_index, kf.scene_cut_before))\n        .collect();\n\n    // -----------------------------------------------------------------------\n    // Pass 2: full-resolution decode + adaptive depth grading\n    // -----------------------------------------------------------------------\n    let frames = ffmpeg::decode_frames(&args.input, &info)\n        .context(\"failed to spawn ffmpeg full-res decoder\")?;\n\n    let mut kf_cursor = 0usize;\n    let mut frame_count = 0u64;\n    let mut current_segment = kf_to_segment.first().copied().unwrap_or(0);\n\n    for frame_result in frames {\n        let frame = frame_result.context(\"frame decode error\")?;\n        let fi = frame.index;\n\n        // Advance cursor: kf_index_list[kf_cursor] is the most recent keyframe ≤ fi.\n        while kf_cursor + 1 < kf_index_list.len() && kf_index_list[kf_cursor + 1].0 <= fi {\n            kf_cursor += 1;\n\n            #[cfg(feature = \"cuda\")]\n            {\n                let new_seg = kf_to_segment[kf_cursor];\n                if new_seg != current_segment {\n                    // Segment boundary: load new base LUT and rebuild the opening KF's\n                    // texture BEFORE swapping, so the active texture uses the correct\n                    // color science for the new segment from the very first frame.\n                    let seg_cal = &segment_calibrations[new_seg];\n                    let base_flat: Vec<f32> = seg_cal.depth_luts.luts.iter()\n                        .flat_map(|lut| lut.data.iter().copied())\n                        .collect();\n                    let base_bounds = &seg_cal.depth_luts.zone_boundaries;\n                    let hsl = &seg_cal.hsl_corrections;\n                    let h_offsets: Vec<f32> = hsl.0.iter().map(|q| q.h_offset).collect();\n                    let s_ratios:  Vec<f32> = hsl.0.iter().map(|q| q.s_ratio).collect();",
+  "source_version": "crates/dorea-cli/src/grade.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360240581Z",
+  "valid_from": "2026-04-08T03:28:13.360240581Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/grade.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 557,
+    "end_line": 590,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

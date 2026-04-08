@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-d9a4d1a0a028",
+  "content": "- [ ] **Step 10: Commit**\n\n```bash\ngit add crates/dorea-gpu/src/cuda/kernels/hsl_correct.cu crates/dorea-gpu/src/cuda/mod.rs\ngit commit -m \"perf(dorea-gpu): pack HSL scalar params into d_hsl_params — 4 htod barriers → 1 on calibration upload\"\n```\n\n---\n\n## Task 3: Reuse host rgb_f32 conversion buffer (Fix 2 partial)\n\n`grade_frame_cuda` currently allocates a 24 MB `Vec<f32>` on every frame for the u8→f32 pixel conversion, then immediately discards it after `htod_sync_copy_into`. This is a 24 MB heap alloc + dealloc at 1080p per frame. Pre-allocating this buffer in `ResolutionBuffers` eliminates the per-frame allocation and reduces pressure on the system allocator.\n\n**Files:**\n- Modify: `crates/dorea-gpu/src/cuda/mod.rs`\n\n- [ ] **Step 1: Write the failing test**\n\nThis is a correctness regression: the reused buffer must be fully overwritten before each upload. Test that alternating different pixel inputs produces the correct distinct outputs:\n\n```rust\n/// The reused host rgb_f32 buffer must be fully overwritten before each upload.\n/// Alternating pixel inputs must produce their respective correct outputs.\n#[test]\nfn host_buffer_reuse_overwrites_correctly() {\n    let grader = CudaGrader::new().expect(\"CudaGrader::new()\");\n    let cal = make_calibration(5);\n    let params = GradeParams::default();\n    let (w, h) = (320, 240);\n    let n = w * h;\n    let depth: Vec<f32> = (0..n).map(|i| i as f32 / n as f32 * 0.8 + 0.1).collect();\n\n    let pixels_a: Vec<u8> = (0..n * 3).map(|i| ((i * 7 + 10) % 256) as u8).collect();\n    let pixels_b: Vec<u8> = (0..n * 3).map(|i| ((i * 13 + 50) % 256) as u8).collect();\n\n    // Establish reference outputs with the current (pre-Task 3) implementation.\n    let ref_a = grader\n        .grade_frame_cuda(&pixels_a, &depth, w, h, &cal, &params)\n        .expect(\"ref_a\");\n    let ref_b = grader\n        .grade_frame_cuda(&pixels_b, &depth, w, h, &cal, &params)\n        .expect(\"ref_b\");\n\n    // Alternate: a, b, a, b — each must match its reference exactly.\n    let out_a2 = grader\n        .grade_frame_cuda(&pixels_a, &depth, w, h, &cal, &params)\n        .expect(\"out_a2\");\n    let out_b2 = grader",
+  "source_version": "docs/plans/2026-04-03-pcie-sync-barrier-reduction.md",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360769205Z",
+  "valid_from": "2026-04-08T03:28:13.360769205Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "docs/plans/2026-04-03-pcie-sync-barrier-reduction.md",
+    "language": "markdown",
+    "chunk_type": "heading_section",
+    "start_line": 473,
+    "end_line": 511,
+    "content_role": "plan",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

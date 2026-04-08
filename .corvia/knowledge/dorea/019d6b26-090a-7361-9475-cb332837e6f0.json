@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-cb332837e6f0",
+  "content": "ed, &B_unused);\n    srgb_to_lab_d(rgb_full[i01], rgb_full[i01+1], rgb_full[i01+2], &L01, &A_unused, &B_unused);\n    srgb_to_lab_d(rgb_full[i11], rgb_full[i11+1], rgb_full[i11+2], &L11, &A_unused, &B_unused);\n\n    float L = L00*(1-fx)*(1-fy) + L10*fx*(1-fy)\n            + L01*(1-fx)*fy     + L11*fx*fy;\n    l_proxy[py * proxy_w + px] = L;\n}\n\n// ---------------------------------------------------------------------------\n// Kernel B-row: box blur along rows of the proxy L channel (one thread per pixel)\n// ---------------------------------------------------------------------------\nextern \"C\"\n__global__ void clarity_box_blur_rows(\n    const float* __restrict__ in,\n    float* __restrict__       out,\n    int width, int height, int radius\n) {\n    int col = blockIdx.x * blockDim.x + threadIdx.x;\n    int row = blockIdx.y * blockDim.y + threadIdx.y;\n    if (col >= width || row >= height) return;\n\n    int lo = max(0, col - radius);\n    int hi = min(width - 1, col + radius);\n    float s = 0.0f;\n    int base = row * width;\n    for (int k = lo; k <= hi; k++) s += in[base + k];\n    out[base + col] = s / (float)(hi - lo + 1);\n}\n\n// ---------------------------------------------------------------------------\n// Kernel B-col: box blur along columns of the proxy L channel (one thread per pixel)\n// ---------------------------------------------------------------------------\nextern \"C\"\n__global__ void clarity_box_blur_cols(\n    const float* __restrict__ in,\n    float* __restrict__       out,\n    int width, int height, int radius\n) {\n    int col = blockIdx.x * blockDim.x + threadIdx.x;\n    int row = blockIdx.y * blockDim.y + threadIdx.y;\n    if (col >= width || row >= height) return;\n\n    int lo = max(0, row - radius);\n    int hi = min(height - 1, row + radius);\n    float s = 0.0f;\n    for (int k = lo; k <= hi; k++) s += in[k * width + col];\n    out[row * width + col] = s / (float)(hi - lo + 1);\n}\n",
+  "source_version": "plans/2026-04-02-clarity-cuda-kernel.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042172213Z",
+  "valid_from": "2026-04-08T03:32:28.042172213Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-clarity-cuda-kernel.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 381,
+    "end_line": 425,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

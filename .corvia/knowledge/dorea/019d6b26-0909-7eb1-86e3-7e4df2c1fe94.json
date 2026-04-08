@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-0909-7eb1-86e3-7e4df2c1fe94",
+  "content": "## 6. Neo4j Bloom\n\n### Graph-to-Document Navigation UX\n\n- **Natural language search**: Users type near-natural-language queries into a search bar.\n  Bloom suggests matching graph patterns and renders results as node-link diagrams.\n- **Click to select**: Left-click selects a node, highlighting it. No document opens --\n  this is a graph-native tool, not a document reader.\n- **Double-click for Inspector**: Double-clicking a node opens the **Inspector panel**, which\n  shows all properties, relationships, and neighbor nodes as interactive cards. You can click\n  neighbor cards to navigate to them.\n- **Right-click context menu**: Offers Expand (show immediate neighbors), Dismiss (remove\n  from scene), Select Related, Reveal Relationships, Group Nodes, and Shortest Path.\n\n\n### Panel Pattern\n\n**Graph canvas + card list sidebar + inspector overlay**.\n\nThree-tier information architecture:\n1. **Scene** (main canvas): The graph visualization itself\n2. **Card List** (sidebar drawer): Lists all nodes/relationships in the scene as cards.\n   Selecting a card highlights the node in the scene and vice versa (bidirectional selection).\n   Can filter by nodes/relationships and search within the list.\n3. **Inspector** (overlay on double-click): Shows all properties with type annotations (string,\n   integer, float), relationships as navigable cards, neighbor nodes as navigable cards.\n   Supports inline property editing.\n\nAdditional panels:\n- **Legend**: Shows available entity types with styling controls\n- **Perspective drawer**: Defines which categories/relationships are visible\n",
+  "source_version": "decisions/graph-document-ux-research.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.041962412Z",
+  "valid_from": "2026-04-08T03:32:28.041962412Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/graph-document-ux-research.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 249,
+    "end_line": 277,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

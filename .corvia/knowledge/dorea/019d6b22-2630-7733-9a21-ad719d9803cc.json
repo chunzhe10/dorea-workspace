@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-ad719d9803cc",
+  "content": "pths: HashMap<u64, (Vec<f32>, usize, usize)> = kf_depths;\n\n    store.seal().context(\"failed to seal calibration store\")?;\n\n    // ---- Pre-compute depth timeline ----\n    use dorea_hsl::derive::{derive_hsl_corrections, HslCorrections, QualifierCorrection};\n    use dorea_hsl::{HSL_QUALIFIERS, MIN_WEIGHT};\n    use dorea_lut::apply::apply_depth_luts;\n    use dorea_lut::build::{adaptive_zone_boundaries, compute_importance, StreamingLutBuilder};\n\n    // Step 1: Collect per-keyframe depth maps from store\n    let kf_depths_store: Vec<Vec<f32>> = (0..store.len())\n        .map(|i| store.read_depth(i))\n        .collect();\n\n    // Step 2: Compute per-keyframe zone boundaries (runtime zones, depth_zones wide)\n    let raw_kf_zones = compute_per_kf_zones(&kf_depths_store, depth_zones);\n\n    // Step 3: Detect scene segments via Wasserstein-1 depth histogram distance\n    let segments = detect_scene_segments(&kf_depths_store, scene_threshold, min_segment_kfs);\n    log::info!(\"Scene segments: {} (from {} keyframes)\", segments.len(), store.len());\n    for (si, seg) in segments.iter().enumerate() {\n        log::info!(\n            \"  segment {si}: keyframes {}..{} ({} KFs)\",\n            seg.start, seg.end, seg.end - seg.start\n        );\n    }\n\n    // Step 4: Smooth zone boundaries (respecting segment boundaries)\n    let smoothed_kf_zones = smooth_zone_boundaries(&raw_kf_zones, &segments, zone_smoothing_w);\n\n    // Step 5: Build per-segment base LUTs + HSL corrections\n    struct SegmentCalibration {\n        depth_luts: dorea_lut::types::DepthLuts,\n        hsl_corrections: HslCorrections,\n    }\n    let n_quals = HSL_QUALIFIERS.len();\n\n    let segment_calibrations: Vec<SegmentCalibration> = segments.iter().map(|seg| {\n        // Collect depths from all keyframes in this segment → base zone boundaries\n        let seg_depths: Vec<f32> = (seg.start..seg.end)",
+  "source_version": "crates/dorea-cli/src/grade.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360236800Z",
+  "valid_from": "2026-04-08T03:28:13.360236800Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/grade.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 383,
+    "end_line": 417,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

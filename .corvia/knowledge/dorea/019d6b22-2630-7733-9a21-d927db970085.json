@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-d927db970085",
+  "content": "ction and after `invalidate_calibration()`.\n    data_valid: bool,\n    d_luts: CudaSlice<f32>,\n    d_boundaries: CudaSlice<f32>,\n    d_h_offsets: CudaSlice<f32>,\n    d_s_ratios: CudaSlice<f32>,\n    d_v_offsets: CudaSlice<f32>,\n    d_weights: CudaSlice<f32>,\n}\n```\n\nIn `alloc_calibration_buffers`, add `data_valid: false` to the returned struct:\n\n```rust\nOk(CalibrationBuffers {\n    n_zones,\n    lut_size,\n    data_valid: false,   // <-- add this\n    d_luts: dev.alloc_zeros(lut_elems).map_err(map_cudarc_error)?,\n    d_boundaries: dev.alloc_zeros(n_zones + 1).map_err(map_cudarc_error)?,\n    d_h_offsets: dev.alloc_zeros(6).map_err(map_cudarc_error)?,\n    d_s_ratios: dev.alloc_zeros(6).map_err(map_cudarc_error)?,\n    d_v_offsets: dev.alloc_zeros(6).map_err(map_cudarc_error)?,\n    d_weights: dev.alloc_zeros(6).map_err(map_cudarc_error)?,\n})\n```\n\n- [ ] **Step 4: Add `CudaGrader::invalidate_calibration()`**\n\nInside `impl CudaGrader` in `cuda/mod.rs`, after `with_capacity`:\n\n```rust\n/// Mark the cached calibration as stale, forcing a re-upload on the next\n/// `grade_frame_cuda` call.\n///\n/// Call this when the calibration content passed to `grade_frame_cuda` changes.\n/// In a typical dorea session, calibration is fixed — you do not need to call this.\npub fn invalidate_calibration(&self) {\n    let mut guard = self.cal_bufs.borrow_mut();\n    if let Some(bufs) = guard.as_mut() {\n        bufs.data_valid = false;\n    }\n}\n```\n\n- [ ] **Step 5: Guard the calibration upload block in `grade_frame_cuda`**\n\nReplace the existing `// --- Upload calibration-keyed data ---` block (lines ~205–228) with:\n\n```rust\n// --- Upload calibration-keyed data (skipped when data_valid — calibration is\n//     constant across a session, so this block fires only on the first frame\n//     and after invalidate_calibration()) ---\nlet needs_cal_upload = {\n    // Immutable borrow, dropped immediately so borrow_mut below can fire.\n    let guard = self.cal_bufs.borrow();\n    guard.as_ref().is_none_or(|b| !b.data_valid)\n};",
+  "source_version": "docs/plans/2026-04-03-pcie-sync-barrier-reduction.md",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360761675Z",
+  "valid_from": "2026-04-08T03:28:13.360761675Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "docs/plans/2026-04-03-pcie-sync-barrier-reduction.md",
+    "language": "markdown",
+    "chunk_type": "heading_section",
+    "start_line": 158,
+    "end_line": 207,
+    "content_role": "plan",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

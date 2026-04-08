@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-ed08bc48b95c",
+  "content": "ff_s = min(self.backoff_s * 2, MAX_BACKOFF)\n\n    def reset_backoff(self) -> None:\n        self.backoff_s = 1.0\n        self.restart_count = 0\n\n    @property\n    def uptime_s(self) -> float | None:\n        if self.started_at is None:\n            return None\n        return time.time() - self.started_at\n\n    def to_status(self) -> ServiceStatus:\n        return ServiceStatus(\n            name=self.service.name,\n            state=self.state,\n            port=self.service.port,\n            pid=self.pid,\n            uptime_s=round(self.uptime_s, 1) if self.uptime_s is not None else None,\n        )\n\n\nclass ProcessManager:\n    \"\"\"Manages multiple child processes with health checks and restart.\"\"\"\n\n    def __init__(\n        self,\n        services: list[ServiceDefinition],\n        workspace_root: Path,\n        state_path: Path = DEFAULT_STATE_PATH,\n        config_summary: ConfigSummary | None = None,\n        enabled_services: list[str] | None = None,\n    ) -> None:\n        self.processes: dict[str, ManagedProcess] = {\n            svc.name: ManagedProcess(svc) for svc in services\n        }\n        self.workspace_root = workspace_root\n        self.state_path = state_path\n        self.config_summary = config_summary or ConfigSummary(\n            embedding_provider=\"unknown\",\n            merge_provider=\"unknown\",\n            storage=\"unknown\",\n            workspace=\"unknown\",\n        )\n        self.enabled_services = enabled_services or []\n        self._started_at = time.time()\n        self._running = False\n        self._log_lines: list[str] = []\n\n    def _log(self, msg: str) -> None:\n        ts = time.strftime(\"%Y-%m-%dT%H:%M:%S\")\n        line = f\"{ts} {msg}\"\n        self._log_lines.append(line)",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-cli.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042474224Z",
+  "valid_from": "2026-04-08T03:32:28.042474224Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-cli.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1059,
+    "end_line": 1101,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

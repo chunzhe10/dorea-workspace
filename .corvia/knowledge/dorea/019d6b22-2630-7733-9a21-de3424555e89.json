@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-de3424555e89",
+  "content": "the current implementation has a bug — do not proceed until they pass.\n\n- [ ] **Step 3: Commit**\n\n```bash\ngit add crates/dorea-gpu/src/cuda/mod.rs\ngit commit -m \"test(dorea-gpu): regression tests for CudaGrader resolution/calibration switching\"\n```\n\n---\n\n### Task 2: Add `ResolutionBuffers` and `CalibrationBuffers` structs with allocation helpers\n\n**Files:**\n- Modify: `crates/dorea-gpu/src/cuda/mod.rs`\n\n- [ ] **Step 1: Add the two buffer structs after the `PROXY_MAX_SIZE` constant (around line 35)**\n\n  Insert after:\n  ```rust\n  /// Maximum proxy long-edge for clarity downsampling (matches CPU path: 518).\n  #[cfg(feature = \"cuda\")]\n  const PROXY_MAX_SIZE: usize = 518;\n  ```\n\n  Add:\n  ```rust\n  /// Pre-allocated device buffers for a specific frame resolution.\n  ///\n  /// Keyed by (width, height). Dropped and reallocated when resolution changes.\n  /// Holds all 8 pixel-count-scaled device slices used across LUT, HSL, and clarity stages.\n  #[cfg(feature = \"cuda\")]\n  struct ResolutionBuffers {\n      width: usize,\n      height: usize,\n      proxy_w: usize,\n      proxy_h: usize,\n      d_rgb_in: CudaSlice<f32>,        // n × 3\n      d_depth: CudaSlice<f32>,         // n\n      d_rgb_after_lut: CudaSlice<f32>, // n × 3\n      d_rgb_after_hsl: CudaSlice<f32>, // n × 3",
+  "source_version": "docs/plans/2026-04-03-cuda-grader-buffer-pre-allocation.md",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360835720Z",
+  "valid_from": "2026-04-08T03:28:13.360835720Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "docs/plans/2026-04-03-cuda-grader-buffer-pre-allocation.md",
+    "language": "markdown",
+    "chunk_type": "heading_section",
+    "start_line": 191,
+    "end_line": 220,
+    "content_role": "plan",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

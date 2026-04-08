@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-0909-7eb1-86e3-75f0d30835c2",
+  "content": "## Design\n\n### Pipeline Integration\n\nThe current pipeline in `grade.rs` is a sequential for loop — decode, depth, grade, and encode\nhappen in order for each frame. There is no multi-threading between pipeline stages. The Maxine\nenhancement call is inserted sequentially, the same way `run_depth()` is called today:\n\n```\nPer-frame loop (sequential, single-threaded):\n  1. decode frame → RGB u8\n  2. run_depth(proxy_frame) → depth f32          [via inference server]\n  3. grade_frame(pixels, depth, calibration) → graded RGB u8\n  4. enhance(graded_frame) → enhanced RGB u8     [via same inference server, NEW]\n  5. encoder.write_frame(enhanced_frame)\n```\n\nWhen Maxine is disabled, step 4 is skipped — zero overhead. No mutex is needed because the\npipeline is single-threaded; depth and enhance calls are never concurrent.\n\n**Two inference server instances:** `grade.rs` spawns two inference servers — one for\nauto-calibration (RAUNE + depth) and one for per-frame grading (depth only). The `--maxine` flag\nis passed ONLY to the grading server. The calibration server never loads Maxine models. This\navoids VRAM pressure during calibration (RAUNE + depth + Maxine would exceed 6GB).\n\n\n### Temporal Interpolation Interaction\n\nThe pipeline uses temporal grade interpolation (perf v3 decision): ~83% of frames skip the full\ngrading pipeline and lerp graded pixel outputs between bracketing keyframes. Maxine enhancement\nruns ONLY on keyframes:\n\n```\nKeyframe:     decode → depth → grade → enhance → encode\nNon-keyframe: decode → MSE check → lerp(enhanced_kf_before, enhanced_kf_after) → encode\n```\n\nInterpolation operates on *enhanced* keyframe outputs, not pre-enhancement outputs. This means:\n- Non-keyframes cost ~12ms (decode + MSE + lerp + encode) — no Maxine overhead\n- Only ~17% of frames pay the Maxine cost (50-100ms per frame)\n- No flickering between enhanced keyframes and unenhanced interpolated frames\n",
+  "source_version": "decisions/2026-04-02-maxine-post-grading-enhancement.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.041853341Z",
+  "valid_from": "2026-04-08T03:32:28.041853341Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-02-maxine-post-grading-enhancement.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 26,
+    "end_line": 64,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

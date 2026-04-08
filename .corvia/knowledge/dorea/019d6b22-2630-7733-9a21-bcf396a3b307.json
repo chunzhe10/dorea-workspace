@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-bcf396a3b307",
+  "content": "el: {e}\")))?;\n            Ok(())\n        })\n    }\n\n    /// Graceful shutdown — unload Python models and release VRAM.\n    pub fn shutdown(self) -> Result<(), InferenceError> {\n        Python::with_gil(|py| {\n            let bridge = self.bridge.bind(py);\n            bridge.call_method0(\"unload_models\")\n                .map_err(|e| InferenceError::InitFailed(format!(\"unload_models: {e}\")))?;\n            Ok(())\n        })\n    }\n\n    // -----------------------------------------------------------------------\n    // Private helpers\n    // -----------------------------------------------------------------------\n\n    /// Find the `python/` directory adjacent to the binary (same logic as subprocess version).\n    fn find_python_dir() -> Option<PathBuf> {\n        std::env::current_exe().ok().and_then(|exe| {\n            // .parent() = target/debug|release, .parent() = target, .parent() = workspace root\n            exe.parent()\n                .and_then(|p| p.parent())\n                .and_then(|p| p.parent())\n                .map(|root| root.join(\"python\"))\n        }).filter(|p| p.exists())\n    }\n\n    /// Load the depth model via the Python bridge.\n    fn call_load_depth(\n        py: Python<'_>,\n        bridge: &Bound<'_, PyModule>,\n        model_path: Option<&str>,\n        device: &str,\n    ) -> Result<(), InferenceError> {\n        let py_model_path = match model_path {\n            Some(p) => p.into_py(py),\n            None => py.None(),\n        };",
+  "source_version": "crates/dorea-video/src/inference/pyo3_backend.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360405722Z",
+  "valid_from": "2026-04-08T03:28:13.360405722Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference/pyo3_backend.rs",
+    "language": "rs",
+    "chunk_type": "impl_item",
+    "start_line": 547,
+    "end_line": 578,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

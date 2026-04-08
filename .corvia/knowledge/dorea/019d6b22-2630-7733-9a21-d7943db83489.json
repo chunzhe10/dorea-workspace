@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-d7943db83489",
+  "content": "## Summary\n## Motivation\n\n## Grid Size: 97³\n\nEmpirically anchored on issue #25 validation (65³ measured: p99=0.81/255, max=2.61/255).\nScaling by (64/96)² factor:\n\n| Grid | VRAM (5 zones) | p99 err/255 | p99 10-bit LSBs | Verdict |\n|------|---------------|-------------|-----------------|---------|\n| 33³  | 2MB           | 3.24        | 13.0            | FAILS 10-bit |\n| 65³  | 16MB          | 0.81        | 3.2             | Risky 10-bit |\n| **97³**  | **55MB**  | **0.36**    | **1.4**         | **Borderline-safe 10-bit** |\n| 129³ | 129MB         | 0.20        | 0.8             | Safe 10-bit |\n\n97³ chosen: safe for current 8-bit footage, forward-compatible with planned 10-bit switch.\nGrid size exposed as named constant `COMBINED_LUT_GRID = 97` — bump to 129 if empirical\n10-bit testing reveals banding. 257³ excluded: 1GB VRAM conflicts with Maxine budget.\n\n\n## Depth Bands: Calibration Zones (5 adaptive)\n\nReuse existing `calibration.depth_luts` zone boundaries (adaptive, fitted per clip).\nSame soft triangular blend logic as current `lut_apply.cu`. Two zone lookups + lerp per\npixel at runtime. No resampling step needed.\n",
+  "source_version": "docs/decisions/2026-04-03-combined-lut-cuda-texture-design.md",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360740429Z",
+  "valid_from": "2026-04-08T03:28:13.360740429Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "docs/decisions/2026-04-03-combined-lut-cuda-texture-design.md",
+    "language": "markdown",
+    "chunk_type": "heading_section",
+    "start_line": 18,
+    "end_line": 39,
+    "content_role": "decision",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

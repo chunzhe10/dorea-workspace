@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-e626d698cb49",
+  "content": "## Problem\n## Goal\n\n## Architecture\n\n```\nPass 1: proxy decode → ChangeDetector.score() → Vec<KeyframeEntry>\n                                ↓\n        fused RAUNE+depth batch (single InferenceServer)\n                /                          \\\n  PagedCalibrationStore              keyframe_depths HashMap\n  (orig, enhanced, depth)            (depth at proxy res, keyed by frame_index)\n                ↓\n  3-pass calibration streaming → Calibration\n                ↓\nPass 2: full-res decode → grade (Calibration + keyframe_depths)\n```\n\nProperties:\n- One proxy decode\n- One inference server startup (RAUNE + depth enabled)\n- One fused inference run — both outputs consumed simultaneously\n- `auto_calibrate()` function deleted\n- No second server startup before grading pass\n- `--keyframe-interval` CLI arg removed\n\nWhen `--calibration` is supplied, the fused inference path is skipped entirely. A depth-only server starts for grading (same as today).\n\n---\n",
+  "source_version": "plans/2026-04-04-unified-keyframe-sampling.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042413154Z",
+  "valid_from": "2026-04-08T03:32:28.042413154Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-unified-keyframe-sampling.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 29,
+    "end_line": 55,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

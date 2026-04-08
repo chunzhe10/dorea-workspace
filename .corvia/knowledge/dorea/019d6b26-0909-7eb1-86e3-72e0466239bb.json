@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-0909-7eb1-86e3-72e0466239bb",
+  "content": "### Approach\n### Why this approach\n\n### Alternatives rejected\n\n- **Download external images**: Copyright risk, not reproducible, may not match\n  DJI Action 4 color profile\n- **Synthetic gradients**: Unrealistic color distribution, poor zone statistics\n- **Use raw D-Log M as references**: Would produce identity-like LUT (flat → flat)\n\n\n### Reference generation parameters\n\nBased on underwater photography color science:\n\n| Parameter | Value | Rationale |\n|-----------|-------|-----------|\n| D-Log M decode | Standard DJI curve | Convert flat encoding to linear light |\n| Red gain | 1.35 | Compensate for water absorption at 3-5m depth |\n| Green gain | 1.05 | Slight boost for natural balance |\n| Blue gain | 0.95 | Reduce cyan/blue cast from scattering |\n| Gamma | 0.50 | Expand D-Log M flat contrast to natural look |\n| Saturation | 1.4x | Restore vibrancy lost in log encoding |\n| Shadow lift | +0.01 | Prevent shadow crushing |\n",
+  "source_version": "decisions/2026-04-01-first-lut-generation-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.041826333Z",
+  "valid_from": "2026-04-08T03:32:28.041826333Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-01-first-lut-generation-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 32,
+    "end_line": 52,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

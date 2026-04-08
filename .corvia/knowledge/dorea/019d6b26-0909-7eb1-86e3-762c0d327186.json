@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-0909-7eb1-86e3-762c0d327186",
+  "content": "        # Import nvvfx (hard error if unavailable — caller checks before constructing)\n        # Obtain PyTorch CUDA stream\n\n        # Create VideoSuperRes effect with NvVFX_SetCudaStream(effect, stream)\n\n        # Create ArtifactReduction effect with shared stream",
+  "source_version": "decisions/2026-04-02-maxine-post-grading-enhancement.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.041854854Z",
+  "valid_from": "2026-04-08T03:32:28.041854854Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-02-maxine-post-grading-enhancement.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 125,
+    "end_line": 126,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

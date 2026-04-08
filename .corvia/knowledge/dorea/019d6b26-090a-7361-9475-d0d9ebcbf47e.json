@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-d0d9ebcbf47e",
+  "content": "hen next keyframe is graded\n            frame_buffer.push(BufferedFrame {\n                index: frame.index,\n                width: frame.width,\n                height: frame.height,\n            });\n            frames_since_keyframe += 1;\n        }\n    }\n\n    // Flush any remaining buffered frames (end of video — use last keyframe, no interpolation)\n    if !frame_buffer.is_empty() {\n        flush_buffer_graded(\n            &mut frame_buffer, &last_keyframe_graded, &last_keyframe_graded,\n            &mut encoder, &mut frame_count, &info,\n        )?;\n    }\n```\n\n- [ ] **Step 4: Add `flush_buffer_graded` helper function**\n\nAdd after the `BufferedFrame` struct definition (from Step 2):\n\n```rust\n/// Write all buffered frames by interpolating between bracketing keyframe graded outputs.\n///\n/// If `graded_before` and `graded_after` point to the same data (scene cut or end of video),\n/// uses `graded_before` directly for all buffered frames (no interpolation).\nfn flush_buffer_graded(\n    buffer: &mut Vec<BufferedFrame>,\n    graded_before: &Option<Vec<u8>>,\n    graded_after: &Option<Vec<u8>>,\n    encoder: &mut FrameEncoder,\n    frame_count: &mut u64,\n    info: &ffmpeg::VideoInfo,\n) -> Result<()> {\n    let Some(before) = graded_before else {\n        // No previous keyframe — shouldn't happen (frame 0 is always a keyframe)\n        // but handle gracefully by dropping buffered frames\n        buffer.clear();\n        return Ok(());\n    };\n\n    let n_buffered = buffer.len();\n    let interval = (n_buffered + 1) as f32;\n\n    let same_keyframe = match graded_after {",
+  "source_version": "plans/2026-04-02-grading-pipeline-perf-v3.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042220400Z",
+  "valid_from": "2026-04-08T03:32:28.042220400Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-grading-pipeline-perf-v3.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 821,
+    "end_line": 857,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

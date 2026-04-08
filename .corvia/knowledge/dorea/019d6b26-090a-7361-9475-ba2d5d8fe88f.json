@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-ba2d5d8fe88f",
+  "content": "### Task 2.1: Add new REST endpoint for entry neighbors\n\n    State(state): State<Arc<AppState>>,\n) -> Result<Json<serde_json::Value>, (StatusCode, String)> {\n    let uuid = uuid::Uuid::parse_str(&entry_id)\n        .map_err(|_| (StatusCode::BAD_REQUEST, \"Invalid UUID\".into()))?;\n    let depth = params.depth.unwrap_or(1).min(3); // cap at 3 hops per spec\n\n    // Use traverse for multi-hop BFS (not just edges — the depth slider needs this)\n    // Use full path for EdgeDirection (same pattern as existing dashboard handlers at line 282)\n    let traversed = state.graph.traverse(&uuid, None, corvia_common::types::EdgeDirection::Both, depth).await\n        .map_err(|e| (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()))?;\n\n    // Also get direct edges to determine relation types and directions\n    let edges = state.graph.edges(&uuid, corvia_common::types::EdgeDirection::Both).await\n        .map_err(|e| (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()))?;\n\n    // Build a map from neighbor_id -> (relation, direction) from direct edges\n    let mut edge_info: std::collections::HashMap<uuid::Uuid, (String, String)> = std::collections::HashMap::new();\n    for edge in &edges {\n        if edge.from == uuid {\n            edge_info.insert(edge.to, (edge.relation.clone(), \"outgoing\".into()));\n        } else {\n            edge_info.insert(edge.from, (edge.relation.clone(), \"incoming\".into()));\n        }\n    }\n\n    let mut neighbors = Vec::new();\n    for entry in &traversed {\n        if entry.id == uuid { continue; } // skip self\n        let (relation, direction) = edge_info\n            .get(&entry.id)",
+  "source_version": "plans/2026-03-13-docs-workflow-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042008204Z",
+  "valid_from": "2026-04-08T03:32:28.042008204Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-13-docs-workflow-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 772,
+    "end_line": 801,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

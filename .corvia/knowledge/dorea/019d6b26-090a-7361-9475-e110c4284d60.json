@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-e110c4284d60",
+  "content": " MSE threshold for keyframe detection (lower = more keyframes)\n    #[arg(long, default_value = \"0.005\")]\n    pub depth_skip_threshold: f32,\n\n    /// Maximum frames between keyframes\n    #[arg(long, default_value = \"12\")]\n    pub depth_max_interval: usize,\n\n    /// Disable temporal interpolation — run full pipeline on every frame\n    #[arg(long)]\n    pub no_depth_interp: bool,\n\n    /// Path to RAUNE-Net weights .pth (for auto-calibration)\n    #[arg(long)]\n    pub raune_weights: Option<PathBuf>,\n\n    /// Path to RAUNE-Net checkout directory (contains models/raune_net.py).\n    #[arg(long)]\n    pub raune_models_dir: Option<PathBuf>,\n\n    /// Path to Depth Anything V2 model directory\n    #[arg(long)]\n    pub depth_model: Option<PathBuf>,\n\n    /// Python executable to use for the inference subprocess\n    #[arg(long, default_value = \"/opt/dorea-venv/bin/python\")]\n    pub python: PathBuf,\n\n    /// Force CPU-only mode (no CUDA)\n    #[arg(long)]\n    pub cpu_only: bool,\n\n    /// Enable verbose logging\n    #[arg(short, long)]\n    pub verbose: bool,\n\n    /// Disable Maxine AI enhancement preprocessing (Maxine is attempted by default)\n    #[arg(long)]\n    pub no_maxine: bool,\n\n    /// Disable Maxine artifact reduction before upscale [default: enabled]\n    #[arg(long)]\n    pub no_maxine_artifact_reduction: bool,\n\n    /// Maxine super-resolution upscale factor [default: 2]\n    #[arg(long, default_value = \"2\")]\n    pub maxine_upscale_factor: u32,\n}\n```\n\n- [ ] **Step 4: Update build_inference_config**\n\nReplace `build_inference_config`:\n\n```rust\nfn build_inference_config(args: &GradeArgs) -> InferenceConfig {\n    InferenceConfig {\n        python_exe: args.python.clone(),\n        raune_weights: args.raune_weights.clone(),\n        raune_models_dir: args.raune_models_dir.clone(),\n        skip_raune: false,\n        depth_model: args.depth_model.clone(),\n        skip_depth: false,\n        device: if args.cpu_only { Some(\"cpu\".to_string()) } else { None },\n        startup_timeout: Duration::from_secs(180),\n        maxine: !args.no_maxine,\n        maxine_upscale_factor: args.maxine_upscale_factor,",
+  "source_version": "plans/2026-04-04-maxine-pipeline-architecture.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042367933Z",
+  "valid_from": "2026-04-08T03:32:28.042367933Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-maxine-pipeline-architecture.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 891,
+    "end_line": 949,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

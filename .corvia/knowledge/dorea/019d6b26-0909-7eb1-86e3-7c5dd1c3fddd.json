@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-0909-7eb1-86e3-7c5dd1c3fddd",
+  "content": "## Decision\n## Context\n\n## Consequences\n\n- GitHub Actions release workflow at `repos/corvia/.github/workflows/release.yml`,\n  triggered by `v*` tags. Builds four binaries: `corvia-cli`, `corvia-inference`,\n  `corvia-adapter-basic`, `corvia-adapter-git`.\n- `post-create.sh` uses `curl` to download from the `latest` release. On failure, falls\n  back to `cargo install --path` from the local source checkout.\n- `corvia-workspace rebuild` command added to the workspace script for local\n  recompilation when developing against source changes in `repos/corvia/`.\n- Version strategy: always downloads `latest` release, no pinning. Appropriate for\n  pre-1.0 development.\n- Normal container open: ~5s binary download. No-release/network-failure: ~5min cargo\n  build. Both paths end with `corvia workspace init`.\n\n**Source:** `docs/decisions/2026-03-03-prebuilt-binaries-design.md`",
+  "source_version": "decisions/d71-prebuilt-binaries.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.041914766Z",
+  "valid_from": "2026-04-08T03:32:28.041914766Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/d71-prebuilt-binaries.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 21,
+    "end_line": 35,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

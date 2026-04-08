@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-ca15a365d217",
+  "content": "### Task 14: Batched Depth Inference\n\n        serde_json::json!({\n            \"id\": id,\n            \"image\": base64::engine::general_purpose::STANDARD.encode(&png),\n            \"proxy_size\": ps,\n        })\n    }).collect();\n\n    let request = serde_json::json!({\n        \"type\": \"depth_batch\",\n        \"frames\": batch_frames,\n    });\n\n    self.send_request(&request)?;\n    let response = self.read_response()?;\n\n    let results = response[\"results\"].as_array()\n        .ok_or(InferenceError::Protocol(\"missing results array\".into()))?;\n\n    let mut output = Vec::new();\n    for r in results {\n        let depth_b64 = r[\"depth_f32_b64\"].as_str()\n            .ok_or(InferenceError::Protocol(\"missing depth_f32_b64\".into()))?;\n        let depth_bytes = base64::engine::general_purpose::STANDARD.decode(depth_b64)\n            .map_err(|e| InferenceError::Protocol(format!(\"bad base64: {e}\")))?;\n        let depth: Vec<f32> = depth_bytes.chunks_exact(4)\n            .map(|c| f32::from_le_bytes([c[0], c[1], c[2], c[3]]))\n            .collect();\n        let w = r[\"width\"].as_u64().unwrap_or(0) as usize;\n        let h = r[\"height\"].as_u64().unwrap_or(0) as usize;\n        output.push((depth, w, h));\n    }\n\n    Ok(output)\n}\n```\n\n- [ ] **Step 3: Build**\n\nRun: `cd /workspaces/dorea-workspace/repos/dorea && cargo build -p dorea-video`\nExpected: Compiles.\n\n- [ ] **Step 4: Commit**\n\n```bash\ngit add python/dorea_inference/server.py crates/dorea-video/src/inference.rs\ngit commit -m \"feat(video): batched depth inference (Python server + Rust client)\"\n```\n\n---\n",
+  "source_version": "plans/2026-04-02-10bit-pipeline-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042157551Z",
+  "valid_from": "2026-04-08T03:32:28.042157551Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-10bit-pipeline-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1937,
+    "end_line": 1986,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

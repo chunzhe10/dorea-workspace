@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-0909-7eb1-86e3-7878e3509c1a",
+  "content": "### Motivation\n### VRAM budget\n\n### VRAM probing\n\n**Do NOT use raw `cuMemGetInfo` for the initial probe.** PyTorch's caching\nallocator holds freed blocks in its internal pool; the driver API reports these\nas allocated, undercounting available memory by potentially gigabytes.\n\nCorrect probe sequence:\n1. `torch.cuda.empty_cache()` — release PyTorch's cached blocks back to the driver\n2. `torch.cuda.mem_get_info()` — returns `(free, total)` with allocator awareness\n3. Apply 15% safety margin for fragmentation and dual-allocator overhead\n4. Divide by per-frame cost\n\nThis probe runs via PyO3 at the start of `grade_video`, before the batch loop.\n\n\n### Dual allocator fragmentation\n\ncudarc uses `cuMemAlloc` (driver API). PyTorch uses `cudaMalloc` (runtime API)\nwith its caching allocator on top. Both carve from the same device memory but\nneither knows about the other's pools. On a 6GB card, a cached PyTorch block\nsitting in the middle of the address space can prevent cudarc from allocating a\ncontiguous batch buffer even when total free memory suffices.\n\nMitigations:\n- Set `PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True` to reduce fragmentation\n- The 15% safety margin accounts for some fragmentation\n- The adaptive batcher handles the rest: if allocation fails, it halves and retries\n- Call `torch.cuda.empty_cache()` before cudarc allocations when transitioning\n  from inference to grading\n",
+  "source_version": "decisions/2026-04-03-gpu-space-ipc-adaptive-batching-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.041875719Z",
+  "valid_from": "2026-04-08T03:32:28.041875719Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-03-gpu-space-ipc-adaptive-batching-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 324,
+    "end_line": 352,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

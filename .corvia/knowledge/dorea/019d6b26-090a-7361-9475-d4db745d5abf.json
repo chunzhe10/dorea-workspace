@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-d4db745d5abf",
+  "content": "## Problem\n## Solution\n\n## Protocol\n\n**Request (Rust → Python):**\n```json\n{\n  \"type\": \"depth_batch\",\n  \"items\": [\n    {\"id\": \"kf_000042\", \"image_b64\": \"<base64 raw RGB>\", \"format\": \"raw_rgb\",\n     \"width\": 518, \"height\": 291, \"max_size\": 518},\n    ...\n  ]\n}\n```\n\n**Response (Python → Rust):**\n```json\n{\n  \"type\": \"depth_batch_result\",\n  \"results\": [\n    {\"id\": \"kf_000042\", \"depth_f32_b64\": \"<base64 raw f32 LE>\", \"width\": 518, \"height\": 291},\n    ...\n  ]\n}\n```\n\nResults are in the same order as items. Each depth map normalized independently to [0,1].\n\n\n## Task A — Python side\n\n**Files:** `python/dorea_inference/depth_anything.py`, `bridge.py`, `protocol.py`, `server.py`\n",
+  "source_version": "plans/2026-04-03-batch-depth-inference-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042256614Z",
+  "valid_from": "2026-04-08T03:32:28.042256614Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-batch-depth-inference-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 28,
+    "end_line": 58,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

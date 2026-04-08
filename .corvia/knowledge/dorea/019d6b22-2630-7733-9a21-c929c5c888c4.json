@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-c929c5c888c4",
+  "content": "[dev-dependencies]\ncriterion = { version = \"0.5\", features = [\"html_reports\"] }\n\n[[bench]]\nname = \"grade_bench\"\nharness = false\n\n[features]\n# Declared so Cargo recognises `#[cfg(feature = \"cuda\")]` as a valid condition.\n# Activation is driven by build.rs (nvcc detection), NOT by Cargo feature flags.\n# Do NOT pass --features cuda manually; build.rs handles it.\ncuda = []",
+  "source_version": "crates/dorea-gpu/Cargo.toml",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360563113Z",
+  "valid_from": "2026-04-08T03:28:13.360563113Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/Cargo.toml",
+    "language": "toml",
+    "chunk_type": "section",
+    "start_line": 24,
+    "end_line": 28,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

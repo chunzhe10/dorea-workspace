@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-bdd9a79ef82e",
+  "content": "::with_gil(|py| {\n            let bridge = self.bridge.bind(py);\n            bridge\n                .call_method0(\"unload_maxine\")\n                .map_err(|e| InferenceError::InitFailed(format!(\"unload_maxine: {e}\")))?;\n            Ok(())\n        })\n    }\npub fn load_raune(\n        &self,\n        weights: Option<&std::path::Path>,\n        models_dir: Option<&std::path::Path>,\n    ) -> Result<(), InferenceError> {\n        Python::with_gil(|py| {\n            let bridge = self.bridge.bind(py);\n            let py_weights = match weights.and_then(|p| p.to_str()) {\n                Some(p) => p.into_py(py),\n                None => py.None(),\n            };\n            let py_models_dir = match models_dir.and_then(|p| p.to_str()) {\n                Some(p) => p.into_py(py),\n                None => py.None(),\n            };\n            bridge\n                .call_method1(\"load_raune_model\", (py_weights, self.device.as_str(), py_models_dir))\n                .map_err(|e| InferenceError::InitFailed(format!(\"load_raune_model: {e}\")))?;\n            Ok(())\n        })\n    }",
+  "source_version": "crates/dorea-video/src/inference/pyo3_backend.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360417123Z",
+  "valid_from": "2026-04-08T03:28:13.360417123Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference/pyo3_backend.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 503,
+    "end_line": 523,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

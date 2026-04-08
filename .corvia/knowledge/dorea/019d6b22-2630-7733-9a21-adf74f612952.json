@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-adf74f612952",
+  "content": "me\n        };\n\n        #[cfg(feature = \"cuda\")]\n        let graded = adaptive_grader.grade_frame_blended(\n            &frame.pixels, &depth, frame.width, frame.height, blend_t,\n        ).map_err(|e| anyhow::anyhow!(\"Grading failed for frame {fi}: {e}\"))?;\n\n        #[cfg(not(feature = \"cuda\"))]\n        let graded = {\n            // CPU fallback: use current segment's calibration\n            use dorea_cal::Calibration;\n            use dorea_gpu::grade_frame;\n            let seg_idx = kf_to_segment.get(kf_cursor).copied().unwrap_or(0);\n            let cal = &segment_calibrations[seg_idx];\n            let calibration = Calibration::new(\n                cal.depth_luts.clone(), cal.hsl_corrections.clone(), store.len(),\n            );\n            grade_frame(&frame.pixels, &depth, frame.width, frame.height, &calibration, &params)\n                .map_err(|e| anyhow::anyhow!(\"Grading failed for frame {fi}: {e}\"))?\n        };\n\n        encoder.write_frame(&graded).context(\"encoder write failed\")?;\n        frame_count += 1;\n\n        if frame_count % 100 == 0 {\n            let pct = frame_count as f64 / info.frame_count.max(1) as f64 * 100.0;\n            log::info!(\"Progress: {frame_count}/{} frames ({:.1}%)\", info.frame_count, pct);\n        }\n    }\n\n    encoder.finish().context(\"ffmpeg encoder failed to finalize\")?;\n\n    if info.frame_count > 0 && frame_count < info.frame_count {\n        log::warn!(\n            \"Incomplete grading: {frame_count} frames processed, {} expected \\\n             (decoder may have stopped early)\",\n            info.frame_count\n        );\n    }\n    log::info!(\"Done. Graded {frame_count} frames → {}\", output.display());\n    Ok(())\n}",
+  "source_version": "crates/dorea-cli/src/grade.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360242704Z",
+  "valid_from": "2026-04-08T03:28:13.360242704Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/grade.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 661,
+    "end_line": 695,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

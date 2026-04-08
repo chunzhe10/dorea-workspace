@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-c260edc15c16",
+  "content": "iff = gpu_out.iter().zip(cpu_out.iter())\n            .map(|(&g, &c)| (g as i32 - c as i32).unsigned_abs())\n            .max().unwrap_or(0);\n        assert!(max_diff <= 2,\n            \"Edge-case pixels: GPU/CPU max diff {max_diff}/255 exceeds 2/255\");\n    }\n\n    #[test]\n    fn combined_lut_zone_count_variants() {\n        for n_zones in [1usize, 3, 8] {\n            let cal = make_calibration(n_zones);\n            let params = crate::GradeParams::default();\n            let grader = match CudaGrader::new(&cal, &params) {\n                Ok(g) => g,\n                Err(e) => { eprintln!(\"SKIP n_zones={n_zones}: {e}\"); continue; }\n            };\n            let (pixels, depth) = make_frame(8, 8);\n            let gpu_out = grader.grade_frame_cuda(&pixels, &depth, 8, 8)\n                .expect(&format!(\"grade_frame_cuda failed for n_zones={n_zones}\"));\n            assert_eq!(gpu_out.len(), 8 * 8 * 3,\n                \"n_zones={n_zones}: output length mismatch\");\n            let cpu_out = crate::cpu::grade_frame_cpu(&pixels, &depth, 8, 8, &cal, &params)\n                .expect(&format!(\"grade_frame_cpu failed for n_zones={n_zones}\"));\n            let max_diff = gpu_out.iter().zip(cpu_out.iter())\n                .map(|(&g, &c)| (g as i32 - c as i32).unsigned_abs())\n                .max().unwrap_or(0);\n            eprintln!(\"n_zones={n_zones}: GPU/CPU max diff {max_diff}/255\");\n            // Tolerance scales with zone count:\n            //   n_zones=1 → up to 11/255: single zone baked at depth=0.5; the\n            //     depth-dependent ambiance/contrast in grade_pixel.cuh produces high\n            //     error for pixels far from zone centre. Acceptable — real deployments\n            //     always use ≥5 zones.\n            //   n_zones=3 → up to 3/255: zone centres at 0.17/0.50/0.83, moderate.\n            //   n_zones=8 → ≤2/255: fine-grained zones, tight accuracy.\n            let tol = if n_zones == 1 { 12 } else if n_zones <= 3 { 4 } else { 2 };\n            assert!(max_diff <= tol,\n                \"n_zones={n_zones}: GPU/CPU max diff {max_diff}/255 exceeds {tol}/255\");\n        }\n    }\n}",
+  "source_version": "crates/dorea-gpu/src/cuda/mod.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360471495Z",
+  "valid_from": "2026-04-08T03:28:13.360471495Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cuda/mod.rs",
+    "language": "rs",
+    "chunk_type": "mod_item",
+    "start_line": 406,
+    "end_line": 439,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

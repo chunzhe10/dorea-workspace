@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-cc4bf8305ace",
+  "content": "ce_zero_contrast`, `finish_grade_roundtrip`).\n\n- [ ] **Step 7: Commit**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ngit add crates/dorea-gpu/src/cpu.rs\ngit commit -m \"refactor(dorea-gpu): extract finish_grade helper for CPU post-GPU pass\"\n```\n\n---\n\n### Task 2: Make `grade_frame_cuda` GPU-only (return `Vec<f32>`)\n\n**Files:**\n- Modify: `crates/dorea-gpu/src/cuda/mod.rs`\n\nRemove `depth_aware_ambiance`, warmth, blend, and `f32 → u8` conversion from `grade_frame_cuda`. Return `Vec<f32>` (the LUT+HSL output) instead of `Vec<u8>`.\n\n- [ ] **Step 1: Verify the compile error before editing**\n\nThe test in Task 1 Step 6 passes. Now we know `finish_grade` exists. Edit `cuda/mod.rs` next.\n\n- [ ] **Step 2: Rewrite `grade_frame_cuda` signature and body**\n\nReplace the full content of `grade_frame_cuda` in `crates/dorea-gpu/src/cuda/mod.rs` (lines 46–146):\n\n```rust\n/// Attempt GPU-accelerated grading: LUT apply + HSL correct only.\n///\n/// Returns the LUT+HSL-processed pixels as f32 [0,1], interleaved RGB.\n/// The caller is responsible for applying `cpu::finish_grade` (depth_aware_ambiance,\n/// warmth, blend, u8 conversion) after this function returns, so GPU resources\n/// are freed before the CPU-heavy ambiance pass begins.\n///\n/// Returns `Err` on any CUDA failure so the caller can fall back to full CPU.\n#[cfg(feature = \"cuda\")]\npub fn grade_frame_cuda(\n    pixels: &[u8],\n    depth: &[f32],\n    width: usize,\n    height: usize,\n    calibration: &Calibration,\n    _params: &GradeParams,\n) -> Result<Vec<f32>, GpuError> {\n    let n = width * height;\n\n    // --- u8 → f32 ---\n    let rgb_f32: Vec<f32> = pixels.iter().map(|&p| p as f32 / 255.0).collect();\n\n    // --- Flatten LUT data ---\n    let depth_luts = &calibration.depth_luts;\n    let n_zones = depth_luts.n_zones();\n    let lut_size = if n_zones > 0 { depth_luts.luts[0].size } else { 33 };\n\n    let luts_flat: Vec<f32> = depth_luts.luts.iter()\n        .flat_map(|lg| lg.data.iter().copied())\n        .collect();\n\n    // --- GPU: LUT apply ---\n    let mut rgb_after_lut = vec![0.0f32; n * 3];",
+  "source_version": "plans/2026-04-02-depth-aware-ambiance-cpu-move.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042181534Z",
+  "valid_from": "2026-04-08T03:32:28.042181534Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-depth-aware-ambiance-cpu-move.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 209,
+    "end_line": 257,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

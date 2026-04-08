@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-d3391ad6fdc8",
+  "content": " array.\"\"\"\n    if _maxine_model is None:\n        raise RuntimeError(\"Maxine model not loaded — call load_maxine_model() first\")\n    h, w = frame_rgb.shape[:2]\n    return _maxine_model.enhance(frame_rgb, width=w, height=h, artifact_reduce=artifact_reduce)\ndef run_depth_gpu(frame_rgb: np.ndarray, max_size: int = 518) -> TensorGuard:\n    \"\"\"Run depth inference, return TensorGuard holding the on-device result.\"\"\"\n    if _depth_model is None:\n        raise RuntimeError(\"Depth model not loaded — call load_depth_model() first\")\n    tensor = _depth_model.infer_gpu(frame_rgb, max_size=max_size)\n    return TensorGuard(tensor)",
+  "source_version": "python/dorea_inference/bridge.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360690433Z",
+  "valid_from": "2026-04-08T03:28:13.360690433Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/bridge.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 96,
+    "end_line": 101,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-bc0329962ca0",
+  "content": "ence: {:.0}%)\", i + 1, finding.check_type, finding.confidence * 100.0);\n                println!(\"      {}\", finding.rationale);\n            }\n        }\n        return Ok(());\n    }\n\n    // Fallback: run locally (same pattern as cmd_reason lines 1532-1536)\n    let (store, graph, _temporal) = connect_full_store(&config).await?;\n\n    // Load entries via knowledge_files::read_scope (NOT dummy embedding search)\n    let data_dir = std::path::Path::new(&config.storage.data_dir);\n    let entries = corvia_kernel::knowledge_files::read_scope(data_dir, scope_id)?;\n\n    let reasoner = Reasoner::new(&*store, &*graph)\n        .with_docs_rules(docs_rules);\n\n    let mut all_findings = Vec::new();\n    for check_type in &checks {\n        let findings = reasoner.run_check(&entries, scope_id, *check_type).await?;\n        all_findings.extend(findings);\n    }\n\n    // Display findings\n    if all_findings.is_empty() {\n        println!(\"No issues found.\");\n    } else {\n        for (i, finding) in all_findings.iter().enumerate() {\n            println!(\"  {}. [{}] {} (confidence: {:.0}%)\",\n                i + 1, finding.check_type.as_str(), finding.rationale, finding.confidence * 100.0);\n        }\n    }\n\n    // Auto-fix mode for MisplacedDoc (skeleton — print plan, don't execute without --yes)\n    if fix {\n        let misplaced: Vec<_> = all_findings.iter()\n            .filter(|f| f.check_type == CheckType::MisplacedDoc)\n            .collect();\n        if misplaced.is_empty() {\n            println!(\"No misplaced docs to fix.\");\n            return Ok(());\n        }\n        // Safety: require clean git tree\n        let status = std::process::Command::new(\"git\").args([\"status\", \"--porcelain\"]).output()?;\n        if !status.stdout.is_empty() {\n            return Err(anyhow::anyhow!(\"Working tree has uncommitted changes. Commit or stash first.\"));\n        }",
+  "source_version": "plans/2026-03-13-docs-workflow-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042026409Z",
+  "valid_from": "2026-04-08T03:32:28.042026409Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-13-docs-workflow-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1974,
+    "end_line": 2012,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-b74c3cf1f3a2",
+  "content": "pc(format!(\n            \"enhance buffer size mismatch: got {}, expected {}\",\n            raw.len(),\n            w * h * 3,\n        )));\n    }\n\n    let _ = expected_id; // id correlation not enforced in response (Python echoes it back)\n    Ok((raw, w, h))\n}\npub struct InferenceServer {\n    child: Child,\n    stdin: ChildStdin,\n    stdout_reader: BufReader<std::process::ChildStdout>,\n}",
+  "source_version": "crates/dorea-video/src/inference_subprocess.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360335618Z",
+  "valid_from": "2026-04-08T03:28:13.360335618Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference_subprocess.rs",
+    "language": "rs",
+    "chunk_type": "struct_item",
+    "start_line": 190,
+    "end_line": 194,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

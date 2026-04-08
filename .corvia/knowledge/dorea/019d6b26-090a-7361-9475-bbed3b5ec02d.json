@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-bbed3b5ec02d",
+  "content": "oner -- --nocapture`\nExpected: All tests pass\n\n- [ ] **Step 4: Commit**\n\n```bash\ncd /workspaces/corvia-workspace/repos/corvia\ngit add crates/corvia-kernel/src/reasoner.rs\ngit commit -m \"feat(reasoner): wire new docs checks into Reasoner dispatch\"\n```\n\n---\n\n### Task 3.6: Add `corvia docs check` CLI subcommand\n\n**Files:**\n- Modify: `repos/corvia/crates/corvia-cli/src/main.rs:244-265`\n\n- [ ] **Step 1: Add `Docs` variant to `WorkspaceCommands`**\n\n```rust\nenum WorkspaceCommands {\n    // ... existing variants ...\n    /// Documentation health checks\n    Docs {\n        #[command(subcommand)]\n        command: DocsCommands,\n    },\n}\n\n#[derive(Subcommand)]\nenum DocsCommands {\n    /// Run documentation placement and coverage checks\n    Check {\n        /// Run only a specific check type: misplaced, temporal, coverage\n        #[arg(long)]\n        check: Option<String>,\n        /// Auto-fix misplaced docs (requires --yes to execute)\n        #[arg(long)]\n        fix: bool,\n        /// Confirm auto-fix moves without prompting\n        #[arg(long)]\n        yes: bool,\n    },\n}\n```\n\n- [ ] **Step 2: Implement `cmd_docs_check` handler**\n\nFollow the same pattern as `cmd_reason` (which tries the server first, falls back to local):\n\nFollow the same pattern as `cmd_reason` (line 1496 of `main.rs`): try server first via `ServerClient::detect`, fall back to local with `connect_full_store` and `knowledge_files::read_scope`:",
+  "source_version": "plans/2026-03-13-docs-workflow-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042025221Z",
+  "valid_from": "2026-04-08T03:32:28.042025221Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-13-docs-workflow-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1896,
+    "end_line": 1934,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-0909-7eb1-86e3-77d7658d24f9",
+  "content": "# GPU-Space IPC & Adaptive Batching Design\n\n## Problem\n\nDorea v2's current architecture has two performance bottlenecks in the Rust-Python\nvideo grading pipeline:\n\n1. **IPC overhead**: The Rust `dorea-video` crate communicates with the Python\n   inference subprocess via JSON lines over stdin/stdout, with base64-encoded image\n   data. Each inference call encodes ~24MB of pixel data to base64 (33% size\n   overhead), serializes to JSON, pipes through stdin, and reverses the process on\n   return. This replaces what could be a zero-copy pointer pass.\n\n2. **Unnecessary host-device round-trips**: The CUDA grading pipeline in `dorea-gpu`\n   runs three sequential kernels (LUT apply, HSL correct, clarity), each with its own\n   host launcher that performs `cudaMalloc` x5, `cudaMemcpy` H-to-D x4, kernel launch,\n   `cudaMemcpy` D-to-H x1, `cudaFree` x5. Per frame at 1080p, this produces ~144MB\n   of PCIe transfers when only ~48MB is necessary (one upload, one download).\n\n   Additionally, when inference (Depth Anything) produces a depth map on the GPU\n   and the grading pipeline needs it, the current flow is:\n   GPU (PyTorch) -> CPU (Python) -> base64 -> pipe -> base64 decode (Rust) -> CPU\n   -> GPU (CUDA kernel). The depth map never needed to leave the GPU.\n\n\n## Solution\n\nTwo complementary changes:\n\n1. **PyO3 embedding** replaces subprocess IPC. Rust embeds the Python interpreter\n   via PyO3 and calls inference functions directly, passing NumPy arrays by\n   zero-copy pointer sharing (rust-numpy). Python exceptions (including\n   `torch.cuda.OutOfMemoryError`) become Rust `Result::Err`, not dead pipes.\n\n2. **cudarc migration** replaces the `extern \"C\"` FFI to CUDA host launchers.\n   The cudarc crate provides RAII device memory (`CudaSlice<T>`), PTX module\n   loading, and typed kernel launches. This enables:\n   - Keeping frame data on GPU across the three-kernel grading chain\n   - Sharing device pointers between PyTorch and Rust CUDA kernels (same primary\n     CUDA context within one process)\n   - Adaptive batch sizing with OOM recovery\n",
+  "source_version": "decisions/2026-04-03-gpu-space-ipc-adaptive-batching-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.041869745Z",
+  "valid_from": "2026-04-08T03:32:28.041869745Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-03-gpu-space-ipc-adaptive-batching-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 7,
+    "end_line": 45,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

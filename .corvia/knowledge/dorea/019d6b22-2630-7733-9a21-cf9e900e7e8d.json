@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-cf9e900e7e8d",
+  "content": "d: str\n    image_b64: str   # base64-encoded PNG bytes\n    max_size: int = 518\n    type: str = \"depth\"\n\n    def to_dict(self) -> dict:\n        return {\"type\": self.type, \"id\": self.id,\n                \"image_b64\": self.image_b64, \"max_size\": self.max_size}\ndef to_dict(self) -> dict:\n        return {\"type\": self.type, \"id\": self.id,\n                \"image_b64\": self.image_b64, \"max_size\": self.max_size}",
+  "source_version": "python/dorea_inference/protocol.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360648372Z",
+  "valid_from": "2026-04-08T03:28:13.360648372Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/protocol.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 49,
+    "end_line": 51,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

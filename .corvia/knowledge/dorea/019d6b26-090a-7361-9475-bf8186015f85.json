@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-bf8186015f85",
+  "content": "### Task 1: Mark corvia-workspace as GitHub Template\n### Task 2: Create dorea-workspace from template\n\n# Remove any .gitkeep or placeholder in repos/\nls -la repos/\n```\n\n- [ ] **Step 7: Remove corvia-specific files**\n\n```bash\ncd /home/chunzhe/corvia-project/dorea-workspace\nrm -f TASK.md\nrm -rf .github/workflows/release.yml\n```\n\nTASK.md is a corvia parallel agent task. release.yml builds corvia-specific artifacts (VS Code extension + dashboard dist) that don't apply to dorea.\n\n- [ ] **Step 8: Commit cleanup**\n\n```bash\ncd /home/chunzhe/corvia-project/dorea-workspace\ngit add TASK.md repos/ .github/\ngit commit -m \"chore: clean up corvia-specific files from template\n\nRemove repos/corvia references, TASK.md (corvia parallel agent task),\nand release.yml (corvia-specific CI artifacts).\nPreparing workspace for dorea pipeline project.\"\n```\n\n---\n",
+  "source_version": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042058407Z",
+  "valid_from": "2026-04-08T03:32:28.042058407Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 135,
+    "end_line": 162,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-0909-7eb1-86e3-79ec2f8ff450",
+  "content": "## Data Flow Correctness\n## VRAM Budget\n\n## Temp File\n\n- **Format:** ffv1 in mkv — lossless, ~2–4 GB for 5-min 1080p\n- **Location:** `$TMPDIR/dorea_maxine_<pid>.mkv`\n- **Lifecycle:** Created at Pass 1 start, deleted after Pass 2 (or on error via RAII Drop guard)\n- **Size note:** Log estimated size before Pass 1 so users can abort if disk is tight\n\n---\n\n\n## Performance\n\n- **Pass 1:** 9,000 Maxine calls at 1080p (~20–40 ms each) = 3–6 min for 5-min clip\n- **Calibration:** unchanged from current pipeline\n- **Pass 2:** decode temp + CUDA grade. No inference. ~same speed as current Pass 2.\n- **Total overhead vs no Maxine:** ~3–6 min for 5-min 1080p clip\n\n---\n",
+  "source_version": "decisions/2026-04-04-maxine-preprocessor-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.041892983Z",
+  "valid_from": "2026-04-08T03:32:28.041892983Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-04-maxine-preprocessor-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 207,
+    "end_line": 224,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

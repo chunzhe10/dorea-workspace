@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-0909-7eb1-86e3-76d3bae69088",
+  "content": "### Licensing & Distribution\n### Maxine SDK Requirements\n\n## Files Changed\n\n| File | Change |\n|------|--------|\n| `crates/dorea-cli/src/grade.rs` | Sequential `enhance()` call after `grade_frame()`, `--maxine`/`--no-maxine` CLI args |\n| `crates/dorea-video/src/inference.rs` | New `enhance()` method, `--maxine` CLI flags for subprocess, response dimension validation |\n| `python/dorea_inference/server.py` | Handle `enhance` message type, dispatch to MaxineEnhancer |\n| `python/dorea_inference/maxine_enhancer.py` | New file: MaxineEnhancer class with CUDA stream sharing, CI mock mode |\n| `python/dorea_inference/protocol.py` | Add enhance request/response types |\n| `config.yaml` | New `maxine:` section |\n| `docs/guides/maxine-setup.md` | New file: Maxine SDK installation guide |\n\n\n## Risks\n\n1. **VRAM estimate is approximate** — Maxine does not publish VRAM figures. Headroom is tight\n   (~0.3-1.1GB on 6GB). First hardware test must validate via `nvidia-smi`. Escape hatches\n   documented above.\n2. **Maxine SDK stability** — proprietary SDK may change APIs between versions. Version logged at\n   startup for debugging. The lazy-import + passthrough pattern limits blast radius.\n3. **CUDA context sharing** — if `NvVFX_SetCudaStream` is not called correctly, duplicate contexts\n   consume ~500MB extra VRAM, potentially causing OOM. Must be validated on first hardware test.\n4. **IPC throughput** — raw RGB at 1080p is ~5.9MB per frame, ~7.9MB base64-encoded. At 50-100ms\n   Maxine inference, IPC overhead (~2-3ms raw encode/decode) is negligible. Would require shared\n   memory or CUDA IPC at 4K.\n5. **8-bit precision loss** — documented in Known Limitations. Users must choose between AI\n   enhancement quality and 10-bit precision.",
+  "source_version": "decisions/2026-04-02-maxine-post-grading-enhancement.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.041861287Z",
+  "valid_from": "2026-04-08T03:32:28.041861287Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-02-maxine-post-grading-enhancement.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 279,
+    "end_line": 304,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

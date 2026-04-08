@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-d8a98aa96a5d",
+  "content": "## Prerequisites\n## Installation\n\n## Usage\n\nEnable Maxine preprocessing when grading:\n\n```bash\ndorea grade --input footage.mp4 --maxine\n```\n\nCLI options:\n\n| Flag | Default | Description |\n|------|---------|-------------|\n| `--maxine` | off | Enable Maxine preprocessing |\n| `--maxine-upscale-factor N` | 2 | Super-resolution factor (2, 3, 4) |\n| `--no-maxine-artifact-reduction` | — | Skip artifact reduction step |\n\n\n## What it does\n\nMaxine runs **before** RAUNE and depth inference, on every frame at full resolution:\n\n1. Artifact reduction at original resolution (if ≤1080p input)\n2. 2× AI super-resolution (e.g. 1080p → 4K intermediate)\n3. Area downsample back to original resolution\n\nThe Maxine-enhanced frames are stored in a **temporary lossless video file** (~2–4 GB for\n5-min 1080p) and reused in the grading pass. Maxine runs once per frame, not twice.\n\nAll downstream algorithms (RAUNE, Depth Anything, LUT calibration, GPU grading) operate\non Maxine-enhanced frames for consistent quality.\n",
+  "source_version": "docs/guides/maxine-setup.md",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360754368Z",
+  "valid_from": "2026-04-08T03:28:13.360754368Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "docs/guides/maxine-setup.md",
+    "language": "markdown",
+    "chunk_type": "heading_section",
+    "start_line": 31,
+    "end_line": 60,
+    "content_role": "design",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

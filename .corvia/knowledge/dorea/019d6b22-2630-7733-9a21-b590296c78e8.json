@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-b590296c78e8",
+  "content": "        Ok(_) => {}\n        }\n\n        let frame = Frame {\n            index: self.frame_index,\n            pixels: buf,\n            width: self.width,\n            height: self.height,\n        };\n        self.frame_index += 1;\n        Some(Ok(frame))\n    }\nfn read_exact(reader: &mut dyn Read, buf: &mut [u8]) -> io::Result<usize> {\n    let mut pos = 0;\n    while pos < buf.len() {\n        match reader.read(&mut buf[pos..]) {\n            Ok(0) if pos == 0 => return Ok(0), // clean EOF before frame starts\n            Ok(0) => {\n                return Err(io::Error::new(\n                    io::ErrorKind::UnexpectedEof,\n                    format!(\"partial frame: got {pos}/{} bytes\", buf.len()),\n                ));\n            }\n            Ok(n) => pos += n,\n            Err(e) if e.kind() == io::ErrorKind::Interrupted => {}\n            Err(e) => return Err(e),\n        }\n    }\n    Ok(pos)\n}",
+  "source_version": "crates/dorea-video/src/ffmpeg.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360314938Z",
+  "valid_from": "2026-04-08T03:28:13.360314938Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/ffmpeg.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 225,
+    "end_line": 242,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

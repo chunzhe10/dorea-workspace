@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-c04a4a2dd545",
+  "content": "pub fn report_oom(&mut self) -> bool {\n        let was_min = self.batch_size <= self.min_batch;\n        self.successes = 0;\n        self.batch_size = (self.batch_size / 2).max(self.min_batch);\n        was_min\n    }\nmod tests {\n    use super::*;\n\n    #[test]\n    fn new_computes_max_batch_from_vram() {\n        let b = AdaptiveBatcher::new(1_000_000_000, 56_000_000, 0.15);\n        assert_eq!(b.batch_size(), 15);\n        assert_eq!(b.max_batch, 15);\n    }\n\n    #[test]\n    fn new_with_zero_per_frame_gives_batch_1() {\n        let b = AdaptiveBatcher::new(1_000_000_000, 0, 0.15);\n        assert_eq!(b.batch_size(), 1);\n    }\n\n    #[test]\n    fn new_with_tiny_vram_gives_batch_1() {\n        let b = AdaptiveBatcher::new(10_000_000, 56_000_000, 0.15);\n        assert_eq!(b.batch_size(), 1);\n    }\n\n    #[test]\n    fn report_oom_halves_batch_size() {\n        let mut b = AdaptiveBatcher::new(1_000_000_000, 56_000_000, 0.15);\n        let initial = b.batch_size();\n        assert!(!b.report_oom());\n        assert_eq!(b.batch_size(), initial / 2);\n    }\n\n    #[test]\n    fn report_oom_at_minimum_returns_true() {\n        let mut b = AdaptiveBatcher::fixed(1);\n        assert!(b.report_oom());\n        assert_eq!(b.batch_size(), 1);\n    }\n\n    #[test]\n    fn report_oom_resets_success_counter() {\n        let mut b = AdaptiveBatcher::new(1_000_000_000, 56_000_000, 0.15);\n        for _ in 0..9 {",
+  "source_version": "crates/dorea-gpu/src/batcher.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360442449Z",
+  "valid_from": "2026-04-08T03:28:13.360442449Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/batcher.rs",
+    "language": "rs",
+    "chunk_type": "mod_item",
+    "start_line": 73,
+    "end_line": 113,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

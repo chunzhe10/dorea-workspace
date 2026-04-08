@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-0909-7eb1-86e3-78372caabcfe",
+  "content": "## Threading Model\n## Data Flow\n\n### Calibration pipeline (keyframes only, runs once per dive)\n\n```\nffmpeg decode keyframe -> CPU Vec<u8> RGB\n  |\n  +-> PyO3: run_depth_gpu(model, numpy_array, max_size)\n  |     Python: numpy -> tensor -> GPU inference -> tensor stays on device\n  |     Returns: TensorGuard with device pointer + dims\n  |     Rust: wrap as BorrowedDeviceSlice<'py, f32>\n  |     Then: cuMemcpy D-to-H -> Vec<f32> (LUT building needs host data)\n  |\n  +-> PyO3: run_raune_gpu(model, numpy_array, max_size)\n  |     Same pattern -> BorrowedDeviceSlice<'py, u8>\n  |     Then: cuMemcpy D-to-H -> Vec<u8> (LUT building needs host data)\n  |\n  +-> LUT building on CPU (dorea-lut, dorea-hsl) — unchanged\n```\n\nCalibration benefits from eliminating base64 encoding but not from GPU-space\nsharing, since LUT building algorithms require host memory.\n\n\n### Grading pipeline (per frame, hot path)\n\n```\nffmpeg decode frame -> CPU Vec<u8> RGB\n  |\n  v  upload once\nCudaSlice<f32> d_rgb       <- u8-to-f32 + htod copy (cudarc)\nCudaSlice<f32> d_depth     <- from PyO3 inference (BorrowedDeviceSlice, zero-copy)\n                               OR from precomputed host depth (htod copy)\n  |\n  v  stays on GPU (no host round-trips)\n  |\n  +- lut_apply_kernel(d_rgb, d_depth, d_luts, ...) -> d_after_lut\n  |\n  +- hsl_correct_kernel(d_after_lut, ...) -> d_after_hsl\n  |\n  +- clarity_kernel(d_after_hsl, ...) -> d_after_clarity\n  |\n  v  download once\nCudaSlice.dtoh_sync_copy() -> Vec<f32>\n  |\n  v\ncpu::finish_grade() (ambiance, warmth, blend, u8 conversion)\n  |\n  v\nffmpeg encode frame <- CPU Vec<u8> RGB\n```\n\n**Per frame at 1080p (1920x1080):**\n\n| Metric | Before (extern C) | After (cudarc) |\n|---|---|---|\n| cudaMalloc calls | 15 | 3 (+ cached calibration) |\n| cudaMemcpy H-to-D | 12 | 1-2 |\n| cudaMemcpy D-to-H | 3 | 1 |\n| cudaFree calls | 15 | 0 (RAII Drop) |\n| PCIe transfer | ~144MB | ~48MB (or ~24MB if depth from GPU) |\n",
+  "source_version": "decisions/2026-04-03-gpu-space-ipc-adaptive-batching-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.041873355Z",
+  "valid_from": "2026-04-08T03:32:28.041873355Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-03-gpu-space-ipc-adaptive-batching-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 202,
+    "end_line": 260,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

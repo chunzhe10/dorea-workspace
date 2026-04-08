@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-e7c139c17c6d",
+  "content": ";\n        for (batch_idx, chunk_kfs) in keyframes.chunks(fused_batch_size).enumerate() {\n            log::info!(\n                \"{}: RAUNE+depth batch {}/{n_batches} ({} frames)\",\n                self.name(), batch_idx + 1, chunk_kfs.len(),\n            );\n\n            // process() builds the RauneDepthBatchItem list inline — one batch at a time.\n            let results = inference_node.process(chunk_kfs.to_vec())?;\n\n            for (kf, (_, enhanced, enh_w, enh_h, depth, dw, dh)) in\n                chunk_kfs.iter().zip(results.into_iter())\n            {\n                // EnhancedDownscaleNode: downscale Maxine-upscaled enhanced to proxy.\n                let enhanced_proxy = self.downscale_node.process(\n                    EnhancedFrame { pixels: enhanced, width: enh_w, height: enh_h }\n                )?.pixels;\n\n                // Depth for store: upscale to proxy dims if needed.\n                let depth_for_store = if dw == proxy_w && dh == proxy_h {\n                    depth.clone()\n                } else {\n                    InferenceServer::upscale_depth(&depth, dw, dh, proxy_w, proxy_h)\n                };\n                store.push(&kf.proxy_pixels, &enhanced_proxy, &depth_for_store, proxy_w, proxy_h)\n                    .context(\"failed to push to calibration store\")?;\n\n                // keyframe_depths keeps native (Maxine-resolution) depth for Pass 2.",
+  "source_version": "plans/2026-04-05-pipeline-dag-refactor.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042427552Z",
+  "valid_from": "2026-04-08T03:32:28.042427552Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-05-pipeline-dag-refactor.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 792,
+    "end_line": 813,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

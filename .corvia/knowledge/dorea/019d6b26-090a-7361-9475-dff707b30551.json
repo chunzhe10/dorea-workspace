@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-dff707b30551",
+  "content": "ed: `3 passed`\n\n- [ ] **Step 5: Commit**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ngit add python/dorea_inference/bridge.py python/tests/test_bridge_maxine.py\ngit commit -m \"feat(bridge): add Maxine model load/unload/run to PyO3 bridge\"\n```\n\n---\n\n### Task 2: Python server — lifecycle IPC handlers + graceful Maxine skip\n\n**Files:**\n- Modify: `python/dorea_inference/server.py`\n- Create: `python/tests/test_lifecycle_server.py`\n\nAdd three new IPC request types (`unload_maxine`, `load_raune`, `load_depth`) and change the Maxine startup failure from a fatal crash to a logged warning.\n\n- [ ] **Step 1: Write the failing tests**\n\nCreate `python/tests/test_lifecycle_server.py`:\n\n```python\n\"\"\"Tests for dynamic model lifecycle IPC commands.\"\"\"\nimport base64\nimport io\nimport json\nimport os\nimport sys\n\nimport numpy as np\nimport pytest\n\nos.environ[\"DOREA_MAXINE_MOCK\"] = \"1\"\n\n\ndef _run_server(requests: list, extra_argv: list = None) -> list:\n    from dorea_inference.server import main\n    lines = [json.dumps(r) for r in requests] + ['{\"type\": \"shutdown\"}']\n    stdin_data = \"\\n\".join(lines) + \"\\n\"\n    captured = io.StringIO()\n    old_stdin, old_stdout = sys.stdin, sys.stdout\n    sys.stdin = io.StringIO(stdin_data)\n    sys.stdout = captured\n    argv = [\"--no-raune\", \"--no-depth\"] + (extra_argv or [])\n    try:\n        main(argv=argv)\n    except SystemExit:\n        pass\n    finally:\n        sys.stdin, sys.stdout = old_stdin, old_stdout\n    output = captured.getvalue().strip()\n    return [json.loads(line) for line in output.split(\"\\n\") if line.strip()]\n\n\ndef test_unload_maxine_returns_ok():\n    responses = _run_server([{\"type\": \"unload_maxine\"}], extra_argv=[\"--maxine\"])\n    assert responses[0][\"type\"] == \"ok\"\n\n\ndef test_load_raune_returns_ok():\n    responses = _run_server([{\"type\": \"load_raune\", \"weights\": None, \"models_dir\": None}])\n    assert responses[0][\"type\"] == \"ok\"\n\n\ndef test_load_depth_returns_ok():\n    responses = _run_server([{\"type\": \"load_depth\", \"model_path\": None}])\n    assert responses[0][\"type\"] == \"ok\"\n\n\ndef test_maxine_graceful_skip_when_unavailable():\n    \"\"\"Server should start successfully even if Maxine fails to load.\"\"\"\n    import importlib",
+  "source_version": "plans/2026-04-04-maxine-pipeline-architecture.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042357972Z",
+  "valid_from": "2026-04-08T03:32:28.042357972Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-maxine-pipeline-architecture.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 149,
+    "end_line": 211,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-dab941d7b98f",
+  "content": "### Task 2: Remove clarity from the pipeline\n\nIn `crates/dorea-gpu/build.rs`, replace:\n\n```rust\n    println!(\"cargo:rerun-if-changed=src/cuda/kernels/lut_apply.cu\");\n    println!(\"cargo:rerun-if-changed=src/cuda/kernels/hsl_correct.cu\");\n    println!(\"cargo:rerun-if-changed=src/cuda/kernels/clarity.cu\");\n```\n\nwith:\n\n```rust\n    println!(\"cargo:rerun-if-changed=src/cuda/kernels/lut_apply.cu\");\n    println!(\"cargo:rerun-if-changed=src/cuda/kernels/hsl_correct.cu\");\n```\n\nAnd replace:\n\n```rust\n    let kernel_names = [\"lut_apply\", \"hsl_correct\", \"clarity\"];\n```\n\nwith:\n\n```rust\n    let kernel_names = [\"lut_apply\", \"hsl_correct\"];\n```\n\n- [ ] **Step 5: Update cuda/mod.rs — remove clarity stage**\n\nAt the top of `crates/dorea-gpu/src/cuda/mod.rs`, remove:\n\n```rust\n#[cfg(feature = \"cuda\")]\nconst CLARITY_PTX: &str = include_str!(concat!(env!(\"OUT_DIR\"), \"/clarity.ptx\"));\n\n/// Blur radius for the clarity box-blur passes (matches CPU path).\n#[cfg(feature = \"cuda\")]\nconst BLUR_RADIUS: i32 = 30;\n\n/// Maximum proxy long-edge for clarity downsampling (matches CPU path: 518).\n#[cfg(feature = \"cuda\")]\nconst PROXY_MAX_SIZE: usize = 518;\n```\n\nIn `CudaGrader::new()`, remove the clarity PTX load block:\n\n```rust\n        device\n            .load_ptx(\n                Ptx::from_src(CLARITY_PTX),\n                \"clarity\",\n                &[\n                    \"clarity_extract_L_proxy\",\n                    \"clarity_box_blur_rows\",\n                    \"clarity_box_blur_cols\",\n                    \"clarity_apply_kernel\",\n                ],\n            )",
+  "source_version": "docs/plans/2026-04-03-combined-lut-cuda-texture-plan.md",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360783765Z",
+  "valid_from": "2026-04-08T03:28:13.360783765Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "docs/plans/2026-04-03-combined-lut-cuda-texture-plan.md",
+    "language": "markdown",
+    "chunk_type": "heading_section",
+    "start_line": 178,
+    "end_line": 235,
+    "content_role": "plan",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

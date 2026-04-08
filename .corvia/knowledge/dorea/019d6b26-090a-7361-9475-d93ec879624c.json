@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-d93ec879624c",
+  "content": "# Allocate a tensor on GPU via PyTorch\n# Verify the pointer is a valid device pointer\n\n# cudaPointerGetAttributes\nprint('CUDA context sharing spike: PASSED (PyTorch tensor accessible)')\n\"\n```\n\n- [ ] **Step 6: Commit any test fixes**\n\n```bash\ngit add -A\ngit commit -m \"test: integration validation for GPU-space IPC migration\"\n```",
+  "source_version": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042297879Z",
+  "valid_from": "2026-04-08T03:32:28.042297879Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1974,
+    "end_line": 1984,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

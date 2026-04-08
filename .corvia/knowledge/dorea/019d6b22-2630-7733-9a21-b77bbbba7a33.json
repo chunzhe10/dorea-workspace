@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-b77bbbba7a33",
+  "content": "!(\"read from server: {e}\")));\n            }\n            Err(_) => {\n                log::warn!(\"Inference server startup timed out after {timeout:?}\");\n                let _ = child.kill();\n                return Err(InferenceError::Timeout);\n            }\n        };\n\n        let trimmed = pong_line.trim_end_matches('\\n').trim_end_matches('\\r');\n        if trimmed.is_empty() {\n            let _ = child.kill();\n            return Err(InferenceError::Ipc(\n                \"server sent empty response during startup (may have crashed)\".to_string(),\n            ));\n        }\n        let v: serde_json::Value = serde_json::from_str(trimmed)\n            .map_err(|e| InferenceError::Ipc(format!(\"ping response parse error: {e}\")))?;\n        if v[\"type\"].as_str() != Some(\"pong\") {\n            let _ = child.kill();\n            return Err(InferenceError::Ipc(format!(\"expected pong, got: {trimmed}\")));\n        }\n\n        Ok(Self { child, stdin, stdout_reader })\n    }\n\n    /// Send a ping and verify the server responds.\n    pub fn ping(&mut self) -> Result<(), InferenceError> {\n        self.send_line(r#\"{\"type\":\"ping\"}\"#)?;\n        let resp = self.recv_line()?;\n        let v: serde_json::Value = serde_json::from_str(&resp)\n            .map_err(|e| InferenceError::Ipc(format!(\"ping response parse error: {e}\")))?;\n        if v[\"type\"].as_str() == Some(\"pong\") {\n            Ok(())\n        } else {\n            Err(InferenceError::Ipc(format!(\"expected pong, got: {resp}\")))\n        }\n    }\n\n    /// Run RAUNE-Net on an RGB image.",
+  "source_version": "crates/dorea-video/src/inference_subprocess.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360338246Z",
+  "valid_from": "2026-04-08T03:28:13.360338246Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference_subprocess.rs",
+    "language": "rs",
+    "chunk_type": "impl_item",
+    "start_line": 262,
+    "end_line": 294,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

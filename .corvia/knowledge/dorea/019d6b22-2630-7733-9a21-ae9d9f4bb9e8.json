@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-ae9d9f4bb9e8",
+  "content": "fn read_depth(&self, i: usize) -> Vec<f32> {\n        self.depth_bytes(i).chunks_exact(4)\n            .map(|b| f32::from_le_bytes([b[0], b[1], b[2], b[3]]))\n            .collect()\n    }\nfn pixtar_slices(&self, i: usize) -> (&[u8], &[u8]) {\n        let mmap = self.pixtar_mmap.as_ref().expect(\"call seal() before reading\");\n        let off = self.pixtar_offsets[i];\n        let n = self.widths[i] * self.heights[i] * 3;\n        (&mmap[off..off + n], &mmap[off + n..off + n * 2])\n    }",
+  "source_version": "crates/dorea-cli/src/grade.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360248925Z",
+  "valid_from": "2026-04-08T03:28:13.360248925Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/grade.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 805,
+    "end_line": 810,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

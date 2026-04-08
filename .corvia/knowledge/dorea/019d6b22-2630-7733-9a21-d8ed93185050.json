@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-d8ed93185050",
+  "content": "# PCIe Sync Barrier Reduction Implementation Plan\n\n## Context: The 9 barriers and their cost at 1080p\n\n| # | Transfer | Size | Fires every frame? |\n|---|----------|------|--------------------|\n| 1 | `htod` → `d_rgb_in` | 24 MB | Yes |\n| 2 | `htod` → `d_depth` | 8 MB | Yes |\n| 3 | `htod` → `d_luts` | 2.2 MB | Yes — **unnecessary** |\n| 4 | `htod` → `d_boundaries` | 24 B | Yes — **unnecessary** |\n| 5 | `htod` → `d_h_offsets` | 24 B | Yes — **unnecessary** |\n| 6 | `htod` → `d_s_ratios` | 24 B | Yes — **unnecessary** |\n| 7 | `htod` → `d_v_offsets` | 24 B | Yes — **unnecessary** |\n| 8 | `htod` → `d_weights` | 24 B | Yes — **unnecessary** |\n| 9 | `dtoh` ← `d_rgb_out` | 24 MB | Yes |\n\nBarriers 3–8 fire every frame even though calibration never changes within a session. Task 1 eliminates them in steady state. Task 2 packs 4 of the tiny ones into 1, reducing the first-frame cost. Task 3 eliminates a 24 MB per-frame heap allocation for the u8→f32 conversion.\n\nAfter Tasks 1–3, steady-state barriers: **2 htod (rgb + depth) + 1 dtoh** = 3 total.\n\n---\n\n\n## File structure\n\n| File | Change |\n|------|--------|\n| `crates/dorea-gpu/src/cuda/mod.rs` | All Rust changes (Tasks 1–3) |\n| `crates/dorea-gpu/src/cuda/kernels/hsl_correct.cu` | Kernel signature: 4 params → 1 packed (Task 2) |\n\nNo new files. No changes to `lib.rs`, `cpu.rs`, `device.rs`, `batcher.rs`, `build.rs`.\n\n---\n",
+  "source_version": "docs/plans/2026-04-03-pcie-sync-barrier-reduction.md",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360757738Z",
+  "valid_from": "2026-04-08T03:28:13.360757738Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "docs/plans/2026-04-03-pcie-sync-barrier-reduction.md",
+    "language": "markdown",
+    "chunk_type": "heading_section",
+    "start_line": 13,
+    "end_line": 43,
+    "content_role": "plan",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

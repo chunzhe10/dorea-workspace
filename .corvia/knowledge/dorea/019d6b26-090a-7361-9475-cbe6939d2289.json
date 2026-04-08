@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-cbe6939d2289",
+  "content": "# depth_aware_ambiance CPU-Only Move Implementation Plan\n\n> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.\n\n**Goal:** Remove `depth_aware_ambiance` (+ warmth + blend) from `grade_frame_cuda` so it runs on CPU *after* GPU resources are released, eliminating the GPU-hold bottleneck.\n\n**Architecture:** Extract a `finish_grade` helper in `cpu.rs` that handles ambiance + warmth + blend + u8 conversion. `grade_frame_cuda` becomes GPU-only (LUT+HSL), returning an `f32` intermediate. `lib.rs` calls `finish_grade` on CPU after CUDA returns, and `grade_frame_cpu` reuses the same helper.\n\n**Tech Stack:** Rust, `dorea-gpu` crate (`cpu.rs`, `cuda/mod.rs`, `lib.rs`)\n\n---\n",
+  "source_version": "plans/2026-04-02-depth-aware-ambiance-cpu-move.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042178066Z",
+  "valid_from": "2026-04-08T03:32:28.042178066Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-depth-aware-ambiance-cpu-move.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1,
+    "end_line": 12,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

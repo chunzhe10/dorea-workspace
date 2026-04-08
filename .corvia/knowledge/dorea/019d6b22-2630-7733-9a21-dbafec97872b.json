@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-dbafec97872b",
+  "content": "_ab *= warmth_factor;\n        b_ab *= warmth_factor;\n    }\n\n    // LAB → RGB\n    float l_out  = fminf(fmaxf(l_norm * 100.0f, 0.0f), 100.0f);\n    float a_out  = fminf(fmaxf(a_ab,  -128.0f), 127.0f);\n    float b_out2 = fminf(fmaxf(b_ab,  -128.0f), 127.0f);\n    float r3, g3, b3;\n    lab_to_srgb(l_out, a_out, b_out2, &r3, &g3, &b3);\n\n    // Final highlight knee — inlined to avoid `auto` lambda in __device__ fn\n    // (CUDA device lambdas require --expt-extended-lambda; inline avoids the flag)\n    {\n        const float knee = 0.92f;\n        const float room = 1.0f - knee;\n        r3 = fminf(fmaxf(r3 > knee ? knee + room * tanhf((r3 - knee) / room) : r3, 0.0f), 1.0f);\n        g3 = fminf(fmaxf(g3 > knee ? knee + room * tanhf((g3 - knee) / room) : g3, 0.0f), 1.0f);\n        b3 = fminf(fmaxf(b3 > knee ? knee + room * tanhf((b3 - knee) / room) : b3, 0.0f), 1.0f);\n    }\n\n    // ------------------------------------------------------------------\n    // 4. Strength blend with original input\n    // ------------------------------------------------------------------\n    if (strength < 1.0f - 1e-4f) {\n        r3 = r * (1.0f - strength) + r3 * strength;\n        g3 = g * (1.0f - strength) + g3 * strength;\n        b3 = b * (1.0f - strength) + b3 * strength;\n    }\n\n    return {r3, g3, b3};\n}\n```\n\n- [ ] **Step 2: Verify the file is syntactically plausible**\n\n```bash\ncd repos/dorea && nvcc --ptx -arch=sm_86 --allow-unsupported-compiler \\\n    --compiler-bindir /usr/bin/gcc-12 \\\n    /dev/null -include crates/dorea-gpu/src/cuda/kernels/grade_pixel.cuh \\\n    -o /dev/null 2>&1 | head -20\n```\n\nExpected: completes (possibly with warnings). Alternatively, this will be validated when build_combined_lut.cu is compiled in Task 5.\n\n- [ ] **Step 3: Commit**\n\n```bash\ncd repos/dorea && git add crates/dorea-gpu/src/cuda/kernels/grade_pixel.cuh\ngit commit -m \"feat: add grade_pixel.cuh — CUDA device fn for full grading pipeline (Task 4)\"\n```\n\n---\n",
+  "source_version": "docs/plans/2026-04-03-combined-lut-cuda-texture-plan.md",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360797333Z",
+  "valid_from": "2026-04-08T03:28:13.360797333Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "docs/plans/2026-04-03-combined-lut-cuda-texture-plan.md",
+    "language": "markdown",
+    "chunk_type": "heading_section",
+    "start_line": 873,
+    "end_line": 918,
+    "content_role": "plan",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

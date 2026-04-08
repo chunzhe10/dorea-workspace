@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-bda538280ec6",
+  "content": "h[y1 * src_w + x1];\n\n                out[dy * dst_w + dx] = v00 * (1.0 - fx) * (1.0 - fy)\n                    + v10 * fx * (1.0 - fy)\n                    + v01 * (1.0 - fx) * fy\n                    + v11 * fx * fy;\n            }\n        }\n        out\n    }\npub fn vram_free_bytes(&self) -> Result<usize, InferenceError> {\n        Python::with_gil(|py| {\n            let bridge = self.bridge.bind(py);\n            let result = bridge.call_method0(\"vram_free_bytes\")\n                .map_err(|e| InferenceError::Ipc(format!(\"vram_free_bytes: {e}\")))?;\n            let bytes: usize = result.extract()\n                .map_err(|e| InferenceError::Ipc(format!(\"extract vram_free_bytes: {e}\")))?;\n            Ok(bytes)\n        })\n    }",
+  "source_version": "crates/dorea-video/src/inference/pyo3_backend.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360414487Z",
+  "valid_from": "2026-04-08T03:28:13.360414487Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference/pyo3_backend.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 439,
+    "end_line": 448,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

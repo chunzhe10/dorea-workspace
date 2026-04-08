@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-d7bccf29a50f",
+  "content": "RADIUS: i32 = 30;\n\n        // Allocate proxy and output buffers\n        let d_proxy_l: CudaSlice<f32> = self.device.alloc_zeros(proxy_n)\n            .map_err(|e| map_cudarc_error(e))?;\n        let d_blur_a: CudaSlice<f32> = self.device.alloc_zeros(proxy_n)\n            .map_err(|e| map_cudarc_error(e))?;\n        let d_blur_b: CudaSlice<f32> = self.device.alloc_zeros(proxy_n)\n            .map_err(|e| map_cudarc_error(e))?;\n        let d_out: CudaSlice<f32> = self.device.alloc_zeros(n * 3)\n            .map_err(|e| map_cudarc_error(e))?;\n\n        // Step A: Extract L at proxy resolution\n        let extract = self.device.get_func(\"clarity\", \"clarity_extract_L_proxy\")\n            .ok_or_else(|| GpuError::ModuleLoad(\"clarity_extract_L_proxy not found\".to_string()))?;\n        let cfg_2d = LaunchConfig {\n            grid_dim: (((proxy_w as u32 + 15) / 16).max(1), ((proxy_h as u32 + 15) / 16).max(1), 1),\n            block_dim: (16, 16, 1),\n            shared_mem_bytes: 0,\n        };\n        unsafe {\n            extract.launch(cfg_2d, (\n                d_rgb,\n                &d_proxy_l,\n                width as i32, height as i32,\n                proxy_w as i32, proxy_h as i32,\n            )).map_err(|e| map_cudarc_error(e))?;\n        }\n\n        // Step B: 3 ping-pong blur passes\n        let blur_rows = self.device.get_func(\"clarity\", \"clarity_box_blur_rows\")\n            .ok_or_else(|| GpuError::ModuleLoad(\"clarity_box_blur_rows not found\".to_string()))?;\n        let blur_cols = self.device.get_func(\"clarity\", \"clarity_box_blur_cols\")\n            .ok_or_else(|| GpuError::ModuleLoad(\"clarity_box_blur_cols not found\".to_string()))?;\n\n        let cfg_blur_rows = LaunchConfig {",
+  "source_version": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042283850Z",
+  "valid_from": "2026-04-08T03:32:28.042283850Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1130,
+    "end_line": 1159,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

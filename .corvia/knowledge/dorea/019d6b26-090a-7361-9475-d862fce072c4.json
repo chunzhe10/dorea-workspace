@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-d862fce072c4",
+  "content": ")?;\n            let path = sys.getattr(\"path\")\n                .map_err(|e| InferenceError::InitFailed(format!(\"sys.path: {e}\")))?;\n\n            // Derive python/ dir from the exe path or PYTHONPATH\n            let python_dir = std::env::current_exe().ok()\n                .and_then(|exe| {\n                    exe.parent().and_then(|p| p.parent()).and_then(|p| p.parent())\n                        .map(|root| root.join(\"python\"))\n                })\n                .filter(|p| p.exists());\n\n            if let Some(ref p) = python_dir {\n                path.call_method1(\"insert\", (0, p.to_str().unwrap_or(\"\")))\n                    .map_err(|e| InferenceError::InitFailed(format!(\"sys.path.insert: {e}\")))?;\n            }\n\n            // Import bridge module\n            let bridge = py.import(\"dorea_inference.bridge\")\n                .map_err(|e| InferenceError::InitFailed(format!(\"import dorea_inference.bridge: {e}\")))?;\n\n            // Load depth model\n            let device = config.device.as_deref().unwrap_or(\"cuda\");\n            let depth_path = config.depth_model.as_ref().map(|p| p.to_str().unwrap_or(\"\"));\n            bridge.call_method1(\"load_depth_model\", (depth_path, device))\n                .map_err(|e| InferenceError::InitFailed(format!(\"load_depth_model: {e}\")))?;\n\n            // Load RAUNE model (if not skipped)\n            if !config.skip_raune {\n                let raune_weights = config.raune_weights.as_ref().map(|p| p.to_str().unwrap_or(\"\"));\n                let raune_dir = config.raune_models_dir.as_ref().map(|p| p.to_str().unwrap_or(\"\"));",
+  "source_version": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042290797Z",
+  "valid_from": "2026-04-08T03:32:28.042290797Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1522,
+    "end_line": 1546,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

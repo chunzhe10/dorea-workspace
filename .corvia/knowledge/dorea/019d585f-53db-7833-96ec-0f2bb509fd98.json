@@ -1,0 +1,31 @@
+{
+  "id": "019d585f-53db-7833-96ec-0f2bb509fd98",
+  "content": "# Maxine Pre-Processing Integration — Implementation Record\n\n**PR:** chunzhe10/dorea#53 (merged 2026-04-04)\n**Issues closed:** #15, #16, #17, #18, #19, #20, #21, #22\n**Branch:** feat/15-maxine-enhancement (squash-merged to master)\n\n## What was built\n\nNVIDIA Maxine VFX SDK added as the first-stage preprocessor in the dorea grading pipeline. Maxine runs on every input frame at full resolution BEFORE RAUNE and Depth Anything, treating enhanced frames as the \"cleaned\" input domain for all downstream algorithms.\n\n## Key design decisions\n\n**Architecture (Approach B — temp-file reuse):**\n- Pass 1: full-res decode → Maxine enhance per frame (IPC to Python) → write lossless ffv1/mkv temp file → resize_rgb_bilinear to proxy → MSE keyframe detection\n- Calibration: fused RAUNE+depth batch on Maxine-enhanced proxies. ONE inference server handles all three models.\n- After calibration: inference server shuts down, freeing ~4.8–5.6 GB VRAM for Pass 2.\n- Pass 2: decode from temp file (Maxine-enhanced frames, no second Maxine pass) → CUDA grade.\n- Temp file: `$TMPDIR/dorea_maxine_<pid>.mkv` (ffv1 lossless, ~2–4 GB for 5-min 1080p), deleted by RAII TempFileGuard on any exit path.\n\n**Design correction from original issues:** Maxine was originally described as post-grading (between grade_frame() and encoder.write_frame()). The correct role is pre-processing input enhancement — all derivative algorithms (RAUNE, depth, LUT calibration, GPU grading) receive Maxine-enhanced frames.\n\n**VRAM fix for --calibration path:** When a pre-computed calibration file is provided, the Maxine server is shut down BEFORE spawning the depth-only server (not after), preventing simultaneous VRAM usage that would exceed 6 GB on the RTX 3060.\n\n**IPC field naming:** The enhance request uses `no_artifact_reduce: bool` (negated form, not `artifact_reduce`), matching the Python server handler. The `upscale_factor` is baked into the server at init time and NOT sent per-frame to avoid dead parameters.\n\n## Files changed\n\n- `python/dorea_inference/protocol.py` — `encode_raw_rgb()` + `EnhanceResult` dataclass\n- `python/dorea_inference/maxine_enhancer.py` — new: MaxineEnhancer (nvvfx wrapper + `DOREA_MAXINE_MOCK=1` mock mode)\n- `python/dorea_inference/server.py` — `--maxine` / `--maxine-upscale-factor` / `--no-maxine-artifact-reduction` args, enhance handler\n- `crates/dorea-video/src/inference_subprocess.rs` — InferenceConfig maxine fields, `build_args()`, `parse_enhance_response()`, `enhance()` IPC method\n- `crates/dorea-video/src/ffmpeg.rs` — `FrameEncoder::new_lossless_temp()` for ffv1/mkv\n- `crates/dorea-cli/src/grade.rs` — full restructure: one server, full-res Pass 1, TempFileGuard RAII, Pass 2 from temp file\n- `docs/guides/maxine-setup.md` — SDK install guide\n\n## CLI usage\n\n```bash\ndorea grade --input footage.mp4 --maxine                    # enable with defaults\ndorea grade --input footage.mp4 --maxine --maxine-upscale-factor 2\ndorea grade --input footage.mp4 --maxine --no-maxine-artifact-reduction\nDOREA_MAXINE_MOCK=1 dorea grade --input test.mp4 --maxine  # CI testing without SDK\n```\n\nSupported upscale factors: 2, 3, 4 only. Factor 5+ rejected at startup.\n\n## VRAM budget\n\nPass 1 + calibration peak: ~4.8–5.6 GB (Maxine VideoSuperRes ~1–1.5 GB, ArtifactReduction ~0.5 GB, Depth Anything V2 Small ~1.8 GB, CUDA context ~500 MB, batch buffers ~500 MB)\nPass 2: ~300 MB (inference server shut down, CUDA grader only)\n\nEscape hatches: `--no-maxine-artifact-reduction` (saves ~500 MB)\n\n## Testing\n\nAll tests pass. E2E verified with DOREA_MAXINE_MOCK=1: temp file created during Pass 1, deleted after Pass 2, output produced, no-maxine path byte-identical to pre-Maxine pipeline.\n",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-04T12:02:15.643662821Z",
+  "valid_from": "2026-04-04T12:02:15.643662821Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "decision",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

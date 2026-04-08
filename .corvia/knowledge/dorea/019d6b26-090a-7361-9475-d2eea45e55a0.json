@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-d2eea45e55a0",
+  "content": "-p dorea-lut 2>&1\n```\n\nExpected: all tests pass including `test_nn_fill_no_identity`.\n\n- [ ] **Step 6: Commit**\n\n```bash\ncd repos/dorea\ngit add crates/dorea-lut/src/build.rs\ngit commit -m \"perf(dorea-lut): parallelize NN fill with rayon par_iter\"\n```\n\n---\n\n## Task 4: Parallelize `compute_importance` (row-parallel Sobel + Gaussian blur)\n\n**Files:**\n- Modify: `repos/dorea/crates/dorea-lut/src/build.rs`\n\nThree loops are independent per output row: the Sobel pass, the horizontal Gaussian blur pass, and the vertical Gaussian blur pass. Replace each with `par_chunks_mut(width).enumerate()`.\n\nThe Combine step at the end (O(n) scalar) is already fast; leave serial.\nThe `local_variance_box` integral-image function is O(n) and correct; leave serial.\n\n- [ ] **Step 1: Parallelize the Sobel edge detection loop**\n\nIn `compute_importance`, replace the Sobel double loop (lines ~36–59):\n\n```rust\n    // --- Sobel edge detection ---\n    let mut edge_mag = vec![0.0_f32; n];\n    for y in 0..height {\n        for x in 0..width {\n```\n\nWith:\n\n```rust\n    // --- Sobel edge detection (row-parallel) ---\n    let mut edge_mag = vec![0.0_f32; n];\n    edge_mag\n        .par_chunks_mut(width)\n        .enumerate()\n        .for_each(|(y, row)| {\n            for x in 0..width {\n```\n\nThe full parallelized Sobel block:\n\n```rust\n    // --- Sobel edge detection (row-parallel) ---\n    let mut edge_mag = vec![0.0_f32; n];\n    edge_mag\n        .par_chunks_mut(width)",
+  "source_version": "plans/2026-04-02-rayon-cpu-parallelization-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042239119Z",
+  "valid_from": "2026-04-08T03:32:28.042239119Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-rayon-cpu-parallelization-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 348,
+    "end_line": 387,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

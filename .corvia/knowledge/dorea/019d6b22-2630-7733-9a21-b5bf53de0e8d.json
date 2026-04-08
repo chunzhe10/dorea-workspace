@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-b5bf53de0e8d",
+  "content": "<Frame, FfmpegError>>, FfmpegError> {\n    let child = if width == info.width && height == info.height {\n        spawn_decoder(input, info)?\n    } else {\n        spawn_decoder_at(input, width, height)?\n    };\n    Ok(FrameReader::new(child, width, height))\n}\nfn spawn_decoder_at(input: &Path, width: usize, height: usize) -> Result<Child, FfmpegError> {\n    let input_str = input.to_str().unwrap_or(\"\");\n    let scale_str = format!(\"scale={width}x{height}\");\n\n    let hw_result = Command::new(\"ffmpeg\")\n        .args([\n            \"-hwaccel\", \"nvdec\",\n            \"-i\", input_str,\n            \"-vf\", &scale_str,\n            \"-f\", \"rawvideo\",\n            \"-pix_fmt\", \"rgb24\",\n            \"pipe:1\",\n        ])\n        .stdin(Stdio::null())\n        .stdout(Stdio::piped())\n        .stderr(Stdio::null())\n        .spawn();\n\n    if let Ok(child) = hw_result {\n        return Ok(child);\n    } else if let Err(ref e) = hw_result {\n        log::debug!(\"nvdec scaled spawn failed ({e}), falling back to software decode\");\n    }\n\n    Command::new(\"ffmpeg\")\n        .args([\n            \"-i\", input_str,\n            \"-vf\", &scale_str,\n            \"-f\", \"rawvideo\",\n            \"-pix_fmt\", \"rgb24\",\n            \"pipe:1\",\n        ])\n        .stdin(Stdio::null())\n        .stdout(Stdio::piped())\n        .stderr(Stdio::null())\n        .spawn()\n        .map_err(FfmpegError::NotFound)\n}",
+  "source_version": "crates/dorea-video/src/ffmpeg.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360315915Z",
+  "valid_from": "2026-04-08T03:28:13.360315915Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/ffmpeg.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 262,
+    "end_line": 299,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

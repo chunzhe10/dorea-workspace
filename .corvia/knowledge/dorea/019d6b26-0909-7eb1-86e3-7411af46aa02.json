@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-0909-7eb1-86e3-7411af46aa02",
+  "content": "## Tiny Planet Handling\n\n### Projection-aware pipeline branching\n\n```\nRectilinear  -> 3-stage pipeline (depth + stratified LUT)\nTinyPlanet   -> 2-stage pipeline (no depth, zone 0 LUT, uniform depth=0.5)\n```\n\nWhen `projection == TinyPlanet`:\n- No inference server spawned (no Python subprocess)\n- Single zone LUT (zone 0 = shallowest depth)\n- Uniform depth = 0.5 placeholder\n- Expected >15 fps (no depth bottleneck)\n\n**Why skip depth:** Depth Anything V2 was trained on rectilinear images. Stereographic\nprojection (tiny planet) produces garbage depth maps. The model cannot interpret the\nradial distortion.\n\n\n### Detection safety net\n\nAfter depth inference on the first frame, check if depth map is degenerate (very low\nvariance or radial pattern). If detected, emit warning suggesting `--projection tiny-planet`.\nNot auto-switch — just a warning.\n",
+  "source_version": "decisions/2026-04-02-10bit-pipeline-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.041836132Z",
+  "valid_from": "2026-04-08T03:32:28.041836132Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-02-10bit-pipeline-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 228,
+    "end_line": 250,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

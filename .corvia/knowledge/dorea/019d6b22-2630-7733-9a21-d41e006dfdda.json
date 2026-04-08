@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-d41e006dfdda",
+  "content": "s\n                all_enhanced_np = []\n                all_depths = []\n                enh_w, enh_h = 0, 0\n\n                for batch_start in range(0, len(imgs), sub_batch_size):\n                    batch_end = min(batch_start + sub_batch_size, len(imgs))\n                    imgs_chunk = imgs[batch_start:batch_end]\n\n                    # RAUNE → enhanced tensors stay on GPU\n                    enhanced_batch, enh_w, enh_h = raune_model.infer_batch_gpu(imgs_chunk, max_size=raune_max)\n\n                    # DEBUG: save RAUNE output before Maxine\n                    if batch_start == 0:\n                        import os\n                        os.makedirs(\"/tmp/dorea_debug_py\", exist_ok=True)\n                        _raune_np = (enhanced_batch.permute(0, 2, 3, 1).cpu().numpy() * 255).astype(\"uint8\")\n                        from PIL import Image as _DebugImage\n                        _DebugImage.fromarray(_raune_np[0]).save(\"/tmp/dorea_debug_py/raune_out_0.png\")\n                        print(f\"[dorea-inference] DEBUG: raune shape={enhanced_batch.shape} enh_w={enh_w} enh_h={enh_h}\", file=sys.stderr, flush=True)\n\n                    # Maxine upscale (optional) — insert between RAUNE and Depth\n                    enable_maxine = req.get(\"enable_maxine\", False)\n                    if enable_maxine:\n                        if maxine_enhancer is None:\n                            raise RuntimeError(\n                                \"Maxine upscaling requested but enhancer failed to load — \"\n                                \"check NVIDIA CUDA, VFX SDK, and dependencies\"",
+  "source_version": "python/dorea_inference/server.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360701604Z",
+  "valid_from": "2026-04-08T03:28:13.360701604Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/server.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 222,
+    "end_line": 242,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

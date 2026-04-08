@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-d9f76a7248fb",
+  "content": "        # Simulate RAUNE output: (3, 3, H, W) float32 in [0, 1]\n        # Before:\n\n        # After:\n        batch = torch.stack(arrays)\n        if self.device.type == \"cuda\":\n            batch = batch.pin_memory().to(self.device, non_blocking=True)\n        else:\n            batch = batch.to(self.device)\n```\n\n**Then**, append after `infer_gpu` (end of the class):\n\n```python\n    def infer_batch_from_tensors(\n        self,\n        enhanced: \"torch.Tensor\",\n        depth_max_size: int = 518,\n    ) -> \"list[np.ndarray]\":\n        \"\"\"Run depth estimation on a batch of RAUNE-output GPU tensors.\n\n        Args:\n            enhanced: (N, 3, H_r, W_r) float32 in [0, 1], on self.device.\n                      This is the direct output of RauneNetInference.infer_batch_gpu().\n            depth_max_size: max long-edge for depth model (default 518).\n\n        Returns list of (H_d, W_d) float32 depth maps normalized to [0, 1].\n        The resize and re-normalisation happen on-device — no dtoh between models.\n        \"\"\"\n        import torch\n        import torch.nn.functional as F\n\n        N, _, H_r, W_r = enhanced.shape\n\n\n        # GPU resize: keep aspect, snap to multiples of _PATCH_SIZE\n        scale = depth_max_size / max(H_r, W_r)\n        H_d = max(_PATCH_SIZE, int(H_r * scale) // _PATCH_SIZE * _PATCH_SIZE)\n        W_d = max(_PATCH_SIZE, int(W_r * scale) // _PATCH_SIZE * _PATCH_SIZE)\n\n        resized = F.interpolate(\n            enhanced, size=(H_d, W_d), mode=\"bilinear\", align_corners=False\n        )  # (N, 3, H_d, W_d) in [0, 1]\n",
+  "source_version": "plans/2026-04-03-inference-gpu-saturation.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042304722Z",
+  "valid_from": "2026-04-08T03:32:28.042304722Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-inference-gpu-saturation.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 349,
+    "end_line": 388,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

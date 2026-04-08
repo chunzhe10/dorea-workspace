@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-aca11c1b3e02",
+  "content": " #[arg(short, long)]\n    pub verbose: bool,\n\n    /// Maxine super-resolution upscale factor for RAUNE→Maxine→Depth fused batch\n    /// (config: [maxine].upscale_factor, built-in default: 2)\n    #[arg(long)]\n    pub maxine_upscale_factor: Option<u32>,\n}\nimpl TempFileGuard {\n    fn new(path: std::path::PathBuf) -> Self {\n        Self(Some(path))\n    }\n}\nfn new(path: std::path::PathBuf) -> Self {\n        Self(Some(path))\n    }",
+  "source_version": "crates/dorea-cli/src/grade.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360228562Z",
+  "valid_from": "2026-04-08T03:28:13.360228562Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/grade.rs",
+    "language": "rs",
+    "chunk_type": "impl_item",
+    "start_line": 108,
+    "end_line": 111,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

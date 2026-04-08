@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-0909-7eb1-86e3-72acfab48807",
+  "content": "## Testing Strategy\n## Phased Delivery\n\n## Decisions Log\n\n- **D1:** Multi-repo doc ownership — repos own product docs, workspace owns cross-cutting\n- **D2:** Approach B (Full Loop) selected over Aggregator-First (A) and Intelligence-Led (C)\n- **D3:** Dashboard is primary human read interface, not file browsing\n- **D4:** Interactive graphed document reader (Heptabase + Neo4j Bloom patterns)\n- **D5:** `content_role` + `source_origin` metadata on `EntryMetadata`\n- **D6:** Git post-commit hooks trigger incremental re-indexing with supersession\n- **D7:** PreToolUse hooks block wrong paths, generated from `corvia.toml` rules\n- **D8:** Claude memory relocated to `.memory/` via `autoMemoryDirectory` (git-tracked)\n- **D9:** Superpowers save path overrides via CLAUDE.md instruction priority\n- **D10:** Aggregator (`corvia docs check`) extends Reasoner with doc-specific checks\n\n\n## References\n\n- UX research: `docs/decisions/graph-document-ux-research.md`\n- Original brainstorm: `repos/corvia/docs/rfcs/2026-02-25-corvia-brainstorm.md` (Flow 2: Living Docs)\n- Existing Reasoner: `crates/corvia-kernel/src/reasoner.rs`\n- Adapter protocol: `crates/corvia-kernel/src/adapter_protocol.rs`\n- Dashboard: `tools/corvia-dashboard/src/components/GraphView.tsx`\n- corvia knowledge entry: `019ce5eb-0930-7f11-9d97-34349917316b`",
+  "source_version": "decisions/2026-03-13-docs-workflow-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.041824200Z",
+  "valid_from": "2026-04-08T03:32:28.041824200Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-03-13-docs-workflow-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 502,
+    "end_line": 522,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

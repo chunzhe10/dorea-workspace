@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-d8726d7c5cf9",
+  "content": "el (if not skipped)\n            if !config.skip_raune {\n                let raune_weights = config.raune_weights.as_ref().map(|p| p.to_str().unwrap_or(\"\"));\n                let raune_dir = config.raune_models_dir.as_ref().map(|p| p.to_str().unwrap_or(\"\"));\n                bridge.call_method(\"load_raune_model\", (raune_weights, device, raune_dir), None)\n                    .map_err(|e| InferenceError::InitFailed(format!(\"load_raune_model: {e}\")))?;\n            }\n\n            log::info!(\"PyO3 inference initialized on device={device}\");\n            Ok(Self { _not_send: std::marker::PhantomData })\n        })\n    }\n\n    /// Run depth inference. Returns (depth_f32, width, height).\n    pub fn run_depth(\n        &mut self,\n        _id: &str,\n        image_rgb: &[u8],\n        width: usize,\n        height: usize,\n        max_size: usize,\n    ) -> Result<(Vec<f32>, usize, usize), InferenceError> {\n        Python::with_gil(|py| {\n            let bridge = py.import(\"dorea_inference.bridge\")\n                .map_err(|e| InferenceError::Ipc(format!(\"import bridge: {e}\")))?;\n            let np = py.import(\"numpy\")\n                .map_err(|e| InferenceError::Ipc(format!(\"import numpy: {e}\")))?;\n\n            // Create numpy array from raw bytes (zero-copy view)",
+  "source_version": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042291350Z",
+  "valid_from": "2026-04-08T03:32:28.042291350Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1547,
+    "end_line": 1571,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

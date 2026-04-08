@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-c44daa7507b1",
+  "content": "CombinedLut (legacy single-segment path) passes the same boundaries/zones\n            // for both base and runtime — semantically equivalent to the old single-zone set.\n            let warmth   = params.warmth;\n            let strength = params.strength;\n            let contrast = params.contrast;\n            let n_i32        = n as i32;\n            let lut_size_i32 = lut_size as i32;\n            let n_zones_i32  = n_zones as i32;\n            let total_i32    = total_threads as i32;\n            let mut args: [*mut std::ffi::c_void; 16] = [\n                (&d_build)     .as_kernel_param(),  // output\n                (&d_luts)      .as_kernel_param(),  // base_luts\n                (&d_boundaries).as_kernel_param(),  // base_zone_boundaries\n                n_zones_i32    .as_kernel_param(),  // base_n_zones\n                (&d_boundaries).as_kernel_param(),  // runtime_zone_boundaries (same as base)\n                n_zones_i32    .as_kernel_param(),  // runtime_n_zones (same as base)\n                (&d_h_offsets) .as_kernel_param(),  // h_offsets\n                (&d_s_ratios)  .as_kernel_param(),  // s_ratios\n                (&d_v_offsets) .as_kernel_param(),  // v_offsets\n                (&d_weights)   .as_kernel_param(),  // weights\n                warmth         .as_kernel_param(),  // warmth\n                strength       .as_kernel_param(),  // strength\n                contrast       .as_kernel_param(),  // contrast\n                n_i32          .as_kernel_param(),  // grid_size\n                lut_size_i32   .as_kernel_param(),  // lut_size\n                total_i32      .as_kernel_param(),  // total_threads\n            ];\n            unsafe {\n                func.launch(cfg, &mut args[..])",
+  "source_version": "crates/dorea-gpu/src/cuda/combined_lut.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360496210Z",
+  "valid_from": "2026-04-08T03:28:13.360496210Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cuda/combined_lut.rs",
+    "language": "rs",
+    "chunk_type": "impl_item",
+    "start_line": 121,
+    "end_line": 145,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

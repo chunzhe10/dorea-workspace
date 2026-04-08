@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-d289bd032de6",
+  "content": "## File Map\n\n## Task 1: Add rayon workspace dependency\n\n**Files:**\n- Modify: `repos/dorea/Cargo.toml`\n- Modify: `repos/dorea/crates/dorea-lut/Cargo.toml`\n- Modify: `repos/dorea/crates/dorea-hsl/Cargo.toml`\n\n- [ ] **Step 1: Add rayon to workspace dependencies**\n\nIn `repos/dorea/Cargo.toml`, add one line to `[workspace.dependencies]`:\n\n```toml\n[workspace.dependencies]\ndorea-color = { path = \"crates/dorea-color\" }\ndorea-lut = { path = \"crates/dorea-lut\" }\ndorea-hsl = { path = \"crates/dorea-hsl\" }\ndorea-cal = { path = \"crates/dorea-cal\" }\ndorea-gpu = { path = \"crates/dorea-gpu\" }\ndorea-video = { path = \"crates/dorea-video\" }\nserde = { version = \"1\", features = [\"derive\"] }\nbincode = \"1\"\nthiserror = \"1\"\nanyhow = \"1\"\nlog = \"0.4\"\nrayon = \"1\"\n```\n\n- [ ] **Step 2: Wire rayon into dorea-lut**\n\nIn `repos/dorea/crates/dorea-lut/Cargo.toml`, add to `[dependencies]`:\n\n```toml\n[dependencies]\ndorea-color = { workspace = true }\nserde = { workspace = true }\nlog = { workspace = true }\nrayon = { workspace = true }\n```\n\n- [ ] **Step 3: Wire rayon into dorea-hsl**\n\nIn `repos/dorea/crates/dorea-hsl/Cargo.toml`, add to `[dependencies]`:\n\n```toml\n[dependencies]\ndorea-color = { workspace = true }\nserde = { workspace = true }\nrayon = { workspace = true }\n```\n\n- [ ] **Step 4: Verify workspace compiles**\n\n```bash\ncd repos/dorea && cargo build 2>&1\n```\n\nExpected: compiles without errors. `Compiling rayon ...` appears in output.\n\n- [ ] **Step 5: Commit**\n\n```bash\ncd repos/dorea\ngit add Cargo.toml crates/dorea-lut/Cargo.toml crates/dorea-hsl/Cargo.toml Cargo.lock\ngit commit -m \"chore: add rayon workspace dependency to dorea-lut and dorea-hsl\"\n```\n\n---\n",
+  "source_version": "plans/2026-04-02-rayon-cpu-parallelization-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042235723Z",
+  "valid_from": "2026-04-08T03:32:28.042235723Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-rayon-cpu-parallelization-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 26,
+    "end_line": 93,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-df1cea101a22",
+  "content": "              frame_index: frame.index,\n                    proxy_pixels: frame.pixels.clone(),\n                    scene_cut_before: scene_cut,\n                });\n                detector.set_reference(&frame.pixels);\n                frames_since_kf = 0;\n            } else {\n                frames_since_kf += 1;\n            }\n        }\n        log::info!(\"Pass 1 complete: {} keyframes detected\", keyframes.len());\n    }\n```\n\n- [ ] **Step 6: Shut down Maxine server after calibration**\n\nIn the calibration section, after the `let _ = inf_server.shutdown();` call for the auto-calibrate path (around line 362), and after the pre-computed calibration path's `let _ = inf_server.shutdown();` (around line 279), add:\n\nAfter each calibration server shutdown, also shut down the Maxine server:\n\n```rust\n    // Shut down Maxine server (VRAM freed for Pass 2 CUDA grading).\n    if let Some(mut srv) = maxine_server.take() {\n        let _ = srv.shutdown();\n        log::info!(\"Maxine server shut down — VRAM freed for Pass 2\");\n    }\n```\n\nPlace this after the calibration server is shut down in both branches (pre-computed and auto-calibrate).\n\nNote: `maxine_server` must be `Option<InferenceServer>` declared with `let mut` so `.take()` works. Ensure it's declared with `let mut maxine_server` in Step 4.\n\n- [ ] **Step 7: Restructure Pass 2 to decode from temp file when Maxine**\n\nReplace the Pass 2 decode source (line 501: `let frames = ffmpeg::decode_frames(&args.input, &info)`) with:\n\n```rust\n    // -----------------------------------------------------------------------\n    // Pass 2: grade + encode\n    // Decode source: Maxine temp file (enhanced frames) or original input (raw).\n    // -----------------------------------------------------------------------\n    let decode_source = maxine_temp_path.as_deref().unwrap_or(args.input.as_path());\n    let frames = ffmpeg::decode_frames(decode_source, &info)\n        .context(\"failed to spawn ffmpeg full-res decoder\")?;",
+  "source_version": "plans/2026-04-04-maxine-enhancement-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042348976Z",
+  "valid_from": "2026-04-08T03:32:28.042348976Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-maxine-enhancement-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1352,
+    "end_line": 1389,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

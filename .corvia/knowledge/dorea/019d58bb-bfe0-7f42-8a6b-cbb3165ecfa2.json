@@ -1,0 +1,31 @@
+{
+  "id": "019d58bb-bfe0-7f42-8a6b-cbb3165ecfa2",
+  "content": "# NVIDIA Maxine VFX SDK — Installation & Python API (2026-04-04)\n\n## Installation\n\nThe SDK ships as a pip wheel called `nvidia-vfx` (imports as `nvvfx`). No NGC tarball or manual SDK download needed.\n\n```bash\nsource /opt/dorea-venv/bin/activate\npip install nvidia-vfx==0.1.0.1 --extra-index-url https://pypi.nvidia.com/\npython -c \"from nvvfx import VideoSuperRes; print('nvvfx OK')\"\n```\n\nThe wheel is ~597 MB and bundles all shared libraries, TensorRT engines, and model weights. No `/usr/local/VideoFX` path required.\n\n## Python API (nvidia-vfx 0.1.0.1)\n\nSingle class: `nvvfx.VideoSuperRes`. No separate `ArtifactReduction` class — denoising is a quality level.\n\n### Input format\n- Shape: `(3, H, W)` — channels-first RGB\n- Dtype: `float32`\n- Device: CUDA\n- Range: `[0, 1]`\n- **Must be contiguous** (call `.contiguous()` after `permute()`)\n\n### Usage pattern\n\n```python\nimport torch\nfrom nvvfx import VideoSuperRes\n\n# Super-resolution (2x upscale)\nsr = VideoSuperRes()\nsr.output_width = 3840\nsr.output_height = 2160\nsr.quality = VideoSuperRes.QualityLevel.HIGH\nsr.load()\n\n# HWC uint8 → CHW float32 CUDA\ntensor = torch.from_numpy(rgb_u8).permute(2, 0, 1).contiguous().float().div(255.0).cuda()\nresult = sr.run(tensor)\noutput = torch.from_dlpack(result.image).clone()  # must clone before next run() or close()\n\nsr.close()\n```\n\n### Quality levels\n\n| Category | Levels | Scale |\n|----------|--------|-------|\n| Upscaling | BICUBIC, LOW, MEDIUM, HIGH, ULTRA | 2, 3, or 4 |\n| Denoising | DENOISE_LOW/MEDIUM/HIGH/ULTRA | 1 (same res) |\n| Deblurring | DEBLUR_LOW/MEDIUM/HIGH/ULTRA | 1 (same res) |\n| High-bitrate | HIGHBITRATE_LOW/MEDIUM/HIGH/ULTRA | 1 (same res) |\n\nFor denoising (replaces old `ArtifactReduction`), set `output_width/height` to input dimensions and use `DENOISE_*` quality.\n\n## POC Benchmark (RTX 3060 Laptop, 1080p input)\n\n- Super-res 2x (1080p → 4K → downsample back): ~2.6ms first frame, ~0.3ms after warmup\n- Denoising (DENOISE_HIGH, same resolution): ~0.4ms per frame\n- VRAM: **238 MB** (torch-tracked) — well under 6 GB budget\n- Both effects can be loaded simultaneously\n\n## Breaking change vs existing maxine_enhancer.py\n\nThe current `repos/dorea/python/dorea_inference/maxine_enhancer.py` assumes:\n- Separate `nvvfx.ArtifactReduction` class → **no longer exists**, use `VideoSuperRes(quality=DENOISE_HIGH)` with scale=1\n- BGRA interleaved uint8 input → **now CHW float32 [0,1] DLPack tensors**\n- `set_cuda_stream()` method → **now `stream_ptr` kwarg on `run()`**\n\nThe enhancer will need a full rewrite to use the new API when integrating Maxine for real.\n\n## System requirements verified on this workstation\n\n| Requirement | Value | Status |\n|---|---|---|\n| GPU | RTX 3060 Laptop (Ampere) | ✓ |\n| Driver | 570.211.01 (min 570.190+) | ✓ |\n| Python | 3.12+ | ✓ |\n| CUDA | 12.4 toolkit | ✓ |\n\n## POC location\n\n`working/maxine/poc_maxine.py` — extracts frames, runs super-res + denoising, saves before/after PNGs.",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-04T13:43:12.608390017Z",
+  "valid_from": "2026-04-04T13:43:12.608390017Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "finding",
+    "source_origin": "workspace"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-0909-7eb1-86e3-739d7999759f",
+  "content": "# Current (8-bit JPEG)\n# New (16-bit PNG, both cameras)\n\n### load_rgb_image upgrade\n\n```rust\n// Current\nlet img = ImageReader::open(path)?.decode()?.into_rgb8();   // 8-bit\nlet pixels = img.pixels()\n    .map(|p| [p[0] as f32 / 255.0, ...]).collect();\n\n// New\nlet img = ImageReader::open(path)?.decode()?.into_rgb16();  // 16-bit\nlet pixels = img.pixels()\n    .map(|p| [p[0] as f32 / 65535.0, ...]).collect();\n```\n\n\n### inference.rs PNG codec\n\nThe hand-rolled PNG encoder/decoder in `inference.rs` supports both bit depths:\n- **Encoder:** IHDR `bit_depth` = 8 or 16, scanline data sized accordingly\n- **Decoder:** Accept `bit_depth == 8 || bit_depth == 16`, normalize to `[0.0, 1.0]`\n- 8-bit backward compat preserved\n",
+  "source_version": "decisions/2026-04-02-10bit-pipeline-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.041832159Z",
+  "valid_from": "2026-04-08T03:32:28.041832159Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-02-10bit-pipeline-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 122,
+    "end_line": 142,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-e3a998f6369f",
+  "content": "_sync_copy(depth).map_err(map_cudarc_error)?;\n        let d_textures_a = dev.htod_sync_copy(self.adaptive_lut.active_textures())\n            .map_err(map_cudarc_error)?;\n        let d_boundaries_a = dev.htod_sync_copy(self.adaptive_lut.active_boundaries())\n            .map_err(map_cudarc_error)?;\n        let d_textures_b = dev.htod_sync_copy(self.adaptive_lut.inactive_textures())\n            .map_err(map_cudarc_error)?;\n        let d_boundaries_b = dev.htod_sync_copy(self.adaptive_lut.inactive_boundaries())\n            .map_err(map_cudarc_error)?;\n        let d_pixels_out: CudaSlice<u8> = dev.alloc_zeros(n * 3).map_err(map_cudarc_error)?;\n\n        let func = dev.get_func(\"combined_lut\", \"combined_lut_kernel\")\n            .ok_or_else(|| GpuError::ModuleLoad(\"combined_lut_kernel not found\".into()))?;\n        let cfg = LaunchConfig {\n            grid_dim: (div_ceil(n as u32, 256), 1, 1),\n            block_dim: (256, 1, 1),\n            shared_mem_bytes: 0,\n        };\n\n        unsafe {\n            func.launch(cfg, (\n                &d_pixels_in,\n                &d_depth,\n                &d_textures_a,\n                &d_boundaries_a,\n                &d_textures_b,\n                &d_boundaries_b,\n                blend_t,\n                &d_pixels_out,\n                n as i32,\n                self.adaptive_lut.runtime_n_zones as i32,\n                self.adaptive_lut.grid_size as i32,\n            ))\n        }.map_err(map_cudarc_error)?;\n\n        let result = dev.dtoh_sync_copy(&d_pixels_out).map_err(map_cudarc_error)?;\n        Ok(result)\n    }\n}\n```\n\n- [ ] **Step 3: Expose AdaptiveGrader in lib.rs**\n\nIn `crates/dorea-gpu/src/lib.rs`, add after the existing `grade_frame_with_grader`:\n\n```rust\n#[cfg(feature = \"cuda\")]\npub fn grade_frame_with_adaptive_grader(\n    grader: &cuda::AdaptiveGrader,\n    pixels: &[u8],\n    depth: &[f32],",
+  "source_version": "plans/2026-04-04-per-keyframe-adaptive-depth-zones-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042390586Z",
+  "valid_from": "2026-04-08T03:32:28.042390586Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-per-keyframe-adaptive-depth-zones-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1246,
+    "end_line": 1292,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

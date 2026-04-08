@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-dbcbc0e64e71",
+  "content": "()}\", file=sys.stderr, flush=True)\n```\n\n- [ ] **Step 6: Commit**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ngit add python/dorea_inference/server.py\ngit commit -m \"feat(inference): add enhance request handler and --maxine flag to server\"\n```\n\n---\n\n### Task 4: Rust InferenceConfig Extension\n\nAdd Maxine-related fields to `InferenceConfig` and pass them to the Python subprocess.\n\n**Files:**\n- Modify: `crates/dorea-video/src/inference.rs`\n\n- [ ] **Step 1: Write failing test for Maxine CLI args in spawn command**\n\nAdd to the existing `#[cfg(test)]` module at the bottom of `inference.rs`:\n\n```rust\n#[test]\nfn spawn_command_includes_maxine_flags() {\n    let config = InferenceConfig {\n        python_exe: PathBuf::from(\"/usr/bin/python3\"),\n        raune_weights: None,\n        raune_models_dir: None,\n        skip_raune: true,\n        depth_model: None,\n        device: None,\n        startup_timeout: Duration::from_secs(10),\n        maxine: true,\n        maxine_upscale_factor: 2,\n    };\n    let args = config.build_args();\n    assert!(args.contains(&\"--maxine\".to_string()));\n    assert!(args.contains(&\"--maxine-upscale-factor\".to_string()));\n    assert!(args.contains(&\"2\".to_string()));\n}\n\n#[test]\nfn spawn_command_omits_maxine_when_disabled() {\n    let config = InferenceConfig {\n        python_exe: PathBuf::from(\"/usr/bin/python3\"),\n        raune_weights: None,",
+  "source_version": "plans/2026-04-03-maxine-enhancement-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042320749Z",
+  "valid_from": "2026-04-08T03:32:28.042320749Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-maxine-enhancement-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 367,
+    "end_line": 402,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

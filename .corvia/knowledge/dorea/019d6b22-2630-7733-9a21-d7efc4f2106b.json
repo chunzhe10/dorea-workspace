@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-d7efc4f2106b",
+  "content": "## Component Design\n\n### `grade_pixel.cuh` — shared device function\n\n```c\n__device__ float3 grade_pixel_device(\n    float r, float g, float b, float depth,\n    const float* luts, const float* zone_boundaries,\n    int lut_size, int n_zones,\n    const float* h_offsets, const float* s_ratios,\n    const float* v_offsets, const float* weights,\n    float warmth, float strength, float contrast\n);\n```\n\nRuns in order: LUT apply (soft zone blend + trilinear) → HSL correct (6 qualifiers) →\ndepth-aware ambiance → warmth → strength blend. Mirrors existing kernel logic.\n\n\n### `build_combined_lut.cu` — GPU LUT build (startup)\n\n- 1D grid: one thread per `(grid_point_index, zone)` pair, ~4.5M total\n- Thread computes `(r,g,b) = (i/(N-1), j/(N-1), k/(N-1))` from flat index\n- Calls `grade_pixel_device` at `depth = zone_center[zone]`\n- Writes `float4(r', g', b', 0.0)` to output device buffer [n_zones × N³]\n- Build time: <1ms GPU (vs ~34ms CPU rayon alternative)\n- Output stays on device — copied to `cudaArray3D` via `cudaMemcpy3D` without CPU roundtrip\n",
+  "source_version": "docs/decisions/2026-04-03-combined-lut-cuda-texture-design.md",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360744427Z",
+  "valid_from": "2026-04-08T03:28:13.360744427Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "docs/decisions/2026-04-03-combined-lut-cuda-texture-design.md",
+    "language": "markdown",
+    "chunk_type": "heading_section",
+    "start_line": 71,
+    "end_line": 95,
+    "content_role": "decision",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

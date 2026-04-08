@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-ad049ff77012",
+  "content": "othing_w    = cfg.grade.zone_smoothing_window.unwrap_or(3_usize);\n    let maxine_upscale_factor = args.maxine_upscale_factor.or(cfg.maxine.upscale_factor).unwrap_or(2_u32);\n    let python = args.python.clone()\n        .or_else(|| cfg.models.python.clone())\n        .unwrap_or_else(|| PathBuf::from(\"/opt/dorea-venv/bin/python\"));\n    let raune_weights    = args.raune_weights.clone().or_else(|| cfg.models.raune_weights.clone());\n    let raune_models_dir = args.raune_models_dir.clone().or_else(|| cfg.models.raune_models_dir.clone());\n    let depth_model      = args.depth_model.clone().or_else(|| cfg.models.depth_model.clone());\n    let device = if args.cpu_only {\n        Some(\"cpu\".to_string())\n    } else {\n        cfg.inference.device.clone()\n    };\n\n    if args.cpu_only {\n        anyhow::bail!(\n            \"--cpu-only is no longer supported for dorea grade; GPU (CUDA) is required. \\\n             Use dorea preview for CPU-only workflows.\"\n        );\n    }\n    if depth_max_interval == 0 {",
+  "source_version": "crates/dorea-cli/src/grade.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360231980Z",
+  "valid_from": "2026-04-08T03:28:13.360231980Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/grade.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 157,
+    "end_line": 173,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

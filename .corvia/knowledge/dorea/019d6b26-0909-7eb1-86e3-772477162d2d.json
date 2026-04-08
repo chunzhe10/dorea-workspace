@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-0909-7eb1-86e3-772477162d2d",
+  "content": "### LUT Structure\n### Why 65x65x65 (not 33)\n\n### Build Phase\n\nAfter calibration is loaded, before the grading loop begins:\n\n1. For each depth sample d in `[0.0] + calibration.zone_centers + [1.0]`:\n2. For each (R, G, B) on the 65x65x65 grid:\n   - Call `grade_frame_inner` on a synthetic 1x1 frame at (R/64, G/64, B/64)\n     with depth d and `skip_clarity=true`\n   - Store the output (R', G', B') in the LUT\n3. Parallelized with rayon across grid points\n\nTotal: 65^3 × 7 = ~1.9M single-pixel evaluations. Estimated build time: ~2-3s\nin Rust with rayon.\n\n**`grade_pixel` is NOT a separate function** — it calls the real pipeline\n(`grade_frame_inner` with skip_clarity) on a 1x1 frame. Any future pipeline\nchanges automatically propagate to the LUT build. Zero divergence risk.\n\nThis requires extracting the per-pixel pipeline into `grade_frame_inner` with a\n`skip_clarity` parameter. The existing `finish_grade` already accepts\n`skip_clarity`, so this is mostly wiring.\n\n\n### Apply Phase (Non-Keyframe Frames)\n\nFor each pixel with input (R, G, B) and interpolated depth d:\n\n1. Find bracketing depth samples: lo, hi, t_depth\n2. Trilinear interpolate in `luts[lo]` → graded_lo\n3. Trilinear interpolate in `luts[hi]` → graded_hi\n4. Linear blend: `output = lerp(graded_lo, graded_hi, t_depth)`\n\nPer-pixel cost: 48 LUT reads + 45 lerps. Parallelized with rayon.\n",
+  "source_version": "decisions/2026-04-03-3d-lut-temporal-interpolation.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.041863932Z",
+  "valid_from": "2026-04-08T03:32:28.041863932Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-03-3d-lut-temporal-interpolation.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 55,
+    "end_line": 87,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

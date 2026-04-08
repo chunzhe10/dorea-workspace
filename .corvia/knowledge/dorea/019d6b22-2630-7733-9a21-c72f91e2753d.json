@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-c72f91e2753d",
+  "content": "press\n    let compress = 0.4 + 0.2 * (1.0 - d);\n    let knee_h = 0.88_f32;\n    if l_norm > knee_h {\n        let over = l_norm - knee_h;\n        let headroom = 1.0 - knee_h;\n        l_norm = knee_h + headroom * ((over / headroom * (1.0 + compress)).tanh());\n    }\n\n    // Warmth (LAB a*/b* push)\n    let lum_weight = 4.0 * l_norm * (1.0 - l_norm);\n    a_ab += (1.0 + 5.0 * d) * lum_weight;\n    b_ab += 4.0 * d * lum_weight;\n\n    // Vibrance\n    let vibrance = 0.4 + 0.5 * d;\n    let chroma = (a_ab * a_ab + b_ab * b_ab + 1e-8).sqrt();\n    let chroma_norm = (chroma / 40.0).clamp(0.0, 1.0);\n    let boost = vibrance * (1.0 - chroma_norm) * (l_norm / 0.25).clamp(0.0, 1.0);\n    a_ab *= 1.0 + boost;\n    b_ab *= 1.0 + boost;\n\n    // User warmth scaling\n    if (warmth_factor - 1.0).abs() > 1e-4 {\n        a_ab *= warmth_factor;\n        b_ab *= warmth_factor;\n    }\n\n    // LAB → RGB\n    let l_out = (l_norm * 100.0).clamp(0.0, 100.0);\n    let a_out = a_ab.clamp(-128.0, 127.0);\n    let b_out_clamped = b_ab.clamp(-128.0, 127.0);\n    let (ro, go, bo) = dorea_color::lab::lab_to_srgb(l_out, a_out, b_out_clamped);\n\n    // Final highlight knee\n    let knee = 0.92_f32;\n    let apply_knee = |v: f32| -> f32 {\n        if v > knee { let over = v - knee; let room = 1.0 - knee; knee + room * ((over / room).tanh()) } else { v }\n    };\n\n    px[0] = apply_knee(ro).clamp(0.0, 1.0);\n    px[1] = apply_knee(go).clamp(0.0, 1.0);\n    px[2] = apply_knee(bo).clamp(0.0, 1.0);\n\n    // 4. Strength blend with original input\n    let strength = params.strength;\n    if strength < 1.0 - 1e-4 {\n        px[0] = r * (1.0 - strength) + px[0] * strength;\n        px[1] = g * (1.0 - strength) + px[1] * strength;\n        px[2] = b * (1.0 - strength) + px[2] * strength;\n    }\n\n    px\n}",
+  "source_version": "crates/dorea-gpu/src/cpu.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360535284Z",
+  "valid_from": "2026-04-08T03:28:13.360535284Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cpu.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 300,
+    "end_line": 346,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

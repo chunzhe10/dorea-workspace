@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-c8b98b299643",
+  "content": "` conversion at the start (it's no longer needed — input is already f32).\nRemove the `f32 → u8` conversion at the end (output stays f32).\n\nUpdate `finish_grade` similarly:\nFrom: `pub fn finish_grade(graded: &mut [f32], ..., from_cuda: bool) -> Vec<u8>`\nTo: `pub fn finish_grade(graded: &mut [f32], ..., from_cuda: bool) -> Vec<f32>`\n\nRemove the final `(v * 255.0).round() as u8` clamp-and-convert loop. Just clamp to [0,1]\nand return the f32 vec.\n\n- [ ] **Step 4: Update grade_frame public API**\n\nIn `crates/dorea-gpu/src/lib.rs`, update `grade_frame`:\n\nFrom: `pub fn grade_frame(pixels: &[u8], ...) -> Result<Vec<u8>, GpuError>`\nTo: `pub fn grade_frame(pixels: &[f32], ...) -> Result<Vec<f32>, GpuError>`\n\nUpdate the size validation from `pixels.len() != width * height * 3` (u8, 3 bytes/px)\n— this stays the same since f32 is also 3 values per pixel.\n\n- [ ] **Step 5: Update all callers in dorea-cli**\n\nIn `crates/dorea-cli/src/grade.rs`, the frame loop currently passes `&frame.pixels`\n(which is `Vec<u8>` from ffmpeg). This will need a u8→f32 conversion at the call site:\n\n```rust\nlet pixels_f32: Vec<f32> = frame.pixels.iter()\n    .map(|&b| b as f32 / 255.0)\n    .collect();\nlet graded = grade_frame(&pixels_f32, &depth, frame.width, frame.height, &calibration, &params)\n    .unwrap_or_else(|e| {\n        log::warn!(\"Grading failed for frame {}: {e} — passing through\", frame.index);\n        pixels_f32.clone()\n    });\n// Convert back to u8 for encoder (temporary — Task 13 adds 10-bit output)",
+  "source_version": "plans/2026-04-02-10bit-pipeline-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042145051Z",
+  "valid_from": "2026-04-08T03:32:28.042145051Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-10bit-pipeline-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 944,
+    "end_line": 973,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

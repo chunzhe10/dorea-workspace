@@ -1,0 +1,31 @@
+{
+  "id": "019d6b22-2630-7733-9a21-d50964de3646",
+  "content": "efault(\"models.raune_net\", fake_mod.raune_net)\n\n    from dorea_inference.raune_net import RauneNetInference\n    m = RauneNetInference.__new__(RauneNetInference)\n    m.device = torch.device(\"cpu\")\n    m.model = _IdentityNet()\n    m.model.eval()\n    return m\nclass _IdentityNet(torch.nn.Module):\n        def forward(self, x):\n            return x  # identity; output in same range as input ([-1,1] after normalize)",
+  "source_version": "python/tests/test_infer_batch.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-08T03:28:13.360711863Z",
+  "valid_from": "2026-04-08T03:28:13.360711863Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/tests/test_infer_batch.py",
+    "language": "py",
+    "chunk_type": "class_definition",
+    "start_line": 17,
+    "end_line": 19,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

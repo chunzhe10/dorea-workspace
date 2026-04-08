@@ -1,0 +1,31 @@
+{
+  "id": "019d5989-edc3-7c43-b566-e9578077b305",
+  "content": "## Maxine Upscaling in Fused RAUNE+Depth Batch\n\n**Implementation:** Added Maxine SR between RAUNE and Depth in the fused batch IPC handler.\n\n**Architecture:**\n```\nProxy frames (518px)\n  → RAUNE inference on GPU → (N, 3, H_r, W_r) float32\n  → Maxine upscale (4x) → (N, 3, ~2070px, ~2070px)\n  → Depth Anything on GPU → (N, H_d, W_d) depth\n```\n\n**Design:**\n- Separate Pass 1 logic from fused batch logic:\n  - `use_maxine = false` — disables full-res Pass 1 enhancement (not needed)\n  - `maxine_in_fused_batch = true` — enables proxy-res upscaling in fused batch\n  - `InferenceConfig.maxine = true` — initializes Maxine in Python server\n\n- Per-frame Maxine loop in fused batch:\n  1. Convert RAUNE GPU tensor to uint8 numpy (dtoh)\n  2. Frame-by-frame through `maxine_enhancer.enhance()`\n  3. Convert result back to GPU float32 tensor (htod)\n  4. Pass to Depth on upscaled input\n\n**Tradeoffs:**\n- ✅ Depth receives 4x larger input (toward 4K from 518px proxy)\n- ✅ Keeps Pass 1 clean (no full-res processing)\n- ✅ Reuses existing Maxine infrastructure\n- ❌ dtoh/htod transfers (Maxine's API requires numpy I/O)\n- ❌ Per-frame loop (no Maxine batch API)\n\n**Commit:** `acd03ee` — \"feat: add Maxine upscaling in fused RAUNE+Depth batch\"\n\n**Next observations:** Monitor GPU utilization during calibration phase. Maxine's CPU-heavy I/O may be bottleneck; if needed, consider integrating Maxine directly into PyTorch pipeline to avoid tensor transfers.",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-04T17:28:24.771317890Z",
+  "valid_from": "2026-04-04T17:28:24.771317890Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "decision",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-090a-7361-9475-e84bb7241a5a",
+  "content": "───────────\n\npub struct ZoneSmoothNode { pub window: usize }\n\nimpl Node for ZoneSmoothNode {\n    type Input = (Vec<Vec<f32>>, Vec<SegmentRange>);\n    type Output = Vec<Vec<f32>>;\n\n    fn name(&self) -> &'static str { \"zone_smooth\" }\n\n    fn process(&mut self, (raw, segs): Self::Input) -> Result<Vec<Vec<f32>>> {\n        Ok(smooth_zone_boundaries(&raw, &segs, self.window))\n    }\n}\n\n// ── Free function: build_segment_lut ─────────────────────────────────────────\n\n/// Builds a `DepthLuts` for one segment by streaming `StreamingLutBuilder` over\n/// all keyframes in the segment.\n///\n/// Uses a free function rather than a Node because the store must be borrowed\n/// for the full duration of the loop — no raw pointers or lifetime gymnastics needed.\npub fn build_segment_lut(\n    store: &crate::pipeline::feature::PagedCalibrationStore,\n    kf_indices: &[usize],\n    kf_depths: &[Vec<f32>],\n    base_lut_zones: usize,\n) -> DepthLuts {\n    let seg_depths: Vec<f32> = kf_indices.iter()\n        .flat_map(|&i| kf_depths[i].iter().cloned())\n        .collect();\n    let base_boundaries = adaptive_zone_boundaries(&seg_depths, base_lut_zones);\n    let mut builder = StreamingLutBuilder::new(base_boundaries);\n    for &i in kf_indices {\n        let (w, h) = store.dims(i);\n        let (pixels_u8, target_u8) = store.pixtar_slices(i);\n        let depth = store.read_depth(i);",
+  "source_version": "plans/2026-04-05-pipeline-dag-refactor.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.042432346Z",
+  "valid_from": "2026-04-08T03:32:28.042432346Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-05-pipeline-dag-refactor.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1044,
+    "end_line": 1070,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

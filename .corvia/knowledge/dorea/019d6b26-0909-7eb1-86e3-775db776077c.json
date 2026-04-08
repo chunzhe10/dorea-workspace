@@ -1,0 +1,31 @@
+{
+  "id": "019d6b26-0909-7eb1-86e3-775db776077c",
+  "content": "### Code Location\n### Clarity Handling\n\n### Maxine Interaction\n\nThe Maxine decision doc (2026-04-02) described non-keyframes as lerping enhanced\nRGB between keyframes — this is the approach reverted in PR #23 for ghosting.\nThe 3D LUT replaces that strategy. Combined pipeline:\n\n| Configuration | Keyframe path | Non-keyframe path |\n|---|---|---|\n| LUT only | grade_frame + clarity | apply_grade_lut |\n| LUT + Maxine | grade_frame + clarity + enhance | apply_grade_lut + enhance |\n| Neither (current) | grade_frame + clarity | grade_frame + clarity |\n\nMaxine runs on ALL frames post-grade (not just keyframes). The Maxine decision\ndoc must be updated to reflect this when Maxine is implemented.\n\n\n### Invariant Enforcement\n\nThe LUT is built from calibration + GradeParams, which must be constant per clip.\n`GradeLut` stores a hash of its build inputs. Before each `apply` call, assert\nthat the current params match the build hash:\n\n```rust\nimpl GradeLut {\n    fn is_valid_for(&self, cal: &Calibration, params: &GradeParams) -> bool;\n}\n```\n\nThis turns a silent correctness bug into a loud failure if params ever change\nmid-clip.\n",
+  "source_version": "decisions/2026-04-03-3d-lut-temporal-interpolation.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-08T03:32:28.041865661Z",
+  "valid_from": "2026-04-08T03:32:28.041865661Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-03-3d-lut-temporal-interpolation.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 129,
+    "end_line": 158,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}
