@@ -1,0 +1,31 @@
+{
+  "id": "019d71cb-76aa-7572-9c54-16e2f3b52816",
+  "content": "# Single-Process Direct Mode: Zero-Pipe RAUNE + OKLab Triton\n\n## Decision\n\nReplaced the pipe-based direct grading mode with a single-process architecture\nthat eliminates all pipe I/O. The filter now decodes and encodes internally via\nPyAV, with GPU processing using a fused Triton OKLab kernel.\n\n## Architecture\n\nOld (pipe-based):\n```\nffmpeg decode → pipe(50MB/frame) → raune_filter.py → pipe(50MB/frame) → ffmpeg encode\n```\n\nNew (single-process):\n```\nraune_filter.py: PyAV decode (in-process) → GPU → PyAV encode (in-process)\n```\n\n## Performance\n\nTested on 3840x2160 120fps HEVC (DJI D-Log M, 10-bit):\n- Pipe-based: 0.85 fps (7 min for 360 frames)\n- Single-process: 2.35 fps (2.5 min for 360 frames)\n- Speedup: 2.8×\n\nRemaining bottleneck is RAUNE inference (~50ms/frame at proxy resolution).\nOKLab Triton transfer is 2.89ms/frame (negligible).\n\n## Files Changed\n\n- `python/dorea_inference/raune_filter.py` — Added `--input`/`--output` single-process\n  mode with PyAV and Triton fused OKLab kernel. Legacy pipe mode preserved for\n  backward compat.\n- `crates/dorea-cli/src/pipeline/grading.rs` — `run_grading_stage_direct()` now spawns\n  filter with file paths, no pipe plumbing. `DirectModeConfig` gains `output` field.\n- `crates/dorea-cli/src/grade.rs` — Passes output path to DirectModeConfig, skips\n  encoder creation for direct mode.\n\n## Dependencies\n\n- PyAV (`pip install av`) — Python FFmpeg bindings for in-process decode/encode\n- Triton (ships with PyTorch) — fused CUDA kernel for OKLab transfer\n- Both have fallbacks: pipe mode if PyAV unavailable, PyTorch OKLab if Triton unavailable\n\n## Branch\n\n`feat/oklab-grade-pipeline` — commit 629fee4",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-09T10:30:52.842906078Z",
+  "valid_from": "2026-04-09T10:30:52.842906078Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "decision",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

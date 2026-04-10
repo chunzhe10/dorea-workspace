@@ -1,0 +1,31 @@
+{
+  "id": "019d74be-6a50-79e0-98c8-da21a979e1ce",
+  "content": "# 3-Thread Pipeline for Direct Mode — Design Decision (2026-04-10)\n\n## What\nRefactor `raune_filter.py::run_single_process()` from single-threaded serial loop to\n3-thread producer-consumer pipeline (decoder → GPU → encoder) with bounded queues.\n\n## Why\n- Current single-threaded mode forces serial execution of stages that run on different\n  hardware units (CPU decoder, GPU, CPU encoder)\n- Theoretical pipelined ceiling: ~12.5 fps; actual: 2.35 fps\n- ~200-300ms/frame wasted on serialization\n\n## How\n- Python `threading.Thread` + `queue.Queue(maxsize=2)`\n- PyAV releases GIL during decode/encode (libav calls)\n- torch.cuda releases GIL during CUDA operations\n- `None` sentinel for termination, shared errors list + stop_event for error handling\n- Only Thread 2 touches CUDA — no thread-safety concerns\n\n## Alternatives Rejected\n- multiprocessing: IPC serialization cost, separate GPU contexts\n- asyncio: decode/encode not natively async, more complex\n- Rust-side parallelism: larger refactor, out of scope\n\n## Issue\nchunzhe10/dorea#64\n\n## Spec\ndocs/decisions/2026-04-10-direct-mode-3thread-pipeline.md",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-10T00:15:29.360612101Z",
+  "valid_from": "2026-04-10T00:15:29.360612101Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "decision",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

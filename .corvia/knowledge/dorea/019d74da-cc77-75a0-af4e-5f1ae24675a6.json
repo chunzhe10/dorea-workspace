@@ -1,0 +1,31 @@
+{
+  "id": "019d74da-cc77-75a0-af4e-5f1ae24675a6",
+  "content": "# 3-Thread Pipeline Direct Mode — Final Decision Record (chunzhe10/dorea#65, merged 2026-04-10)\n\n## What shipped\n3-thread producer-consumer refactor of `raune_filter.py::run_single_process()` plus\nconcurrency hardening from 5-persona review. PR chunzhe10/dorea#65 merged as 3b6626c.\n\n## Result vs goal\n- Goal (issue #64): 2.35 → ~7 fps (3× speedup)\n- Delivered: 2.35 → 2.47 fps (~5% improvement)\n- Bit-exact output (YAVG=0, YMAX=0)\n- Concurrency hardened (4 critical deadlock paths fixed)\n- Per-stage timing instrumentation now ground-truth\n\n## Why goal was missed\nDeep dive estimates were wrong by 5-7×. RAUNE inference at 1080p with batch=4 on\nRTX 3060 is ~398 ms/frame, not the estimated 50-80 ms/frame. Decode (~34ms) and\nencode (~50-100ms) ARE perfectly hidden behind GPU work — pipeline is correctly\nsaturated on the GPU stage. Threading cannot help further.\n\n## Concurrency lessons (reusable for future Python pipelines in this codebase)\n\n1. **Bare `queue.Queue.put()` makes stop_event useless** for blocked threads.\n   Always use a `put_or_stop()` helper with timeout-based puts checking stop_event.\n\n2. **Terminal-stage error path needs to drain its input queue** so upstream\n   producers can complete their in-flight puts and then exit on stop_event.\n\n3. **Container close() can shadow original errors** — wrap in try, only surface\n   close errors if no primary error exists.\n\n4. **errors list reads MUST be locked** — `with errors_lock: error_to_raise = errors[0] if errors else None`.\n\n5. **Decode timer scope**: PyAV's `packet.decode()` is where libavcodec runs,\n   not `to_ndarray()`. Time the iterator materialization with `list(packet.decode())`.\n\n6. **Sentinel-based shutdown is harder than it looks**: every put() is a potential\n   deadlock if the consumer dies before draining.\n\n## Out of scope but flagged\n- `_process_batch()` has double full-res GPU upload + per-frame transfer loop\n  (PCIe inefficiency, breaks batching) — separate issue needed\n- No unit tests added for the threading refactor — separate issue needed\n- 5 GPU stage optimizations ranked in corvia 019d74c9\n\n## Status\nIssue #64 closed. Direct mode is now correctly architected for future GPU-stage\noptimizations but does NOT yet deliver user-visible speedup.",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-10T00:46:29.495261344Z",
+  "valid_from": "2026-04-10T00:46:29.495261344Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "decision",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

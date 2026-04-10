@@ -1,0 +1,31 @@
+{
+  "id": "019d6c3d-c12c-7712-9154-c9fd94037cf9",
+  "content": "# Depth estimation must run on original frames, not RAUNE-enhanced (2026-04-08)\n\n## What\nChanged the fused RAUNE+depth batch to run Depth Anything on the original input frames instead of the RAUNE-enhanced output.\n\n## Why\nRAUNE color correction (designed for underwater red recovery) distorts the image characteristics that Depth Anything was trained on. Running depth on enhanced frames produces artifacts — inaccurate depth zone boundaries that cause visible grading artifacts in the output video. Confirmed via E2E test on 4K 120fps DJI footage.\n\n## How to apply\nIf depth estimation ever appears to produce noisy or incorrect results, check whether the depth model input has been preprocessed. Depth Anything V2 expects natural/unmodified images.",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-08T08:37:59.724312861Z",
+  "valid_from": "2026-04-08T08:37:59.724312861Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "decision",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d71a6-3dd4-7441-9030-f7da3d1051fc",
+  "content": "# Replace CIELab with OKLab in CUDA Grade Pipeline\n\n## Decision\n\nReplaced CIELab D65 with OKLab (Björn Ottosson, 2020) in the per-pixel grading pipeline for better perceptual uniformity in color manipulation (ambiance, warmth, vibrance stages).\n\n## Key Details\n\n- OKLab output rescaled to CIELab-compatible numeric ranges (L×100, a×300, b×300) so all tuned manipulation constants remain unchanged\n- CUDA sRGB gamma switched from `powf` to `__powf` fast intrinsic (~2× faster on SFU, ~2 ULP accuracy, invisible at 10-bit)\n- Combined estimated improvement: 15-30% faster on LAB stage, 5-10% overall per-frame\n\n## Files Changed\n\n- `crates/dorea-color/src/lab.rs` — Rust CPU OKLab conversion\n- `crates/dorea-gpu/src/cuda/kernels/grade_pixel.cuh` — CUDA OKLab + `__powf`\n- `crates/dorea-gpu/src/cuda/mod.rs` — CPU/GPU parity tolerance adjustments (2→5/255 max)\n\n## Implementation Notes\n\n- The standard OKLab LMS→RGB inverse matrix (row 3: `0.0209, -0.7034, 1.6825`) is NOT the proper inverse of the forward RGB→LMS matrix. Corrected to: `-0.0042, -0.7034, 1.7076` via numpy.linalg.inv. Both Rust and CUDA use the corrected values.\n- Function signatures (`srgb_to_lab`, `lab_to_srgb`) unchanged — downstream callers unaffected.\n- `cpu.rs` and `postprocess.cu` required no changes (they call the swapped functions).\n- CPU/GPU parity tolerances loosened from 2/255 to 5/255 due to `__powf` vs `powf` divergence.\n\n## Branch\n\n`feat/oklab-grade-pipeline` — 3 commits (c04783f, 670bad3, b61a40f)\n\n## Benchmark (POC, not production)\n\nStandalone 4K benchmark of the color transfer step only (Python PyTorch vs Triton):\n- CIELab fp32: 33.08ms (30.2 fps)\n- OKLab + torch.compile + fp16: 6.81ms (4.9×)\n- OKLab fused Triton kernel: 2.89ms (11.4×)\n\nThese numbers reflect kernel launch overhead elimination, not directly comparable to production CUDA which is already fused.\n\n## Spec\n\n`docs/decisions/2026-04-09-oklab-grade-pipeline.md`",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-09T09:50:13.460164176Z",
+  "valid_from": "2026-04-09T09:50:13.460164176Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "decision",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

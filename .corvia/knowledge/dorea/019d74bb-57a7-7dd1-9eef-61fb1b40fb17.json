@@ -1,0 +1,31 @@
+{
+  "id": "019d74bb-57a7-7dd1-9eef-61fb1b40fb17",
+  "content": "# Direct Mode Performance Deep Dive (2026-04-10)\n\nAnalysis of single-process direct mode bottlenecks after eliminating pipe I/O.\nCurrent throughput: **2.35 fps** at 4K (3840×2160 120fps HEVC, DJI D-Log M 10-bit).\n425ms per frame — significant headroom remains.\n\n## Per-frame cost estimate (RTX 3060, PCIe 3.0 x16)\n\n| Stage | Est. time | Notes |\n|---|---|---|\n| HEVC 4K 10-bit decode (PyAV) | ~15-25ms | Software decode, multi-threaded |\n| GPU upload uint8 (25MB) | ~3ms | PCIe bound |\n| Proxy downscale 4K→1080p | ~1-2ms | F.interpolate bilinear |\n| **RAUNE inference 1080p** | **~50-80ms** | 30 residual blocks, batched |\n| OKLab delta at proxy | <1ms | |\n| Delta upscale to 4K | ~2ms | |\n| Triton OKLab transfer 4K | ~3ms | Fused kernel |\n| GPU download uint8 | ~3ms | PCIe bound |\n| **ProRes 422 HQ 4K encode** | **~50-100ms** | CPU-bound, expensive |\n| **Sum** | **~130-220ms** | Theoretical ceiling |\n\nPerfect pipelining → slowest stage (~80ms) dominates → ~12.5 fps theoretical.\nActual ~425ms/frame means ~200-300ms wasted per frame.\n\n## Root cause: NO PIPELINING\n\nCurrent loop in raune_filter.py run_single_process() is strictly serial:\n```\nfor packet:\n    decode (CPU blocks)\n    if batch full:\n        GPU work (CPU idle)\n        encode (GPU idle)\n```\n\nDecode, GPU, and encode run on different hardware units (CPU decoder, GPU, CPU encoder)\nbut are forced to serialize. Old pipe-based mode had them in separate processes running\nconcurrently — that's why even with 100MB/frame pipe I/O, pipelining hid some of the cost.\n\n## Secondary bottlenecks\n\n### 1. Precision regression: 8-bit download path\nCurrent code downloads GPU tensor as uint8:\n```python\nresult_u8 = (result * 255.0).to(torch.uint8).cpu().numpy()\n```\nThen PyAV converts rgb24 → yuv422p10le for ProRes 10-bit output. The 10-bit container\nstores 8-bit data. **Regression vs pipe-based mode which used rgb48le (16-bit).**\n\n### 2. Full-res frame uploaded twice per batch\n`_process_batch` uploads each frame once for downscale+discard, then re-uploads the same\nnumpy array for the Triton transfer. 50MB/frame wasted PCIe bandwidth.\n\n### 3. Python/numpy copies in PyAV\n`frame.to_ndarray()` and `av.VideoFrame.from_ndarray()` each copy ~25MB per 4K frame.\n~50MB/frame of CPU memory copies on top of GPU transfers.\n\n### 4. ProRes 422 HQ is the dominant CPU cost\nSoftware encode at 4K = ~50-100ms/frame. Hardware encode (NVENC HEVC) would be 5-10×\nfaster but changes output format.\n\n## Proposed fixes (ranked by impact)\n\n**A. 3-thread pipeline** (biggest win, moderate effort)\n   - Thread 1: PyAV decode → queue_decoded (cap 8)\n   - Thread 2: GPU process → queue_processed (cap 8)\n   - Thread 3: PyAV encode\n   - PyAV and torch.cuda release GIL; Python threads work fine here\n   - Expected: ~3× → ~7 fps\n\n**B. 16-bit precision path** (quality fix)\n   - Download as uint16, pass as rgb48le to PyAV\n   - Restores precision lost vs pipe-based mode\n   - Expected: 0 speed, quality improvement\n\n**C. Cache full-res tensor on GPU** (small win)\n   - Upload each frame once, keep on GPU until transfer\n   - Eliminates 2× upload\n   - Expected: ~5-10%\n\n**D. NVENC hardware encode** (huge win if acceptable)\n   - Use hevc_nvenc instead of ProRes\n   - Hardware encode: ~5-10ms/frame at 4K 10-bit\n   - Changes output format (HEVC vs ProRes — editing/quality tradeoff)\n   - Expected: encode stage ~10×, overall ~2-3× on top of A\n\n**E. Batched proxy downscale** (minor)\n   - Stack frames before F.interpolate\n   - Expected: 1-2%\n\n**F. NVDEC hardware decode** (big win)\n   - PyAV 17 supports hwaccel=\"cuda\" for HEVC decode into GPU memory\n   - Zero CPU decode, zero upload\n   - Expected: eliminates decode stage\n\n## Recommended sequence\n\n1. A (3-thread pipeline) → ~3× speedup (target ~7 fps)\n2. B (16-bit precision) → quality restoration\n3. F (NVDEC) → additional ~2× if PyAV version supports it\n\nOptimistic combined target: 2.35 fps → **~15 fps** at 4K.\n\n## Context\n\n- Baseline: pipe-based direct mode at 0.85 fps (chunzhe10/dorea#63 commit 629fee4)\n- Current: single-process single-threaded at 2.35 fps (2.8× from pipe elimination)\n- RAUNE inference dominates GPU budget; OKLab transfer is negligible at 2.89ms (Triton)\n- Tested on: DJI_20251101111428_0055_D_3s.MP4 (3840x2160 @ 119.88fps, HEVC yuv420p10le, 360 frames)",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-10T00:12:07.975254660Z",
+  "valid_from": "2026-04-10T00:12:07.975254660Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "finding",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

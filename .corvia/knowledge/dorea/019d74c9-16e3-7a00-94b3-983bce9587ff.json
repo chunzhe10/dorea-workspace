@@ -1,0 +1,31 @@
+{
+  "id": "019d74c9-16e3-7a00-94b3-983bce9587ff",
+  "content": "# Direct Mode Bottleneck CORRECTION (2026-04-10)\n\nCORRECTS the 2026-04-10 deep dive (corvia 019d74bb) which estimated stage costs incorrectly.\n\n## Measured per-stage cost (4K, batch=4, RTX 3060, DJI 120fps HEVC)\n\n```\ndecode busy:  10.9 ms/frame   ← much cheaper than estimated 15-25ms\ngpu busy:    378.0 ms/frame   ← 5-7× higher than estimated 50-80ms\nencode busy:  48.9 ms/frame   ← within range, lower end\nwall:        381.7 ms/frame   ← ≈ gpu busy (perfect pipelining)\n```\n\n## Implications\n\n1. **GPU dominates by 8×** over decode and encode combined\n2. The 3-thread pipeline IS hiding decode+encode (~60ms) perfectly behind GPU work\n3. **Threading can't help further** — max ≈ 1000/378 ≈ 2.65 fps regardless of how\n   decode/encode are scheduled\n4. The original 7 fps target from option A was unreachable because RAUNE inference\n   was 5-7× more expensive than estimated\n\n## Why RAUNE is expensive\n\n`_process_batch()` does ~325ms/frame of RAUNE-related work for batch=4 at 1080p\nproxy. Likely contributors (untested hypothesis):\n- RAUNE-Net 30 residual blocks at 1080p in fp32 on a 3060 is genuinely expensive\n- Per-frame Python loops for upload, downscale, and Triton transfer prevent full\n  GPU batching\n- Full-res frame uploaded twice per frame (~50MB/frame redundant PCIe traffic)\n\n## Re-ranked optimization options\n\n1. **Lower proxy resolution** 1080p → 720p ≈ 2.25× fewer pixels through RAUNE\n2. **fp16 RAUNE inference** `model.half()` ≈ 2× on Ampere fp16\n3. **Larger batch_size** RTX 3060 has 6GB, current batch=4 may underutilize\n4. **torch.compile** on RAUNE U-Net — Inductor JIT fuses residual blocks\n5. **Frame skipping** at 120fps source, run RAUNE every Nth frame, interpolate\n\n## What 3-thread pipeline gave us\n\n- Wall: 425 → 382 ms/frame (~10% improvement)\n- Bit-exact output (YAVG=0, YMAX=0 vs single-threaded)\n- Pipeline saturated on GPU stage — perfect baseline for future GPU optimizations\n- Per-stage timing instrumentation for future profiling\n\nFuture work: A optimization done correctly. To go further, target the GPU stage\n(options 1-5 above), not threading.\n\n## Issue\nchunzhe10/dorea#64",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-10T00:27:08.899403049Z",
+  "valid_from": "2026-04-10T00:27:08.899403049Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "finding",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}
