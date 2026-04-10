@@ -1,0 +1,31 @@
+{
+  "id": "019d7574-fcf3-7521-8847-fd4caf07c753",
+  "content": "# torch.compile RAUNE Didn't Work on RTX 3060 — Post-Mortem (2026-04-10)\n\nchunzhe10/dorea#69 implemented and benchmarked but never shipped. Second dead-end\nin the GPU optimization sweep after #68. Closing issue + parent sweep at this point.\n\n## Measured results\n\n| Config | Throughput | GPU busy | Visual YMAX |\n|---|---|---|---|\n| fp16 baseline (#67) | 4.32 fps | 227.7 ms | 0 |\n| torch.compile reduce-overhead | 3.90 fps | 252.4 ms | 13 |\n\n- Throughput: **-10%** (regression)\n- GPU busy: **+11%** (regression)\n- Visual diff: **YMAX 13/255 exceeds 5/255 tolerance**\n\n## Root causes\n\n### 1. RTX 3060 has too few SMs for Inductor's tile autotuning\nInductor explicitly logged: `Not enough SMs to use max_autotune_gemm mode`.\nRTX 3060 has 28 SMs; Inductor's tile tuning is designed for A100-class\n(108 SMs) and up. On consumer GPUs it generates kernels that don't match\ncuDNN's already-tuned paths.\n\n### 2. cuDNN eager mode is already optimal\nRAUNE-Net is a straightforward U-Net with 30 residual blocks. cuDNN has\nhighly optimized implementations for this pattern on consumer Ampere.\nThere's no slack for Inductor to recover.\n\n### 3. CUDA graph thread-locality deadlock\n`mode=\"reduce-overhead\"` captures CUDA graphs which are per-thread. When\nthe warmup forward pass runs on the main thread but the production batches\nrun from the GPU worker thread (3-thread pipeline), the graph capture is\nbound to the wrong thread and `model(batch)` deadlocks. Removing the warmup\nlets the worker thread capture on its first batch, but this negates the\nmain benefit of reduce-overhead mode.\n\n### 4. Inductor fused kernels round fp16 slightly differently\nThe fused conv+bn+relu+add sequences produce different intermediate\nprecision than cuDNN's separate kernel calls. Worst-case diff hits 13/255\nwhich is visible in isolated pixels, above the 5/255 tolerance threshold.\n\n## Lesson: torch.compile isn't free on all hardware\n\nBefore proposing torch.compile as an optimization:\n1. Check the target GPU's SM count against the model's resolution/batch\n   characteristics. Under ~40 SMs, Inductor tile tuning is ineffective\n2. Check if cuDNN already has optimized paths for the model's layer topology.\n   U-Nets and ResNets on consumer Ampere are already well-tuned\n3. If using reduce-overhead mode (CUDA graphs), verify graph capture happens\n   on the SAME thread that will execute production inference — or use\n   default mode (no CUDA graphs)\n4. Benchmark with strict tolerance checks, not just throughput. Kernel\n   fusion can change fp16 rounding order\n\n## Pattern: GPU optimization sweep hit diminishing returns\n\nTwo issues closed wontfix in the sweep:\n- #68 batched uploads (wrong premise: PCIe not on critical path)\n- #69 torch.compile (wrong hardware: insufficient SMs, visual regression)\n\nfp16 (#67) extracted the only real win. The 227 ms/frame of RAUNE compute\nat fp16+cuDNN is essentially the hardware floor on RTX 3060 without\nlifting quality constraints.\n\n## Practical conclusion\n\n**4.25 fps is the practical ceiling for direct mode on RTX 3060 + 6GB VRAM\nunder \"no quality loss\" constraint.** Further speedup requires:\n- Lower proxy resolution (removed from scope per user constraint)\n- Frame skipping (removed from scope per user constraint)\n- Different model (separate architectural work)\n- Upgraded hardware (not a software fix)\n\n## What about NVDEC (issue #66 PR 3/3)?\n\nPer-stage profile: decode is ~34 ms/frame, already hidden behind 230 ms GPU\nin 3-thread pipeline. Eliminating decode entirely saves 0 wall-clock fps.\nNVDEC would reduce CPU load but not throughput. Recommend closing #66 the\nparent sweep as well.\n\n## Related entries\n- 019d7501: fp16 final decision (the win)\n- 019d753f: upload batching post-mortem (first wontfix)\n- This entry: torch.compile post-mortem (second wontfix)\n\n## Artifacts\n- Branch feat/69-torch-compile was never pushed; deleted locally\n- Issue #69 closed as \"not planned\"\n- Parent issue #66 recommendation: also close after documenting NVDEC decision",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-10T03:34:54.451241890Z",
+  "valid_from": "2026-04-10T03:34:54.451241890Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "finding",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}
