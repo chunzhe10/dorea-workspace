@@ -1,0 +1,31 @@
+{
+  "id": "019d74e1-3a5a-7ff3-876e-9924eef71643",
+  "content": "# Direct Mode fp16 + Larger Batch — Design Decision (2026-04-10)\n\n## What\nTwo stacked optimizations targeting the GPU stage of direct mode:\n1. fp16 RAUNE inference via model.half()\n2. Default batch_size 4 → 8 with new --direct-batch-size CLI flag\n\n## Why\n- After 3-thread pipeline (#65), GPU stage at 398ms/frame is the bottleneck\n- User constraint: quality-preserving optimizations only (no proxy reduction, no frame skipping)\n- fp16: ~2× on Ampere fp16 throughput, sub-1/255 numerical noise, free on RTX 3060\n- Larger batch: ~10-20% from amortizing per-call overhead and SM occupancy\n- Stack cleanly: fp16 halves activation memory, freeing room for larger batch\n\n## Expected Outcome\n- 2.47 fps → ~5 fps (combined target)\n- Visually equivalent output (ΔE invisible)\n- VRAM: similar to current (fp16 halves activations, batch=8 doubles them)\n\n## Decomposition\nThis is PR 1 of 3 in the GPU sweep (issue #66):\n- PR 1 (this): fp16 + batch — trivial wins, ~5 fps target\n- PR 2 (follow-up): torch.compile(model.half()) — JIT fusion on top of fp16\n- PR 3 (follow-up): NVDEC hardware decode — eliminates ~34ms decode\n\n## Issue\nchunzhe10/dorea#66\n\n## Spec\ndocs/decisions/2026-04-10-direct-mode-fp16-batch.md",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-10T00:53:30.842746317Z",
+  "valid_from": "2026-04-10T00:53:30.842746317Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "decision",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}
