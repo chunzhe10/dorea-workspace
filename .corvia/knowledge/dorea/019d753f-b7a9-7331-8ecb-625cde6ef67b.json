@@ -1,0 +1,31 @@
+{
+  "id": "019d753f-b7a9-7331-8ecb-625cde6ef67b",
+  "content": "# Upload Batching in _process_batch Didn't Work — Post-Mortem (2026-04-10)\n\nchunzhe10/dorea#68 implemented but closed wontfix. Core finding:\n\n## The wrong mental model\nAssumed per-frame CPU→GPU uploads in `_process_batch()` were serializing the GPU\nand that batching them would speed up direct mode. This was based on the\n\"theoretical PCIe bandwidth wasted\" argument from the bottleneck analysis.\n\n## What actually happens\nOn CUDA, `.cuda()` calls are **asynchronous** — they enqueue work on the default\nCUDA stream but don't block the Python thread until a sync point (like `.cpu()`\nor an explicit `torch.cuda.synchronize()`). The N per-frame H2D transfers were\nrunning **concurrently** with the RAUNE forward pass, hidden behind the\n~230 ms/frame GPU compute.\n\n## Measured results\nRefactoring to batched uploads on `feat/68-batched-uploads`:\n- batch=4: 4.25 → 4.17 fps (neutral)\n- batch=8: 4.36 → 4.23 fps (neutral)\n- batch=16: 3.47 → **STALLS** (VRAM exhausted at 5141/6144 MB)\n\ngpu_busy per-frame barely moved (230 → 232 ms).\n\n## Why batch=16 regressed to a stall\nThe \"reuse full_batch\" design held the full-res tensor on GPU through the whole\npipeline. Peak working set at batch=16 4K fp32 ≈ 5.8 GB:\n- full_batch: 16 × 3 × 2160 × 3840 × 4 = 1.6 GB\n- delta_full fp32: 1.6 GB\n- Triton wrapper permute contiguous fp16 copies: 800 MB\n- RAUNE activations + weights: 1 GB\n- Output fp16: 800 MB\n\nOn 6 GB VRAM this hits fragmentation — cudaMalloc blocks indefinitely at 84%\nutilization with 0% GPU compute. The old per-frame path only held 1 transient\nfull_t at a time so had much more headroom.\n\n## Lesson\n**Before batching H2D transfers, verify they are on the critical path.** On a\nGPU-compute-bound workload with CUDA streams, uploads overlap with compute and\ndon't need to be minimized. Use `torch.cuda.synchronize()` + per-stage timing\nto confirm the bottleneck BEFORE refactoring.\n\n## Template for future perf investigations\n1. Profile with `torch.cuda.synchronize()` + `time.perf_counter()` around each\n   phase\n2. Check if stage timings SUM to wall time (serial) or are LESS THAN wall time\n   (parallel/overlapped)\n3. If overlapped, the \"slow\" phase isn't necessarily the bottleneck — the\n   critical path stage is\n4. Only then decide what to optimize\n\n## What this confirms about the next PR\nPR 2/3 in issue #66 should be `torch.compile(model.half())` — attacking RAUNE\ncompute itself, which IS measurably the bottleneck (232 ms/frame critical path).\nDo NOT try to optimize PCIe, pinned memory, or batch upload patterns — those\nare not on the critical path.\n\n## Artifacts\n- Branch `feat/68-batched-uploads` was never pushed; deleted locally\n- Commit `ae075ed` existed only locally\n- Issue chunzhe10/dorea#68 closed as \"not planned\" with full explanation\n\n## Related entries\n- 019d74e1: fp16 design decision\n- 019d7501: fp16 final decision record (which flagged _process_batch as next bottleneck)\n- 019d7506: batched _process_batch design decision (premise disproven here)",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-10T02:36:43.305836616Z",
+  "valid_from": "2026-04-10T02:36:43.305836616Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "finding",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

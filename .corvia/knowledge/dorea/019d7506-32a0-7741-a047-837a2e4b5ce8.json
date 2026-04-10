@@ -1,0 +1,31 @@
+{
+  "id": "019d7506-32a0-7741-a047-837a2e4b5ce8",
+  "content": "# Batched _process_batch — Design Decision (2026-04-10)\n\n## What\nRefactor `_process_batch()` in raune_filter.py to do single batched H2D upload,\nbatched downscale, batched RAUNE+OKLab, single batched D2H. Update Triton wrapper\nto accept (N, 3, H, W) by flattening N into the pixel dimension.\n\n## Why\nPerformance reviewers (PR #65, #67) flagged that per-frame upload loops dominate\nwhen GPU compute is no longer the bottleneck. fp16 cut GPU compute from 398→230ms,\nexposing the per-frame overhead. batch=8 only gives +0.7%, batch=16 regresses.\n\n## Key insight\nThe Triton OKLab kernel processes pixels independently — flattening N into\n`n_pixels` is mathematically valid. Wrapper-only change, kernel itself untouched.\n\n## Approach\n- np.stack frames CPU-side, single .cuda() call\n- Reuse full_batch tensor for both downscale (proxy) and transfer (full-res)\n- Batched F.interpolate for both downscale and delta upscale\n- Wrapper permutes (N,3,H,W)→(3,N,H,W) for channel-first contiguous layout\n\n## Cost\nPermute+contiguous in wrapper: ~0.6ms at batch=8 4K fp16. Negligible vs the\n~N × ~25ms PCIe uploads it eliminates.\n\n## Expected\n- batch=4: unchanged ~4.25 fps\n- batch=8: ~5 fps (target)\n- batch=16: ~5-6 fps (no longer regresses)\n\n## Issue\nchunzhe10/dorea#68\n\n## Spec\ndocs/decisions/2026-04-10-batched-process-batch.md",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-10T01:33:53.696329146Z",
+  "valid_from": "2026-04-10T01:33:53.696329146Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "decision",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}
