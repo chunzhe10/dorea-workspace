@@ -4,7 +4,7 @@
 
 **Goal:** Flip dorea grade's default mode from `lut` to `direct`, bump direct mode's RAUNE proxy default from 1080p to 1440p and batch size from 4 to 8, soft-deprecate the LUT pipeline.
 
-**Architecture:** Single branch on `chunzhe10/dorea`, four small Rust commits + one docs commit, no Python changes, no new tests, no CI changes. Backed by delta upscale bench (bilinear wins at 1440p, −8.3% ΔE) and fp16 RAUNE activation headroom decision.
+**Architecture:** Single branch on `chunzhe10/dorea` (default branch: `main`), four small Rust commits + one docs commit, no Python changes, no new tests, no CI changes. Backed by delta upscale bench (bilinear wins at 1440p, −8.3% ΔE) and fp16 RAUNE activation headroom decision.
 
 **Tech Stack:** Rust (`cargo build`, `cargo test`, `clap` args), Python (unchanged — already parameterized), `gh` CLI for PR and follow-up issues (always with `--repo chunzhe10/dorea`).
 
@@ -24,7 +24,7 @@
 ## Prerequisites
 
 - Working directory: `/workspaces/dorea-workspace`
-- `repos/dorea` on `master`, clean tree
+- `repos/dorea` on `main` (default branch), clean tree
 - `/opt/dorea-venv` has pytest, PyAV, and direct-mode Python deps installed (per workspace memory — may need `setup_bench.sh` if rebuilt)
 - `gh` CLI authenticated
 - RTX 3060 6GB workstation accessible (for smoke test in Task 7)
@@ -59,15 +59,15 @@ Run:
 cd /workspaces/dorea-workspace/repos/dorea && git status --short && git branch --show-current
 ```
 
-Expected: no output from `git status`, branch is `master`.
+Expected: no output from `git status`. The branch should be `main` — if it is something else (e.g. `feat/upscale-bench`), first verify the other branch is pushed to origin with `git ls-remote origin <branch-name>`, then `git checkout main`.
 
 If there are uncommitted changes, stop and ask the user what to do — do NOT stash or discard.
 
-- [ ] **Step 2: Pull latest master**
+- [ ] **Step 2: Pull latest main**
 
 Run:
 ```bash
-cd /workspaces/dorea-workspace/repos/dorea && git fetch origin && git pull --ff-only origin master
+cd /workspaces/dorea-workspace/repos/dorea && git fetch origin && git pull --ff-only origin main
 ```
 
 Expected: fast-forward or already up to date.
@@ -81,14 +81,14 @@ cd /workspaces/dorea-workspace/repos/dorea && git checkout -b feat/direct-defaul
 
 Expected: `Switched to a new branch 'feat/direct-default-1440p'`.
 
-- [ ] **Step 4: Baseline build to confirm master compiles cleanly on this machine**
+- [ ] **Step 4: Baseline build to confirm main compiles cleanly on this machine**
 
 Run:
 ```bash
 cd /workspaces/dorea-workspace/repos/dorea && cargo build --release -p dorea-cli 2>&1 | tail -20
 ```
 
-Expected: `Finished \`release\` profile [optimized] target(s) in ...`. If this fails on master, stop — it's not a task regression, it's an environment issue.
+Expected: `Finished \`release\` profile [optimized] target(s) in ...`. If this fails on main, stop — it's not a task regression, it's an environment issue.
 
 ---
 
@@ -678,7 +678,7 @@ Run (copying the smoke-test results from `/tmp/smoke_results.md` into the body):
 
 ```bash
 gh pr create --repo chunzhe10/dorea \
-  --base master \
+  --base main \
   --head feat/direct-default-1440p \
   --title "Direct mode is default; bump RAUNE proxy to 1440p, batch to 8" \
   --body "$(cat <<'EOF'
@@ -739,7 +739,7 @@ Run:
 gh pr view --repo chunzhe10/dorea $(gh pr list --repo chunzhe10/dorea --head feat/direct-default-1440p --json number -q '.[0].number')
 ```
 
-Expected: shows the PR we just created, targeting `chunzhe10/dorea master`. If it shows up on `chunzhe10/dorea-workspace`, the `--repo` flag was dropped — stop and check the `gh` invocation.
+Expected: shows the PR we just created, targeting `chunzhe10/dorea main`. If it shows up on `chunzhe10/dorea-workspace`, the `--repo` flag was dropped — stop and check the `gh` invocation.
 
 ---
 
