@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-f09697b7a54c",
+  "content": "   let needs = slot.as_ref().map_or(true, |b| b.width != width || b.height != height);\n            if needs {\n                *slot = Some(alloc_frame_buffers_16(dev, width, height)?);\n            }\n            let bufs = slot.as_mut().expect(\"allocated\");\n            dev.htod_sync_copy_into(pixels, &mut bufs.d_pixels_in).map_err(map_cudarc_error)?;\n        }\n\n        let d_depth = dev.htod_sync_copy(depth).map_err(map_cudarc_error)?;\n\n        {\n            let slot = self.frame_bufs.borrow();\n            let bufs = slot.as_ref().expect(\"allocated\");\n\n            let func = dev.get_func(\"postprocess\", \"postprocess_kernel_16\")\n                .ok_or_else(|| GpuError::ModuleLoad(\"postprocess_kernel_16 not found\".into()))?;\n            let cfg = LaunchConfig {\n                grid_dim: (div_ceil(n as u32, 256), 1, 1),\n                block_dim: (256, 1, 1),\n                shared_mem_bytes: 0,\n            };\n\n            use cudarc::driver::DeviceRepr;\n            let n_i32 = n as i32;\n            let fw_i32 = width as i32;\n            let fh_i32 = height as i32;\n            let dw_i32 = depth_w as i32;\n            let dh_i32 = depth_h as i32;\n            let sm_i32 = self.stage_mask as i32;\n\n            let mut args: [*mut std::ffi::c_void; 15] = [\n                (&bufs.d_pixels_in).as_kernel_param(),\n                (&d_depth).as_kernel_param(),\n                (&bufs.d_pixels_out).as_kernel_param(),\n                n_i32.as_kernel_param(),\n                fw_i32.as_kernel_param(),\n                fh_i32.as_kernel_param(),\n                dw_i32.as_kernel_param(),\n                dh_i32.as_kernel_param(),\n                (&self.d_h_offsets).as_kernel_param(),\n                (&self.d_s_ratios).as_kernel_param(),\n                (&self.d_v_offsets).as_kernel_param(),\n                (&self.d_weights).as_kernel_param(),\n                self.warmth.as_kernel_param(),\n                self.contrast.as_kernel_param(),\n                sm_i32.as_kernel_param(),\n            ];\n            unsafe { func.launch(cfg, &mut args[..]) }.map_err(map_cudarc_error)?;\n        }\n\n        let slot = self.frame_bufs.borrow();\n        let bufs = slot.as_ref().expect(\"allocated\");\n        dev.dtoh_sync_copy(&bufs.d_pixels_out).map_err(map_cudarc_error)\n    }\n}",
+  "source_version": "crates/dorea-gpu/src/cuda/mod.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229817616Z",
+  "valid_from": "2026-04-11T00:04:13.229817616Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cuda/mod.rs",
+    "language": "rs",
+    "chunk_type": "impl_item",
+    "start_line": 1008,
+    "end_line": 1057,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

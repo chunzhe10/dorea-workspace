@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-00eafca879f3",
+  "content": "### Rust: InferenceServer::enhance()\n### Rust: FrameEncoder — lossless temp mode\n\n### Rust: grade.rs restructure (Task #21 — major change)\n\n**When `--maxine` is enabled:**\n\n**Server lifecycle:** Spawn ONE `InferenceServer` before Pass 1 (Maxine + RAUNE + Depth).\nUse for Pass 1 enhance calls and calibration batch. Shut down after calibration.\n\n**Pass 1:**\n1. Change `decode_frames_scaled` → `decode_frames` (full-res decode)\n2. Create temp `FrameEncoder` (ffv1/mkv, path: `$TMPDIR/dorea_maxine_<pid>.mkv`)\n3. Per frame:\n   - `inf_server.enhance(frame.pixels, ...)` → `maxine_full_res`\n   - `temp_encoder.write_frame(&maxine_full_res)`\n   - `resize_rgb_bilinear(&maxine_full_res, proxy_w, proxy_h)` → `maxine_proxy`\n   - MSE on `maxine_proxy` → change detection\n   - If keyframe: `KeyframeEntry { proxy_pixels: maxine_proxy }`\n4. `temp_encoder.finish()` → temp file sealed\n\n**Calibration:** Unchanged in structure. `kf.proxy_pixels` is now Maxine-proxy automatically.\n\n**After calibration:** `inf_server.shutdown()`. VRAM freed.\n\n**Pass 2:**\n1. `decode_frames(&temp_file_path)` instead of `decode_frames(&args.input)`\n2. Per frame: grade `frame.pixels` (already Maxine-enhanced, decoded from temp)\n3. After `encoder.finish()`: delete temp file\n\n**When `--maxine` is disabled:** Pass 1 uses `decode_frames_scaled` (proxy), Pass 2 grades\n`frame.pixels` from the original input. Byte-identical to pre-Maxine pipeline.\n\n**Startup validation:**\n- Reject `maxine_upscale_factor` not in `[2, 3, 4]`\n- Log Maxine status and estimated temp file size before Pass 1\n\n---\n",
+  "source_version": "decisions/2026-04-04-maxine-preprocessor-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836141712Z",
+  "valid_from": "2026-04-11T00:10:08.836141712Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-04-maxine-preprocessor-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 130,
+    "end_line": 165,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

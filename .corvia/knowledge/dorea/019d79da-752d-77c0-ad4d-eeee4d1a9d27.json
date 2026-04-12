@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-eeee4d1a9d27",
+  "content": " on top of zone-related error.\n            let tol = if n_zones == 1 { 14 } else if n_zones <= 3 { 6 } else { 4 };\n            assert!(max_diff <= tol,\n                \"n_zones={n_zones}: GPU/CPU max diff {max_diff}/255 exceeds {tol}/255\");\n        }\n    }\npub struct AdaptiveGrader {\n    adaptive_lut: combined_lut::AdaptiveLut,  // dropped first — CUDA resources\n    d_textures_a: CudaSlice<u64>,             // active texture handles (constant after allocate)\n    d_textures_b: CudaSlice<u64>,             // inactive texture handles (constant after allocate)\n    d_bounds_a:   RefCell<CudaSlice<f32>>,    // active boundaries (updated on swap/rebuild)\n    d_bounds_b:   RefCell<CudaSlice<f32>>,    // inactive boundaries (updated on swap/rebuild)\n    frame_bufs:   RefCell<Option<FrameBuffers>>,   // resolution-keyed (u8 path)\n    frame_bufs_16: RefCell<Option<FrameBuffers16>>, // resolution-keyed (u16 path)\n    stage_mask:   u32,                         // per-frame kernel stage bitmask\n    device:       Arc<CudaDevice>,            // dropped last — destroys CUDA context\n    _not_send:    std::marker::PhantomData<*const ()>,\n}",
+  "source_version": "crates/dorea-gpu/src/cuda/mod.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229796530Z",
+  "valid_from": "2026-04-11T00:04:13.229796530Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cuda/mod.rs",
+    "language": "rs",
+    "chunk_type": "struct_item",
+    "start_line": 546,
+    "end_line": 557,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-cac8eed45318",
+  "content": "## Rejected Alternatives\n## Architecture\n\n### New structs in `crates/dorea-gpu/src/cuda/mod.rs`\n\n```\nResolutionBuffers {\n    width, height, proxy_w, proxy_h: usize,\n    d_rgb_in:        CudaSlice<f32>,  // n × 3  (input pixels, f32)\n    d_depth:         CudaSlice<f32>,  // n      (depth map)\n    d_rgb_after_lut: CudaSlice<f32>,  // n × 3  (LUT → HSL stage boundary)\n    d_rgb_after_hsl: CudaSlice<f32>,  // n × 3  (HSL → clarity stage boundary)\n    d_proxy_l:       CudaSlice<f32>,  // proxy_n (clarity: downsampled L)\n    d_blur_a:        CudaSlice<f32>,  // proxy_n (clarity: ping buffer)\n    d_blur_b:        CudaSlice<f32>,  // proxy_n (clarity: pong buffer)\n    d_rgb_out:       CudaSlice<f32>,  // n × 3  (final output)\n}\n\nCalibrationBuffers {\n    n_zones, lut_size: usize,\n    d_luts:       CudaSlice<f32>,  // n_zones × lut_size³ × 3\n    d_boundaries: CudaSlice<f32>,  // n_zones + 1\n    d_h_offsets:  CudaSlice<f32>,  // [f32; 6]\n    d_s_ratios:   CudaSlice<f32>,  // [f32; 6]\n    d_v_offsets:  CudaSlice<f32>,  // [f32; 6]\n    d_weights:    CudaSlice<f32>,  // [f32; 6]\n}\n```\n\n\n### `CudaGrader` struct additions\n\n```rust\nres_bufs: RefCell<Option<ResolutionBuffers>>,\ncal_bufs: RefCell<Option<CalibrationBuffers>>,\n```\n",
+  "source_version": "docs/decisions/2026-04-03-cuda-grader-buffer-pre-allocation.md",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230399644Z",
+  "valid_from": "2026-04-11T00:04:13.230399644Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "docs/decisions/2026-04-03-cuda-grader-buffer-pre-allocation.md",
+    "language": "markdown",
+    "chunk_type": "heading_section",
+    "start_line": 50,
+    "end_line": 82,
+    "content_role": "decision",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

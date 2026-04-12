@@ -1,0 +1,31 @@
+{
+  "id": "019d8150-4da3-7a40-80f2-5b3525f0f5d5",
+  "content": "# GPU Acceleration Opportunities for Dorea Pipeline\n\n## Context\n\nDorea's direct-mode RAUNE-Net pipeline runs at ~2-7fps on RTX 3060 6GB (2fps serial, ~7fps with 3-thread pipeline from PR #65). Current stack: PyTorch fp16 inference, Triton fused OKLab kernel, PyAV CPU decode/encode, 3-thread producer-consumer overlap.\n\n## Why Insta360 Aqua Vision is faster\n\nAqua Vision almost certainly uses a 3D LUT or parametric color transform — a fixed per-pixel lookup with no neural network. A 3D LUT maps (R_in, G_in, B_in) → (R_out, G_out, B_out) via trilinear interpolation on a precomputed grid (e.g. 33×33×33 = 35,937 sample points). This runs at hundreds of fps on any GPU as a texture sample. The tradeoff: a 3D LUT is a pure color-to-color mapping with no spatial awareness — every pixel with the same input RGB gets the same output regardless of position. RAUNE-Net's convolutional architecture provides spatially-varying correction (shadows vs highlights, depth gradients, local context), which is why it's slower but higher quality.\n\n## SOTA approaches for fast spatially-aware enhancement\n\n1. **Bilateral learning (HDRNet, Gharbi et al. 2017)**: Run a lightweight CNN on a low-res input to predict a bilateral grid (x, y, luminance → affine color transform), then \"slice\" at full resolution. Network runs at low-res (fast), output is spatially-varying (quality). Used by Google for real-time HDR+ on Pixel phones. Google has since moved toward heavier ML pipelines with custom Tensor TPU silicon.\n\n2. **Image-Adaptive 3DLUT (Zeng et al. 2020)**: Small backbone CNN predicts blending weights for pre-learned basis 3D LUTs. SA-3DLUT extends this with spatial grid for per-region weights. Fast but coarser spatial awareness than bilateral grids.\n\n3. **Per-clip distillation**: Run RAUNE-Net on keyframes, train a bilateral grid network to match. Evaluated and rejected for dorea — the training loop (gradient descent, hundreds of optimization steps) takes longer than just running RAUNE on the full clip. Only makes sense for hours of footage with similar conditions, not per-clip processing.\n\n## Unused RTX 3060 hardware accelerators (actionable)\n\n### 1. torch.compile (easiest, +20-50%)\n```python\nmodel = torch.compile(model, mode=\"reduce-overhead\")\n```\nOne line. PyTorch 2.x compiler fuses operations, generates optimized CUDA kernels via Triton, uses CUDA graphs under the hood to eliminate per-batch CPU dispatch overhead.\n\n### 2. TensorRT (biggest win, 2-4x over PyTorch fp16)\nExport RAUNE-Net to ONNX, build TensorRT engine with layer fusion and kernel auto-tuning. Workflow: `trtexec --onnx=raune.onnx --fp16`. Can also do INT8 quantization (2x throughput over fp16 on Tensor Cores) with calibration dataset (~100 underwater frames for activation ranges). Quality verification needed for INT8.\n\n### 3. NVDEC/NVENC (dedicated codec silicon)\nRTX 3060 has fixed-function ASIC for video decode (NVDEC) and encode (NVENC), completely separate from CUDA cores. Currently dorea uses PyAV CPU decode/encode. NVDEC can decode 4K HEVC at hundreds of fps with zero CUDA core or VRAM compute contention. Data stays on GPU — eliminates CPU↔GPU frame copies. PyAV supports hwaccel for decode; ffmpeg hevc_nvenc/h264_nvenc for encode.\n\n## Recommended implementation order\n\n| Step | Effort | Expected gain | Cumulative estimate |\n|---|---|---|---|\n| torch.compile reduce-overhead | 1 line | +20-50% | ~10fps |\n| TensorRT fp16 export | Half a day | 2-3x | ~15-20fps |\n| TensorRT INT8 (if quality holds) | Calibration work | +2x on inference | ~25-30fps |\n| NVDEC/NVENC | Rework decode/encode | Eliminates CPU bottleneck | ~30+fps |\n\nSteps 1 and 2 alone could realistically reach 15-20fps, which for overnight batch processing is more than sufficient.",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-12T10:50:16.867010862Z",
+  "valid_from": "2026-04-12T10:50:16.867010862Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "finding",
+    "source_origin": "workspace"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

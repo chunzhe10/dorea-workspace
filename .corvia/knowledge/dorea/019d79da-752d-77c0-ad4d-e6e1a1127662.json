@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-e6e1a1127662",
+  "content": "ruct InferenceServer {\n    /// Cached bridge module — avoids re-importing on every inference call.\n    bridge: Py<PyModule>,\n    /// Device string captured at spawn time (e.g. \"cuda\" or \"cpu\").\n    device: String,\n    _not_send: PhantomData<*const ()>,\n}\nimpl InferenceServer {\n    /// Initialize the embedded Python interpreter and load models.\n    ///\n    /// 1. Calls `pyo3::prepare_freethreaded_python()` to init Python.\n    /// 2. Adds the `python/` dir to `sys.path`.\n    /// 3. Imports `dorea_inference.bridge`.\n    /// 4. Loads depth and (optionally) RAUNE models.\n    pub fn spawn(config: &InferenceConfig) -> Result<Self, InferenceError> {\n        pyo3::prepare_freethreaded_python();\n\n        Python::with_gil(|py| {\n            // Add python/ dir to sys.path so `dorea_inference` is importable.\n            let python_dir = Self::find_python_dir();\n            if let Some(ref p) = python_dir {\n                let sys = py.import_bound(\"sys\")\n                    .map_err(|e| InferenceError::InitFailed(format!(\"import sys: {e}\")))?;\n                let path = sys.getattr(\"path\")\n                    .map_err(|e| InferenceError::InitFailed(format!(\"sys.path: {e}\")))?;\n                let p_str = p.to_str().unwrap_or(\"\");\n                let already_present = path\n                    .call_method1(\"__contains__\", (p_str,))",
+  "source_version": "crates/dorea-video/src/inference/pyo3_backend.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229697001Z",
+  "valid_from": "2026-04-11T00:04:13.229697001Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference/pyo3_backend.rs",
+    "language": "rs",
+    "chunk_type": "impl_item",
+    "start_line": 149,
+    "end_line": 169,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

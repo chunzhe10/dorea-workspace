@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-d41f56bbc0f7",
+  "content": "size=3, padding=p, bias=use_bias), norm_layer(dim)]\n\n        return nn.Sequential(*conv_block)\n\n    def forward(self, x):\n        \"\"\"Forward function (with skip connections)\"\"\"\n        out = x + self.conv_block(x)  # add skip connections\n        return out\ndef __init__(self, dim, padding_type, norm_layer, use_dropout, use_bias):\n        \"\"\"Initialize the Resnet block.\n\n        A resnet block is a conv block with skip connections\n        We construct a conv block with build_conv_block function,\n        and implement skip connections in <forward> function.\n        Original Resnet paper: https://arxiv.org/pdf/1512.03385.pdf\n        \"\"\"\n        super(ResnetBlock, self).__init__()\n        self.conv_block = self.build_conv_block(dim, padding_type, norm_layer, use_dropout, use_bias)",
+  "source_version": "models/raune_net/models/RAUNE-Net/models/resnet.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230548722Z",
+  "valid_from": "2026-04-11T00:04:13.230548722Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "models/raune_net/models/RAUNE-Net/models/resnet.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 10,
+    "end_line": 19,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

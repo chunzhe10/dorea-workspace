@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-e90ca454efbb",
+  "content": "    return Err(InferenceError::ServerError(format!(\n                    \"enhance: expected {} bytes ({}x{}x3), got {}\",\n                    expected, width, height, rgb_data.len()\n                )));\n            }\n            Ok(rgb_data)\n        })\n    }\npub fn unload_maxine(&self) -> Result<(), InferenceError> {\n        Python::with_gil(|py| {\n            let bridge = self.bridge.bind(py);\n            bridge\n                .call_method0(\"unload_maxine\")\n                .map_err(|e| InferenceError::InitFailed(format!(\"unload_maxine: {e}\")))?;\n            Ok(())\n        })\n    }",
+  "source_version": "crates/dorea-video/src/inference/pyo3_backend.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229723268Z",
+  "valid_from": "2026-04-11T00:04:13.229723268Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference/pyo3_backend.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 671,
+    "end_line": 679,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

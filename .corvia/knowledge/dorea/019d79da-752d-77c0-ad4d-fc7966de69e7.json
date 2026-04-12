@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-fc7966de69e7",
+  "content": " i64).pow(2) as u64;\n        let db = (empty_cell[2] as i64 - pc[2] as i64).pow(2) as u64;\n        let dist = dr + dg + db;\n        if dist < best_dist {\n            best_dist = dist;\n            best_pop = pc;\n        }\n    }\n    (*empty_cell, best_pop)\n}\npub fn adaptive_zone_boundaries(all_depths: &[f32], n_zones: usize) -> Vec<f32> {\n    // C2: guard against empty input — return uniform linspace.\n    if all_depths.is_empty() {\n        return (0..=n_zones)\n            .map(|i| i as f32 / n_zones as f32)\n            .collect();\n    }\n\n    let mut sorted = all_depths.to_vec();\n    // I2: use total_cmp to handle NaN values without panic.\n    sorted.sort_by(|a, b| a.total_cmp(b));\n    let n = sorted.len();\n\n    let mut boundaries = Vec::with_capacity(n_zones + 1);\n    boundaries.push(0.0_f32);\n    for z in 1..n_zones {\n        let idx = (z * n) / n_zones;\n        // C2: use saturating_sub to avoid underflow if n == 0 (already guarded above).\n        let idx = idx.min(n.saturating_sub(1));\n        boundaries.push(sorted[idx]);\n    }\n    boundaries.push(1.0_f32);\n    boundaries\n}",
+  "source_version": "crates/dorea-lut/src/build.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229977623Z",
+  "valid_from": "2026-04-11T00:04:13.229977623Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-lut/src/build.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 205,
+    "end_line": 228,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

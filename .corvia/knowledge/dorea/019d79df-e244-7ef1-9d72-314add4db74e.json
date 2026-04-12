@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-314add4db74e",
+  "content": " usize, usize)> = Vec::with_capacity(n_kf);\n\n    for (chunk_items, chunk_pixels) in fused_items\n        .chunks(FUSED_BATCH_SIZE)\n        .zip(kf_pixels.chunks(FUSED_BATCH_SIZE))\n    {\n        let mut results = inf_server.run_raune_depth_batch(chunk_items)\n            .unwrap_or_else(|e| {\n                log::warn!(\"Fused RAUNE+depth batch failed: {e} — using originals + uniform depth\");\n                chunk_items.iter().zip(chunk_pixels.iter()).map(|(item, px)| {\n                    (item.id.clone(), px.clone(), kf_w, kf_h,\n                     vec![0.5f32; kf_w * kf_h], kf_w, kf_h)\n                }).collect()\n            });\n\n        if results.len() < chunk_items.len() {\n            log::warn!(\n                \"Fused batch returned {} results for {} items — padding with originals\",\n                results.len(), chunk_items.len()\n            );\n            let have = results.len();\n            for (item, px) in chunk_items[have..].iter().zip(chunk_pixels[have..].iter()) {\n                results.push((item.id.clone(), px.clone(), kf_w, kf_h,\n                               vec![0.5f32; kf_w * kf_h], kf_w, kf_h));\n            }\n        }\n\n        for (_, enhanced, _, _, depth_raw, dw, dh) in results {\n            kf_results.push((enhanced, depth_raw, dw, dh));\n        }\n    }\n    log::info!(\"Fused inference complete: {} frames\", kf_results.len());\n\n    let _ = inf_server.shutdown();\n\n    // --- Phase 3: push to store ---\n    for (i, (pixels, (enhanced, depth_proxy, dw, dh))) in\n        kf_pixels.iter().zip(kf_results.iter()).enumerate()\n    {",
+  "source_version": "plans/2026-04-03-inference-gpu-saturation.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836767622Z",
+  "valid_from": "2026-04-11T00:10:08.836767622Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-inference-gpu-saturation.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 798,
+    "end_line": 829,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

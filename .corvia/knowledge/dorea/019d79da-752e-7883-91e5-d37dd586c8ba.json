@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-d37dd586c8ba",
+  "content": ".\n            norm_layer: Type of Normalization layer.\n        \"\"\"\n        assert (n_blocks >= 0 and n_down >= 0)\n        super().__init__()\n        use_bias = False if norm_layer else True\n\n        model = []\n\n        # Wide-range Perception Module (WRPM)\n        model.append(nn.Sequential(\n            nn.ReflectionPad2d(3),\n            nn.Conv2d(input_nc, ngf, kernel_size=7, padding=0, bias=False),\n            norm_layer(ngf),\n            nn.ReLU(True)\n        ))\n\n        # Attention Down-sampling Module (ADM)\n        for i in range(n_down):\n            mult = 2 ** i\n            model.append(self._down(ngf*mult, ngf*mult*2, norm_layer=norm_layer, use_att=use_att_down, use_dropout=use_dropout))\n        \n        # High-level Features Residual Learning Module (HFRLM)\n        mult = 2 ** n_down\n        for i in range(n_blocks):\n            model.append(ResnetBlock(ngf * mult, padding_type=padding_type, norm_layer=norm_layer,\n                                     use_dropout=use_dropout, use_bias=use_bias))\n        \n        # Up-sampling Module (UM)\n        for i in range(n_down):\n            mult = 2 ** (n_down - i)\n            model.append(self._up(ngf * mult, int(ngf * mult / 2), use_att=use_att_up, use_dropout=use_dropout))\n\n        # Feature Map Smoothing Module (FMSM) and Tanh Activation Layer\n        model.append(nn.Sequential(\n            nn.ReflectionPad2d(3),\n            nn.Conv2d(ngf, output_nc, kernel_size=7, padding=0),",
+  "source_version": "models/raune_net/models/RAUNE-Net/models/raune_net.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230539343Z",
+  "valid_from": "2026-04-11T00:04:13.230539343Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "models/raune_net/models/RAUNE-Net/models/raune_net.py",
+    "language": "py",
+    "chunk_type": "class_definition",
+    "start_line": 34,
+    "end_line": 60,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

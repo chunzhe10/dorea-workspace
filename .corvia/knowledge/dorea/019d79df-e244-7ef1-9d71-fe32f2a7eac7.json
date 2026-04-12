@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d71-fe32f2a7eac7",
+  "content": "## Design\n\n### LUT Structure\n\n- **Type**: Array of N standard 3D color LUTs, one per depth sample point\n- **Grid resolution**: 65x65x65 (validated — see Numerical Validation below)\n- **Depth samples**: Zone-aligned — `[0.0] + calibration.zone_centers + [1.0]`\n  (7 points for 5 calibration zones). Uses the actual adaptive zone centers from\n  calibration, not evenly-spaced bands. This guarantees sampling exactly where each\n  zone's LUT dominates, with smooth soft-weight transitions between samples.\n- **Per entry**: 3x f32 (R', G', B') graded output\n- **Total memory**: 65^3 × 7 × 3 × 4 bytes = **23MB**\n- **Lifetime**: Built once per clip (calibration + params are constant)\n\n\n### Why 65x65x65 (not 33)\n\nNumerical validation (100K random samples, fused_ambiance_warmth + blend pipeline):\n\n| Grid | p99 error | Max error | Pixels > 2/255 |\n|------|-----------|-----------|-----------------|\n| 33x33x33 | 1.71/255 | 5.23/255 | 0.69% |\n| **65x65x65** | **0.81/255** | **2.61/255** | **0.03%** |\n\nThe 33-grid fails at `tanh` highlight knees (L=0.88, output=0.92) where second\nderivative is high. The 65-grid keeps 99.97% of pixels within 2/255.\n\n**10-bit note**: At 10-bit (1023 levels), 65-grid max error maps to ~10.5/1023 —\ntoo high. A 129x129x129 grid (~180MB) would be needed. Grid size is parameterized\nfor future upgrade. Locked at 65 for the current 8-bit pipeline.\n",
+  "source_version": "decisions/2026-04-03-3d-lut-temporal-interpolation.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836108185Z",
+  "valid_from": "2026-04-11T00:10:08.836108185Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-03-3d-lut-temporal-interpolation.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 27,
+    "end_line": 54,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

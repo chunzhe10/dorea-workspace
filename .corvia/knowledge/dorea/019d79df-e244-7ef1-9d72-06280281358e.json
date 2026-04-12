@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-06280281358e",
+  "content": "### 2. Download RAUNE weights (`scripts/download_raune_weights.sh`)\n\n# Ensure gdown is installed in the dorea venv\n/opt/dorea-venv/bin/pip show gdown >/dev/null 2>&1 || \\\n    /opt/dorea-venv/bin/pip install gdown\n\n\n# Pull the whole pretrained folder; pick out just RAUNENet/test/weights_95.pth\nTMP=$(mktemp -d)\ntrap 'rm -rf \"$TMP\"' EXIT\n/opt/dorea-venv/bin/gdown --folder \"https://drive.google.com/drive/folders/$GDRIVE_FOLDER_ID\" -O \"$TMP\"\ncp \"$TMP\"/*/RAUNENet/test/weights_95.pth \"$DEST\"\n\nactual=$(sha256sum \"$DEST\" | awk '{print $1}')\necho \"downloaded $DEST\"\necho \"sha256: $actual\"\nif [ -z \"$EXPECTED_SHA256\" ] || [ \"$EXPECTED_SHA256\" = \"<pinned after first download>\" ]; then\n    echo \"NOTE: no pinned SHA256 yet. Record this value and update this script.\"\nelif [ \"$actual\" != \"$EXPECTED_SHA256\" ]; then\n    echo \"ERROR: sha256 mismatch. expected $EXPECTED_SHA256\" >&2\n    exit 1\nfi\n```\n\nFirst run: downloads, prints the SHA256, user updates the `EXPECTED_SHA256` constant and commits. Subsequent runs: verify and skip.\n\nAfter first download:\n\n```bash\ncd repos/dorea\ngit add models/raune_net/weights_95.pth  # stored as LFS pointer\ngit commit -m \"chore: add RAUNE pretrained weights via git-lfs\"\n```\n\nUpdate `dorea.toml`:\n```diff\n- raune_weights   = \"/workspaces/dorea-workspace/working/sea_thru_poc/models/RAUNE-Net/pretrained/RAUNENet/test/weights_95.pth\"\n+ raune_weights   = \"/workspaces/dorea-workspace/repos/dorea/models/raune_net/weights_95.pth\"\n- raune_models_dir = \"/workspaces/dorea-workspace/working/sea_thru_poc\"\n+ raune_models_dir = \"/workspaces/dorea-workspace/repos/dorea/models/raune_net\"\n```\n\n`raune_models_dir` must contain a `models/raune_net.py` file (the `RAUNENet` class). Currently that class lives at `python/dorea_inference/raune_net.py`. Either copy or symlink it into `models/raune_net/models/raune_net.py` as part of the setup script, or have `scripts/download_raune_weights.sh` do the layout fix.\n\nDecision: do the layout fix in the setup script. Simpler than adding import-path logic.\n",
+  "source_version": "decisions/2026-04-10-delta-upscale-bench-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836203597Z",
+  "valid_from": "2026-04-11T00:10:08.836203597Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-10-delta-upscale-bench-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 430,
+    "end_line": 472,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

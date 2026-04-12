@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-f444e256a2c0",
+  "content": "      let orig = orig_pixels[i] as f32 / 255.0;\n            rgb_f32[i] = orig * (1.0 - params.strength) + rgb_f32[i] * params.strength;\n        }\n    }\n\n    // 3. f32 → u8\n    rgb_f32.iter().map(|&v| (v.clamp(0.0, 1.0) * 255.0).round() as u8).collect()\n}\npub fn grade_pixel_cpu(\n    r: f32, g: f32, b: f32,\n    depth: f32,\n    calibration: &Calibration,\n    params: &GradeParams,\n) -> [f32; 3] {\n    use dorea_lut::apply::apply_depth_luts;\n    use dorea_hsl::apply::apply_hsl_corrections;\n\n    // 1. Depth-stratified LUT apply\n    let lut_out = apply_depth_luts(&[[r, g, b]], &[depth], &calibration.depth_luts);\n    let [r1, g1, b1] = lut_out[0];\n\n    // 2. HSL qualifier corrections\n    let hsl_out = apply_hsl_corrections(&[[r1, g1, b1]], &calibration.hsl_corrections);\n    let [r2, g2, b2] = hsl_out[0];\n\n    // 3. Fused ambiance + warmth (single LAB roundtrip)\n    let mut px = [r2, g2, b2];\n    let warmth_factor = 1.0 + (params.warmth - 1.0) * 0.3;\n    let d = depth;\n\n    let (mut l_norm, mut a_ab, mut b_ab) = {\n        let (l, a, b_l) = dorea_color::lab::srgb_to_lab(px[0], px[1], px[2]);\n        (l / 100.0, a, b_l)\n    };\n\n    // Shadow lift\n    let lift_amount = 0.2 + 0.15 * d;\n    let toe = 0.15_f32;\n    let shadow_mask = ((toe - l_norm) / toe).clamp(0.0, 1.0);\n    l_norm += shadow_mask * lift_amount * toe;\n\n    // S-curve contrast\n    let contrast_strength = (0.3 + 0.3 * d) * params.contrast;\n    let slope = 4.0 + 4.0 * contrast_strength;\n    let s_curve = 1.0 / (1.0 + (-(l_norm - 0.5) * slope).exp());\n    l_norm += (s_curve - l_norm) * contrast_strength;\n\n    // Highlight compress\n    let compress = 0.4 + 0.2 * (1.0 - d);\n    let knee_h = 0.88_f32;\n    if l_norm > knee_h {\n        let over = l_norm - knee_h;\n        let headroom = 1.0 - knee_h;\n        l_norm = knee_h + headroom * ((over / headroom * (1.0 + compress)).tanh());",
+  "source_version": "crates/dorea-gpu/src/cpu.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229867070Z",
+  "valid_from": "2026-04-11T00:04:13.229867070Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cpu.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 254,
+    "end_line": 299,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

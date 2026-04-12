@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c857c363b43b",
+  "content": "nsor,\n    final_gold: torch.Tensor,\n) -> dict[str, float]:\n    dE = delta_e_2000(final_method, final_gold)\n    flat = dE.flatten()\n    return {\n        \"final_delta_e\": dE.mean().item(),\n        \"final_delta_e_p95\": torch.quantile(flat, 0.95).item(),\n    }\ndef _rgb_to_luma_bt709(rgb: torch.Tensor) -> torch.Tensor:\n    return 0.2126 * rgb[:, 0:1] + 0.7152 * rgb[:, 1:2] + 0.0722 * rgb[:, 2:3]",
+  "source_version": "benchmarks/upscale_bench/metrics.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230352924Z",
+  "valid_from": "2026-04-11T00:04:13.230352924Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/metrics.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 185,
+    "end_line": 186,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

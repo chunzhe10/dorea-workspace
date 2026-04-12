@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-1fbda8e487ba",
+  "content": "### Task 10: InputEncoding Extended + Projection Enum\n\n\n```rust\n/// Projection type of the input clip.\n#[derive(Debug, Clone, Copy, PartialEq)]\npub enum Projection {\n    Rectilinear,\n    TinyPlanet,\n}\n\nimpl Projection {\n    pub fn needs_depth(&self) -> bool {\n        matches!(self, Projection::Rectilinear)\n    }\n\n    pub fn default_lut_zone(&self) -> Option<usize> {\n        match self {\n            Projection::Rectilinear => None,\n            Projection::TinyPlanet => Some(0),\n        }\n    }\n}\n\nfn parse_projection(s: &str) -> std::result::Result<Projection, String> {\n    match s {\n        \"rectilinear\" => Ok(Projection::Rectilinear),\n        \"tiny-planet\" | \"tiny_planet\" => Ok(Projection::TinyPlanet),\n        other => Err(format!(\n            \"unknown projection '{other}'; expected 'rectilinear' or 'tiny-planet'\"\n        )),\n    }\n}\n```\n\n- [ ] **Step 3: Add CLI flags to CalibrateArgs**\n\nIn `crates/dorea-cli/src/calibrate.rs`, add to `CalibrateArgs`:\n\n```rust\n/// Projection type of input footage\n#[arg(long, default_value = \"rectilinear\", value_parser = parse_projection)]\npub projection: Projection,\n",
+  "source_version": "plans/2026-04-02-10bit-pipeline-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836508734Z",
+  "valid_from": "2026-04-11T00:10:08.836508734Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-10bit-pipeline-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1309,
+    "end_line": 1350,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-f79b1d65dda6",
+  "content": "pub fn ilog_to_linear(x: f32) -> f32 {\n    let x = x as f64;\n    let linear = if x >= ENC_CUT {\n        10_f64.powf((x - D) / A) * 0.19 - B\n    } else {\n        (x - LIN_OFFSET) / LIN_SLOPE\n    };\n    linear.max(0.0) as f32\n}\npub fn linear_to_ilog(x: f32) -> f32 {\n    let x = x as f64;\n    let encoded = if x >= LIN_CUT {\n        A * ((x + B) / 0.19).log10() + D\n    } else {\n        x * LIN_SLOPE + LIN_OFFSET\n    };\n    encoded.clamp(0.0, 1.0) as f32\n}",
+  "source_version": "crates/dorea-color/src/ilog.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229915348Z",
+  "valid_from": "2026-04-11T00:04:13.229915348Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-color/src/ilog.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 37,
+    "end_line": 45,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

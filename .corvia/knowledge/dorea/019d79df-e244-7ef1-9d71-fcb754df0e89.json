@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d71-fcb754df0e89",
+  "content": "interval, 5 of 6 frames cost ~12ms instead of\n~80-180ms. At 1671 frames with ~1393 non-keyframe frames:\n- Old: 1393 × ~130ms = ~3 min (depth interp + grade)\n- New: 1393 × ~12ms = ~17s (lerp only)\n- **Additional savings: ~2.5 min on top of Opt 1-4**\n\n---\n\n## File Map\n\n| File | Optimization | Change |\n|------|-------------|--------|\n| `crates/dorea-cli/src/grade.rs` | Opt 1+5 | Frame buffer, MSE, keyframe logic, graded frame interpolation, scene-cut flush |\n| `crates/dorea-cli/src/grade.rs` | Opt 1+5 | New CLI args: `--depth-skip-threshold`, `--depth-max-interval`, `--no-depth-interp` |\n| `crates/dorea-gpu/src/cpu.rs` | Opt 2 | New `fused_ambiance_warmth()` with rayon, update `finish_grade` to call it |\n| `crates/dorea-gpu/src/lib.rs` | Opt 4b | Remove CPU fallback, hard error on CUDA failure |\n| `crates/dorea-gpu/src/cuda/mod.rs` | Opt 4b | Clarity kernel failure becomes hard error |\n| `crates/dorea-video/src/inference.rs` | Opt 3 | Raw RGB encode path in `run_depth` and `run_raune` |\n| `python/dorea_inference/protocol.py` | Opt 3 | `decode_raw_rgb()` helper, format-aware dispatch |\n| `python/dorea_inference/server.py` | Opt 3 | Dispatch on `format` field in request |\n| `python/dorea_inference/depth_anything.py` | Opt 4a, 4b | Replace processor with direct tensor; hard error on no CUDA |\n\n\n## Instrumentation\n\nAdd timing spans (`Instant::now()` in Rust, `time.perf_counter()` in Python) around\neach optimization's hot path to validate savings independently:\n\n| Optimization | Metric | Location |\n|-------------|--------|----------|\n| Opt 1+5 | MSE computation time, keyframe %, frames graded vs interpolated | `grade.rs` |\n| Opt 2 | `fused_ambiance_warmth()` wall time vs old `depth_aware_ambiance()` | `cpu.rs` |\n| Opt 3 | Encode time (raw vs PNG), decode time | `inference.rs`, `server.py` |\n| Opt 4a | Tensor construction time vs processor time | `depth_anything.py` |\n\nLog per-frame timing at `--verbose` level. Aggregate stats (p50, p90, p99) at end of run.\n",
+  "source_version": "decisions/2026-04-02-grading-pipeline-perf-v3.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836087461Z",
+  "valid_from": "2026-04-11T00:10:08.836087461Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-02-grading-pipeline-perf-v3.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 257,
+    "end_line": 284,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

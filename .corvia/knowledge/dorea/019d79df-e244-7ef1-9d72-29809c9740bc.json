@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-29809c9740bc",
+  "content": "i, &kv) in kernel.iter().enumerate() {\n                let nx = (x as i32 + ki as i32 - radius as i32).clamp(0, width as i32 - 1) as usize;\n                acc += edge_mag[y * width + nx] * kv;\n            }\n            temp[y * width + x] = acc;\n        }\n    }\n```\n\nWith:\n\n```rust\n    // Horizontal pass (row-parallel)\n    let mut temp = vec![0.0_f32; n];\n    temp.par_chunks_mut(width)\n        .enumerate()\n        .for_each(|(y, row)| {\n            for x in 0..width {\n                let mut acc = 0.0_f32;\n                for (ki, &kv) in kernel.iter().enumerate() {\n                    let nx = (x as i32 + ki as i32 - radius as i32)\n                        .clamp(0, width as i32 - 1) as usize;\n                    acc += edge_mag[y * width + nx] * kv;\n                }\n                row[x] = acc;\n            }\n        });\n```\n\n- [ ] **Step 3: Parallelize the vertical Gaussian blur pass**\n\nReplace the vertical blur loop (lines ~91–101):\n\n```rust\n    // Vertical pass\n    let mut edge_dilated = vec![0.0_f32; n];\n    for y in 0..height {\n        for x in 0..width {\n            let mut acc = 0.0_f32;\n            for (ki, &kv) in kernel.iter().enumerate() {\n                let ny = (y as i32 + ki as i32 - radius as i32).clamp(0, height as i32 - 1) as usize;\n                acc += temp[ny * width + x] * kv;\n            }\n            edge_dilated[y * width + x] = acc;\n        }\n    }\n```\n\nWith:\n\n```rust\n    // Vertical pass (row-parallel)\n    let mut edge_dilated = vec![0.0_f32; n];\n    edge_dilated\n        .par_chunks_mut(width)\n        .enumerate()\n        .for_each(|(y, row)| {\n            for x in 0..width {\n                let mut acc = 0.0_f32;\n                for (ki, &kv) in kernel.iter().enumerate() {\n                    let ny = (y as i32 + ki as i32 - radius as i32)\n                        .clamp(0, height as i32 - 1) as usize;\n                    acc += temp[ny * width + x] * kv;\n                }\n                row[x] = acc;\n            }\n        });\n```\n\n- [ ] **Step 4: Run tests**\n\n```bash\ncd repos/dorea && cargo test -p dorea-lut 2>&1\n```\n\nExpected: all tests pass.\n\n- [ ] **Step 5: Commit**\n\n```bash\ncd repos/dorea\ngit add crates/dorea-lut/src/build.rs\ngit commit -m \"perf(dorea-lut): parallelize compute_importance Sobel + Gaussian blur with rayon\"\n```\n\n---\n",
+  "source_version": "plans/2026-04-02-rayon-cpu-parallelization-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836651771Z",
+  "valid_from": "2026-04-11T00:10:08.836651771Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-rayon-cpu-parallelization-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 429,
+    "end_line": 509,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

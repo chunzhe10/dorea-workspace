@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d94853559959",
+  "content": ";\n        let d_ab = depth_distribution_distance(&a, &b, 64);\n        let d_ba = depth_distribution_distance(&b, &a, 64);\n        assert!((d_ab - d_ba).abs() < 1e-6, \"not symmetric: {d_ab} vs {d_ba}\");\n    }\n\n    #[test]\n    fn depth_dist_empty_is_zero() {\n        assert!((depth_distribution_distance(&[], &[], 64) - 0.0).abs() < 1e-6);\n        assert!((depth_distribution_distance(&[0.5], &[], 64) - 0.0).abs() < 1e-6);\n    }\n\n    #[test]\n    fn segments_single_uniform_clip() {\n        let depths: Vec<Vec<f32>> = (0..10)\n            .map(|_| (0..100).map(|i| i as f32 / 100.0).collect())\n            .collect();\n        let segs = detect_scene_segments(&depths, 0.15, 5);\n        assert_eq!(segs.len(), 1);\n        assert_eq!(segs[0].start, 0);\n        assert_eq!(segs[0].end, 10);\n    }\n\n    #[test]\n    fn segments_hard_scene_cut() {\n        let mut depths: Vec<Vec<f32>> = Vec::new();\n        for _ in 0..5 { depths.push(vec![0.1; 100]); }\n        for _ in 0..5 { depths.push(vec![0.9; 100]); }\n        let segs = detect_scene_segments(&depths, 0.15, 3);\n        assert_eq!(segs.len(), 2, \"expected 2 segments, got {:?}\", segs);\n        assert_eq!(segs[0].end, segs[1].start);\n    }\n\n    #[test]\n    fn segments_short_segment_merged() {\n        let mut depths: Vec<Vec<f32>> = Vec::new();\n        for _ in 0..5 { depths.push(vec![0.1; 100]); }\n        for _ in 0..2 { depths.push(vec![0.9; 100]); }\n        for _ in 0..5 { depths.push(vec![0.1; 100]); }\n        let segs = detect_scene_segments(&depths, 0.15, 5);\n        assert!(segs.len() <= 2, \"short segment should be merged, got {:?}\", segs);\n    }\n\n    #[test]\n    fn per_kf_zones_basic() {\n        let depths: Vec<Vec<f32>> = vec![\n            (0..100).map(|i| i as f32 / 100.0).collect(),\n            vec![0.5; 100],\n        ];\n        let zones = compute_per_kf_zones(&depths, 4);\n        assert_eq!(zones.len(), 2);\n        assert_eq!(zones[0].len(), 5); // 4 zones → 5 boundaries\n        assert!((zones[0][0] - 0.0).abs() < 1e-6);\n        assert!((zones[0][4] - 1.0).abs() < 1e-6);\n        for i in 1..4 {",
+  "source_version": "crates/dorea-cli/src/change_detect.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229527961Z",
+  "valid_from": "2026-04-11T00:04:13.229527961Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/change_detect.rs",
+    "language": "rs",
+    "chunk_type": "mod_item",
+    "start_line": 319,
+    "end_line": 365,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

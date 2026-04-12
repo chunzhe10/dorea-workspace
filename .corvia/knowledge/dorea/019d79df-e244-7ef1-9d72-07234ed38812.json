@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-07234ed38812",
+  "content": "### CUDA thread safety\n\n## Expected Outcome\n\n- Slowest stage (~80ms RAUNE or ~80ms encode) determines throughput\n- Target: 2.35 fps → ~7 fps (3× speedup)\n\n\n## Scope\n\n- Modify only `raune_filter.py::run_single_process()`\n- Pipe mode (`run_pipe_mode`) untouched\n- `_process_batch()` unchanged — same signature, same logic\n- No Rust changes\n- No new dependencies (Python `threading` and `queue` are stdlib)\n",
+  "source_version": "decisions/2026-04-10-direct-mode-3thread-pipeline.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836215953Z",
+  "valid_from": "2026-04-11T00:10:08.836215953Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-10-direct-mode-3thread-pipeline.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 62,
+    "end_line": 74,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

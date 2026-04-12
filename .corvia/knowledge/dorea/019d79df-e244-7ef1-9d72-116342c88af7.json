@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-116342c88af7",
+  "content": "tring, string> = {\n  design: \"#7dd3fc\",\n  code: \"#5eead4\",\n  plan: \"#ffb07c\",\n  memory: \"#c4b5fd\",\n  finding: \"#ff8a80\",\n  decision: \"#f0c94c\",\n  instruction: \"#fcd34d\",\n  learning: \"#6ee7b7\",\n};\n```\n\n**Node shape mapping** (from spec, by `source_origin`):\n```typescript\nfunction drawNodeShape(ctx: CanvasRenderingContext2D, x: number, y: number, r: number, origin: string | undefined) {\n  ctx.beginPath();\n  if (origin?.startsWith(\"repo:\")) {\n    // Circle for repo entries\n    ctx.arc(x, y, r, 0, Math.PI * 2);\n  } else if (origin === \"workspace\") {\n    // Diamond for workspace entries\n    ctx.moveTo(x, y - r); ctx.lineTo(x + r, y); ctx.lineTo(x, y + r); ctx.lineTo(x - r, y);\n    ctx.closePath();\n  } else if (origin === \"memory\") {\n    // Triangle for memory entries\n    ctx.moveTo(x, y - r); ctx.lineTo(x + r, y + r); ctx.lineTo(x - r, y + r);\n    ctx.closePath();\n  } else {\n    ctx.arc(x, y, r, 0, Math.PI * 2); // default circle\n  }\n}\n```\n\n**Transition logic:** On cluster click, filter the full `GraphScopeResponse` to nodes/edges within that cluster's files. Create a new force simulation with those nodes. On \"Back\" click, restore the cluster simulation.\n\n**Note on file size:** The existing `GraphView.tsx` is 753 lines. After these changes it may approach 1000. If it grows past 900, extract the entry-level rendering into a separate `EntryGraph.tsx` component (the spec already names this as a planned new component). The split boundary: `GraphView` handles cluster mode + layout, `EntryGraph` handles entry-level force simulation + node rendering.\n\n- [ ] **Step 4: Wire hover highlight/fade**\n\nOn mouse hover over a node:\n- Connected nodes keep full opacity\n- Unrelated nodes fade to 0.15 opacity\n- On mouse out, restore all to full opacity\n\n```typescript\n// In the canvas draw loop:\nconst isConnected = hoveredNodeId\n  ? connectedSet.has(node.id)\n  : true;\nctx.globalAlpha = isConnected ? 1.0 : 0.15;\n```\n\n- [ ] **Step 5: Wire click → select entry → populate reader panel**\n\nOn node click, call `setSelectedEntryId(node.id)` which triggers the `DocumentReader` to load.\n\n- [ ] **Step 6: Add CSS for split-panel layout**\n",
+  "source_version": "plans/2026-03-13-docs-workflow-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836340011Z",
+  "valid_from": "2026-04-11T00:10:08.836340011Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-13-docs-workflow-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1362,
+    "end_line": 1406,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

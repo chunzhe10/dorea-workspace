@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-1f6912c72246",
+  "content": "### Task 8: CUDA Kernels f32 Signature\n\n- [ ] **Step 4: Update Rust FFI declarations in cuda/mod.rs**\n\nIn `crates/dorea-gpu/src/cuda/mod.rs`, update the `extern \"C\"` block:\n\n```rust\n#[cfg(feature = \"cuda\")]\nextern \"C\" {\n    fn dorea_lut_apply_gpu(\n        h_pixels_in: *const f32,\n        h_depth: *const f32,\n        h_luts: *const f32,\n        h_zone_boundaries: *const f32,\n        h_pixels_out: *mut f32,\n        width: i32,\n        height: i32,\n        lut_size: i32,\n        n_zones: i32,\n    ) -> i32;\n\n    fn dorea_hsl_correct_gpu(\n        h_pixels_in: *const f32,\n        h_pixels_out: *mut f32,\n        h_offsets: *const f32,\n        h_s_ratios: *const f32,\n        h_v_offsets: *const f32,\n        h_weights: *const f32,\n        width: i32,\n        height: i32,\n        n_qualifiers: i32,\n    ) -> i32;\n\n    fn dorea_clarity_gpu(\n        h_rgb_in: *const f32,\n        h_rgb_out: *mut f32,\n        full_w: i32,\n        full_h: i32,\n        proxy_w: i32,\n        proxy_h: i32,\n        strength: f32,\n    ) -> i32;\n}\n```\n\n- [ ] **Step 5: Update grade_frame_cuda**\n\nChange signature from:\n```rust\npub fn grade_frame_cuda(pixels: &[u8], ...) -> Result<Vec<f32>, GpuError>\n```\nTo:\n```rust\npub fn grade_frame_cuda(pixels: &[f32], ...) -> Result<Vec<f32>, GpuError>\n```\n\nRemove the u8→f32 conversion. Update buffer size calculations to use `sizeof::<f32>()`\nfor pixel buffers.\n\n- [ ] **Step 6: Build and test**\n\nRun: `cd /workspaces/dorea-workspace/repos/dorea && cargo build -p dorea-gpu && cargo test -p dorea-gpu`\nExpected: Compiles. Tests pass (CUDA tests may skip if no GPU in container — that's fine,\nthe CPU fallback tests exercise the signature).\n\n- [ ] **Step 7: Commit**\n\n```bash\ngit add crates/dorea-gpu/\ngit commit -m \"feat(gpu): update CUDA kernels from u8 to f32 pixel format\"\n```\n\n---\n",
+  "source_version": "plans/2026-04-02-10bit-pipeline-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836505289Z",
+  "valid_from": "2026-04-11T00:10:08.836505289Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-10bit-pipeline-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1075,
+    "end_line": 1146,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

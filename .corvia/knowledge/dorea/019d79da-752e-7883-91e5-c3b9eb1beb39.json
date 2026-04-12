@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c3b9eb1beb39",
+  "content": " = (w // b) * b\n    if h2 == 0 or w2 == 0:\n        return 0.0\n    L = L[:, :, :h2, :w2]\n    patches = L.unfold(2, b, b).unfold(3, b, b)  # (1, 1, Hb, Wb, 32, 32)\n    mean_var = patches.reshape(1, 1, -1, b * b).var(dim=-1).mean().item()\n    return -mean_var\ndef _score_chroma_magnitude(thumb: torch.Tensor) -> float:\n    \"\"\"Mean sqrt(a² + b²) in OKLab.\"\"\"\n    lab = rgb_to_oklab(thumb)\n    a = lab[:, 1:2]\n    b = lab[:, 2:3]\n    chroma = (a * a + b * b).sqrt()\n    return chroma.mean().item()",
+  "source_version": "benchmarks/upscale_bench/frame_select.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230290389Z",
+  "valid_from": "2026-04-11T00:04:13.230290389Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/frame_select.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 74,
+    "end_line": 80,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

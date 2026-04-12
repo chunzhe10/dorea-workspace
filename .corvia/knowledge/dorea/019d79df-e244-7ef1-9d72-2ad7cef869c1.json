@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-2ad7cef869c1",
+  "content": "### Task 4: Unit tests — boundary conditions and validity check\n\n            // LUT lookup at exact grid node (should be near-exact, only u8 quantization diff)\n            let [lo, go, bo] = grade_lut.lookup(r, g, b, d);\n            let lut_result = [\n                (lo.clamp(0.0, 1.0) * 255.0).round() as u8,\n                (go.clamp(0.0, 1.0) * 255.0).round() as u8,\n                (bo.clamp(0.0, 1.0) * 255.0).round() as u8,\n            ];\n\n            for c in 0..3 {\n                let err = (direct[c] as i32 - lut_result[c] as i32).unsigned_abs();\n                assert!(\n                    err <= 1,\n                    \"Boundary ({:.1},{:.1},{:.1}) d={d}: channel {c} direct={} lut={} err={err}\",\n                    rgb[0], rgb[1], rgb[2], direct[c], lut_result[c]\n                );\n            }\n        }\n    }\n\n    #[test]\n    fn validity_check_detects_param_change() {\n        let cal = test_calibration();\n        let params = GradeParams::default();\n        let grade_lut = GradeLut::build(&cal, &params);\n\n        assert!(grade_lut.is_valid_for(&cal, &params));\n\n        let changed_params = GradeParams { warmth: 1.5, ..params };\n        assert!(!grade_lut.is_valid_for(&cal, &changed_params));\n    }\n```\n\n- [ ] **Step 2: Run tests**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ncargo test -p dorea-gpu -- lut3d::tests --nocapture 2>&1 | tail -15\n```\n\nExpected: all 3 tests pass.\n\n- [ ] **Step 3: Commit**\n\n```bash\ngit add crates/dorea-gpu/src/lut3d.rs\ngit commit -m \"test(dorea-gpu): boundary conditions and param validity for grade LUT\n\nVerifies grid-node lookups match direct pipeline within 1/255.\nAsserts is_valid_for detects GradeParams changes.\"\n```\n\n---\n",
+  "source_version": "plans/2026-04-03-3d-lut-temporal-interpolation.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836674241Z",
+  "valid_from": "2026-04-11T00:10:08.836674241Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-3d-lut-temporal-interpolation.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 573,
+    "end_line": 625,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

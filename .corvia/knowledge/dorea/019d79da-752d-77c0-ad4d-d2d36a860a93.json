@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d2d36a860a93",
+  "content": "coder→GPU carries Frame16 (u16 pixels). GPU→encoder carries Vec<u16>.\n    let (decoded_tx, decoded_rx) = crossbeam_channel::bounded::<Frame16>(CHANNEL_CAPACITY);\n    let (graded_tx, graded_rx) = crossbeam_channel::bounded::<Vec<u16>>(CHANNEL_CAPACITY);\n\n    let total_frames = info.frame_count;\n\n    std::thread::scope(|s| -> Result<u64> {\n        // ---------------------------------------------------------------\n        // Thread 1: Decoder — reads 16-bit frames from ffmpeg\n        // ---------------------------------------------------------------\n        let decoder_handle = s.spawn(|| -> Result<()> {\n            let frames = ffmpeg::decode_frames_16bit(&cfg.input, info)\n                .context(\"failed to spawn ffmpeg full-res 16-bit decoder\")?;\n            for frame_result in frames {\n                let frame = frame_result.context(\"16-bit frame decode error\")?;\n                if decoded_tx.send(frame).is_err() {\n                    break;\n                }\n            }\n            drop(decoded_tx);\n            Ok(())\n        });\n\n        // ---------------------------------------------------------------\n        // Thread 3: Encoder — receives graded u16 frames, writes via write_frame_16\n        // ---------------------------------------------------------------\n        let encoder_handle = s.spawn(move || -> Result<u64> {\n            let mut encoder = encoder;\n            let mut frame_count = 0u64;\n            for graded in graded_rx {\n                encoder.write_frame_16(&graded).context(\"16-bit encoder write failed\")?;\n                frame_count += 1;\n                if frame_count % 100 == 0 {",
+  "source_version": "crates/dorea-cli/src/pipeline/grading.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229450744Z",
+  "valid_from": "2026-04-11T00:04:13.229450744Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/pipeline/grading.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 455,
+    "end_line": 484,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

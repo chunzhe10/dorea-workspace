@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-333115c97943",
+  "content": "## Usage\n## What it does\n\n## Known limitations\n\n- **8-bit bottleneck**: Maxine accepts only uint8. The 10-bit pipeline's f32 precision\n  is quantized to u8 for enhancement. This trades bit-depth for spatial quality.\n- **VRAM**: Peak ~4.9-5.7GB with Maxine enabled on RTX 3060 6GB. If OOM occurs,\n  try `--maxine-artifact-reduction false` or `--no-maxine`.\n- **Artifact reduction** is trained for H.264; effectiveness on H.265 source is\n  unvalidated but expected to help with common artifacts.\n\n\n## CI / Testing\n\nSet `DOREA_MAXINE_MOCK=1` to test the enhancement pipeline without the SDK:\n\n```bash\nDOREA_MAXINE_MOCK=1 cargo test\n```\n```\n\n- [ ] **Step 2: Commit**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ngit add docs/guides/maxine-setup.md\ngit commit -m \"docs: add Maxine VFX SDK setup guide\"\n```\n\n---\n",
+  "source_version": "plans/2026-04-03-maxine-enhancement-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836797540Z",
+  "valid_from": "2026-04-11T00:10:08.836797540Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-maxine-enhancement-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 898,
+    "end_line": 925,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

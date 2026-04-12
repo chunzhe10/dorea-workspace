@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-018b8db41261",
+  "content": "## Data Flow\n## Scene Segmentation\n\n### Detection metric\n\nWasserstein-1 distance (earth mover's distance) between consecutive keyframes' depth histograms. Measures how much \"work\" it takes to reshape one depth distribution into the other. Computed from sorted CDF difference on quantized depth bins.\n\n```rust\nfn depth_distribution_distance(depth_a: &[f32], depth_b: &[f32], n_bins: usize) -> f32 {\n    // Quantize into n_bins histogram bins (e.g., 64 bins)\n    // Compute CDFs for both\n    // Wasserstein-1 = sum of |CDF_a[i] - CDF_b[i]| / n_bins\n}\n```\n\nThis is distinct from the MSE-based `ChangeDetector` used for keyframe selection. MSE detects visual change; Wasserstein-1 detects depth distribution shift.\n\n\n### Segment rules\n\n1. Scene boundary triggered when `depth_distribution_distance` > `scene_threshold` between consecutive keyframes\n2. Minimum segment length: 5 keyframes. Segments shorter than this are merged with the previous segment (too few frames for good LUT cell coverage)\n3. Scene cuts reset the `ChangeDetector` reference (existing behavior)\n",
+  "source_version": "decisions/2026-04-04-per-keyframe-adaptive-depth-zones.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836149931Z",
+  "valid_from": "2026-04-11T00:10:08.836149931Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-04-per-keyframe-adaptive-depth-zones.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 79,
+    "end_line": 98,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-f9a26c7f64e1",
+  "content": "e = (1,0,0), rescaled L = 100, a = 0, b = 0\n        assert!((l - 100.0).abs() < 1e-2, \"White L: expected 100, got {l}\");\n        assert!(a.abs() < 1e-2, \"White a: expected 0, got {a}\");\n        assert!(b.abs() < 1e-2, \"White b: expected 0, got {b}\");\n    }\nfn test_black_point() {\n        let (l, a, b) = srgb_to_lab(0.0, 0.0, 0.0);\n        assert!(l.abs() < 1e-3, \"Black L: expected 0, got {l}\");\n        assert!(a.abs() < 1e-3, \"Black a: expected 0, got {a}\");\n        assert!(b.abs() < 1e-3, \"Black b: expected 0, got {b}\");\n    }",
+  "source_version": "crates/dorea-color/src/lab.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229943144Z",
+  "valid_from": "2026-04-11T00:04:13.229943144Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-color/src/lab.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 127,
+    "end_line": 132,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

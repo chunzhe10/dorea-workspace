@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-3150ea83dc0d",
+  "content": "\"Fused inference complete: {} frames\", kf_results.len());\n\n    let _ = inf_server.shutdown();\n\n    // --- Phase 3: push to store ---\n    for (i, (pixels, (enhanced, depth_proxy, dw, dh))) in\n        kf_pixels.iter().zip(kf_results.iter()).enumerate()\n    {\n        let depth = InferenceServer::upscale_depth(depth_proxy, *dw, *dh, kf_w, kf_h);\n        store.push(pixels, enhanced, &depth, kf_w, kf_h)\n            .with_context(|| format!(\"failed to page frame {i} to store\"))?;\n    }\n```\n\n- [ ] **Step 5.3: Cargo check**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ncargo check -p dorea-cli 2>&1 | tail -10\n```\nExpected: `Finished` with no errors. Fix any type mismatches before continuing.\n\n- [ ] **Step 5.4: Cargo test**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ncargo test -p dorea-cli 2>&1 | tail -10\n```\nExpected: no failures.\n\n- [ ] **Step 5.5: Commit**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ngit add crates/dorea-cli/src/grade.rs\ngit commit -m \"feat(grade): fused RAUNE+depth in auto_calibrate — depth runs on enhanced frames, single IPC phase\"\n```\n\n---\n",
+  "source_version": "plans/2026-04-03-inference-gpu-saturation.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836768402Z",
+  "valid_from": "2026-04-11T00:10:08.836768402Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-inference-gpu-saturation.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 830,
+    "end_line": 861,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

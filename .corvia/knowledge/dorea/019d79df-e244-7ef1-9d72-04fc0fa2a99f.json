@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-04fc0fa2a99f",
+  "content": "#### 1. `bicubic`\n#### 2. `lanczos3`\n\n#### 3. `joint_bilateral`\nLuma-guided joint bilateral upsample. Triton kernel (the pipeline already ships Triton; the loop structure mirrors the existing OKLab transfer kernel in `raune_filter.py`). For each output pixel:\n\n```\nsum_w = 0; sum_d = 0\nfor each of the 4 neighboring proxy-grid samples n:\n    w_spatial = exp(-spatial_distance(out, n)² / σ_spatial²)\n    w_guide   = exp(-|L_full(out) - L_guide(n)|² / σ_luma²)\n    w = w_spatial * w_guide\n    sum_w += w\n    sum_d += w * delta_proxy(n)\ndelta_full(out) = sum_d / sum_w\n```\n\nHyperparameters:\n- `σ_spatial = 1.5` proxy pixels\n- `σ_luma = 0.1` on OKLab-L in [0, 1]\n\n`L_guide(n)` is the luma at the proxy-grid point, obtained by downsampling `orig_full`'s OKLab-L to proxy dimensions once up front and reusing. This is the method I expect to win on edges specifically.\n\n\n#### 4. `guided_filter`\nHe/Sun/Tang 2010 guided filter with `orig_full`'s OKLab-L as the guide. Implemented in PyTorch using separable box filters (cheap on GPU, closed-form, no tuning loop).\n\nHyperparameters:\n- `r = 8` (box filter radius, in full-resolution pixels)\n- `ε = 1e-4` (regularization)\n\nConceptually similar to joint bilateral but with different trade-offs: smoother in flat regions, less aggressive at hard edges. Worth testing alongside joint bilateral because the winner between them is content-dependent.\n",
+  "source_version": "decisions/2026-04-10-delta-upscale-bench-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836190400Z",
+  "valid_from": "2026-04-11T00:10:08.836190400Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-10-delta-upscale-bench-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 136,
+    "end_line": 164,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

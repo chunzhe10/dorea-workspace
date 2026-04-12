@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-38bf76ad54b4",
+  "content": "llect())\n            .collect();\n        let segs = detect_scene_segments(&depths, 0.15, 5);\n        assert_eq!(segs.len(), 1);\n        assert_eq!(segs[0].start, 0);\n        assert_eq!(segs[0].end, 10);\n    }\n\n    #[test]\n    fn segments_hard_scene_cut() {\n        // First 5 keyframes: near-field. Next 5: far-field.\n        let mut depths: Vec<Vec<f32>> = Vec::new();\n        for _ in 0..5 {\n            depths.push(vec![0.1; 100]);\n        }\n        for _ in 0..5 {\n            depths.push(vec![0.9; 100]);\n        }\n        let segs = detect_scene_segments(&depths, 0.15, 3);\n        assert_eq!(segs.len(), 2, \"expected 2 segments, got {:?}\", segs);\n        assert_eq!(segs[0].end, segs[1].start);\n    }\n\n    #[test]\n    fn segments_short_segment_merged() {\n        // Pattern: 5 near, 2 far (too short), 5 near\n        let mut depths: Vec<Vec<f32>> = Vec::new();\n        for _ in 0..5 { depths.push(vec![0.1; 100]); }\n        for _ in 0..2 { depths.push(vec![0.9; 100]); }\n        for _ in 0..5 { depths.push(vec![0.1; 100]); }\n        let segs = detect_scene_segments(&depths, 0.15, 5);\n        // The 2-KF far segment is below min_segment_keyframes=5, should be merged\n        assert!(segs.len() <= 2, \"short segment should be merged, got {:?}\", segs);\n    }\n```\n\n- [ ] **Step 6: Run tests to verify they fail**\n",
+  "source_version": "plans/2026-04-04-per-keyframe-adaptive-depth-zones-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836880874Z",
+  "valid_from": "2026-04-11T00:10:08.836880874Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-per-keyframe-adaptive-depth-zones-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 223,
+    "end_line": 250,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

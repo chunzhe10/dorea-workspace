@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-3fa45800983c",
+  "content": "&grade_params, lut_size, depth_zones,\n            ).context(\"AdaptiveGrader init failed\")?;\n            grader.prepare_keyframe(&smoothed_kf_zones[0])\n                .context(\"prepare initial keyframe texture failed\")?;\n            grader.swap_textures();\n            if smoothed_kf_zones.len() > 1 {\n                grader.prepare_keyframe(&smoothed_kf_zones[1])\n                    .context(\"prepare second keyframe texture failed\")?;\n            }\n            log::info!(\n                \"{}: AdaptiveGrader initialized ({base_lut_zones} base zones, {depth_zones} runtime zones)\",\n                self.name()\n            );\n            grader\n        };\n\n        let frames = ffmpeg::decode_frames(&video_path, &video_info)\n            .context(\"failed to spawn full-res decoder\")?;\n\n        let mut kf_cursor = 0usize;\n        let mut frame_count = 0u64;\n        let mut current_segment = kf_to_segment.first().copied().unwrap_or(0);\n\n        for frame_result in frames {\n            let frame = frame_result.context(\"frame decode error\")?;\n            let fi = frame.index;\n\n            while kf_cursor + 1 < kf_index_list.len() && kf_index_list[kf_cursor + 1].0 <= fi {\n                kf_cursor += 1;\n                #[cfg(feature = \"cuda\")]\n                {\n                    let new_seg = kf_to_segment[kf_cursor];\n                    if new_seg != current_segment {",
+  "source_version": "plans/2026-04-05-pipeline-dag-refactor.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836992844Z",
+  "valid_from": "2026-04-11T00:10:08.836992844Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-05-pipeline-dag-refactor.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1587,
+    "end_line": 1614,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

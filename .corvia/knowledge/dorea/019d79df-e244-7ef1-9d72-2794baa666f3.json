@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-2794baa666f3",
+  "content": "## Task 5: End-to-End Smoke Test\n\n## Self-Review Checklist\n\n**Spec coverage:**\n- [x] Opt 1+5 (temporal grade interpolation) → Task 4\n- [x] Opt 2 (fused LAB pass with rayon) → Task 3\n- [x] Opt 3 (raw RGB IPC) → Task 1\n- [x] Opt 4a (HF processor bypass) → Task 2, Steps 1-3\n- [x] Opt 4b (GPU-required runtime) → Task 2, Steps 4-5\n- [x] Scene-cut handling → Task 4 (scene_cut_threshold = 10x threshold, buffer flush)\n- [x] Buffer overflow safety → Task 4 (max_buffer = 1.5x max_interval)\n- [x] Division-by-zero guard → Task 4 (lerp_graded clamps t to [0,1])\n- [x] Last-frame handling → Task 4 (flush at end with graded_before == graded_after)\n- [x] Timing instrumentation → noted in Task 5 (verbose logging)\n- [x] Backward-compatible format field → Task 1 Step 2 (defaults to \"png\")\n\n**Placeholder scan:** No TBDs, TODOs, or \"fill in later\". All code blocks are complete.\n\n**Type consistency:**\n- `fused_ambiance_warmth` signature: `(&mut [f32], &[f32], usize, usize, f32, f32)` — matches call in finish_grade\n- `frame_mse` returns `f32` — compared against `args.depth_skip_threshold: f32` ✓\n- `lerp_graded` takes `(&[u8], &[u8], f32)` → `Vec<u8>` — matches graded frame type ✓\n- `BufferedFrame` stores only `index, width, height` — no source pixels (interpolation uses graded cache) ✓\n- `flush_buffer_graded` takes `&Option<Vec<u8>>` for graded before/after — matches `last_keyframe_graded` type ✓",
+  "source_version": "plans/2026-04-02-grading-pipeline-perf-v3.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836623841Z",
+  "valid_from": "2026-04-11T00:10:08.836623841Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-grading-pipeline-perf-v3.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 990,
+    "end_line": 1012,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

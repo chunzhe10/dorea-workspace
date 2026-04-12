@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-2f665cac953c",
+  "content": "hon` feature (uses subprocess fallback). The PyO3 path compiles only with `--features python`.\n\n- [ ] **Step 7: Commit**\n\n```bash\ngit add crates/dorea-video/\ngit commit -m \"feat(dorea-video): add PyO3 inference backend behind python feature flag\"\n```\n\n---\n\n## Task 7: CLI Integration — Adaptive Batching and Grader Reuse\n\n**Files:**\n- Modify: `crates/dorea-cli/src/grade.rs`\n- Test: `cargo build -p dorea-cli`\n\n- [ ] **Step 1: Update grade.rs imports**\n\nAt the top of `crates/dorea-cli/src/grade.rs`, add imports for the new types:\n\n```rust\n#[cfg(feature = \"cuda\")]\nuse dorea_gpu::cuda::CudaGrader;\n#[cfg(feature = \"cuda\")]\nuse dorea_gpu::batcher::AdaptiveBatcher;\n#[cfg(feature = \"cuda\")]\nuse dorea_gpu::device::per_frame_vram_bytes;\n```\n\nNote: These imports are conditional on `cuda` feature which is auto-detected. When `cuda` is not available, the existing `grade_frame()` fallback path handles everything.\n\n- [ ] **Step 2: Add CudaGrader initialization to `run()`**\n\nAfter the inference server spawn (around line 218), add grader initialization:\n\n```rust\n    // Initialize CUDA grader (loads PTX once, reuses across all frames)\n    #[cfg(feature = \"cuda\")]\n    let grader = match CudaGrader::new() {\n        Ok(g) => {\n            log::info!(\"CUDA grader initialized (cudarc + PTX modules loaded)\");\n            Some(g)\n        }\n        Err(e) => {\n            log::warn!(\"CUDA grader init failed: {e} — falling back to per-frame init\");\n            None\n        }\n    };\n```\n\n- [ ] **Step 3: Update the grading call sites to use pre-initialized grader**\n\nReplace the `grade_frame()` calls in the keyframe branch and `flush_buffer_with_depth` to optionally use the pre-initialized grader:\n\nIn `flush_buffer_with_depth`, add a `grader` parameter:\n```rust\nfn flush_buffer_with_depth(",
+  "source_version": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836741380Z",
+  "valid_from": "2026-04-11T00:10:08.836741380Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1795,
+    "end_line": 1841,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

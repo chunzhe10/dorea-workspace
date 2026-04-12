@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-df92c605800b",
+  "content": "y(&o.stdout).contains(\"hevc_nvenc\"))\n                        .unwrap_or(false)\n                });\n\n                if hevc_nvenc {\n                    cmd.args([\n                        \"-c:v\", \"hevc_nvenc\",\n                        \"-profile:v\", \"main10\",\n                        \"-pix_fmt\", \"p010le\",\n                    ]);\n                } else {\n                    cmd.args([\n                        \"-c:v\", \"libx265\",\n                        \"-profile:v\", \"main10\",\n                        \"-pix_fmt\", \"yuv420p10le\",\n                        \"-crf\", \"18\",\n                        \"-preset\", \"fast\",\n                    ]);\n                }\n            }\n            OutputCodec::H264 => {\n                // ffmpeg will handle the rgb48le → yuv420p downconversion.\n                static NVENC_AVAILABLE_10: OnceLock<bool> = OnceLock::new();\n                let nvenc = *NVENC_AVAILABLE_10.get_or_init(|| {\n                    Command::new(\"ffmpeg\")\n                        .args([\"-hide_banner\", \"-encoders\"])\n                        .output()\n                        .map(|o| String::from_utf8_lossy(&o.stdout).contains(\"h264_nvenc\"))\n                        .unwrap_or(false)\n                });\n\n                if nvenc {\n                    cmd.args([\"-c:v\", \"h264_nvenc\", \"-preset\", \"p4\", \"-cq\", \"18\"]);\n                } else {\n                    cmd.args([\"-c:v\", \"libx264\", \"-crf\", \"18\", \"-preset\", \"fast\"]);\n                }\n            }\n        }\n\n        cmd.arg(out_s);",
+  "source_version": "crates/dorea-video/src/ffmpeg.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229602123Z",
+  "valid_from": "2026-04-11T00:04:13.229602123Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/ffmpeg.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 882,
+    "end_line": 913,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-cbf7c02dc5b5",
+  "content": "0f) * mask);\n        v += v_offsets[q] * mask;\n    }\n\n    h = fmodf(h, 360.0f);\n    if (h < 0.0f) h += 360.0f;\n    s = fminf(fmaxf(s, 0.0f), 1.0f);\n    v = fminf(fmaxf(v, 0.0f), 1.0f);\n\n    hsv_to_rgb(h, s, v, &r, &g, &b);\n\n    pixels_out[idx * 3 + 0] = r;\n    pixels_out[idx * 3 + 1] = g;\n    pixels_out[idx * 3 + 2] = b;\n}\n```\n\nThe helper functions `rgb_to_hsv`, `hsv_to_rgb`, `angular_dist`, and the `__constant__` arrays at the top of the file are unchanged.\n\n- [ ] **Step 4: Update `CalibrationBuffers` in `cuda/mod.rs`**\n\nReplace the four scalar fields with one packed field:\n\n```rust\nstruct CalibrationBuffers {\n    n_zones: usize,\n    lut_size: usize,\n    data_valid: bool,\n    d_luts: CudaSlice<f32>,\n    d_boundaries: CudaSlice<f32>,\n    /// Packed HSL correction parameters: [h_offsets(6) | s_ratios(6) | v_offsets(6) | weights(6)] = 24 f32.\n    d_hsl_params: CudaSlice<f32>,\n}\n```\n\n- [ ] **Step 5: Update `alloc_calibration_buffers`**\n\n```rust\nOk(CalibrationBuffers {\n    n_zones,\n    lut_size,\n    data_valid: false,\n    d_luts: dev.alloc_zeros(lut_elems).map_err(map_cudarc_error)?,\n    d_boundaries: dev.alloc_zeros(n_zones + 1).map_err(map_cudarc_error)?,\n    d_hsl_params: dev.alloc_zeros(24).map_err(map_cudarc_error)?,\n})\n```\n\n- [ ] **Step 6: Update the calibration upload block in `grade_frame_cuda`**\n\nInside the `if needs_cal_upload { ... }` block added in Task 1, replace the four separate uploads with one packed upload:\n\n```rust\nif needs_cal_upload {\n    let luts_flat: Vec<f32> = depth_luts.luts.iter()\n        .flat_map(|lg| lg.data.iter().copied())\n        .collect();\n    let mut hsl_params = [0.0f32; 24];\n    for (i, q) in calibration.hsl_corrections.0.iter().enumerate().take(6) {\n        hsl_params[i]      = q.h_offset;\n        hsl_params[6 + i]  = q.s_ratio;\n        hsl_params[12 + i] = q.v_offset;\n        hsl_params[18 + i] = q.weight;\n    }\n    {",
+  "source_version": "docs/plans/2026-04-03-pcie-sync-barrier-reduction.md",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230416915Z",
+  "valid_from": "2026-04-11T00:04:13.230416915Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "docs/plans/2026-04-03-pcie-sync-barrier-reduction.md",
+    "language": "markdown",
+    "chunk_type": "heading_section",
+    "start_line": 366,
+    "end_line": 418,
+    "content_role": "plan",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

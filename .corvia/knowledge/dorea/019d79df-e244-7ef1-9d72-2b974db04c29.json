@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-2b974db04c29",
+  "content": "## Task B — Rust IPC side\n\n### `inference_subprocess.rs`: add `DepthBatchItem` + `run_depth_batch`\n\n```rust\npub struct DepthBatchItem {\n    pub id: String,\n    pub pixels: Vec<u8>,\n    pub width: usize,\n    pub height: usize,\n    pub max_size: usize,\n}\n\n// On InferenceServer:\npub fn run_depth_batch(\n    &mut self,\n    items: &[DepthBatchItem],\n) -> Result<Vec<(String, Vec<f32>, usize, usize)>, InferenceError> {\n    // Encode each item, send one JSON request, parse one response\n    // Returns Vec<(id, depth_f32, width, height)> in same order\n}\n```\n\n\n### `pyo3_backend.rs`: add same `DepthBatchItem` + `run_depth_batch`\n\n```rust\npub fn run_depth_batch(\n    &self,\n    items: &[DepthBatchItem],\n) -> Result<Vec<(String, Vec<f32>, usize, usize)>, InferenceError> {\n    // Build list of numpy arrays\n    // Call bridge.run_depth_batch_cpu(imgs, max_size)\n    // Decode each result\n}\n```\n\n---\n",
+  "source_version": "plans/2026-04-03-batch-depth-inference-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836683861Z",
+  "valid_from": "2026-04-11T00:10:08.836683861Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-batch-depth-inference-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 134,
+    "end_line": 169,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

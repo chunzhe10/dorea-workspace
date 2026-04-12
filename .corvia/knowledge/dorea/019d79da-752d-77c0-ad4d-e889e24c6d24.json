@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-e889e24c6d24",
+  "content": "r(|e| InferenceError::Ipc(format!(\"reshape for id={}: {e}\", item.id)))?;\n                py_list\n                    .append(np_reshaped)\n                    .map_err(|e| InferenceError::Ipc(format!(\"list append for id={}: {e}\", item.id)))?;\n            }\n\n            let raune_max = items[0].raune_max_size;\n            let depth_max = items[0].depth_max_size;\n\n            // Call bridge.run_raune_depth_batch_cpu(imgs, raune_max, depth_max, enable_maxine)\n            let result = bridge\n                .call_method1(\n                    \"run_raune_depth_batch_cpu\",\n                    (py_list, raune_max, depth_max, enable_maxine),\n                )\n                .map_err(|e| Self::map_python_error(py, e))?;\n\n            // Result is a Python list of (enhanced_np, depth_np) tuples\n            let result_list = result\n                .downcast::<pyo3::types::PyList>()\n                .map_err(|e| InferenceError::Ipc(format!(\n                    \"run_raune_depth_batch_cpu result not a list: {e}\"\n                )))?;\n\n            let mut out = Vec::with_capacity(items.len());\n            for (i, item) in items.iter().enumerate() {\n                let pair = result_list\n                    .get_item(i)\n                    .map_err(|e| InferenceError::Ipc(format!(\"get result[{i}]: {e}\")))?;\n\n                let pair_tuple = pair",
+  "source_version": "crates/dorea-video/src/inference/pyo3_backend.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229716844Z",
+  "valid_from": "2026-04-11T00:04:13.229716844Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference/pyo3_backend.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 456,
+    "end_line": 480,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

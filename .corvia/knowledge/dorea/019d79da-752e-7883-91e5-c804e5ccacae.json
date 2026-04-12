@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c804e5ccacae",
+  "content": "urn torch.where(t > delta ** 3, t.clamp_min(1e-12).pow(1.0 / 3.0), t / (3 * delta * delta) + 4 / 29)\n\n    fx = _f(x)\n    fy = _f(y)\n    fz = _f(z)\n\n    L = 116 * fy - 16\n    a = 500 * (fx - fy)\n    b = 200 * (fy - fz)\n    return torch.cat([L, a, b], dim=1)\ndef _f(t):\n        return torch.where(t > delta ** 3, t.clamp_min(1e-12).pow(1.0 / 3.0), t / (3 * delta * delta) + 4 / 29)",
+  "source_version": "benchmarks/upscale_bench/metrics.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230349267Z",
+  "valid_from": "2026-04-11T00:04:13.230349267Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/metrics.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 91,
+    "end_line": 92,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c43b7a0e8ef5",
+  "content": "m = x.movedim(dim, -1)  # (..., in_size)\n    gathered = x_perm[..., sample_idx]  # (..., out_size, 2*support_int)\n    w = weights.to(dtype)  # (out_size, 2*support_int)\n    out = (gathered * w).sum(dim=-1)  # (..., out_size)\n    return out.movedim(-1, dim)\ndef lanczos3(\n    delta_proxy: torch.Tensor,\n    orig_full: torch.Tensor,\n    full_size: Tuple[int, int],\n) -> torch.Tensor:\n    \"\"\"Lanczos-3 upscale via separable 1-D resampling.\n\n    PyTorch does not provide Lanczos in F.interpolate, so we implement it\n    as two separable passes. This is slower than bicubic but closer to the\n    ideal sinc-windowed reconstruction.\n    \"\"\"\n    fh, fw = full_size\n    # Resample width first (along dim=-1), then height (along dim=-2)\n    resampled = _lanczos_resample_1d(delta_proxy, fw, dim=-1, a=3)\n    resampled = _lanczos_resample_1d(resampled, fh, dim=-2, a=3)\n    return resampled",
+  "source_version": "benchmarks/upscale_bench/methods.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230297521Z",
+  "valid_from": "2026-04-11T00:04:13.230297521Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/methods.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 116,
+    "end_line": 131,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

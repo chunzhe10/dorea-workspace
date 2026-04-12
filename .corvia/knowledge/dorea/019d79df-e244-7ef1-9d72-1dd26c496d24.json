@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-1dd26c496d24",
+  "content": "# 10-Bit Pipeline Implementation Plan\n\n## Phase A: Foundation (Color Math + I/O + LUT Size)\n\nThese tasks produce a working 10-bit calibration pipeline. No GPU or grading changes yet.\n\n---\n",
+  "source_version": "plans/2026-04-02-10bit-pipeline-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836484802Z",
+  "valid_from": "2026-04-11T00:10:08.836484802Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-10bit-pipeline-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 15,
+    "end_line": 20,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

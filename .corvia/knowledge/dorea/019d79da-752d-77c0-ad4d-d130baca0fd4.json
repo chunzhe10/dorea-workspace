@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d130baca0fd4",
+  "content": "used RAUNE+Maxine+depth → paged store)\n    // -----------------------------------------------------------------------\n    let mut inf_server = InferenceServer::spawn(&InferenceConfig {\n        skip_raune: true,\n        skip_depth: true,\n        ..inf_cfg\n    }).context(\"failed to spawn inference server\")?;\n\n    inf_server.load_raune(\n        raune_weights.as_deref(),\n        raune_models_dir.as_deref(),\n    ).context(\"failed to load RAUNE-Net for calibration\")?;\n    inf_server.load_depth(\n        depth_model.as_deref(),\n    ).context(\"failed to load Depth Anything for calibration\")?;\n\n    let feat_out = pipeline::feature::run_feature_stage(&pipeline_cfg, &info, inf_server, kf_out)?;\n\n    // -----------------------------------------------------------------------\n    // Stage 3: Calibration (zones → segments → LUT build → HSL → grader init)\n    // -----------------------------------------------------------------------\n    let cal_out = pipeline::calibration::run_calibration_stage(&pipeline_cfg, feat_out)?;\n\n    // -----------------------------------------------------------------------\n    // Stage 4: Grading render (full-res decode → depth interp → grade → encode)\n    // -----------------------------------------------------------------------\n    let frame_count = pipeline::grading::run_grading_stage(&pipeline_cfg, &info, encoder, cal_out)?;\n\n    if info.frame_count > 0 && frame_count < info.frame_count {\n        log::warn!(\n            \"Incomplete grading: {frame_count} frames processed, {} expected \\\n             (decoder may have stopped early)\",\n            info.frame_count\n        );\n    }\n    log::info!(\"Done. Graded {frame_count} frames → {}\", output.display());\n    Ok(())\n}",
+  "source_version": "crates/dorea-cli/src/grade.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229429904Z",
+  "valid_from": "2026-04-11T00:04:13.229429904Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/grade.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 352,
+    "end_line": 383,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

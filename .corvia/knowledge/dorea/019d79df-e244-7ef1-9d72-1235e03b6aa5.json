@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-1235e03b6aa5",
+  "content": "ement `check_temporal_contradiction`**\n\nExtends the existing `Contradiction` pattern but additionally requires overlapping `valid_from`/`valid_to` windows AND different `source_origin` values. This is an LLM-assisted check (uses embeddings for similarity).\n\n```rust\nfn check_temporal_contradiction(\n    entries: &[KnowledgeEntry],\n    threshold: f32,\n) -> Vec<Finding> {\n    let mut findings = Vec::new();\n    let current: Vec<_> = entries.iter().filter(|e| e.is_current()).collect();\n\n    for i in 0..current.len() {\n        for j in (i + 1)..current.len() {\n            let a = current[i];\n            let b = current[j];\n\n            // Must have different source_origin\n            if a.metadata.source_origin == b.metadata.source_origin { continue; }\n\n            // Must both have embeddings for similarity check\n            let (Some(ref ea), Some(ref eb)) = (&a.embedding, &b.embedding) else { continue };\n\n            let sim = cosine_similarity(ea, eb);\n            if sim >= threshold {\n                findings.push(Finding::new(\n                    CheckType::TemporalContradiction,\n                    &a.scope_id,\n                    vec![a.id, b.id],\n                    sim,\n                    format!(\n                        \"High similarity ({:.2}) between entries from '{}' and '{}' — possible contradiction\",\n                        sim,\n                        a.metadata.source_origin.as_deref().unwrap_or(\"unknown\"),\n                        b.metadata.source_origin.as_deref().unwrap_or(\"unknown\"),\n                    ),\n                ));\n            }\n        }\n    }\n    findings\n}\n```\n\n- [ ] **Step 3: Run tests**\n\nRun: `cd /workspaces/corvia-workspace/repos/corvia && cargo test -p corvia-kernel test_temporal_contradiction -- --nocapture`\n\n- [ ] **Step 4: Commit**\n\n```bash\ncd /workspaces/corvia-workspace/repos/corvia\ngit add crates/corvia-kernel/src/reasoner.rs\ngit commit -m \"feat(reasoner): implement TemporalContradiction check across source origins\"\n```\n\n---\n",
+  "source_version": "plans/2026-03-13-docs-workflow-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836349596Z",
+  "valid_from": "2026-04-11T00:10:08.836349596Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-13-docs-workflow-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1775,
+    "end_line": 1829,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

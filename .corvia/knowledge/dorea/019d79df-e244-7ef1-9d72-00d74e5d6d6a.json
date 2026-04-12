@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-00d74e5d6d6a",
+  "content": "### Python: protocol.py\n### Rust: InferenceConfig + build_args()\n\n### Rust: InferenceServer::enhance()\n\n```rust\npub fn enhance(\n    &mut self, id: &str, image_rgb: &[u8], width: usize, height: usize,\n    artifact_reduce: bool, upscale_factor: u32,\n) -> Result<Vec<u8>, InferenceError>\n```\n\nEncodes frame as base64 raw_rgb, sends IPC request, parses `enhance_result` response,\nvalidates returned dimensions match request. Returns enhanced RGB u8 at same resolution.\n\n\n### Rust: FrameEncoder — lossless temp mode\n\nNew constructor:\n\n```rust\nimpl FrameEncoder {\n    pub fn new_lossless_temp(path: &Path, width: usize, height: usize, fps: f64)\n        -> Result<Self>\n}\n```\n\nUses ffmpeg with `-c:v ffv1 -level 3` (lossless, deterministic). Output is `.mkv`.\nNo audio stream. Used only as an intermediary; deleted after Pass 2 via Drop guard.\n",
+  "source_version": "decisions/2026-04-04-maxine-preprocessor-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836140193Z",
+  "valid_from": "2026-04-11T00:10:08.836140193Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-04-maxine-preprocessor-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 104,
+    "end_line": 129,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

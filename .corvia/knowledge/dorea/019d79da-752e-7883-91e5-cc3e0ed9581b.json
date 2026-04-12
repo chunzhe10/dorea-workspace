@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-cc3e0ed9581b",
+  "content": "upload.\n    h_rgb_f32: Vec<f32>,\n    d_rgb_in: CudaSlice<f32>,\n    d_depth: CudaSlice<f32>,\n    d_rgb_after_lut: CudaSlice<f32>,\n    d_rgb_after_hsl: CudaSlice<f32>,\n    d_proxy_l: CudaSlice<f32>,\n    d_blur_a: CudaSlice<f32>,\n    d_blur_b: CudaSlice<f32>,\n    d_rgb_out: CudaSlice<f32>,\n}\n```\n\n- [ ] **Step 4: Initialise in `alloc_resolution_buffers`**\n\n```rust\nOk(ResolutionBuffers {\n    width,\n    height,\n    proxy_w,\n    proxy_h,\n    h_rgb_f32: vec![0.0f32; n * 3],   // pre-allocated; content overwritten on every frame\n    d_rgb_in: dev.alloc_zeros(n * 3).map_err(map_cudarc_error)?,\n    d_depth: dev.alloc_zeros(n).map_err(map_cudarc_error)?,\n    d_rgb_after_lut: dev.alloc_zeros(n * 3).map_err(map_cudarc_error)?,\n    d_rgb_after_hsl: dev.alloc_zeros(n * 3).map_err(map_cudarc_error)?,\n    d_proxy_l: dev.alloc_zeros(proxy_n).map_err(map_cudarc_error)?,\n    d_blur_a: dev.alloc_zeros(proxy_n).map_err(map_cudarc_error)?,\n    d_blur_b: dev.alloc_zeros(proxy_n).map_err(map_cudarc_error)?,\n    d_rgb_out: dev.alloc_zeros(n * 3).map_err(map_cudarc_error)?,\n})\n```\n\n- [ ] **Step 5: Replace per-frame Vec allocation in `grade_frame_cuda`**\n\nFind and remove:\n\n```rust\nlet rgb_f32: Vec<f32> = pixels.iter().map(|&p| p as f32 / 255.0).collect();\n```\n\nReplace the resolution upload block (which previously borrowed `rgb_f32`) with:\n\n```rust\n// --- Upload resolution-keyed data — convert u8→f32 into pre-allocated host buffer,\n//     then copy into device. No per-frame heap allocation. ---\n{\n    let mut guard = self.res_bufs.borrow_mut();",
+  "source_version": "docs/plans/2026-04-03-pcie-sync-barrier-reduction.md",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230420834Z",
+  "valid_from": "2026-04-11T00:04:13.230420834Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "docs/plans/2026-04-03-pcie-sync-barrier-reduction.md",
+    "language": "markdown",
+    "chunk_type": "heading_section",
+    "start_line": 551,
+    "end_line": 589,
+    "content_role": "plan",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

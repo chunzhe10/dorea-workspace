@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d085dc64bb1e",
+  "content": " # Load depth model\n    sys.path.insert(0, \"/workspaces/dorea-workspace/repos/dorea/python\")\n    from dorea_inference.depth_anything import DepthAnythingInference\n\n    print(\"Loading Depth Anything V2...\")\n    model = DepthAnythingInference(device=\"cuda\")\n\n    # Run at 1518px (matching pipeline config)\n    print(\"Running depth at max_size=1518...\")\n    depth = model.infer(frame, max_size=1518)\n    print(f\"Depth map shape: {depth.shape}, range: [{depth.min():.3f}, {depth.max():.3f}]\")\n\n    # Normalize to 0-255 and save as grayscale PNG\n    depth_norm = ((depth - depth.min()) / (depth.max() - depth.min()) * 255).astype(np.uint8)\n\n    out_path = \"/workspaces/dorea-workspace/working/depth_raw.png\"\n    Image.fromarray(depth_norm).save(out_path)\n    print(f\"Saved raw depth map: {out_path}\")\n\n    # Also save a colorized version using matplotlib colormap\n    try:\n        import matplotlib\n        matplotlib.use('Agg')\n        import matplotlib.pyplot as plt\n        import matplotlib.cm as cm\n\n        colored = (cm.inferno(depth_norm / 255.0)[:, :, :3] * 255).astype(np.uint8)\n        out_color = \"/workspaces/dorea-workspace/working/depth_colored.png\"\n        Image.fromarray(colored).save(out_color)\n        print(f\"Saved colored depth map: {out_color}\")\n    except ImportError:\n        print(\"matplotlib not available — skipping colored depth map\")",
+  "source_version": "dump_depth.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229419983Z",
+  "valid_from": "2026-04-11T00:04:13.229419983Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "dump_depth.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 48,
+    "end_line": 72,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

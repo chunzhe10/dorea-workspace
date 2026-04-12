@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-07110b614e20",
+  "content": "### Termination\n### Error handling\n\n### CUDA thread safety\n- PyTorch CUDA context is process-wide; calling from a single Python thread is fine\n- Only Thread 2 touches CUDA — no contention\n- Pinned memory could be added later for additional async copy benefits\n",
+  "source_version": "decisions/2026-04-10-direct-mode-3thread-pipeline.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836215511Z",
+  "valid_from": "2026-04-11T00:10:08.836215511Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-10-direct-mode-3thread-pipeline.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 57,
+    "end_line": 61,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

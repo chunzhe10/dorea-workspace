@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c016857170cf",
+  "content": "def test_empty_returns_empty(self):\n        model = _fake_raune_model()\n        assert model.infer_batch([], max_size=80) == []\ndef test_mixed_dims_falls_back_to_sequential(self):\n        model = _fake_raune_model()\n        imgs = [_make_rgb(60, 80), _make_rgb(40, 60)]  # different sizes\n        results = model.infer_batch(imgs, max_size=160)\n        assert len(results) == 2",
+  "source_version": "python/tests/test_infer_batch.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230242539Z",
+  "valid_from": "2026-04-11T00:04:13.230242539Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/tests/test_infer_batch.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 51,
+    "end_line": 55,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

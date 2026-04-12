@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-2894b4dd57b7",
+  "content": "## Task 4: End-to-end smoke test on the real video\n\n  | python3 -c \"\nimport json, sys\nd = json.load(sys.stdin)\nfor s in d.get('streams', []):\n    if s.get('codec_type') == 'video':\n        print(f'frames: {s.get(\\\"nb_frames\\\", \\\"?\\\")}')\n        print(f'duration: {s.get(\\\"duration\\\", \\\"?\\\")}s')\n        print(f'codec: {s.get(\\\"codec_name\\\", \\\"?\\\")}')\n\"\n```\n\nExpected:\n```\nframes: 1671\nduration: ~13.9s\ncodec: h264\n```\n\n- [ ] **Step 3: Check output file size is reasonable**\n\n```bash\nls -lh /workspaces/dorea-workspace/working/DJI_20251101111428_0055_D_graded_v2.mp4\n```\n\nExpected: 20–300 MB (comparable to the 218 MB source). If < 1 MB, the encoder didn't receive frames.\n\n- [ ] **Step 4: Record the total wall time and commit the result to corvia**\n\nAfter a successful run, note the actual wall time. Then record the fix:\n\n```bash",
+  "source_version": "plans/2026-04-02-inference-perf-fix.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836638160Z",
+  "valid_from": "2026-04-11T00:10:08.836638160Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-inference-perf-fix.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 541,
+    "end_line": 571,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-be0992c3a608",
+  "content": "0, 2, 3, 1).cpu().numpy() * 255\n        ).astype(\"uint8\")  # (N, H, W, 3)\n\n        for i in range(len(imgs_chunk)):\n            results.append((enhanced_np[i], depth_maps[i]))\n\n        del enhanced_batch\n        torch.cuda.empty_cache()\n\n    return results\ndef load_yolo_seg_model(model_path: Optional[str] = None, device: str = \"cuda\") -> None:\n    \"\"\"Load YOLOv11n-seg for binary diver/water segmentation.\"\"\"\n    global _yolo_seg_model\n    from .yolo_seg import YoloSegInference\n    _yolo_seg_model = YoloSegInference(model_path=model_path, device=device)",
+  "source_version": "python/dorea_inference/bridge.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230212133Z",
+  "valid_from": "2026-04-11T00:04:13.230212133Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/bridge.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 203,
+    "end_line": 207,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

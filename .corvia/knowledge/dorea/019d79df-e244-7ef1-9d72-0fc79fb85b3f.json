@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-0fc79fb85b3f",
+  "content": "### Task 1.2: Add `DocsConfig` to workspace configuration\n\n    let loaded: CorviaConfig = toml::from_str(&toml_str).unwrap();\n    assert!(loaded.workspace.unwrap().docs.is_none());\n}\n```\n\n- [ ] **Step 2: Run test to verify it fails**\n\nRun: `cd /workspaces/corvia-workspace/repos/corvia && cargo test -p corvia-common test_docs_config -- --nocapture`\nExpected: FAIL — `docs` field doesn't exist on `WorkspaceConfig`\n\n- [ ] **Step 3: Add `DocsConfig` structs and wire into `WorkspaceConfig`**\n\nIn `config.rs`, add after the `WorkspaceConfig` struct:\n\n```rust\n#[derive(Debug, Clone, Serialize, Deserialize, Default, PartialEq)]\npub struct DocsConfig {\n    #[serde(default)]\n    pub memory_dir: Option<String>,\n    #[serde(default)]\n    pub workspace_docs: Option<String>,\n    #[serde(default)]\n    pub allowed_workspace_subdirs: Vec<String>,\n    #[serde(default)]\n    pub rules: Option<DocsRulesConfig>,\n}\n\n#[derive(Debug, Clone, Serialize, Deserialize, Default, PartialEq)]\npub struct DocsRulesConfig {\n    #[serde(default)]\n    pub blocked_paths: Vec<String>,\n    #[serde(default)]\n    pub repo_docs_pattern: Option<String>,\n}\n```\n\nAdd to `WorkspaceConfig`:\n\n```rust\npub struct WorkspaceConfig {\n    #[serde(default = \"default_repos_dir\")]\n    pub repos_dir: String,\n    #[serde(default)]\n    pub repos: Vec<RepoConfig>,\n    #[serde(default, skip_serializing_if = \"Option::is_none\")]\n    pub docs: Option<DocsConfig>,\n}\n```\n\n- [ ] **Step 4: Fix existing tests — add `docs: None` to all `WorkspaceConfig` literals**\n\nUpdate all existing test code that constructs `WorkspaceConfig { repos_dir, repos }` to include `docs: None`. Search for `WorkspaceConfig {` in the test module.\n\n- [ ] **Step 5: Run tests to verify everything passes**\n\nRun: `cd /workspaces/corvia-workspace/repos/corvia && cargo test -p corvia-common`\nExpected: All tests pass including the new `test_docs_config_*` tests.\n\n- [ ] **Step 6: Commit**\n\n```bash\ncd /workspaces/corvia-workspace/repos/corvia\ngit add crates/corvia-common/src/config.rs\ngit commit -m \"feat(config): add DocsConfig for workspace doc placement rules\"\n```\n\n---\n",
+  "source_version": "plans/2026-03-13-docs-workflow-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836320166Z",
+  "valid_from": "2026-04-11T00:10:08.836320166Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-13-docs-workflow-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 217,
+    "end_line": 284,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

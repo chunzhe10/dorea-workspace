@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d1dfb8d1f32b",
+  "content": "std::path::Path::new(\"clip.mp4\"));\n        assert_eq!(enc, InputEncoding::Srgb);\n        assert!(!enc.is_10bit());\n        let codec = if enc.is_10bit() { OutputCodec::ProRes } else { OutputCodec::H264 };\n        assert_eq!(codec, OutputCodec::H264);\n    }\nfn default_encoding_for_10bit_hevc() {\n        use dorea_video::ffmpeg::{InputEncoding, OutputCodec, VideoInfo};\n        let info = VideoInfo {\n            width: 3840, height: 2160, fps: 29.97, duration_secs: 3.0,\n            frame_count: 90, has_audio: true,\n            codec_name: \"hevc\".to_string(),\n            pix_fmt: \"yuv420p10le\".to_string(),\n            bits_per_component: 10,\n        };\n        let enc = InputEncoding::auto_detect(&info, std::path::Path::new(\"clip.mp4\"));\n        assert_eq!(enc, InputEncoding::DLogM);\n        assert!(enc.is_10bit());\n        let codec = if enc.is_10bit() { OutputCodec::ProRes } else { OutputCodec::H264 };\n        assert_eq!(codec, OutputCodec::ProRes);\n    }",
+  "source_version": "crates/dorea-cli/src/grade.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229437139Z",
+  "valid_from": "2026-04-11T00:04:13.229437139Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/grade.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 473,
+    "end_line": 487,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

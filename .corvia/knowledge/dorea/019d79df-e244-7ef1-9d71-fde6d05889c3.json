@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d71-fde6d05889c3",
+  "content": "### Known Limitations\n\n### Licensing & Distribution\n\nNVIDIA Maxine EULA prohibits bundling SDK binaries under an open source license. Maxine is\nhandled as a fully optional external dependency:\n\n1. **Lazy import** — `import nvvfx` only in `MaxineEnhancer.__init__()`. The module exists in\n   the codebase but does nothing without the SDK installed.\n2. **No pip dependency** — `nvvfx` is NOT listed in dorea's requirements.txt. Users install\n   separately per NVIDIA instructions.\n3. **Setup guide** — `docs/guides/maxine-setup.md`: install driver 570.190+, download SDK from\n   NGC (`nvidia-maxine-vfx-sdk`), install Python bindings, verify with\n   `python -c \"import nvvfx; print(nvvfx.__version__)\"`.\n4. **CI/tests** — `DOREA_MAXINE_MOCK=1` enables passthrough mode for CI. IPC protocol tests\n   exercise the full round-trip without the proprietary SDK.\n5. **No license contamination** — dorea's license is unaffected. Same pattern as ffmpeg-based\n   projects handling proprietary codecs.\n\n\n### Maxine SDK Requirements\n\n- **GPU:** NVIDIA Turing, Ampere, Ada, or Blackwell with Tensor Cores (RTX 3060 Ampere: compatible)\n- **Driver:** Linux 570.190+, 580.82+, or 590.44+\n- **Input format:** BGRA interleaved uint8\n- **Super-resolution input range:** 90p–2160p\n- **Artifact reduction input range:** 90p–1080p (skipped with warning for larger inputs)\n- **Supported scale factors:** 1.33x, 1.5x, 2x, 3x, 4x (3x/4x require >8GB VRAM)\n",
+  "source_version": "decisions/2026-04-02-maxine-post-grading-enhancement.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836104223Z",
+  "valid_from": "2026-04-11T00:10:08.836104223Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-02-maxine-post-grading-enhancement.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 253,
+    "end_line": 278,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

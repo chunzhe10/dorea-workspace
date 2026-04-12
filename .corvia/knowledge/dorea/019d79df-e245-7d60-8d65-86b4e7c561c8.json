@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-86b4e7c561c8",
+  "content": "# PCIe Barrier Reduction Implementation Plan\n\n## Task 1: CudaGrader — cache constant data + pre-allocate FrameBuffers\n\n**Goal:** Reduce CudaGrader from 6 per-frame CUDA operations to 3 barriers.\n",
+  "source_version": "plans/2026-04-08-pcie-barrier-reduction-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837052014Z",
+  "valid_from": "2026-04-11T00:10:08.837052014Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-08-pcie-barrier-reduction-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 9,
+    "end_line": 12,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

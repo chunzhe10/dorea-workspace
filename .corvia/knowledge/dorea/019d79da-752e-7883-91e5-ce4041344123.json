@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-ce4041344123",
+  "content": " threadIdx.x;\n    if (idx >= total_threads) return;\n\n    int N = grid_size;\n    int N3 = N * N * N;\n\n    int zone = idx / N3;\n    int rem  = idx % N3;\n\n    // Memory layout matches cuMemcpy3D: ri is column (x/fastest), gi is row (y), bi is slice (z/depth).\n    // This ensures tex3D(tex, r*(N-1), g*(N-1), b*(N-1)) in the per-frame kernel maps\n    // x→ri, y→gi, z→bi correctly — no R/B axis swap.\n    int bi = rem / (N * N);   // z = depth/slice (slowest in memory)\n    int gi = (rem / N) % N;   // y = row\n    int ri = rem % N;          // x = column (fastest in memory)\n\n    float r = (float)ri / (float)(N - 1);\n    float g = (float)gi / (float)(N - 1);\n    float b = (float)bi / (float)(N - 1);\n\n    // Depth = center of this zone\n    float z_lo = zone_boundaries[zone];\n    float z_hi = zone_boundaries[zone + 1];\n    float depth = 0.5f * (z_lo + z_hi);\n\n    float3 graded = grade_pixel_device(\n        r, g, b, depth,\n        luts, zone_boundaries,\n        lut_size, n_zones,\n        h_offsets, s_ratios, v_offsets, weights,\n        warmth, strength, contrast\n    );\n\n    // Write float4: hardware requires 4-channel format for 3D texture\n    output[idx] = make_float4(graded.x, graded.y, graded.z, 0.0f);\n}\n```\n\n- [ ] **Step 2: Update build.rs — add build_combined_lut to kernel_names and rerun-if-changed**\n\nIn `crates/dorea-gpu/build.rs`, after the existing rerun-if-changed lines, add:\n\n```rust\n    println!(\"cargo:rerun-if-changed=src/cuda/kernels/grade_pixel.cuh\");\n    println!(\"cargo:rerun-if-changed=src/cuda/kernels/build_combined_lut.cu\");\n```\n\nChange the kernel_names array from:\n\n```rust\n    let kernel_names = [\"lut_apply\", \"hsl_correct\"];\n```\n\nto:\n\n```rust\n    let kernel_names = [\"lut_apply\", \"hsl_correct\", \"build_combined_lut\"];\n```\n\n- [ ] **Step 3: Verify it compiles**\n\n```bash\ncd repos/dorea && cargo build -p dorea-gpu 2>&1 | grep -E \"warning=|error\" | head -20\n```\n\nExpected: no errors; possibly nvcc warnings about `auto` lambda in CUDA (acceptable).\n\n- [ ] **Step 4: Commit**\n\n```bash\ncd repos/dorea && git add crates/dorea-gpu/src/cuda/kernels/build_combined_lut.cu crates/dorea-gpu/build.rs\ngit commit -m \"feat: add build_combined_lut.cu GPU kernel for LUT precomputation (Task 5)\"\n```\n\n---\n",
+  "source_version": "docs/plans/2026-04-03-combined-lut-cuda-texture-plan.md",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230457610Z",
+  "valid_from": "2026-04-11T00:04:13.230457610Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "docs/plans/2026-04-03-combined-lut-cuda-texture-plan.md",
+    "language": "markdown",
+    "chunk_type": "heading_section",
+    "start_line": 984,
+    "end_line": 1049,
+    "content_role": "plan",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

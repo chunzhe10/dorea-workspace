@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-2e571be7007f",
+  "content": "clone().launch(cfg_blur_cols, (\n                    &d_blur_a,\n                    &d_blur_b,\n                    proxy_w as i32, proxy_h as i32,\n                    BLUR_RADIUS,\n                )).map_err(|e| map_cudarc_error(e))?;\n            }\n        }\n\n        // Step C: Apply clarity at full resolution\n        let apply = self.device.get_func(\"clarity\", \"clarity_apply_kernel\")\n            .ok_or_else(|| GpuError::ModuleLoad(\"clarity_apply_kernel not found\".to_string()))?;\n        let block = 256u32;\n        let grid = ((n as u32 + block - 1) / block).max(1);\n        let cfg_1d = LaunchConfig {\n            grid_dim: (grid, 1, 1),\n            block_dim: (block, 1, 1),\n            shared_mem_bytes: 0,\n        };\n        unsafe {\n            apply.launch(cfg_1d, (\n                d_rgb,\n                &d_blur_b,  // final blurred L at proxy res\n                &d_out,\n                width as i32, height as i32,\n                proxy_w as i32, proxy_h as i32,\n                clarity_amount,\n            )).map_err(|e| map_cudarc_error(e))?;\n        }\n\n        Ok(d_out)\n    }\n}\n\n/// Compute proxy dimensions: scale so the long edge <= max_size.\nfn proxy_dims(src_w: usize, src_h: usize, max_size: usize) -> (usize, usize) {\n    let long_edge = src_w.max(src_h);\n    if long_edge <= max_size {\n        return (src_w, src_h);\n    }\n    let scale = max_size as f64 / long_edge as f64;\n    let pw = ((src_w as f64 * scale).round() as usize).max(1);\n    let ph = ((src_h as f64 * scale).round() as usize).max(1);\n    (pw, ph)\n}\n\n/// Map cudarc driver errors to GpuError, detecting OOM specifically.\nfn map_cudarc_error(e: cudarc::driver::DriverError) -> GpuError {\n    let msg = format!(\"{e}\");\n    // cudarc wraps CUDA driver error codes\n    if msg.contains(\"OUT_OF_MEMORY\") || msg.contains(\"out of memory\") {\n        GpuError::Oom(msg)\n    } else {\n        GpuError::CudaFail(msg)\n    }\n}\n```\n\n- [ ] **Step 2: Update `lib.rs` to use `CudaGrader`**\n\nReplace the `grade_frame` function's CUDA path in `crates/dorea-gpu/src/lib.rs`:\n\n```rust\n/// Grade a single frame using the calibration and parameters.\n///\n/// `pixels`: interleaved sRGB u8, length = width * height * 3.\n/// `depth`: f32 depth map [0,1], length = width * height.\n///",
+  "source_version": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836725163Z",
+  "valid_from": "2026-04-11T00:10:08.836725163Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1190,
+    "end_line": 1249,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

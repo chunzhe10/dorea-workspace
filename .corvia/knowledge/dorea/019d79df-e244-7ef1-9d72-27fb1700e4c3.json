@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-27fb1700e4c3",
+  "content": "## Task 1: Fix O(N×radius) box blur with sliding window + transpose\n\ncd /workspaces/dorea-workspace/repos/dorea\ncargo test -p dorea-gpu box_blur_rows_sliding 2>&1 | tail -5\n```\nExpected: compile error — `box_blur_rows_sliding` not found.\n\n- [ ] **Step 3: Add `box_blur_rows_sliding` to `cpu.rs`**\n\nAdd this function immediately after the existing `box_blur_rows` function (after line 228):\n\n```rust\n/// Sliding-window box blur over rows. O(W) per row — replaces the naive O(W×radius) version.\nfn box_blur_rows_sliding(src: &[f32], dst: &mut [f32], width: usize, height: usize, radius: usize) {\n    let r = radius as isize;\n    for row in 0..height {\n        let base = row * width;\n        let mut sum = 0.0f32;\n        let mut count = 0usize;\n\n        // Seed window for col=0: indices [0..min(r, W-1)]\n        let init_hi = r.min(width as isize - 1) as usize;\n        for k in 0..=init_hi {\n            sum += src[base + k];\n            count += 1;\n        }\n\n        for col in 0..width {\n            dst[base + col] = sum / count as f32;\n\n            // Expand right edge for next column\n            let add = col as isize + r + 1;\n            if add < width as isize {\n                sum += src[base + add as usize];\n                count += 1;\n            }\n            // Shrink left edge for next column\n            let rem = col as isize - r;\n            if rem >= 0 {\n                sum -= src[base + rem as usize];\n                count -= 1;\n            }\n        }\n    }\n}\n```\n\n- [ ] **Step 4: Run tests to confirm `box_blur_rows_sliding` passes**\n\n```bash\ncargo test -p dorea-gpu box_blur_rows_sliding 2>&1 | tail -10\n```\nExpected: `3 tests passed`.\n\n- [ ] **Step 5: Write failing tests for `box_blur_cols_via_transpose`**",
+  "source_version": "plans/2026-04-02-inference-perf-fix.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836628449Z",
+  "valid_from": "2026-04-11T00:10:08.836628449Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-inference-perf-fix.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 106,
+    "end_line": 158,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

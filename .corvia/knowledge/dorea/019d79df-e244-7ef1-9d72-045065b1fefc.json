@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-045065b1fefc",
+  "content": "# Delta Upscale Benchmark — Design Spec\n\n## Summary\n\nBuild a re-runnable benchmark that measures the quality and performance of **9 candidate methods** for upscaling the OKLab delta produced by RAUNE in `raune_filter.py::_process_batch`, using **RAUNE-at-4K** as the ground-truth reference. Output is a contact sheet (summary grid, per-frame detail sheets, error heatmaps) and a CSV of metrics. The tool lives at `repos/dorea/benchmarks/upscale_bench/` and is structured so adding a new upscale method requires writing exactly one function.\n\n\n## Motivation\n\n`raune_filter.py::_process_batch()` currently computes the RAUNE OKLab delta at proxy resolution (1080p) and upscales it to full resolution (2160p) with plain bilinear interpolation:\n\n```python",
+  "source_version": "decisions/2026-04-10-delta-upscale-bench-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836183210Z",
+  "valid_from": "2026-04-11T00:10:08.836183210Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-10-delta-upscale-bench-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 11,
+    "end_line": 19,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

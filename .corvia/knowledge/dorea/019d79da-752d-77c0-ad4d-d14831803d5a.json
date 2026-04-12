@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d14831803d5a",
+  "content": "     \"Incomplete grading: {frame_count} frames processed, {} expected \\\n             (decoder may have stopped early)\",\n            info.frame_count\n        );\n    }\n    log::info!(\"Done. Graded {frame_count} frames → {}\", output.display());\n    Ok(())\n}\nfn build_inference_config(\n    python: &std::path::Path,\n    raune_weights: Option<&std::path::Path>,\n    raune_models_dir: Option<&std::path::Path>,\n    depth_model: Option<&std::path::Path>,\n    device: Option<String>,\n    maxine_upscale_factor: u32,\n) -> InferenceConfig {\n    InferenceConfig {\n        python_exe: python.to_path_buf(),\n        raune_weights: raune_weights.map(|p| p.to_path_buf()),\n        raune_models_dir: raune_models_dir.map(|p| p.to_path_buf()),\n        skip_raune: false,\n        depth_model: depth_model.map(|p| p.to_path_buf()),\n        skip_depth: false,\n        device,\n        startup_timeout: Duration::from_secs(180),\n        maxine: false, // Maxine requires NVIDIA VFX SDK — disabled when not available\n        maxine_upscale_factor,\n    }\n}",
+  "source_version": "crates/dorea-cli/src/grade.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229430838Z",
+  "valid_from": "2026-04-11T00:04:13.229430838Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/grade.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 385,
+    "end_line": 405,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

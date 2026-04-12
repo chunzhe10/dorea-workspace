@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-88d6e6620d5d",
+  "content": "    # Slice into per-frame numpy arrays for the encoder\n\n  --direct \\\n  --verbose \\\n  2>&1 | tail -10\n```\n\nExpected:\n- 360 frames complete\n- Throughput should be roughly equal to the previous fp16 result (~4.25 fps) or slightly better\n- gpu busy time should be slightly lower than the previous 230 ms (some Python loop overhead removed)\n\nReport the actual numbers.\n\n- [ ] **Step 5: Frame parity vs previous fp16 output**\n\n```bash\nffmpeg -v quiet -ss 1.5 -i \"/workspaces/dorea-workspace/working/oklab_batched_b4.mov\" \\\n  -frames:v 1 \"/workspaces/dorea-workspace/working/oklab_batched_b4_frame.png\" -y\n\nffmpeg -v error \\\n  -i /workspaces/dorea-workspace/working/oklab_batched_b4_frame.png \\\n  -i /workspaces/dorea-workspace/working/oklab_fp16_e2e_frame.png \\\n  -filter_complex \"format=rgb24[a];[1:v]format=rgb24[b];[a][b]blend=all_mode=difference,signalstats\" \\\n  -f null - 2>&1 | grep -E \"YAVG|YMAX\"\n```\n\nExpected: YAVG=0, YMAX=0 (the batched ops should produce bit-identical output to the per-frame loop). If diff is non-zero, investigate.\n\n- [ ] **Step 6: Throughput test at batch=8**\n\n```bash",
+  "source_version": "plans/2026-04-10-batched-process-batch.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837079104Z",
+  "valid_from": "2026-04-11T00:10:08.837079104Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-10-batched-process-batch.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 261,
+    "end_line": 290,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

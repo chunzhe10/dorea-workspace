@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c281390246f7",
+  "content": "e_pil(img: Image.Image, max_long_edge: int) -> Image.Image:\n    w, h = img.size\n    if max(w, h) <= max_long_edge:\n        return img\n    scale = max_long_edge / max(w, h)\n    return img.resize((int(round(w * scale)), int(round(h * scale))), Image.LANCZOS)\ndef _heatmap_pil(values: torch.Tensor, vmax: float) -> Image.Image:\n    \"\"\"(H, W) fp32 tensor → RGB PIL image via turbo colormap.\"\"\"\n    arr = values.detach().cpu().numpy()\n    arr = np.clip(arr / max(vmax, 1e-8), 0, 1)\n    # Turbo colormap (Google): encode as RGB lookup\n    try:\n        import matplotlib.pyplot as plt  # type: ignore\n        cmap = plt.get_cmap(\"turbo\")\n        rgb = (cmap(arr)[..., :3] * 255).astype(np.uint8)\n    except ImportError:\n        # Fallback: jet-ish gradient\n        r = np.clip(1.5 - np.abs(4 * arr - 3), 0, 1)\n        g = np.clip(1.5 - np.abs(4 * arr - 2), 0, 1)\n        b = np.clip(1.5 - np.abs(4 * arr - 1), 0, 1)\n        rgb = (np.stack([r, g, b], axis=-1) * 255).astype(np.uint8)\n    return Image.fromarray(rgb)",
+  "source_version": "benchmarks/upscale_bench/visualize.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230274335Z",
+  "valid_from": "2026-04-11T00:04:13.230274335Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/visualize.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 32,
+    "end_line": 47,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

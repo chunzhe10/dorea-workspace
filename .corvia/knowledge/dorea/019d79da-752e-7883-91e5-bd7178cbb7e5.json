@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-bd7178cbb7e5",
+  "content": "del(upscale_factor: int = 2) -> None:\n    \"\"\"Load the Maxine enhancer. Always CUDA-backed — no device selection.\"\"\"\n    global _maxine_model\n    from .maxine_enhancer import MaxineEnhancer\n    _maxine_model = MaxineEnhancer(upscale_factor=upscale_factor)\ndef unload_maxine() -> None:\n    \"\"\"Release Maxine model reference and free CUDA cache.\"\"\"\n    global _maxine_model\n    _maxine_model = None\n    try:\n        import torch\n        if torch.cuda.is_available():\n            torch.cuda.empty_cache()\n    except ImportError:\n        pass",
+  "source_version": "python/dorea_inference/bridge.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230203994Z",
+  "valid_from": "2026-04-11T00:04:13.230203994Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/bridge.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 72,
+    "end_line": 81,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-382c61d4acf3",
+  "content": "d in Path B's depth-only server). Check if `DepthBatchItem` is still used elsewhere; if not, remove from the import.\n\n- [ ] **Step 7: Run the full dorea-cli tests**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ncargo test -p dorea-cli 2>&1 | tail -20\n```\n\nExpected: all tests pass (lerp_depth tests + new build_inference_config tests)\n\nVerify `--calibration` is gone from help:\n\n```bash\ncargo run -p dorea-cli -- grade --help 2>&1 | grep calibration\n```\n\nExpected: no output (flag removed)\n\nVerify `--no-maxine` appears in help:\n\n```bash\ncargo run -p dorea-cli -- grade --help 2>&1 | grep maxine\n```\n\nExpected: `--no-maxine`, `--no-maxine-artifact-reduction`, `--maxine-upscale-factor` visible\n\n- [ ] **Step 8: Commit**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ngit add crates/dorea-cli/src/grade.rs\ngit commit -m \"refactor(grade): single-server lifecycle, remove --calibration Path B, default Maxine\"\n```\n\n---\n",
+  "source_version": "plans/2026-04-04-maxine-pipeline-architecture.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836871495Z",
+  "valid_from": "2026-04-11T00:10:08.836871495Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-maxine-pipeline-architecture.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1217,
+    "end_line": 1246,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

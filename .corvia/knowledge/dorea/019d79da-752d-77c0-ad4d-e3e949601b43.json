@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-e3e949601b43",
+  "content": "h[y1 * src_w + x1];\n\n                out[dy * dst_w + dx] = v00 * (1.0 - fx) * (1.0 - fy)\n                    + v10 * fx * (1.0 - fy)\n                    + v01 * (1.0 - fx) * fy\n                    + v11 * fx * fy;\n            }\n        }\n        out\n    }\npub fn shutdown(mut self) -> Result<(), InferenceError> {\n        let _ = self.send_line(r#\"{\"type\":\"shutdown\"}\"#);\n        let _ = self.child.wait();\n        Ok(())\n    }",
+  "source_version": "crates/dorea-video/src/inference_subprocess.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229657526Z",
+  "valid_from": "2026-04-11T00:04:13.229657526Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference_subprocess.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 816,
+    "end_line": 820,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-e475d6278728",
+  "content": "          }\n            t[i as usize] = c;\n        }\n        t\n    };\n    let mut crc = 0xFFFF_FFFFu32;\n    for &b in chunk_type.iter().chain(data.iter()) {\n        crc = table[((crc ^ b as u32) & 0xFF) as usize] ^ (crc >> 8);\n    }\n    crc ^ 0xFFFF_FFFF\n}\nfn decode_png_bytes(png: &[u8]) -> Result<Vec<u8>, InferenceError> {\n    // Parse enough of the PNG to extract raw pixel data.\n    // For simplicity, defer to a dependency-free approach: require 8-bit RGB PNG.\n    // We'll rely on the Python side always producing valid 8-bit RGB PNGs.\n    //\n    // Since we don't have the `image` crate in dorea-video, we implement a\n    // minimal PNG reader supporting only 8-bit RGB non-interlaced PNGs.\n    parse_png_rgb(png)\n        .map_err(InferenceError::ImageError)\n}",
+  "source_version": "crates/dorea-video/src/inference_subprocess.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229664244Z",
+  "valid_from": "2026-04-11T00:04:13.229664244Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference_subprocess.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 960,
+    "end_line": 969,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

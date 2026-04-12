@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d9d6882f036a",
+  "content": "e — not updated by calling score itself\n        let s1 = det.score(&other_frame);\n        let s2 = det.score(&other_frame);\n        assert_eq!(s1, s2, \"score should be deterministic without set_reference\");\n        assert!((s1 - 1.0).abs() < 1e-5);\n    }\nfn mse_detector_reset_clears_reference() {\n        let mut det = MseDetector::default();\n        det.set_reference(&vec![0u8; 3]);\n        det.reset();\n        assert_eq!(det.score(&vec![0u8; 3]), f32::MAX);\n    }",
+  "source_version": "crates/dorea-cli/src/change_detect.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229533598Z",
+  "valid_from": "2026-04-11T00:04:13.229533598Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/change_detect.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 287,
+    "end_line": 292,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

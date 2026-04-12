@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-844883f673ee",
+  "content": "## Phase B: 10-Bit I/O (Decode + Encode)\n\n### Task 4: VideoInfo Enhancement — Detect Bit Depth and Codec\n\n**Files:**\n- Modify: `crates/dorea-video/src/ffmpeg.rs`\n\nThe current `probe()` function returns width/height/fps/duration/frame_count/has_audio.\nWe need to also detect the video codec name, pixel format, and bit depth so that\ndownstream code can auto-detect 10-bit input and suggest the correct `InputEncoding`.\n\n- [ ] **Step 1: Add fields to VideoInfo**\n\nIn `crates/dorea-video/src/ffmpeg.rs`, extend the `VideoInfo` struct:\n\n```rust\n#[derive(Debug, Clone)]\npub struct VideoInfo {\n    pub width: usize,\n    pub height: usize,\n    pub fps: f64,\n    pub duration_secs: f64,\n    pub frame_count: u64,\n    pub has_audio: bool,\n    /// Video codec name (e.g. \"hevc\", \"prores\", \"h264\").\n    pub codec_name: String,\n    /// Pixel format (e.g. \"yuv420p10le\", \"yuv422p10le\", \"yuv420p\").\n    pub pix_fmt: String,\n    /// Bits per component (8, 10, 12). 0 if unknown.\n    pub bits_per_component: u8,\n}\n```\n\n- [ ] **Step 2: Extract new fields from ffprobe JSON**\n\nIn the `probe()` function, after extracting width/height, add:\n\n```rust\nlet codec_name = video[\"codec_name\"].as_str().unwrap_or(\"unknown\").to_string();\nlet pix_fmt = video[\"pix_fmt\"].as_str().unwrap_or(\"unknown\").to_string();\n\n// Detect bit depth: prefer bits_per_raw_sample, fall back to pix_fmt heuristic\nlet bits_per_component = video[\"bits_per_raw_sample\"]\n    .as_str()\n    .and_then(|s| s.parse::<u8>().ok())\n    .unwrap_or_else(|| {\n        if pix_fmt.contains(\"10\") { 10 }\n        else if pix_fmt.contains(\"12\") { 12 }\n        else { 8 }",
+  "source_version": "plans/2026-04-08-10bit-pipeline-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837017807Z",
+  "valid_from": "2026-04-11T00:10:08.837017807Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-08-10bit-pipeline-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 526,
+    "end_line": 572,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

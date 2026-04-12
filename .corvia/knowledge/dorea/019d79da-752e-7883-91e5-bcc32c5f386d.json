@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-bcc32c5f386d",
+  "content": "l(proxy_batch)\n        # Cast back to fp32 for downstream OKLab math\n        raune_out = raune_out.float()\n        raune_out = ((raune_out + 1.0) / 2.0).clamp(0.0, 1.0)\n\n        # Handle U-Net padding\n        rh, rw = raune_out.shape[2], raune_out.shape[3]\n        if rh != ph or rw != pw:\n            raune_out = F.interpolate(raune_out, size=(ph, pw), mode=\"bilinear\", align_corners=False)\n\n        # Original proxy (un-normalized) — cast back to fp32 for OKLab math\n        orig_proxy = (proxy_batch.float() * 0.5 + 0.5).clamp(0.0, 1.0)\n        del proxy_batch\n\n        # OKLab deltas at proxy resolution\n        raune_lab = rgb_to_lab(raune_out)\n        orig_lab = rgb_to_lab(orig_proxy)\n        delta_lab = raune_lab - orig_lab\n        del raune_out, orig_proxy, raune_lab, orig_lab\n\n        # Upscale deltas to full resolution\n        delta_full = F.interpolate(delta_lab, size=(fh, fw), mode=\"bilinear\", align_corners=False)\n        del delta_lab\n\n        # Apply transfer per frame\n        for i in range(n):\n            full_t = torch.from_numpy(batch_frames_np[i]).cuda().float() / 255.0\n            full_t = full_t.permute(2, 0, 1).unsqueeze(0)  # (1,3,H,W)\n\n            result = transfer_fn(full_t, delta_full[i:i+1])\n            del full_t\n\n            # GPU → CPU → uint8\n            result_u8 = (result.squeeze(0).permute(1, 2, 0).clamp(0, 1) * 255.0\n                         ).to(torch.uint8).cpu().numpy()\n            results.append(result_u8)\n            del result\n\n        del delta_full\n\n    return results",
+  "source_version": "python/dorea_inference/raune_filter.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230194280Z",
+  "valid_from": "2026-04-11T00:04:13.230194280Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/raune_filter.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 500,
+    "end_line": 533,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

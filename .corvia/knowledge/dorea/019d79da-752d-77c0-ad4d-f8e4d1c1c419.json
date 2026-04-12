@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-f8e4d1c1c419",
+  "content": "fn identity_lut(n: usize) -> Vec<f32> {\n        (0..n).map(|i| i as f32 / (n - 1) as f32).collect()\n    }\nfn test_identity_round_trip() {\n        let lut = LutBased::new(identity_lut(256), 0.90, \"identity\".to_string());\n        for i in 0..=10 {\n            let x = i as f32 / 10.0;\n            let linear = lut.to_linear(x);\n            let encoded = lut.from_linear(linear);\n            assert!(\n                (encoded - x).abs() < 0.01,\n                \"Identity round-trip failed at {x}: linear={linear}, encoded={encoded}\"\n            );\n        }\n    }",
+  "source_version": "crates/dorea-color/src/lut_transfer.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229933920Z",
+  "valid_from": "2026-04-11T00:04:13.229933920Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-color/src/lut_transfer.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 140,
+    "end_line": 151,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

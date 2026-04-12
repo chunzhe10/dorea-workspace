@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c3582d31e2c8",
+  "content": "def _crop_of(t: torch.Tensor) -> Image.Image:\n        c = t[:, :, crop_y:crop_y + crop_size, crop_x:crop_x + crop_size]\n        return _tensor_to_pil(c)\ndef generate_heatmap(\n    delta_method: torch.Tensor,\n    delta_gold: torch.Tensor,\n    frame_p95: float,\n    out_path: Path,\n    method_name: str,\n) -> None:\n    \"\"\"Per-(frame, method) heatmap of |delta_method - delta_gold| averaged across channels.\"\"\"\n    diff = (delta_method - delta_gold).abs().mean(dim=1).squeeze(0)  # (H, W)\n    img = _heatmap_pil(diff, vmax=frame_p95)\n    # Add a small label on the image\n    draw = ImageDraw.Draw(img)\n    font = _load_font(24)\n    draw.text((12, 12), method_name, fill=(255, 255, 255), font=font)\n    draw.text((12, 40), f\"max={diff.max().item():.4f}, p95={frame_p95:.4f}\", fill=(255, 255, 255), font=font)\n    out_path.parent.mkdir(parents=True, exist_ok=True)\n    img.save(out_path)",
+  "source_version": "benchmarks/upscale_bench/visualize.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230285239Z",
+  "valid_from": "2026-04-11T00:04:13.230285239Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/visualize.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 365,
+    "end_line": 381,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

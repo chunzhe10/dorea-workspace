@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d71-fc42a9ac24d7",
+  "content": "## Problem\n## Decision\n\n### Optimization 1: Motion-Adaptive Depth Interpolation\n\nSkip depth inference for frames that are visually similar to the previous keyframe.\nUse linear interpolation of bracketing keyframe depth maps for skipped frames.\n\n**Motion detection:** Compute normalized MSE between the current proxy-resolution frame\nand the last keyframe's proxy frame, in Rust (`grade.rs`), before any IPC call. This is\n~0.1ms on a 518x292 frame and avoids the entire Python round-trip when skipped.\n\n```\nMSE = sum((curr[i] - keyframe[i])^2) / (n_pixels * 255^2)\n```\n\n**Keyframe selection rules:**\n- Frame 0 is always a keyframe (no prior reference)\n- A frame is a keyframe if `MSE > threshold` OR `frames_since_last_keyframe >= max_interval`\n- **Scene cuts**: If `MSE > 10 * threshold`, treat as a scene cut — force keyframe and\n  flush the interpolation buffer. Never interpolate across scene boundaries (produces\n  visible ghosting due to semantic depth discontinuity).\n- The max interval caps drift for static scenes\n\n**Interpolation:** For non-keyframe frame `i` between keyframes `k_before` and `k_after`:\n```\nt = clamp((i - k_before) / max(k_after - k_before, 1), 0.0, 1.0)\ndepth[i] = depth[k_before] * (1 - t) + depth[k_after] * t\n```\nGuard: if `k_before == k_after`, use `k_before`'s depth directly (no division by zero).",
+  "source_version": "decisions/2026-04-02-grading-pipeline-perf-v3.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836081341Z",
+  "valid_from": "2026-04-11T00:10:08.836081341Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-02-grading-pipeline-perf-v3.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 29,
+    "end_line": 55,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

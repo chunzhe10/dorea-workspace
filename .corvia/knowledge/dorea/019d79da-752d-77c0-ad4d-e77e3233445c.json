@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-e77e3233445c",
+  "content": "              .downcast::<pyo3::types::PyTuple>()\n                    .map_err(|e| InferenceError::Ipc(format!(\"result[{i}] not a tuple: {e}\")))?;\n\n                // Enhanced RGB u8 array (H, W, 3)\n                let enhanced_arr = pair_tuple.get_item(0)\n                    .map_err(|e| InferenceError::Ipc(format!(\"get enhanced[{i}]: {e}\")))?;\n                let enh_shape: Vec<usize> = enhanced_arr.getattr(\"shape\")\n                    .map_err(|e| InferenceError::Ipc(format!(\"enhanced shape[{i}]: {e}\")))?\n                    .extract()\n                    .map_err(|e| InferenceError::Ipc(format!(\"extract enhanced shape[{i}]: {e}\")))?;\n                let enh_h = enh_shape[0];\n                let enh_w = enh_shape[1];\n                let enhanced_flat = enhanced_arr\n                    .call_method1(\"reshape\", ((-1_i32,),))\n                    .map_err(|e| InferenceError::Ipc(format!(\"flatten enhanced[{i}]: {e}\")))?;\n                let enhanced_data: Vec<u8> = enhanced_flat\n                    .call_method0(\"tolist\")\n                    .map_err(|e| InferenceError::Ipc(format!(\"tolist enhanced[{i}]: {e}\")))?\n                    .extract()\n                    .map_err(|e| InferenceError::Ipc(format!(\"extract enhanced[{i}]: {e}\")))?;\n\n                // Depth f32 array (H, W)\n                let depth_arr = pair_tuple.get_item(1)\n                    .map_err(|e| InferenceError::Ipc(format!(\"get depth[{i}]: {e}\")))?;\n                let depth_shape: Vec<usize> = depth_arr.getattr(\"shape\")\n                    .map_err(|e| InferenceError::Ipc(format!(\"depth shape[{i}]: {e}\")))?",
+  "source_version": "crates/dorea-video/src/inference/pyo3_backend.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229704337Z",
+  "valid_from": "2026-04-11T00:04:13.229704337Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference/pyo3_backend.rs",
+    "language": "rs",
+    "chunk_type": "impl_item",
+    "start_line": 486,
+    "end_line": 506,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

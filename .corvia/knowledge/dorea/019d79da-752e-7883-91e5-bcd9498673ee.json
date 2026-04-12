@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-bcd9498673ee",
+  "content": " CPU → uint8\n            result_u8 = (result.squeeze(0).permute(1, 2, 0).clamp(0, 1) * 255.0\n                         ).to(torch.uint8).cpu().numpy()\n            results.append(result_u8)\n            del result\n\n        del delta_full\n\n    return results\ndef run_pipe_mode(args, model, normalize, model_dtype):\n    \"\"\"Read rgb48le from stdin, process, write rgb48le to stdout.\"\"\"\n    fw, fh = args.full_width, args.full_height\n    pw, ph = args.proxy_width, args.proxy_height\n    full_frame_bytes = fw * fh * 3 * 2  # rgb48le\n    batch_size = args.batch_size\n\n    print(f\"[raune-filter] pipe mode: full={fw}x{fh}, proxy={pw}x{ph}, \"\n          f\"batch={batch_size}, dtype={model_dtype}\",\n          file=sys.stderr, flush=True)\n\n    stdin = sys.stdin.buffer\n    stdout = sys.stdout.buffer\n    frame_count = 0\n    read_buf = bytearray(full_frame_bytes)\n\n    while True:\n        batch_raw = []\n        for _ in range(batch_size):\n            n_read = stdin.readinto(read_buf)\n            if n_read is None or n_read < full_frame_bytes:\n                break\n            batch_raw.append(bytes(read_buf))\n\n        if not batch_raw:\n            break\n\n        n = len(batch_raw)\n\n        with torch.no_grad():\n            proxy_tensors = []\n            for raw in batch_raw:\n                arr_u16 = np.frombuffer(raw, dtype=np.uint16).reshape(fh, fw, 3)\n                full_t = torch.from_numpy(arr_u16.astype(np.float32)).cuda() / 65535.0\n                full_t = full_t.permute(2, 0, 1).unsqueeze(0)\n                proxy_t = F.interpolate(full_t, size=(ph, pw), mode=\"bilinear\", align_corners=False)\n                proxy_norm = (proxy_t - 0.5) / 0.5\n                proxy_tensors.append(proxy_norm.squeeze(0))\n                del full_t\n\n            proxy_batch = torch.stack(proxy_tensors).cuda()\n            del proxy_tensors\n\n            if proxy_batch.dtype != model_dtype:",
+  "source_version": "python/dorea_inference/raune_filter.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230194844Z",
+  "valid_from": "2026-04-11T00:04:13.230194844Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/raune_filter.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 540,
+    "end_line": 583,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

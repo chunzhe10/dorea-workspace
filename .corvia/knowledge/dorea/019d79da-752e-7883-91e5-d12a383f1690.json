@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-d12a383f1690",
+  "content": "\n                *slot = Some(alloc_resolution_buffers(dev, width, height)?);\n            }\n        }\n\n        // =====================================================================\n        // ENSURE CALIBRATION BUFFERS  (reallocate only on shape change)\n        // =====================================================================\n        let lut_size = depth_luts.luts[0].size;\n        {\n            let mut slot = self.cal_bufs.borrow_mut();\n            let needs = slot.as_ref().map_or(true, |b| b.n_zones != n_zones || b.lut_size != lut_size);\n            if needs {\n                *slot = Some(alloc_calibration_buffers(dev, n_zones, lut_size)?);\n            }\n        }\n\n        // =====================================================================\n        // FILL INPUT BUFFERS  (htod_sync_copy_into: copy only, no cudaMalloc)\n        // =====================================================================\n        {\n            let mut res = self.res_bufs.borrow_mut();\n            let res = res.as_mut().unwrap();\n            dev.htod_sync_copy_into(&rgb_f32, &mut res.d_rgb_in)\n                .map_err(map_cudarc_error)?;\n            dev.htod_sync_copy_into(depth, &mut res.d_depth)\n                .map_err(map_cudarc_error)?;\n        }\n\n        let luts_flat: Vec<f32> = depth_luts",
+  "source_version": "docs/plans/2026-04-03-cuda-grader-buffer-pre-allocation.md",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230505153Z",
+  "valid_from": "2026-04-11T00:04:13.230505153Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "docs/plans/2026-04-03-cuda-grader-buffer-pre-allocation.md",
+    "language": "markdown",
+    "chunk_type": "heading_section",
+    "start_line": 469,
+    "end_line": 491,
+    "content_role": "plan",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

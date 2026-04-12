@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d8aa5862ad64",
+  "content": "      return 0.0;\n    }\n    let n = a.len() as f64;\n    let sum_sq: f64 = a.iter().zip(b.iter())\n        .map(|(&av, &bv)| {\n            let d = av as f64 - bv as f64;\n            d * d\n        })\n        .sum();\n    (sum_sq / (n * 255.0 * 255.0)) as f32\n}\npub fn depth_distribution_distance(a: &[f32], b: &[f32], n_bins: usize) -> f32 {\n    if a.is_empty() || b.is_empty() || n_bins == 0 {\n        return 0.0;\n    }\n\n    let mut hist_a = vec![0u32; n_bins];\n    let mut hist_b = vec![0u32; n_bins];\n\n    for &d in a {\n        let bin = ((d.clamp(0.0, 1.0) * n_bins as f32) as usize).min(n_bins - 1);\n        hist_a[bin] += 1;\n    }\n    for &d in b {\n        let bin = ((d.clamp(0.0, 1.0) * n_bins as f32) as usize).min(n_bins - 1);\n        hist_b[bin] += 1;\n    }\n\n    let na = a.len() as f64;\n    let nb = b.len() as f64;\n    let mut cdf_a = 0.0_f64;\n    let mut cdf_b = 0.0_f64;\n    let mut distance = 0.0_f64;\n\n    for i in 0..n_bins {\n        cdf_a += hist_a[i] as f64 / na;\n        cdf_b += hist_b[i] as f64 / nb;\n        distance += (cdf_a - cdf_b).abs();\n    }\n\n    (distance / n_bins as f64) as f32\n}",
+  "source_version": "crates/dorea-cli/src/change_detect.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229521018Z",
+  "valid_from": "2026-04-11T00:04:13.229521018Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/change_detect.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 49,
+    "end_line": 79,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

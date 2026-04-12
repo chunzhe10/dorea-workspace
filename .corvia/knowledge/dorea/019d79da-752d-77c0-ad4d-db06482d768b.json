@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-db06482d768b",
+  "content": "on_byte != FORMAT_VERSION {\n            return Err(CalError::UnsupportedVersion(version_byte));\n        }\n\n        let cal: Calibration =\n            bincode::deserialize(&bytes).map_err(|e| CalError::Serialization(e.to_string()))?;\n        Ok(cal)\n    }\n}\npub fn new(\n        depth_luts: DepthLuts,\n        hsl_corrections: HslCorrections,\n        keyframe_count: usize,\n    ) -> Self {\n        Self {\n            version: FORMAT_VERSION,\n            depth_luts,\n            hsl_corrections,\n            created_at_unix_secs: unix_now(),\n            keyframe_count,\n            source_description: format!(\"{keyframe_count} keyframe(s)\"),\n        }\n    }",
+  "source_version": "crates/dorea-cal/src/format.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229548473Z",
+  "valid_from": "2026-04-11T00:04:13.229548473Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cal/src/format.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 29,
+    "end_line": 42,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

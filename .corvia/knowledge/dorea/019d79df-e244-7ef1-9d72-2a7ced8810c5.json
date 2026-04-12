@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-2a7ced8810c5",
+  "content": ">= samples[i] && d < samples[i + 1] {\n                let t = (d - samples[i]) / (samples[i + 1] - samples[i]).max(1e-8);\n                return (i, i + 1, t);\n            }\n        }\n        let last = samples.len() - 1;\n        (last, last, 0.0)\n    }\n}\n\n/// Trilinear interpolation through a LutGrid for one pixel.\n/// Duplicated from dorea-lut::apply (which is private) to avoid cross-crate\n/// dependency on an internal function.\nfn trilinear(lut: &LutGrid, rgb: [f32; 3]) -> [f32; 3] {\n    let size = lut.size;\n    let scale = (size - 1) as f32;\n\n    let sr = (rgb[0] * scale).clamp(0.0, scale);\n    let sg = (rgb[1] * scale).clamp(0.0, scale);\n    let sb = (rgb[2] * scale).clamp(0.0, scale);\n\n    let i0 = (sr.floor() as usize).min(size - 2);\n    let j0 = (sg.floor() as usize).min(size - 2);\n    let k0 = (sb.floor() as usize).min(size - 2);\n\n    let fr = (sr - i0 as f32).clamp(0.0, 1.0);\n    let fg = (sg - j0 as f32).clamp(0.0, 1.0);\n    let fb = (sb - k0 as f32).clamp(0.0, 1.0);\n\n    let c000 = lut.get(i0, j0, k0);\n    let c001 = lut.get(i0, j0, k0 + 1);\n    let c010 = lut.get(i0, j0 + 1, k0);\n    let c011 = lut.get(i0, j0 + 1, k0 + 1);\n    let c100 = lut.get(i0 + 1, j0, k0);\n    let c101 = lut.get(i0 + 1, j0, k0 + 1);\n    let c110 = lut.get(i0 + 1, j0 + 1, k0);\n    let c111 = lut.get(i0 + 1, j0 + 1, k0 + 1);\n\n    let mut out = [0.0_f32; 3];\n    for c in 0..3 {\n        let v00 = c000[c] * (1.0 - fb) + c001[c] * fb;\n        let v01 = c010[c] * (1.0 - fb) + c011[c] * fb;\n        let v10 = c100[c] * (1.0 - fb) + c101[c] * fb;\n        let v11 = c110[c] * (1.0 - fb) + c111[c] * fb;\n        let v0 = v00 * (1.0 - fg) + v01 * fg;\n        let v1 = v10 * (1.0 - fg) + v11 * fg;",
+  "source_version": "plans/2026-04-03-3d-lut-temporal-interpolation.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836668076Z",
+  "valid_from": "2026-04-11T00:10:08.836668076Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-3d-lut-temporal-interpolation.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 323,
+    "end_line": 358,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

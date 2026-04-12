@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-35316e17ea23",
+  "content": "er_creates_decodable_file` PASSES.\n\n- [ ] **Step 5: Commit**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ngit add crates/dorea-video/src/ffmpeg.rs\ngit commit -m \"feat(ffmpeg): add FrameEncoder::new_lossless_temp() for ffv1/mkv temp output\"\n```\n\n---\n\n### Task 7: grade.rs — Full Restructure for Maxine (issue #21)\n\n**Files:**\n- Modify: `crates/dorea-cli/src/grade.rs`\n\nThis is the largest task. It restructures grade.rs in three areas:\n1. New `--maxine` CLI args\n2. Pass 1: full-res decode + enhance() per frame + temp encoder + proxy downscale\n3. Pass 2: decode from temp file instead of raw input\n\n- [ ] **Step 1: Add `--maxine` CLI args to `GradeArgs`**\n\nIn `GradeArgs` struct (after the `pub verbose: bool` field at line 84), add:\n\n```rust\n    /// Enable Maxine AI enhancement preprocessing (requires nvvfx SDK or DOREA_MAXINE_MOCK=1)\n    #[arg(long)]\n    pub maxine: bool,\n\n    /// Disable Maxine artifact reduction before upscale [default: enabled when --maxine]\n    #[arg(long)]\n    pub no_maxine_artifact_reduction: bool,\n\n    /// Maxine super-resolution upscale factor [default: 2]\n    #[arg(long, default_value = \"2\")]\n    pub maxine_upscale_factor: u32,\n```\n\n- [ ] **Step 2: Add a RAII temp file guard struct**\n\nBefore `pub fn run(args: GradeArgs)`, add:\n\n```rust\n/// RAII guard that deletes a temp file when dropped.\nstruct TempFileGuard(Option<std::path::PathBuf>);\n\nimpl TempFileGuard {",
+  "source_version": "plans/2026-04-04-maxine-enhancement-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836827057Z",
+  "valid_from": "2026-04-11T00:10:08.836827057Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-maxine-enhancement-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1125,
+    "end_line": 1161,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

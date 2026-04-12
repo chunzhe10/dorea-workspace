@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-bdb5a20c6cb4",
+  "content": "rGuard holding the on-device result.\"\"\"\n    if _raune_model is None:\n        raise RuntimeError(\"RAUNE-Net model not loaded — call load_raune_model() first\")\n    tensor = _raune_model.infer_gpu(frame_rgb, max_size=max_size)\n    return TensorGuard(tensor)\ndef run_depth_cpu(frame_rgb: np.ndarray, max_size: int = 518) -> np.ndarray:\n    \"\"\"Run depth inference on CPU, return numpy array.\"\"\"\n    if _depth_model is None:\n        raise RuntimeError(\"Depth model not loaded — call load_depth_model() first\")\n    return _depth_model.infer(frame_rgb, max_size=max_size)",
+  "source_version": "python/dorea_inference/bridge.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230206825Z",
+  "valid_from": "2026-04-11T00:04:13.230206825Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/bridge.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 116,
+    "end_line": 120,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

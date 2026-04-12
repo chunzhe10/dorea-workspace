@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-074e6c7e7391",
+  "content": "## Alternatives Rejected\n\n### Multiprocessing (separate processes per stage)\n- Higher overhead — IPC serialization of frame data\n- More memory usage — no shared GPU context\n- Threads work fine because PyAV/torch.cuda release GIL\n\n\n### asyncio\n- Decode/encode are not natively async; would need to wrap in executors\n- More complex than threading.Thread + queue.Queue\n- No benefit over threads for this use case\n",
+  "source_version": "decisions/2026-04-10-direct-mode-3thread-pipeline.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836216998Z",
+  "valid_from": "2026-04-11T00:10:08.836216998Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-10-direct-mode-3thread-pipeline.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 77,
+    "end_line": 86,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

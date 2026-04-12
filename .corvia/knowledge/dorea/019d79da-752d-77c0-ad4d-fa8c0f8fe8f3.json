@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-fa8c0f8fe8f3",
+  "content": ", tv))| {\n                let h_dist = angular_dist(lh, hc);\n                let mask = (1.0 - h_dist / hw).max(0.0)\n                    * if ls > MIN_SATURATION { 1.0_f32 } else { 0.0_f32 };\n                if mask < 1e-7 {\n                    return acc;\n                }\n                let w = mask as f64;\n                let h_diff = wrap_hue_diff(th - lh) as f64;\n                acc.total_weight += w;\n                acc.h_offset_sum += h_diff * w;\n                acc.lut_s_sum += ls as f64 * w;\n                acc.tgt_s_sum += ts as f64 * w;\n                acc.v_diff_sum += (tv - lv) as f64 * w;\n                acc\n            })\n            .reduce(QualifierAccum::zero, QualifierAccum::combine);\n\n        if accum.total_weight < MIN_WEIGHT as f64 {\n            corrections.push(QualifierCorrection {\n                h_center: hc,\n                h_width: hw,\n                h_offset: 0.0,\n                s_ratio: 1.0,\n                v_offset: 0.0,\n                weight: 0.0,\n            });\n            continue;\n        }\n\n        let h_offset = (accum.h_offset_sum / accum.total_weight) as f32;\n        let lut_s_mean = (accum.lut_s_sum / accum.total_weight) as f32;\n        let tgt_s_mean = (accum.tgt_s_sum / accum.total_weight) as f32;\n        let s_ratio = tgt_s_mean / lut_s_mean.max(1e-6);\n        let v_offset = (accum.v_diff_sum / accum.total_weight) as f32;\n\n        corrections.push(QualifierCorrection {\n            h_center: hc,\n            h_width: hw,\n            h_offset,\n            s_ratio,\n            v_offset,\n            weight: accum.total_weight as f32,\n        });\n    }\n\n    HslCorrections(corrections)\n}",
+  "source_version": "crates/dorea-hsl/src/derive.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229954211Z",
+  "valid_from": "2026-04-11T00:04:13.229954211Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-hsl/src/derive.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 101,
+    "end_line": 142,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

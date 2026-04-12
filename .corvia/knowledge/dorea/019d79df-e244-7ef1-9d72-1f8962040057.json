@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-1f8962040057",
+  "content": "### Task 9: Persistent GPU LUT Resources\n\n}\n\n#[cfg(feature = \"cuda\")]\nunsafe impl Send for GpuResources {}\n\n#[cfg(feature = \"cuda\")]\nimpl GpuResources {\n    /// Upload calibration LUT data to GPU. Call once at pipeline start.\n    pub fn upload(calibration: &dorea_cal::Calibration) -> Result<Self, crate::GpuError> {\n        let luts = &calibration.depth_luts;\n        let n_zones = luts.n_zones();\n        let lut_size = if n_zones > 0 { luts.luts[0].size } else { 33 };\n        let luts_flat: Vec<f32> = luts.luts.iter()\n            .flat_map(|g| g.data.iter().copied())\n            .collect();\n        let luts_bytes = luts_flat.len() * std::mem::size_of::<f32>();\n        let bounds_bytes = luts.zone_boundaries.len() * std::mem::size_of::<f32>();\n\n        unsafe {\n            let mut d_luts: *mut f32 = std::ptr::null_mut();\n            let mut d_bounds: *mut f32 = std::ptr::null_mut();\n\n            let r1 = cudaMalloc(&mut d_luts as *mut *mut f32 as *mut *mut std::ffi::c_void, luts_bytes);\n            if r1 != 0 { return Err(crate::GpuError::Cuda(format!(\"cudaMalloc luts failed: {r1}\"))); }\n\n            let r2 = cudaMalloc(&mut d_bounds as *mut *mut f32 as *mut *mut std::ffi::c_void, bounds_bytes);\n            if r2 != 0 {\n                cudaFree(d_luts as *mut std::ffi::c_void);\n                return Err(crate::GpuError::Cuda(format!(\"cudaMalloc bounds failed: {r2}\")));\n            }",
+  "source_version": "plans/2026-04-02-10bit-pipeline-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836506798Z",
+  "valid_from": "2026-04-11T00:10:08.836506798Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-10bit-pipeline-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1177,
+    "end_line": 1206,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d71-ffdeffb7e4bb",
+  "content": "## Error Handling\n\n### Error types\n\n```rust\n#[derive(Debug, Error)]\npub enum GpuError {\n    #[error(\"CUDA OOM: {0}\")]\n    Oom(String),\n\n    #[error(\"CUDA error: {0}\")]\n    CudaFail(String),\n\n    #[error(\"CUDA module load failed: {0}\")]\n    ModuleLoad(String),\n\n    #[error(\"invalid input: {0}\")]\n    InvalidInput(String),\n}\n\n#[derive(Debug, Error)]\npub enum InferenceError {\n    #[error(\"CUDA OOM during inference: {0}\")]\n    Oom(String),\n\n    #[error(\"Python exception: {0}\")]\n    PythonError(String),\n\n    #[error(\"model not loaded: {0}\")]\n    ModelNotLoaded(String),\n\n    #[error(\"PyO3 initialization failed: {0}\")]\n    InitFailed(String),\n}\n```\n\n\n### CUDA error mapping\n\ncudarc returns `cudarc::driver::DriverError`. Use structured enum matching, not\nstring matching:\n\n```rust\nfn from_cudarc(e: DriverError) -> GpuError {\n    match e {\n        DriverError::Cuda(CudaError::OutOfMemory) => {\n            GpuError::Oom(format!(\"{e}\"))\n        }\n        _ => GpuError::CudaFail(format!(\"{e}\")),\n    }\n}\n```\n",
+  "source_version": "decisions/2026-04-03-gpu-space-ipc-adaptive-batching-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836128693Z",
+  "valid_from": "2026-04-11T00:10:08.836128693Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-03-gpu-space-ipc-adaptive-batching-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 415,
+    "end_line": 464,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

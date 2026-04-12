@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d6d6ec26f13f",
+  "content": "fn reset(&mut self) {\n        self.reference = None;\n        self.last_flow = None;\n    }\npub fn warp_depth(\n    depth: &[f32],\n    flow: &MotionField,\n    width: usize,\n    height: usize,\n    fill_value: f32,\n) -> Vec<f32> {\n    assert_eq!(depth.len(), width * height);\n    assert_eq!(flow.vectors.len(), flow.width * flow.height);\n\n    let mut warped = vec![fill_value; width * height];\n\n    for y in 0..height {\n        for x in 0..width {\n            // Get motion vector for this pixel (may need to scale if flow resolution differs)\n            let fx = x as f32 * flow.width as f32 / width as f32;\n            let fy = y as f32 * flow.height as f32 / height as f32;\n            let fix = (fx as usize).min(flow.width - 1);\n            let fiy = (fy as usize).min(flow.height - 1);\n            let [dx, dy] = flow.vectors[fiy * flow.width + fix];\n\n            // Source position (where this pixel came from in the previous frame)\n            let sx = x as f32 - dx;\n            let sy = y as f32 - dy;\n\n            // Bilinear sample from source depth\n            if sx >= 0.0 && sy >= 0.0 && sx < (width - 1) as f32 && sy < (height - 1) as f32 {\n                let x0 = sx.floor() as usize;\n                let y0 = sy.floor() as usize;\n                let x1 = x0 + 1;\n                let y1 = y0 + 1;\n                let fx = sx - x0 as f32;\n                let fy = sy - y0 as f32;\n\n                let v00 = depth[y0 * width + x0];\n                let v10 = depth[y0 * width + x1];\n                let v01 = depth[y1 * width + x0];\n                let v11 = depth[y1 * width + x1];\n\n                warped[y * width + x] = v00 * (1.0 - fx) * (1.0 - fy)\n                    + v10 * fx * (1.0 - fy)\n                    + v01 * (1.0 - fx) * fy\n                    + v11 * fx * fy;\n            }\n        }\n    }\n\n    warped\n}",
+  "source_version": "crates/dorea-cli/src/optical_flow.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229499262Z",
+  "valid_from": "2026-04-11T00:04:13.229499262Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/optical_flow.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 182,
+    "end_line": 230,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d4aea882317c",
+  "content": "8], &[u8]) {\n        let mmap = self.pixtar_mmap.as_ref().expect(\"call seal() before reading\");\n        let off = self.pixtar_offsets[i];\n        let n = self.widths[i] * self.heights[i] * 3;\n        (&mmap[off..off + n], &mmap[off + n..off + n * 2])\n    }\nimpl Drop for PagedCalibrationStore {\n    fn drop(&mut self) {\n        drop(self.depth_mmap.take());\n        drop(self.pixtar_mmap.take());\n        let _ = std::fs::remove_dir_all(&self.dir);\n    }\n}",
+  "source_version": "crates/dorea-cli/src/pipeline/feature.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229473361Z",
+  "valid_from": "2026-04-11T00:04:13.229473361Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/pipeline/feature.rs",
+    "language": "rs",
+    "chunk_type": "impl_item",
+    "start_line": 114,
+    "end_line": 120,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

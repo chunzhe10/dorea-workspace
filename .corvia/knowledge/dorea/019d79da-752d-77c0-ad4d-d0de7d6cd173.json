@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d0de7d6cd173",
+  "content": "{\n        Some(\"cpu\".to_string())\n    } else {\n        cfg.inference.device.clone()\n    };\n\n    #[cfg(feature = \"cuda\")]\n    if args.cpu_only {\n        anyhow::bail!(\n            \"--cpu-only is no longer supported for dorea grade; GPU (CUDA) is required. \\\n             Use dorea preview for CPU-only workflows.\"\n        );\n    }\n    if depth_max_interval == 0 {\n        anyhow::bail!(\"--depth-max-interval must be >= 1\");\n    }\n\n    // Probe input\n    let info = ffmpeg::probe(&args.input)\n        .context(\"ffprobe failed — is ffmpeg installed?\")?;\n    log::info!(\n        \"Input: {}x{} @ {:.3}fps, {:.1}s ({} frames)\",\n        info.width, info.height, info.fps, info.duration_secs, info.frame_count\n    );\n\n    // Resolve input encoding: CLI flag → config → auto-detect\n    let input_encoding = args.input_encoding.as_deref()\n        .or(cfg.grade.input_encoding.as_deref())\n        .map(|s| s.parse::<InputEncoding>().map_err(|e| anyhow::anyhow!(\"invalid --input-encoding: {e}\")))\n        .transpose()?\n        .unwrap_or_else(|| InputEncoding::auto_detect(&info, &args.input));\n\n    // Resolve output codec: CLI flag → config → auto based on input encoding\n    let output_codec = args.output_codec.as_deref()\n        .or(cfg.grade.output_codec.as_deref())\n        .map(|s| s.parse::<OutputCodec>().map_err(|e| anyhow::anyhow!(\"invalid --output-codec: {e}\")))\n        .transpose()?\n        .unwrap_or_else(|| {\n            if input_encoding.is_10bit() { OutputCodec::ProRes } else { OutputCodec::H264 }\n        });\n\n    log::info!(\"Encoding: input={input_encoding}, output={output_codec}, 10-bit={}\", output_codec.is_10bit());",
+  "source_version": "crates/dorea-cli/src/grade.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229424013Z",
+  "valid_from": "2026-04-11T00:04:13.229424013Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/grade.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 162,
+    "end_line": 193,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

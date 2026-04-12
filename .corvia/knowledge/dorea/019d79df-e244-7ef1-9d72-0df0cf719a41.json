@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-0df0cf719a41",
+  "content": "## Anti-Patterns to Avoid\n## Key Insight: The Maturity Spectrum\n\n## Sources\n\n- [Obsidian Graph View Design Discussion](https://forum.obsidian.md/t/design-talk-about-the-graph-view/22594)\n- [Obsidian Graph View Documentation](https://help.obsidian.md/plugins/graph)\n- [Obsidian Graph Navigation Mode Request](https://forum.obsidian.md/t/graph-navigation-mode/11471)\n- [Obsidian Local Graph Sidebar](https://forum.obsidian.md/t/how-to-open-a-local-graph-view-pane-on-the-right-sidebar/7190)\n- [Obsidian Large Vault Performance](https://forum.obsidian.md/t/obsidian-graph-view-doesnt-work-for-a-large-vault/106287)\n- [Roam Research Beginner Guide](https://thesweetsetup.com/a-thorough-beginners-guide-to-roam-research/)\n- [Roam Research Review 2025](https://aiproductivity.ai/tools/roam-research/)\n- [Roam Research UX for Qualitative Data](https://uxdesign.cc/roam-research-a-new-way-of-working-with-qualitative-research-data-96534b9cd951)\n- [Athens Research GitHub](https://github.com/athensresearch/athens)\n- [Logseq Graph View Discussion](https://discuss.logseq.com/t/confusion-about-the-graph-view-whats-the-point-of-it-if-you-rely-on-blocks-and-journals/28136)\n- [Logseq Sidebar from Graph Feature Request](https://discuss.logseq.com/t/is-it-possible-to-open-a-page-in-the-sidebar-from-the-graph-view/15283)\n- [Neo4j Bloom Overview](https://neo4j.com/docs/bloom-user-guide/current/bloom-visual-tour/bloom-overview/)\n- [Neo4j Bloom Card List](https://neo4j.com/docs/bloom-user-guide/current/bloom-visual-tour/card-list/)\n- [Neo4j Bloom Scene Interactions](https://neo4j.com/docs/bloom-user-guide/current/bloom-visual-tour/bloom-scene-interactions/)\n- [Kumu Profiles Documentation](https://docs.kumu.io/guides/profiles)\n- [Kumu Map Editor](https://docs.kumu.io/overview/user-interfaces/map-editor)",
+  "source_version": "decisions/graph-document-ux-research.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836296723Z",
+  "valid_from": "2026-04-11T00:10:08.836296723Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/graph-document-ux-research.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 789,
+    "end_line": 806,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

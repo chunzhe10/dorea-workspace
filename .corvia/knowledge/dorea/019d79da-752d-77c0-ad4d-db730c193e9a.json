@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-db730c193e9a",
+  "content": "utGrid::new(3);\n        for ri in 0..3 {\n            for gi in 0..3 {\n                for bi in 0..3 {\n                    lut.set(ri, gi, bi, [ri as f32 / 2.0, gi as f32 / 2.0, bi as f32 / 2.0]);\n                }\n            }\n        }\n        lut\n    }\nfn dummy_calibration() -> Calibration {\n        let luts = vec![dummy_lut(); 5];\n        let boundaries = vec![0.0, 0.2, 0.4, 0.6, 0.8, 1.0];\n        let depth_luts = DepthLuts::new(luts, boundaries);\n\n        let corrections = HslCorrections(vec![\n            QualifierCorrection {\n                h_center: 0.0,\n                h_width: 40.0,\n                h_offset: 5.0,\n                s_ratio: 1.1,\n                v_offset: 0.05,\n                weight: 200.0,\n            },\n        ]);\n\n        Calibration::new(depth_luts, corrections, 3)\n    }",
+  "source_version": "crates/dorea-cal/src/format.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229553102Z",
+  "valid_from": "2026-04-11T00:04:13.229553102Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cal/src/format.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 110,
+    "end_line": 127,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-e7fef3217fb7",
+  "content": "),\n            None => py.None(),\n        };\n        let py_models_dir = match models_dir {\n            Some(p) => p.into_py(py),\n            None => py.None(),\n        };\n        bridge.call_method1(\"load_raune_model\", (py_weights, device, py_models_dir))\n            .map_err(|e| InferenceError::InitFailed(format!(\"load_raune_model: {e}\")))?;\n        Ok(())\n    }\n\n    /// Load the Maxine model via the Python bridge.\n    fn call_load_maxine(\n        py: Python<'_>,\n        bridge: &Bound<'_, PyModule>,\n        upscale_factor: u32,\n        _device: &str,  // Reserved for future multi-GPU support; Python bridge is CUDA-only today\n    ) -> Result<(), InferenceError> {\n        bridge\n            .call_method1(\"load_maxine_model\", (upscale_factor,))\n            .map_err(|e| InferenceError::InitFailed(format!(\"load_maxine_model: {e}\")))?;\n        Ok(())\n    }\n\n    /// Map a Python exception to the appropriate InferenceError variant.\n    /// Detects CUDA OOM specifically for better error reporting.\n    fn map_python_error(py: Python<'_>, err: PyErr) -> InferenceError {\n        // Try to detect CUDA OOM errors.\n        // torch.cuda.OutOfMemoryError is a subclass of RuntimeError.\n        let msg = format!(\"{err}\");\n        if msg.contains(\"OutOfMemoryError\") || msg.contains(\"CUDA out of memory\") {\n            return InferenceError::Oom(msg);\n        }\n\n        // Check if it's a torch.cuda.OutOfMemoryError by trying to import and check.\n        let is_oom = (|| -> Result<bool, PyErr> {\n            let torch = py.import_bound(\"torch\")?;\n            let cuda = torch.getattr(\"cuda\")?;\n            let oom_type = cuda.getattr(\"OutOfMemoryError\")?;\n            let err_value = err.value_bound(py);\n            Ok(err_value.is_instance(&oom_type)?)\n        })();\n\n        if matches!(is_oom, Ok(true)) {\n            return InferenceError::Oom(msg);\n        }\n\n        InferenceError::ServerError(msg)\n    }\n}",
+  "source_version": "crates/dorea-video/src/inference/pyo3_backend.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229710299Z",
+  "valid_from": "2026-04-11T00:04:13.229710299Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference/pyo3_backend.rs",
+    "language": "rs",
+    "chunk_type": "impl_item",
+    "start_line": 780,
+    "end_line": 822,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

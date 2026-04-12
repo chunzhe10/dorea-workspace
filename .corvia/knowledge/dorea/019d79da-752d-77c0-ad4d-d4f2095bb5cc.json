@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d4f2095bb5cc",
+  "content": " after depth — uses freed VRAM from RAUNE unload.\n    log::info!(\"Loading YOLO-seg for diver detection...\");\n    if let Err(e) = inf_server.load_yolo_seg(None) {\n        log::warn!(\"Failed to load YOLO-seg ({}), proceeding without diver masks\", e);\n    }\n    log::info!(\"Running YOLO-seg on {} keyframes for diver detection...\", keyframes.len());\n    let mut kf_masks: HashMap<u64, (Vec<u8>, usize, usize)> = HashMap::new();\n    use dorea_video::inference::YoloSegBatchItem;\n    let yolo_items: Vec<YoloSegBatchItem> = keyframes.iter().map(|kf| {\n        YoloSegBatchItem {\n            id: format!(\"kf_f{}\", kf.frame_index),\n            pixels: kf.proxy_pixels.clone(),\n            width: proxy_w,\n            height: proxy_h,\n        }\n    }).collect();\n    match inf_server.run_yolo_seg_batch(&yolo_items) {\n        Ok(results) => {\n            for (i, (_, mask, mw, mh)) in results.into_iter().enumerate() {\n                kf_masks.insert(keyframes[i].frame_index, (mask, mw, mh));\n            }\n            log::info!(\"YOLO-seg complete: {} masks\", kf_masks.len());\n        }\n        Err(e) => {\n            // YOLO-seg is optional — degrade gracefully if model not available\n            log::warn!(\"YOLO-seg failed ({}), proceeding without diver masks\", e);\n        }\n    }\n\n    let _ = inf_server.shutdown();\n\n    store.seal().context(\"failed to seal calibration store\")?;\n\n    Ok(FeatureStageOutput {\n        store,\n        keyframe_depths: kf_depths,\n        keyframes,\n        keyframe_masks: kf_masks,\n    })\n}",
+  "source_version": "crates/dorea-cli/src/pipeline/feature.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229477254Z",
+  "valid_from": "2026-04-11T00:04:13.229477254Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/pipeline/feature.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 228,
+    "end_line": 262,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

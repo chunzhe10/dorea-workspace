@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-f998e47ac557",
+  "content": "_trip(1.0, 1.0, 1.0); // white\n        round_trip(0.0, 0.0, 0.0); // black\n        round_trip(0.5, 0.5, 0.5); // mid grey\n        round_trip(1.0, 0.0, 0.0); // red\n        round_trip(0.0, 1.0, 0.0); // green\n        round_trip(0.0, 0.0, 1.0); // blue\n    }\nfn test_white_point() {\n        let (l, a, b) = srgb_to_lab(1.0, 1.0, 1.0);\n        // OKLab white = (1,0,0), rescaled L = 100, a = 0, b = 0\n        assert!((l - 100.0).abs() < 1e-2, \"White L: expected 100, got {l}\");\n        assert!(a.abs() < 1e-2, \"White a: expected 0, got {a}\");\n        assert!(b.abs() < 1e-2, \"White b: expected 0, got {b}\");\n    }",
+  "source_version": "crates/dorea-color/src/lab.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229942507Z",
+  "valid_from": "2026-04-11T00:04:13.229942507Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-color/src/lab.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 118,
+    "end_line": 124,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

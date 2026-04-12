@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d312ecf4959c",
+  "content": "idx - prev_kf_idx) as f32).clamp(0.0, 1.0)\n                    }\n                } else {\n                    0.0\n                };\n\n                #[cfg(feature = \"cuda\")]\n                // Look up the nearest keyframe's class mask for diver detection.\n                let (class_mask_slice, mask_w, mask_h, diver_depth) = match keyframe_masks.get(&prev_kf_idx) {\n                    Some((mask, mw, mh)) => {\n                        let diver_d = {\n                            let mut diver_depths: Vec<f32> = Vec::new();\n                            for (mi, &class_id) in mask.iter().enumerate() {\n                                if class_id > 0 {\n                                    let mx = mi % mw;\n                                    let my = mi / mw;\n                                    let dx = mx as f32 * (dpw as f32 - 1.0) / (*mw as f32 - 1.0).max(1.0);\n                                    let dy = my as f32 * (dph as f32 - 1.0) / (*mh as f32 - 1.0).max(1.0);\n                                    let di = (dy as usize).min(dph - 1) * dpw + (dx as usize).min(dpw - 1);\n                                    if di < depth.len() {\n                                        diver_depths.push(depth[di]);\n                                    }\n                                }\n                            }\n                            if diver_depths.is_empty() {\n                                0.5\n                            } else {\n                                diver_depths.sort_by(|a, b| a.partial_cmp(b).unwrap());\n                                diver_depths[diver_depths.len() / 2]\n                            }\n                        };\n                        (Some(mask.as_slice()), *mw, *mh, diver_d)\n                    }\n                    None => (None, 0, 0, 0.5),\n                };\n\n                // 16-bit grading — uses grade_frame_blended_16 with u16 pixel data.\n                let graded = adaptive_grader.grade_frame_blended_16(\n                    &frame.pixels, &depth, frame.width, frame.height, dpw, dph, blend_t,",
+  "source_version": "crates/dorea-cli/src/pipeline/grading.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229453557Z",
+  "valid_from": "2026-04-11T00:04:13.229453557Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/pipeline/grading.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 577,
+    "end_line": 607,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

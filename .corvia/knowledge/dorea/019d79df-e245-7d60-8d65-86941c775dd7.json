@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-86941c775dd7",
+  "content": "# output_codec = \"auto\"    # \"prores\" for 10-bit, \"h264\" for 8-bit\n\n## Self-Review Checklist\n\n1. **Spec coverage:**\n   - ✅ TransferFunction trait (Tasks 1-3)\n   - ✅ 10-bit decode (Tasks 4-6)\n   - ✅ 10-bit encode (Task 7)\n   - ✅ CUDA u16 kernel (Tasks 8-9)\n   - ✅ CLI flags (Task 10)\n   - ✅ Pipeline integration (Task 11)\n   - ✅ dorea probe (Task 12)\n   - ✅ Backward compat (Task 13)\n   - ⏳ Tiny planet projection — DEFERRED. Not needed for MVP. Can be added later as a separate issue.\n   - ⏳ LUT grid bump 97→129 — DEFERRED. Current 97³ with output dithering works well. Bump if testing reveals banding at 10-bit.\n\n2. **Placeholder scan:** No TBD/TODO/placeholders found.\n\n3. **Type consistency:**\n   - `InputEncoding` — defined in Task 5, used in Tasks 10, 11, 12\n   - `OutputCodec` — defined in Task 7, used in Tasks 10, 11, 12\n   - `Frame16` — defined in Task 6, used in Task 11\n   - `grade_frame_blended_16` — defined in Task 9, used in Task 11\n   - `write_frame_16` — defined in Task 7, used in Task 11\n   - `VideoInfo` new fields — defined in Task 4, used in Tasks 5, 12",
+  "source_version": "plans/2026-04-08-10bit-pipeline-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837050035Z",
+  "valid_from": "2026-04-11T00:10:08.837050035Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-08-10bit-pipeline-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1977,
+    "end_line": 1999,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

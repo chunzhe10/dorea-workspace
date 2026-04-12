@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-10d96f655164",
+  "content": "`\nExpected: Compiles\n\n- [ ] **Step 4: Commit**\n\n```bash\ncd /workspaces/corvia-workspace/repos/corvia\ngit add crates/corvia-server/src/dashboard/mod.rs\ngit commit -m \"feat(dashboard): add content_role/source_origin to all dashboard JSON responses\"\n```\n\n---\n\n### Task 2.2: Update dashboard types with metadata fields\n\n**Files:**\n- Modify: `tools/corvia-dashboard/src/types.ts`\n\n- [ ] **Step 1: Add `content_role` and `source_origin` to relevant types**\n\nUpdate `GraphNode`:\n\n```typescript\nexport interface GraphNode {\n  id: string;\n  label: string;\n  preview?: string;\n  source_file?: string;\n  language?: string;\n  group?: string;\n  content_role?: string;\n  source_origin?: string;\n}\n```\n\nUpdate `EntryDetail`:\n\n```typescript\nexport interface EntryDetail {\n  id: string;\n  content: string;\n  scope_id: string;\n  recorded_at: string;\n  valid_from: string;\n  valid_to: string | null;\n  superseded_by: string | null;\n  metadata: {\n    source_file: string | null;\n    language: string | null;\n    content_role: string | null;\n    source_origin: string | null;\n  };\n}\n```\n\nUpdate `HistoryEntry`:\n\n```typescript\nexport interface HistoryEntry {\n  id: string;\n  content: string;\n  recorded_at: string;\n  valid_from: string;\n  valid_to: string | null;\n  superseded_by: string | null;\n  is_current: boolean;\n  metadata: {\n    source_file: string | null;\n    language: string | null;\n    content_role: string | null;\n    source_origin: string | null;\n  };\n}\n```\n\nAdd new neighbor types:\n\n```typescript\nexport interface NeighborEntry {\n  id: string;\n  content: string;\n  relation: string;\n  direction: \"outgoing\" | \"incoming\";\n  score: number | null;\n  source_file: string | null;\n  content_role: string | null;\n  source_origin: string | null;\n}\n\nexport interface NeighborsResponse {\n  neighbors: NeighborEntry[];\n  count: number;\n}\n```\n\nUpdate `RagSource`:\n\n```typescript\nexport interface RagSource {\n  content: string;\n  score: number;\n  source_file: string | null;\n  language: string | null;\n  content_role: string | null;\n  source_origin: string | null;\n}\n```\n\n- [ ] **Step 2: Commit**\n\n```bash\ncd /workspaces/corvia-workspace\ngit add tools/corvia-dashboard/src/types.ts\ngit commit -m \"feat(dashboard): add content_role, source_origin, and neighbor types\"\n```\n\n---\n",
+  "source_version": "plans/2026-03-13-docs-workflow-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836333511Z",
+  "valid_from": "2026-04-11T00:10:08.836333511Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-13-docs-workflow-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 862,
+    "end_line": 966,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

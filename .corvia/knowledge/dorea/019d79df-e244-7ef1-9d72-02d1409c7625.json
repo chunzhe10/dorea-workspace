@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-02d1409c7625",
+  "content": "### 3. Replace allocating copies with copy-into\n\n## After Optimization\n\n| Grader | Before | After (steady state) |\n|--------|--------|---------------------|\n| CudaGrader | 4 htod + 1 alloc + 1 dtoh = 6 ops | 2 htod_into + 1 dtoh = 3 barriers |\n| AdaptiveGrader | 6 htod + 1 alloc + 1 dtoh = 8 ops | 2 htod_into + 1 dtoh = 3 barriers |\n\n\n## Files Changed\n\n| File | Change |\n|------|--------|\n| `crates/dorea-gpu/src/cuda/mod.rs` | Add `FrameBuffers`, refactor `CudaGrader` and `AdaptiveGrader` |\n\nNo kernel changes. No public API changes. No new unsafe code.\n",
+  "source_version": "decisions/2026-04-08-pcie-barrier-reduction-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836165703Z",
+  "valid_from": "2026-04-11T00:10:08.836165703Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-08-pcie-barrier-reduction-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 70,
+    "end_line": 84,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

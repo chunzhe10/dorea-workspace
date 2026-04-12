@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-89266266065d",
+  "content": "### The proxy_batch / proxy_norm distinction\n### Why permute+contiguous in the Triton wrapper\n\n### What if batch=16 still regresses\n\nIf the batch=16 test in Step 7 still shows regression, the per-frame loop wasn't the only issue. Possible additional culprits:\n- VRAM pressure (peak memory exceeds 6GB at batch=16)\n- L2 cache thrashing\n- delta_full at fp32 4K is large (4 × 4K_pixels × 4 bytes per channel = ~100MB per frame, batch=16 = 1.6GB)\n\nIn that case: report it as a finding, don't try to fix in this PR. The plan succeeded in eliminating the per-frame loop overhead — further optimization is a separate issue.\n\n\n### What NOT to do\n\n- DO NOT modify the Triton kernel `_oklab_transfer_kernel` itself\n- DO NOT modify `pytorch_oklab_transfer` (already batch-aware)\n- DO NOT modify `run_pipe_mode` (separate code path)\n- DO NOT modify `rgb_to_lab` / `lab_to_rgb` (already batch-aware via NCHW)\n- DO NOT add pinned memory (separate optimization for a future PR)\n- DO NOT add unit tests (separate issue)",
+  "source_version": "plans/2026-04-10-batched-process-batch.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837084924Z",
+  "valid_from": "2026-04-11T00:10:08.837084924Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-10-batched-process-batch.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 370,
+    "end_line": 386,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

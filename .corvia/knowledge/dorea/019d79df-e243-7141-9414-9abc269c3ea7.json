@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e243-7141-9414-9abc269c3ea7",
+  "content": "## Problem\n## Design\n\n### Two Modes\n\n| Aspect | Light (default) | With Ollama | With SurrealDB |\n|--------|----------------|-------------|----------------|\n| Storage | LiteStore (redb + hnsw_rs) | LiteStore | SurrealStore (SurrealDB v3) |\n| Embeddings | corvia-inference (fastembed/ONNX) | Ollama (nomic-embed-text) | unchanged |\n| Docker needed | No | No | Yes (docker-compose) |\n| Image size | ~1.5GB (Rust toolchain + build deps) | +500MB (Ollama binary) | N/A (container) |\n\nOllama and SurrealDB are independent checkboxes — any combination is valid.\n\n\n### Toggle Mechanism\n\n`corvia-workspace` shell script at `.devcontainer/scripts/corvia-workspace.sh`, installed to PATH during `post-create.sh`.\n\n```\ncorvia-workspace enable ollama       # install + pull model + start + update corvia.toml\ncorvia-workspace disable ollama      # stop + revert corvia.toml\ncorvia-workspace enable surrealdb   # start container + update corvia.toml\ncorvia-workspace disable surrealdb  # stop container + revert corvia.toml\ncorvia-workspace status             # show enabled/running state\n```\n",
+  "source_version": "decisions/2026-03-03-optional-devcontainer-services-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.835995153Z",
+  "valid_from": "2026-04-11T00:10:08.835995153Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-03-03-optional-devcontainer-services-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 17,
+    "end_line": 39,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

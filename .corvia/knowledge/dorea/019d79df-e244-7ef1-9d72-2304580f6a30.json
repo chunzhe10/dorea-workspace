@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-2304580f6a30",
+  "content": "\n\n- [ ] **Step 7: Commit**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ngit add crates/dorea-gpu/src/cuda/mod.rs crates/dorea-gpu/src/lib.rs\ngit commit -m \"fix(dorea-gpu): move depth_aware_ambiance out of CUDA path to CPU-only finish pass\"\n```\n\n---\n\n### Task 3: Run full crate tests + integration check\n\n**Files:** none changed\n\n- [ ] **Step 1: Run full workspace tests touching dorea-gpu**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ncargo test --workspace 2>&1 | grep -E \"test |FAILED|error\" | tail -40\n```\n\nExpected: all tests pass.\n\n- [ ] **Step 2: Verify CLI callers still build**\n\nThe public API of `dorea-gpu` hasn't changed (`grade_frame` still takes and returns the same types). Verify:\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ncargo build -p dorea-cli 2>&1 | tail -20\n```\n\nExpected: builds cleanly.\n\n- [ ] **Step 3: Commit if any fixes needed, otherwise done**\n\nIf clean, no commit needed. Branch `fix/inference-gpu-bugs` is ready to review.\n\n---\n",
+  "source_version": "plans/2026-04-02-depth-aware-ambiance-cpu-move.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836560167Z",
+  "valid_from": "2026-04-11T00:10:08.836560167Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-depth-aware-ambiance-cpu-move.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 407,
+    "end_line": 436,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

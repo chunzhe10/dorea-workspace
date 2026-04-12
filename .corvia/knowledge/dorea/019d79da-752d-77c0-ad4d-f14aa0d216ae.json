@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-f14aa0d216ae",
+  "content": "      .as_kernel_param(),  // grid_size\n                lut_size_i32   .as_kernel_param(),  // lut_size\n                total_i32      .as_kernel_param(),  // total_threads\n            ];\n            unsafe {\n                func.launch(cfg, &mut args[..])\n            }.map_err(map_cudarc_error)?;\n        }\n\n        // Synchronise: ensure build kernel completed before cuMemcpy3D\n        device.synchronize().map_err(map_cudarc_error)?;\n\n        // --- For each zone: copy device buffer slice → CUarray, create texture ---\n        let mut arrays:   Vec<CUarray>     = Vec::with_capacity(n_zones);\n        let mut textures: Vec<CUtexObject> = Vec::with_capacity(n_zones);\n\n        // Raw device pointer to the build buffer\n        let build_base: CUdeviceptr = *d_build.device_ptr();\n        // Bytes per zone: N*N*N float4 = N*N*N * 4 * sizeof(f32)\n        let zone_bytes = (n * n * n * 4 * std::mem::size_of::<f32>()) as u64;\n        // Width in bytes for one row: N texels × float4 = N × 16 bytes\n        let width_in_bytes = n * 4 * std::mem::size_of::<f32>();\n\n        for zone in 0..n_zones {\n            // --- Create CUarray ---\n            let arr_desc = CUDA_ARRAY3D_DESCRIPTOR {\n                Width:       n,\n                Height:      n,\n                Depth:       n,\n                Format:      CUarray_format_enum::CU_AD_FORMAT_FLOAT,",
+  "source_version": "crates/dorea-gpu/src/cuda/combined_lut.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229825813Z",
+  "valid_from": "2026-04-11T00:04:13.229825813Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cuda/combined_lut.rs",
+    "language": "rs",
+    "chunk_type": "impl_item",
+    "start_line": 146,
+    "end_line": 169,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c7dcb02e352e",
+  "content": "    \"final_delta_e_p95\": self.final_delta_e_p95,\n            \"ssim\": self.ssim,\n            \"wall_time_ms_upscale\": self.wall_time_ms_upscale,\n            \"wall_time_ms_end_to_end\": self.wall_time_ms_end_to_end,\n            \"status\": self.status,\n        }\ndef compute_delta_errors(\n    delta_method: torch.Tensor,  # (1, 3, H, W)\n    delta_gold: torch.Tensor,    # (1, 3, H, W)\n) -> dict[str, float]:\n    \"\"\"Return a dict of delta-space error metrics.\"\"\"\n    diff = (delta_method - delta_gold).abs()\n    per_pixel = diff.mean(dim=1)  # (1, H, W), averaged across L/a/b\n    flat = per_pixel.flatten()\n    return {\n        \"delta_l1_L\": diff[:, 0].mean().item(),\n        \"delta_l1_a\": diff[:, 1].mean().item(),\n        \"delta_l1_b\": diff[:, 2].mean().item(),\n        \"delta_l1\": diff.mean().item(),\n        \"delta_l2\": (diff.pow(2).mean().sqrt()).item(),\n        \"delta_max\": diff.max().item(),\n        \"delta_p95\": torch.quantile(flat, 0.95).item(),\n    }",
+  "source_version": "benchmarks/upscale_bench/metrics.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230347284Z",
+  "valid_from": "2026-04-11T00:04:13.230347284Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/metrics.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 52,
+    "end_line": 68,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

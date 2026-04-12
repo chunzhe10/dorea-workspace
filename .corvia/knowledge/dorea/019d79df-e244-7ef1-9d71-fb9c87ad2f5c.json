@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d71-fb9c87ad2f5c",
+  "content": "## Expected Performance\n## Test Plan\n\n### Section 1: Camera Input Abstraction\n- `test_ilog_round_trip` -- I-Log encode/decode proxy curve\n- `test_lut_based_round_trip` -- 1D LUT transfer function round-trip\n- `test_container_detection` -- .mov+ProRes -> ILog; .mp4+H.265 -> DlogM\n- `test_mismatch_warning` -- wrong encoding for container -> warning\n- `test_prores_frame_selection` -- ProRes skips I-frame filter\n- `test_projection_enum_parse` -- CLI parses rectilinear|tiny-planet\n\n\n### Section 2: 16-bit I/O and Performance\n- `test_16bit_png_encode_decode` -- inference.rs 16-bit round-trip\n- `test_8bit_png_still_works` -- backward compat\n- `test_load_rgb_image_precision` -- value 1024 -> correct f32\n- `test_65_cube_lut_format` -- valid .cube file\n- `test_lut_size_auto_default` -- 10-bit -> 65^3; 8-bit -> 33^3\n- `test_inference_receives_8bit` -- proxy frames are u8\n- `test_pipeline_stages_concurrent` -- decode overlaps with depth\n- `test_batch_depth_inference` -- 2-3 frame batch returns correct depths\n- `test_persistent_lut_gpu` -- 1 cudaMalloc for N frames\n- `test_cuda_f32_signature` -- f32 in, f32 out\n- `test_10bit_prores_encode` -- output verified 10-bit via ffprobe\n- `test_dlogm_golden_file` -- bit-identical regression\n",
+  "source_version": "decisions/2026-04-02-10bit-pipeline-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836073009Z",
+  "valid_from": "2026-04-11T00:10:08.836073009Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-02-10bit-pipeline-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 350,
+    "end_line": 371,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

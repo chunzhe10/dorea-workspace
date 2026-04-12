@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-e061d83c270f",
+  "content": "prores\".to_string(),\n            pix_fmt: \"yuv422p10le\".to_string(),\n            bits_per_component: 10,\n        };\n        let path = std::path::Path::new(\"clip.mov\");\n        assert_eq!(InputEncoding::auto_detect(&info, path), InputEncoding::ILog);\n    }\nfn input_encoding_auto_detect_srgb_h264() {\n        let info = VideoInfo {\n            width: 1920,\n            height: 1080,\n            fps: 30.0,\n            duration_secs: 5.0,\n            frame_count: 150,\n            has_audio: false,\n            codec_name: \"h264\".to_string(),\n            pix_fmt: \"yuv420p\".to_string(),\n            bits_per_component: 8,\n        };\n        let path = std::path::Path::new(\"clip.mp4\");\n        assert_eq!(InputEncoding::auto_detect(&info, path), InputEncoding::Srgb);\n    }",
+  "source_version": "crates/dorea-video/src/ffmpeg.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229611889Z",
+  "valid_from": "2026-04-11T00:04:13.229611889Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/ffmpeg.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 1115,
+    "end_line": 1129,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

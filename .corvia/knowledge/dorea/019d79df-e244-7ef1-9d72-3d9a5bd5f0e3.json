@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-3d9a5bd5f0e3",
+  "content": " type Input = (std::path::PathBuf, dorea_video::ffmpeg::VideoInfo, usize, usize);\n    type Output = ProxyDecoder;\n\n    fn name(&self) -> &'static str { \"proxy_decode\" }\n\n    fn process(&mut self, (path, info, pw, ph): Self::Input) -> Result<ProxyDecoder> {\n        let iter = ffmpeg::decode_frames_scaled(&path, &info, pw, ph)\n            .context(\"failed to spawn ffmpeg proxy decoder\")?;\n        Ok(ProxyDecoder(Box::new(iter)))\n    }\n}\n\n// ── Node: ChangeDetectNode ────────────────────────────────────────────────────\n\n/// Scores a frame against the last reference. Standalone node for external use.\n/// Inside KeyframeStage, KeyframeSelectNode owns its own detector to avoid\n/// passing pixels through an extra struct allocation.\npub struct FrameScore {\n    pub frame_index: u64,\n    /// Owned pixels. For non-keyframes, these are moved into process() and dropped.\n    /// No copy occurs; the Vec is moved through FrameScore without heap allocation.\n    pub pixels: Vec<u8>,\n    pub change_score: f32,\n}\n\npub struct ChangeDetectNode {\n    detector: Box<dyn ChangeDetector>,\n}\n\nimpl ChangeDetectNode {\n    pub fn new() -> Self {\n        Self { detector: Box::new(MseDetector::default()) }\n    }\n}\n\nimpl Node for ChangeDetectNode {\n    type Input = (u64, Vec<u8>);\n    type Output = FrameScore;\n\n    fn name(&self) -> &'static str { \"change_detect\" }\n\n    fn process(&mut self, (frame_index, pixels): Self::Input) -> Result<FrameScore> {\n        let score = self.detector.score(&pixels);\n        Ok(FrameScore { frame_index, pixels, change_score: score })\n    }\n}",
+  "source_version": "plans/2026-04-05-pipeline-dag-refactor.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836962473Z",
+  "valid_from": "2026-04-11T00:10:08.836962473Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-05-pipeline-dag-refactor.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 348,
+    "end_line": 387,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

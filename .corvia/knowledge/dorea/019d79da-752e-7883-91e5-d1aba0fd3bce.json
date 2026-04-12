@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-d1aba0fd3bce",
+  "content": "### Task 5: Update `per_frame_vram_bytes` for the new 4-RGB-plane layout\n\n### Task 6: Add `CudaGrader::with_capacity(max_w, max_h)` — zero reallocation ever\n\n**Files:**\n- Modify: `crates/dorea-gpu/src/cuda/mod.rs`\n- Modify: `crates/dorea-gpu/src/lib.rs`\n\nWhen the caller knows all frames will be at a fixed resolution (e.g. a pure-4K batch), this constructor pre-allocates `ResolutionBuffers` immediately so the very first frame also pays zero cudaMalloc cost. Frames larger than `(max_w, max_h)` return `GpuError::InvalidInput`.\n\n- [ ] **Step 1: Add `with_capacity` to `CudaGrader` in `cuda/mod.rs`**\n\n  Add the following method to the `impl CudaGrader` block, directly after `CudaGrader::new()`:\n\n```rust\n/// Create a `CudaGrader` with device buffers pre-allocated for `(max_w, max_h)`.\n///\n/// Use this when all frames in a session share one known resolution.\n/// The very first `grade_frame_cuda` call pays zero `cudaMalloc` cost.\n///\n/// Frames larger than `(max_w, max_h)` return `GpuError::InvalidInput`.\npub fn with_capacity(max_w: usize, max_h: usize) -> Result<Self, GpuError> {\n    let device = CudaDevice::new(0).map_err(|e| {\n        GpuError::ModuleLoad(format!(\"CudaDevice::new(0) failed: {e}\"))\n    })?;\n\n    device\n        .load_ptx(Ptx::from_src(LUT_APPLY_PTX), \"lut_apply\", &[\"lut_apply_kernel\"])\n        .map_err(|e| GpuError::ModuleLoad(format!(\"load lut_apply PTX: {e}\")))?;\n\n    device\n        .load_ptx(Ptx::from_src(HSL_CORRECT_PTX), \"hsl_correct\", &[\"hsl_correct_kernel\"])\n        .map_err(|e| GpuError::ModuleLoad(format!(\"load hsl_correct PTX: {e}\")))?;\n\n    device\n        .load_ptx(\n            Ptx::from_src(CLARITY_PTX),\n            \"clarity\",\n            &[\n                \"clarity_extract_L_proxy\",\n                \"clarity_box_blur_rows\",\n                \"clarity_box_blur_cols\",\n                \"clarity_apply_kernel\",\n            ],\n        )\n        .map_err(|e| GpuError::ModuleLoad(format!(\"load clarity PTX: {e}\")))?;\n\n    let res_bufs = RefCell::new(Some(alloc_resolution_buffers(&device, max_w, max_h)?));\n",
+  "source_version": "docs/plans/2026-04-03-cuda-grader-buffer-pre-allocation.md",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230514788Z",
+  "valid_from": "2026-04-11T00:04:13.230514788Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "docs/plans/2026-04-03-cuda-grader-buffer-pre-allocation.md",
+    "language": "markdown",
+    "chunk_type": "heading_section",
+    "start_line": 824,
+    "end_line": 870,
+    "content_role": "plan",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

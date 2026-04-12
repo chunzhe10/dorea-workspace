@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-220e075ec9c4",
+  "content": "`-isystem` flags in `build.rs` handle GCC 14/glibc 2.35 issues already.\n\n- [ ] **Step 3: Commit**\n\n```bash\ngit add crates/dorea-gpu/src/cuda/kernels/clarity.cu\ngit commit -m \"feat(dorea-gpu): clarity.cu — GPU clarity kernel at proxy resolution\"\n```\n\n---\n\n## Task 3: Wire `dorea_clarity_gpu` into `cuda/mod.rs`\n\n**Files:** `crates/dorea-gpu/src/cuda/mod.rs`, `crates/dorea-gpu/src/lib.rs`\n\n- [ ] **Step 1: Add `extern \"C\"` declaration and call in `cuda/mod.rs`**\n\nIn `crates/dorea-gpu/src/cuda/mod.rs`, add the `dorea_clarity_gpu` declaration alongside the existing ones, and call it after `dorea_hsl_correct_gpu`. Replace the entire file with:\n\n```rust\n//! CUDA-backed grading pipeline.\n//!\n//! Only compiled when the `cuda` feature is enabled (detected by build.rs).\n//! Provides `grade_frame_cuda` which runs LUT apply, HSL correct, and clarity on GPU,\n//! returning f32 intermediate pixels. The caller (`lib.rs`) applies\n//! `cpu::finish_grade` (depth_aware_ambiance WITHOUT clarity, warmth, blend, u8)\n//! after GPU resources are freed.\n\n#[cfg(feature = \"cuda\")]\nuse crate::{GradeParams, GpuError};\n#[cfg(feature = \"cuda\")]\nuse dorea_cal::Calibration;\n\n#[cfg(feature = \"cuda\")]\nextern \"C\" {\n    /// GPU launcher: depth-stratified LUT apply. Returns cudaError_t (0 = success).\n    fn dorea_lut_apply_gpu(\n        h_pixels_in: *const f32,\n        h_depth: *const f32,\n        h_luts: *const f32,\n        h_zone_boundaries: *const f32,\n        h_pixels_out: *mut f32,\n        n_pixels: i32,\n        lut_size: i32,\n        n_zones: i32,\n    ) -> i32;\n\n    /// GPU launcher: HSL 6-qualifier correction. Returns cudaError_t (0 = success).\n    fn dorea_hsl_correct_gpu(\n        h_pixels_in: *const f32,\n        h_pixels_out: *mut f32,\n        h_offsets: *const f32,\n        h_s_ratios: *const f32,\n        h_v_offsets: *const f32,\n        h_weights: *const f32,\n        n_pixels: i32,\n    ) -> i32;\n\n    /// GPU launcher: clarity at proxy resolution. Returns cudaError_t (0 = success).\n    fn dorea_clarity_gpu(\n        h_rgb_in: *const f32,\n        h_rgb_out: *mut f32,\n        full_w: i32,\n        full_h: i32,\n        proxy_w: i32,\n        proxy_h: i32,\n        blur_radius: i32,\n        clarity_amount: f32,\n    ) -> i32;",
+  "source_version": "plans/2026-04-02-clarity-cuda-kernel.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836544250Z",
+  "valid_from": "2026-04-11T00:10:08.836544250Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-clarity-cuda-kernel.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 606,
+    "end_line": 663,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

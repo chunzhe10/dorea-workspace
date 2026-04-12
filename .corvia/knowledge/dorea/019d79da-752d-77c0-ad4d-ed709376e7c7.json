@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-ed709376e7c7",
+  "content": "\", \"combined_lut_kernel\")\n                .ok_or_else(|| GpuError::ModuleLoad(\"combined_lut_kernel not found\".into()))?;\n            let cfg = LaunchConfig {\n                grid_dim: (div_ceil(n as u32, 256), 1, 1),\n                block_dim: (256, 1, 1),\n                shared_mem_bytes: 0,\n            };\n            let blend_t_val = 0.0f32;\n            let n_i32 = n as i32;\n            let nz_i32 = self.combined_lut.n_zones as i32;\n            let gs_i32 = self.combined_lut.grid_size as i32;\n            let fw_i32 = width as i32;\n            let fh_i32 = height as i32;\n            // CudaGrader: depth is same res as frame\n            let dw_i32 = width as i32;\n            let dh_i32 = height as i32;\n            use cudarc::driver::DeviceRepr;\n            let null_mask: u64 = 0;  // no YOLO-seg mask for CudaGrader\n            let zero_i32: i32 = 0;\n            let default_depth: f32 = 0.5;\n            let mut args: [*mut std::ffi::c_void; 19] = [\n                (&bufs.d_pixels_in).as_kernel_param(),\n                (&bufs.d_depth).as_kernel_param(),\n                (&self.d_textures).as_kernel_param(),\n                (&self.d_boundaries).as_kernel_param(),\n                (&self.d_textures).as_kernel_param(),\n                (&self.d_boundaries).as_kernel_param(),\n                blend_t_val.as_kernel_param(),\n                (&bufs.d_pixels_out).as_kernel_param(),\n                n_i32.as_kernel_param(),\n                nz_i32.as_kernel_param(),\n                gs_i32.as_kernel_param(),\n                fw_i32.as_kernel_param(),\n                fh_i32.as_kernel_param(),\n                dw_i32.as_kernel_param(),\n                dh_i32.as_kernel_param(),\n                null_mask.as_kernel_param(),\n                zero_i32.as_kernel_param(),\n                zero_i32.as_kernel_param(),\n                default_depth.as_kernel_param(),\n            ];\n            unsafe {\n                func.launch(cfg, &mut args[..])\n            }.map_err(map_cudarc_error)?;\n        }\n\n        // Download result\n        let slot = self.frame_bufs.borrow();\n        let bufs = slot.as_ref().expect(\"frame_bufs allocated above\");\n        let result = dev.dtoh_sync_copy(&bufs.d_pixels_out).map_err(map_cudarc_error)?;\n        Ok(result)\n    }",
+  "source_version": "crates/dorea-gpu/src/cuda/mod.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229779420Z",
+  "valid_from": "2026-04-11T00:04:13.229779420Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cuda/mod.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 197,
+    "end_line": 243,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

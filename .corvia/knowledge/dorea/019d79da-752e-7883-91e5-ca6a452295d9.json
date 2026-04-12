@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-ca6a452295d9",
+  "content": "# Motion-Aware Content-Adaptive Grading Design\n\n## Overview\n\nThree subsystems integrated into the existing 4-stage pipeline:\n1. NVIDIA OFA optical flow for keyframe detection + depth map warping (#50)\n2. YOLOv11n-seg binary segmentation (diver vs water) for per-class grading (#52)\n3. CUDA guided filter to snap warped depth to class boundaries (#51)\n\n\n## Key Decisions\n\n- Optical flow via direct CUDA driver API (not Python) — runs on OFA hardware engine\n- YOLO-seg via Python inference server — PyTorch model, fits existing pattern\n- Binary classification (diver=1 / water=0) using COCO \"person\" zero-shot\n- YOLO runs on ALL proxy frames (not keyframe-only) — cheap at 5-15ms/frame\n- Guided filter as CUDA kernel — runs at proxy resolution alongside grading\n- Motion vectors stored per-frame during Pass 1, consumed in Pass 2 (grading)\n- Depth warping replaces linear lerp: warp prev keyframe depth using motion vectors\n- Per-class LUT bank: combined texture becomes N_classes x N_zones x 97^3\n",
+  "source_version": "docs/decisions/2026-04-08-motion-aware-grading-design.md",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230389057Z",
+  "valid_from": "2026-04-11T00:04:13.230389057Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "docs/decisions/2026-04-08-motion-aware-grading-design.md",
+    "language": "markdown",
+    "chunk_type": "heading_section",
+    "start_line": 7,
+    "end_line": 24,
+    "content_role": "decision",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

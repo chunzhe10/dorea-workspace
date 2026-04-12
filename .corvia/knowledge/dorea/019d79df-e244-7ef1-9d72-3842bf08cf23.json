@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-3842bf08cf23",
+  "content": "# Per-Keyframe Adaptive Depth Zones — Implementation Plan\n\n> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.\n\n**Goal:** Replace global depth zone computation with a two-tier architecture: 32-zone base LUT per scene segment + 8 adaptive runtime zones per keyframe, with pipelined double-buffer GPU texture builds and dual-texture temporal blending.\n\n**Architecture:** After Pass 0 (all keyframe depths known), pre-compute the full depth timeline: per-KF zone boundaries, scene segments via Wasserstein-1 depth histogram distance, per-segment base LUTs + HSL corrections. During grading, double-buffered CUDA streams pipeline combined texture rebuilds (Stream B) behind frame grading (Stream A), with dual-texture temporal blending for non-keyframe frames.\n\n**Tech Stack:** Rust (dorea-cli, dorea-gpu, dorea-lut), CUDA C (kernels via nvcc/build.rs), cudarc (Rust CUDA bindings), rayon (CPU parallelism)\n\n**Spec:** `docs/decisions/2026-04-04-per-keyframe-adaptive-depth-zones.md`\n\n---\n",
+  "source_version": "plans/2026-04-04-per-keyframe-adaptive-depth-zones-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836873052Z",
+  "valid_from": "2026-04-11T00:10:08.836873052Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-per-keyframe-adaptive-depth-zones-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1,
+    "end_line": 14,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

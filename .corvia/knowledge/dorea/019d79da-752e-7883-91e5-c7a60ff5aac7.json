@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c7a60ff5aac7",
+  "content": "           raune_4k = _tiled_4k_raune(raune_model, frame_4k)\n            path_used = \"tiled_2x2_1984x1144_o128\"\n\n    delta_4k = rgb_to_oklab(raune_4k) - rgb_to_oklab(frame_4k)\n    return GoldResult(raune_4k=raune_4k, delta_4k=delta_4k, path_used=path_used)\ndef load_or_compute_gold(\n    frame_4k: torch.Tensor,\n    frame_idx: int,\n    raune_model: torch.nn.Module,\n    weights_path: Path,\n    cache_dir: Path,\n    regen: bool = False,\n    force_path: Optional[str] = None,\n) -> GoldResult:\n    \"\"\"Disk-cached wrapper around compute_gold.\"\"\"\n    cache_dir.mkdir(parents=True, exist_ok=True)\n    sha_prefix = _sha1_file_prefix(weights_path)\n    cache_file = cache_dir / f\"{sha_prefix}_{frame_idx}.pt\"\n\n    if cache_file.exists() and not regen:\n        try:\n            blob = torch.load(cache_file, map_location=\"cuda\", weights_only=False)\n            return GoldResult(\n                raune_4k=blob[\"raune_4k\"],\n                delta_4k=blob[\"delta_4k\"],\n                path_used=blob[\"path_used\"],\n            )\n        except Exception as e:\n            print(f\"[gold] WARNING: corrupt cache {cache_file} ({e}); regenerating\")\n\n    result = compute_gold(frame_4k, raune_model, force_path=force_path)\n    torch.save(\n        {\n            \"raune_4k\": result.raune_4k,\n            \"delta_4k\": result.delta_4k,\n            \"path_used\": result.path_used,\n            \"version\": 1,\n        },\n        cache_file,\n    )\n    return result",
+  "source_version": "benchmarks/upscale_bench/gold.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230344763Z",
+  "valid_from": "2026-04-11T00:04:13.230344763Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/gold.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 148,
+    "end_line": 183,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-e425e57c5957",
+  "content": "impl Drop for InferenceServer {\n    fn drop(&mut self) {\n        // Best-effort shutdown\n        let _ = self.stdin.write_all(b\"{\\\"type\\\":\\\"shutdown\\\"}\\n\");\n        let _ = self.child.wait();\n    }\n}\nfn drop(&mut self) {\n        // Best-effort shutdown\n        let _ = self.stdin.write_all(b\"{\\\"type\\\":\\\"shutdown\\\"}\\n\");\n        let _ = self.child.wait();\n    }",
+  "source_version": "crates/dorea-video/src/inference_subprocess.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229660135Z",
+  "valid_from": "2026-04-11T00:04:13.229660135Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference_subprocess.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 842,
+    "end_line": 846,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

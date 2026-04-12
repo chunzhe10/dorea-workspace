@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-f07181f6d664",
+  "content": "   // Download result\n        let slot = self.frame_bufs_16.borrow();\n        let bufs = slot.as_ref().expect(\"frame_bufs_16 allocated above\");\n        let result = dev.dtoh_sync_copy(&bufs.d_pixels_out).map_err(map_cudarc_error)?;\n        Ok(result)\n    }\npub struct PostprocessGrader {\n    device: Arc<CudaDevice>,\n    d_h_offsets: CudaSlice<f32>,\n    d_s_ratios: CudaSlice<f32>,\n    d_v_offsets: CudaSlice<f32>,\n    d_weights: CudaSlice<f32>,\n    warmth: f32,\n    contrast: f32,\n    stage_mask: u32,\n    frame_bufs: RefCell<Option<FrameBuffers16>>,\n    _not_send: std::marker::PhantomData<*const ()>,\n}",
+  "source_version": "crates/dorea-gpu/src/cuda/mod.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229815378Z",
+  "valid_from": "2026-04-11T00:04:13.229815378Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cuda/mod.rs",
+    "language": "rs",
+    "chunk_type": "struct_item",
+    "start_line": 944,
+    "end_line": 955,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

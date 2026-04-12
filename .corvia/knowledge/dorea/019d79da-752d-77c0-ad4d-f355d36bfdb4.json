@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-f355d36bfdb4",
+  "content": "impl Default for GuidedFilterParams {\n    fn default() -> Self {\n        Self {\n            radius: 4,\n            epsilon_water: 0.01,\n            epsilon_diver: 0.001,\n        }\n    }\n}\nfn default() -> Self {\n        Self {\n            radius: 4,\n            epsilon_water: 0.01,\n            epsilon_diver: 0.001,\n        }\n    }",
+  "source_version": "crates/dorea-gpu/src/cuda/guided_filter.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229855340Z",
+  "valid_from": "2026-04-11T00:04:13.229855340Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cuda/guided_filter.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 35,
+    "end_line": 41,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

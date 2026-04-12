@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-22e9def4b092",
+  "content": ",\n        )\n    };\n    if status != 0 {\n        return Err(GpuError::Cuda(format!(\"dorea_hsl_correct_gpu returned CUDA error {status}\")));\n    }\n\n    // GPU work done. Return f32 intermediate — caller applies CPU finish pass.\n    Ok(rgb_after_hsl)\n}\n```\n\nAlso remove the now-unused `use dorea_color::lab::{srgb_to_lab, lab_to_srgb};` import from the `#[cfg(feature = \"cuda\")]` block at the top of `cuda/mod.rs`.\n\n- [ ] **Step 3: Update `lib.rs` to call `cpu::finish_grade` after CUDA returns**\n\nReplace the `grade_frame` function body in `crates/dorea-gpu/src/lib.rs`:\n\n```rust\npub fn grade_frame(\n    pixels: &[u8],\n    depth: &[f32],\n    width: usize,\n    height: usize,\n    calibration: &Calibration,\n    params: &GradeParams,\n) -> Result<Vec<u8>, GpuError> {\n    if pixels.len() != width * height * 3 {\n        return Err(GpuError::InvalidInput(format!(\n            \"pixels length {} != width*height*3 {}\",\n            pixels.len(),\n            width * height * 3\n        )));\n    }\n    if depth.len() != width * height {\n        return Err(GpuError::InvalidInput(format!(\n            \"depth length {} != width*height {}\",\n            depth.len(),\n            width * height\n        )));\n    }\n\n    #[cfg(feature = \"cuda\")]\n    {\n        match cuda::grade_frame_cuda(pixels, depth, width, height, calibration, params) {\n            Ok(mut rgb_f32) => {\n                // GPU resources are now freed. Apply CPU-only ambiance + warmth + blend.\n                return Ok(cpu::finish_grade(\n                    &mut rgb_f32,\n                    pixels,\n                    depth,\n                    width,\n                    height,\n                    params,\n                    calibration,\n                ));\n            }\n            Err(e) => {\n                log::warn!(\"CUDA grading failed ({e}), falling back to CPU\");\n            }\n        }",
+  "source_version": "plans/2026-04-02-depth-aware-ambiance-cpu-move.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836558176Z",
+  "valid_from": "2026-04-11T00:10:08.836558176Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-depth-aware-ambiance-cpu-move.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 308,
+    "end_line": 356,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

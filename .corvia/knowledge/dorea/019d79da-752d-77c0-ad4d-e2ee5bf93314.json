@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-e2ee5bf93314",
+  "content": "  .map_err(|e| InferenceError::Ipc(format!(\"ping response parse error: {e}\")))?;\n        if v[\"type\"].as_str() == Some(\"pong\") {\n            Ok(())\n        } else {\n            Err(InferenceError::Ipc(format!(\"expected pong, got: {resp}\")))\n        }\n    }\npub fn run_raune(\n        &mut self,\n        id: &str,\n        image_rgb: &[u8],\n        width: usize,\n        height: usize,\n        max_size: usize,\n    ) -> Result<(Vec<u8>, usize, usize), InferenceError> {\n        let b64 = B64.encode(image_rgb);\n\n        let req = serde_json::json!({\n            \"type\": \"raune\",\n            \"id\": id,\n            \"image_b64\": b64,\n            \"format\": \"raw_rgb\",\n            \"width\": width,\n            \"height\": height,\n            \"max_size\": max_size\n        });\n        self.send_line(&req.to_string())?;\n\n        let resp = self.recv_line()?;\n        let v: serde_json::Value = serde_json::from_str(&resp)\n            .map_err(|e| InferenceError::Ipc(format!(\"raune response parse: {e}\")))?;\n\n        if v[\"type\"].as_str() == Some(\"error\") {\n            return Err(InferenceError::ServerError(\n                v[\"message\"].as_str().unwrap_or(\"unknown error\").to_string(),\n            ));\n        }\n        if v[\"type\"].as_str() != Some(\"raune_result\") {\n            return Err(InferenceError::Ipc(format!(\"unexpected response type: {resp}\")));\n        }\n\n        let w = v[\"width\"].as_u64().unwrap_or(0) as usize;\n        let h = v[\"height\"].as_u64().unwrap_or(0) as usize;\n        let b64_out = v[\"image_b64\"].as_str()\n            .ok_or_else(|| InferenceError::Ipc(\"missing image_b64 in raune_result\".to_string()))?;\n\n        let png_bytes = B64.decode(b64_out)\n            .map_err(|e| InferenceError::Ipc(format!(\"base64 decode: {e}\")))?;\n        let rgb = decode_png_bytes(&png_bytes)?;\n\n        Ok((rgb, w, h))\n    }",
+  "source_version": "crates/dorea-video/src/inference_subprocess.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229644901Z",
+  "valid_from": "2026-04-11T00:04:13.229644901Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference_subprocess.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 306,
+    "end_line": 350,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

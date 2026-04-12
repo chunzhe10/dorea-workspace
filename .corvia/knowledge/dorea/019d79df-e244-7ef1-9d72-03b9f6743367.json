@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-03b9f6743367",
+  "content": "# Batched _process_batch — Eliminate Per-Frame Upload Loop\n\n## Problem\n\nAfter fp16 landed (chunzhe10/dorea#67), direct mode is at 4.25 fps. Performance reviewers\nflagged that `_process_batch()` does N serial CPU→GPU uploads per batch, then re-uploads\nthe same numpy buffers a second time for the OKLab transfer. Larger batch sizes show no\nbenefit (batch=8 ≈ batch=4) and batch=16 actively regresses, because the per-frame upload\nloop scales linearly with batch_size and dominates as RAUNE inference shrinks.\n\n\n## Decision\n\nRefactor `_process_batch()` to do a single batched H2D upload, batched downscale,\nbatched transfer, and single batched D2H. Update the Triton wrapper to accept batched\ninput by flattening N into the pixel dimension.\n",
+  "source_version": "decisions/2026-04-10-batched-process-batch.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836176109Z",
+  "valid_from": "2026-04-11T00:10:08.836176109Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-10-batched-process-batch.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 3,
+    "end_line": 16,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

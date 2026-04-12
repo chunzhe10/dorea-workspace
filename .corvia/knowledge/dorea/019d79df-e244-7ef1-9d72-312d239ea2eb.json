@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-312d239ea2eb",
+  "content": "th no errors.\n\n- [ ] **Step 4.5: Commit**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ngit add crates/dorea-video/src/inference_subprocess.rs\ngit commit -m \"feat(inference): add RauneDepthBatchItem + run_raune_depth_batch fused IPC method\"\n```\n\n---\n\n## Task 5: Refactor `auto_calibrate` to use fused batch call\n\n**Files:**\n- Modify: `repos/dorea/crates/dorea-cli/src/grade.rs`\n\n- [ ] **Step 5.1: Update import and add constant**\n\nIn `grade.rs`, update the inference import line:\n\n```rust\nuse dorea_video::inference::{DepthBatchItem, RauneDepthBatchItem, InferenceConfig, InferenceServer};\n```\n\nAfter `DEPTH_BATCH_SIZE` (line 116), add:\n\n```rust\n/// Maximum frames per fused RAUNE+depth inference batch.\n/// Calibration images are ~1024×577; 8 frames ≈ 57 MB RAUNE input on GPU.\nconst FUSED_BATCH_SIZE: usize = 8;\n```\n\n- [ ] **Step 5.2: Replace the `auto_calibrate` inference loop**\n\nFind the loop starting at line 549 (`for i in 0..n_kf {`) through `let _ = inf_server.shutdown();` and replace with:\n\n```rust\n    // --- Phase 1: collect pixel buffers (N individual ffmpeg seeks — unchanged) ---\n    log::info!(\"Auto-calibration: extracting {n_kf} keyframes...\");\n    let mut kf_pixels: Vec<Vec<u8>> = Vec::with_capacity(n_kf);\n    for i in 0..n_kf {\n        let ts = (i as f64 + 0.5) * safe_duration / n_kf as f64;\n        let pixels = ffmpeg::extract_frame_at(&args.input, ts, kf_w, kf_h)",
+  "source_version": "plans/2026-04-03-inference-gpu-saturation.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836766601Z",
+  "valid_from": "2026-04-11T00:10:08.836766601Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-inference-gpu-saturation.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 734,
+    "end_line": 765,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

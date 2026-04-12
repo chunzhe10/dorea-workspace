@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-1e4468df1a59",
+  "content": "### Task 3: LutBased Transfer Function\n\n    /// Inverse LUT: linear → encoded. Length = LUT size.\n    inverse: Vec<f32>,\n    shoulder: f32,\n    name: String,\n}\n\nimpl LutBased {\n    /// Build from a forward LUT (encoded → linear).\n    /// The inverse is computed by table inversion.\n    pub fn new(forward: Vec<f32>, shoulder: f32, name: String) -> Self {\n        let inverse = invert_1d_lut(&forward);\n        Self { forward, inverse, shoulder, name }\n    }\n\n    /// Load from a 1D .cube file.\n    ///\n    /// Expected format:\n    /// ```text\n    /// # comment\n    /// TITLE \"curve name\"\n    /// LUT_1D_SIZE 1024\n    /// 0.000000\n    /// 0.000123\n    /// ...\n    /// ```\n    pub fn from_cube_file(path: &Path, shoulder: f32) -> Result<Self, String> {\n        let content = std::fs::read_to_string(path)\n            .map_err(|e| format!(\"cannot read {}: {e}\", path.display()))?;\n\n        let mut size: Option<usize> = None;\n        let mut values: Vec<f32> = Vec::new();\n        let mut title = path.file_stem()",
+  "source_version": "plans/2026-04-02-10bit-pipeline-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836490532Z",
+  "valid_from": "2026-04-11T00:10:08.836490532Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-10bit-pipeline-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 310,
+    "end_line": 341,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

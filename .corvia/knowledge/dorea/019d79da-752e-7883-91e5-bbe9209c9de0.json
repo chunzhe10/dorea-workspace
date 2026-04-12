@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-bbe9209c9de0",
+  "content": "def pytorch_oklab_transfer(frame_nchw_f32, delta_nchw_f32):\n    \"\"\"PyTorch fallback: OKLab transfer without Triton.\"\"\"\n    lab = rgb_to_lab(frame_nchw_f32)\n    lab = lab + delta_nchw_f32\n    return lab_to_rgb(lab)\ndef run_single_process(args, model, normalize, model_dtype):\n    \"\"\"Decode → GPU process → encode, all in one process via PyAV.\"\"\"\n    import av\n\n    fw, fh = args.full_width, args.full_height\n    pw, ph = args.proxy_width, args.proxy_height\n    batch_size = args.batch_size\n\n    # Select transfer function\n    if _USE_TRITON:\n        transfer_fn = triton_oklab_transfer\n        # Warm up Triton compilation\n        _dummy_f = torch.zeros(1, 3, 16, 16, device=\"cuda\")\n        _dummy_d = torch.zeros(1, 3, 16, 16, device=\"cuda\")\n        transfer_fn(_dummy_f, _dummy_d)\n        torch.cuda.synchronize()\n        print(\"[raune-filter] Using Triton fused kernel\", file=sys.stderr, flush=True)\n    else:\n        transfer_fn = pytorch_oklab_transfer\n        print(\"[raune-filter] Using PyTorch OKLab (Triton unavailable)\", file=sys.stderr, flush=True)\n\n    # Open input\n    in_container = av.open(args.input)\n    in_stream = in_container.streams.video[0]\n    in_stream.thread_type = \"AUTO\"\n    total_frames = in_stream.frames or 0\n    from fractions import Fraction\n    fps_frac = in_stream.average_rate or in_stream.rate or Fraction(30, 1)\n    fps = float(fps_frac)\n\n    # Open output\n    out_container = av.open(args.output, mode=\"w\")",
+  "source_version": "python/dorea_inference/raune_filter.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230056826Z",
+  "valid_from": "2026-04-11T00:04:13.230056826Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/raune_filter.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 202,
+    "end_line": 233,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

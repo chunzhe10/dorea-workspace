@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-bb546c316699",
+  "content": "       self.conf = conf\n        # Load YOLOv11n-seg (nano variant for speed)\n        if model_path is None:\n            model_path = \"yolo11n-seg.pt\"  # auto-downloads from ultralytics hub\n        self.model = YOLO(model_path)\n        self.model.to(device)\ndef infer(self, frame_rgb: np.ndarray) -> np.ndarray:\n        \"\"\"Run segmentation on a single frame.\n\n        Args:\n            frame_rgb: (H, W, 3) uint8 RGB array\n\n        Returns:\n            class_mask: (H, W) uint8 array — 0=water, 1=diver\n        \"\"\"\n        h, w = frame_rgb.shape[:2]\n        # YOLO expects BGR\n        import cv2\n        frame_bgr = cv2.cvtColor(frame_rgb, cv2.COLOR_RGB2BGR)\n        results = self.model(frame_bgr, conf=self.conf, verbose=False)\n\n        mask = np.zeros((h, w), dtype=np.uint8)\n        if results and results[0].masks is not None:\n            for i, cls_id in enumerate(results[0].boxes.cls):\n                if int(cls_id) == 0:  # COCO class 0 = \"person\"\n                    seg_mask = results[0].masks.data[i].cpu().numpy()\n                    # Resize mask to frame dimensions if needed\n                    if seg_mask.shape != (h, w):\n                        seg_mask = cv2.resize(seg_mask, (w, h), interpolation=cv2.INTER_NEAREST)\n                    mask[seg_mask > 0.5] = 1\n        return mask",
+  "source_version": "python/dorea_inference/yolo_seg.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230047902Z",
+  "valid_from": "2026-04-11T00:04:13.230047902Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/yolo_seg.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 27,
+    "end_line": 51,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-cc65e3c8bf91",
+  "content": "## Task 4 & 5: Architecture notes for the follow-up streaming PR\n\n### Task 4: Deferred dtoh (Fix 5)\n\nGoal: In batch mode, collect all frame results on device, then download in one burst instead of one `dtoh_sync_copy` per frame.\n\nPrerequisite design decisions needed:\n1. Each frame needs its own output `CudaSlice<f32>` (since `d_rgb_out` in `ResolutionBuffers` is shared and overwritten each frame).\n2. N output slices must be allocated upfront in `grade_frames_with_capacity`. This reintroduces N `cudaMalloc` calls per batch. Acceptable only if batch size is large (>= 10 frames) so the saving on N dtoh syncs outweighs the alloc cost.\n3. D2D copy from `d_rgb_out` into per-frame output slot: cudarc's `dev.dtod_copy_into` or raw `cuMemcpyDtoD`. This is a device→device copy (no PCIe) and can be enqueued async.\n4. One final `device.synchronize()` before all downloads.\n\nCreate a separate issue/plan before implementing.\n\n\n### Task 5: Copy-compute overlap (Fix 3)\n\nGoal: Upload frame N+1's pixels while the GPU runs frame N's kernels. At 7–16% SM utilisation, the PCIe copy engine and SMs can run fully concurrently.\n\nPrerequisite design decisions needed:\n1. cudarc 0.12's `LaunchConfig` has no stream field. Explicit multi-stream requires `sys::lib().cuStreamCreate()` and raw kernel launch. Investigate whether upgrading to cudarc 0.13 exposes `CudaStream` in the safe API.\n2. Double-buffered `ResolutionBuffers` (slot A + slot B). `CudaGrader` alternates between slots per frame.\n3. Upload stream: fires `cuMemcpyHtoDAsync` for the next frame's rgb + depth.\n4. Compute stream: depends on upload stream via `cuStreamWaitEvent` before the first kernel.\n5. CUDA event for signalling when compute stream has finished writing `d_rgb_out` and the slot can be reused.\n\nCreate a separate issue/plan before implementing.\n\n---\n",
+  "source_version": "docs/plans/2026-04-03-pcie-sync-barrier-reduction.md",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230428619Z",
+  "valid_from": "2026-04-11T00:04:13.230428619Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "docs/plans/2026-04-03-pcie-sync-barrier-reduction.md",
+    "language": "markdown",
+    "chunk_type": "heading_section",
+    "start_line": 633,
+    "end_line": 659,
+    "content_role": "plan",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

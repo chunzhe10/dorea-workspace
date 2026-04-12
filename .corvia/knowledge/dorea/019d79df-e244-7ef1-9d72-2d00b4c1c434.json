@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-2d00b4c1c434",
+  "content": "## Task 2: Expand GpuError and Add AdaptiveBatcher\n\n    /// Current batch size.\n    pub fn batch_size(&self) -> usize {\n        self.batch_size\n    }\n\n    /// Report a successful batch completion.\n    pub fn report_success(&mut self) {\n        self.successes += 1;\n        if self.successes >= self.grow_threshold && self.batch_size < self.max_batch {\n            self.batch_size = ((self.batch_size as f64 * 1.5).ceil() as usize).min(self.max_batch);\n            self.successes = 0;\n        }\n    }\n\n    /// Report an OOM failure. Returns true if batch_size was already at minimum\n    /// (meaning the frame genuinely cannot fit).\n    pub fn report_oom(&mut self) -> bool {\n        let was_min = self.batch_size <= self.min_batch;\n        self.successes = 0;\n        self.batch_size = (self.batch_size / 2).max(self.min_batch);\n        was_min\n    }\n}\n\n#[cfg(test)]\nmod tests {\n    use super::*;\n\n    #[test]\n    fn new_computes_max_batch_from_vram() {\n        // 1GB free, 56MB per frame, 15% margin\n        let b = AdaptiveBatcher::new(1_000_000_000, 56_000_000, 0.15);\n        // usable = 850MB, 850/56 = 15.17 → 15\n        assert_eq!(b.batch_size(), 15);\n        assert_eq!(b.max_batch, 15);\n    }\n\n    #[test]\n    fn new_with_zero_per_frame_gives_batch_1() {\n        let b = AdaptiveBatcher::new(1_000_000_000, 0, 0.15);\n        assert_eq!(b.batch_size(), 1);\n    }\n\n    #[test]\n    fn new_with_tiny_vram_gives_batch_1() {\n        // Only 10MB free, 56MB per frame\n        let b = AdaptiveBatcher::new(10_000_000, 56_000_000, 0.15);\n        assert_eq!(b.batch_size(), 1);\n    }\n\n    #[test]\n    fn report_oom_halves_batch_size() {\n        let mut b = AdaptiveBatcher::new(1_000_000_000, 56_000_000, 0.15);\n        let initial = b.batch_size();\n        assert!(!b.report_oom());\n        assert_eq!(b.batch_size(), initial / 2);\n    }\n\n    #[test]\n    fn report_oom_at_minimum_returns_true() {\n        let mut b = AdaptiveBatcher::fixed(1);\n        assert!(b.report_oom());",
+  "source_version": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836705168Z",
+  "valid_from": "2026-04-11T00:10:08.836705168Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 347,
+    "end_line": 408,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

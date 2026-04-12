@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-017a6b3d3ca0",
+  "content": "### Why this works\n\n## Data Flow\n\n```\nPass 0 (existing, unchanged):\n  Proxy decode → keyframe detection → fused RAUNE+depth inference\n  Output: all keyframe depth maps + RAUNE targets in memory\n\nPre-compute phase (new, ~500ms total):\n  ┌─────────────────────────────────┐\n  │ 1. Per-KF zone boundaries (raw) │  ~5ms\n  │    adaptive_zone_boundaries      │  (all keyframes, trivially parallel)\n  │    per keyframe depth map        │\n  │    Output: Vec<[f32; 9]>         │\n  ├─────────────────────────────────┤\n  │ 2. Segment detection             │  ~2ms\n  │    Wasserstein-1 distance on     │  (consecutive KF depth histograms)\n  │    depth histograms              │\n  │    Output: Vec<SegmentRange>     │\n  ├─────────────────────────────────┤\n  │ 3. Zone boundary smoothing       │  ~microseconds\n  │    Weighted avg over 3 KFs       │  (0.6 center + 0.2 each neighbor)\n  │    Respects segment boundaries   │  (segments must be known first)\n  ├─────────────────────────────────┤\n  │ 4. Per-segment base LUT build    │  ~100ms × N_segments\n  │    32-zone StreamingLutBuilder   │\n  │    + HSL corrections             │\n  │    Output: Vec<(DepthLuts,       │\n  │            HslCorrections)>      │\n  └─────────────────────────────────┘\n\nGrading pass (restructured):\n  CUDA Stream A: grade frames using current texture pair + temporal blend\n  CUDA Stream B: build next KF's combined texture (pipelined, hidden)\n  At KF boundary: swap textures, upload new zone boundaries\n  At segment boundary: also upload new base LUT to device\n```\n\n\n## Scene Segmentation\n",
+  "source_version": "decisions/2026-04-04-per-keyframe-adaptive-depth-zones.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836149080Z",
+  "valid_from": "2026-04-11T00:10:08.836149080Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-04-per-keyframe-adaptive-depth-zones.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 40,
+    "end_line": 78,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

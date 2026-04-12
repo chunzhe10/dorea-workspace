@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-29a51f09558f",
+  "content": "## Task 5: Parallelize `derive_hsl_corrections` (HSV conversion + fold/reduce)\n\n\n```rust\n    // Convert to HSV\n    let lut_hsv: Vec<(f32, f32, f32)> = lut_output\n        .iter()\n        .map(|&[r, g, b]| rgb_to_hsv(r, g, b))\n        .collect();\n    let tgt_hsv: Vec<(f32, f32, f32)> = target\n        .iter()\n        .map(|&[r, g, b]| rgb_to_hsv(r, g, b))\n        .collect();\n```\n\nWith:\n\n```rust\n    // Convert to HSV (parallel — each pixel is independent)\n    let lut_hsv: Vec<(f32, f32, f32)> = lut_output\n        .par_iter()\n        .map(|&[r, g, b]| rgb_to_hsv(r, g, b))\n        .collect();\n    let tgt_hsv: Vec<(f32, f32, f32)> = target\n        .par_iter()\n        .map(|&[r, g, b]| rgb_to_hsv(r, g, b))\n        .collect();\n```\n\n- [ ] **Step 4: Replace the two-pass qualifier loop with a single fold/reduce pass**\n\nThe current qualifier body does two serial passes: one to build `weights` + compute `total_weight`, then a second to accumulate `h_offset_sum` etc. Replace both with a single `fold/reduce` pass.\n\nReplace the entire qualifier body inside `for qual in HSL_QUALIFIERS { ... }` with:\n\n```rust\n    for qual in HSL_QUALIFIERS {\n        let hc = qual.h_center;\n        let hw = qual.h_width;\n\n        // Single parallel pass: compute weight and accumulate in one scan.\n        // fold() builds partial sums per rayon thread; reduce() merges them.\n        // Tuple: (total_w, h_sum, lut_s_sum, tgt_s_sum, v_sum)\n        let (total_weight, h_offset_sum, lut_s_sum, tgt_s_sum, v_diff_sum) =\n            lut_hsv\n                .par_iter()\n                .zip(tgt_hsv.par_iter())",
+  "source_version": "plans/2026-04-02-rayon-cpu-parallelization-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836653949Z",
+  "valid_from": "2026-04-11T00:10:08.836653949Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-rayon-cpu-parallelization-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 554,
+    "end_line": 598,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

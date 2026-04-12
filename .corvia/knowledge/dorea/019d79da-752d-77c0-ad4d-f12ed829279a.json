@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-f12ed829279a",
+  "content": "map_err(map_cudarc_error)?;\n\n        // --- Allocate build buffer: n_zones × N³ × float4 (4 floats) ---\n        let build_count = n_zones * n * n * n * 4;\n        let d_build: CudaSlice<f32> = device.alloc_zeros(build_count).map_err(map_cudarc_error)?;\n\n        // --- Launch build kernel ---\n        device.load_ptx(\n            Ptx::from_src(BUILD_COMBINED_LUT_PTX),\n            \"build_combined_lut\",\n            &[\"build_combined_lut_kernel\"],\n        ).map_err(|e| GpuError::ModuleLoad(format!(\"load build_combined_lut PTX: {e}\")))?;\n\n        let total_threads = (n_zones * n * n * n) as u32;\n        let block = 256u32;\n        let grid  = total_threads.div_ceil(block);\n\n        {\n            let func = device.get_func(\"build_combined_lut\", \"build_combined_lut_kernel\")\n                .ok_or_else(|| GpuError::ModuleLoad(\"build_combined_lut_kernel not found\".into()))?;\n            let cfg = LaunchConfig { grid_dim: (grid, 1, 1), block_dim: (block, 1, 1), shared_mem_bytes: 0 };\n            // cudarc 0.12 LaunchAsync supports tuples up to 12 elements.\n            // We have 16 args, so we use the raw *mut c_void params slice instead.\n            // Kernel signature: output, base_luts, base_zone_boundaries, base_n_zones,\n            //   runtime_zone_boundaries, runtime_n_zones, h_offsets, s_ratios, v_offsets,\n            //   weights, warmth, strength, contrast, grid_size, lut_size, total_threads\n            // CombinedLut (legacy single-segment path) passes the same boundaries/zones\n            // for both base and runtime — semantically equivalent to the old single-zone set.\n            let warmth   = params.warmth;\n            let strength = params.strength;",
+  "source_version": "crates/dorea-gpu/src/cuda/combined_lut.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229824260Z",
+  "valid_from": "2026-04-11T00:04:13.229824260Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cuda/combined_lut.rs",
+    "language": "rs",
+    "chunk_type": "impl_item",
+    "start_line": 97,
+    "end_line": 120,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-34fe81bddb62",
+  "content": " tests PASS (existing + new).\n\n- [ ] **Step 7: Commit**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ngit add crates/dorea-video/src/inference_subprocess.rs\ngit commit -m \"feat(inference): add enhance() IPC method with dimension validation\"\n```\n\n---\n\n### Task 6: FrameEncoder Lossless Temp Mode (supports grade.rs)\n\n**Files:**\n- Modify: `crates/dorea-video/src/ffmpeg.rs`\n\n- [ ] **Step 1: Write failing test**\n\nAdd to the `#[cfg(test)]` section at the bottom of `ffmpeg.rs`:\n\n```rust\n#[cfg(test)]\nmod tests {\n    use super::*;\n    use std::path::PathBuf;\n\n    #[test]\n    fn lossless_temp_encoder_creates_decodable_file() {\n        let dir = std::env::temp_dir();\n        let path = dir.join(format!(\"dorea_test_ffv1_{}.mkv\", std::process::id()));\n        let width = 8usize;\n        let height = 4usize;\n        let fps = 30.0f64;\n\n        // Write 3 frames\n        let mut enc = FrameEncoder::new_lossless_temp(&path, width, height, fps)\n            .expect(\"failed to create lossless encoder\");\n        let frame: Vec<u8> = (0..width * height * 3).map(|i| (i % 256) as u8).collect();\n        for _ in 0..3 {\n            enc.write_frame(&frame).expect(\"write_frame failed\");\n        }\n        enc.finish().expect(\"finish failed\");\n\n        // File must exist and be non-empty\n        assert!(path.exists(), \"output file does not exist\");\n        assert!(path.metadata().unwrap().len() > 0, \"output file is empty\");\n",
+  "source_version": "plans/2026-04-04-maxine-enhancement-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836823763Z",
+  "valid_from": "2026-04-11T00:10:08.836823763Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-maxine-enhancement-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 981,
+    "end_line": 1016,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

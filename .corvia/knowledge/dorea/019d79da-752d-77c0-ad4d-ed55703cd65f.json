@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-ed55703cd65f",
+  "content": "es).map_err(map_cudarc_error)?;\n\n        Ok(Self {\n            combined_lut,\n            d_textures,\n            d_boundaries,\n            frame_bufs: RefCell::new(None),\n            device,\n            _not_send: std::marker::PhantomData,\n        })\n    }\npub fn grade_frame_cuda(\n        &self,\n        pixels: &[u8],\n        depth: &[f32],\n        width: usize,\n        height: usize,\n    ) -> Result<Vec<u8>, GpuError> {\n        let n = width.checked_mul(height).ok_or_else(|| {\n            GpuError::InvalidInput(\"frame dimensions overflow usize\".into())\n        })?;\n        if pixels.len() != n * 3 {\n            return Err(GpuError::InvalidInput(format!(\n                \"pixels len {} != width*height*3 {}\", pixels.len(), n * 3\n            )));\n        }\n        if depth.len() != n {\n            return Err(GpuError::InvalidInput(format!(\n                \"depth len {} != width*height {}\", depth.len(), n\n            )));\n        }\n        let dev = &self.device;\n\n        // Ensure frame buffers exist at the correct resolution, then upload per-frame data.",
+  "source_version": "crates/dorea-gpu/src/cuda/mod.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229777920Z",
+  "valid_from": "2026-04-11T00:04:13.229777920Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cuda/mod.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 151,
+    "end_line": 173,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d00516ce8b68",
+  "content": "[\"ffmpeg\", \"-y\", \"-ss\", str(ts), \"-i\", path, \"-vframes\", \"1\",\n           \"-f\", \"rawvideo\", \"-pix_fmt\", \"rgb24\", \"-s\", f\"{w}x{h}\", \"pipe:1\"]\n    r = subprocess.run(cmd, capture_output=True)\n    return np.frombuffer(r.stdout, dtype=np.uint8).reshape(h, w, 3)\ndef probe(path):\n    r = subprocess.run([\"ffprobe\", \"-v\", \"quiet\", \"-print_format\", \"json\", \"-show_streams\", path],\n                       capture_output=True, text=True)\n    vs = [s for s in json.loads(r.stdout)[\"streams\"] if s[\"codec_type\"] == \"video\"][0]\n    return int(vs[\"width\"]), int(vs[\"height\"])",
+  "source_version": "investigate_artifacts.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229412103Z",
+  "valid_from": "2026-04-11T00:04:13.229412103Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "investigate_artifacts.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 28,
+    "end_line": 32,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

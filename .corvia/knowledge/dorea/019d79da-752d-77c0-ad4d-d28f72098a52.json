@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d28f72098a52",
+  "content": "yhow::anyhow!(\"encoder thread panicked\"))?;\n\n        // Propagate GPU error first (root cause), then thread errors.\n        gpu_result.context(\"GPU grading failed\")?;\n        decoder_result.context(\"decoder thread failed\")?;\n        encoder_result\n    })\n}\npub struct DirectModeConfig {\n    pub python: std::path::PathBuf,\n    pub raune_weights: std::path::PathBuf,\n    pub raune_models_dir: std::path::PathBuf,\n    pub raune_proxy_size: usize,\n    pub batch_size: usize,\n    pub output: std::path::PathBuf,\n}",
+  "source_version": "crates/dorea-cli/src/pipeline/grading.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229446308Z",
+  "valid_from": "2026-04-11T00:04:13.229446308Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/pipeline/grading.rs",
+    "language": "rs",
+    "chunk_type": "struct_item",
+    "start_line": 315,
+    "end_line": 322,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

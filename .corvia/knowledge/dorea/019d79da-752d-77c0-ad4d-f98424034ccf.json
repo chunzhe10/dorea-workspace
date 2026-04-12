@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-f98424034ccf",
+  "content": " g2, b2) = lab_to_srgb(l, a, lab_b);\n        assert!(\n            (r2 - r).abs() < 1e-3 && (g2 - g).abs() < 1e-3 && (b2 - b).abs() < 1e-3,\n            \"Round-trip ({r},{g},{b}) -> Lab({l:.2},{a:.2},{lab_b:.2}) -> ({r2:.5},{g2:.5},{b2:.5})\"\n        );\n    }\nfn test_lab_round_trip() {\n        round_trip(1.0, 1.0, 1.0); // white\n        round_trip(0.0, 0.0, 0.0); // black\n        round_trip(0.5, 0.5, 0.5); // mid grey\n        round_trip(1.0, 0.0, 0.0); // red\n        round_trip(0.0, 1.0, 0.0); // green\n        round_trip(0.0, 0.0, 1.0); // blue\n    }",
+  "source_version": "crates/dorea-color/src/lab.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229942018Z",
+  "valid_from": "2026-04-11T00:04:13.229942018Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-color/src/lab.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 108,
+    "end_line": 115,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c84e5ab7a9be",
+  "content": "def _atan2_deg(y, x):\n        return torch.atan2(y, x) * (180.0 / torch.pi) % 360.0\ndef compute_final_image_errors(\n    final_method: torch.Tensor,\n    final_gold: torch.Tensor,\n) -> dict[str, float]:\n    dE = delta_e_2000(final_method, final_gold)\n    flat = dE.flatten()\n    return {\n        \"final_delta_e\": dE.mean().item(),\n        \"final_delta_e_p95\": torch.quantile(flat, 0.95).item(),\n    }",
+  "source_version": "benchmarks/upscale_bench/metrics.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230352251Z",
+  "valid_from": "2026-04-11T00:04:13.230352251Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/metrics.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 171,
+    "end_line": 180,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d359b4041a4b",
+  "content": "impl PipelineConfig {\n    pub fn grade_params(&self) -> GradeParams {\n        GradeParams {\n            warmth: self.warmth,\n            strength: self.strength,\n            contrast: self.contrast,\n        }\n    }\n}\npub fn grade_params(&self) -> GradeParams {\n        GradeParams {\n            warmth: self.warmth,\n            strength: self.strength,\n            contrast: self.contrast,\n        }\n    }",
+  "source_version": "crates/dorea-cli/src/pipeline/mod.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229457134Z",
+  "valid_from": "2026-04-11T00:04:13.229457134Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/pipeline/mod.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 42,
+    "end_line": 48,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

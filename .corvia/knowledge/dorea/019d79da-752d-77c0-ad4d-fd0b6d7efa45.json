@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-fd0b6d7efa45",
+  "content": "/ wc) as f32,\n                            ]);\n                            populated.push([ri, gi, bi]);\n                        } else {\n                            empty.push([ri, gi, bi]);\n                        }\n                    }\n                }\n            }\n\n            if !populated.is_empty() && !empty.is_empty() {\n                let filled: Vec<([usize; 3], [usize; 3])> = empty\n                    .par_iter()\n                    .map(|ec| find_nearest(ec, &populated))\n                    .collect();\n                for (ec, best_pop) in filled {\n                    let val = lut.get(best_pop[0], best_pop[1], best_pop[2]);\n                    lut.set(ec[0], ec[1], ec[2], val);\n                }\n            } else if populated.is_empty() {\n                for ri in 0..LUT_SIZE {\n                    for gi in 0..LUT_SIZE {\n                        for bi in 0..LUT_SIZE {\n                            let r = ri as f32 / (LUT_SIZE - 1) as f32;\n                            let g = gi as f32 / (LUT_SIZE - 1) as f32;\n                            let b = bi as f32 / (LUT_SIZE - 1) as f32;\n                            lut.set(ri, gi, bi, [r, g, b]);\n                        }\n                    }\n                }\n            }\n\n            luts.push(lut);\n        }\n\n        DepthLuts::new(luts, self.zone_boundaries)\n    }",
+  "source_version": "crates/dorea-lut/src/build.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229984024Z",
+  "valid_from": "2026-04-11T00:04:13.229984024Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-lut/src/build.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 324,
+    "end_line": 352,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

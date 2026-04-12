@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c4e77b2867b2",
+  "content": "def set_injected_raune_model(model: torch.nn.Module) -> None:\n    _INJECTED_MODEL[\"raune\"] = model\ndef clear_injected_raune_model() -> None:\n    _INJECTED_MODEL.pop(\"raune\", None)\ndef _get_injected_raune_model() -> torch.nn.Module:\n    if \"raune\" not in _INJECTED_MODEL:\n        raise RuntimeError(\n            \"higher_proxy called without an injected RAUNE model. \"\n            \"The driver must call set_injected_raune_model() before running this method.\"\n        )\n    return _INJECTED_MODEL[\"raune\"]",
+  "source_version": "benchmarks/upscale_bench/methods.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230308584Z",
+  "valid_from": "2026-04-11T00:04:13.230308584Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/methods.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 423,
+    "end_line": 429,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

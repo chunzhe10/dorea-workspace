@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-0708a290ac37",
+  "content": "### Why threads, not processes\n### Queue sizing\n\n### Termination\nA `None` sentinel propagates downstream:\n1. Decoder finishes → puts `None` on `q_decoded`\n2. GPU thread drains, puts `None` on `q_processed`\n3. Encoder drains, exits\n\n\n### Error handling\n- Each worker thread catches exceptions, appends to shared `errors` list (lock-protected)\n- A `stop_event: threading.Event` signals other threads to abort\n- Sentinel `None` ensures downstream queues unblock\n- Main thread joins all threads then raises any captured exception\n",
+  "source_version": "decisions/2026-04-10-direct-mode-3thread-pipeline.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836214759Z",
+  "valid_from": "2026-04-11T00:10:08.836214759Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-10-direct-mode-3thread-pipeline.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 45,
+    "end_line": 56,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

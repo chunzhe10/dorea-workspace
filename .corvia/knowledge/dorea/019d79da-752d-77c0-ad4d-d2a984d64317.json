@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d2a984d64317",
+  "content": "pyav_codec,\n    );\n\n    let python_dir = std::path::Path::new(env!(\"CARGO_MANIFEST_DIR\"))\n        .parent().and_then(|p| p.parent())\n        .map(|p| p.join(\"python\"))\n        .unwrap_or_default();\n\n    let output_str = direct_cfg.output.to_string_lossy();\n\n    let mut raune_proc = Command::new(&direct_cfg.python)\n        .env(\"PYTHONPATH\", &python_dir)\n        .args([\n            \"-m\", \"dorea_inference.raune_filter\",\n            \"--weights\", direct_cfg.raune_weights.to_str().unwrap_or(\"\"),\n            \"--models-dir\", direct_cfg.raune_models_dir.to_str().unwrap_or(\"\"),\n            \"--full-width\", &info.width.to_string(),\n            \"--full-height\", &info.height.to_string(),\n            \"--proxy-width\", &proxy_w.to_string(),\n            \"--proxy-height\", &proxy_h.to_string(),\n            \"--batch-size\", &direct_cfg.batch_size.to_string(),\n            \"--input\", cfg.input.to_str().unwrap_or(\"\"),\n            \"--output\", &output_str,\n            \"--output-codec\", pyav_codec,\n        ])\n        .stdin(Stdio::null())\n        .stdout(Stdio::inherit())\n        .stderr(Stdio::inherit())\n        .spawn()\n        .context(\"failed to spawn raune_filter.py\")?;\n\n    let status = raune_proc.wait().context(\"raune_filter wait failed\")?;\n    if !status.success() {\n        anyhow::bail!(\"raune_filter exited with {status}\");\n    }\n\n    // The filter reports frame count via stderr; return total frames from info\n    Ok(info.frame_count)\n}",
+  "source_version": "crates/dorea-cli/src/pipeline/grading.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229447721Z",
+  "valid_from": "2026-04-11T00:04:13.229447721Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/pipeline/grading.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 358,
+    "end_line": 387,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

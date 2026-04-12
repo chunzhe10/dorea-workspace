@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-ce0775641d18",
+  "content": "---------------------------------------\n    float d = depth;\n    float l_norm, a_ab, b_ab;\n    {\n        float l_raw, a_raw, b_raw;\n        srgb_to_lab(r2, g2, b2, &l_raw, &a_raw, &b_raw);\n        l_norm = l_raw / 100.0f; a_ab = a_raw; b_ab = b_raw;\n    }\n\n    // Shadow lift\n    float lift = 0.2f + 0.15f * d;\n    float toe = 0.15f;\n    float shadow_mask = fminf(fmaxf((toe - l_norm) / toe, 0.0f), 1.0f);\n    l_norm += shadow_mask * lift * toe;\n\n    // S-curve contrast\n    float cs = (0.3f + 0.3f * d) * contrast;\n    float slope = 4.0f + 4.0f * cs;\n    float s_curve = 1.0f / (1.0f + expf(-(l_norm - 0.5f) * slope));\n    l_norm += (s_curve - l_norm) * cs;\n\n    // Highlight compress\n    float compress = 0.4f + 0.2f * (1.0f - d);\n    float knee_h = 0.88f;\n    if (l_norm > knee_h) {\n        float over = l_norm - knee_h;\n        float headroom = 1.0f - knee_h;\n        l_norm = knee_h + headroom * tanhf(over / headroom * (1.0f + compress));\n    }\n\n    // Warmth (a*/b* push)\n    float lum_w = 4.0f * l_norm * (1.0f - l_norm);\n    a_ab += (1.0f + 5.0f * d) * lum_w;\n    b_ab +=  4.0f * d          * lum_w;\n\n    // Vibrance\n    float vib = 0.4f + 0.5f * d;\n    float chroma = sqrtf(a_ab*a_ab + b_ab*b_ab + 1e-8f);\n    float chroma_n = fminf(chroma / 40.0f, 1.0f);\n    float boost = vib * (1.0f - chroma_n) * fminf(l_norm / 0.25f, 1.0f);\n    a_ab *= 1.0f + boost;\n    b_ab *= 1.0f + boost;\n\n    // User warmth scaling\n    float warmth_factor = 1.0f + (warmth - 1.0f) * 0.3f;\n    if (fabsf(warmth_factor - 1.0f) > 1e-4f) {\n        a_ab *= warmth_factor;\n        b_ab *= warmth_factor;\n    }\n\n    // LAB → RGB\n    float l_out  = fminf(fmaxf(l_norm * 100.0f, 0.0f), 100.0f);\n    float a_out  = fminf(fmaxf(a_ab,  -128.0f), 127.0f);\n    float b_out2 = fminf(fmaxf(b_ab,  -128.0f), 127.0f);",
+  "source_version": "docs/plans/2026-04-03-combined-lut-cuda-texture-plan.md",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230454188Z",
+  "valid_from": "2026-04-11T00:04:13.230454188Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "docs/plans/2026-04-03-combined-lut-cuda-texture-plan.md",
+    "language": "markdown",
+    "chunk_type": "heading_section",
+    "start_line": 828,
+    "end_line": 872,
+    "content_role": "plan",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

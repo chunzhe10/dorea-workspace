@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d7dec5d0fdb5",
+  "content": "ner/codec)\n    pub input_encoding: Option<String>,\n    /// Output codec (default: \"h264\" for 8-bit, \"prores\" for 10-bit)\n    pub output_codec: Option<String>,\n    /// Enabled grading stages (comma-separated). Default: all.\n    pub stages: Option<String>,\n}\npub struct MaxineDefaults {\n    /// Super-resolution upscale factor: 2, 3, or 4 (default: 2)\n    pub upscale_factor: Option<u32>,\n    /// Run artifact reduction before upscale (default: true)\n    pub artifact_reduction: Option<bool>,\n}",
+  "source_version": "crates/dorea-cli/src/config.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229511422Z",
+  "valid_from": "2026-04-11T00:04:13.229511422Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/config.rs",
+    "language": "rs",
+    "chunk_type": "struct_item",
+    "start_line": 92,
+    "end_line": 97,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

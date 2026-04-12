@@ -1,0 +1,31 @@
+{
+  "id": "019d81c9-d10b-7fc3-82ae-97fa23f5deb9",
+  "content": "# TensorRT FP16 for RAUNE-Net — Final Decision Record (2026-04-12)\n\n## What: Manual ONNX→TRT FP16 engine for RAUNE-Net inference, opt-in via --tensorrt flag\n\n## Key Design Decisions:\n1. Manual ONNX→TRT over torch_tensorrt (Python 3.13 blocker + InstanceNorm graph fragmentation)\n2. FP16 only, no INT8 (INT8's 256 levels insufficient for 10-bit pipeline's 1024 levels)\n3. PREFER_PRECISION_CONSTRAINTS builder flag ensures InstanceNorm variance stays in FP32\n4. CUDA event-based inter-stream synchronization instead of full stream sync (avoids CPU stall)\n5. Atomic engine cache writes via tempfile+rename to prevent corruption on crash\n6. torch.compile gated behind separate --torch-compile flag (not bundled with TRT)\n\n## Performance Results (4K footage, RTX 3060):\n- TRT FP16: 6.3 fps (128ms/frame GPU) vs PyTorch fp16: 4.5 fps (191ms/frame GPU) = 1.5x speedup\n- Quality: 51.3 dB PSNR avg, all frames > 40dB (spec threshold)\n- Engine build: ~3 min first run, <2s cached\n\n## Review Findings Worth Remembering:\n- TRT execute_async_v3 on a private stream races with default stream — use CUDA events\n- TRT engine I/O bindings may be FP32 even with FP16 flag — engine casts internally\n- RAUNE-Net trims 2 pixels in height due to conv padding — handle shape mismatch downstream\n- Pre-allocate output buffers to avoid cudaMalloc in hot inference loop\n- CUDA stream race condition caused black frames — only manifests under GPU load, not isolated tests",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-12T13:03:00.363333030Z",
+  "valid_from": "2026-04-12T13:03:00.363333030Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "decision",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

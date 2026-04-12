@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-1ccdfc66df73",
+  "content": "### Camera support\n\n## Quick start\n\n```bash",
+  "source_version": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836472405Z",
+  "valid_from": "2026-04-11T00:10:08.836472405Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1608,
+    "end_line": 1610,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

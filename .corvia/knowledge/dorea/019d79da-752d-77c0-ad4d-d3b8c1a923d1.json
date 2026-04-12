@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d3b8c1a923d1",
+  "content": "ments.iter().map(|seg| {\n        let seg_depths: Vec<f32> = (seg.start..seg.end)\n            .flat_map(|i| kf_depths_store[i].iter().cloned())\n            .collect();\n        let base_boundaries = adaptive_zone_boundaries(&seg_depths, cfg.base_lut_zones);\n\n        let mut lut_builder = StreamingLutBuilder::new(base_boundaries);\n        for i in seg.start..seg.end {\n            let (w, h) = store.dims(i);\n            let (pixels_u8, target_u8) = store.pixtar_slices(i);\n            let depth = store.read_depth(i);\n            let original: Vec<[f32; 3]> = pixels_u8.chunks_exact(3)\n                .map(|c| [c[0] as f32 / 255.0, c[1] as f32 / 255.0, c[2] as f32 / 255.0])\n                .collect();\n            let target: Vec<[f32; 3]> = target_u8.chunks_exact(3)\n                .map(|c| [c[0] as f32 / 255.0, c[1] as f32 / 255.0, c[2] as f32 / 255.0])\n                .collect();\n            let importance = compute_importance(&depth, w, h);\n            lut_builder.add_frame(&original, &target, &depth, &importance);\n        }\n        let depth_luts = lut_builder.finish();\n\n        // HSL corrections: weighted average over keyframes in segment\n        let mut h_offset_acc    = vec![0.0_f64; n_quals];\n        let mut s_ratio_acc     = vec![0.0_f64; n_quals];\n        let mut v_offset_acc    = vec![0.0_f64; n_quals];\n        let mut active_count    = vec![0_usize;  n_quals];\n        let mut total_weight_acc = vec![0.0_f64; n_quals];\n\n        for i in seg.start..seg.end {\n            let (pixels_u8, target_u8) = store.pixtar_slices(i);\n            let depth = store.read_depth(i);\n            let original: Vec<[f32; 3]> = pixels_u8.chunks_exact(3)\n                .map(|c| [c[0] as f32 / 255.0, c[1] as f32 / 255.0, c[2] as f32 / 255.0])\n                .collect();\n            let target: Vec<[f32; 3]> = target_u8.chunks_exact(3)\n                .map(|c| [c[0] as f32 / 255.0, c[1] as f32 / 255.0, c[2] as f32 / 255.0])\n                .collect();\n            let lut_output = apply_depth_luts(&original, &depth, &depth_luts);\n            let corrs = derive_hsl_corrections(&lut_output, &target);\n            for (qi, corr) in corrs.0.iter().enumerate() {\n                if corr.weight >= MIN_WEIGHT {",
+  "source_version": "crates/dorea-cli/src/pipeline/calibration.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229461261Z",
+  "valid_from": "2026-04-11T00:04:13.229461261Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/pipeline/calibration.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 56,
+    "end_line": 91,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

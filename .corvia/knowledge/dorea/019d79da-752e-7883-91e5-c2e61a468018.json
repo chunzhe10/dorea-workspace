@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c2e61a468018",
+  "content": "r_color = (160, 160, 160)  # gray = baseline\n            else:\n                border_color = None\n            if border_color is not None:\n                draw.rectangle((x - 2, y - 2, x + img.width + 2, y + img.height + 2), outline=border_color, width=3)\n        y += cell_h + padding + label_h\n\n    # Footer: small aggregate metrics table\n    y_footer = canvas_h - footer_h + padding\n    draw.text((padding, y_footer), \"Aggregate (mean across frames):\", fill=(220, 220, 220), font=font)\n    y_footer += 32\n    header_cols = [\"method\", \"delta_l1\", \"final_ΔE\", \"SSIM\", \"ms (end-to-end)\"]\n    col_widths = [160, 100, 100, 80, 160]\n    x = padding\n    for cname, cw in zip(header_cols, col_widths):\n        draw.text((x, y_footer), cname, fill=(160, 160, 160), font=font_small)\n        x += cw\n    y_footer += 20\n    for name in method_order:\n        means = {}\n        for key in (\"delta_l1\", \"final_delta_e\", \"ssim\"):\n            vals = [fd.method_metrics.get(name, {}).get(key, float(\"nan\")) for fd in frames_data]\n            vals = [v for v in vals if v == v]\n            means[key] = sum(vals) / max(len(vals), 1) if vals else float(\"nan\")\n        t = method_timings.get(name, 0.0)\n        x = padding\n        draw.text((x, y_footer), name, fill=(220, 220, 220), font=font_small)\n        x += col_widths[0]\n        draw.text((x, y_footer), f\"{means['delta_l1']:.4f}\", fill=(220, 220, 220), font=font_small)\n        x += col_widths[1]\n        draw.text((x, y_footer), f\"{means['final_delta_e']:.3f}\", fill=(220, 220, 220), font=font_small)\n        x += col_widths[2]\n        draw.text((x, y_footer), f\"{means['ssim']:.4f}\", fill=(220, 220, 220), font=font_small)\n        x += col_widths[3]\n        draw.text((x, y_footer), f\"{t:.1f}\", fill=(220, 220, 220), font=font_small)\n        y_footer += 16\n\n    out_path.parent.mkdir(parents=True, exist_ok=True)\n    canvas.save(out_path)",
+  "source_version": "benchmarks/upscale_bench/visualize.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230279469Z",
+  "valid_from": "2026-04-11T00:04:13.230279469Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/visualize.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 170,
+    "end_line": 203,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

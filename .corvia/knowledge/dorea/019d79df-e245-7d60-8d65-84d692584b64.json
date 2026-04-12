@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-84d692584b64",
+  "content": "### Task 7: OutputCodec Enum and 10-Bit Encoder\n\n- [ ] **Step 2: Add FrameEncoder::new_10bit**\n\nAdd a new constructor to `FrameEncoder`:\n\n```rust\nimpl FrameEncoder {\n    /// Spawn a 10-bit encoder subprocess.\n    ///\n    /// Accepts raw rgb48le input (6 bytes per pixel).\n    /// Output format depends on `codec`:\n    /// - ProRes: prores_ks -profile:v 3 (422 HQ), .mov container\n    /// - Hevc10: hevc_nvenc -profile:v main10, .mp4 container\n    pub fn new_10bit(\n        output: &Path,\n        width: usize,\n        height: usize,\n        fps: f64,\n        codec: OutputCodec,\n        input_for_audio: Option<&Path>,\n    ) -> Result<Self, FfmpegError> {\n        if let Some(parent) = output.parent() {\n            if !parent.as_os_str().is_empty() && !parent.exists() {\n                return Err(FfmpegError::EncodeFailed(format!(\n                    \"output directory does not exist: {}\",\n                    parent.display()\n                )));\n            }\n        }\n\n        let w_s = width.to_string();\n        let h_s = height.to_string();\n        let fps_s = format!(\"{fps:.3}\");\n        let size_s = format!(\"{w_s}x{h_s}\");\n        let out_s = output.to_str().unwrap_or(\"output.mov\");\n\n        let mut cmd = Command::new(\"ffmpeg\");\n        cmd.args([\n            \"-y\",\n            \"-f\", \"rawvideo\",\n            \"-pixel_format\", \"rgb48le\",\n            \"-s\", &size_s,\n            \"-r\", &fps_s,\n            \"-i\", \"pipe:0\",\n        ]);\n\n        if let Some(audio_src) = input_for_audio {\n            cmd.args([\"-i\", audio_src.to_str().unwrap_or(\"\")]);\n            cmd.args([\"-map\", \"0:v\", \"-map\", \"1:a\", \"-c:a\", \"copy\"]);\n        } else {\n            cmd.args([\"-map\", \"0:v\"]);\n        }\n\n        match codec {\n            OutputCodec::ProRes => {\n                cmd.args([\n                    \"-c:v\", \"prores_ks\",\n                    \"-profile:v\", \"3\",     // 422 HQ\n                    \"-pix_fmt\", \"yuv422p10le\",",
+  "source_version": "plans/2026-04-08-10bit-pipeline-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837026560Z",
+  "valid_from": "2026-04-11T00:10:08.837026560Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-08-10bit-pipeline-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 979,
+    "end_line": 1036,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-049ae38b72e6",
+  "content": "## Architecture\n\n### Package layout\n\n```\nrepos/dorea/benchmarks/upscale_bench/\n├── __init__.py\n├── methods.py           # @register(\"name\") registry + 9 method functions\n├── gold.py              # compute_gold(frame, model) → (raune_4k, delta_4k)\n├── metrics.py           # delta_l1/l2/max/p95, ΔE2000, SSIM, timing helpers\n├── visualize.py         # summary grid, per-frame sheets, error heatmaps\n├── frame_select.py      # heuristic auto-selection + decode\n├── run.py               # CLI entry point, orchestration\n├── README.md            # usage + \"how to add a method\" cookbook\n└── tests/\n    ├── __init__.py\n    ├── test_methods.py  # per-method smoke tests on synthetic input\n    └── test_e2e.py      # end-to-end pytest subprocess runs\n```\n",
+  "source_version": "decisions/2026-04-10-delta-upscale-bench-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836185779Z",
+  "valid_from": "2026-04-11T00:10:08.836185779Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-10-delta-upscale-bench-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 45,
+    "end_line": 62,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

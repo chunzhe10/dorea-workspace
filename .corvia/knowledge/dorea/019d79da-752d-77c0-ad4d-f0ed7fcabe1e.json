@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-f0ed7fcabe1e",
+  "content": "ec<CUarray>,\n    /// One texture object per zone.\n    pub textures:    Vec<CUtexObject>,\n    pub n_zones:     usize,\n    pub grid_size:   usize,\n    /// Zone boundary values [n_zones + 1], kept for the per-frame kernel.\n    pub zone_boundaries: Vec<f32>,\n}\nimpl Drop for CombinedLut {\n    fn drop(&mut self) {\n        unsafe {\n            for &tex in &self.textures {\n                let _ = sys::lib().cuTexObjectDestroy(tex);\n            }\n            for &arr in &self.arrays {\n                let _ = sys::lib().cuArrayDestroy(arr);\n            }\n        }\n    }\n}",
+  "source_version": "crates/dorea-gpu/src/cuda/combined_lut.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229820838Z",
+  "valid_from": "2026-04-11T00:04:13.229820838Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cuda/combined_lut.rs",
+    "language": "rs",
+    "chunk_type": "impl_item",
+    "start_line": 36,
+    "end_line": 47,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

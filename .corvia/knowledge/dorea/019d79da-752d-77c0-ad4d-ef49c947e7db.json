@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-ef49c947e7db",
+  "content": "\n                *slot = Some(alloc_frame_buffers(dev, width, height)?);\n            }\n            let bufs = slot.as_mut().expect(\"frame_bufs allocated above\");\n            dev.htod_sync_copy_into(pixels, &mut bufs.d_pixels_in).map_err(map_cudarc_error)?;\n        }\n\n        // Upload depth separately — may be at different resolution than frame.\n        let d_depth = dev.htod_sync_copy(depth).map_err(map_cudarc_error)?;\n\n        // Determine which cached device slices correspond to the current active/inactive sets.\n        // d_textures_a/d_bounds_a always correspond to sets[0], d_textures_b/d_bounds_b to sets[1].\n        let active_idx = self.adaptive_lut.active_index();\n        let (d_tex_active, d_bounds_active, d_tex_inactive, d_bounds_inactive) = if active_idx == 0 {\n            (&self.d_textures_a, &self.d_bounds_a, &self.d_textures_b, &self.d_bounds_b)\n        } else {\n            (&self.d_textures_b, &self.d_bounds_b, &self.d_textures_a, &self.d_bounds_a)\n        };\n\n        // Three distinct RefCells borrowed concurrently — safe because they are independent fields.\n        {\n            let slot = self.frame_bufs.borrow();\n            let bufs = slot.as_ref().expect(\"frame_bufs allocated above\");\n            let bounds_a = d_bounds_active.borrow();\n            let bounds_b = d_bounds_inactive.borrow();\n\n            let func = dev.get_func(\"combined_lut\", \"combined_lut_kernel\")\n                .ok_or_else(|| GpuError::ModuleLoad(\"combined_lut_kernel not found\".into()))?;\n            let cfg = LaunchConfig {",
+  "source_version": "crates/dorea-gpu/src/cuda/mod.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229800529Z",
+  "valid_from": "2026-04-11T00:04:13.229800529Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cuda/mod.rs",
+    "language": "rs",
+    "chunk_type": "impl_item",
+    "start_line": 724,
+    "end_line": 747,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

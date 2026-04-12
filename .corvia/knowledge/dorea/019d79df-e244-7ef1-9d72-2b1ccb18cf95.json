@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-2b1ccb18cf95",
+  "content": "s/dorea-cli/src/grade.rs\ngit commit -m \"feat(dorea-cli): wire GradeLut into non-keyframe grading path\n\nBuilds 3D LUT after calibration. Non-keyframe frames use LUT lookup\ninstead of grade_frame. Disabled with --no-grade-lut or --no-depth-interp.\"\n```\n\n---\n\n### Task 7: Full pipeline benchmark and verify\n\n**Files:** None (runtime verification)\n\n- [ ] **Step 1: Run the benchmark on the test clip**\n\n```bash\ncd /workspaces/dorea-workspace\ntime repos/dorea/target/release/dorea grade \\\n  --input footage/raw/2025-11-01/DJI_20251101111428_0055_D.MP4 \\\n  --output working/graded/DJI_20251101111428_0055_D_graded_lut3d.mp4 \\\n  --raune-weights working/sea_thru_poc/models/RAUNE-Net/pretrained/RAUNENet/test/weights_95.pth \\\n  --raune-models-dir working/sea_thru_poc \\\n  --depth-model models/depth_anything_v2_small \\\n  --verbose 2>&1 | tee /tmp/dorea_bench_lut3d.log\n```\n\nRecord: total wall time, LUT build time, per-100-frame progress intervals.\n\n- [ ] **Step 2: Run with `--no-grade-lut` to verify flag works**\n\n```bash\ncd /workspaces/dorea-workspace\ntime repos/dorea/target/release/dorea grade \\\n  --input footage/raw/2025-11-01/DJI_20251101111428_0055_D.MP4 \\\n  --output working/graded/DJI_20251101111428_0055_D_graded_nolut.mp4 \\\n  --raune-weights working/sea_thru_poc/models/RAUNE-Net/pretrained/RAUNENet/test/weights_95.pth \\\n  --raune-models-dir working/sea_thru_poc \\\n  --depth-model models/depth_anything_v2_small \\\n  --no-grade-lut \\\n  --verbose 2>&1 | tee /tmp/dorea_bench_nolut.log\n```\n\nShould produce same timing as the depth-interp baseline (~11m37s).\n\n- [ ] **Step 3: Visual quality check — extract frames and compare**\n\n```bash\nmkdir -p /tmp/lut_compare",
+  "source_version": "plans/2026-04-03-3d-lut-temporal-interpolation.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836677123Z",
+  "valid_from": "2026-04-11T00:10:08.836677123Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-3d-lut-temporal-interpolation.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 769,
+    "end_line": 807,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-1f45a82baa16",
+  "content": "eight, &calibration, &params)\n    .unwrap_or_else(|e| {\n        log::warn!(\"Grading failed for frame {}: {e} — passing through\", frame.index);\n        pixels_f32.clone()\n    });\n// Convert back to u8 for encoder (temporary — Task 13 adds 10-bit output)\nlet graded_u8: Vec<u8> = graded.iter()\n    .map(|&v| (v.clamp(0.0, 1.0) * 255.0).round() as u8)\n    .collect();\nencoder.write_frame(&graded_u8).context(\"encoder write failed\")?;\n```\n\nDo the same in `crates/dorea-cli/src/preview.rs`.\n\n- [ ] **Step 6: Update existing tests**\n\nAll existing tests in `cpu.rs` that call `grade_frame_cpu` with `&[u8]` need to convert\nto `&[f32]` input and expect `Vec<f32>` output. Update each test's pixel input from\n`vec![128u8, 100, 80, ...]` to `vec![128.0/255.0, 100.0/255.0, 80.0/255.0, ...]`\nand assertions from `u8` comparisons to `f32` tolerance checks.\n\n- [ ] **Step 7: Run all tests**\n\nRun: `cd /workspaces/dorea-workspace/repos/dorea && cargo test`\nExpected: All pass.\n\n- [ ] **Step 8: Commit**\n\n```bash\ngit add crates/dorea-gpu/src/lib.rs crates/dorea-gpu/src/cpu.rs \\\n       crates/dorea-cli/src/grade.rs crates/dorea-cli/src/preview.rs\ngit commit -m \"feat(gpu): change grade_frame API from u8 to f32\"\n```\n\n---\n",
+  "source_version": "plans/2026-04-02-10bit-pipeline-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836503955Z",
+  "valid_from": "2026-04-11T00:10:08.836503955Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-10bit-pipeline-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 974,
+    "end_line": 1003,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

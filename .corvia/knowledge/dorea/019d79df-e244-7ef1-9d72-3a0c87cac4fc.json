@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-3a0c87cac4fc",
+  "content": "ata<*const ()>,\n}\n\n#[cfg(feature = \"cuda\")]\nimpl AdaptiveGrader {\n    /// Initialize CUDA device, load kernels, allocate double-buffered textures.\n    pub fn new(\n        base_luts_flat: &[f32],\n        base_boundaries: &[f32],\n        base_n_zones: usize,\n        hsl_data: (&[f32], &[f32], &[f32], &[f32]),\n        params: &GradeParams,\n        lut_size: usize,\n        runtime_n_zones: usize,\n    ) -> Result<Self, GpuError> {\n        let device = CudaDevice::new(0).map_err(|e| {\n            GpuError::ModuleLoad(format!(\"CudaDevice::new(0) failed: {e}\"))\n        })?;\n\n        // Load per-frame kernel\n        device.load_ptx(\n            Ptx::from_src(COMBINED_LUT_PTX),\n            \"combined_lut\",\n            &[\"combined_lut_kernel\"],\n        ).map_err(|e| GpuError::ModuleLoad(format!(\"load combined_lut PTX: {e}\")))?;\n\n        // Load build kernel\n        device.load_ptx(\n            Ptx::from_src(BUILD_COMBINED_LUT_PTX),\n            \"build_combined_lut\",\n            &[\"build_combined_lut_kernel\"],\n        ).map_err(|e| GpuError::ModuleLoad(format!(\"load build_combined_lut PTX: {e}\")))?;\n\n        let adaptive_lut = combined_lut::AdaptiveLut::new(\n            &device,\n            base_luts_flat,\n            base_boundaries,\n            base_n_zones,\n            hsl_data,\n            (params.warmth, params.strength, params.contrast),\n            lut_size,\n            runtime_n_zones,\n        )?;\n\n        Ok(Self {\n            adaptive_lut,\n            device,\n            _not_send: std::marker::PhantomData,\n        })\n    }\n\n    /// Build runtime textures for a keyframe's zone boundaries into the inactive set.\n    pub fn prepare_keyframe(&mut self, runtime_boundaries: &[f32]) -> Result<(), GpuError> {\n        let inactive = 1 - self.adaptive_lut.active;\n        self.adaptive_lut.rebuild_set(&self.device, inactive, runtime_boundaries)\n    }\n",
+  "source_version": "plans/2026-04-04-per-keyframe-adaptive-depth-zones-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836905379Z",
+  "valid_from": "2026-04-11T00:10:08.836905379Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-per-keyframe-adaptive-depth-zones-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1153,
+    "end_line": 1199,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

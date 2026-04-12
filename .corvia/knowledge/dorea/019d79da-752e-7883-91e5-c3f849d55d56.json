@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c3f849d55d56",
+  "content": "def decorator(fn: Callable) -> Callable:\n        if name in REGISTRY:\n            raise ValueError(f\"method {name!r} already registered\")\n        REGISTRY[name] = fn\n        return fn\ndef bilinear(\n    delta_proxy: torch.Tensor,\n    orig_full: torch.Tensor,\n    full_size: Tuple[int, int],\n) -> torch.Tensor:\n    \"\"\"Current production behavior: plain bilinear upscale of the delta.\"\"\"\n    return F.interpolate(delta_proxy, size=full_size, mode=\"bilinear\", align_corners=False)",
+  "source_version": "benchmarks/upscale_bench/methods.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230294839Z",
+  "valid_from": "2026-04-11T00:04:13.230294839Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/methods.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 38,
+    "end_line": 44,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

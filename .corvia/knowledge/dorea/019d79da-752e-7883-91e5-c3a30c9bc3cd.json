@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c3a30c9bc3cd",
+  "content": " [-1, 0, 1]], dtype=torch.float32, device=L.device).view(1, 1, 3, 3)\n    sobel_y = sobel_x.transpose(-1, -2)\n    gx = F.conv2d(L, sobel_x, padding=1)\n    gy = F.conv2d(L, sobel_y, padding=1)\n    mag = (gx * gx + gy * gy).sqrt()\n    return mag.mean().item()\ndef _score_smoothness(thumb: torch.Tensor) -> float:\n    \"\"\"Negative of mean 32×32-block variance on OKLab-L (higher = flatter).\"\"\"\n    L = rgb_to_oklab(thumb)[:, 0:1]\n    b = 32\n    _, _, h, w = L.shape\n    h2 = (h // b) * b\n    w2 = (w // b) * b\n    if h2 == 0 or w2 == 0:\n        return 0.0\n    L = L[:, :, :h2, :w2]\n    patches = L.unfold(2, b, b).unfold(3, b, b)  # (1, 1, Hb, Wb, 32, 32)\n    mean_var = patches.reshape(1, 1, -1, b * b).var(dim=-1).mean().item()\n    return -mean_var",
+  "source_version": "benchmarks/upscale_bench/frame_select.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230289705Z",
+  "valid_from": "2026-04-11T00:04:13.230289705Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/frame_select.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 59,
+    "end_line": 71,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

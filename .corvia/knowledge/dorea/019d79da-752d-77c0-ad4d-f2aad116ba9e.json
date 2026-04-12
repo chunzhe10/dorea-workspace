@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-f2aad116ba9e",
+  "content": "ase_n_zones_i32      .as_kernel_param(),\n            (&d_runtime_bounds)   .as_kernel_param(),\n            nz_i32                .as_kernel_param(),\n            (&self.d_h_offsets)   .as_kernel_param(),\n            (&self.d_s_ratios)    .as_kernel_param(),\n            (&self.d_v_offsets)   .as_kernel_param(),\n            (&self.d_weights)     .as_kernel_param(),\n            warmth                .as_kernel_param(),\n            strength              .as_kernel_param(),\n            contrast              .as_kernel_param(),\n            n_i32                 .as_kernel_param(),\n            lut_size_i32          .as_kernel_param(),\n            total_i32             .as_kernel_param(),\n        ];\n        unsafe {\n            func.launch(cfg, &mut args[..])\n        }.map_err(map_cudarc_error)?;\n\n        device.synchronize().map_err(map_cudarc_error)?;\n\n        // Copy build buffer → CUarrays (one per runtime zone)\n        let zone_bytes = (n * n * n * 4 * std::mem::size_of::<f32>()) as u64;\n        let width_in_bytes = n * 4 * std::mem::size_of::<f32>();\n        let build_base: CUdeviceptr = *d_build.device_ptr();\n\n        for z in 0..nz {\n            let zone_ptr = build_base + z as u64 * zone_bytes;\n            // Use MaybeUninit to avoid debug-mode validity checks on CUmemorytype enum\n            let mut cpy: CUDA_MEMCPY3D =\n                unsafe { std::mem::MaybeUninit::<CUDA_MEMCPY3D>::zeroed().assume_init() };\n            cpy.srcMemoryType = CUmemorytype_enum::CU_MEMORYTYPE_DEVICE;\n            cpy.srcDevice     = zone_ptr;\n            cpy.srcPitch      = width_in_bytes;\n            cpy.srcHeight     = n;\n            cpy.dstMemoryType = CUmemorytype_enum::CU_MEMORYTYPE_ARRAY;\n            cpy.dstArray      = self.sets[set_index].arrays[z];\n            cpy.WidthInBytes  = width_in_bytes;\n            cpy.Height        = n;\n            cpy.Depth         = n;\n            unsafe {\n                let rc = sys::lib().cuMemcpy3D_v2(&cpy);\n                if rc != cudaError_enum::CUDA_SUCCESS {\n                    return Err(GpuError::CudaFail(format!(\"cuMemcpy3D zone {z}: {rc:?}\")));\n                }\n            }\n        }\n\n        self.sets[set_index].zone_boundaries = runtime_boundaries.to_vec();\n        Ok(())\n    }\n",
+  "source_version": "crates/dorea-gpu/src/cuda/combined_lut.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229844607Z",
+  "valid_from": "2026-04-11T00:04:13.229844607Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cuda/combined_lut.rs",
+    "language": "rs",
+    "chunk_type": "impl_item",
+    "start_line": 456,
+    "end_line": 501,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

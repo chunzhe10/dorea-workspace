@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-be1bccfd3a2c",
+  "content": "[str] = None, device: str = \"cuda\") -> None:\n    \"\"\"Load YOLOv11n-seg for binary diver/water segmentation.\"\"\"\n    global _yolo_seg_model\n    from .yolo_seg import YoloSegInference\n    _yolo_seg_model = YoloSegInference(model_path=model_path, device=device)\ndef run_yolo_seg_batch_cpu(imgs: \"list[np.ndarray]\") -> \"list[np.ndarray]\":\n    \"\"\"Run YOLO-seg on a batch of frames, returning class masks.\"\"\"\n    if _yolo_seg_model is None:\n        raise RuntimeError(\"YOLO-seg not loaded — call load_yolo_seg_model() first\")\n    return _yolo_seg_model.infer_batch(imgs)",
+  "source_version": "python/dorea_inference/bridge.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230212773Z",
+  "valid_from": "2026-04-11T00:04:13.230212773Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/bridge.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 210,
+    "end_line": 214,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

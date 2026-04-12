@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-ca47473bff18",
+  "content": "### `CudaGrader` API changes\n### Per-frame data movement at 4K\n\n## Testing\n\n| Test | Validates |\n|------|-----------|\n| `grade_pixel_cpu` matches `grade_frame_cpu` on 1×1 synthetic frame | CPU extraction correct |\n| GPU build vs CPU build within 1/255 on 1000 random samples | `grade_pixel_device` matches CPU |\n| `grade_frame_with_grader` vs `grade_frame_cpu` within 2/255 | Combined LUT accuracy |\n| Existing `frame_mse_*`, `lerp_depth_*` tests | No regression in grade.rs helpers |\n| Criterion bench `with_grader/1080p` and `with_grader/4K` | Performance validates ~15ms |\n\n\n## Decisions\n\n- **Hard delete clarity**: no flag, no fallback. Maxine will handle sharpening when implemented.\n- **97³ grid**: forward-compatible with 10-bit; `COMBINED_LUT_GRID` constant for easy bump to 129.\n- **GPU LUT build**: device→device via `cudaMemcpy3D`; avoids 55MB PCIe roundtrip.\n- **u8 I/O in kernel**: eliminates CPU f32 expansion and 75MB htod overhead per frame.\n- **float4 texture format**: single `tex3D<float4>` fetch returns all 3 channels.\n- **Calibration zones reused**: no resampling, no additional approximation error at zone boundaries.\n- **Calibration + params baked at construction**: `CudaGrader::new(cal, params)` — not per-call.",
+  "source_version": "docs/decisions/2026-04-03-combined-lut-cuda-texture-design.md",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230387306Z",
+  "valid_from": "2026-04-11T00:04:13.230387306Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "docs/decisions/2026-04-03-combined-lut-cuda-texture-design.md",
+    "language": "markdown",
+    "chunk_type": "heading_section",
+    "start_line": 162,
+    "end_line": 180,
+    "content_role": "decision",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-3b15b0e12898",
+  "content": "# Unified Keyframe Sampling — Implementation Plan\n\n## Prerequisites\n\n**This plan requires `docs/plans/2026-04-03-inference-gpu-saturation.md` to be fully implemented first.**\n\nSpecifically, the following must exist before starting Task 3:\n- `RauneDepthBatchItem` struct in `crates/dorea-video/src/inference_subprocess.rs`\n- `InferenceServer::run_raune_depth_batch` method in `inference_subprocess.rs`\n- `FUSED_BATCH_SIZE: usize = 8` constant in `grade.rs`\n- Updated import: `use dorea_video::inference::{DepthBatchItem, RauneDepthBatchItem, InferenceConfig, InferenceServer};`\n\nVerify:\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ncargo check -p dorea-video 2>&1 | tail -3\ngrep -n \"RauneDepthBatchItem\\|run_raune_depth_batch\" crates/dorea-video/src/inference_subprocess.rs | head -5\n```\n\n---\n\n\n## File Map\n\n| File | Change |\n|---|---|\n| `crates/dorea-cli/src/change_detect.rs` | **New** — `ChangeDetector` trait, `MseDetector` impl, `frame_mse` helper |\n| `crates/dorea-cli/src/lib.rs` | Add `pub mod change_detect;` |\n| `crates/dorea-cli/src/grade.rs` | Major refactor — see tasks below |\n\n---\n",
+  "source_version": "plans/2026-04-04-unified-keyframe-sampling-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836922685Z",
+  "valid_from": "2026-04-11T00:10:08.836922685Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-unified-keyframe-sampling-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 13,
+    "end_line": 41,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-873615c08637",
+  "content": "# OKLab Grade Pipeline Implementation Plan\n\n## File Map\n\n| File | Change |\n|------|--------|\n| `crates/dorea-color/src/lab.rs` | Replace CIELab internals with OKLab + rescale. Update tests. |\n| `crates/dorea-gpu/src/cuda/kernels/grade_pixel.cuh` | Replace CUDA CIELab with OKLab + rescale + `__powf`. |\n\nFiles that need NO changes (they call the functions above, signatures unchanged):\n- `crates/dorea-gpu/src/cpu.rs`\n- `crates/dorea-gpu/src/cuda/kernels/postprocess.cu`\n- `crates/dorea-gpu/src/cuda/kernels/build_combined_lut.cu`\n- `crates/dorea-gpu/src/cuda/kernels/combined_lut.cu`\n\n---\n",
+  "source_version": "plans/2026-04-09-oklab-grade-pipeline.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837056955Z",
+  "valid_from": "2026-04-11T00:10:08.837056955Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-09-oklab-grade-pipeline.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 15,
+    "end_line": 29,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-b7eba0402c60",
+  "content": "class PingRequest:\n    type: str = \"ping\"\n\n    def to_dict(self) -> dict:\n        return {\"type\": \"ping\"}\ndef to_dict(self) -> dict:\n        return {\"type\": \"ping\"}",
+  "source_version": "python/dorea_inference/protocol.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230003264Z",
+  "valid_from": "2026-04-11T00:04:13.230003264Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/protocol.py",
+    "language": "py",
+    "chunk_type": "class_definition",
+    "start_line": 21,
+    "end_line": 25,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

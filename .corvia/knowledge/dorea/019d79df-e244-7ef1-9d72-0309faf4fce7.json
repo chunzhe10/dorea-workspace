@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-0309faf4fce7",
+  "content": "# Pipeline DAG Refactor Design\n\n## Decision\n\nRefactor `grade.rs::run` (~527 lines of sequential logic) into four named\nstages under `crates/dorea-cli/src/pipeline/`, each with typed inputs/outputs.\n`grade.rs::run` becomes ~80 lines of orchestration.\n\n\n## Stages\n\n1. **KeyframeStage** — proxy decode → change detect → keyframe select\n2. **FeatureStage** — fused RAUNE+Maxine+depth inference → paged store\n3. **CalibrationStage** — zone compute → segment detect → LUT build → HSL → grader init\n4. **GradingStage** — full-res decode → depth interpolate → blend_t → grade → encode\n",
+  "source_version": "decisions/2026-04-08-pipeline-dag-refactor-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836167392Z",
+  "valid_from": "2026-04-11T00:10:08.836167392Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-08-pipeline-dag-refactor-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 6,
+    "end_line": 18,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

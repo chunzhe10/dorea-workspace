@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-33bed6d640c4",
+  "content": "### Task 2: Python MaxineEnhancer Class (issue #17)\n\n# Attempt nvvfx import (unless mock mode)\n_nvvfx = None\nif not _MOCK_MODE:\n    try:\n        import nvvfx as _nvvfx\n    except ImportError:\n        _nvvfx = None\n\n\nclass MaxineEnhancer:\n    \"\"\"AI enhancement via Maxine VideoSuperRes + ArtifactReduction.\n\n    If DOREA_MAXINE_MOCK=1 is set, all enhance() calls return the input unchanged.\n    \"\"\"\n\n    def __init__(self, upscale_factor: int = 2) -> None:\n        self.upscale_factor = upscale_factor\n        self._mock = _MOCK_MODE\n        self._passthrough_count = 0\n        self._total_count = 0\n        self._sr_effect = None\n        self._ar_effect = None\n\n        if self._mock:\n            log.info(\"Maxine mock mode enabled (DOREA_MAXINE_MOCK=1)\")\n            return\n\n        if _nvvfx is None:\n            raise RuntimeError(\n                \"Maxine SDK not found. Install from NGC (nvidia-maxine-vfx-sdk): \"\n                \"see docs/guides/maxine-setup.md, or unset --maxine\"\n            )\n\n        log.info(\"Maxine VideoSuperRes initialized (upscale_factor=%d)\", upscale_factor)\n\n        # Effects are initialized lazily on first enhance() call because we need",
+  "source_version": "plans/2026-04-04-maxine-enhancement-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836804749Z",
+  "valid_from": "2026-04-11T00:10:08.836804749Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-maxine-enhancement-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 199,
+    "end_line": 233,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

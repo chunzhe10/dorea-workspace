@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-bde6e784a9db",
+  "content": "t = 1080) -> np.ndarray:\n    \"\"\"Run RAUNE-Net on CPU, return numpy array.\"\"\"\n    if _raune_model is None:\n        raise RuntimeError(\"RAUNE-Net model not loaded — call load_raune_model() first\")\n    return _raune_model.infer(frame_rgb, max_size=max_size)\ndef run_raune_depth_batch_cpu(\n    imgs: \"list[np.ndarray]\",\n    raune_max_size: int = 1080,\n    depth_max_size: int = 518,\n    enable_maxine: bool = False,\n) -> \"list[tuple[np.ndarray, np.ndarray]]\":\n    \"\"\"Run fused RAUNE + Depth batch inference.\n\n    For each image: RAUNE enhancement → (optional Maxine upscale) → Depth estimation.\n    Returns list of (enhanced_u8, depth_f32) numpy array pairs.\n\n    Uses sub-batching (4 frames) to fit within 6 GB VRAM.\n    \"\"\"\n    import torch\n\n    if _raune_model is None:\n        raise RuntimeError(\"RAUNE-Net model not loaded — call load_raune_model() first\")\n    if _depth_model is None:\n        raise RuntimeError(\"Depth model not loaded — call load_depth_model() first\")\n\n    sub_batch_size = 4\n    results: list[tuple[np.ndarray, np.ndarray]] = []\n\n    for batch_start in range(0, len(imgs), sub_batch_size):\n        imgs_chunk = imgs[batch_start:batch_start + sub_batch_size]\n\n        # RAUNE → enhanced tensors stay on GPU\n        enhanced_batch, enh_w, enh_h = _raune_model.infer_batch_gpu(imgs_chunk, max_size=raune_max_size)\n\n        # Maxine upscale (optional) — insert between RAUNE and Depth",
+  "source_version": "python/dorea_inference/bridge.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230210660Z",
+  "valid_from": "2026-04-11T00:04:13.230210660Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/bridge.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 137,
+    "end_line": 166,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

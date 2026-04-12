@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-bf91517dc124",
+  "content": "def _make_rgb(h: int, w: int) -> np.ndarray:\n    return np.random.default_rng(42).integers(0, 256, (h, w, 3), dtype=np.uint8)",
+  "source_version": "python/tests/test_infer_batch.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230236081Z",
+  "valid_from": "2026-04-11T00:04:13.230236081Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/tests/test_infer_batch.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 7,
+    "end_line": 8,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

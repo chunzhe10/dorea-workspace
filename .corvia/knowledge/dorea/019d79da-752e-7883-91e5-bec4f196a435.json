@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-bec4f196a435",
+  "content": "                        enhanced_np[i] = maxine_enhancer._enhance_impl(\n                                    enhanced_np[i],\n                                    width=enh_w,\n                                    height=enh_h,\n                                )\n                            except Exception as e:\n                                raise RuntimeError(\n                                    f\"Maxine enhance failed on frame {batch_start + i}/{len(imgs)}: {e}\"\n                                ) from e\n\n                        # Convert back to float32 tensor on GPU (htod)\n                        enhanced_batch = (\n                            torch.from_numpy(enhanced_np.transpose(0, 3, 1, 2) / 255.0)\n                            .float()\n                            .cuda()\n                        )\n                        # Note: enh_w, enh_h remain unchanged (Maxine returns same resolution)\n\n                    # Depth on ORIGINAL frames — RAUNE enhancement distorts depth estimation\n                    depth_maps = depth_model.infer_batch(imgs_chunk, max_size=depth_max)\n                    all_depths.extend(depth_maps)\n\n                    # dtoh enhanced frames for output\n                    enhanced_np = (\n                        enhanced_batch.permute(0, 2, 3, 1).cpu().numpy() * 255\n                    ).astype(\"uint8\")  # (N, H, W, 3)\n                    all_enhanced_np.append(enhanced_np)",
+  "source_version": "python/dorea_inference/server.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230224454Z",
+  "valid_from": "2026-04-11T00:04:13.230224454Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/server.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 259,
+    "end_line": 280,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

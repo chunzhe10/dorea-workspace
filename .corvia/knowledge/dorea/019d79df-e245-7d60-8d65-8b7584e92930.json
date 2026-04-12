@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-8b7584e92930",
+  "content": "    # layer we fall back to eager mode, which still works (just slower).\n    # This is DIFFERENT from the fp16 try/except which we removed in PR #67:\n\n    # fp16 is required for correctness; torch.compile is optional for speed.\n    try:\n        import time as _compile_time_start_mod\n        t_compile_start = _compile_time_start_mod.time()\n        print(f\"[raune-filter] compiling RAUNE with torch.compile \"\n              f\"(cache: {os.environ.get('TORCHINDUCTOR_CACHE_DIR', 'default')})\",\n              file=sys.stderr, flush=True)\n        model = torch.compile(model, mode=\"reduce-overhead\", dynamic=False)\n\n\n        # Warmup forward pass to trigger compilation during startup so the first",
+  "source_version": "plans/2026-04-10-torch-compile-raune.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837113717Z",
+  "valid_from": "2026-04-11T00:10:08.837113717Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-10-torch-compile-raune.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 70,
+    "end_line": 79,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-2da3309f808c",
+  "content": "## Task 4: Device Types — BorrowedDeviceSlice and Helpers\n\nimpl<'a, T> BorrowedDeviceSlice<'a, T> {\n    /// Create a borrowed device slice from a raw device pointer.\n    ///\n    /// # Safety\n    /// - `ptr` must be a valid device pointer with at least `len` elements of type T.\n    /// - The pointer must remain valid for lifetime `'a`.\n    /// - The caller must ensure no concurrent writes to this memory.\n    pub unsafe fn from_raw(ptr: *mut T, len: usize) -> Self {\n        Self { ptr, len, _phantom: PhantomData }\n    }\n\n    /// Raw device pointer (for passing to cudarc kernel launches).\n    pub fn as_device_ptr(&self) -> *const T {\n        self.ptr as *const T\n    }\n\n    /// Number of elements.\n    pub fn len(&self) -> usize {\n        self.len\n    }\n\n    /// Whether the slice is empty.\n    pub fn is_empty(&self) -> bool {\n        self.len == 0\n    }\n}\n\n// BorrowedDeviceSlice is !Send + !Sync because raw pointers are not Send/Sync.\n// This is correct — device pointers must not cross thread boundaries.\n\n/// Per-frame VRAM cost at a given resolution.\n///\n/// Used by AdaptiveBatcher to compute max batch size from available VRAM.\n#[cfg(feature = \"cuda\")]",
+  "source_version": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836714980Z",
+  "valid_from": "2026-04-11T00:10:08.836714980Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 787,
+    "end_line": 820,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

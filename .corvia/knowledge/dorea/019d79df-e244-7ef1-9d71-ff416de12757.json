@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d71-ff416de12757",
+  "content": "### Python changes\n\n## Threading Model\n\n**The grading pipeline is single-threaded.** `Python::with_gil` acquires the GIL,\nwhich serializes all Python calls to one thread at a time. Since the grading hot\nloop interleaves PyO3 inference calls with CUDA kernel launches, the entire\n`grade_video` function must run on a single thread.\n\nThis is acceptable because:\n- The pipeline is already sequential (6GB VRAM, one model at a time)\n- GPU kernels release the GIL implicitly (the GPU does the work, the CPU thread\n  just dispatches and waits)\n- Parallelism comes from GPU occupancy (batching), not CPU threads\n\n**Do NOT call `grade_frame` from rayon or tokio.** GIL contention would serialize\nthe threads anyway, and holding a mutex while calling `with_gil` risks deadlock\nif Python callbacks re-enter Rust.\n\nThe `InferenceServer` (PyO3-based) struct should be `!Send + !Sync` to prevent\naccidental use from other threads. Use `PhantomData<*const ()>` to opt out.\n\n\n## Data Flow\n",
+  "source_version": "decisions/2026-04-03-gpu-space-ipc-adaptive-batching-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836121658Z",
+  "valid_from": "2026-04-11T00:10:08.836121658Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-03-gpu-space-ipc-adaptive-batching-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 180,
+    "end_line": 201,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

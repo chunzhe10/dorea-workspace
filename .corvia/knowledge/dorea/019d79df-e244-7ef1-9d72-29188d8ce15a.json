@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-29188d8ce15a",
+  "content": "## Task 1: Add rayon workspace dependency\n\n## Task 2: Parallelize `apply_depth_luts` (pixel-parallel)\n\n**Files:**\n- Modify: `repos/dorea/crates/dorea-lut/src/apply.rs`\n\nThe entire pixel loop (line 81+) is independent per pixel because `luts` is read-only.\nReplace with `par_iter_mut().zip(par_iter().zip(par_iter()))`.\n\n- [ ] **Step 1: Run the existing test to confirm baseline**\n\n```bash\ncd repos/dorea && cargo test -p dorea-lut test_apply_identity_lut -- --nocapture 2>&1\n```\n\nExpected: `test test_apply_identity_lut ... ok`\n\n- [ ] **Step 2: Add rayon import and rewrite the pixel loop**\n\nReplace the top of `apply.rs` and the pixel loop in `apply_depth_luts`:\n\n```rust\n//! Apply depth-stratified LUTs via trilinear interpolation + depth blending.\n//!\n//! Ported from `run_fixed_hsl_lut_poc.py::apply_depth_luts`.\n\nuse rayon::prelude::*;\n\nuse crate::types::{DepthLuts, LutGrid};\n```\n\nReplace the loop body of `apply_depth_luts` (from `let mut result = ...` through `result`):\n\n```rust\n    let n_zones = luts.n_zones();\n",
+  "source_version": "plans/2026-04-02-rayon-cpu-parallelization-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836643946Z",
+  "valid_from": "2026-04-11T00:10:08.836643946Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-rayon-cpu-parallelization-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 94,
+    "end_line": 128,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

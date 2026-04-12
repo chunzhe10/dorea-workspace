@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-e278b2ea2ab6",
+  "content": "o_str()),\n        });\n        self.send_line(&req.to_string())?;\n        let resp = self.recv_line()?;\n        let v: serde_json::Value = serde_json::from_str(&resp)\n            .map_err(|e| InferenceError::Ipc(format!(\"load_raune response parse: {e}\")))?;\n        if v[\"type\"].as_str() == Some(\"error\") {\n            return Err(InferenceError::ServerError(\n                v[\"message\"].as_str().unwrap_or(\"unknown error\").to_string(),\n            ));\n        }\n        if v[\"type\"].as_str() != Some(\"ok\") {\n            return Err(InferenceError::Ipc(format!(\n                \"unexpected response type for load_raune: {resp}\"\n            )));\n        }\n        Ok(())\n    }\n\n    /// Load Depth Anything into the running server (after it was started without it).\n    pub fn load_depth(\n        &mut self,\n        model_path: Option<&std::path::Path>,\n    ) -> Result<(), InferenceError> {\n        let req = serde_json::json!({\n            \"type\": \"load_depth\",\n            \"model_path\": model_path.and_then(|p| p.to_str()),\n        });\n        self.send_line(&req.to_string())?;\n        let resp = self.recv_line()?;\n        let v: serde_json::Value = serde_json::from_str(&resp)\n            .map_err(|e| InferenceError::Ipc(format!(\"load_depth response parse: {e}\")))?;\n        if v[\"type\"].as_str() == Some(\"error\") {\n            return Err(InferenceError::ServerError(\n                v[\"message\"].as_str().unwrap_or(\"unknown error\").to_string(),\n            ));\n        }\n        if v[\"type\"].as_str() != Some(\"ok\") {\n            return Err(InferenceError::Ipc(format!(\n                \"unexpected response type for load_depth: {resp}\"\n            )));\n        }\n        Ok(())\n    }\n",
+  "source_version": "crates/dorea-video/src/inference_subprocess.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229639809Z",
+  "valid_from": "2026-04-11T00:04:13.229639809Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference_subprocess.rs",
+    "language": "rs",
+    "chunk_type": "impl_item",
+    "start_line": 681,
+    "end_line": 719,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

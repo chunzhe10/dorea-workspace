@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-baf6bc7595f0",
+  "content": "or\n\n        self._sr_effect = _nvvfx.VideoSuperRes()\n        self._sr_effect.output_width = out_w\n        self._sr_effect.output_height = out_h\n        self._sr_effect.load()\n\n        _log(f\"Maxine VideoSuperRes loaded: {width}x{height}→{out_w}x{out_h}\")\ndef enhance(\n        self,\n        rgb_u8: np.ndarray,\n        width: int,\n        height: int,\n        artifact_reduce: bool = True,\n    ) -> np.ndarray:\n        \"\"\"Enhance a single RGB u8 frame via VideoSuperRes. Returns RGB u8 at original resolution.\n\n        Raises on failure — callers must not swallow errors.\n        \"\"\"\n        if self._mock:\n            self._total_count += 1\n            return rgb_u8\n\n        return self._enhance_impl(rgb_u8, width, height)",
+  "source_version": "python/dorea_inference/maxine_enhancer.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230042296Z",
+  "valid_from": "2026-04-11T00:04:13.230042296Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/maxine_enhancer.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 67,
+    "end_line": 82,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

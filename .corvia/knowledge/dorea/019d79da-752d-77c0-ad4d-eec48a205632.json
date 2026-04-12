@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-eec48a205632",
+  "content": " hardware trilinear interpolation of the baked pipeline introduces\n        // quantization error, compounded by __powf (~2 ULP) vs CPU powf.\n        assert!(max_diff <= 8,\n            \"Non-trivial LUT: GPU/CPU max diff {max_diff}/255 exceeds 8/255\");\n    }\nfn combined_lut_edge_case_pixels() {\n        let cal = make_calibration(5);\n        let params = crate::GradeParams::default();\n        let grader = match CudaGrader::new(&cal, &params) {\n            Ok(g) => g,\n            Err(e) => { eprintln!(\"SKIP: {e}\"); return; }\n        };\n\n        let pixels: Vec<u8> = vec![\n            0, 0, 0,\n            255, 255, 255,\n            128, 64, 32,\n            128, 64, 32,\n        ];\n        let depth = vec![0.0f32, 1.0f32, 0.0f32, 1.0f32];\n\n        let gpu_out = grader.grade_frame_cuda(&pixels, &depth, 4, 1)\n            .expect(\"grade_frame_cuda failed\");\n        let cpu_out = crate::cpu::grade_frame_cpu(&pixels, &depth, 4, 1, &cal, &params)\n            .expect(\"grade_frame_cpu failed\");\n\n        assert_eq!(gpu_out.len(), cpu_out.len());\n        let max_diff = gpu_out.iter().zip(cpu_out.iter())\n            .map(|(&g, &c)| (g as i32 - c as i32).unsigned_abs())\n            .max().unwrap_or(0);\n        // __powf introduces up to ~3/255 additional divergence vs CPU powf.\n        assert!(max_diff <= 6,\n            \"Edge-case pixels: GPU/CPU max diff {max_diff}/255 exceeds 6/255\");\n    }",
+  "source_version": "crates/dorea-gpu/src/cuda/mod.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229794226Z",
+  "valid_from": "2026-04-11T00:04:13.229794226Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cuda/mod.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 476,
+    "end_line": 504,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

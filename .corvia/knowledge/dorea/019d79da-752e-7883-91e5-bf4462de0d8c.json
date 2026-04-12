@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-bf4462de0d8c",
+  "content": "def test_encode_raw_rgb_roundtrip():\n    \"\"\"encode_raw_rgb output should be decodable by decode_raw_rgb.\"\"\"\n    img = np.array([[[10, 20, 30], [40, 50, 60]],\n                    [[70, 80, 90], [100, 110, 120]]], dtype=np.uint8)\n    h, w = img.shape[:2]\n    b64 = encode_raw_rgb(img)\n    recovered = decode_raw_rgb(b64, w, h)\n    np.testing.assert_array_equal(recovered, img)",
+  "source_version": "python/tests/test_maxine_protocol.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230231844Z",
+  "valid_from": "2026-04-11T00:04:13.230231844Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/tests/test_maxine_protocol.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 9,
+    "end_line": 16,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

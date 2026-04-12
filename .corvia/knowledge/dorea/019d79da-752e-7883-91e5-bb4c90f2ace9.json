@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-bb4c90f2ace9",
+  "content": "atch(self, frames_rgb: List[np.ndarray]) -> List[np.ndarray]:\n        \"\"\"Run segmentation on a batch of frames.\n\n        Returns list of (H, W) uint8 class masks in same order as input.\n        \"\"\"\n        return [self.infer(frame) for frame in frames_rgb]\ndef __init__(self, model_path: Optional[str] = None, device: str = \"cuda\", conf: float = 0.3):\n        from ultralytics import YOLO\n        self.device = device\n        self.conf = conf\n        # Load YOLOv11n-seg (nano variant for speed)\n        if model_path is None:\n            model_path = \"yolo11n-seg.pt\"  # auto-downloads from ultralytics hub\n        self.model = YOLO(model_path)\n        self.model.to(device)",
+  "source_version": "python/dorea_inference/yolo_seg.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230047276Z",
+  "valid_from": "2026-04-11T00:04:13.230047276Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/yolo_seg.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 17,
+    "end_line": 25,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

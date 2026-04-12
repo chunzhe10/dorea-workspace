@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d71-ffede8577ff9",
+  "content": "### Error types\n### CUDA error mapping\n\n### Python exception handling\n\nPyO3 converts Python exceptions to `PyErr`. Use `isinstance` checking, not\nstring matching on type names (PyTorch renamed the OOM class in 2.0):\n\n```rust\nfn is_torch_oom(py: Python<'_>, err: &PyErr) -> bool {\n    if let Ok(torch_cuda) = py.import(\"torch.cuda\") {\n        if let Ok(oom_type) = torch_cuda.getattr(\"OutOfMemoryError\") {\n            return err.is_instance(py, oom_type.downcast().unwrap_or_else(|_| return false));\n        }\n    }\n    false\n}\n```\n\nKey mapping:\n- `torch.cuda.OutOfMemoryError` -> `InferenceError::Oom` (recoverable,\n  call `torch.cuda.empty_cache()` before retry)\n- Any other exception -> `InferenceError::PythonError` (not recoverable for\n  this frame, fall to CPU)\n- Segfault in C extension -> process death (unavoidable with in-process\n  embedding; extremely rare with mature PyTorch)\n- Rust panic inside `with_gil` -> stack unwind; `BorrowedDeviceSlice` has no\n  Drop impl so the pointer leaks harmlessly; the `TensorGuard` may not be\n  released (Python GC will eventually collect it when the `Py<>` reference drops)\n\n\n### CUDA context health check after OOM\n\nAfter an OOM recovery (either cudarc or PyTorch), the CUDA context may be in an\ninconsistent state. Before retrying, verify context health:\n\n```rust\nfn verify_cuda_context(device: &CudaDevice) -> Result<(), GpuError> {\n    // Attempt a tiny allocation + free to confirm the context is healthy\n    let probe = device.alloc_zeros::<f32>(1)\n        .map_err(|e| GpuError::CudaFail(format!(\"context health check failed: {e}\")))?;\n    drop(probe);\n    Ok(())\n}\n```\n\nIf the health check fails after OOM, skip GPU single-frame retry (step 2 in the\nfallback chain) and go directly to CPU fallback. The CUDA context is likely\nwedged and won't recover without process restart.\n",
+  "source_version": "decisions/2026-04-03-gpu-space-ipc-adaptive-batching-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836129331Z",
+  "valid_from": "2026-04-11T00:10:08.836129331Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-03-gpu-space-ipc-adaptive-batching-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 465,
+    "end_line": 510,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

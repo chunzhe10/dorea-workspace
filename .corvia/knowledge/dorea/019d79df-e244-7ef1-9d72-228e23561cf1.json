@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-228e23561cf1",
+  "content": "## File Map\n\n### Task 1: Extract `finish_grade` helper in `cpu.rs`\n\n**Files:**\n- Modify: `crates/dorea-gpu/src/cpu.rs`\n\nThis extracts the last three steps of `grade_frame_cpu` (ambiance + warmth + blend + u8 out) into a reusable `pub(crate) fn finish_grade`. Both the CPU path and the refactored CUDA path will call it.\n\n- [ ] **Step 1: Write the failing test for `finish_grade`**\n\nAdd to the `#[cfg(test)]` block at the bottom of `cpu.rs`:\n\n```rust\n#[test]\nfn finish_grade_roundtrip() {\n    use crate::GradeParams;\n    use dorea_cal::Calibration;\n\n    let width = 2;\n    let height = 2;\n    let n = width * height;\n    // Grey pixels, f32\n    let mut rgb_f32: Vec<f32> = vec![0.5; n * 3];\n    let orig_pixels: Vec<u8> = vec![128u8; n * 3];\n    let depth: Vec<f32> = vec![0.5; n];\n    let params = GradeParams::default();\n    let cal = Calibration::default();\n\n    let out = finish_grade(&mut rgb_f32, &orig_pixels, &depth, width, height, &params, &cal);\n    assert_eq!(out.len(), n * 3);\n    for &v in &out {\n        assert!(v <= 255, \"out-of-range u8: {v}\");\n    }\n}\n```\n\n- [ ] **Step 2: Run test to verify it fails**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ncargo test -p dorea-gpu finish_grade_roundtrip 2>&1 | tail -20\n```\n\nExpected: `error[E0425]: cannot find function \\`finish_grade\\``\n\n- [ ] **Step 3: Add `finish_grade` to `cpu.rs`**\n",
+  "source_version": "plans/2026-04-02-depth-aware-ambiance-cpu-move.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836551420Z",
+  "valid_from": "2026-04-11T00:10:08.836551420Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-depth-aware-ambiance-cpu-move.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 23,
+    "end_line": 68,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

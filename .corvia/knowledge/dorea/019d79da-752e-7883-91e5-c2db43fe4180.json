@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c2db43fe4180",
+  "content": "frame_idx, '?')}\"\n        for fd in frames_data\n    )\n    draw.text((padding, padding + 32), gold_paths_text, fill=(180, 180, 180), font=font_small)\n\n    # Column labels (method name + timing)\n    y_col = header_h\n    for c, col_name in enumerate(columns):\n        x = 120 + c * (cell_w + padding) + padding\n        if col_name in (\"orig_proxy\", \"gold\"):\n            label = col_name\n        else:\n            t = method_timings.get(col_name, 0.0)\n            label = f\"{col_name}  {t:.1f}ms\"\n        draw.text((x, y_col), label, fill=(220, 220, 220), font=font)\n\n    # Grid body\n    y = header_h + col_label_h\n    for r, (fd, row) in enumerate(zip(frames_data, cell_images)):\n        # Row label (frame index)\n        draw.text((padding, y + cell_h // 2), f\"frame\\n{fd.frame_idx}\", fill=(220, 220, 220), font=font)\n        # Determine winner in this row (lowest final_delta_e)\n        best_method = None\n        best_val = float(\"inf\")\n        for name in method_order:\n            val = fd.method_metrics.get(name, {}).get(\"final_delta_e\", float(\"inf\"))\n            if val < best_val:\n                best_val = val\n                best_method = name\n        for c, (col_name, img) in enumerate(zip(columns, row)):\n            x = 120 + c * (cell_w + padding) + padding\n            canvas.paste(img, (x, y))\n            # Border\n            if col_name == best_method:\n                border_color = (0, 220, 0)  # green = winner\n            elif col_name == \"bilinear\":\n                border_color = (160, 160, 160)  # gray = baseline\n            else:\n                border_color = None\n            if border_color is not None:\n                draw.rectangle((x - 2, y - 2, x + img.width + 2, y + img.height + 2), outline=border_color, width=3)",
+  "source_version": "benchmarks/upscale_bench/visualize.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230278061Z",
+  "valid_from": "2026-04-11T00:04:13.230278061Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/visualize.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 137,
+    "end_line": 169,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

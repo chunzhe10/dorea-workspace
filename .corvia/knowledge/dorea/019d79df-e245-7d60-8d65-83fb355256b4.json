@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-83fb355256b4",
+  "content": "go test -p dorea-color`\nExpected: All pass (including new ilog tests).\n\n- [ ] **Step 4: Commit**\n\n```bash\ngit add crates/dorea-color/src/ilog.rs crates/dorea-color/src/lib.rs\ngit commit -m \"feat(color): add I-Log transfer function (S-Log3 proxy)\"\n```\n\n---\n\n### Task 3: LutBased Transfer Function (1D .cube)\n\n**Files:**\n- Create: `crates/dorea-color/src/lut_transfer.rs`\n- Modify: `crates/dorea-color/src/lib.rs`\n\n- [ ] **Step 1: Create lut_transfer.rs with full implementation and tests**\n\nCreate `crates/dorea-color/src/lut_transfer.rs`:\n\n```rust\n//! 1D LUT-based transfer function.\n//!\n//! Loads a 1D .cube file as a transfer function for cameras whose exact\n//! log curve is unknown. Drop in an empirical extraction to replace the\n//! S-Log3 proxy for I-Log.\n\nuse crate::TransferFunction;\nuse std::path::Path;\n\n/// A transfer function defined by a 1D lookup table.\npub struct LutBased {\n    forward: Vec<f32>,\n    inverse: Vec<f32>,\n    shoulder: f32,\n    name: String,\n}\n\nimpl LutBased {\n    /// Build from a forward LUT (encoded → linear).\n    /// The inverse is computed by table inversion.\n    pub fn new(forward: Vec<f32>, shoulder: f32, name: String) -> Self {\n        let inverse = invert_1d_lut(&forward);\n        Self { forward, inverse, shoulder, name }\n    }\n\n    /// Load from a 1D .cube file.\n    pub fn from_cube_file(path: &Path, shoulder: f32) -> Result<Self, String> {\n        let content = std::fs::read_to_string(path)\n            .map_err(|e| format!(\"cannot read {}: {e}\", path.display()))?;\n\n        let mut size: Option<usize> = None;\n        let mut values: Vec<f32> = Vec::new();\n        let mut title = path.file_stem()\n            .map(|s| s.to_string_lossy().to_string())\n            .unwrap_or_else(|| \"custom\".to_string());\n\n        for line in content.lines() {\n            let line = line.trim();\n            if line.is_empty() || line.starts_with('#') {\n                continue;\n            }\n            if let Some(rest) = line.strip_prefix(\"TITLE\") {\n                title = rest.trim().trim_matches('\"').to_string();",
+  "source_version": "plans/2026-04-08-10bit-pipeline-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837013486Z",
+  "valid_from": "2026-04-11T00:10:08.837013486Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-08-10bit-pipeline-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 303,
+    "end_line": 356,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

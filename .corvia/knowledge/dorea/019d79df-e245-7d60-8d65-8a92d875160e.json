@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-8a92d875160e",
+  "content": "            # Match input dtype to model dtype (fp16 if model.half() was called)\n\n- No type errors or NaN warnings\n\nIf gpu busy time is NOT lower, fp16 conversion didn't take effect — investigate before proceeding.\n\n- [ ] **Step 7: Visual quality check vs baseline**\n\n```bash\nffmpeg -v quiet -ss 1.5 -i \"/workspaces/dorea-workspace/working/oklab_fp16.mov\" \\\n  -frames:v 1 \"/workspaces/dorea-workspace/working/oklab_fp16_frame.png\" -y\n\nffmpeg -v error \\\n  -i /workspaces/dorea-workspace/working/oklab_fp16_frame.png \\\n  -i /workspaces/dorea-workspace/working/oklab_3thread_fixed_frame.png \\\n  -filter_complex \"blend=all_mode=difference,signalstats\" \\\n  -f null - 2>&1 | grep -E \"YAVG|YMAX\"\n```\n\nExpected: YAVG < 1.0, YMAX < 5.0 (fp16 introduces tiny rounding noise but should be visually identical).\n\nIf YMAX > 5, the fp16 numerical drift is larger than expected — investigate.\n\n- [ ] **Step 8: Commit fp16 changes**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ngit add python/dorea_inference/raune_filter.py\ngit commit -m \"$(cat <<'EOF'\nperf(direct): fp16 RAUNE inference\n\nConvert RAUNE model to half precision via model.half() after loading.\nForward pass runs in fp16; output cast back to fp32 for OKLab transfer\nwhich expects fp32 inputs.\n\nfp16 has 11 bits of mantissa precision, more than enough for 8/10-bit\noutput. Expected ~2× speedup on Ampere fp16 throughput.\n\nWrapped in try/except as a safety net — if any RAUNE layer doesn't\nsupport fp16, falls back to fp32 with a stderr warning.\n\nBoth single-process and pipe modes affected; both pick up the new dtype\nvia runtime check (next(model.parameters()).dtype).\n\nRefs #66\n\nCo-Authored-By: Claude Opus 4.6 (1M context) <noreply@anthropic.com>\nEOF\n)\"\n```\n\n---\n",
+  "source_version": "plans/2026-04-10-direct-mode-fp16-batch.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837104148Z",
+  "valid_from": "2026-04-11T00:10:08.837104148Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-10-direct-mode-fp16-batch.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 189,
+    "end_line": 239,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

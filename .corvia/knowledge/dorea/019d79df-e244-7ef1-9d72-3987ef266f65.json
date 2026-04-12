@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-3987ef266f65",
+  "content": "     &tex_desc,\n                std::ptr::null(),\n            )\n        }.map_err(|e| GpuError::CudaFail(format!(\"cuTexObjectCreate: {e}\")))?;\n        Ok(tex)\n    }\n}\n\nimpl Drop for TextureSet {\n    fn drop(&mut self) {\n        for &tex in &self.textures {\n            unsafe { let _ = sys::lib().cuTexObjectDestroy(tex); }\n        }\n        for &arr in &self.arrays {\n            unsafe { let _ = sys::lib().cuArrayDestroy(arr); }\n        }\n    }\n}\n```\n\n- [ ] **Step 3: Implement AdaptiveLut::new**\n\n```rust\nimpl AdaptiveLut {\n    /// Create a new AdaptiveLut with two pre-allocated texture sets.\n    ///\n    /// `base_luts_flat`: flattened base LUT data [base_n_zones][lut_size^3][3]\n    /// `base_boundaries`: base zone boundaries [base_n_zones + 1]\n    /// `hsl_data`: (h_offsets, s_ratios, v_offsets, weights) each Vec<f32> of length 6\n    /// `params`: (warmth, strength, contrast)\n    pub(crate) fn new(\n        device: &Arc<CudaDevice>,\n        base_luts_flat: &[f32],\n        base_boundaries: &[f32],\n        base_n_zones: usize,\n        hsl_data: (&[f32], &[f32], &[f32], &[f32]),\n        params: (f32, f32, f32),\n        lut_size: usize,\n        runtime_n_zones: usize,\n    ) -> Result<Self, GpuError> {\n        let grid_size = COMBINED_LUT_GRID;\n\n        // Upload base LUT data to device\n        let d_base_luts = device.htod_sync_copy(base_luts_flat).map_err(map_cudarc_error)?;\n        let d_base_boundaries = device.htod_sync_copy(base_boundaries).map_err(map_cudarc_error)?;\n\n        // Upload HSL data\n        let (ho, sr, vo, wt) = hsl_data;\n        let d_h_offsets = device.htod_sync_copy(ho).map_err(map_cudarc_error)?;\n        let d_s_ratios  = device.htod_sync_copy(sr).map_err(map_cudarc_error)?;\n        let d_v_offsets = device.htod_sync_copy(vo).map_err(map_cudarc_error)?;\n        let d_weights   = device.htod_sync_copy(wt).map_err(map_cudarc_error)?;\n\n        // Allocate both texture sets\n        let set_a = TextureSet::allocate(runtime_n_zones, grid_size)?;\n        let set_b = TextureSet::allocate(runtime_n_zones, grid_size)?;\n\n        Ok(Self {",
+  "source_version": "plans/2026-04-04-per-keyframe-adaptive-depth-zones-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836896497Z",
+  "valid_from": "2026-04-11T00:10:08.836896497Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-per-keyframe-adaptive-depth-zones-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 780,
+    "end_line": 826,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

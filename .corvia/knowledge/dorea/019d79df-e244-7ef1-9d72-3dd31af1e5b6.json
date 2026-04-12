@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-3dd31af1e5b6",
+  "content": ".\"\n```\nExpected: all 3 keyframe tests pass.\n\n- [ ] **Step 5: Commit**\n\n```bash\ngit add crates/dorea-cli/src/pipeline/keyframe.rs\ngit commit -m \"feat(pipeline): KeyframeStage — ProxyDecodeNode (streaming) + ChangeDetectNode + KeyframeSelectNode\"\n```\n\n---\n\n### Task 3: Feature stage (`pipeline/feature.rs`)\n\n**Files:**\n- Modify: `crates/dorea-cli/src/pipeline/feature.rs`\n\nMoves `PagedCalibrationStore` and the fused inference batch from `grade.rs`. Nodes:\n- `FusedInferenceNode`: fully implemented — owns `InferenceServer`, builds each batch inline without pre-collecting all keyframe pixels, calls `run_raune_depth_batch` directly\n- `EnhancedDownscaleNode`: downscales Maxine-upscaled enhanced to proxy dims\n\n`DepthCacheNode` is not a node — the stage manages the `keyframe_depths` HashMap directly. No node abstraction is needed for a single HashMap insert.\n\n`FeatureStageInput` carries the model paths so `load_raune` and `load_depth` use the configured weights, not default fallbacks.\n\n- [ ] **Step 1: Write failing tests**\n\n```rust\n#[cfg(test)]\nmod tests {\n    use super::*;\n    use crate::pipeline::Node;\n\n    #[test]\n    fn enhanced_downscale_node_noop_when_same_size() {\n        let mut node = EnhancedDownscaleNode { proxy_w: 4, proxy_h: 4 };\n        let pixels = vec![100u8; 4 * 4 * 3];\n        let out = node.process(EnhancedFrame {\n            pixels: pixels.clone(),\n            width: 4,\n            height: 4,\n        }).unwrap();\n        assert_eq!(out.pixels, pixels);\n        assert_eq!(out.width, 4);\n        assert_eq!(out.height, 4);\n    }\n\n    #[test]\n    fn enhanced_downscale_node_downscales_to_proxy() {\n        let mut node = EnhancedDownscaleNode { proxy_w: 2, proxy_h: 2 };\n        let pixels = vec![200u8; 4 * 4 * 3]; // 4x4 input\n        let out = node.process(EnhancedFrame {\n            pixels,\n            width: 4,\n            height: 4,",
+  "source_version": "plans/2026-04-05-pipeline-dag-refactor.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836966301Z",
+  "valid_from": "2026-04-11T00:10:08.836966301Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-05-pipeline-dag-refactor.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 510,
+    "end_line": 552,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

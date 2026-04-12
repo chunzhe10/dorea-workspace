@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-bd36f631f5d1",
+  "content": "def __init__(self, tensor: \"torch.Tensor\") -> None:\n        self.tensor = tensor\n        self.data_ptr = tensor.data_ptr()\n        self.numel = tensor.numel()\n        self.shape = tuple(tensor.shape)\n        self.dtype = str(tensor.dtype)\ndef release(self) -> None:\n        \"\"\"Explicitly release the tensor. Called by Rust when done.\"\"\"\n        self.tensor = None\n        self.data_ptr = 0\n        self.numel = 0",
+  "source_version": "python/dorea_inference/bridge.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230200284Z",
+  "valid_from": "2026-04-11T00:04:13.230200284Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/bridge.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 29,
+    "end_line": 33,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

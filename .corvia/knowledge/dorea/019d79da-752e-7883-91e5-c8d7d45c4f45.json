@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c8d7d45c4f45",
+  "content": "    env_info = _log_environment(args, weights_path, clip_path)\n    print(\"=== upscale_bench ===\")\n    for k, v in env_info.items():\n        print(f\" {k}: {v}\")\n\n    # Select methods\n    if args.methods == \"all\":\n        method_names = list(REGISTRY.keys())\n    else:\n        method_names = [m.strip() for m in args.methods.split(\",\")]\n        unknown = [m for m in method_names if m not in REGISTRY]\n        if unknown:\n            raise ValueError(f\"unknown methods: {unknown}. Available: {list(REGISTRY.keys())}\")\n\n    # sr_maxine hard-required if it's in the list\n    if \"sr_maxine\" in method_names:\n        try:\n            import nvvfx  # noqa: F401\n        except ImportError as e:\n            raise RuntimeError(\n                \"sr_maxine requested but nvvfx is not installed. \"\n                \"Run scripts/setup_bench.sh or pip install nvidia-vfx\"\n            ) from e\n\n    # Select frames\n    if args.frames == \"auto\":\n        frame_indices = auto_select(clip_path, every_n=30)\n    else:\n        frame_indices = [int(s) for s in args.frames.split(\",\")]\n    print(f\" frames: {frame_indices}\")\n\n    # Load model once\n    print(\" loading RAUNE model...\")\n    raune_model = _load_raune_model(weights_path, models_dir)\n    set_injected_raune_model(raune_model)\n\n    # Collect results\n    all_results: list[MethodResult] = []\n    frames_data: list[FrameCellData] = []\n    gold_paths: dict[int, str] = {}\n    oom_events: list[str] = []",
+  "source_version": "benchmarks/upscale_bench/run.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230359147Z",
+  "valid_from": "2026-04-11T00:04:13.230359147Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/run.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 155,
+    "end_line": 187,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

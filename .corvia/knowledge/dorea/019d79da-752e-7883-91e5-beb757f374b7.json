@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-beb757f374b7",
+  "content": "batch_size, len(imgs))\n                    imgs_chunk = imgs[batch_start:batch_end]\n\n                    # RAUNE → enhanced tensors stay on GPU\n                    enhanced_batch, enh_w, enh_h = raune_model.infer_batch_gpu(imgs_chunk, max_size=raune_max)\n\n                    # Maxine upscale (optional) — insert between RAUNE and Depth\n                    enable_maxine = req.get(\"enable_maxine\", False)\n                    if enable_maxine:\n                        if maxine_enhancer is None:\n                            raise RuntimeError(\n                                \"Maxine upscaling requested but enhancer failed to load — \"\n                                \"check NVIDIA CUDA, VFX SDK, and dependencies\"\n                            )\n                        # Convert batch to uint8 RGB for Maxine (dtoh)\n                        enhanced_np = (\n                            enhanced_batch.permute(0, 2, 3, 1).cpu().numpy() * 255\n                        ).astype(\"uint8\")  # (N, H, W, 3)\n\n                        # Frame-by-frame Maxine enhance (single-frame API) — propagate errors\n                        for i in range(enhanced_np.shape[0]):\n                            # Call _enhance_impl directly to avoid silent error swallowing\n                            try:\n                                enhanced_np[i] = maxine_enhancer._enhance_impl(\n                                    enhanced_np[i],\n                                    width=enh_w,\n                                    height=enh_h,\n                                )",
+  "source_version": "python/dorea_inference/server.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230223890Z",
+  "valid_from": "2026-04-11T00:04:13.230223890Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/server.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 236,
+    "end_line": 258,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

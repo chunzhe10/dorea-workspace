@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-fbdeb4807b4b",
+  "content": " {\n                assert!(\n                    (orig[c] - out[c]).abs() < 1e-4,\n                    \"pixel {i} channel {c}: expected {:.4} got {:.4}\",\n                    orig[c],\n                    out[c]\n                );\n            }\n        }\n    }\nfn test_adaptive_zone_boundaries_empty_input() {\n        let bounds = adaptive_zone_boundaries(&[], N_DEPTH_ZONES);\n        assert_eq!(bounds.len(), N_DEPTH_ZONES + 1);\n        // Should be uniform linspace 0, 0.2, 0.4, 0.6, 0.8, 1.0\n        for (i, &b) in bounds.iter().enumerate() {\n            let expected = i as f32 / N_DEPTH_ZONES as f32;\n            assert!(\n                (b - expected).abs() < 1e-6,\n                \"bounds[{i}] expected {expected}, got {b}\"\n            );\n        }\n    }",
+  "source_version": "crates/dorea-lut/src/apply.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229969836Z",
+  "valid_from": "2026-04-11T00:04:13.229969836Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-lut/src/apply.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 185,
+    "end_line": 196,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

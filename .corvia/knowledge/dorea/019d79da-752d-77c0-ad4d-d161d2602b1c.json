@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d161d2602b1c",
+  "content": "a: Vec<f32> = vec![0.1, 0.2];\n        let b: Vec<f32> = vec![0.9, 0.8];\n        assert_eq!(lerp_depth(&a, &b, 2.0), vec![0.9, 0.8]);\n        assert_eq!(lerp_depth(&a, &b, -1.0), vec![0.1, 0.2]);\n    }\n\n    #[test]\n    fn build_inference_config_defaults() {\n        let python = PathBuf::from(\"/opt/dorea-venv/bin/python\");\n        let cfg = build_inference_config(&python, None, None, None, None, 2);\n        assert!(!cfg.maxine, \"Maxine should be disabled — SDK not available in devcontainer\");\n        assert!(!cfg.skip_raune, \"RAUNE should not be skipped in config\");\n        assert!(!cfg.skip_depth, \"depth should not be skipped in config\");\n    }\n\n    #[test]\n    fn default_encoding_for_8bit_h264() {\n        use dorea_video::ffmpeg::{InputEncoding, OutputCodec, VideoInfo};\n        let info = VideoInfo {\n            width: 1920, height: 1080, fps: 30.0, duration_secs: 10.0,\n            frame_count: 300, has_audio: true,\n            codec_name: \"h264\".to_string(),\n            pix_fmt: \"yuv420p\".to_string(),\n            bits_per_component: 8,\n        };\n        let enc = InputEncoding::auto_detect(&info, std::path::Path::new(\"clip.mp4\"));\n        assert_eq!(enc, InputEncoding::Srgb);\n        assert!(!enc.is_10bit());\n        let codec = if enc.is_10bit() { OutputCodec::ProRes } else { OutputCodec::H264 };\n        assert_eq!(codec, OutputCodec::H264);\n    }\n\n    #[test]\n    fn default_encoding_for_10bit_hevc() {\n        use dorea_video::ffmpeg::{InputEncoding, OutputCodec, VideoInfo};\n        let info = VideoInfo {\n            width: 3840, height: 2160, fps: 29.97, duration_secs: 3.0,\n            frame_count: 90, has_audio: true,\n            codec_name: \"hevc\".to_string(),\n            pix_fmt: \"yuv420p10le\".to_string(),\n            bits_per_component: 10,\n        };\n        let enc = InputEncoding::auto_detect(&info, std::path::Path::new(\"clip.mp4\"));\n        assert_eq!(enc, InputEncoding::DLogM);\n        assert!(enc.is_10bit());\n        let codec = if enc.is_10bit() { OutputCodec::ProRes } else { OutputCodec::H264 };\n        assert_eq!(codec, OutputCodec::ProRes);\n    }\n}",
+  "source_version": "crates/dorea-cli/src/grade.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229432293Z",
+  "valid_from": "2026-04-11T00:04:13.229432293Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/grade.rs",
+    "language": "rs",
+    "chunk_type": "mod_item",
+    "start_line": 448,
+    "end_line": 488,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

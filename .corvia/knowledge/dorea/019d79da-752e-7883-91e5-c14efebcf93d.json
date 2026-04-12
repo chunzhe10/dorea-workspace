@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c14efebcf93d",
+  "content": "nce_result (passthrough mode).\"\"\"\n    req = _make_enhance_req(4, 6)\n    responses = _run_server_with_reqs([req])  # no --maxine\n    assert responses[0][\"type\"] == \"enhance_result\"\n    assert responses[0][\"width\"] == 4\n    assert responses[0][\"height\"] == 6\ndef test_enhance_handler_passthrough_preserves_dimensions():\n    \"\"\"Mock mode returns same dimensions as input.\"\"\"\n    req = _make_enhance_req(16, 9)\n    responses = _run_server_with_reqs([req], extra_argv=[\"--maxine\"])\n    r = responses[0]\n    assert r[\"width\"] == 16\n    assert r[\"height\"] == 9",
+  "source_version": "python/tests/test_maxine_server.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230258366Z",
+  "valid_from": "2026-04-11T00:04:13.230258366Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/tests/test_maxine_server.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 77,
+    "end_line": 83,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

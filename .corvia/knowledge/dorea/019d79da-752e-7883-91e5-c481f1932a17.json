@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c481f1932a17",
+  "content": "he area-average of orig_full's OKLab-L\n    # downsampled to proxy dimensions — NOT the nearest corner of the full-res guide.\n    g00 = tl.load(guide_proxy_ptr + py0c * pw + px0c, mask=mask)\n    g01 = tl.load(guide_proxy_ptr + py0c * pw + px1c, mask=mask)\n    g10 = tl.load(guide_proxy_ptr + py1c * pw + px0c, mask=mask)\n    g11 = tl.load(guide_proxy_ptr + py1c * pw + px1c, mask=mask)\n\n    # Spatial distances in proxy-pixel units\n    dy0 = py_f - py0c.to(tl.float32)\n    dy1 = py_f - py1c.to(tl.float32)\n    dx0 = px_f - px0c.to(tl.float32)\n    dx1 = px_f - px1c.to(tl.float32)\n\n    # L channel weights (sigma_spatial_L)\n    s2_L = sigma_spatial_L * sigma_spatial_L\n    spatial00_L = tl.exp(-(dy0 * dy0 + dx0 * dx0) / (2.0 * s2_L))\n    spatial01_L = tl.exp(-(dy0 * dy0 + dx1 * dx1) / (2.0 * s2_L))\n    spatial10_L = tl.exp(-(dy1 * dy1 + dx0 * dx0) / (2.0 * s2_L))\n    spatial11_L = tl.exp(-(dy1 * dy1 + dx1 * dx1) / (2.0 * s2_L))\n\n    dg00 = g00 - g_out\n    dg01 = g01 - g_out\n    dg10 = g10 - g_out\n    dg11 = g11 - g_out\n\n    # Compute raw luma weights (no per-weight floor).\n    # When the sum of all 4 luma weights collapses below 1e-4 the guide is\n    # useless at this pixel (all neighbors lie on the wrong side of a sharp\n    # edge).  In that case fall back to pure spatial bilinear (luma = 1 for\n    # all 4), which is mathematically clean and avoids content-dependent\n    # edge bleed that the old 1e-3 per-weight floor introduced.\n    luma00 = tl.exp(-(dg00 * dg00) * sigma_luma_sq_inv * 0.5)\n    luma01 = tl.exp(-(dg01 * dg01) * sigma_luma_sq_inv * 0.5)\n    luma10 = tl.exp(-(dg10 * dg10) * sigma_luma_sq_inv * 0.5)\n    luma11 = tl.exp(-(dg11 * dg11) * sigma_luma_sq_inv * 0.5)\n\n    luma_sum = luma00 + luma01 + luma10 + luma11",
+  "source_version": "benchmarks/upscale_bench/methods.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230303952Z",
+  "valid_from": "2026-04-11T00:04:13.230303952Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/methods.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 266,
+    "end_line": 298,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

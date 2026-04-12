@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c2657e1b4508",
+  "content": "def _tensor_to_pil(t: torch.Tensor) -> Image.Image:\n    \"\"\"(1, 3, H, W) or (3, H, W) fp32 [0,1] → PIL RGB Image.\"\"\"\n    if t.dim() == 4:\n        t = t[0]\n    arr = (t.permute(1, 2, 0).clamp(0, 1).cpu().numpy() * 255).astype(np.uint8)\n    return Image.fromarray(arr)",
+  "source_version": "benchmarks/upscale_bench/visualize.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230272781Z",
+  "valid_from": "2026-04-11T00:04:13.230272781Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/visualize.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 16,
+    "end_line": 21,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

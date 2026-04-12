@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-3a4b3c727064",
+  "content": ": Vec<f32> = hsl.0.iter().map(|q| q.weight).collect();\n\n        let mut grader = match AdaptiveGrader::new(\n            &base_luts_flat, base_boundaries, 32,\n            (&h_offsets, &s_ratios, &v_offsets, &weights),\n            &params, 17, 8,\n        ) {\n            Ok(g) => g,\n            Err(e) => { eprintln!(\"SKIP: {e}\"); return; }\n        };\n\n        // Build runtime zones (uniform 8 zones)\n        let runtime_bounds: Vec<f32> = (0..=8).map(|i| i as f32 / 8.0).collect();\n        grader.prepare_keyframe(&runtime_bounds).expect(\"prepare_keyframe failed\");\n        grader.swap_textures();\n        // Build second set for blending\n        grader.prepare_keyframe(&runtime_bounds).expect(\"prepare_keyframe 2 failed\");\n\n        let (pixels, depth) = make_frame(4, 4);\n        let out = grader.grade_frame_blended(&pixels, &depth, 4, 4, 0.0)\n            .expect(\"grade_frame_blended failed\");\n        assert_eq!(out.len(), 4 * 4 * 3);\n\n        // Test blending (t=0.5)\n        let out2 = grader.grade_frame_blended(&pixels, &depth, 4, 4, 0.5)\n            .expect(\"grade_frame_blended t=0.5 failed\");\n        assert_eq!(out2.len(), 4 * 4 * 3);\n    }\n```\n\nNote: This test requires `DepthLuts` to expose `flat_data()` and `Calibration` to expose `hsl_corrections()`. If these accessors don't exist, add them:\n- In `dorea-lut/src/types.rs`: `pub fn flat_data(&self) -> Vec<f32>` and `pub fn zone_boundaries(&self) -> &[f32]`\n- In `dorea-cal`: `pub fn hsl_corrections(&self) -> &HslCorrections` and `pub fn depth_luts(&self) -> &DepthLuts`\n\n- [ ] **Step 6: Run the test**\n\nRun: `cd /workspaces/dorea-workspace/repos/dorea && cargo test -p dorea-gpu adaptive_grader -- --nocapture`\nExpected: PASS (or SKIP if no GPU)\n\n- [ ] **Step 7: Commit**\n\n```bash\ngit add crates/dorea-gpu/src/cuda/kernels/combined_lut.cu \\\n       crates/dorea-gpu/src/cuda/mod.rs \\\n       crates/dorea-gpu/src/lib.rs\ngit commit -m \"feat(cuda): dual-texture grading kernel + AdaptiveGrader\n\ncombined_lut_kernel now samples two texture sets with blend factor t.\nAdaptiveGrader wraps AdaptiveLut with prepare_keyframe(), swap_textures(),\nload_segment(), and grade_frame_blended() API.\"\n```\n\n---\n",
+  "source_version": "plans/2026-04-04-per-keyframe-adaptive-depth-zones-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836910019Z",
+  "valid_from": "2026-04-11T00:10:08.836910019Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-per-keyframe-adaptive-depth-zones-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1339,
+    "end_line": 1385,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

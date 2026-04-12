@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d448566f3af8",
+  "content": "\");\n        let off = self.pixtar_offsets[i];\n        let n = self.widths[i] * self.heights[i] * 3;\n        (&mmap[off..off + n], &mmap[off + n..off + n * 2])\n    }\n\n    pub fn dims(&self, i: usize) -> (usize, usize) { (self.widths[i], self.heights[i]) }\n}\npub fn new() -> Result<Self> {\n        use std::io::BufWriter;\n        let dir = std::env::temp_dir()\n            .join(format!(\"dorea_cal_{}\", std::process::id()));\n        std::fs::create_dir_all(&dir)\n            .with_context(|| format!(\"failed to create calibration temp dir {:?}\", dir))?;\n        let dw = BufWriter::new(\n            std::fs::File::create(dir.join(\"depths.bin\")).context(\"create depths.bin\")?\n        );\n        let pw = BufWriter::new(\n            std::fs::File::create(dir.join(\"pixtar.bin\")).context(\"create pixtar.bin\")?\n        );\n        Ok(Self {\n            dir,\n            widths: Vec::new(),\n            heights: Vec::new(),\n            depth_offsets: Vec::new(),\n            pixtar_offsets: Vec::new(),\n            depth_writer: Some(dw),\n            pixtar_writer: Some(pw),\n            depth_mmap: None,\n            pixtar_mmap: None,\n        })\n    }",
+  "source_version": "crates/dorea-cli/src/pipeline/feature.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229469117Z",
+  "valid_from": "2026-04-11T00:04:13.229469117Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/pipeline/feature.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 28,
+    "end_line": 51,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

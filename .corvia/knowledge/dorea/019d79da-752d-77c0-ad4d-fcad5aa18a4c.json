@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-fcad5aa18a4c",
+  "content": "n_zones {\n            let d_lo = self.zone_boundaries[z];\n            let d_hi = self.zone_boundaries[z + 1];\n            let is_last = z == self.n_zones - 1;\n            let wsum = &mut self.lut_wsums[z];\n            let wcount = &mut self.lut_wcounts[z];\n\n            for i in 0..n_px {\n                let d = depth[i];\n                let in_zone = if is_last { d >= d_lo } else { d >= d_lo && d < d_hi };\n                if !in_zone {\n                    continue;\n                }\n                let orig = original[i];\n                let tgt = target[i];\n                let w = importance[i] as f64;\n\n                let ri = ((orig[0] * (LUT_SIZE as f32 - 1.0)).round() as usize).min(LUT_SIZE - 1);\n                let gi = ((orig[1] * (LUT_SIZE as f32 - 1.0)).round() as usize).min(LUT_SIZE - 1);\n                let bi = ((orig[2] * (LUT_SIZE as f32 - 1.0)).round() as usize).min(LUT_SIZE - 1);\n\n                let cell = ri * LUT_SIZE * LUT_SIZE + gi * LUT_SIZE + bi;\n                wsum[cell * 3]     += tgt[0] as f64 * w;\n                wsum[cell * 3 + 1] += tgt[1] as f64 * w;\n                wsum[cell * 3 + 2] += tgt[2] as f64 * w;\n                wcount[cell] += w;\n            }\n        }\n    }\n\n    /// Normalise, apply NN fill, and return the completed `DepthLuts`.\n    pub fn finish(self) -> DepthLuts {\n        let mut luts = Vec::with_capacity(self.n_zones);\n",
+  "source_version": "crates/dorea-lut/src/build.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229979351Z",
+  "valid_from": "2026-04-11T00:04:13.229979351Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-lut/src/build.rs",
+    "language": "rs",
+    "chunk_type": "impl_item",
+    "start_line": 271,
+    "end_line": 298,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

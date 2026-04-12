@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-f870595bc2e6",
+  "content": "D_SIZE={sz} but found {} values\", values.len()\n                ));\n            }\n        }\n        if values.len() < 2 {\n            return Err(\"LUT must have at least 2 entries\".to_string());\n        }\n\n        Ok(Self::new(values, shoulder, title))\n    }\nimpl TransferFunction for LutBased {\n    fn to_linear(&self, encoded: f32) -> f32 {\n        lerp_lut(&self.forward, encoded)\n    }\n\n    fn from_linear(&self, linear: f32) -> f32 {\n        lerp_lut(&self.inverse, linear)\n    }\n\n    fn shoulder(&self) -> f32 {\n        self.shoulder\n    }\n\n    fn name(&self) -> &str {\n        &self.name\n    }\n}",
+  "source_version": "crates/dorea-color/src/lut_transfer.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229927813Z",
+  "valid_from": "2026-04-11T00:04:13.229927813Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-color/src/lut_transfer.rs",
+    "language": "rs",
+    "chunk_type": "impl_item",
+    "start_line": 75,
+    "end_line": 91,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

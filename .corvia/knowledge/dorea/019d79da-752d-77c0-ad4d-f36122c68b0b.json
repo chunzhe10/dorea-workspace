@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-f36122c68b0b",
+  "content": "fn default() -> Self {\n        Self {\n            radius: 4,\n            epsilon_water: 0.01,\n            epsilon_diver: 0.001,\n        }\n    }\npub fn guided_filter_cuda(\n    device: &Arc<CudaDevice>,\n    depth: &[f32],\n    class_mask: &[u8],\n    width: usize,\n    height: usize,\n    params: &GuidedFilterParams,\n) -> Result<Vec<f32>, GpuError> {\n    let n = width * height;\n    if depth.len() != n {\n        return Err(GpuError::InvalidInput(format!(\n            \"depth len {} != width*height {}\", depth.len(), n\n        )));\n    }\n    if class_mask.len() != n {\n        return Err(GpuError::InvalidInput(format!(\n            \"class_mask len {} != width*height {}\", class_mask.len(), n\n        )));\n    }\n\n    // Load PTX (idempotent — cudarc caches loaded modules)\n    device.load_ptx(\n        Ptx::from_src(GUIDED_FILTER_PTX),\n        \"guided_filter\",\n        &[\"guided_filter_kernel\"],\n    ).map_err(|e| GpuError::ModuleLoad(format!(\"load guided_filter PTX: {e}\")))?;\n\n    // Upload inputs\n    let d_depth = device.htod_sync_copy(depth).map_err(map_cudarc_error)?;\n    let d_guide = device.htod_sync_copy(class_mask).map_err(map_cudarc_error)?;\n    let d_out: CudaSlice<f32> = device.alloc_zeros(n).map_err(map_cudarc_error)?;\n\n    // Launch kernel (2D grid)\n    let func = device.get_func(\"guided_filter\", \"guided_filter_kernel\")\n        .ok_or_else(|| GpuError::ModuleLoad(\"guided_filter_kernel not found\".into()))?;\n    let block_dim = (16u32, 16u32, 1u32);\n    let grid_dim = (\n        (width as u32 + block_dim.0 - 1) / block_dim.0,\n        (height as u32 + block_dim.1 - 1) / block_dim.1,\n        1u32,\n    );\n    let cfg = LaunchConfig {\n        grid_dim,\n        block_dim,\n        shared_mem_bytes: 0,\n    };\n\n    unsafe {\n        func.launch(cfg, (\n            &d_depth,\n            &d_guide,\n            &d_out,\n            width as i32,\n            height as i32,\n            params.radius,\n            params.epsilon_water,\n            params.epsilon_diver,\n        ))\n    }.map_err(map_cudarc_error)?;\n\n    // Download result\n    let result = device.dtoh_sync_copy(&d_out).map_err(map_cudarc_error)?;\n    Ok(result)\n}",
+  "source_version": "crates/dorea-gpu/src/cuda/guided_filter.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229856247Z",
+  "valid_from": "2026-04-11T00:04:13.229856247Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cuda/guided_filter.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 50,
+    "end_line": 113,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-cda44de15107",
+  "content": "| tail -10\n```\n\nExpected: both grade_pixel_cpu tests PASS.\n\n- [ ] **Step 6: Commit**\n\n```bash\ncd repos/dorea && git add crates/dorea-gpu/src/cpu.rs\ngit commit -m \"feat: add grade_pixel_cpu — single-pixel CPU reference for combined LUT (Task 3)\"\n```\n\n---\n\n### Task 4: Write grade_pixel.cuh\n\n**Files:**\n- Create: `crates/dorea-gpu/src/cuda/kernels/grade_pixel.cuh`\n\nThis header is `#include`d by both `build_combined_lut.cu` and (if needed) `combined_lut.cu`. It is not compiled standalone and has no PTX. No build.rs change needed.\n\n- [ ] **Step 1: Create grade_pixel.cuh**\n\n```c\n/**\n * grade_pixel.cuh — __device__ single-pixel grading pipeline.\n *\n * Included by build_combined_lut.cu.\n * Mirrors grade_pixel_cpu() in cpu.rs exactly.\n *\n * Pipeline order:\n *   1. Depth-stratified LUT (soft zone blend + manual trilinear)\n *   2. HSL 6-qualifier corrections\n *   3. Fused ambiance + warmth (LAB colorspace)\n *   4. Strength blend with original input\n */\n\n#pragma once\n#include <cuda_runtime.h>\n#include <math.h>\n\n// -------------------------------------------------------------------------\n// CIELAB D65 colorspace (matches dorea-color/src/lab.rs exactly)\n// -------------------------------------------------------------------------\n\n#define XN 0.95047f\n#define YN 1.00000f\n#define ZN 1.08883f\n#define DELTA_CUBED 0.008856f   // (6/29)^3\n#define DELTA_SQ_3  0.128419f   // 3*(6/29)^2\n\n__device__ __forceinline__ float srgb_to_linear(float v) {\n    return (v <= 0.04045f) ? (v / 12.92f) : powf((v + 0.055f) / 1.055f, 2.4f);\n}\n\n__device__ __forceinline__ float linear_to_srgb(float v) {\n    return (v <= 0.0031308f) ? (v * 12.92f) : (1.055f * powf(v, 1.0f / 2.4f) - 0.055f);\n}\n",
+  "source_version": "docs/plans/2026-04-03-combined-lut-cuda-texture-plan.md",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230447096Z",
+  "valid_from": "2026-04-11T00:04:13.230447096Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "docs/plans/2026-04-03-combined-lut-cuda-texture-plan.md",
+    "language": "markdown",
+    "chunk_type": "heading_section",
+    "start_line": 556,
+    "end_line": 600,
+    "content_role": "plan",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

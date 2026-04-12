@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-8eb0e34904ab",
+  "content": "    # First switch to ollama, then back to corvia\n\n    \"ollama\": {\n        \"provider\": \"ollama\",\n        \"url\": \"http://127.0.0.1:11434\",\n    },\n    \"corvia-inference\": {\n        \"provider\": \"corvia\",\n        \"url\": \"http://127.0.0.1:8030\",\n    },\n    \"vllm\": {\n        \"provider\": \"vllm\",\n        \"url\": \"http://127.0.0.1:8000\",\n    },\n}\n\nVALID_PROVIDERS = set(PROVIDER_MAP.keys())\n\n\n@dataclass(frozen=True)\nclass ConfigSnapshot:\n    \"\"\"Read-only snapshot of the fields we care about.\"\"\"\n\n    embedding_provider: str\n    embedding_url: str\n    merge_provider: str\n    merge_url: str\n    storage: str\n    workspace_name: str\n\n\ndef load_config(path: Path) -> ConfigSnapshot:\n    \"\"\"Load corvia.toml and extract the fields we need.\"\"\"\n    raw = tomllib.loads(path.read_text())\n    embedding = raw.get(\"embedding\", {})\n    merge = raw.get(\"merge\", {})\n    storage = raw.get(\"storage\", {})\n    project = raw.get(\"project\", {})\n    return ConfigSnapshot(\n        embedding_provider=embedding.get(\"provider\", \"corvia\"),\n        embedding_url=embedding.get(\"url\", \"http://127.0.0.1:8030\"),\n        merge_provider=merge.get(\"provider\", embedding.get(\"provider\", \"corvia\")),\n        merge_url=merge.get(\"url\", embedding.get(\"url\", \"http://127.0.0.1:8030\")),\n        storage=storage.get(\"store_type\", \"lite\"),\n        workspace_name=project.get(\"name\", \"unknown\"),\n    )\n\n\ndef use_provider(provider: str, path: Path) -> None:\n    \"\"\"Switch embedding and merge providers in corvia.toml.\n\n    Preserves all other fields. Creates [merge] section if absent.\n    \"\"\"\n    if provider not in VALID_PROVIDERS:\n        raise ValueError(\n            f\"Unknown provider '{provider}'. Valid: {sorted(VALID_PROVIDERS)}\"\n        )\n\n    mapping = PROVIDER_MAP[provider]\n    raw = tomllib.loads(path.read_text())\n",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-cli.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837155132Z",
+  "valid_from": "2026-04-11T00:10:08.837155132Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-cli.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 689,
+    "end_line": 747,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-34d78611c65b",
+  "content": "   let h = v[\"height\"].as_u64().unwrap_or(0) as usize;\n\n    if w != expected_w || h != expected_h {\n        return Err(InferenceError::Ipc(format!(\n            \"enhance dimension mismatch: expected {expected_w}x{expected_h}, got {w}x{h}\"\n        )));\n    }\n\n    let b64_out = v[\"image_b64\"]\n        .as_str()\n        .ok_or_else(|| InferenceError::Ipc(\"missing image_b64\".to_string()))?;\n\n    let raw = B64\n        .decode(b64_out)\n        .map_err(|e| InferenceError::Ipc(format!(\"base64 decode: {e}\")))?;\n\n    if raw.len() != w * h * 3 {\n        return Err(InferenceError::Ipc(format!(\n            \"enhance buffer size mismatch: got {}, expected {}\",\n            raw.len(),\n            w * h * 3,\n        )));\n    }\n\n    Ok((raw, w, h))\n}\n```\n\n- [ ] **Step 4: Run tests to verify they pass**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ncargo test -p dorea-video enhance_ 2>&1 | tail -20\n```\n\nExpected: both tests PASS.\n\n- [ ] **Step 5: Add `enhance()` method to `InferenceServer`**\n\nAdd to `impl InferenceServer` (after `run_depth` or `run_raune_depth_batch`):\n\n```rust\n    /// Send an RGB u8 frame to Maxine for enhancement.\n    /// Returns enhanced RGB u8 at the same resolution as input.\n    ///\n    /// On success returns the enhanced pixel buffer.\n    /// On server-side failure the Python side sends back the original frame\n    /// (passthrough), so this method never errors on Maxine inference failure —\n    /// only on IPC/protocol errors.\n    pub fn enhance(\n        &mut self,\n        id: &str,",
+  "source_version": "plans/2026-04-04-maxine-enhancement-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836822082Z",
+  "valid_from": "2026-04-11T00:10:08.836822082Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-maxine-enhancement-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 891,
+    "end_line": 935,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-8453a09507d0",
+  "content": "### Task 4: VideoInfo Enhancement — Detect Bit Depth and Codec\n\n    });\n```\n\nUpdate the `Ok(VideoInfo { ... })` return to include the three new fields.\n\n- [ ] **Step 3: Add test for 10-bit detection**\n\nAdd to the existing `tests` module in `crates/dorea-video/src/ffmpeg.rs`:\n\n```rust\n#[test]\nfn video_info_has_codec_fields() {\n    // Verify the struct can be constructed with the new fields\n    let info = VideoInfo {\n        width: 3840,\n        height: 2160,\n        fps: 29.97,\n        duration_secs: 10.0,\n        frame_count: 300,\n        has_audio: true,\n        codec_name: \"hevc\".to_string(),\n        pix_fmt: \"yuv420p10le\".to_string(),\n        bits_per_component: 10,\n    };\n    assert_eq!(info.bits_per_component, 10);\n    assert_eq!(info.codec_name, \"hevc\");\n}\n```\n\n- [ ] **Step 4: Fix any compilation errors from new fields**\n\nAny code that constructs `VideoInfo` directly (e.g. tests) needs the new fields.\nSearch for `VideoInfo {` in the codebase and add defaults where needed.\n\n- [ ] **Step 5: Run tests**\n\nRun: `cd /workspaces/dorea-workspace/repos/dorea && cargo test -p dorea-video`\nExpected: All pass.\n\n- [ ] **Step 6: Commit**\n\n```bash\ngit add crates/dorea-video/src/ffmpeg.rs\ngit commit -m \"feat(video): add codec_name, pix_fmt, bits_per_component to VideoInfo\"\n```\n\n---\n",
+  "source_version": "plans/2026-04-08-10bit-pipeline-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837019034Z",
+  "valid_from": "2026-04-11T00:10:08.837019034Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-08-10bit-pipeline-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 573,
+    "end_line": 620,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

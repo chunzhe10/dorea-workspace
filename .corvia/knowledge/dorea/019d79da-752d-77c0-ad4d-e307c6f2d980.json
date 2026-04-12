@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-e307c6f2d980",
+  "content": "es, expected {}\",\n                raw.len(), w * h * 4\n            )));\n        }\n\n        let depth: Vec<f32> = raw.chunks_exact(4)\n            .map(|b| f32::from_le_bytes([b[0], b[1], b[2], b[3]]))\n            .collect();\n\n        Ok((depth, w, h))\n    }\npub fn run_depth_batch(\n        &mut self,\n        items: &[DepthBatchItem],\n    ) -> Result<Vec<(String, Vec<f32>, usize, usize)>, InferenceError> {\n        if items.is_empty() {\n            return Ok(vec![]);\n        }\n\n        let json_items: Vec<serde_json::Value> = items.iter().map(|item| {\n            let b64 = B64.encode(&item.pixels);\n            serde_json::json!({\n                \"id\": item.id,\n                \"image_b64\": b64,\n                \"format\": \"raw_rgb\",\n                \"width\": item.width,\n                \"height\": item.height,\n                \"max_size\": item.max_size\n            })\n        }).collect();\n\n        let req = serde_json::json!({\n            \"type\": \"depth_batch\",\n            \"items\": json_items\n        });\n        self.send_line(&req.to_string())?;\n\n        let resp = self.recv_line()?;\n        let v: serde_json::Value = serde_json::from_str(&resp)\n            .map_err(|e| InferenceError::Ipc(format!(\"depth_batch response parse: {e}\")))?;\n\n        if v[\"type\"].as_str() == Some(\"error\") {\n            return Err(InferenceError::ServerError(\n                v[\"message\"].as_str().unwrap_or(\"unknown error\").to_string(),\n            ));",
+  "source_version": "crates/dorea-video/src/inference_subprocess.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229646345Z",
+  "valid_from": "2026-04-11T00:04:13.229646345Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference_subprocess.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 415,
+    "end_line": 448,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

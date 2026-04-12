@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d46cb172d8a9",
+  "content": "ext(\"write pixels\")?;\n        pw.write_all(target).context(\"write target\")?;\n\n        self.depth_offsets.push(depth_off);\n        self.pixtar_offsets.push(pixtar_off);\n        self.widths.push(width);\n        self.heights.push(height);\n        Ok(())\n    }\npub fn seal(&mut self) -> Result<()> {\n        use std::io::Write;\n        if let Some(mut dw) = self.depth_writer.take() { dw.flush().context(\"flush depths\")?; }\n        if let Some(mut pw) = self.pixtar_writer.take() { pw.flush().context(\"flush pixtar\")?; }\n        let df = std::fs::File::open(self.dir.join(\"depths.bin\")).context(\"open depths.bin\")?;\n        let pf = std::fs::File::open(self.dir.join(\"pixtar.bin\")).context(\"open pixtar.bin\")?;\n        self.depth_mmap = Some(unsafe { memmap2::Mmap::map(&df) }.context(\"mmap depths\")?);\n        self.pixtar_mmap = Some(unsafe { memmap2::Mmap::map(&pf) }.context(\"mmap pixtar\")?);\n        Ok(())\n    }",
+  "source_version": "crates/dorea-cli/src/pipeline/feature.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229471131Z",
+  "valid_from": "2026-04-11T00:04:13.229471131Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/pipeline/feature.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 78,
+    "end_line": 87,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

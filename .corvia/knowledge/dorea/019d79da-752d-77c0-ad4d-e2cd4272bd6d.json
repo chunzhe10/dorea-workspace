@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-e2cd4272bd6d",
+  "content": "        })?;\n\n        // Send ping immediately so the server starts loading models ASAP.\n        stdin.write_all(b\"{\\\"type\\\":\\\"ping\\\"}\\n\")\n            .and_then(|_| stdin.flush())\n            .map_err(|e| InferenceError::Ipc(format!(\"write ping: {e}\")))?;\n\n        // Read pong in a background thread so we can enforce the startup timeout.\n        // BufReader<ChildStdout> is Send, so this is safe.\n        let timeout = config.startup_timeout;\n        let (tx, rx) = mpsc::channel::<io::Result<(String, BufReader<std::process::ChildStdout>)>>();\n        std::thread::spawn(move || {\n            let mut reader = BufReader::new(stdout);\n            let mut line = String::new();\n            let result = reader.read_line(&mut line).map(|_| (line, reader));\n            let _ = tx.send(result);\n        });\n\n        let (pong_line, stdout_reader) = match rx.recv_timeout(timeout) {\n            Ok(Ok((line, reader))) => (line, reader),\n            Ok(Err(e)) => {\n                let _ = child.kill();\n                return Err(InferenceError::Ipc(format!(\"read from server: {e}\")));\n            }\n            Err(_) => {\n                log::warn!(\"Inference server startup timed out after {timeout:?}\");\n                let _ = child.kill();\n                return Err(InferenceError::Timeout);\n            }\n        };\n\n        let trimmed = pong_line.trim_end_matches('\\n').trim_end_matches('\\r');\n        if trimmed.is_empty() {\n            let _ = child.kill();\n            return Err(InferenceError::Ipc(\n                \"server sent empty response during startup (may have crashed)\".to_string(),\n            ));\n        }\n        let v: serde_json::Value = serde_json::from_str(trimmed)\n            .map_err(|e| InferenceError::Ipc(format!(\"ping response parse error: {e}\")))?;\n        if v[\"type\"].as_str() != Some(\"pong\") {\n            let _ = child.kill();\n            return Err(InferenceError::Ipc(format!(\"expected pong, got: {trimmed}\")));\n        }\n\n        Ok(Self { child, stdin, stdout_reader })\n    }",
+  "source_version": "crates/dorea-video/src/inference_subprocess.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229643654Z",
+  "valid_from": "2026-04-11T00:04:13.229643654Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference_subprocess.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 248,
+    "end_line": 287,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

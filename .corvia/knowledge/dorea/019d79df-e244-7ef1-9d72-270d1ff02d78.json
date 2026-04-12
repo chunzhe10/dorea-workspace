@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-270d1ff02d78",
+  "content": "d ambiance+warmth in single LAB roundtrip with rayon\n\nMerges depth_aware_ambiance per-pixel work and user warmth scaling into\none RGB→LAB→RGB pass. Parallelized with rayon par_chunks_exact_mut.\nEliminates ~1.45B redundant FLOPs per 4K frame.\"\n```\n\n---\n\n## Task 4: Temporal Grade Interpolation (Motion-Adaptive)\n\n**Files:**\n- Modify: `crates/dorea-cli/src/grade.rs` (lines 14-73: args, lines 121-202: frame loop)\n\nThis is the largest change — the frame-by-frame grading loop becomes a buffered lookahead loop with MSE-based keyframe detection. Non-keyframe frames skip the entire pipeline (depth + grading) and interpolate the final graded RGB output between bracketing keyframes.\n\n- [ ] **Step 1: Add new CLI args to `GradeArgs`**\n\nIn `crates/dorea-cli/src/grade.rs`, add after the `proxy_size` field (after line 43):\n\n```rust\n    /// MSE threshold for keyframe detection (lower = more keyframes)\n    #[arg(long, default_value = \"0.005\")]\n    pub depth_skip_threshold: f32,\n\n    /// Maximum frames between keyframes\n    #[arg(long, default_value = \"12\")]\n    pub depth_max_interval: usize,\n\n    /// Disable temporal interpolation — run full pipeline on every frame\n    #[arg(long)]\n    pub no_depth_interp: bool,\n```\n\n- [ ] **Step 2: Add helper functions for MSE and graded frame interpolation**\n\nIn `crates/dorea-cli/src/grade.rs`, add before the `run` function (before line 75):\n\n```rust\n/// Compute normalized MSE between two same-length u8 slices.\n/// Returns value in [0, 1] where 0 = identical.\nfn frame_mse(a: &[u8], b: &[u8]) -> f32 {\n    debug_assert_eq!(a.len(), b.len());\n    let n = a.len() as f64;\n    let sum_sq: f64 = a.iter().zip(b.iter())",
+  "source_version": "plans/2026-04-02-grading-pipeline-perf-v3.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836615373Z",
+  "valid_from": "2026-04-11T00:10:08.836615373Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-grading-pipeline-perf-v3.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 640,
+    "end_line": 675,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

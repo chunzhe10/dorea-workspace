@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-83d245faf065",
+  "content": "`\nExpected: All tests pass including the new trait object test.\n\n- [ ] **Step 6: Commit**\n\n```bash\ngit add crates/dorea-color/src/lib.rs crates/dorea-color/src/dlog_m.rs\ngit commit -m \"feat(color): add TransferFunction trait, implement for DLogM\"\n```\n\n---\n\n### Task 2: I-Log Transfer Function (S-Log3 Proxy)\n\n**Files:**\n- Create: `crates/dorea-color/src/ilog.rs`\n- Modify: `crates/dorea-color/src/lib.rs`\n\n- [ ] **Step 1: Create ilog.rs with implementation and tests**\n\nCreate `crates/dorea-color/src/ilog.rs`:\n\n```rust\n//! I-Log transfer function (Insta360 X5).\n//!\n//! Uses S-Log3 as a proxy curve until empirical extraction is available.\n//! Replace with `LutBased` once a 1D .cube file is produced from a\n//! grayscale chart shot on the X5.\n\nuse crate::TransferFunction;\n\n// Sony S-Log3 parameters (BT.2100 / Sony S-Gamut3)\nconst A: f64 = 0.432699;\nconst B: f64 = 0.01125;\nconst C: f64 = 0.01125;\nconst D: f64 = 0.616596;\nconst E: f64 = 0.03;\nconst F: f64 = 0.037584;\n// Linear cut point: below this, encoding is linear\nconst LIN_CUT: f64 = 0.01125000;\n// Encoded cut point: S-Log3 value at LIN_CUT\nconst ENC_CUT: f64 = 0.171260702;\n\n/// Convert I-Log (S-Log3 proxy) encoded value to scene-linear light.\npub fn ilog_to_linear(x: f32) -> f32 {\n    let x = x as f64;\n    let linear = if x >= ENC_CUT {\n        10_f64.powf((x - D) / A) - B\n    } else {\n        (x * E - F) / E\n    };\n    linear.max(0.0) as f32\n}\n\n/// Convert scene-linear light to I-Log (S-Log3 proxy) encoding.\npub fn linear_to_ilog(x: f32) -> f32 {\n    let x = x as f64;\n    let encoded = if x >= LIN_CUT {\n        A * (x + B).log10() + D\n    } else {\n        (x * E + F) / E\n    };\n    encoded.clamp(0.0, 1.0) as f32\n}\n\n/// I-Log transfer function (Insta360 X5, S-Log3 proxy).\npub struct ILog;\n\nimpl TransferFunction for ILog {\n    fn to_linear(&self, encoded: f32) -> f32 {\n        ilog_to_linear(encoded)\n    }\n\n    fn from_linear(&self, linear: f32) -> f32 {\n        linear_to_ilog(linear)\n    }\n\n    fn shoulder(&self) -> f32 {\n        0.88\n    }\n\n    fn name(&self) -> &'static str {\n        \"I-Log\"\n    }\n}\n\n#[cfg(test)]\nmod tests {\n    use super::*;\n",
+  "source_version": "plans/2026-04-08-10bit-pipeline-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837010805Z",
+  "valid_from": "2026-04-11T00:10:08.837010805Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-08-10bit-pipeline-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 147,
+    "end_line": 224,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

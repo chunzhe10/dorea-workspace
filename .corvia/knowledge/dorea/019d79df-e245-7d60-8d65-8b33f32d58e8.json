@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-8b33f32d58e8",
+  "content": "## File Map\n## Task 1: Wrap model with torch.compile\n\n# Persistent Inductor compile cache so subsequent runs skip the ~10-30s JIT.\n\n# The workspace /workspaces mount is persistent across devcontainer restarts.\n_INDUCTOR_CACHE = \"/workspaces/dorea-workspace/working/.torch_inductor_cache\"\nos.environ.setdefault(\"TORCHINDUCTOR_CACHE_DIR\", _INDUCTOR_CACHE)\n```\n\nYou'll also need to import `os` if not already imported at the top of the file. Check the imports and add `import os` if needed.\n\n- [ ] **Step 2: Add torch.compile wrapper in main() after fp16 conversion**\n\nFind the fp16 conversion block in `main()` (currently around line 667-682):\n\n```python",
+  "source_version": "plans/2026-04-10-torch-compile-raune.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837111494Z",
+  "valid_from": "2026-04-11T00:10:08.837111494Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-10-torch-compile-raune.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 34,
+    "end_line": 46,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

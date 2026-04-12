@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-87528e38b39d",
+  "content": "## Task 1: Replace CIELab with OKLab in Rust (`lab.rs`)\n\n\nReplace the existing `srgb_to_lab` function (was lines 55–79) with:\n\n```rust\n/// Convert sRGB [0,1] to OKLab, rescaled to CIELab-compatible ranges.\n///\n/// Returns (L, a, b) where L ∈ [0,100], a/b ∈ approx [-120, 120].\npub fn srgb_to_lab(r: f32, g: f32, b: f32) -> (f32, f32, f32) {\n    // sRGB → linear\n    let rl = srgb_to_linear(r);\n    let gl = srgb_to_linear(g);\n    let bl = srgb_to_linear(b);\n\n    // Linear RGB → LMS\n    let l = 0.4122214708 * rl + 0.5363325363 * gl + 0.0514459929 * bl;\n    let m = 0.2119034982 * rl + 0.6806995451 * gl + 0.1073969566 * bl;\n    let s = 0.0883024619 * rl + 0.2817188376 * gl + 0.6299787005 * bl;\n\n    // Cube root\n    let l_ = l.max(0.0).cbrt();\n    let m_ = m.max(0.0).cbrt();\n    let s_ = s.max(0.0).cbrt();\n\n    // LMS' → OKLab\n    let ok_l = 0.2104542553 * l_ + 0.7936177850 * m_ - 0.0040720468 * s_;\n    let ok_a = 1.9779984951 * l_ - 2.4285922050 * m_ + 0.4505937099 * s_;\n    let ok_b = 0.0259040371 * l_ + 0.7827717662 * m_ - 0.8086757660 * s_;\n\n    // Rescale to CIELab-compatible ranges\n    (ok_l * L_SCALE, ok_a * AB_SCALE, ok_b * AB_SCALE)\n}\n```\n\n- [ ] **Step 4: Replace `lab_to_srgb`**\n\nReplace the existing `lab_to_srgb` function (was lines 81–102) with:\n\n```rust\n/// Convert OKLab (rescaled) to sRGB [0,1] (clamped).\npub fn lab_to_srgb(l: f32, a: f32, b: f32) -> (f32, f32, f32) {\n    // Unscale from CIELab-compatible ranges to native OKLab\n    let ok_l = l / L_SCALE;\n    let ok_a = a / AB_SCALE;\n    let ok_b = b / AB_SCALE;\n\n    // OKLab → LMS'\n    let l_ = ok_l + 0.3963377774 * ok_a + 0.2158037573 * ok_b;\n    let m_ = ok_l - 0.1055613458 * ok_a - 0.0638541728 * ok_b;\n    let s_ = ok_l - 0.0894841775 * ok_a - 1.2914855480 * ok_b;\n\n    // Cube (inverse of cube root)\n    let l = l_ * l_ * l_;\n    let m = m_ * m_ * m_;\n    let s = s_ * s_ * s_;",
+  "source_version": "plans/2026-04-09-oklab-grade-pipeline.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837059853Z",
+  "valid_from": "2026-04-11T00:10:08.837059853Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-09-oklab-grade-pipeline.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 83,
+    "end_line": 136,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

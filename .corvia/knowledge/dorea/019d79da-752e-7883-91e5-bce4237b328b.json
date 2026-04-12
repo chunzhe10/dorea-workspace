@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-bce4237b328b",
+  "content": "norm = (proxy_t - 0.5) / 0.5\n                proxy_tensors.append(proxy_norm.squeeze(0))\n                del full_t\n\n            proxy_batch = torch.stack(proxy_tensors).cuda()\n            del proxy_tensors\n\n            if proxy_batch.dtype != model_dtype:\n                proxy_batch = proxy_batch.to(model_dtype)\n\n            raune_out = model(proxy_batch).float()\n            raune_out = ((raune_out + 1.0) / 2.0).clamp(0.0, 1.0)\n\n            rh, rw = raune_out.shape[2], raune_out.shape[3]\n            if rh != ph or rw != pw:\n                raune_out = F.interpolate(raune_out, size=(ph, pw), mode=\"bilinear\", align_corners=False)\n\n            orig_proxy = (proxy_batch.float() * 0.5 + 0.5).clamp(0.0, 1.0)\n            del proxy_batch\n\n            raune_lab = rgb_to_lab(raune_out)\n            orig_lab = rgb_to_lab(orig_proxy)\n            delta_lab = raune_lab - orig_lab\n            del raune_out, orig_proxy, raune_lab, orig_lab\n\n            delta_full = F.interpolate(delta_lab, size=(fh, fw), mode=\"bilinear\", align_corners=False)\n            del delta_lab\n\n            for i in range(n):\n                arr_u16 = np.frombuffer(batch_raw[i], dtype=np.uint16).reshape(fh, fw, 3)\n                full_t = torch.from_numpy(arr_u16.astype(np.float32)).cuda() / 65535.0\n                full_t = full_t.permute(2, 0, 1).unsqueeze(0)\n\n                full_lab = rgb_to_lab(full_t)\n                full_lab = full_lab + delta_full[i:i+1]\n                result = lab_to_rgb(full_lab)\n                del full_lab, full_t\n\n                result_u16 = (result.squeeze(0).permute(1, 2, 0) * 65535.0\n                              ).clamp(0, 65535).to(torch.int32).cpu().numpy().astype(np.uint16)\n                stdout.write(result_u16.tobytes())\n                del result, result_u16\n\n            del delta_full\n\n        stdout.flush()\n        frame_count += n\n        if frame_count % (batch_size * 4) == 0:\n            print(f\"[raune-filter] {frame_count} frames\", file=sys.stderr, flush=True)\n\n    print(f\"[raune-filter] done: {frame_count} frames\", file=sys.stderr, flush=True)\n    return frame_count",
+  "source_version": "python/dorea_inference/raune_filter.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230196489Z",
+  "valid_from": "2026-04-11T00:04:13.230196489Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/raune_filter.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 584,
+    "end_line": 627,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

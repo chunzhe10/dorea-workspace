@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d71-ffabba9fa041",
+  "content": "### VRAM probing\n### Dual allocator fragmentation\n\n### Algorithm\n\n```rust\npub struct AdaptiveBatcher {\n    batch_size: usize,\n    max_batch: usize,\n    min_batch: usize,       // always 1\n    successes: usize,\n    grow_threshold: usize,  // default 10, tunable\n}\n```\n\n**Initialization**: VRAM probe (see above), divide by per-frame cost.\n\n**On success**: increment success counter. After `grow_threshold` (default: 10)\nconsecutive successes, grow batch size by 50% (capped at `max_batch`).\nConservative ramp-up avoids oscillation.\n\n**On OOM**: reset success counter, halve batch size (floor at `min_batch=1`). If\nbatch_size=1 still OOMs, propagate the error — the frame genuinely cannot fit.\n\n**On non-OOM CUDA error**: do not adjust batch size. Fall through to single-frame\nretry, then CPU fallback.\n\n**Batch size does NOT persist across runs.** Each `dorea grade` invocation probes\nfresh because VRAM state depends on what else is loaded at the time.\n\n**External VRAM consumers**: if another process grabs VRAM mid-run, the batcher\ndiscovers this via OOM and halves. Recovery is slow (10 successes to grow back by\n50%). This is acceptable for a batch pipeline — correctness over throughput. If\nthe external consumer is periodic and causes oscillation, the batcher will\nsettle at the minimum stable batch size. No attempt is made to detect or\ncoordinate with external consumers.\n",
+  "source_version": "decisions/2026-04-03-gpu-space-ipc-adaptive-batching-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836125959Z",
+  "valid_from": "2026-04-11T00:10:08.836125959Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-03-gpu-space-ipc-adaptive-batching-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 353,
+    "end_line": 386,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

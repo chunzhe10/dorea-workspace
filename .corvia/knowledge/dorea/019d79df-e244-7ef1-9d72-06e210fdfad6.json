@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-06e210fdfad6",
+  "content": "# 3-Thread Pipeline for Direct Mode\n\n## Problem\n\nDirect mode runs at 2.35 fps on 4K 120fps HEVC. After eliminating pipe I/O, the bottleneck\nis **lack of pipelining** — decode, GPU processing, and encode in `raune_filter.py::run_single_process()`\nrun serially in a single thread:\n\n```python\nfor packet in demux:\n    for frame in decode:           # CPU: blocks GPU + encode\n        batch.append(frame)\n        if batch full:\n            process_batch()         # GPU: blocks decode + encode\n            for r in results:\n                encode(r)           # CPU: blocks decode + GPU\n```\n\nThese three stages run on different hardware units (CPU decoder, GPU, CPU encoder) but\ncannot overlap. Theoretical pipelined ceiling is ~12.5 fps; we waste ~200-300ms per frame\non serialization.\n\n\n## Decision\n\nProducer-consumer architecture with three threads and bounded queues:\n\n```\nThread 1 (decoder):  PyAV decode → q_decoded   (capacity 2 batches)\nThread 2 (GPU):      q_decoded → process → q_processed   (capacity 2 batches)\nThread 3 (encoder):  q_processed → PyAV encode\n```\n",
+  "source_version": "decisions/2026-04-10-direct-mode-3thread-pipeline.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836212597Z",
+  "valid_from": "2026-04-11T00:10:08.836212597Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-10-direct-mode-3thread-pipeline.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 3,
+    "end_line": 32,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

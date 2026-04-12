@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-bdf63a1bba1c",
+  "content": "batch_start + sub_batch_size]\n\n        # RAUNE → enhanced tensors stay on GPU\n        enhanced_batch, enh_w, enh_h = _raune_model.infer_batch_gpu(imgs_chunk, max_size=raune_max_size)\n\n        # Maxine upscale (optional) — insert between RAUNE and Depth\n        if enable_maxine and _maxine_model is not None:\n            enhanced_np = (\n                enhanced_batch.permute(0, 2, 3, 1).cpu().numpy() * 255\n            ).astype(\"uint8\")  # (N, H, W, 3)\n\n            for i in range(enhanced_np.shape[0]):\n                enhanced_np[i] = _maxine_model._enhance_impl(\n                    enhanced_np[i], width=enh_w, height=enh_h,\n                )\n\n            enhanced_batch = (\n                torch.from_numpy(enhanced_np.transpose(0, 3, 1, 2) / 255.0)\n                .float()\n                .cuda()\n            )\n\n        # Depth on ORIGINAL frames — RAUNE enhancement distorts depth estimation\n        depth_maps = _depth_model.infer_batch(imgs_chunk, max_size=depth_max_size)\n\n        # dtoh enhanced frames\n        enhanced_np = (\n            enhanced_batch.permute(0, 2, 3, 1).cpu().numpy() * 255\n        ).astype(\"uint8\")  # (N, H, W, 3)\n\n        for i in range(len(imgs_chunk)):\n            results.append((enhanced_np[i], depth_maps[i]))\n\n        del enhanced_batch\n        torch.cuda.empty_cache()\n\n    return results",
+  "source_version": "python/dorea_inference/bridge.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230211433Z",
+  "valid_from": "2026-04-11T00:04:13.230211433Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/bridge.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 167,
+    "end_line": 197,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

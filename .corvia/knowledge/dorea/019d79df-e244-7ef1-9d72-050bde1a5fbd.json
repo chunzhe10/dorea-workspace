@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-050bde1a5fbd",
+  "content": "#### 3. `joint_bilateral`\n#### 4. `guided_filter`\n\n#### 5. `asymmetric_bilateral`\nSame Triton kernel as `joint_bilateral` but with per-channel spatial sigma:\n- `σ_spatial_L = 1.5` (same as joint_bilateral)\n- `σ_spatial_ab = 3.0` (chroma blurred more than luma)\n\nTheory: OKLab-L corrections must track luminance edges precisely, but a/b corrections can be smoother without being visible — human color acuity is lower than luma acuity. If this beats plain `joint_bilateral`, we learn that chroma-bleed tolerance is the lever that matters most.\n\n\n#### 6. `higher_proxy` (control, not an upscale)\nNot strictly an upscale method — a **control condition**. Runs RAUNE at `proxy_size = 2160` (native 4K) instead of 1080p. Uses the same tiled fallback path as `gold.py` if native-4K OOMs.\n\nThe strategic value of this row:\n\n- If `higher_proxy` wins by a lot: the bottleneck is **information loss in RAUNE** (1080p never saw the full-res frequencies), and no amount of fancy upscale can recover what RAUNE never saw.\n- If `higher_proxy` ≈ `joint_bilateral`: classical upscale has hit its ceiling and only learned SR can do more.\n- If `higher_proxy` ≈ `bilinear`: RAUNE at 4K is no better than RAUNE at 1080p on this content — out-of-distribution effects dominate.\n\nThis is the most informative row for the strategic question: \"what's the actual ceiling?\"\n",
+  "source_version": "decisions/2026-04-10-delta-upscale-bench-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836191147Z",
+  "valid_from": "2026-04-11T00:10:08.836191147Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-10-delta-upscale-bench-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 165,
+    "end_line": 182,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-0396de6870fa",
+  "content": "### What does NOT change\n\n## Testing\n\n1. `cargo test -p dorea-color` — round-trip accuracy in `lab.rs` (update expected values)\n2. `cargo build -p dorea-gpu` — verify CUDA kernel compiles\n3. `dorea grade` on a short test clip — visual comparison against CIELab output\n4. Existing integration tests pass unchanged (function signatures preserved)\n\n\n## Visual Impact\n\nThe grading output will differ slightly from CIELab. OKLab distributes color corrections\nmore uniformly across hue regions, so warmth and vibrance adjustments will appear more\nnatural, particularly in the blue-cyan range common in underwater footage. The rescaling\nensures magnitudes are comparable, so the difference should be subtle — a quality\nimprovement rather than a visible shift.",
+  "source_version": "decisions/2026-04-09-oklab-grade-pipeline.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836173928Z",
+  "valid_from": "2026-04-11T00:10:08.836173928Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-09-oklab-grade-pipeline.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 115,
+    "end_line": 128,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

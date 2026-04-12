@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d58cfc4ec88e",
+  "content": "(\"Spawning inference subprocess for auto-generation of missing inputs...\");\n        let cfg = InferenceConfig {\n            python_exe: python,\n            raune_weights,\n            raune_models_dir,\n            skip_raune: false,\n            depth_model,\n            device,\n            startup_timeout: Duration::from_secs(180),\n            maxine: false,\n            maxine_upscale_factor: 2,\n            skip_depth: false,\n        };\n        inf_server = Some(\n            InferenceServer::spawn(&cfg).context(\"failed to spawn inference server\")?,\n        );\n    }\n\n    // 1. Scan keyframe directory for PNGs\n    let mut keyframe_paths: Vec<PathBuf> = std::fs::read_dir(&args.keyframes)\n        .with_context(|| format!(\"Cannot read keyframes dir: {:?}\", args.keyframes))?\n        .filter_map(|e| e.ok())\n        .map(|e| e.path())\n        .filter(|p| p.extension().map(|e| e.eq_ignore_ascii_case(\"png\")).unwrap_or(false))\n        .collect();\n    keyframe_paths.sort();\n\n    if keyframe_paths.is_empty() {\n        anyhow::bail!(\"No PNG files found in {:?}\", args.keyframes);\n    }\n\n    log::info!(\"Found {} keyframe(s)\", keyframe_paths.len());",
+  "source_version": "crates/dorea-cli/src/calibrate.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229484373Z",
+  "valid_from": "2026-04-11T00:04:13.229484373Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/calibrate.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 202,
+    "end_line": 226,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

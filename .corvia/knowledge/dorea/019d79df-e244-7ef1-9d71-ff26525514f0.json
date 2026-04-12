@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d71-ff26525514f0",
+  "content": "### dorea-gpu changes\n\n### dorea-video changes\n\n```\ncrates/dorea-video/\n  Cargo.toml          # + pyo3, numpy behind \"python\" feature; - base64, flate2\n  src/\n    inference.rs      # REWRITTEN: PyO3 embedded calls + device tensor bridge\n    inference_subprocess.rs  # KEPT: renamed from old inference.rs, fallback path\n    lib.rs            # minor: re-export new inference types\n    ffmpeg.rs         # unchanged\n    scene.rs          # unchanged\n    resize.rs         # unchanged\n```\n\n**Cargo.toml additions**:\n```toml\n[dependencies]\npyo3 = { version = \"0.22\", optional = true }\nnumpy = { version = \"0.22\", optional = true }\n\n[features]\npython = [\"dep:pyo3\", \"dep:numpy\"]\n```\n\n**IMPORTANT**: PyO3 is behind the `python` feature, NOT default. This prevents\n`dorea-cli` from inheriting a libpython link dependency. The `auto-initialize`\nfeature is NOT used — the Python interpreter is initialized explicitly in\n`inference.rs` so that library consumers control when/whether Python starts.\n\n**Build-time requirements** when `python` feature is enabled:\n- `python3-dev` headers (matching the target Python version)\n- `numpy` installed in the target Python environment (for C header FFI)\n- `PYO3_PYTHON` env var pointing to the correct Python binary\n\nWhen `python` feature is disabled, `inference_subprocess.rs` (the current\nJSON-lines subprocess approach) remains available as fallback. `base64` and\n`flate2` dependencies are retained only when `python` feature is off.\n\n**Removed dependencies** (when `python` feature is on): `base64`, `flate2`. The\nmanual PNG encoder/decoder (~200 lines) is deleted.\n",
+  "source_version": "decisions/2026-04-03-gpu-space-ipc-adaptive-batching-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836119258Z",
+  "valid_from": "2026-04-11T00:10:08.836119258Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-03-gpu-space-ipc-adaptive-batching-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 90,
+    "end_line": 130,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

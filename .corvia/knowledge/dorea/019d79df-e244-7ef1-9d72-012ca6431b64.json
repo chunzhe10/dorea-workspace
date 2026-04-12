@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-012ca6431b64",
+  "content": "## Testing\n## CLI\n\n## Files Changed\n\n| File | Change |\n|------|--------|\n| `python/dorea_inference/protocol.py` | Add `EnhanceResult` + `encode_raw_rgb` |\n| `python/dorea_inference/maxine_enhancer.py` | New: MaxineEnhancer class |\n| `python/dorea_inference/server.py` | `--maxine` flag, enhance handler |\n| `crates/dorea-video/src/inference.rs` | `InferenceConfig` fields, `build_args()`, `enhance()` IPC |\n| `crates/dorea-video/src/ffmpeg.rs` | `FrameEncoder::new_lossless_temp()` for ffv1/mkv |\n| `crates/dorea-cli/src/grade.rs` | Full restructure: one server, full-res Pass 1, temp-file Pass 2 |\n| `docs/guides/maxine-setup.md` | New: SDK install guide (pre-processing role, temp file note) |",
+  "source_version": "decisions/2026-04-04-maxine-preprocessor-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836144365Z",
+  "valid_from": "2026-04-11T00:10:08.836144365Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-04-maxine-preprocessor-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 247,
+    "end_line": 257,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-df86a2a67977",
+  "content": "ec.is_10bit() { \"rgb48le\" } else { \"rgb24\" };\n\n        let mut cmd = Command::new(\"ffmpeg\");\n        cmd.args([\n            \"-y\",\n            \"-f\", \"rawvideo\",\n            \"-pixel_format\", input_pix_fmt,\n            \"-s\", &size_s,\n            \"-r\", &fps_s,\n            \"-i\", \"pipe:0\",\n        ]);\n\n        if let Some(audio_src) = input_for_audio {\n            cmd.args([\"-i\", audio_src.to_str().unwrap_or(\"\")]);\n            cmd.args([\"-map\", \"0:v\", \"-map\", \"1:a\", \"-c:a\", \"copy\"]);\n        } else {\n            cmd.args([\"-map\", \"0:v\"]);\n        }\n\n        match codec {\n            OutputCodec::ProRes => {\n                cmd.args([\n                    \"-c:v\", \"prores_ks\",\n                    \"-profile:v\", \"3\",        // ProRes 422 HQ\n                    \"-pix_fmt\", \"yuv422p10le\",\n                ]);\n            }\n            OutputCodec::Hevc10 => {\n                // Cache HEVC NVENC availability separately from H.264 NVENC.\n                static HEVC_NVENC_AVAILABLE: OnceLock<bool> = OnceLock::new();\n                let hevc_nvenc = *HEVC_NVENC_AVAILABLE.get_or_init(|| {\n                    Command::new(\"ffmpeg\")\n                        .args([\"-hide_banner\", \"-encoders\"])\n                        .output()\n                        .map(|o| String::from_utf8_lossy(&o.stdout).contains(\"hevc_nvenc\"))\n                        .unwrap_or(false)\n                });\n\n                if hevc_nvenc {\n                    cmd.args([\n                        \"-c:v\", \"hevc_nvenc\",\n                        \"-profile:v\", \"main10\",",
+  "source_version": "crates/dorea-video/src/ffmpeg.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229601270Z",
+  "valid_from": "2026-04-11T00:04:13.229601270Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/ffmpeg.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 849,
+    "end_line": 881,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

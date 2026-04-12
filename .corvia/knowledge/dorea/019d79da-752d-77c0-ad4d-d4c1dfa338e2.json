@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d4c1dfa338e2",
+  "content": "fn drop(&mut self) {\n        drop(self.depth_mmap.take());\n        drop(self.pixtar_mmap.take());\n        let _ = std::fs::remove_dir_all(&self.dir);\n    }\npub fn run_feature_stage(\n    cfg: &PipelineConfig,\n    info: &dorea_video::ffmpeg::VideoInfo,\n    mut inf_server: InferenceServer,\n    kf_out: KeyframeStageOutput,\n) -> Result<FeatureStageOutput> {\n    let KeyframeStageOutput { keyframes, proxy_w, proxy_h, .. } = kf_out;\n\n    log::info!(\n        \"Auto-calibrating from {} keyframes (parallel RAUNE+depth)\",\n        keyframes.len()\n    );\n\n    // Depth runs on full-res keyframes for better depth quality.\n    // The depth model internally resizes to max_size, but starting from 4K source\n    // preserves more detail than starting from proxy (518px).\n    // After RAUNE completes and is unloaded, depth can use the freed VRAM for 1036px.\n    let depth_max_size = 1036;\n    log::info!(\n        \"Extracting {} keyframes at full resolution for depth (max_size={})\",\n        keyframes.len(), depth_max_size,\n    );\n    let mut fullres_pixels: Vec<Vec<u8>> = Vec::with_capacity(keyframes.len());\n    for kf in &keyframes {\n        let ts = kf.frame_index as f64 / info.fps.max(1.0);\n        let pixels = dorea_video::ffmpeg::extract_frame_at(&cfg.input, ts, info.width, info.height)\n            .with_context(|| format!(\"failed to extract full-res keyframe at frame {}\", kf.frame_index))?;\n        fullres_pixels.push(pixels);\n    }\n\n    let mut store = PagedCalibrationStore::new()\n        .context(\"failed to create paged calibration store\")?;\n    let mut kf_depths: HashMap<u64, (Vec<f32>, usize, usize)> = HashMap::new();\n",
+  "source_version": "crates/dorea-cli/src/pipeline/feature.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229474546Z",
+  "valid_from": "2026-04-11T00:04:13.229474546Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/pipeline/feature.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 126,
+    "end_line": 159,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d71-f666198e07a4",
+  "content": "    # Stop server\n    # Revert corvia.toml\n\n# --- SurrealDB ---\n\nenable_surrealdb() {\n    echo \"Enabling SurrealDB...\"\n\n    local compose_file=\"$WORKSPACE_ROOT/repos/corvia/docker/docker-compose.yml\"\n\n    if [ ! -f \"$compose_file\" ]; then\n        echo \"  Error: docker-compose.yml not found at $compose_file\"\n        exit 1\n    fi\n\n    docker compose -f \"$compose_file\" up -d\n\n\n    # Wait for readiness\n    echo \"  Waiting for SurrealDB...\"\n    for i in $(seq 1 30); do\n        curl -sf http://localhost:8000/health >/dev/null 2>&1 && break\n        sleep 1\n    done\n",
+  "source_version": "decisions/2026-03-03-optional-devcontainer-services.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836009450Z",
+  "valid_from": "2026-04-11T00:10:08.836009450Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-03-03-optional-devcontainer-services.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 296,
+    "end_line": 316,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

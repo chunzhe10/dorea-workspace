@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-f0a9b7f03439",
+  "content": "e { func.launch(cfg, &mut args[..]) }.map_err(map_cudarc_error)?;\n        }\n\n        let slot = self.frame_bufs.borrow();\n        let bufs = slot.as_ref().expect(\"allocated\");\n        dev.dtoh_sync_copy(&bufs.d_pixels_out).map_err(map_cudarc_error)\n    }\n}\npub fn new(\n        hsl_data: (&[f32], &[f32], &[f32], &[f32]),\n        params: &GradeParams,\n    ) -> Result<Self, GpuError> {\n        let device = CudaDevice::new(0).map_err(|e| {\n            GpuError::ModuleLoad(format!(\"CudaDevice::new(0) failed: {e}\"))\n        })?;\n\n        device.load_ptx(\n            Ptx::from_src(POSTPROCESS_PTX),\n            \"postprocess\",\n            &[\"postprocess_kernel_16\"],\n        ).map_err(|e| GpuError::ModuleLoad(format!(\"load postprocess PTX: {e}\")))?;\n\n        let (ho, sr, vo, wt) = hsl_data;\n        Ok(Self {\n            d_h_offsets: device.htod_sync_copy(ho).map_err(map_cudarc_error)?,\n            d_s_ratios: device.htod_sync_copy(sr).map_err(map_cudarc_error)?,\n            d_v_offsets: device.htod_sync_copy(vo).map_err(map_cudarc_error)?,\n            d_weights: device.htod_sync_copy(wt).map_err(map_cudarc_error)?,\n            warmth: params.warmth,\n            contrast: params.contrast,\n            stage_mask: params.stage_mask,\n            frame_bufs: RefCell::new(None),\n            _not_send: std::marker::PhantomData,\n            device,\n        })\n    }",
+  "source_version": "crates/dorea-gpu/src/cuda/mod.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229818138Z",
+  "valid_from": "2026-04-11T00:04:13.229818138Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cuda/mod.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 959,
+    "end_line": 986,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

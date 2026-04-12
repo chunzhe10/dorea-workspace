@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d71-ff38a90c7377",
+  "content": "### dorea-video changes\n\n### Python changes\n\n```\npython/dorea_inference/\n  server.py           # KEPT for standalone testing / fallback\n  depth_anything.py   # + infer_gpu() returning on-device tensor\n  raune_net.py        # + infer_gpu() returning on-device tensor\n  bridge.py           # NEW: PyO3-callable entry points, tensor guard\n```\n\n`bridge.py` provides the functions that Rust calls via PyO3:\n\n```python\nclass TensorGuard:\n    \"\"\"Prevent GC of a GPU tensor while Rust holds its device pointer.\n    Explicitly prevents accidental release via reference counting.\"\"\"\n    def __init__(self, tensor: torch.Tensor):\n        self.tensor = tensor\n        self.data_ptr = tensor.data_ptr()\n        self.numel = tensor.numel()\n        self.shape = tuple(tensor.shape)\n        self.dtype = str(tensor.dtype)\n\n    def release(self) -> None:\n        \"\"\"Explicitly release the tensor. Called by Rust when done.\"\"\"\n        self.tensor = None\n\ndef load_depth_model(model_path: str, device: str) -> DepthAnythingInference:\n    ...\n\ndef run_depth_gpu(model, frame_rgb: np.ndarray, max_size: int) -> TensorGuard:\n    \"\"\"Returns a TensorGuard holding the on-device result tensor.\"\"\"\n    ...\n\ndef run_depth_cpu(model, frame_rgb: np.ndarray, max_size: int) -> np.ndarray:\n    \"\"\"CPU fallback — returns numpy array.\"\"\"\n    ...\n```\n\nThe `TensorGuard` class replaces the bare dict pattern. It holds a strong\nreference to the PyTorch tensor, preventing GC. Rust holds a `Py<TensorGuard>`\nwhich prevents Python from collecting the guard. The `release()` method is called\nexplicitly by Rust when grading completes, dropping the tensor reference.\n\nThe existing `server.py` remains for:\n- Standalone testing without Rust (`python -m dorea_inference.server`)\n- CI environments without GPU / PyO3 build dependencies\n- Debugging inference in isolation\n",
+  "source_version": "decisions/2026-04-03-gpu-space-ipc-adaptive-batching-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836120096Z",
+  "valid_from": "2026-04-11T00:10:08.836120096Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-03-gpu-space-ipc-adaptive-batching-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 131,
+    "end_line": 179,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-0068de0ecfa8",
+  "content": "## Testing Strategy\n\n## Review Findings Incorporated\n\nThis spec incorporates findings from 5 persona reviews (CUDA systems engineer,\nRust safety expert, PyTorch ML engineer, build systems engineer, production\nreliability engineer). Key changes from the original draft:\n\n1. `BorrowedDeviceSlice` carries lifetime `'py` tied to GIL token (was `'static`)\n2. PyO3 behind `python` feature flag (was `auto-initialize` default dependency)\n3. PTX embedded via `include_bytes!` (was loose files in `OUT_DIR`)\n4. VRAM probe uses `torch.cuda.mem_get_info()` (was raw `cuMemGetInfo`)\n5. OOM detection uses structured enum matching (was string `contains`)\n6. CUDA context health check after OOM recovery\n7. `ModuleLoad` error added to fallback chain (step 0)\n8. Threading model explicitly stated as single-threaded\n9. `TensorGuard` class replaces bare dict for GC prevention\n10. Dual-allocator fragmentation mitigations documented\n11. Batching benefit corrected to dispatch amortization (was \"coalescing\")\n12. Fault-injection tests added to testing strategy\n13. CI feature-flag build matrix documented\n14. Runtime context validation at initialization (not just spike)",
+  "source_version": "decisions/2026-04-03-gpu-space-ipc-adaptive-batching-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836135859Z",
+  "valid_from": "2026-04-11T00:10:08.836135859Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-03-gpu-space-ipc-adaptive-batching-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 704,
+    "end_line": 723,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

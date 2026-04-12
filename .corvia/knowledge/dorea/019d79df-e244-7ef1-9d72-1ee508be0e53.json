@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-1ee508be0e53",
+  "content": "### Task 5: load_rgb_image 16-Bit Upgrade\n\n### Task 6: Configurable LUT Size\n\n**Files:**\n- Modify: `crates/dorea-lut/src/build.rs:8` (LUT_SIZE constant)\n- Modify: `crates/dorea-lut/src/build.rs` (build_depth_luts signature)\n- Modify: `crates/dorea-lut/src/types.rs` (LutGrid::new)\n- Modify: `crates/dorea-lut/src/apply.rs` (trilinear uses grid.size)\n\n- [ ] **Step 1: Write failing test for 65^3 LUT**\n\nAdd test in `crates/dorea-lut/src/build.rs` inside the `tests` module:\n\n```rust\n#[test]\nfn test_build_lut_size_65() {\n    // Minimal test: 1 keyframe, 1x1 pixel, verify output grid is 65^3\n    let kf = KeyframeData {\n        original: vec![[0.5, 0.5, 0.5]],\n        target: vec![[0.6, 0.4, 0.5]],\n        depth: vec![0.5],\n        importance: vec![1.0],\n        width: 1,\n        height: 1,\n    };\n    let luts = build_depth_luts(&[kf], 65);\n    assert_eq!(luts.luts[0].size, 65);\n    assert_eq!(luts.luts[0].data.len(), 65 * 65 * 65 * 3);\n}\n```\n\n- [ ] **Step 2: Run test to verify it fails**\n\nRun: `cd /workspaces/dorea-workspace/repos/dorea && cargo test -p dorea-lut test_build_lut_size_65`\nExpected: FAIL — `build_depth_luts` does not accept a size argument.\n\n- [ ] **Step 3: Make LUT size a parameter**\n\nIn `crates/dorea-lut/src/build.rs`:\n\nChange the constant to a default:\n\n```rust\n/// Default LUT grid size. Use 33 for 8-bit sources, 65 for 10-bit.\npub const DEFAULT_LUT_SIZE: usize = 33;\n```\n\nUpdate `build_depth_luts` signature from:",
+  "source_version": "plans/2026-04-02-10bit-pipeline-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836497882Z",
+  "valid_from": "2026-04-11T00:10:08.836497882Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-10bit-pipeline-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 785,
+    "end_line": 831,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-ef62679a898e",
+  "content": "      dh_i32.as_kernel_param(),\n                mask_ptr.as_kernel_param(),\n                mw_i32.as_kernel_param(),\n                mh_i32.as_kernel_param(),\n                diver_depth.as_kernel_param(),\n                stage_mask_i32.as_kernel_param(),\n            ];\n            unsafe {\n                func.launch(cfg, &mut args[..])\n            }.map_err(map_cudarc_error)?;\n        }\n\n        // Download result\n        let slot = self.frame_bufs.borrow();\n        let bufs = slot.as_ref().expect(\"frame_bufs allocated above\");\n        let result = dev.dtoh_sync_copy(&bufs.d_pixels_out).map_err(map_cudarc_error)?;\n        Ok(result)\n    }\n\n    /// Grade one frame with dual-texture temporal blending — 16-bit (u16) I/O variant.\n    ///\n    /// Identical to `grade_frame_blended` but reads/writes `u16` pixel data instead of `u8`.\n    /// Uses `combined_lut_kernel_16` which normalises to [0, 65535].\n    pub fn grade_frame_blended_16(\n        &self,\n        pixels: &[u16],\n        depth: &[f32],\n        width: usize,\n        height: usize,\n        depth_w: usize,\n        depth_h: usize,\n        blend_t: f32,\n        class_mask: Option<&[u8]>,\n        mask_w: usize,\n        mask_h: usize,\n        diver_depth: f32,\n    ) -> Result<Vec<u16>, GpuError> {\n        let n = width.checked_mul(height).ok_or_else(|| {\n            GpuError::InvalidInput(\"frame dimensions overflow usize\".into())\n        })?;\n        if pixels.len() != n * 3 {\n            return Err(GpuError::InvalidInput(format!(\n                \"pixels len {} != {}*3\", pixels.len(), n\n            )));\n        }\n        let dn = depth_w.checked_mul(depth_h).ok_or_else(|| {\n            GpuError::InvalidInput(\"depth dimensions overflow usize\".into())\n        })?;\n        if depth.len() != dn {\n            return Err(GpuError::InvalidInput(format!(\n                \"depth len {} != depth_w*depth_h {}\", depth.len(), dn\n            )));\n        }",
+  "source_version": "crates/dorea-gpu/src/cuda/mod.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229801972Z",
+  "valid_from": "2026-04-11T00:04:13.229801972Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cuda/mod.rs",
+    "language": "rs",
+    "chunk_type": "impl_item",
+    "start_line": 795,
+    "end_line": 841,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

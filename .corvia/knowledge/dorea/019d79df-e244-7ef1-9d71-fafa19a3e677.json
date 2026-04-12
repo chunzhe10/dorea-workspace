@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d71-fafa19a3e677",
+  "content": "### 3-Stage pipelined frame loop\n### Persistent GPU LUT allocation\n\n### CUDA kernel signature: u8 -> f32\n\nAll CUDA kernels (`lut_apply.cu`, `hsl_correct.cu`, `clarity.cu`) and the CPU fallback\nchange from `unsigned char*` / `&[u8]` to `float*` / `&[f32]`. No double conversion.\n\n\n### Batched depth inference\n\nExtend Python inference server protocol with `depth_batch` command (2-3 frames per call).\nAmortizes IPC overhead. VRAM safe: batch=2 uses ~2.5 GB, batch=3 uses ~3.5 GB, both\nwithin 6 GB budget since depth and grading never share GPU simultaneously.\n",
+  "source_version": "decisions/2026-04-02-10bit-pipeline-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836066129Z",
+  "valid_from": "2026-04-11T00:10:08.836066129Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-02-10bit-pipeline-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 190,
+    "end_line": 200,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-bc3a59cb8320",
+  "content": "────────────────────────\n    def encoder_thread() -> None:\n        nonlocal encoded_count, encode_busy\n        try:\n            while True:\n                if stop_event.is_set():\n                    return\n                results = q_processed.get()\n                if results is None:\n                    return\n                for result_np in results:\n                    t0 = time.perf_counter()\n                    out_frame = av.VideoFrame.from_ndarray(result_np, format=\"rgb24\")\n                    out_frame.pts = encoded_count\n                    for pkt in out_stream.encode(out_frame):\n                        out_container.mux(pkt)\n                    encode_busy += time.perf_counter() - t0\n                    encoded_count += 1\n                    if encoded_count % (batch_size * 4) == 0:\n                        elapsed = time.time() - t_start\n                        fps_actual = encoded_count / elapsed if elapsed > 0 else 0\n                        pct = (encoded_count / total_frames * 100\n                               if total_frames else 0)\n                        print(f\"[raune-filter] {encoded_count} frames \"\n                              f\"({pct:.0f}%, {fps_actual:.1f} fps)\",\n                              file=sys.stderr, flush=True)\n        except BaseException as e:\n            record_error(e)\n            # On error, drain q_processed so the upstream gpu_thread does\n            # not deadlock in put_or_stop on a full queue. record_error\n            # has already set stop_event — once gpu_thread's in-flight put\n            # lands in the slot we empty here, its next loop iteration\n            # sees stop_event and exits cleanly.\n            try:\n                while True:\n                    _ = q_processed.get_nowait()\n            except queue.Empty:\n                pass\n\n    # Spawn threads",
+  "source_version": "python/dorea_inference/raune_filter.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230183192Z",
+  "valid_from": "2026-04-11T00:04:13.230183192Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/raune_filter.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 366,
+    "end_line": 398,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

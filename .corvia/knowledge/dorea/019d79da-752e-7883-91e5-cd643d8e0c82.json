@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-cd643d8e0c82",
+  "content": "ed if no GPU).\n\n- [ ] **Step 10: Commit**\n\n```bash\ncd repos/dorea && git add -u crates/dorea-gpu/ && git rm crates/dorea-gpu/src/cuda/kernels/clarity.cu\ngit commit -m \"feat: hard-delete clarity; remove 3-kernel clarity from GPU pipeline (Task 2)\"\n```\n\n---\n\n### Task 3: Extract grade_pixel_cpu\n\n**Files:**\n- Modify: `crates/dorea-gpu/src/cpu.rs`\n\nThis is the CPU reference implementation for a single lattice point — used to verify `grade_pixel_device` (in Task 4) and as a CPU test oracle for the combined LUT accuracy test (Task 10).\n\n- [ ] **Step 1: Run the baseline test from Task 1**\n\n```bash\ncd repos/dorea && cargo test -p dorea-gpu grade_pixel_cpu_matches_grade_frame_cpu_baseline 2>&1 | tail -5\n```\n\nExpected: PASS (baseline still works after Task 2 changes).\n\n- [ ] **Step 2: Write the test that verifies grade_pixel_cpu matches grade_frame_cpu**\n\nAdd to `cpu.rs` tests (this test was added in Task 1, and now we update it to also call grade_pixel_cpu):\n\n```rust\n#[test]\nfn grade_pixel_cpu_matches_grade_frame_cpu() {\n    use dorea_cal::Calibration;\n    use dorea_hsl::derive::{HslCorrections, QualifierCorrection};\n    use dorea_lut::types::{DepthLuts, LutGrid};\n\n    fn identity_lut(size: usize) -> LutGrid {\n        let mut lut = LutGrid::new(size);\n        for ri in 0..size { for gi in 0..size { for bi in 0..size {\n            let r = ri as f32 / (size - 1) as f32;\n            let g = gi as f32 / (size - 1) as f32;\n            let b = bi as f32 / (size - 1) as f32;\n            lut.set(ri, gi, bi, [r, g, b]);\n        }}}\n        lut\n    }\n\n    let n_zones = 5;\n    let luts: Vec<LutGrid> = (0..n_zones).map(|_| identity_lut(17)).collect();\n    let boundaries: Vec<f32> = (0..=n_zones).map(|i| i as f32 / n_zones as f32).collect();\n    let cal = Calibration::new(\n        DepthLuts::new(luts, boundaries),\n        HslCorrections(vec![QualifierCorrection {\n            h_center: 0.0, h_width: 1.0, h_offset: 0.0,\n            s_ratio: 1.0, v_offset: 0.0, weight: 0.0,\n        }]),\n        1,\n    );\n    let params = crate::GradeParams::default();\n\n    let r_u8 = 153u8; let g_u8 = 77u8; let b_u8 = 51u8;",
+  "source_version": "docs/plans/2026-04-03-combined-lut-cuda-texture-plan.md",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230442803Z",
+  "valid_from": "2026-04-11T00:04:13.230442803Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "docs/plans/2026-04-03-combined-lut-cuda-texture-plan.md",
+    "language": "markdown",
+    "chunk_type": "heading_section",
+    "start_line": 352,
+    "end_line": 402,
+    "content_role": "plan",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

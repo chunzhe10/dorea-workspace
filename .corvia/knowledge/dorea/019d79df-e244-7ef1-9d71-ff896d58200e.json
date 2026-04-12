@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d71-ff896d58200e",
+  "content": "## Adaptive Batching\n\n### Motivation\n\nWhen grading a full video (`dorea grade`), processing frames one at a time\nunder-utilizes GPU parallelism. Batching N frames amortizes kernel dispatch\noverhead (~5-10us per launch x 3 kernels per frame). The adaptive layer\nautomatically finds the largest batch size that fits in available VRAM.\n\nNote: batching does NOT improve memory coalescing unless frames are interleaved\nin memory (struct-of-arrays layout). The current layout is array-of-structs\n(contiguous per frame), so the benefit is purely dispatch amortization and\nreduced synchronization points.\n\n\n### VRAM budget\n\nPer frame (1080p, ping-pong buffer strategy):\n- Buffer A (input/output ping-pong): 24MB\n- Buffer B (input/output ping-pong): 24MB\n- Depth map: 8MB\n- Total per frame: **56MB**\n\nCalibration data (uploaded once): ~2.1MB (5 zones x 33^3 x 3 x f32)\n\nAvailable headroom:\n\n| Scenario | VRAM free | Max frames (1080p) | Max frames (4K) |\n|---|---|---|---|\n| Grading only | ~5.8GB | ~100 | ~25 |\n| Depth Anything loaded (1.5GB) | ~4.3GB | ~73 | ~18 |\n| SAM2 loaded (3GB) | ~2.8GB | ~46 | ~11 |\n",
+  "source_version": "decisions/2026-04-03-gpu-space-ipc-adaptive-batching-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836124497Z",
+  "valid_from": "2026-04-11T00:10:08.836124497Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-03-gpu-space-ipc-adaptive-batching-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 294,
+    "end_line": 323,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

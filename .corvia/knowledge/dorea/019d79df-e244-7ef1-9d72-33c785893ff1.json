@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-33c785893ff1",
+  "content": "# Attempt nvvfx import (unless mock mode)\n        # Effects are initialized lazily on first enhance() call because we need\n\n        # the input dimensions to configure the output size.\n\n    def _init_effects(self, width: int, height: int) -> None:\n        \"\"\"Lazily initialize Maxine effects with known input dimensions.\"\"\"\n        import torch\n\n        out_w = width * self.upscale_factor\n        out_h = height * self.upscale_factor\n\n        self._sr_effect = _nvvfx.VideoSuperRes(\n            output_width=out_w,\n            output_height=out_h,\n        )\n        stream = torch.cuda.current_stream()\n        self._sr_effect.set_cuda_stream(stream.cuda_stream)\n        self._sr_effect.load()\n\n        self._ar_effect = _nvvfx.ArtifactReduction()\n        self._ar_effect.set_cuda_stream(stream.cuda_stream)\n        self._ar_effect.load()\n\n        log.info(\n            \"Maxine effects loaded: SR %dx%d→%dx%d, AR %dx%d\",\n            width, height, out_w, out_h, width, height,\n        )\n\n    def enhance(\n        self,\n        rgb_u8: np.ndarray,\n        width: int,\n        height: int,\n        artifact_reduce: bool = True,\n        upscale_factor: int = 2,\n    ) -> np.ndarray:\n        \"\"\"Enhance a single RGB u8 frame. Returns RGB u8 at original resolution.\n\n        On any failure, logs the error and returns the original frame unchanged.\n        \"\"\"\n        self._total_count += 1\n\n        if self._mock:\n            return rgb_u8\n\n        try:\n            return self._enhance_impl(rgb_u8, width, height, artifact_reduce, upscale_factor)\n        except Exception as e:\n            self._passthrough_count += 1\n            log.warning(\"Maxine enhance failed (frame passthrough): %s\", e)\n            return rgb_u8\n\n    def _enhance_impl(\n        self,\n        rgb_u8: np.ndarray,\n        width: int,\n        height: int,\n        artifact_reduce: bool,\n        upscale_factor: int,\n    ) -> np.ndarray:\n        \"\"\"Internal enhancement — exceptions propagate to enhance() for catch.\"\"\"\n        import torch\n\n        if self._sr_effect is None:\n            self._init_effects(width, height)\n",
+  "source_version": "plans/2026-04-04-maxine-enhancement-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836806029Z",
+  "valid_from": "2026-04-11T00:10:08.836806029Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-maxine-enhancement-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 234,
+    "end_line": 297,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d71-f7eb4eabefd9",
+  "content": "# Initialize workspace\n# Install corvia-workspace toggle command\n\n### Task 3: Add `rebuild` command to corvia-workspace.sh\n\n**Files:**\n- Modify: `.devcontainer/scripts/corvia-workspace.sh`\n\n**Step 1: Add the rebuild function**\n\nInsert before the `# --- Main ---` comment (before line 180):\n\n```bash",
+  "source_version": "decisions/2026-03-03-prebuilt-binaries.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836026495Z",
+  "valid_from": "2026-04-11T00:10:08.836026495Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-03-03-prebuilt-binaries.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 167,
+    "end_line": 176,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

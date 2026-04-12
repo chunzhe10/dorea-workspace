@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-31674afafbdb",
+  "content": "o failures.\n\n- [ ] **Step 5.5: Commit**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ngit add crates/dorea-cli/src/grade.rs\ngit commit -m \"feat(grade): fused RAUNE+depth in auto_calibrate — depth runs on enhanced frames, single IPC phase\"\n```\n\n---\n\n## Self-Review\n\n**Spec coverage:**\n\n| Requirement | Task |\n|---|---|\n| Depth runs on RAUNE-enhanced frames | Task 3 handler, Task 5 caller |\n| Enhanced tensor stays on GPU between models | Task 2 `infer_batch_from_tensors`, Task 3 handler |\n| Single IPC round-trip for both models | Task 3 fused handler |\n| Pinned memory for initial htod | Tasks 1 + 2 |\n| Fallback to originals + uniform depth on failure | Task 5 |\n| `infer_batch` standalone (for non-fused uses) | Task 1 |\n| `pyo3_backend.rs` parity | NOT in scope — note below |\n\n**Out of scope:** `pyo3_backend.rs` (the `python` Cargo feature path) is not updated. If that feature is ever enabled, it needs matching `RauneDepthBatchItem` + `run_raune_depth_batch` additions.\n\n**Placeholder scan:** None. All code blocks are complete with exact types.\n\n**Type consistency:**\n- `run_raune_depth_batch` returns `Vec<(String, Vec<u8>, usize, usize, Vec<f32>, usize, usize)>`\n- Destructured in Task 5 as `(_, enhanced, _, _, depth_raw, dw, dh)` — matches\n- `kf_results` stores `(Vec<u8>, Vec<f32>, usize, usize)` — consumed correctly in Phase 3\n\n---\n\n\n## Expected impact vs. prior plan\n\n| Metric | Sequential (original) | Separate batches (prior plan) | Fused batch (this plan) |\n|---|---|---|---|\n| IPC round-trips (55 frames) | 110 | 7 + 2 = 9 | 7 |\n| Enhanced frame IPC crossings | N/A | 2 × 97 MB | 0 |\n| Depth input quality | original | original | RAUNE-enhanced |\n| GPU idle between RAUNE→depth | yes (IPC gap) | yes (separate phases) | no (same forward call) |",
+  "source_version": "plans/2026-04-03-inference-gpu-saturation.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836769855Z",
+  "valid_from": "2026-04-11T00:10:08.836769855Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-inference-gpu-saturation.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 862,
+    "end_line": 894,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

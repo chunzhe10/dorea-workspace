@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-ded842359df0",
+  "content": "    Ok(Self {\n            child,\n            stdin,\n            stderr,\n            frame_bytes: width * height * 3,\n            write_buf: Vec::new(),\n        })\n    }\n\n    /// Create a lossless ffv1/mkv encoder for temporary intermediate storage.\n    ///\n    /// Output is a lossless Matroska video (no audio, no NVENC attempt).\n    /// Intended for the Maxine-enhanced frame temp file between Pass 1 and Pass 2.\n    pub fn new_lossless_temp(\n        output: &Path,\n        width: usize,\n        height: usize,\n        fps: f64,\n    ) -> Result<Self, FfmpegError> {\n        let w_s = width.to_string();\n        let h_s = height.to_string();\n        let fps_s = format!(\"{fps:.3}\");\n        let size_s = format!(\"{w_s}x{h_s}\");\n        let out_s = output.to_str().unwrap_or(\"temp.mkv\");\n\n        let mut cmd = Command::new(\"ffmpeg\");\n        cmd.args([\n            \"-y\",\n            \"-f\", \"rawvideo\",\n            \"-pixel_format\", \"rgb24\",\n            \"-s\", &size_s,\n            \"-r\", &fps_s,\n            \"-i\", \"pipe:0\",\n            \"-map\", \"0:v\",\n            \"-c:v\", \"ffv1\",\n            \"-level\", \"3\",\n            out_s,\n        ]);\n        cmd.stdin(Stdio::piped())\n            .stdout(Stdio::null())\n            .stderr(Stdio::piped());\n\n        let mut child = cmd.spawn().map_err(FfmpegError::NotFound)?;\n        let stdin = child.stdin.take().ok_or_else(|| {\n            FfmpegError::EncodeFailed(\"could not open lossless encoder stdin\".to_string())\n        })?;\n        let stderr = child.stderr.take();\n\n        if let Ok(Some(status)) = child.try_wait() {\n            let msg = stderr\n                .map(|mut s| {\n                    let mut buf = String::new();\n                    let _ = s.read_to_string(&mut buf);\n                    buf\n                })\n                .unwrap_or_default();\n            return Err(FfmpegError::EncodeFailed(format!(\n                \"ffv1 encoder exited immediately (code {:?}): {}\",\n                status.code(),\n                msg.trim()",
+  "source_version": "crates/dorea-video/src/ffmpeg.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229591401Z",
+  "valid_from": "2026-04-11T00:04:13.229591401Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/ffmpeg.rs",
+    "language": "rs",
+    "chunk_type": "impl_item",
+    "start_line": 749,
+    "end_line": 797,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

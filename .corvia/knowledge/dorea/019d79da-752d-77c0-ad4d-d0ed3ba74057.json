@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d0ed3ba74057",
+  "content": "ranspose()?\n        .unwrap_or_else(|| {\n            if input_encoding.is_10bit() { OutputCodec::ProRes } else { OutputCodec::H264 }\n        });\n\n    log::info!(\"Encoding: input={input_encoding}, output={output_codec}, 10-bit={}\", output_codec.is_10bit());\n\n    let output = args.output.clone().unwrap_or_else(|| {\n        let stem = args.input.file_stem().unwrap_or_default().to_string_lossy();\n        let ext = if output_codec == OutputCodec::ProRes { \"mov\" } else { \"mp4\" };\n        args.input.with_file_name(format!(\"{stem}_graded.{ext}\"))\n    });\n\n    log::info!(\"Grading: {} → {}\", args.input.display(), output.display());\n\n    // -----------------------------------------------------------------------\n    // Direct mode: per-frame RAUNE, skip LUT pipeline entirely\n    // -----------------------------------------------------------------------\n    let direct_mode = args.direct || cfg.grade.mode.as_deref() == Some(\"direct\");\n    if direct_mode {\n        let raune_proxy_size = args.raune_proxy_size\n            .or(cfg.grade.raune_proxy_size)\n            .unwrap_or(1080_usize);\n\n        let rw = raune_weights.as_ref()\n            .ok_or_else(|| anyhow::anyhow!(\"--direct requires RAUNE weights (set [models].raune_weights in dorea.toml)\"))?;\n        let rmd = raune_models_dir.as_ref()\n            .ok_or_else(|| anyhow::anyhow!(\"--direct requires RAUNE models dir (set [models].raune_models_dir in dorea.toml)\"))?;\n\n        let (proxy_w, proxy_h) = dorea_video::resize::proxy_dims(\n            info.width, info.height, raune_proxy_size,\n        );\n\n        let direct_batch_size = args.direct_batch_size\n            .or(cfg.grade.direct_batch_size)\n            .unwrap_or(4);\n",
+  "source_version": "crates/dorea-cli/src/grade.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229424660Z",
+  "valid_from": "2026-04-11T00:04:13.229424660Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/grade.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 194,
+    "end_line": 224,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

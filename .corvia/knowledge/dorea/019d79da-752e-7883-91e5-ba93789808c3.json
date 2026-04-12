@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-ba93789808c3",
+  "content": "    f\"but model is on {self.device}. Caller must keep tensors on the same device.\"\n            )\n\n        if enhanced.numel() == 0:\n            return []\n\n        import torch\n        import torch.nn.functional as F\n\n        N, _, H_r, W_r = enhanced.shape\n\n        # GPU resize: keep aspect, snap to multiples of _PATCH_SIZE\n        scale = min(depth_max_size / max(H_r, W_r), 1.0)\n        H_d = max(_PATCH_SIZE, int(H_r * scale) // _PATCH_SIZE * _PATCH_SIZE)\n        W_d = max(_PATCH_SIZE, int(W_r * scale) // _PATCH_SIZE * _PATCH_SIZE)\n\n        resized = F.interpolate(\n            enhanced, size=(H_d, W_d), mode=\"bilinear\", align_corners=False\n        )  # (N, 3, H_d, W_d) in [0, 1]\n\n        # Re-normalise [0,1] → ImageNet stats Depth Anything expects\n        mean = torch.tensor(self._MEAN, dtype=torch.float32, device=enhanced.device).view(1, 3, 1, 1)\n        std  = torch.tensor(self._STD,  dtype=torch.float32, device=enhanced.device).view(1, 3, 1, 1)\n        depth_input = (resized - mean) / std  # (N, 3, H_d, W_d)\n\n        with torch.no_grad():\n            outputs = self.model(pixel_values=depth_input)\n\n        depths_raw = outputs.predicted_depth.cpu().numpy()  # (N, H_d, W_d)\n\n        result = []\n        for i in range(N):\n            d = depths_raw[i]\n            d_min, d_max = float(d.min()), float(d.max())\n            if d_max - d_min < 1e-6:\n                result.append(np.zeros_like(d, dtype=np.float32))\n            else:\n                result.append(((d - d_min) / (d_max - d_min)).astype(np.float32))\n        return result",
+  "source_version": "python/dorea_inference/depth_anything.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230037519Z",
+  "valid_from": "2026-04-11T00:04:13.230037519Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/depth_anything.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 228,
+    "end_line": 256,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c6059ab54cfa",
+  "content": "0.01, \"final_delta_e\": 0.5, \"final_delta_e_p95\": 0.8, \"ssim\": 0.99}\n                        for name in method_order},\n        method_order=method_order,\n        out_path=out,\n        crop_size=64,\n    )\n    assert out.exists()\n    Image.open(out).verify()\ndef test_generate_per_frame_sheet_full_scale_canvas(tmp_path):\n    \"\"\"Regression test: canvas_w must include the crops row width at full scale.\n\n    At default crop_size=400 with 11 cells, crops row (4532 px) is wider than\n    the thumbs row (~3432 px). Previously canvas_w was only max(gold, thumbs),\n    so the rightmost crops got silently clipped. This test verifies the right\n    edge isn't truncated by checking the final canvas has pixels in the last\n    (rightmost) crop column's expected location.\n    \"\"\"\n    # 9-method benchmark shape: orig_proxy + gold + 9 core methods (bilinear\n    # baseline + 7 core + sr_realesrgan) = 11 total cells\n    method_order = [\"bilinear\", \"bicubic\", \"lanczos3\", \"joint_bilateral\",\n                    \"guided_filter\", \"asymmetric_bilateral\",\n                    \"higher_proxy\", \"sr_maxine\", \"sr_realesrgan\"]\n    method_finals = {name: torch.rand(1, 3, 200, 320, device=\"cuda\", dtype=torch.float32)\n                     for name in method_order}\n    method_deltas = {name: torch.randn(1, 3, 200, 320, device=\"cuda\", dtype=torch.float32) * 0.05\n                     for name in method_order}\n    method_metrics = {\n        name: {\"delta_l1\": 0.01, \"final_delta_e\": 0.5, \"final_delta_e_p95\": 0.8, \"ssim\": 0.99}\n        for name in method_order\n    }\n    out = tmp_path / \"fullscale.png\"",
+  "source_version": "benchmarks/upscale_bench/tests/test_visualize.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230324071Z",
+  "valid_from": "2026-04-11T00:04:13.230324071Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/tests/test_visualize.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 73,
+    "end_line": 95,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

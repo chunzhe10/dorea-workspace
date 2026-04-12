@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-f2f9c074e58a",
+  "content": "ror_enum::CUDA_SUCCESS {\n                    return Err(GpuError::CudaFail(format!(\"cuMemcpy3D zone {z}: {rc:?}\")));\n                }\n            }\n        }\n\n        self.sets[set_index].zone_boundaries = runtime_boundaries.to_vec();\n        Ok(())\n    }\npub(crate) fn load_segment(\n        &mut self,\n        device: &Arc<CudaDevice>,\n        base_luts_flat: &[f32],\n        base_boundaries: &[f32],\n        hsl_data: (&[f32], &[f32], &[f32], &[f32]),\n    ) -> Result<(), GpuError> {\n        self.d_base_luts = device.htod_sync_copy(base_luts_flat).map_err(map_cudarc_error)?;\n        self.d_base_boundaries = device.htod_sync_copy(base_boundaries).map_err(map_cudarc_error)?;\n        self.base_n_zones = base_boundaries.len() - 1;\n        let (ho, sr, vo, wt) = hsl_data;\n        self.d_h_offsets = device.htod_sync_copy(ho).map_err(map_cudarc_error)?;\n        self.d_s_ratios  = device.htod_sync_copy(sr).map_err(map_cudarc_error)?;\n        self.d_v_offsets = device.htod_sync_copy(vo).map_err(map_cudarc_error)?;\n        self.d_weights   = device.htod_sync_copy(wt).map_err(map_cudarc_error)?;\n        Ok(())\n    }",
+  "source_version": "crates/dorea-gpu/src/cuda/combined_lut.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229849563Z",
+  "valid_from": "2026-04-11T00:04:13.229849563Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cuda/combined_lut.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 503,
+    "end_line": 519,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d81ca567b20d",
+  "content": "e(cfg) = Self::try_load(path) {\n                log::debug!(\"Loaded config from {}\", path.display());\n                return cfg;\n            }\n        }\n\n        log::debug!(\"No dorea.toml found — using built-in defaults\");\n        Self::default()\n    }\nfn try_load(path: &std::path::Path) -> Option<Self> {\n        let text = std::fs::read_to_string(path).ok()?;\n        match toml::from_str(&text) {\n            Ok(cfg) => Some(cfg),\n            Err(e) => {\n                log::warn!(\"Failed to parse {}: {e}\", path.display());\n                None\n            }\n        }\n    }",
+  "source_version": "crates/dorea-cli/src/config.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229513858Z",
+  "valid_from": "2026-04-11T00:04:13.229513858Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/config.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 145,
+    "end_line": 154,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

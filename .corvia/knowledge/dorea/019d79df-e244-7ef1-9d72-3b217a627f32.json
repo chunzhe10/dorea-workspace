@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-3b217a627f32",
+  "content": "## Prerequisites\n## File Map\n\n## Task 1: Add `change_detect.rs` — `ChangeDetector` trait + `MseDetector`\n\n**Files:**\n- Create: `crates/dorea-cli/src/change_detect.rs`\n\n- [ ] **Step 1.1: Write the failing tests**\n\nCreate `crates/dorea-cli/src/change_detect.rs` with just the test module:\n\n```rust\n/// Abstracted change detection between video frames.\n///\n/// Implementations hold a reference frame and compute a scalar change score\n/// against it. The caller decides when to update the reference (i.e. on keyframe\n/// detection) — this is intentional: we compare each frame to the *last keyframe*,\n/// not to the immediately preceding frame.\n\npub trait ChangeDetector: Send {\n    /// Change score from `pixels` vs the stored reference frame.\n    /// Returns `f32::MAX` when no reference has been set yet.\n    fn score(&self, pixels: &[u8]) -> f32;\n\n    /// Accept `pixels` as the new reference for future `score()` calls.\n    fn set_reference(&mut self, pixels: &[u8]);\n\n    /// Clear the reference — next `score()` will return `f32::MAX`.\n    fn reset(&mut self);\n}\n\n/// Mean-squared-error change detector.\npub struct MseDetector {\n    reference: Option<Vec<u8>>,\n}\n\nimpl Default for MseDetector {\n    fn default() -> Self {\n        Self { reference: None }\n    }\n}\n\n/// Normalized MSE between two equal-length u8 slices.\n/// Returns value in [0, 1] where 0 = identical.\npub fn frame_mse(a: &[u8], b: &[u8]) -> f32 {\n    debug_assert_eq!(a.len(), b.len());\n    if a.is_empty() {",
+  "source_version": "plans/2026-04-04-unified-keyframe-sampling-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836923234Z",
+  "valid_from": "2026-04-11T00:10:08.836923234Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-unified-keyframe-sampling-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 42,
+    "end_line": 86,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

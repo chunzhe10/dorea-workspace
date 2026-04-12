@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-da99f5c9d409",
+  "content": "fn nvcc_available() -> bool {\n    // 1. Check PATH\n    if let Ok(output) = std::process::Command::new(\"nvcc\").arg(\"--version\").output() {\n        if output.status.success() {\n            return true;\n        }\n    }\n\n    // 2. Check CUDA_HOME/bin/nvcc\n    if let Ok(cuda_home) = std::env::var(\"CUDA_HOME\") {\n        let nvcc = PathBuf::from(cuda_home).join(\"bin\").join(\"nvcc\");\n        if nvcc.exists() {\n            return true;\n        }\n    }\n\n    // 3. Scan /usr/local/cuda-*\n    if let Ok(entries) = std::fs::read_dir(\"/usr/local\") {\n        let found = entries\n            .flatten()\n            .filter(|e| e.file_name().to_string_lossy().starts_with(\"cuda-\"))\n            .any(|e| e.path().join(\"bin\").join(\"nvcc\").exists());\n        if found {\n            return true;\n        }\n    }\n\n    // 4. Common fixed paths\n    for candidate in &[\"/usr/local/cuda/bin/nvcc\", \"/usr/bin/nvcc\"] {\n        if PathBuf::from(candidate).exists() {\n            return true;\n        }\n    }\n\n    false\n}",
+  "source_version": "crates/dorea-cli/build.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229542972Z",
+  "valid_from": "2026-04-11T00:04:13.229542972Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/build.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 8,
+    "end_line": 43,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

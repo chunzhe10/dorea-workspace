@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-e191ae3332ab",
+  "content": "pub struct YoloSegBatchItem {\n    pub id: String,\n    pub pixels: Vec<u8>,\n    pub width: usize,\n    pub height: usize,\n}\npub(super) fn parse_enhance_response(\n    resp: &str,\n    expected_id: &str,\n    expected_w: usize,\n    expected_h: usize,\n) -> Result<(Vec<u8>, usize, usize), InferenceError> {\n    let v: serde_json::Value = serde_json::from_str(resp)\n        .map_err(|e| InferenceError::Ipc(format!(\"enhance response parse: {e}\")))?;\n\n    if v[\"type\"].as_str() == Some(\"error\") {\n        let msg = v[\"message\"].as_str().unwrap_or(\"unknown error\");\n        return Err(InferenceError::ServerError(msg.to_string()));\n    }\n    if v[\"type\"].as_str() != Some(\"enhance_result\") {\n        return Err(InferenceError::Ipc(format!(\n            \"unexpected response type for enhance: {resp}\"\n        )));\n    }\n\n    let w = v[\"width\"].as_u64().unwrap_or(0) as usize;\n    let h = v[\"height\"].as_u64().unwrap_or(0) as usize;\n\n    if w != expected_w || h != expected_h {\n        return Err(InferenceError::Ipc(format!(\n            \"enhance dimension mismatch: expected {expected_w}x{expected_h}, got {w}x{h}\"\n        )));\n    }\n\n    let b64_out = v[\"image_b64\"]\n        .as_str()\n        .ok_or_else(|| InferenceError::Ipc(\"missing image_b64\".to_string()))?;\n\n    let raw = B64\n        .decode(b64_out)\n        .map_err(|e| InferenceError::Ipc(format!(\"base64 decode: {e}\")))?;\n\n    if raw.len() != w * h * 3 {\n        return Err(InferenceError::Ipc(format!(\n            \"enhance buffer size mismatch: got {}, expected {}\",\n            raw.len(),\n            w * h * 3,\n        )));\n    }\n\n    let _ = expected_id; // id correlation not enforced in response (Python echoes it back)\n    Ok((raw, w, h))\n}",
+  "source_version": "crates/dorea-video/src/inference_subprocess.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229628362Z",
+  "valid_from": "2026-04-11T00:04:13.229628362Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference_subprocess.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 149,
+    "end_line": 195,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d7a7b-458c-7033-ad34-56d84fdfb0a6",
+  "content": "# Delta Upscale Benchmark — First Real Run Findings (2026-04-11)\n\nBranch: `feat/upscale-bench` @ `5d4b8f5` (repos/dorea)\nPlan:   `docs/plans/2026-04-10-delta-upscale-bench-implementation.md`\nSpec:   `docs/decisions/2026-04-10-delta-upscale-bench-design.md`\nClip:   `footage/raw/2025-11-01/DJI_20251101111428_0055_D_3s.MP4` (sha `a41e727b1df1f5a4`)\nWeights: RAUNE `weights_95.pth` (sha `3bfd8f403a025965`)\n\n## Run configuration\n\n- 3 auto-selected frames: `[0, 30, 180]`\n- 8 methods ran end-to-end; `sr_realesrgan` soft-skipped (package not installed, by design)\n- Methods: bilinear, bicubic, lanczos3, guided_filter, joint_bilateral, asymmetric_bilateral, higher_proxy, sr_maxine\n- Hardware: RTX 3060 Laptop, 6 GB VRAM, torch 2.6.0+cu124, nvvfx 1.2.0\n\n## Winners\n\n| metric | winner | value |\n|---|---|---|\n| final_delta_e (trivial) | `higher_proxy` | ~2e-4 (it IS the gold) |\n| final_delta_e (non-trivial) | **`guided_filter`** | 4.926 mean ΔE |\n| wall_time_ms_end_to_end | **`bilinear`** | 28.68 ms |\n| wall_time_ms_upscale | `bilinear` | 0.68 ms |\n\n## Key finding: the information ceiling is *very* low\n\nAcross the 7 non-trivial methods, aggregate final ΔE spans only **4.93 → 5.10**\n— a total spread of ~3%. Bilinear sits at 4.99, `guided_filter` (the best\nnon-trivial method) at 4.93. That is a ~1% ΔE improvement at ~3× wall-time\ncost (83 ms vs 29 ms).\n\n**Implication for production:** the current `bilinear` upscale in\n`raune_filter.py::_process_batch` is effectively on the pareto frontier.\nThere is no justification for switching to edge-aware methods based on\nquality alone.\n\n## Surprise: `sr_maxine` is strictly *worse* than bilinear\n\nNVIDIA Maxine VideoSuperRes ranked **last** on every aggregate metric:\n\n| method | delta_l1 | final_ΔE | SSIM | e2e ms |\n|---|---|---|---|---|\n| bilinear | 0.01636 | 4.988 | 0.9476 | 28.7 |\n| sr_maxine | 0.01688 | 5.104 | **0.9185** | 75.0 |\n\nThe SSIM gap is the most striking: Maxine introduces enough texture\nperturbation (~3% relative SSIM loss) to be visibly worse than the naive\nbaseline. On frame 180 (the hardest frame) Maxine slightly beats bilinear\non ΔE (11.676 vs 11.727) but still loses badly on SSIM (0.861 vs 0.891).\n\nThis tells us learned super-resolution is **not** a free lunch for this\ndelta pathway: SR models are trained to hallucinate plausible high-freq\ncontent, but the OKLab delta signal has essentially no high-freq content\nto recover — only smooth gradients — so the hallucination becomes noise.\n\n## Frame 180 dominates the aggregate\n\n| frame | gold path | bilinear ΔE |\n|---|---|---|\n| 0 | `native_4k` | 1.77 |\n| 30 | `native_4k` | 1.46 |\n| 180 | `tiled_2x2_1984x1144_o128` | **11.73** |\n\nFrame 180 (dive scene: two divers + bubbles + coral + surface light) carries\n~80% of the aggregate ΔE by itself. Method ranking is consistent across\nframes — the hardest frame just amplifies the spread.\n\n## higher_proxy validates the tiled fallback numerically\n\n`higher_proxy` matched gold to **~3e-5 ΔE on frames 0 & 30 (native_4k gold)**\nand **~3e-5 ΔE on frame 180 (tiled_2x2 gold)**. Because `higher_proxy` re-uses\nthe same `compute_gold` path as the gold, numerical equality is expected —\nand it held for *both* the native and tiled code paths. This is strong\nevidence the 2×2 tiled RAUNE-at-4K fallback (1984×1144 tiles, 128-px overlap,\nlinear feathering) produces output identical to the native path on content\nwhere both fit. No seam artifacts, no feather bugs.\n\n## Gold path per frame\n\n- Frame 0: `native_4k` — native 4K RAUNE fit in VRAM\n- Frame 30: `native_4k`\n- Frame 180: `tiled_2x2_1984x1144_o128` — native OOM'd, tiled fallback used\n\nMix of both paths in one run is useful: it exercises the tiled fallback\nwithout `--regen-gold`, confirming the auto-escalation logic is live.\n\n## Operational notes\n\n- **sr_maxine OOM fix** (committed as `5d4b8f5`): the original run.py kept\n  `method_finals` and `method_deltas` on GPU across all methods per frame,\n  which starved Maxine's nvvfx 4K output buffer on the 8th method. Fix was\n  to move both dicts to CPU immediately after metrics computation and\n  `torch.cuda.empty_cache()` between methods. Visualization functions already\n  call `.cpu()` internally so this is pure win.\n- **python3-dev missing after devcontainer rebuild**: Triton JIT compilation\n  needs Python.h. Installing `python3-dev` (apt) fixed the\n  joint_bilateral/asymmetric_bilateral smoke tests.\n- **pytest + PyAV not in /opt/dorea-venv after rebuild**: had to pip install\n  both. `setup_bench.sh` does not install these — candidate follow-up for the\n  setup script.\n\n## Recommendation\n\nKeep production on `bilinear`. The delta path is info-ceiling limited — no\nupscale method tested materially improves quality, and the learned-SR option\nactively regresses SSIM. If ever revisited (e.g. for 8K output), `guided_filter`\nis the only non-trivial method worth considering, and only for its ~1% ΔE\nwin at 3× cost.\n",
+  "source_version": "repos/dorea@5d4b8f5",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-11T02:59:52.332164716Z",
+  "valid_from": "2026-04-11T02:59:52.332164716Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "finding",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d71-fec849182858",
+  "content": "### 4D Tetrahedral LUT\n### Depth-Parameterized Polynomial Fit\n\n### 33x33x33 Grid\nIndustry standard for film grading, but insufficient for this pipeline's\nnonlinear operations. Max error 5.2/255 at highlight knees. Rejected after\nnumerical validation.\n\n\n### Interpolate graded RGB (status quo ante)\nThe original perf v3 approach. Fast (~12ms) but produces ghosting on moving\nsubjects. Not acceptable for production output. Rejected and reverted in #23.\n",
+  "source_version": "decisions/2026-04-03-3d-lut-temporal-interpolation.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836114837Z",
+  "valid_from": "2026-04-11T00:10:08.836114837Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-03-3d-lut-temporal-interpolation.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 233,
+    "end_line": 241,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d02b29278420",
+  "content": "def save(arr, name):\n    path = f\"{OUT}/{name}.png\"\n    Image.fromarray(arr).save(path)\n    print(f\"  Saved: {path}\")\ndef main():\n    w, h = probe(VIDEO)\n    print(f\"Video: {w}x{h}\")\n\n    # 1. Original frame 0\n    print(\"Extracting original frame 0...\")\n    orig = extract_frame(VIDEO, 0.0, w, h)\n    save(orig, \"01_original\")\n\n    # 2. Graded frame 0\n    print(\"Extracting graded frame 0...\")\n    graded = extract_frame(GRADED, 0.0, w, h)\n    save(graded, \"02_graded\")\n\n    # 3. Diff (amplified 5x)\n    print(\"Computing diff...\")\n    diff = np.abs(orig.astype(np.int16) - graded.astype(np.int16)).astype(np.uint8)\n    diff_amp = np.clip(diff.astype(np.uint16) * 5, 0, 255).astype(np.uint8)\n    save(diff_amp, \"03_diff_5x\")\n\n    # 4. Per-channel diff\n    for ch, name in enumerate([\"red\", \"green\", \"blue\"]):\n        ch_diff = np.abs(orig[:,:,ch].astype(np.int16) - graded[:,:,ch].astype(np.int16))\n        ch_img = np.clip(ch_diff.astype(np.uint16) * 5, 0, 255).astype(np.uint8)\n        save(ch_img, f\"04_diff_{name}\")\n\n    # 5. Depth map at proxy resolution with zone boundaries\n    print(\"Running depth estimation...\")\n    from dorea_inference.depth_anything import DepthAnythingInference\n    model = DepthAnythingInference(device=\"cuda\")\n    depth = model.infer(orig, max_size=1518)\n    dh, dw = depth.shape\n    print(f\"  Depth: {dw}x{dh}, range [{depth.min():.3f}, {depth.max():.3f}]\")\n\n    # Save raw depth\n    depth_u8 = ((depth - depth.min()) / (depth.max() - depth.min() + 1e-8) * 255).astype(np.uint8)\n    save(depth_u8, \"05_depth_raw\")\n\n    # 6. Zone visualization — show which of 8 zones each pixel falls into\n    n_zones = 8\n    # Compute adaptive zone boundaries (quantile-based, matching pipeline)\n    flat = depth.flatten()\n    boundaries = np.quantile(flat, np.linspace(0, 1, n_zones + 1))\n    print(f\"  Zone boundaries: {[f'{b:.3f}' for b in boundaries]}\")\n\n    zone_map = np.zeros_like(depth, dtype=np.uint8)\n    for z in range(n_zones):\n        mask = (depth >= boundaries[z]) & (depth < boundaries[z + 1])\n        zone_map[mask] = int(255 * z / (n_zones - 1))",
+  "source_version": "investigate_artifacts.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229413605Z",
+  "valid_from": "2026-04-11T00:04:13.229413605Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "investigate_artifacts.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 39,
+    "end_line": 87,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

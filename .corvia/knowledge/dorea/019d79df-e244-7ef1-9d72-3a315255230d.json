@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-3a315255230d",
+  "content": "ptiveGrader in lib.rs**\n\nIn `crates/dorea-gpu/src/lib.rs`, add after the existing `grade_frame_with_grader`:\n\n```rust\n#[cfg(feature = \"cuda\")]\npub fn grade_frame_with_adaptive_grader(\n    grader: &cuda::AdaptiveGrader,\n    pixels: &[u8],\n    depth: &[f32],\n    width: usize,\n    height: usize,\n    blend_t: f32,\n) -> Result<Vec<u8>, GpuError> {\n    grader.grade_frame_blended(pixels, depth, width, height, blend_t)\n}\n```\n\nAnd in the `pub use` section, ensure `AdaptiveGrader` is exported from `cuda`:\n\n```rust\n#[cfg(feature = \"cuda\")]\npub use cuda::AdaptiveGrader;\n```\n\n- [ ] **Step 4: Verify it compiles**\n\nRun: `cd /workspaces/dorea-workspace/repos/dorea && cargo check -p dorea-gpu --features cuda`\nExpected: compiles (existing CudaGrader is untouched, new types are additive)\n\n- [ ] **Step 5: Write basic integration test**\n\nAdd to `crates/dorea-gpu/src/cuda/mod.rs` tests module:\n\n```rust\n    #[test]\n    fn adaptive_grader_builds_and_grades() {\n        let cal = make_calibration(32); // 32 base zones\n        let params = crate::GradeParams::default();\n\n        // Extract flat LUT data from calibration\n        let base_luts_flat = cal.depth_luts().flat_data();\n        let base_boundaries = cal.depth_luts().zone_boundaries();\n\n        // HSL data: extract from calibration\n        let hsl = cal.hsl_corrections();\n        let h_offsets: Vec<f32> = hsl.0.iter().map(|q| q.h_offset).collect();\n        let s_ratios: Vec<f32> = hsl.0.iter().map(|q| q.s_ratio).collect();\n        let v_offsets: Vec<f32> = hsl.0.iter().map(|q| q.v_offset).collect();\n        let weights: Vec<f32> = hsl.0.iter().map(|q| q.weight).collect();\n\n        let mut grader = match AdaptiveGrader::new(\n            &base_luts_flat, base_boundaries, 32,\n            (&h_offsets, &s_ratios, &v_offsets, &weights),\n            &params, 17, 8,\n        ) {",
+  "source_version": "plans/2026-04-04-per-keyframe-adaptive-depth-zones-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836907945Z",
+  "valid_from": "2026-04-11T00:10:08.836907945Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-per-keyframe-adaptive-depth-zones-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1293,
+    "end_line": 1338,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

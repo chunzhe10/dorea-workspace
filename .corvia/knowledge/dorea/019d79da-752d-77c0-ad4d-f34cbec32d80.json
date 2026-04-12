@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-f34cbec32d80",
+  "content": ": 4 (9x9 window at proxy res).\n    pub radius: i32,\n    /// Epsilon for water regions (larger = smoother). Default: 0.01.\n    pub epsilon_water: f32,\n    /// Epsilon for diver regions (smaller = sharper edges). Default: 0.001.\n    pub epsilon_diver: f32,\n}\nimpl Default for GuidedFilterParams {\n    fn default() -> Self {\n        Self {\n            radius: 4,\n            epsilon_water: 0.01,\n            epsilon_diver: 0.001,\n        }\n    }\n}",
+  "source_version": "crates/dorea-gpu/src/cuda/guided_filter.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229854564Z",
+  "valid_from": "2026-04-11T00:04:13.229854564Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cuda/guided_filter.rs",
+    "language": "rs",
+    "chunk_type": "impl_item",
+    "start_line": 34,
+    "end_line": 42,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

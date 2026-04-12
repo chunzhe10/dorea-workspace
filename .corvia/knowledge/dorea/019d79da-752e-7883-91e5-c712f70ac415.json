@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c712f70ac415",
+  "content": "def synthetic_proxy_delta():\n    \"\"\"Tiny OKLab delta at proxy resolution for smoke tests.\"\"\"\n    return torch.randn(1, 3, 36, 64, device=\"cuda\", dtype=torch.float32) * 0.05\ndef synthetic_full_rgb():\n    \"\"\"Tiny full-res RGB in [0, 1] for smoke tests.\"\"\"\n    return torch.rand(1, 3, 72, 128, device=\"cuda\", dtype=torch.float32)",
+  "source_version": "benchmarks/upscale_bench/tests/conftest.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230336430Z",
+  "valid_from": "2026-04-11T00:04:13.230336430Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/tests/conftest.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 29,
+    "end_line": 31,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

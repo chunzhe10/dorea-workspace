@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c4439d19887e",
+  "content": "n.\n    \"\"\"\n    fh, fw = full_size\n    # Resample width first (along dim=-1), then height (along dim=-2)\n    resampled = _lanczos_resample_1d(delta_proxy, fw, dim=-1, a=3)\n    resampled = _lanczos_resample_1d(resampled, fh, dim=-2, a=3)\n    return resampled\ndef _box_filter(x: torch.Tensor, r: int) -> torch.Tensor:\n    \"\"\"Separable box filter with radius r (window size 2r+1), reflection padding.\n\n    Operates on (N, C, H, W). Used by the guided filter.\n    \"\"\"\n    k = 2 * r + 1\n    # Separable: horizontal then vertical average pool is a box filter\n    x = F.pad(x, (r, r, r, r), mode=\"reflect\")\n    x = F.avg_pool2d(x, kernel_size=(1, k), stride=1)\n    x = F.avg_pool2d(x, kernel_size=(k, 1), stride=1)\n    return x",
+  "source_version": "benchmarks/upscale_bench/methods.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230298133Z",
+  "valid_from": "2026-04-11T00:04:13.230298133Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/methods.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 137,
+    "end_line": 147,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

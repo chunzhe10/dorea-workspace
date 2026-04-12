@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c90fd3286dd0",
+  "content": "nd, warmup=args.timing_warmup, runs=args.timing_runs)\n\n                    # One more call to capture output\n                    delta_method = fn(delta_proxy, frame_4k, (2160, 3840))\n                    final_method = _apply_delta(delta_method, frame_4k)\n\n                    derrs = compute_delta_errors(delta_method, gold.delta_4k)\n                    ferrs = compute_final_image_errors(final_method, gold_final)\n                    ssim = compute_ssim(final_method, gold_final)\n\n                    method_finals[name] = final_method\n                    method_deltas[name] = delta_method\n                    method_timings[name] = t_e2e\n                    metrics_dict = {**derrs, **ferrs, \"ssim\": ssim,\n                                    \"wall_time_ms_upscale\": t_upscale,\n                                    \"wall_time_ms_end_to_end\": t_e2e}\n                    method_metrics[name] = metrics_dict\n\n                    all_results.append(MethodResult(\n                        frame_idx=frame_idx, method=name,\n                        delta_l1_L=derrs[\"delta_l1_L\"], delta_l1_a=derrs[\"delta_l1_a\"],\n                        delta_l1_b=derrs[\"delta_l1_b\"], delta_l1=derrs[\"delta_l1\"],\n                        delta_l2=derrs[\"delta_l2\"], delta_max=derrs[\"delta_max\"],\n                        delta_p95=derrs[\"delta_p95\"],\n                        final_delta_e=ferrs[\"final_delta_e\"],\n                        final_delta_e_p95=ferrs[\"final_delta_e_p95\"],\n                        ssim=ssim,\n                        wall_time_ms_upscale=t_upscale,\n                        wall_time_ms_end_to_end=t_e2e,\n                        status=\"ok\",\n                    ))\n                except torch.cuda.OutOfMemoryError:\n                    torch.cuda.empty_cache()\n                    oom_events.append(f\"{frame_idx}/{name}\")\n                    print(f\"    OOM: {name}\")\n                    all_results.append(MethodResult(\n                        frame_idx=frame_idx, method=name,\n                        delta_l1_L=float(\"nan\"), delta_l1_a=float(\"nan\"),\n                        delta_l1_b=float(\"nan\"), delta_l1=float(\"nan\"),",
+  "source_version": "benchmarks/upscale_bench/run.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230363747Z",
+  "valid_from": "2026-04-11T00:04:13.230363747Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/run.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 254,
+    "end_line": 286,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

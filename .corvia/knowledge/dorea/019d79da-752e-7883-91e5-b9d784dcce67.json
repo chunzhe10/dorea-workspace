@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-b9d784dcce67",
+  "content": "        model_id_or_path = str(path)\n        has_local = path.is_dir() and any(\n            (path / f).exists() for f in (\"config.json\", \"pytorch_model.bin\", \"model.safetensors\")\n        )\n        if not has_local:\n            import sys\n            print(\n                f\"[dorea_inference] WARNING: local depth model not found at {path}; \"\n                \"falling back to HuggingFace hub download (requires internet access). \"\n                \"Pass --depth-model to suppress this.\",\n                file=sys.stderr,\n            )\n            model_id_or_path = \"depth-anything/Depth-Anything-V2-Small-hf\"\n\n        self.model = AutoModelForDepthEstimation.from_pretrained(model_id_or_path)\n        self.model = self.model.to(self.device)\n        self.model.eval()\n\n    # ImageNet normalization constants (Depth Anything V2 uses these)\n    _MEAN = np.array([0.485, 0.456, 0.406], dtype=np.float32)\n    _STD  = np.array([0.229, 0.224, 0.225], dtype=np.float32)\n\n    def infer(self, img_rgb: np.ndarray, max_size: int = 518) -> np.ndarray:\n        \"\"\"Run depth estimation on uint8 HxWx3 RGB image.\n\n        Returns float32 HxW depth map normalized to [0, 1] at inference resolution.\n        \"\"\"\n        import torch\n        from PIL import Image as _Image\n\n        pil = _Image.fromarray(img_rgb)\n        capped = _resize_for_depth(pil, max_size)\n\n        # Direct tensor construction — bypass AutoImageProcessor",
+  "source_version": "python/dorea_inference/depth_anything.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230027356Z",
+  "valid_from": "2026-04-11T00:04:13.230027356Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/depth_anything.py",
+    "language": "py",
+    "chunk_type": "class_definition",
+    "start_line": 67,
+    "end_line": 93,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

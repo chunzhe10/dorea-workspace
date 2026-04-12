@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-2a53d36c9b38",
+  "content": "ish()\n    }\n\n    /// Check that this LUT is still valid for the given calibration and params.\n    pub fn is_valid_for(&self, calibration: &Calibration, params: &GradeParams) -> bool {\n        self.build_hash == Self::compute_hash(calibration, params)\n    }\n}\n```\n\n- [ ] **Step 3: Add the apply function**\n\n```rust\nimpl GradeLut {\n    /// Grade a frame using the precomputed LUT.\n    ///\n    /// For each pixel: trilinear-interpolate in two bracketing depth-band LUTs,\n    /// then linearly blend by depth. Parallelized with rayon.\n    pub fn apply(&self, pixels: &[u8], depth: &[f32], width: usize, height: usize) -> Vec<u8> {\n        let n = width * height;\n        assert_eq!(pixels.len(), n * 3, \"pixels length mismatch\");\n        assert_eq!(depth.len(), n, \"depth length mismatch\");\n\n        let result: Vec<u8> = (0..n)\n            .into_par_iter()\n            .flat_map_iter(|i| {\n                let r = pixels[i * 3] as f32 / 255.0;\n                let g = pixels[i * 3 + 1] as f32 / 255.0;\n                let b = pixels[i * 3 + 2] as f32 / 255.0;\n                let d = depth[i];\n\n                let [ro, go, bo] = self.lookup(r, g, b, d);\n                [\n                    (ro.clamp(0.0, 1.0) * 255.0).round() as u8,\n                    (go.clamp(0.0, 1.0) * 255.0).round() as u8,\n                    (bo.clamp(0.0, 1.0) * 255.0).round() as u8,\n                ]\n            })\n            .collect();\n\n        result\n    }\n",
+  "source_version": "plans/2026-04-03-3d-lut-temporal-interpolation.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836667134Z",
+  "valid_from": "2026-04-11T00:10:08.836667134Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-3d-lut-temporal-interpolation.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 251,
+    "end_line": 286,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

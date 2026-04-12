@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-e01bb3ee1814",
+  "content": "\n\n    #[test]\n    fn output_codec_bytes_per_pixel() {\n        assert_eq!(OutputCodec::ProRes.bytes_per_pixel(), 6);\n        assert_eq!(OutputCodec::Hevc10.bytes_per_pixel(), 6);\n        assert_eq!(OutputCodec::H264.bytes_per_pixel(), 3);\n    }\n\n    #[test]\n    fn output_codec_parse() {\n        assert_eq!(\"prores\".parse::<OutputCodec>(), Ok(OutputCodec::ProRes));\n        assert_eq!(\"hevc10\".parse::<OutputCodec>(), Ok(OutputCodec::Hevc10));\n        assert_eq!(\"hevc\".parse::<OutputCodec>(), Ok(OutputCodec::Hevc10));\n        assert_eq!(\"h264\".parse::<OutputCodec>(), Ok(OutputCodec::H264));\n        assert_eq!(\"avc\".parse::<OutputCodec>(), Ok(OutputCodec::H264));\n        assert!(\"unknown\".parse::<OutputCodec>().is_err());\n    }\n\n    #[test]\n    fn output_codec_display() {\n        assert_eq!(OutputCodec::ProRes.to_string(), \"prores\");\n        assert_eq!(OutputCodec::Hevc10.to_string(), \"hevc10\");\n        assert_eq!(OutputCodec::H264.to_string(), \"h264\");\n    }\n\n    #[test]\n    fn lossless_temp_encoder_creates_decodable_file() {\n        let dir = std::env::temp_dir();\n        let path = dir.join(format!(\"dorea_test_ffv1_{}.mkv\", std::process::id()));\n        let width = 8usize;\n        let height = 4usize;\n        let fps = 30.0f64;\n\n        // Write 3 frames\n        let mut enc = FrameEncoder::new_lossless_temp(&path, width, height, fps)\n            .expect(\"failed to create lossless encoder\");\n        let frame: Vec<u8> = (0..width * height * 3).map(|i| (i % 256) as u8).collect();\n        for _ in 0..3 {\n            enc.write_frame(&frame).expect(\"write_frame failed\");\n        }\n        enc.finish().expect(\"finish failed\");\n\n        // File must exist and be non-empty\n        assert!(path.exists(), \"output file does not exist\");\n        assert!(path.metadata().unwrap().len() > 0, \"output file is empty\");\n\n        // Must be decodable as a video\n        let probe_result = probe(&path);\n        assert!(probe_result.is_ok(), \"ffprobe failed: {:?}\", probe_result);\n        let info = probe_result.unwrap();\n        assert_eq!(info.width, width);\n        assert_eq!(info.height, height);\n\n        // Cleanup\n        let _ = std::fs::remove_file(&path);\n    }\n}",
+  "source_version": "crates/dorea-video/src/ffmpeg.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229608767Z",
+  "valid_from": "2026-04-11T00:04:13.229608767Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/ffmpeg.rs",
+    "language": "rs",
+    "chunk_type": "mod_item",
+    "start_line": 1191,
+    "end_line": 1238,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

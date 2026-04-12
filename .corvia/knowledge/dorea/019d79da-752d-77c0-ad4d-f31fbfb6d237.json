@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-f31fbfb6d237",
+  "content": "pub(crate) fn swap(&mut self) -> usize {\n        self.active = 1 - self.active;\n        self.active\n    }\npub(crate) fn active_index(&self) -> usize {\n        self.active\n    }\npub(crate) fn active_textures(&self) -> &[CUtexObject] {\n        &self.sets[self.active].textures\n    }\npub(crate) fn active_boundaries(&self) -> &[f32] {\n        &self.sets[self.active].zone_boundaries\n    }",
+  "source_version": "crates/dorea-gpu/src/cuda/combined_lut.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229851371Z",
+  "valid_from": "2026-04-11T00:04:13.229851371Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cuda/combined_lut.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 532,
+    "end_line": 538,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

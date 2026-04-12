@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-3b37be346d8e",
+  "content": "## Task 1: Add `change_detect.rs` — `ChangeDetector` trait + `MseDetector`\n\n        return 0.0;\n    }\n    let n = a.len() as f64;\n    let sum_sq: f64 = a.iter().zip(b.iter())\n        .map(|(&av, &bv)| {\n            let d = av as f64 - bv as f64;\n            d * d\n        })\n        .sum();\n    (sum_sq / (n * 255.0 * 255.0)) as f32\n}\n\nimpl ChangeDetector for MseDetector {\n    fn score(&self, pixels: &[u8]) -> f32 {\n        match self.reference.as_ref() {\n            Some(r) => frame_mse(pixels, r),\n            None => f32::MAX,\n        }\n    }\n\n    fn set_reference(&mut self, pixels: &[u8]) {\n        self.reference = Some(pixels.to_vec());\n    }\n\n    fn reset(&mut self) {\n        self.reference = None;\n    }\n}\n\n#[cfg(test)]\nmod tests {\n    use super::*;\n\n    #[test]\n    fn frame_mse_identical_is_zero() {\n        let a: Vec<u8> = vec![100, 150, 200, 50, 75, 125];\n        assert_eq!(frame_mse(&a, &a), 0.0);\n    }\n\n    #[test]\n    fn frame_mse_empty_is_zero() {\n        assert_eq!(frame_mse(&[], &[]), 0.0);\n    }\n\n    #[test]\n    fn frame_mse_opposite_is_one() {",
+  "source_version": "plans/2026-04-04-unified-keyframe-sampling-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836923982Z",
+  "valid_from": "2026-04-11T00:10:08.836923982Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-unified-keyframe-sampling-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 87,
+    "end_line": 132,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

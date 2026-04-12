@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c4c1f4e80ace",
+  "content": ".Tensor:\n    \"\"\"Joint bilateral upsample with uniform spatial sigma across L/a/b.\"\"\"\n    return _run_joint_bilateral_kernel(\n        delta_proxy, orig_full, full_size,\n        sigma_spatial_L=1.5,\n        sigma_spatial_ab=1.5,\n        sigma_luma=0.1,\n    )\ndef asymmetric_bilateral(\n    delta_proxy: torch.Tensor,\n    orig_full: torch.Tensor,\n    full_size: Tuple[int, int],\n) -> torch.Tensor:\n    \"\"\"Joint bilateral with larger spatial sigma for chroma (a/b) than luma (L).\"\"\"\n    return _run_joint_bilateral_kernel(\n        delta_proxy, orig_full, full_size,\n        sigma_spatial_L=1.5,\n        sigma_spatial_ab=3.0,\n        sigma_luma=0.1,\n    )",
+  "source_version": "benchmarks/upscale_bench/methods.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230307226Z",
+  "valid_from": "2026-04-11T00:04:13.230307226Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/methods.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 397,
+    "end_line": 408,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

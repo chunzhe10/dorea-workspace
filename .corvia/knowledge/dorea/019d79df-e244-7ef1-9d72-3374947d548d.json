@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-3374947d548d",
+  "content": "## File Map\n\n### Task 1: Python Protocol Extension (issue #16)\n\n**Files:**\n- Modify: `python/dorea_inference/protocol.py`\n- Create: `python/tests/test_maxine_protocol.py`\n\n- [ ] **Step 1: Write the failing protocol tests**\n\nCreate `python/tests/test_maxine_protocol.py`:\n\n```python\n\"\"\"Tests for EnhanceResult protocol type and encode_raw_rgb helper.\"\"\"\nimport base64\nimport numpy as np\nimport pytest\n\nfrom dorea_inference.protocol import encode_raw_rgb, decode_raw_rgb, EnhanceResult\n\n\ndef test_encode_raw_rgb_roundtrip():\n    \"\"\"encode_raw_rgb output should be decodable by decode_raw_rgb.\"\"\"\n    img = np.array([[[10, 20, 30], [40, 50, 60]],\n                    [[70, 80, 90], [100, 110, 120]]], dtype=np.uint8)\n    h, w = img.shape[:2]\n    b64 = encode_raw_rgb(img)\n    recovered = decode_raw_rgb(b64, w, h)\n    np.testing.assert_array_equal(recovered, img)\n\n\ndef test_encode_raw_rgb_shape_check():\n    \"\"\"encode_raw_rgb must reject non-HxWx3 arrays.\"\"\"\n    bad = np.zeros((4, 4), dtype=np.uint8)  # 2D, not 3D\n    with pytest.raises(ValueError, match=\"HxWx3\"):\n        encode_raw_rgb(bad)\n\n\ndef test_enhance_result_from_array_roundtrip():\n    \"\"\"EnhanceResult.from_array should encode and store correct dimensions.\"\"\"\n    img = np.zeros((10, 20, 3), dtype=np.uint8)\n    img[0, 0] = [255, 128, 64]\n    result = EnhanceResult.from_array(\"frame_001\", img)\n    assert result.width == 20\n    assert result.height == 10\n    assert result.id == \"frame_001\"\n    assert result.type == \"enhance_result\"",
+  "source_version": "plans/2026-04-04-maxine-enhancement-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836800683Z",
+  "valid_from": "2026-04-11T00:10:08.836800683Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-maxine-enhancement-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 33,
+    "end_line": 77,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

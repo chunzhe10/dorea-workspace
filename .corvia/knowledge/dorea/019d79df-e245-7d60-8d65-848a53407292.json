@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-848a53407292",
+  "content": "Run: `cd /workspaces/dorea-workspace/repos/dorea && cargo test -p dorea-video`\nExpected: All pass.\n\n- [ ] **Step 4: Commit**\n\n```bash\ngit add crates/dorea-video/src/ffmpeg.rs\ngit commit -m \"feat(video): add InputEncoding enum with auto-detection\"\n```\n\n---\n\n### Task 6: 10-Bit Decode Path — Frame16 and decode_frames_16bit\n\n**Files:**\n- Modify: `crates/dorea-video/src/ffmpeg.rs`\n\nffmpeg outputs `rgb48le` (little-endian, 16-bit per component, 6 bytes per pixel) for\n10-bit sources. We add a `Frame16` struct and `decode_frames_16bit()` function.\n\n- [ ] **Step 1: Add Frame16 struct**\n\nAdd after the existing `Frame` struct:\n\n```rust\n/// A decoded video frame in 16-bit precision.\n/// Used for 10-bit source material (DJI D-Log M, Insta360 X5 I-Log).\n#[derive(Debug)]\npub struct Frame16 {\n    pub index: u64,\n    pub pixels: Vec<u16>, // RGB48: width * height * 3 u16 values\n    pub width: usize,\n    pub height: usize,\n}\n```\n\n- [ ] **Step 2: Add FrameReader16**\n\nAdd a 16-bit variant of the frame reader:\n\n```rust\nstruct FrameReader16 {\n    child: Child,\n    frame_index: u64,\n    width: usize,\n    height: usize,\n    frame_bytes: usize, // width * height * 6 (2 bytes per component × 3 channels)\n    done: bool,\n}\n\nimpl FrameReader16 {\n    fn new(child: Child, width: usize, height: usize) -> Self {\n        Self {\n            child,\n            frame_index: 0,\n            width,",
+  "source_version": "plans/2026-04-08-10bit-pipeline-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837022256Z",
+  "valid_from": "2026-04-11T00:10:08.837022256Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-08-10bit-pipeline-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 746,
+    "end_line": 789,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

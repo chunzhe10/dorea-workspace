@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-e2445c078e63",
+  "content": "(|| InferenceError::Ipc(format!(\"missing depth_f32_b64 for {id}\")))?;\n            let raw = B64.decode(depth_b64)\n                .map_err(|e| InferenceError::Ipc(format!(\"base64 depth for {id}: {e}\")))?;\n            if raw.len() != depth_w * depth_h * 4 {\n                return Err(InferenceError::Ipc(format!(\n                    \"depth size mismatch for {id}: got {} want {}\",\n                    raw.len(), depth_w * depth_h * 4\n                )));\n            }\n            let depth: Vec<f32> = raw.chunks_exact(4)\n                .map(|b| f32::from_le_bytes([b[0], b[1], b[2], b[3]]))\n                .collect();\n\n            out.push((id, enh_rgb, enh_w, enh_h, depth, depth_w, depth_h));\n        }\n        Ok(out)\n    }\n\n    /// Send an RGB u8 frame to Maxine for enhancement.\n    /// Returns enhanced RGB u8 at the same resolution as input.\n    ///\n    /// On server-side failure the Python side returns the original frame\n    /// (passthrough), so this method only errors on IPC/protocol issues.\n    pub fn enhance(\n        &mut self,\n        id: &str,\n        image_rgb: &[u8],\n        width: usize,\n        height: usize,\n        artifact_reduce: bool,\n    ) -> Result<Vec<u8>, InferenceError> {\n        let b64 = B64.encode(image_rgb);\n\n        let req = serde_json::json!({\n            \"type\": \"enhance\",\n            \"id\": id,\n            \"format\": \"raw_rgb\",\n            \"image_b64\": b64,\n            \"width\": width,\n            \"height\": height,\n            \"no_artifact_reduce\": !artifact_reduce,\n        });\n\n        self.send_line(&req.to_string())?;",
+  "source_version": "crates/dorea-video/src/inference_subprocess.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229637919Z",
+  "valid_from": "2026-04-11T00:04:13.229637919Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference_subprocess.rs",
+    "language": "rs",
+    "chunk_type": "impl_item",
+    "start_line": 561,
+    "end_line": 600,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-30fad03967de",
+  "content": "## Task 4: Add `run_raune_depth_batch` to Rust IPC client\n\n    /// Raw RGB24 pixels, row-major.\n    pub pixels: Vec<u8>,\n    pub width: usize,\n    pub height: usize,\n    /// Max long-edge for RAUNE resize (pixels).\n    pub raune_max_size: usize,\n    /// Max long-edge for depth resize (pixels, must be ≤518 for Depth Anything).\n    pub depth_max_size: usize,\n}\n```\n\nAfter `run_depth_batch`:\n\n```rust\n/// Run RAUNE then Depth Anything on a batch, with the enhanced tensor staying on GPU\n/// between the two models. Returns enhanced RGB and depth map for each item.\n///\n/// Returns `Vec<(id, enhanced_rgb_u8, enh_w, enh_h, depth_f32, depth_w, depth_h)>`.\n#[allow(clippy::type_complexity)]\npub fn run_raune_depth_batch(\n    &mut self,\n    items: &[RauneDepthBatchItem],\n) -> Result<Vec<(String, Vec<u8>, usize, usize, Vec<f32>, usize, usize)>, InferenceError> {\n    if items.is_empty() {\n        return Ok(vec![]);\n    }\n\n    let json_items: Vec<serde_json::Value> = items.iter().map(|item| {\n        serde_json::json!({\n            \"id\": item.id,\n            \"image_b64\": B64.encode(&item.pixels),\n            \"format\": \"raw_rgb\",\n            \"width\": item.width,\n            \"height\": item.height,\n            \"raune_max_size\": item.raune_max_size,\n            \"depth_max_size\": item.depth_max_size,\n        })\n    }).collect();\n\n    let req = serde_json::json!({ \"type\": \"raune_depth_batch\", \"items\": json_items });",
+  "source_version": "plans/2026-04-03-inference-gpu-saturation.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836763638Z",
+  "valid_from": "2026-04-11T00:10:08.836763638Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-inference-gpu-saturation.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 614,
+    "end_line": 653,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

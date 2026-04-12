@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-d4475e3ade6d",
+  "content": "class ChannelAttention(nn.Module):\n    def __init__(self,channel,reduction=16):\n        super().__init__()\n        self.maxpool=nn.AdaptiveMaxPool2d(1)\n        self.avgpool=nn.AdaptiveAvgPool2d(1)\n        self.se=nn.Sequential(\n            nn.Conv2d(channel,channel//reduction,1,bias=False),\n            nn.ReLU(),\n            nn.Conv2d(channel//reduction,channel,1,bias=False)\n        )\n        self.sigmoid=nn.Sigmoid()\n    \n    def forward(self, x) :\n        max_result=self.maxpool(x)\n        avg_result=self.avgpool(x)\n        max_out=self.se(max_result)\n        avg_out=self.se(avg_result)\n        output=self.sigmoid(max_out+avg_out)\n        return output",
+  "source_version": "models/raune_net/models/RAUNE-Net/models/cbam.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230551555Z",
+  "valid_from": "2026-04-11T00:04:13.230551555Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "models/raune_net/models/RAUNE-Net/models/cbam.py",
+    "language": "py",
+    "chunk_type": "class_definition",
+    "start_line": 7,
+    "end_line": 25,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

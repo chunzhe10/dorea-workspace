@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d0149053b9e6",
+  "content": "e\", \"-v\", \"quiet\", \"-print_format\", \"json\", \"-show_streams\", path],\n                       capture_output=True, text=True)\n    vs = [s for s in json.loads(r.stdout)[\"streams\"] if s[\"codec_type\"] == \"video\"][0]\n    return int(vs[\"width\"]), int(vs[\"height\"])\ndef save(arr, name):\n    path = f\"{OUT}/{name}.png\"\n    Image.fromarray(arr).save(path)\n    print(f\"  Saved: {path}\")",
+  "source_version": "investigate_artifacts.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229412835Z",
+  "valid_from": "2026-04-11T00:04:13.229412835Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "investigate_artifacts.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 34,
+    "end_line": 37,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

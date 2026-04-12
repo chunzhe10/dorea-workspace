@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-086ed4b82d6e",
+  "content": "### Warmup forward pass\n\n## Expected Outcome\n\n- ~1.2-1.5× speedup on RAUNE forward pass (standard Inductor gain on Ampere vision models)\n- 4.25 fps → ~5-6 fps target\n- First run: ~10-30s additional startup time (one-time compile)\n- Subsequent runs: negligible startup overhead (cache hit)\n- Output numerically equivalent to eager mode within fp16 rounding\n\n\n## Risks\n",
+  "source_version": "decisions/2026-04-10-torch-compile-raune.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836230016Z",
+  "valid_from": "2026-04-11T00:10:08.836230016Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-10-torch-compile-raune.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 46,
+    "end_line": 55,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

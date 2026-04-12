@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-2a2be505ddb2",
+  "content": "### Task 2: Create `lut3d` module with `GradeLut` struct\n\n    /// Used to detect invalidation if params change mid-clip.\n    build_hash: u64,\n}\n```\n\n- [ ] **Step 2: Add the build function**\n\n```rust\nimpl GradeLut {\n    /// Build the grade LUT by evaluating the real pipeline on synthetic 1x1 frames.\n    ///\n    /// `depth_samples` should be zone-aligned: `[0.0] + cal.depth_luts.zone_centers + [1.0]`.\n    /// Each sample produces a 65x65x65 LUT. Build is parallelized with rayon.\n    pub fn build(\n        calibration: &Calibration,\n        params: &GradeParams,\n    ) -> Self {\n        let mut depth_samples: Vec<f32> = Vec::with_capacity(\n            calibration.depth_luts.zone_centers.len() + 2,\n        );\n        depth_samples.push(0.0);\n        depth_samples.extend_from_slice(&calibration.depth_luts.zone_centers);\n        depth_samples.push(1.0);\n        // Deduplicate and sort\n        depth_samples.sort_by(|a, b| a.partial_cmp(b).unwrap());\n        depth_samples.dedup_by(|a, b| (*a - *b).abs() < 1e-6);\n\n        let build_hash = Self::compute_hash(calibration, params);\n\n        let luts: Vec<LutGrid> = depth_samples\n            .iter()\n            .map(|&d| Self::build_single_lut(d, calibration, params))\n            .collect();\n\n        log::info!(\n            \"GradeLut built: {}x{}x{} grid, {} depth bands, {:.1}MB\",",
+  "source_version": "plans/2026-04-03-3d-lut-temporal-interpolation.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836663251Z",
+  "valid_from": "2026-04-11T00:10:08.836663251Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-3d-lut-temporal-interpolation.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 142,
+    "end_line": 177,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-8bae0a0c6b7b",
+  "content": "        # Warmup forward pass to trigger compilation during startup\n\n\n- [ ] **Step 4: First-run smoke test (expect compile time)**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\n./target/release/dorea grade \\\n  --input \"/workspaces/dorea-workspace/footage/raw/2025-11-01/DJI_20251101111428_0055_D_3s.MP4\" \\\n  --output \"/workspaces/dorea-workspace/working/oklab_compile_run1.mov\" \\\n  --output-codec prores \\\n  --direct \\\n  --verbose \\\n  2>&1 | tail -20\n```\n\nExpected on the FIRST run:\n- `[raune-filter] compiling RAUNE with torch.compile ...`\n- `[raune-filter] torch.compile ready (N.Ns, ...)` where N is 10-60 seconds\n- 360 frames complete\n- Per-stage timing at the end should show `gpu` busy time LOWER than the previous 230 ms (target: ~160-190 ms)\n- Wall throughput at least slightly better than 4.25 fps (target: ~5-6 fps)\n\nReport the compile duration and the per-stage timings.\n\n- [ ] **Step 5: Second-run smoke test (expect cached compile)**\n\n```bash\n./target/release/dorea grade \\\n  --input \"/workspaces/dorea-workspace/footage/raw/2025-11-01/DJI_20251101111428_0055_D_3s.MP4\" \\\n  --output \"/workspaces/dorea-workspace/working/oklab_compile_run2.mov\" \\\n  --output-codec prores \\\n  --direct \\\n  --verbose \\",
+  "source_version": "plans/2026-04-10-torch-compile-raune.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837115409Z",
+  "valid_from": "2026-04-11T00:10:08.837115409Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-10-torch-compile-raune.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 144,
+    "end_line": 175,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

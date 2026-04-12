@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-0b1ec55e85c2",
+  "content": "### Panel Pattern\n### What Works Well\n\n### Common Complaints\n\n- No visual way to see the network of connections\n- Can't discover unexpected connections between documents\n- Navigation is always hierarchical (tree) or explicit (link), never emergent\n\n\n### Lessons\n\nNotion proves that **graph visualization is not necessary for linked knowledge** -- but its\nabsence is the single most common feature request from power users migrating from Obsidian/Roam.\nThe gap matters most for discovery of implicit relationships.\n\n---\n",
+  "source_version": "decisions/graph-document-ux-research.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836263424Z",
+  "valid_from": "2026-04-11T00:10:08.836263424Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/graph-document-ux-research.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 98,
+    "end_line": 111,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

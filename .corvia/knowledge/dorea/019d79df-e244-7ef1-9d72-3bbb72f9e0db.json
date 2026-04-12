@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-3bbb72f9e0db",
+  "content": "## Task 3: Restructure `run()` — unified inference block\n\nlog::info!(\"Pass 1 complete: ...\");\n\n// Calibration — now references keyframes from pass 1\nlet calibration = if let Some(cal_path) = ...\n```\n\n- [ ] **Step 3.2: Replace the calibration+depth block with the unified branch**\n\nAfter pass 1, `keyframes` is populated. Replace:\n\n```rust\n    // Load or derive calibration\n    let calibration = if let Some(cal_path) = &args.calibration {\n        log::info!(\"Loading calibration from {}\", cal_path.display());\n        Calibration::load(cal_path).context(\"failed to load .dorea-cal file\")?\n    } else {\n        log::info!(\"No calibration provided — auto-calibrating from keyframes\");\n        auto_calibrate(&args, &info)?\n    };\n\n    // Spawn inference server (depth-only; RAUNE is not needed for grading).\n    let inf_cfg = InferenceConfig {\n        skip_raune: true,\n        ..build_inference_config(&args)\n    };\n    let mut inf_server = InferenceServer::spawn(&inf_cfg)\n        .context(\"failed to spawn inference server — check --python and --depth-model\")?;\n```\n\nAND the entire depth batch block that follows (lines ~260–309 in the current layout after moving pass 1 above it):\n\n```rust\n    // -----------------------------------------------------------------------\n    // Batch depth inference\n    // -----------------------------------------------------------------------\n    let batch_items: Vec<DepthBatchItem> = keyframes.iter().map(|kf| { ... }).collect();\n\n    let mut keyframe_depths: HashMap<u64, (Vec<f32>, usize, usize)> = HashMap::new();\n    for (chunk_kfs, chunk_items) in keyframes\n        .chunks(DEPTH_BATCH_SIZE)\n        .zip(batch_items.chunks(DEPTH_BATCH_SIZE))\n    {\n        ... // run_depth_batch, pad, insert into keyframe_depths\n    }\n    log::info!(\"Batch depth inference complete ({} keyframes)\", keyframes.len());",
+  "source_version": "plans/2026-04-04-unified-keyframe-sampling-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836934123Z",
+  "valid_from": "2026-04-11T00:10:08.836934123Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-unified-keyframe-sampling-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 434,
+    "end_line": 478,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

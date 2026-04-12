@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d71-fcd59080a042",
+  "content": "## Expected Impact\n## Non-Goals\n\n## Review Panel Findings (2026-04-02)\n\nReviewed by 5 personas: SWE, QA, PM, Video Pipeline Specialist, Performance Engineer.\n\n**Resolved blockers:**\n- Scene-cut ghosting → force keyframe + buffer flush on MSE > 10x threshold\n- LAB fusion non-bit-exactness → accepted as color-science tradeoff, validate ΔE < 2\n- GPU clarity fallback swallowed → changed to hard error (consistent with GPU-required)\n\n**Key additions from review:**\n- Rayon parallelism for fused LAB pass (Perf Eng)\n- Buffer overflow safety valve at 1.5x max_interval (Video Specialist)\n- Division-by-zero guard on interpolation t (SWE)\n- Raw RGB for both depth AND RAUNE, not just depth (SWE)\n- Backward-compatible format field in protocol (QA)\n- Timing instrumentation for per-optimization validation (Perf Eng)\n- Edge case handling: single frame, last frame, short clips (QA)\n- HF processor savings revised from 20ms to 5-10ms (Perf Eng)",
+  "source_version": "decisions/2026-04-02-grading-pipeline-perf-v3.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836089236Z",
+  "valid_from": "2026-04-11T00:10:08.836089236Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-02-grading-pipeline-perf-v3.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 309,
+    "end_line": 326,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

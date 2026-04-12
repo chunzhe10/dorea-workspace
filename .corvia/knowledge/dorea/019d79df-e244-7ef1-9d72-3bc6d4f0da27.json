@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-3bc6d4f0da27",
+  "content": "in keyframes\n        .chunks(DEPTH_BATCH_SIZE)\n        .zip(batch_items.chunks(DEPTH_BATCH_SIZE))\n    {\n        ... // run_depth_batch, pad, insert into keyframe_depths\n    }\n    log::info!(\"Batch depth inference complete ({} keyframes)\", keyframes.len());\n\n    // Shut down inference server before pass 2 ...\n    let _ = inf_server.shutdown();\n```\n\nReplace both blocks with this unified branch:\n\n```rust\n    // -----------------------------------------------------------------------\n    // Calibration + depth cache\n    // -----------------------------------------------------------------------\n    // When a pre-computed calibration is supplied: load it, run depth-only batch\n    // for grading (same path as before).\n    // When auto-calibrating: one fused RAUNE+depth server fills both the\n    // calibration store and the grading depth cache from the same keyframes.\n    let calibration: Calibration;\n    let keyframe_depths: HashMap<u64, (Vec<f32>, usize, usize)>;\n\n    if let Some(cal_path) = &args.calibration {\n        log::info!(\"Loading calibration from {}\", cal_path.display());\n        calibration = Calibration::load(cal_path)\n            .context(\"failed to load .dorea-cal file\")?;\n\n        // Depth-only inference for grading depth cache.\n        let inf_cfg = InferenceConfig {\n            skip_raune: true,\n            ..build_inference_config(&args)\n        };\n        let mut inf_server = InferenceServer::spawn(&inf_cfg)\n            .context(\"failed to spawn depth-only inference server\")?;\n\n        let batch_items: Vec<DepthBatchItem> = keyframes.iter().map(|kf| DepthBatchItem {\n            id: format!(\"kf_f{}\", kf.frame_index),\n            pixels: kf.proxy_pixels.clone(),\n            width: proxy_w,\n            height: proxy_h,\n            max_size: args.proxy_size,\n        }).collect();\n\n        let mut kf_depths: HashMap<u64, (Vec<f32>, usize, usize)> = HashMap::new();\n        for (chunk_kfs, chunk_items) in keyframes\n            .chunks(DEPTH_BATCH_SIZE)\n            .zip(batch_items.chunks(DEPTH_BATCH_SIZE))\n        {",
+  "source_version": "plans/2026-04-04-unified-keyframe-sampling-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836934766Z",
+  "valid_from": "2026-04-11T00:10:08.836934766Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-unified-keyframe-sampling-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 479,
+    "end_line": 522,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

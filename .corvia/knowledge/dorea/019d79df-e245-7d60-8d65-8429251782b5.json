@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-8429251782b5",
+  "content": " = lut.to_linear(x);\n            let encoded = lut.from_linear(linear);\n            assert!(\n                (encoded - x).abs() < 0.01,\n                \"Identity round-trip failed at {x}: linear={linear}, encoded={encoded}\"\n            );\n        }\n    }\n\n    #[test]\n    fn test_gamma_lut_round_trip() {\n        let n = 1024;\n        let forward: Vec<f32> = (0..n)\n            .map(|i| (i as f32 / (n - 1) as f32).powf(2.2))\n            .collect();\n        let lut = LutBased::new(forward, 0.85, \"gamma2.2\".to_string());\n        let values = [0.0, 0.1, 0.18, 0.5, 0.8, 1.0];\n        for &v in &values {\n            let linear = lut.to_linear(v);\n            let back = lut.from_linear(linear);\n            assert!(\n                (back - v).abs() < 0.01,\n                \"Gamma round-trip failed at {v}: linear={linear}, back={back}\"\n            );\n        }\n    }\n\n    #[test]\n    fn test_lerp_lut_boundaries() {\n        let lut = vec![0.0, 0.5, 1.0];\n        assert!((lerp_lut(&lut, 0.0) - 0.0).abs() < 1e-6);\n        assert!((lerp_lut(&lut, 0.5) - 0.5).abs() < 1e-6);\n        assert!((lerp_lut(&lut, 1.0) - 1.0).abs() < 1e-6);\n        assert!((lerp_lut(&lut, 0.25) - 0.25).abs() < 1e-6);\n    }\n\n    #[test]\n    fn test_trait_impl() {\n        let lut = LutBased::new(identity_lut(256), 0.90, \"test\".to_string());\n        let tf: &dyn crate::TransferFunction = &lut;\n        assert_eq!(tf.shoulder(), 0.90);\n        assert_eq!(tf.name(), \"test\");\n    }\n}\n```\n\n- [ ] **Step 2: Register module and export**\n\nUpdate `crates/dorea-color/src/lib.rs` — add `pub mod lut_transfer;` and `pub use lut_transfer::LutBased;`\n\n- [ ] **Step 3: Run tests**\n\nRun: `cd /workspaces/dorea-workspace/repos/dorea && cargo test -p dorea-color`\nExpected: All pass.\n\n- [ ] **Step 4: Commit**\n\n```bash\ngit add crates/dorea-color/src/lut_transfer.rs crates/dorea-color/src/lib.rs\ngit commit -m \"feat(color): add LutBased transfer function for 1D .cube files\"\n```\n\n---\n",
+  "source_version": "plans/2026-04-08-10bit-pipeline-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837016472Z",
+  "valid_from": "2026-04-11T00:10:08.837016472Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-08-10bit-pipeline-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 467,
+    "end_line": 521,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d80e03a63052",
+  "content": "std::fs::read_to_string(path).ok()?;\n        match toml::from_str(&text) {\n            Ok(cfg) => Some(cfg),\n            Err(e) => {\n                log::warn!(\"Failed to parse {}: {e}\", path.display());\n                None\n            }\n        }\n    }\n}\npub fn load() -> Self {\n        // 1. Explicit env var\n        if let Ok(path) = std::env::var(\"DOREA_CONFIG\") {\n            if let Some(cfg) = Self::try_load(&PathBuf::from(&path)) {\n                log::debug!(\"Loaded config from $DOREA_CONFIG: {path}\");\n                return cfg;\n            }\n            log::warn!(\"$DOREA_CONFIG={path} does not exist or is invalid — using defaults\");\n        }\n\n        // 2. ./dorea.toml\n        if let Some(cfg) = Self::try_load(&PathBuf::from(\"dorea.toml\")) {\n            log::debug!(\"Loaded config from ./dorea.toml\");\n            return cfg;\n        }\n\n        // 3. ~/.config/dorea/config.toml\n        let user_cfg = std::env::var(\"HOME\").ok()\n            .map(|h| PathBuf::from(h).join(\".config\").join(\"dorea\").join(\"config.toml\"));\n        if let Some(ref path) = user_cfg {\n            if let Some(cfg) = Self::try_load(path) {\n                log::debug!(\"Loaded config from {}\", path.display());\n                return cfg;\n            }\n        }\n\n        log::debug!(\"No dorea.toml found — using built-in defaults\");\n        Self::default()\n    }",
+  "source_version": "crates/dorea-cli/src/config.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229513129Z",
+  "valid_from": "2026-04-11T00:04:13.229513129Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/config.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 115,
+    "end_line": 143,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

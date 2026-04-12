@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-f956a51bd13a",
+  "content": "8 * s_;\n    let ok_a = 1.9779984951 * l_ - 2.4285922050 * m_ + 0.4505937099 * s_;\n    let ok_b = 0.0259040371 * l_ + 0.7827717662 * m_ - 0.8086757660 * s_;\n\n    // Rescale to CIELab-compatible ranges\n    (ok_l * L_SCALE, ok_a * AB_SCALE, ok_b * AB_SCALE)\n}\npub fn lab_to_srgb(l: f32, a: f32, b: f32) -> (f32, f32, f32) {\n    // Unscale from CIELab-compatible ranges to native OKLab\n    let ok_l = l / L_SCALE;\n    let ok_a = a / AB_SCALE;\n    let ok_b = b / AB_SCALE;\n\n    // OKLab → LMS'\n    let l_ = ok_l + 0.3963377774 * ok_a + 0.2158037573 * ok_b;\n    let m_ = ok_l - 0.1055613458 * ok_a - 0.0638541728 * ok_b;\n    let s_ = ok_l - 0.0894841775 * ok_a - 1.2914855480 * ok_b;\n\n    // Cube (inverse of cube root)\n    let l = l_ * l_ * l_;\n    let m = m_ * m_ * m_;\n    let s = s_ * s_ * s_;\n\n    // LMS → linear RGB (proper inverse of forward RGB→LMS matrix)\n    let rl =  4.0767416613 * l - 3.3077115904 * m + 0.2309699287 * s;\n    let gl = -1.2684380041 * l + 2.6097574007 * m - 0.3413193963 * s;\n    let bl = -0.0041960863 * l - 0.7034186145 * m + 1.7076147010 * s;\n\n    // Linear → sRGB, clamped\n    let r = linear_to_srgb(rl.max(0.0));\n    let g = linear_to_srgb(gl.max(0.0));\n    let b_out = linear_to_srgb(bl.max(0.0));\n\n    (r.clamp(0.0, 1.0), g.clamp(0.0, 1.0), b_out.clamp(0.0, 1.0))\n}",
+  "source_version": "crates/dorea-color/src/lab.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229938164Z",
+  "valid_from": "2026-04-11T00:04:13.229938164Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-color/src/lab.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 65,
+    "end_line": 92,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

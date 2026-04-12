@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-8d4d87bd5621",
+  "content": "## File Layout\n\n### New files\n\n```\ncorvia-workspace/\n├── tools/\n│   └── corvia-dev/\n│       ├── pyproject.toml          # deps: pydantic, tomli, tomli_w, click\n│       ├── corvia_dev/\n│       │   ├── __init__.py\n│       │   ├── cli.py              # click CLI entry point\n│       │   ├── config.py           # CorviaToml parse/mutate/write\n│       │   ├── services.py         # Service registry & definitions\n│       │   ├── manager.py          # ProcessManager, health checks, supervision\n│       │   └── models.py           # Pydantic models (StatusResponse, Service, etc.)\n│       └── tests/\n│           ├── test_config.py\n│           ├── test_services.py\n│           └── test_manager.py\n├── .devcontainer/\n│   └── extensions/\n│       └── corvia-services/\n│           ├── extension.js        # Rewritten: ~200 lines, thin skin\n│           └── package.json\n```\n\n\n### What gets deleted\n\n| Old File | Replaced By |\n|----------|-------------|\n| `.devcontainer/scripts/corvia-workspace.sh` (390 lines) | `tools/corvia-dev/` |\n| `.devcontainer/scripts/corvia-supervisor.sh` (79 lines) | `corvia_dev/manager.py` |\n| `.devcontainer/extensions/corvia-services/extension.js` (818 lines) | Rewritten (~200 lines) |\n",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-cli-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837134914Z",
+  "valid_from": "2026-04-11T00:10:08.837134914Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-cli-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 189,
+    "end_line": 221,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

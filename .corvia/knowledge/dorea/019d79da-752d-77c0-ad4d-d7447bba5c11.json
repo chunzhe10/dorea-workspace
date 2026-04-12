@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d7447bba5c11",
+  "content": "].python, built-in default: /opt/dorea-venv/bin/python)\n    #[arg(long)]\n    pub python: Option<PathBuf>,\n\n    /// Force CPU-only mode\n    #[arg(long)]\n    pub cpu_only: bool,\n\n    /// Enable verbose logging\n    #[arg(short, long)]\n    pub verbose: bool,\n}\npub fn run(args: PreviewArgs, cfg: &crate::config::DoreaConfig) -> Result<()> {\n    let frames   = args.frames.or(cfg.preview.frames).unwrap_or(8_usize);\n    let warmth   = args.warmth.or(cfg.preview.warmth).or(cfg.grade.warmth).unwrap_or(1.0_f32);\n    let strength = args.strength.or(cfg.preview.strength).or(cfg.grade.strength).unwrap_or(0.8_f32);\n    let contrast = args.contrast.or(cfg.preview.contrast).or(cfg.grade.contrast).unwrap_or(1.0_f32);\n    let python = args.python.clone()\n        .or_else(|| cfg.models.python.clone())\n        .unwrap_or_else(|| PathBuf::from(\"/opt/dorea-venv/bin/python\"));\n    let raune_weights    = args.raune_weights.clone().or_else(|| cfg.models.raune_weights.clone());\n    let raune_models_dir = args.raune_models_dir.clone().or_else(|| cfg.models.raune_models_dir.clone());\n    let depth_model      = args.depth_model.clone().or_else(|| cfg.models.depth_model.clone());\n    let device = if args.cpu_only { Some(\"cpu\".to_string()) } else { cfg.inference.device.clone() };\n\n    log::info!(\"Generating preview for {}\", args.input.display());\n\n    let info = ffmpeg::probe(&args.input)\n        .context(\"ffprobe failed\")?;\n    log::info!(\"Input: {}x{} @ {:.2}fps, {:.1}s\", info.width, info.height, info.fps, info.duration_secs);\n\n    let n = frames.clamp(1, 20);\n    let params = GradeParams { warmth, strength, contrast };\n\n    // Decide preview tile size (max 512px wide per tile)\n    let tile_w = info.width.min(512);\n    let tile_h = (info.height as f64 * tile_w as f64 / info.width as f64).round() as usize;",
+  "source_version": "crates/dorea-cli/src/preview.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229504431Z",
+  "valid_from": "2026-04-11T00:04:13.229504431Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/preview.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 69,
+    "end_line": 93,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

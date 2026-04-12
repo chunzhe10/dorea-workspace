@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-f7c86ac6b23a",
+  "content": "fn to_linear(&self, encoded: f32) -> f32 {\n        ilog_to_linear(encoded)\n    }\nfn from_linear(&self, linear: f32) -> f32 {\n        linear_to_ilog(linear)\n    }\nfn shoulder(&self) -> f32 {\n        0.88\n    }\nfn name(&self) -> &str {\n        \"I-Log\"\n    }",
+  "source_version": "crates/dorea-color/src/ilog.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229918706Z",
+  "valid_from": "2026-04-11T00:04:13.229918706Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-color/src/ilog.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 59,
+    "end_line": 65,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

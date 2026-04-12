@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-3e70d5b269e9",
+  "content": "### Task 4: LUT Calibration stage (`pipeline/calibration.rs`)\n\n        let depths = vec![\n            vec![0.1f32, 0.5, 0.9],\n            vec![0.2f32, 0.6, 0.8],\n        ];\n        let mut node = ZoneComputeNode { depth_zones: 4 };\n        let zones = node.process(depths).unwrap();\n        assert_eq!(zones.len(), 2);\n        assert_eq!(zones[0].len(), 5); // 4 zones = 5 boundaries\n    }\n\n    #[test]\n    fn segment_detect_node_single_segment_uniform_depths() {\n        let depths: Vec<Vec<f32>> = (0..5)\n            .map(|_| (0..50).map(|i| i as f32 / 50.0).collect())\n            .collect();\n        let mut node = SegmentDetectNode { scene_threshold: 0.15, min_segment_kfs: 3 };\n        let segs = node.process(depths).unwrap();\n        assert_eq!(segs.len(), 1);\n    }\n\n    #[test]\n    fn zone_smooth_node_noop_at_window_1() {\n        let raw = vec![\n            vec![0.0f32, 0.25, 0.5, 0.75, 1.0],\n            vec![0.0f32, 0.10, 0.20, 0.30, 1.0],\n        ];\n        let segs = vec![crate::change_detect::SegmentRange { start: 0, end: 2 }];",
+  "source_version": "plans/2026-04-05-pipeline-dag-refactor.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836975641Z",
+  "valid_from": "2026-04-11T00:10:08.836975641Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-05-pipeline-dag-refactor.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 884,
+    "end_line": 910,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

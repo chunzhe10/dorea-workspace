@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d71-f7bd3b8924ab",
+  "content": "workflows/release.yml')); print('Valid YAML')\"` (if pyyaml available) or just verify visually.\n\n**Step 4: Commit**\n\n```bash\ncd repos/corvia\ngit add .github/workflows/release.yml\ngit commit -m \"ci: add release workflow for prebuilt binaries (D71)\"\n```\n\n---\n\n### Task 2: Update post-create.sh with download-first logic\n\n**Files:**\n- Modify: `.devcontainer/scripts/post-create.sh`\n\n**Step 1: Replace the script contents**\n\nThe current script (lines 9-19) tries `corvia workspace init` then falls back to building from source. Replace with download-first logic:\n\n```bash\n#!/bin/bash\nset -e\n\necho \"=== Corvia Workspace: Post-Create Setup ===\"\n",
+  "source_version": "decisions/2026-03-03-prebuilt-binaries.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836024589Z",
+  "valid_from": "2026-04-11T00:10:08.836024589Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-03-03-prebuilt-binaries.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 97,
+    "end_line": 111,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

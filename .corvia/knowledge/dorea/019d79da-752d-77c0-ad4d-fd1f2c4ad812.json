@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-fd1f2c4ad812",
+  "content": "T_SIZE - 1) as f32;\n                            lut.set(ri, gi, bi, [r, g, b]);\n                        }\n                    }\n                }\n            }\n\n            luts.push(lut);\n        }\n\n        DepthLuts::new(luts, self.zone_boundaries)\n    }\npub fn build_depth_luts(keyframes: &[KeyframeData]) -> DepthLuts {\n    // I7: validate that all keyframe slices have consistent lengths.\n    for (i, kd) in keyframes.iter().enumerate() {\n        assert_eq!(kd.original.len(), kd.target.len(),     \"keyframe {i}: original and target length mismatch\");\n        assert_eq!(kd.original.len(), kd.depth.len(),      \"keyframe {i}: original and depth length mismatch\");\n        assert_eq!(kd.original.len(), kd.importance.len(), \"keyframe {i}: original and importance length mismatch\");\n    }\n\n    let all_depths: Vec<f32> = keyframes.iter().flat_map(|kd| kd.depth.iter().cloned()).collect();\n    let zone_boundaries = adaptive_zone_boundaries(&all_depths, N_DEPTH_ZONES);\n\n    let mut builder = StreamingLutBuilder::new(zone_boundaries);\n    for kd in keyframes {\n        builder.add_frame(&kd.original, &kd.target, &kd.depth, &kd.importance);\n    }\n    builder.finish()\n}",
+  "source_version": "crates/dorea-lut/src/build.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229985Z",
+  "valid_from": "2026-04-11T00:04:13.229985Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-lut/src/build.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 358,
+    "end_line": 374,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

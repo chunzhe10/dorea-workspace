@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d3c9ab7e7b7e",
+  "content": ";\n            let lut_output = apply_depth_luts(&original, &depth, &depth_luts);\n            let corrs = derive_hsl_corrections(&lut_output, &target);\n            for (qi, corr) in corrs.0.iter().enumerate() {\n                if corr.weight >= MIN_WEIGHT {\n                    let w = corr.weight as f64;\n                    h_offset_acc[qi]     += corr.h_offset as f64 * w;\n                    s_ratio_acc[qi]      += corr.s_ratio  as f64 * w;\n                    v_offset_acc[qi]     += corr.v_offset as f64 * w;\n                    active_count[qi]     += 1;\n                    total_weight_acc[qi] += w;\n                }\n            }\n        }\n\n        let avg_corrections: Vec<QualifierCorrection> = (0..n_quals).map(|qi| {\n            let qual = &HSL_QUALIFIERS[qi];\n            if active_count[qi] > 0 {\n                let tw = total_weight_acc[qi];\n                QualifierCorrection {\n                    h_center: qual.h_center,\n                    h_width:  qual.h_width,\n                    h_offset: (h_offset_acc[qi] / tw) as f32,\n                    s_ratio:  (s_ratio_acc[qi]  / tw) as f32,\n                    v_offset: (v_offset_acc[qi] / tw) as f32,\n                    weight:   tw as f32,\n                }\n            } else {\n                QualifierCorrection {\n                    h_center: qual.h_center,\n                    h_width:  qual.h_width,\n                    h_offset: 0.0,\n                    s_ratio:  1.0,\n                    v_offset: 0.0,\n                    weight:   0.0,\n                }\n            }\n        }).collect();\n\n        SegmentCalibration {\n            depth_luts,",
+  "source_version": "crates/dorea-cli/src/pipeline/calibration.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229461941Z",
+  "valid_from": "2026-04-11T00:04:13.229461941Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/pipeline/calibration.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 92,
+    "end_line": 127,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

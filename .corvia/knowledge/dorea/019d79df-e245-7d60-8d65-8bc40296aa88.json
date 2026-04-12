@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-8bc40296aa88",
+  "content": "t call, the fallback should print a warning and the pipeline should still complete successfully at eager-mode speed (~4.25 fps). Check that the `WARNING: torch.compile failed` line appears in stderr and the run completes.\n\nIf compile works, skip this step.\n\n- [ ] **Step 8: Commit**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ngit add python/dorea_inference/raune_filter.py\ngit commit -m \"$(cat <<'EOF'\nperf(direct): torch.compile RAUNE for Inductor JIT fusion\n\nWrap fp16 RAUNE model with torch.compile(mode=\"reduce-overhead\", dynamic=False)\nafter the InstanceNorm fp32 restoration. Inductor JIT-fuses the 30 residual\nblocks and uses CUDA graphs where possible to eliminate kernel launch overhead.\n\nPersistent compile cache via TORCHINDUCTOR_CACHE_DIR so subsequent runs skip\nthe ~10-30s cold start. Warmup forward pass triggers compilation during\nstartup rather than on the first real frame.\n\ntry/except fallback to eager mode if Inductor fails — torch.compile is a\npure performance optimization, not a correctness requirement. Unlike the\nmodel.half() try/except we removed in PR #67, falling back to eager just\nmeans losing speedup, not broken output.\n\nCloses #69\nRefs #66 (GPU optimization sweep PR 2/3)\n\nCo-Authored-By: Claude Opus 4.6 (1M context) <noreply@anthropic.com>\nEOF\n)\"\n```\n\n---\n",
+  "source_version": "plans/2026-04-10-torch-compile-raune.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837118258Z",
+  "valid_from": "2026-04-11T00:10:08.837118258Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-10-torch-compile-raune.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 208,
+    "end_line": 239,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

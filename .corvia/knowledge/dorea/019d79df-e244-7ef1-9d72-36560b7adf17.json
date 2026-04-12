@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-36560b7adf17",
+  "content": "### Task 1: Python bridge — Maxine model support\n\n    # cleanup\n    bridge.unload_maxine()\n\n\ndef test_unload_maxine_clears_model():\n    from dorea_inference import bridge\n    bridge.load_maxine_model(upscale_factor=2)\n    bridge.unload_maxine()\n    with pytest.raises(RuntimeError, match=\"not loaded\"):\n        frame = np.zeros((4, 4, 3), dtype=np.uint8)\n        bridge.run_maxine_cpu(frame)\n\n\ndef test_unload_models_also_clears_maxine():\n    from dorea_inference import bridge\n    bridge.load_maxine_model(upscale_factor=2)\n    bridge.unload_models()\n    with pytest.raises(RuntimeError, match=\"not loaded\"):\n        frame = np.zeros((4, 4, 3), dtype=np.uint8)\n        bridge.run_maxine_cpu(frame)\n```\n\n- [ ] **Step 2: Run tests to verify they fail**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\nDOREA_MAXINE_MOCK=1 python -m pytest python/tests/test_bridge_maxine.py -v\n```\n\nExpected: `AttributeError: module 'dorea_inference.bridge' has no attribute 'load_maxine_model'`\n\n- [ ] **Step 3: Implement Maxine support in bridge.py**\n\nAdd after `_raune_model = None` (line 41 of current file):\n\n```python\n_maxine_model = None\n\n\ndef load_maxine_model(upscale_factor: int = 2, device: str = \"cuda\") -> None:\n    \"\"\"Load the Maxine enhancer. Called on demand after spawn.\"\"\"\n    global _maxine_model\n    from .maxine_enhancer import MaxineEnhancer\n    _maxine_model = MaxineEnhancer(upscale_factor=upscale_factor)\n\n\ndef unload_maxine() -> None:\n    \"\"\"Release Maxine model reference and free CUDA cache.\"\"\"",
+  "source_version": "plans/2026-04-04-maxine-pipeline-architecture.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836842313Z",
+  "valid_from": "2026-04-11T00:10:08.836842313Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-maxine-pipeline-architecture.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 53,
+    "end_line": 100,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

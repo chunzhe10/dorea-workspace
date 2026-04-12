@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-f1f766210ea8",
+  "content": "_ADDRESS_MODE_CLAMP;\n            tex_desc.addressMode[2] = CUaddress_mode_enum::CU_TR_ADDRESS_MODE_CLAMP;\n            tex_desc.filterMode     = CUfilter_mode_enum::CU_TR_FILTER_MODE_LINEAR;\n            tex_desc.flags          = 0;    // unnormalized coords\n\n            let mut tex: CUtexObject = 0;\n            unsafe {\n                let rc = sys::lib().cuTexObjectCreate(&mut tex, &res_desc, &tex_desc, std::ptr::null());\n                if rc != cudaError_enum::CUDA_SUCCESS {\n                    // arr was pushed; destroy it and all previously created resources.\n                    for &tex in &textures { let _ = sys::lib().cuTexObjectDestroy(tex); }\n                    for &a in &arrays    { let _ = sys::lib().cuArrayDestroy(a); }\n                    return Err(GpuError::CudaFail(format!(\"cuTexObjectCreate zone {zone}: {rc:?}\")));\n                }\n            }\n            textures.push(tex);\n        }\n\n        // d_build drops here — build buffer freed\n        Ok(Self {\n            arrays,\n            textures,\n            n_zones,\n            grid_size: n,\n            zone_boundaries: calibration.depth_luts.zone_boundaries.clone(),\n        })\n    }",
+  "source_version": "crates/dorea-gpu/src/cuda/combined_lut.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229836329Z",
+  "valid_from": "2026-04-11T00:04:13.229836329Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cuda/combined_lut.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 219,
+    "end_line": 241,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

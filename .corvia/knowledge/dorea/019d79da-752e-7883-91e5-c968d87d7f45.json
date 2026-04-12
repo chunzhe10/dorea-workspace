@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c968d87d7f45",
+  "content": "def _end_to_end():\n                        d = fn(delta_proxy, frame_4k, (2160, 3840))\n                        return _apply_delta(d, frame_4k)\ndef _write_run_report(\n    report_path: Path,\n    env_info: dict,\n    frame_indices: list[int],\n    gold_paths: dict[int, str],\n    oom_events: list[str],\n    all_results: list,\n    method_names: list[str],\n    out_dir: Path,\n) -> None:\n    lines = []\n    lines.append(f\"# Upscale Bench Run Report — {env_info['date']}\\n\")\n    lines.append(\"## Environment\\n\")\n    for k, v in env_info.items():\n        lines.append(f\"- **{k}:** {v}\")\n    lines.append(\"\\n## Frames\\n\")\n    for idx in frame_indices:\n        lines.append(f\"- frame {idx}: gold path = `{gold_paths.get(idx, 'unknown')}`\")\n    if oom_events:\n        lines.append(\"\\n## OOM events\\n\")\n        for ev in oom_events:\n            lines.append(f\"- {ev}\")\n    lines.append(\"\\n## Winners\\n\")\n    ok_results = [r for r in all_results if r.status == \"ok\"]\n    if ok_results:\n        # Per-metric winner averaged across frames\n        def best(metric_getter, lower_better=True):\n            per_method = {}\n            for r in ok_results:\n                per_method.setdefault(r.method, []).append(metric_getter(r))\n            means = {m: sum(v) / len(v) for m, v in per_method.items()}",
+  "source_version": "benchmarks/upscale_bench/run.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230370015Z",
+  "valid_from": "2026-04-11T00:04:13.230370015Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/run.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 389,
+    "end_line": 419,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

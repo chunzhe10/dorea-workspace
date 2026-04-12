@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-0344f992ad28",
+  "content": "## Problem\n## Decision\n\n### Rescale mapping\n\n```\nOKLab L ∈ [0, 1]       → × 100  → L ∈ [0, 100]    (matches CIELab L)\nOKLab a ∈ [-0.4, 0.4]  → × 300  → a ∈ [-120, 120]  (approximates CIELab a range)\nOKLab b ∈ [-0.4, 0.4]  → × 300  → b ∈ [-120, 120]  (approximates CIELab b range)\n```\n\nThe `× 300` factor maps OKLab's native `[-0.4, 0.4]` range to approximately match\nCIELab's `[-128, 127]` range. This is close enough that all hardcoded constants\n(warmth push magnitudes, vibrance chroma thresholds at `40.0`, a/b clamping at\n`[-128, 127]`) remain valid without retuning.\n\n\n### OKLab conversion path\n\n```\nsrgb_to_lab:\n  sRGB → linear (piecewise gamma, unchanged)\n  → LMS via 3×3 matrix\n  → cube root (cbrtf, no conditional)\n  → OKLab via 3×3 matrix\n  → rescale (L×100, a×300, b×300)\n\nlab_to_srgb:\n  unscale (L/100, a/300, b/300)\n  → inverse OKLab via 3×3 matrix\n  → cube (x³, no conditional)\n  → inverse LMS via 3×3 matrix\n  → linear → sRGB (piecewise gamma, unchanged)\n```\n\nCompared to CIELab, this eliminates: the XYZ intermediate step, the `f_lab` / `f_lab_inv`\nconditional piecewise functions, and one division per channel (XYZ normalization by\nXN/YN/ZN whitepoint).\n",
+  "source_version": "decisions/2026-04-09-oklab-grade-pipeline.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836170943Z",
+  "valid_from": "2026-04-11T00:10:08.836170943Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-09-oklab-grade-pipeline.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 21,
+    "end_line": 55,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

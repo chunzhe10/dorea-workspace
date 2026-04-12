@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-e8c885d0ffeb",
+  "content": "_err(|e| InferenceError::Ipc(format!(\"list append for id={}: {e}\", item.id)))?;\n            }\n\n            let result = bridge\n                .call_method1(\"run_yolo_seg_batch_cpu\", (py_list,))\n                .map_err(|e| Self::map_python_error(py, e))?;\n\n            let result_list = result\n                .downcast::<pyo3::types::PyList>()\n                .map_err(|e| InferenceError::Ipc(format!(\"result not a list: {e}\")))?;\n\n            let mut out = Vec::with_capacity(items.len());\n            for (i, item) in items.iter().enumerate() {\n                let arr = result_list.get_item(i)\n                    .map_err(|e| InferenceError::Ipc(format!(\"get result[{i}]: {e}\")))?;\n                let shape: Vec<usize> = arr.getattr(\"shape\")\n                    .map_err(|e| InferenceError::Ipc(format!(\"shape[{i}]: {e}\")))?\n                    .extract()\n                    .map_err(|e| InferenceError::Ipc(format!(\"extract shape[{i}]: {e}\")))?;\n                let h = shape[0];\n                let w = shape[1];\n                let flat = arr.call_method0(\"tobytes\")\n                    .map_err(|e| InferenceError::Ipc(format!(\"tobytes[{i}]: {e}\")))?;\n                let mask_data: Vec<u8> = flat.extract()\n                    .map_err(|e| InferenceError::Ipc(format!(\"extract mask[{i}]: {e}\")))?;\n                out.push((item.id.clone(), mask_data, w, h));\n            }\n\n            Ok(out)\n        })\n    }",
+  "source_version": "crates/dorea-video/src/inference/pyo3_backend.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229719705Z",
+  "valid_from": "2026-04-11T00:04:13.229719705Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference/pyo3_backend.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 557,
+    "end_line": 581,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

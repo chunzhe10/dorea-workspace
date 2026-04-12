@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-83e23bbb2d7c",
+  "content": "### Task 2: I-Log Transfer Function (S-Log3 Proxy)\n\n    #[test]\n    fn test_ilog_round_trip() {\n        let values = [0.0_f32, 0.01, 0.05, 0.18, 0.5, 0.9, 1.0];\n        for &v in &values {\n            let encoded = linear_to_ilog(v);\n            let decoded = ilog_to_linear(encoded);\n            assert!(\n                (decoded - v).abs() < 1e-4,\n                \"Round-trip failed for {v}: encoded={encoded}, decoded={decoded}\"\n            );\n        }\n    }\n\n    #[test]\n    fn test_ilog_middle_grey() {\n        // S-Log3 middle grey: 18% linear ≈ 0.41 encoded\n        let encoded = linear_to_ilog(0.18);\n        assert!(\n            (0.35..0.50).contains(&encoded),\n            \"Middle grey encode: expected 0.35–0.50, got {encoded}\"\n        );\n    }\n\n    #[test]\n    fn test_ilog_monotonic() {\n        let mut prev = ilog_to_linear(0.0);\n        for i in 1..=100 {\n            let x = i as f32 / 100.0;\n            let lin = ilog_to_linear(x);\n            assert!(lin >= prev, \"Non-monotonic at x={x}: {lin} < {prev}\");\n            prev = lin;\n        }\n    }\n\n    #[test]\n    fn test_ilog_trait() {\n        let tf: Box<dyn crate::TransferFunction> = Box::new(ILog);\n        assert_eq!(tf.shoulder(), 0.88);\n        assert_eq!(tf.name(), \"I-Log\");\n    }\n}\n```\n\n- [ ] **Step 2: Register module and export**\n\nUpdate `crates/dorea-color/src/lib.rs`:\n\n```rust\npub mod dlog_m;\npub mod hsv;\npub mod ilog;\npub mod lab;\n\npub trait TransferFunction {\n    fn to_linear(&self, encoded: f32) -> f32;\n    fn from_linear(&self, linear: f32) -> f32;\n    fn shoulder(&self) -> f32;\n    fn name(&self) -> &'static str;\n}\n\npub use dlog_m::DLogM;\npub use ilog::ILog;\n```\n\n- [ ] **Step 3: Run tests**\n\nRun: `cd /workspaces/dorea-workspace/repos/dorea && cargo test -p dorea-color`\nExpected: All pass (including new ilog tests).\n\n- [ ] **Step 4: Commit**\n\n```bash\ngit add crates/dorea-color/src/ilog.rs crates/dorea-color/src/lib.rs\ngit commit -m \"feat(color): add I-Log transfer function (S-Log3 proxy)\"\n```\n\n---\n",
+  "source_version": "plans/2026-04-08-10bit-pipeline-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837011594Z",
+  "valid_from": "2026-04-11T00:10:08.837011594Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-08-10bit-pipeline-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 225,
+    "end_line": 302,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

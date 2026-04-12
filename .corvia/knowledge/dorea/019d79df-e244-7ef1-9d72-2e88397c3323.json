@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-2e88397c3323",
+  "content": "          }\n            Err(e) => return Err(e),\n        }\n    }\n\n    #[cfg(not(feature = \"cuda\"))]\n    {\n        Err(GpuError::CudaFail(\n            \"dorea grade requires CUDA. Rebuild with GPU support (build.rs auto-detects nvcc).\".to_string()\n        ))\n    }\n}\n```\n\nAlso add a `grade_frame_with_grader` function for use by the batching loop in the CLI:\n\n```rust\n/// Grade a frame using a pre-initialized CudaGrader (avoids re-loading PTX per frame).\n#[cfg(feature = \"cuda\")]\npub fn grade_frame_with_grader(\n    grader: &cuda::CudaGrader,\n    pixels: &[u8],\n    depth: &[f32],\n    width: usize,\n    height: usize,\n    calibration: &Calibration,\n    params: &GradeParams,\n) -> Result<Vec<u8>, GpuError> {\n    if pixels.len() != width * height * 3 {\n        return Err(GpuError::InvalidInput(format!(\n            \"pixels length {} != width*height*3 {}\", pixels.len(), width * height * 3\n        )));\n    }\n    if depth.len() != width * height {\n        return Err(GpuError::InvalidInput(format!(\n            \"depth length {} != width*height {}\", depth.len(), width * height\n        )));\n    }\n\n    let mut rgb_f32 = grader.grade_frame_cuda(pixels, depth, width, height, calibration, params)?;\n    Ok(cpu::finish_grade(\n        &mut rgb_f32, pixels, depth, width, height, params, calibration, true,\n    ))\n}\n```\n\n- [ ] **Step 3: Build**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea && cargo build -p dorea-gpu 2>&1\n```\n\nExpected: Compiles successfully. May warn about unused imports if cuda feature is not active.\n\n- [ ] **Step 4: Run tests**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea && cargo test -p dorea-gpu -- --nocapture\n```\n\nExpected: Existing CPU tests pass. CUDA tests only run if GPU is available.\n\n- [ ] **Step 5: Commit**\n\n```bash\ngit add crates/dorea-gpu/src/cuda/mod.rs crates/dorea-gpu/src/lib.rs\ngit commit -m \"feat(dorea-gpu): rewrite CUDA launching with cudarc PTX modules\"\n```\n\n---\n",
+  "source_version": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836728039Z",
+  "valid_from": "2026-04-11T00:10:08.836728039Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1310,
+    "end_line": 1370,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

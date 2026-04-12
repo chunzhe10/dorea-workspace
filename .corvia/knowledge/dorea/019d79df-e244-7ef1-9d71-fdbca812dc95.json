@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d71-fdbca812dc95",
+  "content": "        # 7. Return RGB u8 numpy array\n\n### VRAM Budget\n\nBoth models (Depth Anything + Maxine) remain resident in GPU memory for the pipeline duration.\nThe sequential call pattern means they never *execute* simultaneously, but their weights occupy\nVRAM at the same time.\n\nThe grading CUDA kernels run in the Rust process (separate CUDA context from the Python\nsubprocess). Their VRAM usage is additive with the subprocess models — not time-sliced.\n\n| Component | VRAM | Notes |\n|-----------|------|-------|\n| Python subprocess CUDA context | ~500MB | Shared via NvVFX_SetCudaStream |\n| Rust process CUDA context | ~300MB | Separate context for grading kernels |\n| Depth Anything V2 Small | ~1.8GB | Resident in subprocess |\n| Depth batch buffers (batch=2) | ~500MB | During inference |\n| Maxine VideoSuperRes model | ~1.0-1.5GB | Resident in subprocess |\n| Maxine inference workspace | ~200-500MB | TensorRT scratch, scales with resolution |\n| Maxine ArtifactReduction model | ~0.5GB | Resident in subprocess |\n| Grading CUDA kernels | ~60MB | Per-frame malloc/free in Rust context |\n| **Total peak** | **~4.9-5.7GB** | |\n| **Headroom on 6GB** | **~0.3-1.1GB** | |\n\n**Escape hatches if VRAM is tight:**\n- Set `artifact_reduction: false` → drop ~500MB\n- Reduce depth `batch_size` to 1 → save ~250MB\n- Set `enabled: false` → revert to current 2.8GB peak\n\n**Upscale factor cap:** On GPUs with ≤6GB VRAM, `upscale_factor` is capped at 2. Factors 3x and\n4x produce large intermediates (3240p, 4320p) whose TensorRT workspace exceeds available\nheadroom. The startup validator rejects `upscale_factor > 2` unless total VRAM exceeds 8GB.\n",
+  "source_version": "decisions/2026-04-02-maxine-post-grading-enhancement.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836102149Z",
+  "valid_from": "2026-04-11T00:10:08.836102149Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-02-maxine-post-grading-enhancement.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 160,
+    "end_line": 190,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-03e7af81da04",
+  "content": "### Before\n### After\n\n## Triton Wrapper Change\n\nThe kernel itself stays unchanged — pixels are processed independently with no spatial\ndependencies, so flattening N into `n_pixels` is mathematically valid.\n\nThe wrapper permutes `(N,3,H,W)` → `(3,N,H,W)` (channel-first) and flattens to\n`(3, N*H*W)`. After the kernel, it reverses the permutation. Permute+contiguous costs\n~0.6ms at batch=8 4K fp16, negligible vs the ~N × ~25ms PCIe uploads it eliminates.\n\n\n## Expected Outcome\n\n- `batch=4` should match current 4.25 fps (no regression)\n- `batch=8` should now actually deliver ~10-20% (target ~5 fps)\n- `batch=16` should no longer regress (~5-6 fps)\n- Cumulative: 2.47 → ~5-6 fps (additional 18-40% over PR #67)\n",
+  "source_version": "decisions/2026-04-10-batched-process-batch.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836178039Z",
+  "valid_from": "2026-04-11T00:10:08.836178039Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-10-batched-process-batch.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 40,
+    "end_line": 55,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

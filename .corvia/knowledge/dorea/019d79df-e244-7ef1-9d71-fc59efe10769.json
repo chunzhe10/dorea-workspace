@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d71-fc59efe10769",
+  "content": "### Optimization 1: Motion-Adaptive Depth Interpolation\n\n\n**Lookahead buffer:** Accumulate frames until the next keyframe is identified, run depth\ninference on it, then interpolate and grade the buffered frames. The buffer is bounded\nby `max_interval`. **Safety valve:** if buffer exceeds `1.5 * max_interval` (e.g., due\nto Python server backpressure), force a keyframe and flush to prevent unbounded growth.\n\n**Edge cases:**\n- **Frame 0**: Always a keyframe, no interpolation.\n- **Last frames of video**: If no `k_after` exists, use `k_before`'s depth for all\n  trailing frames (no interpolation, just reuse).\n- **Single-frame input**: Frame 0 is a keyframe, done.\n- **Very short clips (< max_interval frames)**: Frame 0 is keyframe, all others use\n  frame 0's depth unless MSE triggers additional keyframes.\n\n**CLI arguments:**\n- `--depth-skip-threshold <f32>` — MSE threshold for keyframe decision (default: 0.005)\n- `--depth-max-interval <usize>` — Maximum frames between keyframes (default: 12)\n- `--no-depth-interp` — Disable interpolation, run depth on every frame\n\n**Quality justification:** At 120fps, frames are 8.3ms apart. Underwater camera sway is\n1-3 cm/s = 0.08-0.25mm between frames (sub-pixel in 518px depth map space). The depth\nmap feeds `depth_aware_ambiance` which uses depth as a smooth continuous parameter —\nsub-1% depth errors are invisible in the 8-bit RGB output. Validate with ΔE comparison\non test footage during implementation.\n\n**Expected savings:** 4-12x reduction in depth inference calls depending on content.\n",
+  "source_version": "decisions/2026-04-02-grading-pipeline-perf-v3.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836081912Z",
+  "valid_from": "2026-04-11T00:10:08.836081912Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-02-grading-pipeline-perf-v3.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 56,
+    "end_line": 82,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

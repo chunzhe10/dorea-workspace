@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-30b4c7539d12",
+  "content": "        # Round-trip through JSON\n\n```python\nfrom .protocol import (\n    PongResponse,\n    RauneResult,\n    DepthResult,\n    DepthBatchResult,\n    RauneDepthBatchResult,\n    ErrorResponse,\n    OkResponse,\n    decode_png,\n    decode_raw_rgb,\n    encode_png,\n)\n```\n\nAdd the handler after `depth_batch` and before `shutdown` in `server.py`:\n\n```python\n            elif req_type == \"raune_depth_batch\":\n                if raune_model is None:\n                    raise RuntimeError(\"RAUNE-Net not loaded — pass --raune-weights\")\n                if depth_model is None:\n                    raise RuntimeError(\"Depth Anything not loaded — pass --depth-model\")\n\n                items = req.get(\"items\", [])\n                imgs = []\n                for item in items:\n                    fmt = item.get(\"format\", \"png\")\n                    if fmt == \"raw_rgb\":\n                        imgs.append(decode_raw_rgb(item[\"image_b64\"], int(item[\"width\"]), int(item[\"height\"])))\n                    else:\n                        imgs.append(decode_png(item[\"image_b64\"]))\n\n                raune_max = int(items[0].get(\"raune_max_size\", 1024)) if items else 1024\n                depth_max = int(items[0].get(\"depth_max_size\", 518)) if items else 518\n",
+  "source_version": "plans/2026-04-03-inference-gpu-saturation.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836759392Z",
+  "valid_from": "2026-04-11T00:10:08.836759392Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-inference-gpu-saturation.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 496,
+    "end_line": 531,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-bb12c4e4f6d7",
+  "content": "d_hwc, 0.0, 1.0) * 255).astype(np.uint8)\n\n        # Downsample back to original resolution\n        result = cv2.resize(\n            upscaled_rgb, (width, height), interpolation=cv2.INTER_AREA,\n        )\n\n        self._total_count += 1\n        return result\ndef stats(self) -> str:\n        \"\"\"Return summary string for shutdown logging.\"\"\"\n        if self._total_count == 0:\n            return \"Maxine: no frames processed\"\n        return f\"Maxine: enhanced {self._total_count} frames\"",
+  "source_version": "python/dorea_inference/maxine_enhancer.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230043837Z",
+  "valid_from": "2026-04-11T00:04:13.230043837Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/maxine_enhancer.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 119,
+    "end_line": 123,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

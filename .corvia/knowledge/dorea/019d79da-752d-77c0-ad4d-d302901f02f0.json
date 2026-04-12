@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d302901f02f0",
+  "content": "= kf_index_list[kf_cursor];\n                let (prev_depth_proxy, dpw, dph) = keyframe_depths\n                    .get(&prev_kf_idx)\n                    .expect(\"prev keyframe depth missing — logic error\");\n                let (dpw, dph) = (*dpw, *dph);\n\n                let depth_proxy = if fi == prev_kf_idx {\n                    prev_depth_proxy.clone()\n                } else if let Some(&(next_kf_idx, scene_cut_before_next)) = kf_index_list.get(kf_cursor + 1) {\n                    if scene_cut_before_next {\n                        prev_depth_proxy.clone()\n                    } else {\n                        let (next_depth_proxy, _, _) = keyframe_depths\n                            .get(&next_kf_idx)\n                            .expect(\"next keyframe depth missing — logic error\");\n                        let t = (fi - prev_kf_idx) as f32 / (next_kf_idx - prev_kf_idx) as f32;\n                        lerp_depth(prev_depth_proxy, next_depth_proxy, t)\n                    }\n                } else {\n                    prev_depth_proxy.clone()\n                };\n\n                let depth = depth_proxy;\n\n                let blend_t = if fi == prev_kf_idx {\n                    0.0_f32\n                } else if let Some(&(next_kf_idx, scene_cut)) = kf_index_list.get(kf_cursor + 1) {\n                    if scene_cut { 0.0 } else {\n                        ((fi - prev_kf_idx) as f32 / (next_kf_idx - prev_kf_idx) as f32).clamp(0.0, 1.0)\n                    }\n                } else {\n                    0.0\n                };\n\n                #[cfg(feature = \"cuda\")]\n                // Look up the nearest keyframe's class mask for diver detection.",
+  "source_version": "crates/dorea-cli/src/pipeline/grading.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229452874Z",
+  "valid_from": "2026-04-11T00:04:13.229452874Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/pipeline/grading.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 546,
+    "end_line": 576,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

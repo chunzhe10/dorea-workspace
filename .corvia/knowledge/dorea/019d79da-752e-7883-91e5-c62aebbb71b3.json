@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c62aebbb71b3",
+  "content": "def test_auto_select_returns_three_distinct_indices():\n    picks = auto_select(CLIP, every_n=60)\n    assert len(picks) == 3\n    assert len(set(picks)) == 3\n    assert all(0 <= i for i in picks)",
+  "source_version": "benchmarks/upscale_bench/tests/test_frame_select.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230325276Z",
+  "valid_from": "2026-04-11T00:04:13.230325276Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/tests/test_frame_select.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 13,
+    "end_line": 17,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

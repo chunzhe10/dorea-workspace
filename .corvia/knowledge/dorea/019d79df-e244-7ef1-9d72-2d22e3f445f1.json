@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-2d22e3f445f1",
+  "content": "    b.report_success();\n        }\n        assert_eq!(b.batch_size(), 4);\n    }\n}\n```\n\n- [ ] **Step 2: Update GpuError in `lib.rs`**\n\nReplace the existing `GpuError` enum in `crates/dorea-gpu/src/lib.rs`:\n\n```rust\n#[derive(Debug, Error)]\npub enum GpuError {\n    #[error(\"CUDA OOM: {0}\")]\n    Oom(String),\n    #[error(\"CUDA error: {0}\")]\n    CudaFail(String),\n    #[error(\"CUDA module load failed: {0}\")]\n    ModuleLoad(String),\n    #[error(\"invalid input: {0}\")]\n    InvalidInput(String),\n}\n```\n\nUpdate the `grade_frame` function's CUDA error return to use `CudaFail` instead of `Cuda`:\n\nIn `grade_frame` at the `#[cfg(not(feature = \"cuda\"))]` block:\n```rust\n    #[cfg(not(feature = \"cuda\"))]\n    {\n        Err(GpuError::CudaFail(\n            \"dorea grade requires CUDA. Rebuild with GPU support (build.rs auto-detects nvcc).\".to_string()\n        ))\n    }\n```\n\nAdd the batcher module to `lib.rs`:\n```rust\npub mod batcher;\n```\n\n- [ ] **Step 3: Run tests to verify batcher + error types compile and pass**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea && cargo test -p dorea-gpu -- --nocapture\n```\n\nExpected: All existing tests pass + new batcher tests pass.\n\n- [ ] **Step 4: Fix any compilation errors from GpuError rename**\n\nThe `cuda/mod.rs` uses `GpuError::Cuda(...)`. Update all occurrences to `GpuError::CudaFail(...)`:\n\nIn `crates/dorea-gpu/src/cuda/mod.rs`, replace all `GpuError::Cuda(` with `GpuError::CudaFail(`:\n- Line 111: `GpuError::Cuda(format!(\"dorea_lut_apply_gpu...\"))` → `GpuError::CudaFail(...)`\n- Line 141: `GpuError::Cuda(format!(\"dorea_hsl_correct_gpu...\"))` → `GpuError::CudaFail(...)`\n- Line 166: `GpuError::Cuda(format!(\"dorea_clarity_gpu...\"))` → `GpuError::CudaFail(...)`\n\n- [ ] **Step 5: Re-run tests**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea && cargo test -p dorea-gpu -- --nocapture\n```\n\nExpected: All tests pass.\n\n- [ ] **Step 6: Commit**\n\n```bash\ngit add crates/dorea-gpu/src/lib.rs crates/dorea-gpu/src/batcher.rs crates/dorea-gpu/src/cuda/mod.rs\ngit commit -m \"feat(dorea-gpu): expand GpuError with Oom/ModuleLoad variants, add AdaptiveBatcher\"\n```\n\n---\n",
+  "source_version": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836706936Z",
+  "valid_from": "2026-04-11T00:10:08.836706936Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 470,
+    "end_line": 531,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

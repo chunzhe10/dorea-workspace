@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d4d4f801ba4b",
+  "content": " kf.frame_index))?;\n        fullres_pixels.push(pixels);\n    }\n\n    let mut store = PagedCalibrationStore::new()\n        .context(\"failed to create paged calibration store\")?;\n    let mut kf_depths: HashMap<u64, (Vec<f32>, usize, usize)> = HashMap::new();\n\n    // --- RAUNE on proxy pixels (for LUT training) ---\n    log::info!(\"Running RAUNE on {} keyframes (proxy {}x{})\", keyframes.len(), proxy_w, proxy_h);\n    let mut raune_enhanced: Vec<(Vec<u8>, usize, usize)> = Vec::with_capacity(keyframes.len());\n    for (i, kf) in keyframes.iter().enumerate() {\n        let (enhanced, ew, eh) = inf_server.run_raune(\n            &format!(\"kf_f{}\", kf.frame_index),\n            &kf.proxy_pixels, proxy_w, proxy_h,\n            proxy_w.max(proxy_h),\n        ).with_context(|| format!(\"RAUNE failed for keyframe {i}\"))?;\n        raune_enhanced.push((enhanced, ew, eh));\n    }\n    log::info!(\"RAUNE complete\");\n\n    // --- Depth on full-res pixels (better depth quality) ---\n    // Unload RAUNE first to free ~500MB VRAM for higher-res depth inference.\n    inf_server.unload_raune().context(\"failed to unload RAUNE\")?;\n    log::info!(\"RAUNE unloaded — VRAM freed for depth at {}px\", depth_max_size);\n    log::info!(\"Running depth on {} keyframes (full-res, max_size={})\", keyframes.len(), depth_max_size);\n    use dorea_video::inference::DepthBatchItem;\n    let mut depth_results: Vec<(String, Vec<f32>, usize, usize)> = Vec::with_capacity(keyframes.len());\n    // Sub-batch depth to avoid OOM: 4 full-res frames at a time\n    let depth_sub_batch = 2; // small batches at high res to fit 6GB VRAM\n    for chunk_start in (0..keyframes.len()).step_by(depth_sub_batch) {\n        let chunk_end = (chunk_start + depth_sub_batch).min(keyframes.len());\n        let depth_items: Vec<DepthBatchItem> = (chunk_start..chunk_end).map(|i| {\n            DepthBatchItem {\n                id: format!(\"kf_f{}\", keyframes[i].frame_index),\n                pixels: fullres_pixels[i].clone(),\n                width: info.width,\n                height: info.height,\n                max_size: depth_max_size,\n            }\n        }).collect();\n        let batch_results = inf_server.run_depth_batch(&depth_items)",
+  "source_version": "crates/dorea-cli/src/pipeline/feature.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229475193Z",
+  "valid_from": "2026-04-11T00:04:13.229475193Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/pipeline/feature.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 160,
+    "end_line": 193,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

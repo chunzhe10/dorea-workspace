@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-2a6a107df0f7",
+  "content": "     (ro.clamp(0.0, 1.0) * 255.0).round() as u8,\n                    (go.clamp(0.0, 1.0) * 255.0).round() as u8,\n                    (bo.clamp(0.0, 1.0) * 255.0).round() as u8,\n                ]\n            })\n            .collect();\n\n        result\n    }\n\n    /// Single-pixel lookup with depth-band interpolation.\n    fn lookup(&self, r: f32, g: f32, b: f32, d: f32) -> [f32; 3] {\n        let (lo, hi, t) = self.depth_bracket(d);\n        let graded_lo = trilinear(&self.luts[lo], [r, g, b]);\n        if lo == hi {\n            return graded_lo;\n        }\n        let graded_hi = trilinear(&self.luts[hi], [r, g, b]);\n        [\n            graded_lo[0] + (graded_hi[0] - graded_lo[0]) * t,\n            graded_lo[1] + (graded_hi[1] - graded_lo[1]) * t,\n            graded_lo[2] + (graded_hi[2] - graded_lo[2]) * t,\n        ]\n    }\n\n    /// Find bracketing depth samples and interpolation weight.\n    fn depth_bracket(&self, d: f32) -> (usize, usize, f32) {\n        let samples = &self.depth_samples;\n        if d <= samples[0] {\n            return (0, 0, 0.0);\n        }\n        if d >= *samples.last().unwrap() {\n            let last = samples.len() - 1;\n            return (last, last, 0.0);\n        }\n        for i in 0..samples.len() - 1 {\n            if d >= samples[i] && d < samples[i + 1] {\n                let t = (d - samples[i]) / (samples[i + 1] - samples[i]).max(1e-8);\n                return (i, i + 1, t);\n            }\n        }\n        let last = samples.len() - 1;\n        (last, last, 0.0)\n    }\n}\n",
+  "source_version": "plans/2026-04-03-3d-lut-temporal-interpolation.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836667643Z",
+  "valid_from": "2026-04-11T00:10:08.836667643Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-3d-lut-temporal-interpolation.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 287,
+    "end_line": 322,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

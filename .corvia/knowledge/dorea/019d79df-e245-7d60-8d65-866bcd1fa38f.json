@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-866bcd1fa38f",
+  "content": "## Phase E: Integration and Backward Compatibility\n\n### Task 13: Integration Test — 8-Bit Backward Compatibility\n\n**Files:**\n- Modify: `crates/dorea-cli/src/grade.rs` (test module)\n\n- [ ] **Step 1: Verify auto-detection defaults to 8-bit for existing clips**\n\nAdd test to `crates/dorea-cli/src/grade.rs`:\n\n```rust\n#[test]\nfn default_encoding_for_8bit_h264() {\n    use dorea_video::ffmpeg::{InputEncoding, OutputCodec, VideoInfo};\n    let info = VideoInfo {\n        width: 1920, height: 1080, fps: 30.0, duration_secs: 10.0,\n        frame_count: 300, has_audio: true,\n        codec_name: \"h264\".to_string(),\n        pix_fmt: \"yuv420p\".to_string(),\n        bits_per_component: 8,\n    };\n    let enc = InputEncoding::auto_detect(&info, std::path::Path::new(\"clip.mp4\"));\n    assert_eq!(enc, InputEncoding::Srgb);\n    assert!(!enc.is_10bit());\n    // Default output codec for 8-bit should be H264\n    let codec = if enc.is_10bit() { OutputCodec::ProRes } else { OutputCodec::H264 };\n    assert_eq!(codec, OutputCodec::H264);\n}\n```\n\n- [ ] **Step 2: Run full test suite**\n\nRun: `cd /workspaces/dorea-workspace/repos/dorea && cargo test 2>&1 | tail -30`\nExpected: All existing tests still pass. No regressions.\n\n- [ ] **Step 3: Run clippy**\n\nRun: `cd /workspaces/dorea-workspace/repos/dorea && cargo clippy -- -D warnings 2>&1 | tail -30`\nExpected: No warnings.\n\n- [ ] **Step 4: Commit**\n\n```bash\ngit add crates/dorea-cli/src/grade.rs\ngit commit -m \"test: backward compat — 8-bit auto-detection and defaults\"\n```\n\n---\n\n\n### Task 14: Update dorea.toml Defaults\n\n**Files:**\n- Modify: `dorea.toml` (project root, if it exists — may need to recreate since git shows it as deleted)\n\n- [ ] **Step 1: Add 10-bit config defaults**\n\nThe `dorea.toml` was deleted in working tree. If restoring it or creating fresh, add:\n\n```toml\n[grade]",
+  "source_version": "plans/2026-04-08-10bit-pipeline-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837048396Z",
+  "valid_from": "2026-04-11T00:10:08.837048396Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-08-10bit-pipeline-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1902,
+    "end_line": 1960,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

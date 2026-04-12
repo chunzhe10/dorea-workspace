@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-2a02c67b6892",
+  "content": "### Task 1: Add `skip_clarity` parameter to `grade_frame_cpu`\n\n        .collect();\n    let hsl_result = apply_hsl_corrections(&pixels_arr, &calibration.hsl_corrections);\n    for (i, px) in hsl_result.iter().enumerate() {\n        rgb_f32[i * 3]     = px[0];\n        rgb_f32[i * 3 + 1] = px[1];\n        rgb_f32[i * 3 + 2] = px[2];\n    }\n\n    // 3–5. Ambiance + (optional clarity) + warmth + blend + u8\n    Ok(finish_grade(&mut rgb_f32, pixels, depth, width, height, params, calibration, skip_clarity))\n}\n```\n\n- [ ] **Step 2: Fix the one existing caller**\n\nIn `crates/dorea-gpu/src/lib.rs`, `grade_frame_cpu` is not called directly (the CUDA path is used). But check for any test callers and add `false` as the `skip_clarity` argument to maintain existing behavior.\n\nSearch for `grade_frame_cpu` across the crate:\n```bash\ncd /workspaces/dorea-workspace/repos/dorea && grep -rn \"grade_frame_cpu\" crates/\n```\n\nUpdate each caller to pass `false` (preserve existing behavior).\n\n- [ ] **Step 3: Build and test**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ncargo build --release 2>&1 | tail -5\ncargo test -p dorea-gpu 2>&1 | tail -10\n```\n\nExpected: build succeeds, all existing tests pass.\n\n- [ ] **Step 4: Commit**\n\n```bash\ngit add crates/dorea-gpu/src/cpu.rs crates/dorea-gpu/src/lib.rs\ngit commit -m \"refactor(dorea-gpu): add skip_clarity param to grade_frame_cpu\n\nEnables the 3D LUT build phase to evaluate the per-pixel pipeline without\nthe spatial clarity pass. Existing callers pass false to preserve behavior.\"\n```\n\n---\n",
+  "source_version": "plans/2026-04-03-3d-lut-temporal-interpolation.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836659249Z",
+  "valid_from": "2026-04-11T00:10:08.836659249Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-3d-lut-temporal-interpolation.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 60,
+    "end_line": 105,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

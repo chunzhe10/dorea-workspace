@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-8822c3930f50",
+  "content": "    # Reverse the permutation: (3, N*H*W) → (3, N, H, W) → (N, 3, H, W)\n\n## Task 2: Rewrite _process_batch with batched operations\n\n**File:** `python/dorea_inference/raune_filter.py`\n\n- [ ] **Step 1: Replace the entire `_process_batch()` function**\n\nCurrent code (lines 467-532, approximately):\n```python\ndef _process_batch(batch_frames_np, model, normalize, fw, fh, pw, ph, transfer_fn, model_dtype):\n    \"\"\"Process a batch of frames on GPU. Returns list of uint8 HWC numpy arrays.\"\"\"\n    n = len(batch_frames_np)\n    results = []\n\n    with torch.no_grad():",
+  "source_version": "plans/2026-04-10-batched-process-batch.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837070414Z",
+  "valid_from": "2026-04-11T00:10:08.837070414Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-10-batched-process-batch.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 99,
+    "end_line": 112,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

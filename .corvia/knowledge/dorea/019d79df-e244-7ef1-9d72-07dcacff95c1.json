@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-07dcacff95c1",
+  "content": "## Risks and mitigations\n\n### Risk: RAUNE-Net layers don't support fp16\n**Mitigation**: RAUNE-Net is a standard U-Net with conv/batchnorm/relu/instance-norm.\nAll these layers support fp16 in PyTorch. If a layer fails, the error will be obvious\nat first call. Fallback: keep the model in fp32 if `model.half()` fails (try/except\nin main).\n\n\n### Risk: fp16 numerical differences cause visible quality regression\n**Mitigation**: Frame-by-frame diff against fp32 baseline must be ≤ 2/255 mean,\n≤ 5/255 max. If exceeded, escalate.\n",
+  "source_version": "decisions/2026-04-10-direct-mode-fp16-batch.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836223407Z",
+  "valid_from": "2026-04-11T00:10:08.836223407Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-10-direct-mode-fp16-batch.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 60,
+    "end_line": 69,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

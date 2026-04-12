@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-01fa0a832beb",
+  "content": "### Dual-texture temporal blending\n### Performance\n\n## VRAM Budget\n\n| Component | Size | Notes |\n|-----------|------|-------|\n| 32-zone base LUT (device) | ~14MB | Uploaded per-segment |\n| Combined texture set A | ~91MB | Permanent allocation |\n| Combined texture set B | ~91MB | Permanent allocation |\n| Zone boundaries (2 sets) | ~72 bytes | Trivial |\n| Frame I/O buffers | ~50MB | Existing (pixels + depth + output) |\n| **Total grading VRAM** | **~246MB** | |\n| RTX 3060 available | 6GB | Models unloaded before grading |\n\nComfortable fit. Depth model (~1.5GB) and RAUNE (~3GB) are unloaded after Pass 0 inference completes, before grading begins.\n\n\n## Configuration\n",
+  "source_version": "decisions/2026-04-04-per-keyframe-adaptive-depth-zones.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836154293Z",
+  "valid_from": "2026-04-11T00:10:08.836154293Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-04-per-keyframe-adaptive-depth-zones.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 172,
+    "end_line": 187,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

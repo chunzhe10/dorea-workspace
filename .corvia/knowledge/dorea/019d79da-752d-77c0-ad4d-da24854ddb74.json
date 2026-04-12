@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-da24854ddb74",
+  "content": "fn depth_dist_empty_is_zero() {\n        assert!((depth_distribution_distance(&[], &[], 64) - 0.0).abs() < 1e-6);\n        assert!((depth_distribution_distance(&[0.5], &[], 64) - 0.0).abs() < 1e-6);\n    }\nfn segments_single_uniform_clip() {\n        let depths: Vec<Vec<f32>> = (0..10)\n            .map(|_| (0..100).map(|i| i as f32 / 100.0).collect())\n            .collect();\n        let segs = detect_scene_segments(&depths, 0.15, 5);\n        assert_eq!(segs.len(), 1);\n        assert_eq!(segs[0].start, 0);\n        assert_eq!(segs[0].end, 10);\n    }",
+  "source_version": "crates/dorea-cli/src/change_detect.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229537258Z",
+  "valid_from": "2026-04-11T00:04:13.229537258Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/change_detect.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 324,
+    "end_line": 332,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

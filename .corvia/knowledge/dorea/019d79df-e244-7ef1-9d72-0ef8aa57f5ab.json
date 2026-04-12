@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-0ef8aa57f5ab",
+  "content": "## Pipeline Insights\n\n### 7. D-Log M JPEG encoding assumption\nD-Log M keyframes extracted by ffmpeg contain raw D-Log M values in sRGB byte encoding\n(no EOTF applied). `generate_references.py` correctly treats pixel values as D-Log M,\nwhile `00_generate_lut.py` correctly treats reference images as sRGB. This asymmetry\nis correct but undocumented and fragile.\n\n\n### 8. Two-repo workflow\nPipeline code lives in `repos/dorea/` (chunzhe10/dorea.git), workspace files in the\nworkspace repo (chunzhe10/dorea-workspace.git). Changes require commits and PRs in\nboth repos. The `repos/dorea/` directory is gitignored in the workspace.",
+  "source_version": "learnings/2026-04-01-lut-generation-learnings.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836310260Z",
+  "valid_from": "2026-04-11T00:10:08.836310260Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "learnings/2026-04-01-lut-generation-learnings.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 58,
+    "end_line": 67,
+    "content_role": "learning",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

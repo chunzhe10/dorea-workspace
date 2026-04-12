@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d71-fe53bab5e164",
+  "content": "### Build Phase\n### Apply Phase (Non-Keyframe Frames)\n\n### Pipeline Integration\n\n```\nKeyframe path (unchanged):\n  depth_inference → grade_frame (full pipeline incl. clarity) → encode\n\nNon-keyframe path (changed):\n  Before: lerp_depth → grade_frame (~40ms)\n  After:  lerp_depth → apply_grade_lut (~15-25ms est, benchmark on real footage)\n```\n\nThe `grade.rs` main loop changes:\n- Build `GradeLut` once after calibration, before the frame loop\n- In the non-keyframe branch: call `grade_lut.apply(pixels, depth)` instead of `grade_frame`\n- Keyframe branch: unchanged (full pipeline, stores depth for interpolation)\n\n\n### CLI Flags\n\n- `--no-grade-lut`: Disable 3D LUT, force full `grade_frame` on every frame.\n  For debugging and A/B quality comparison. Mirrors existing `--no-depth-interp`.\n",
+  "source_version": "decisions/2026-04-03-3d-lut-temporal-interpolation.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836109705Z",
+  "valid_from": "2026-04-11T00:10:08.836109705Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-03-3d-lut-temporal-interpolation.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 88,
+    "end_line": 108,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

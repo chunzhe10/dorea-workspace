@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-334cc4bad25a",
+  "content": "## Known limitations\n## CI / Testing\n\n## Verification Checklist\n\nAfter all tasks are complete, verify:\n\n- [ ] `cargo build` succeeds with no warnings\n- [ ] `cargo test` passes all tests (existing + new)\n- [ ] `dorea grade --help` shows `--maxine` and related flags\n- [ ] `dorea grade --input test.mp4 --maxine --maxine-upscale-factor 5` fails with \"unsupported\" error\n- [ ] With `DOREA_MAXINE_MOCK=1`, the Python server starts with `--maxine` and processes enhance requests (returns input unchanged)\n- [ ] Without `--maxine`, the pipeline produces byte-identical output to before this change",
+  "source_version": "plans/2026-04-03-maxine-enhancement-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836797988Z",
+  "valid_from": "2026-04-11T00:10:08.836797988Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-maxine-enhancement-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 926,
+    "end_line": 935,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

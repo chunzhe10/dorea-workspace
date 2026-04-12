@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-88edb7aa9c29",
+  "content": "erence,signalstats\" \\\n  -f null - 2>&1 | grep -E \"YAVG|YMAX\"\n```\n\nExpected: YAVG=0, YMAX=0 (the batched ops should produce bit-identical output to the per-frame loop). If diff is non-zero, investigate.\n\n- [ ] **Step 6: Throughput test at batch=8**\n\n```bash\n./target/release/dorea grade \\\n  --input \"/workspaces/dorea-workspace/footage/raw/2025-11-01/DJI_20251101111428_0055_D_3s.MP4\" \\\n  --output \"/workspaces/dorea-workspace/working/oklab_batched_b8.mov\" \\\n  --output-codec prores \\\n  --direct \\\n  --direct-batch-size 8 \\\n  --verbose \\\n  2>&1 | tail -10\n```\n\nExpected: throughput should now be MEANINGFULLY higher than batch=4 (target: ~5 fps). Report numbers.\n\n- [ ] **Step 7: Throughput test at batch=16**\n\n```bash\n./target/release/dorea grade \\\n  --input \"/workspaces/dorea-workspace/footage/raw/2025-11-01/DJI_20251101111428_0055_D_3s.MP4\" \\\n  --output \"/workspaces/dorea-workspace/working/oklab_batched_b16.mov\" \\\n  --output-codec prores \\\n  --direct \\\n  --direct-batch-size 16 \\\n  --verbose \\\n  2>&1 | tail -10\n```\n\nExpected: throughput should NOT regress vs batch=8 (target: ~5-6 fps). If it still regresses, the per-frame loop wasn't the only bottleneck and we need to investigate further.\n\n- [ ] **Step 8: Commit**\n\n```bash",
+  "source_version": "plans/2026-04-10-batched-process-batch.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837079745Z",
+  "valid_from": "2026-04-11T00:10:08.837079745Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-10-batched-process-batch.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 291,
+    "end_line": 320,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

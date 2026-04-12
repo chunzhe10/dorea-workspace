@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d71-fb1d400b7037",
+  "content": "### ffmpeg decode: NVDEC for H.265 10-bit\n### ffmpeg encode: 10-bit output\n\n### VRAM budget (RTX 3060, 6 GB)\n\n| Operation | VRAM | When |\n|-----------|------|------|\n| Depth Anything V2 (batch=2) | ~2.5 GB | Stage 2 |\n| CUDA grading kernels | ~200 MB | Stage 3 |\n| Persistent LUT (65^3 x 5 zones) | ~16.5 MB | Entire run |\n| NVDEC decoder context | ~50 MB | Entire run |\n| **Peak** | **~2.8 GB** | During depth batch |\n",
+  "source_version": "decisions/2026-04-02-10bit-pipeline-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836067747Z",
+  "valid_from": "2026-04-11T00:10:08.836067747Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-02-10bit-pipeline-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 216,
+    "end_line": 225,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

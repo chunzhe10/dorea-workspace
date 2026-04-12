@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-edda26ea8410",
+  "content": "_or_else(|e| panic!(\"grade_frame_cuda failed at {w}×{h}: {e}\"));\n            let expected_len = w * h * 3;\n            assert_eq!(out.len(), expected_len,\n                \"output length for {w}×{h} should be {expected_len}, got {}\", out.len());\n        }\n    }\n\n    #[test]\n    fn combined_lut_builds_without_panic() {\n        use crate::cuda::combined_lut::CombinedLut;\n        let cal = make_calibration(5);\n        let params = crate::GradeParams::default();\n        let device = match cudarc::driver::CudaDevice::new(0) {\n            Ok(d) => d,\n            Err(e) => { eprintln!(\"SKIP: no CUDA device ({e})\"); return; }\n        };\n        let _lut = CombinedLut::build(&device, &cal, &params).expect(\"CombinedLut::build failed\");\n    }\n\n    /// Helper: build calibration with a gamma-shifted LUT (not identity).\n    /// Uses the fixed 6-vector HSL qualifier grid that the GPU hardcodes in\n    /// GP_H_CENTERS/GP_H_WIDTHS, activating the Green slot (index 2, h_center=100).\n    fn make_shifted_calibration(n_zones: usize) -> Calibration {\n        use dorea_lut::types::{DepthLuts, LutGrid};\n        use dorea_hsl::derive::{HslCorrections, QualifierCorrection};\n        use dorea_hsl::qualifiers::HSL_QUALIFIERS;\n        let size = 17usize;\n        let luts: Vec<LutGrid> = (0..n_zones).map(|_| {\n            let mut lut = LutGrid::new(size);\n            for ri in 0..size { for gi in 0..size { for bi in 0..size {\n                let r = (ri as f32 / (size - 1) as f32).powf(0.9);\n                let g = (gi as f32 / (size - 1) as f32).powf(0.9);\n                let b = (bi as f32 / (size - 1) as f32).powf(0.9);\n                lut.set(ri, gi, bi, [r, g, b]);\n            }}}\n            lut\n        }).collect();\n        let boundaries: Vec<f32> = (0..=n_zones).map(|i| i as f32 / n_zones as f32).collect();\n        // Use the standard 6-vector structure (matches GP_H_CENTERS/GP_H_WIDTHS in grade_pixel.cuh).\n        // Green slot (index 2, h_center=100, h_width=50) gets an active s_ratio=1.2.",
+  "source_version": "crates/dorea-gpu/src/cuda/mod.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229783914Z",
+  "valid_from": "2026-04-11T00:04:13.229783914Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cuda/mod.rs",
+    "language": "rs",
+    "chunk_type": "mod_item",
+    "start_line": 367,
+    "end_line": 401,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

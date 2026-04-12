@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-0bfc5d94ccfd",
+  "content": "### Graph-to-Document Navigation UX\n### Panel Pattern\n\n### Large Graph Handling\n\n- **Advanced Expansion**: When expanding a node, users can choose specific relationship types,\n  target categories, and result limits to avoid overwhelming the scene\n- **Grouping**: Multiple nodes can be collapsed into a single visual group\n- **Dismiss**: Remove individual nodes or all unconnected nodes\n- **Map Overview**: Mini-map for navigating large scenes\n\n\n### What Works Well\n\n- **Inspector showing neighbors as navigable cards** is excellent for graph exploration\n- Natural language search lowers the barrier to query construction\n- Bidirectional selection (card list <-> graph scene) keeps context synchronized\n- Property type annotations on hover help users understand the data model\n- Advanced expansion with relationship type filtering prevents information overload\n",
+  "source_version": "decisions/graph-document-ux-research.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836274109Z",
+  "valid_from": "2026-04-11T00:10:08.836274109Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/graph-document-ux-research.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 278,
+    "end_line": 293,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

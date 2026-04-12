@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-872da90233f5",
+  "content": "# OKLab Grade Pipeline Implementation Plan\n\n> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.\n\n**Goal:** Replace CIELab with OKLab (rescaled to CIELab ranges) in the per-pixel grading pipeline, and switch CUDA `powf` to `__powf` for faster sRGB gamma.\n\n**Architecture:** Two files contain the conversion functions: `dorea-color/src/lab.rs` (Rust CPU) and `dorea-gpu/src/cuda/kernels/grade_pixel.cuh` (CUDA GPU). Both expose `srgb_to_lab` / `lab_to_srgb` with identical signatures. Replace internals with OKLab math, rescale output to match CIELab numeric ranges (L×100, a×300, b×300) so all downstream manipulation constants stay unchanged. CUDA path additionally switches `powf` → `__powf`.\n\n**Tech Stack:** Rust, CUDA C++\n\n**Spec:** `docs/decisions/2026-04-09-oklab-grade-pipeline.md`\n\n---\n",
+  "source_version": "plans/2026-04-09-oklab-grade-pipeline.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837056435Z",
+  "valid_from": "2026-04-11T00:10:08.837056435Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-09-oklab-grade-pipeline.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1,
+    "end_line": 14,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

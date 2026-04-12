@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-fa622a8925f1",
+  "content": "fn zero() -> Self {\n        Self { total_weight: 0.0, h_offset_sum: 0.0, lut_s_sum: 0.0, tgt_s_sum: 0.0, v_diff_sum: 0.0 }\n    }\nfn combine(self, other: Self) -> Self {\n        Self {\n            total_weight: self.total_weight + other.total_weight,\n            h_offset_sum: self.h_offset_sum + other.h_offset_sum,\n            lut_s_sum: self.lut_s_sum + other.lut_s_sum,\n            tgt_s_sum: self.tgt_s_sum + other.tgt_s_sum,\n            v_diff_sum: self.v_diff_sum + other.v_diff_sum,\n        }\n    }",
+  "source_version": "crates/dorea-hsl/src/derive.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229951772Z",
+  "valid_from": "2026-04-11T00:04:13.229951772Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-hsl/src/derive.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 45,
+    "end_line": 53,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-852f9947be34",
+  "content": "## Phase C: CUDA 10-Bit Kernel\n\n### Task 8: CUDA Kernel — combined_lut_kernel_16 (u16 I/O)\n\n**Files:**\n- Modify: `crates/dorea-gpu/src/cuda/kernels/combined_lut.cu`\n\nAdd a second kernel entry point for u16 I/O. The internal f32 math is identical.\nOnly the input load (u16→f32, /65535.0) and output store (f32→u16, *65535.0) change.\n\n- [ ] **Step 1: Add the u16 kernel entry point**\n\nAppend to `crates/dorea-gpu/src/cuda/kernels/combined_lut.cu`, after the existing kernel:\n\n```cuda\n/**\n * 10-bit variant: u16 input/output for full 10-bit precision.\n * Internal math is identical to combined_lut_kernel.\n * Input: rgb48le u16 pixels. Output: rgb48le u16 pixels.\n */\nextern \"C\"\n__global__ void combined_lut_kernel_16(\n    const unsigned short* __restrict__ pixels_in,\n    const float*          __restrict__ depth,\n    const unsigned long long* __restrict__ textures_a,\n    const float*              __restrict__ zone_boundaries_a,\n    const unsigned long long* __restrict__ textures_b,\n    const float*              __restrict__ zone_boundaries_b,\n    float blend_t,\n    unsigned short*      __restrict__ pixels_out,\n    int n_pixels,\n    int n_zones,\n    int grid_size,\n    int frame_w,\n    int frame_h,\n    int depth_w,\n    int depth_h,\n    const unsigned char* __restrict__ class_mask,\n    int mask_w,\n    int mask_h,\n    float diver_depth\n) {\n    int idx = blockIdx.x * blockDim.x + threadIdx.x;\n    if (idx >= n_pixels) return;\n\n    // u16 → f32 (10-bit source uses [0, 65535] range)\n    float r = pixels_in[idx * 3 + 0] * (1.0f / 65535.0f);\n    float g = pixels_in[idx * 3 + 1] * (1.0f / 65535.0f);\n    float b = pixels_in[idx * 3 + 2] * (1.0f / 65535.0f);\n\n    // --- Bilinear sample depth (identical to u8 kernel) ---\n    float d;\n    if (depth_w == frame_w && depth_h == frame_h) {\n        d = depth[idx];\n    } else {\n        int px = idx % frame_w;\n        int py = idx / frame_w;\n        float sx = (float)px * (float)(depth_w - 1) / (float)(frame_w - 1);\n        float sy = (float)py * (float)(depth_h - 1) / (float)(frame_h - 1);",
+  "source_version": "plans/2026-04-08-10bit-pipeline-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837031002Z",
+  "valid_from": "2026-04-11T00:10:08.837031002Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-08-10bit-pipeline-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1156,
+    "end_line": 1212,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

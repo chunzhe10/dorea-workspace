@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-04bd8b86054b",
+  "content": "### Method contract\n\n### Driver flow (`run.py`)\n\n```\n1. parse CLI args\n2. log environment (python/torch/cuda/driver versions, GPU, weights SHA, clip SHA, git SHA)\n3. load RAUNE model once (fp16, InstanceNorm → fp32 per #67)\n4. select frames:\n     if --frames: decode explicit indices\n     else:        run frame_select.auto_select(clip_path) → [idx_edge, idx_smooth, idx_chroma]\n5. for each frame_idx:\n     a. decode frame_4k (fp32 RGB [0,1] on CUDA)\n     b. compute_gold(frame_4k, raune_model) → (raune_4k, delta_4k)\n        - cache-check: working/upscale_bench/gold/{weights_sha[:8]}_{frame_idx}.pt\n        - on miss: try native 4K RAUNE; on OOM fall back to 2×2 tiled (1920×1080, 128px overlap, feathered)\n        - write cache\n     c. resize frame_4k → frame_proxy (1080p)\n        run RAUNE on frame_proxy → raune_proxy\n        compute delta_proxy = lab(raune_proxy) - lab(orig_proxy)\n     d. for each registered method:\n          - warmup 3 runs\n          - 10 timed runs, cuda.synchronize() bracketed\n          - run once more to capture delta_method (warmup output discarded)\n          - compute final_method via triton_oklab_transfer(frame_4k, delta_method)\n          - compute metrics against gold\n          - append row to results[]\n6. generate visualizations:\n     - summary_grid.png      (visualize.generate_grid)\n     - per_frame/*.png       (visualize.generate_per_frame_sheet × 3)\n     - heatmaps/*.png        (visualize.generate_heatmap × 3 × 9)\n7. write metrics.csv\n8. write run_report.md\n```\n\nTotal expected runtime on first run with all 9 methods + 3 frames: ~1–3 minutes (dominated by gold computation and Real-ESRGAN model download). Re-runs with cached gold: ~30 seconds.\n",
+  "source_version": "decisions/2026-04-10-delta-upscale-bench-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836187079Z",
+  "valid_from": "2026-04-11T00:10:08.836187079Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-10-delta-upscale-bench-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 86,
+    "end_line": 120,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

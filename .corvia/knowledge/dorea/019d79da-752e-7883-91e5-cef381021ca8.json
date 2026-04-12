@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-cef381021ca8",
+  "content": "++) {\n        float z_lo = zone_boundaries[z];\n        float z_hi = zone_boundaries[z + 1];\n        float z_width = z_hi - z_lo;\n        if (z_width < 1e-6f) continue;\n        float z_center = 0.5f * (z_lo + z_hi);\n        float dist = fabsf(d - z_center);\n        float w = fmaxf(1.0f - dist / z_width, 0.0f);\n        if (w < 1e-6f) continue;\n\n        // Sample combined LUT texture for this zone.\n        // Texture uses unnormalized coordinates: texel i is at position i (not i/(N-1)).\n        // Scale [0,1] input to [0, N-1] texel space — avoids the half-texel shift that\n        // normalized coords introduce ((i+0.5)/N centre vs i/(N-1) lattice point).\n        cudaTextureObject_t tex = (cudaTextureObject_t)textures[z];\n        float gs = (float)(grid_size - 1);\n        float4 sample = tex3D<float4>(tex, r * gs, g * gs, b * gs);\n\n        blended.x += sample.x * w;\n        blended.y += sample.y * w;\n        blended.z += sample.z * w;\n        total_w += w;\n    }\n\n    float r_out, g_out, b_out;\n    if (total_w > 1e-6f) {\n        r_out = blended.x / total_w;\n        g_out = blended.y / total_w;\n        b_out = blended.z / total_w;\n    } else {\n        r_out = r; g_out = g; b_out = b;\n    }\n\n    // f32 → u8 (with clamp)\n    pixels_out[idx * 3 + 0] = (unsigned char)(__float2uint_rn(fminf(fmaxf(r_out, 0.0f), 1.0f) * 255.0f));\n    pixels_out[idx * 3 + 1] = (unsigned char)(__float2uint_rn(fminf(fmaxf(g_out, 0.0f), 1.0f) * 255.0f));\n    pixels_out[idx * 3 + 2] = (unsigned char)(__float2uint_rn(fminf(fmaxf(b_out, 0.0f), 1.0f) * 255.0f));\n}\n```\n",
+  "source_version": "docs/plans/2026-04-03-combined-lut-cuda-texture-plan.md",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230468791Z",
+  "valid_from": "2026-04-11T00:04:13.230468791Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "docs/plans/2026-04-03-combined-lut-cuda-texture-plan.md",
+    "language": "markdown",
+    "chunk_type": "heading_section",
+    "start_line": 1414,
+    "end_line": 1446,
+    "content_role": "plan",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c3c8b6223b51",
+  "content": "def _score_chroma_magnitude(thumb: torch.Tensor) -> float:\n    \"\"\"Mean sqrt(a² + b²) in OKLab.\"\"\"\n    lab = rgb_to_oklab(thumb)\n    a = lab[:, 1:2]\n    b = lab[:, 2:3]\n    chroma = (a * a + b * b).sqrt()\n    return chroma.mean().item()\ndef auto_select(clip_path: Path, every_n: int = 30) -> List[int]:\n    \"\"\"Decode every Nth frame and pick 3 indices: one edge-heavy, one\n    smooth, one high-chroma. Deterministic on the same clip.\"\"\"\n    import av\n\n    container = av.open(str(clip_path))\n    stream = container.streams.video[0]\n    stream.thread_type = \"AUTO\"\n    total = stream.frames or 0\n    if total == 0:\n        container.close()\n        raise ValueError(f\"cannot determine frame count of {clip_path}\")\n    candidates = list(range(0, total, every_n))\n\n    thumbs: dict[int, torch.Tensor] = {}\n    for i, frame in enumerate(container.decode(stream)):\n        if i in candidates:\n            arr = frame.to_ndarray(format=\"rgb24\")\n            t = torch.from_numpy(arr).to(\"cuda\", dtype=torch.float32) / 255.0\n            t = t.permute(2, 0, 1).unsqueeze(0).contiguous()\n            thumbs[i] = _thumbnail(t)\n        if i >= candidates[-1]:\n            break\n    container.close()\n\n    scores_edge: dict[int, float] = {}\n    scores_smooth: dict[int, float] = {}\n    scores_chroma: dict[int, float] = {}\n    for idx, thumb in thumbs.items():\n        scores_edge[idx] = _score_edge_density(thumb)\n        scores_smooth[idx] = _score_smoothness(thumb)\n        scores_chroma[idx] = _score_chroma_magnitude(thumb)\n\n    best_edge = max(scores_edge, key=scores_edge.get)\n    best_smooth = max(scores_smooth, key=scores_smooth.get)\n    best_chroma = max(scores_chroma, key=scores_chroma.get)\n\n    # Deduplicate while preserving order\n    picked: List[int] = []\n    for idx in (best_edge, best_smooth, best_chroma):\n        if idx not in picked:\n            picked.append(idx)\n\n    # If dedup left us with fewer than 3 (rare: all criteria picked the same frame),\n    # pad with the next best edge-density frames.\n    if len(picked) < 3:\n        ranked = sorted(scores_edge, key=scores_edge.get, reverse=True)\n        for idx in ranked:\n            if idx not in picked:\n                picked.append(idx)\n            if len(picked) == 3:\n                break\n\n    return picked[:3]",
+  "source_version": "benchmarks/upscale_bench/frame_select.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230291959Z",
+  "valid_from": "2026-04-11T00:04:13.230291959Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/frame_select.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 83,
+    "end_line": 136,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

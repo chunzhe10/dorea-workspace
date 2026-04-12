@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-bd06deb61cd0",
+  "content": "-Net\"\n    else:\n        raune_dir = models_dir\n    if str(raune_dir) not in sys.path:\n        sys.path.insert(0, str(raune_dir))\n\n    from models.raune_net import RauneNet\n\n    model = RauneNet(input_nc=3, output_nc=3, n_blocks=30, n_down=2, ngf=64).cuda()\n    state = torch.load(args.weights, map_location=\"cuda\", weights_only=True)\n    model.load_state_dict(state)\n    model.eval()\n    # Convert RAUNE to fp16 for ~2× throughput on Ampere.\n    # fp16 has 11 bits of mantissa precision, more than enough for 8/10-bit output.\n    # InstanceNorm2d layers are kept in fp32 because their per-channel variance\n    # computation can underflow in fp16 (PyTorch's autocast handles this automatically;\n    # model.half() does not, so we restore InstanceNorm explicitly here).\n    import torch.nn as nn\n    model = model.half()\n    instance_norm_count = 0\n    for m in model.modules():\n        if isinstance(m, (nn.InstanceNorm1d, nn.InstanceNorm2d, nn.InstanceNorm3d)):\n            m.float()\n            instance_norm_count += 1\n    model_dtype = next(model.parameters()).dtype\n    print(f\"[raune-filter] RAUNE converted to fp16 \"\n          f\"({instance_norm_count} InstanceNorm layers kept in fp32, \"\n          f\"model_dtype={model_dtype})\",\n          file=sys.stderr, flush=True)\n\n    normalize = transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))\n\n    # Dispatch to single-process or pipe mode\n    if args.input:\n        if not args.output:\n            print(\"error: --output required with --input\", file=sys.stderr)\n            sys.exit(1)\n        run_single_process(args, model, normalize, model_dtype)\n    else:\n        run_pipe_mode(args, model, normalize, model_dtype)",
+  "source_version": "python/dorea_inference/raune_filter.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230198063Z",
+  "valid_from": "2026-04-11T00:04:13.230198063Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/raune_filter.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 665,
+    "end_line": 695,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

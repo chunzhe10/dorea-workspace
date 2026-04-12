@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-0d7510cd414e",
+  "content": "### Dendron (VS Code extension, discontinued active development)\n### Foam (VS Code extension, active)\n\n### TheBrain (commercial, cross-platform)\n\n**Most innovative graph-to-content UX in the entire comparison.**\n\n- **The Plex**: Dynamic graph visualization with animated transitions. Clicking a node\n  re-centers the graph around it with smooth animation, showing parents above, children below,\n  and siblings alongside.\n- **Unified scroll surface (mobile)**: On mobile, the plex (graph) and content are a single\n  scrollable surface. Swiping transitions from full-screen graph to full-screen content.\n  No panel switching -- just scroll.\n- **Radiant layout**: Force-simulation graph that users can expand/collapse arbitrarily\n  and drag nodes to place.\n- **Mapped Links (footer navigation)**: Below note content, a linear outline of all connections\n  (parents, children, siblings, jumps) as clickable links. Allows graph traversal from\n  within the document without seeing the graph at all.\n- **Unlinked Mentions**: Automatically detects when note text mentions existing nodes and\n  underlines them. Right-click to activate as a link.\n- **Aggregated Content**: Backlinks section shows where the current node is referenced\n  elsewhere, with paragraph-level context excerpts.\n- **Plex hide/show**: The graph can be completely hidden while still navigating via mapped\n  links in the content footer.\n\n**Key Innovation**: TheBrain treats graph and content as **a single continuous surface** rather\nthan two separate panels. The graph is not a view -- it is the navigation system embedded\nin and around the content.\n\n---\n",
+  "source_version": "decisions/graph-document-ux-research.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836290657Z",
+  "valid_from": "2026-04-11T00:10:08.836290657Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/graph-document-ux-research.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 605,
+    "end_line": 632,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

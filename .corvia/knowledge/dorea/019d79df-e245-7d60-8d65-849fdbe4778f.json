@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-849fdbe4778f",
+  "content": "### Task 6: 10-Bit Decode Path — Frame16 and decode_frames_16bit\n\n            height,\n            frame_bytes: width * height * 6,\n            done: false,\n        }\n    }\n}\n\nimpl Drop for FrameReader16 {\n    fn drop(&mut self) {\n        let _ = self.child.kill();\n        let _ = self.child.wait();\n    }\n}\n\nimpl Iterator for FrameReader16 {\n    type Item = Result<Frame16, FfmpegError>;\n\n    fn next(&mut self) -> Option<Self::Item> {\n        if self.done {\n            return None;\n        }\n\n        let mut buf = vec![0u8; self.frame_bytes];\n        let stdout = self.child.stdout.as_mut()?;\n\n        match read_exact(stdout, &mut buf) {\n            Ok(0) | Err(_) => {\n                self.done = true;\n                return None;\n            }\n            Ok(_) => {}\n        }\n\n        // Convert LE byte pairs to u16\n        let pixels: Vec<u16> = buf.chunks_exact(2)\n            .map(|c| u16::from_le_bytes([c[0], c[1]]))\n            .collect();\n\n        let frame = Frame16 {\n            index: self.frame_index,\n            pixels,\n            width: self.width,\n            height: self.height,\n        };",
+  "source_version": "plans/2026-04-08-10bit-pipeline-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837022791Z",
+  "valid_from": "2026-04-11T00:10:08.837022791Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-08-10bit-pipeline-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 790,
+    "end_line": 833,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

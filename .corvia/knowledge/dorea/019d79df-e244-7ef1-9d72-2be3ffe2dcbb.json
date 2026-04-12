@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-2be3ffe2dcbb",
+  "content": "_or_else(|e| {\n            log::warn!(\"Depth batch failed: {e} — using uniform depth 0.5\");\n            chunk_items.iter().map(|it| {\n                (it.id.clone(), vec![0.5f32; proxy_w * proxy_h], proxy_w, proxy_h)\n            }).collect()\n        });\n\n    for (kf, (_, depth_raw, dw, dh)) in chunk_kfs.iter().zip(results.iter()) {\n        let depth = if *dw == info.width && *dh == info.height {\n            depth_raw.clone()\n        } else {\n            InferenceServer::upscale_depth(depth_raw, *dw, *dh, info.width, info.height)\n        };\n        keyframe_depths.insert(kf.frame_index, depth);\n    }\n}\n\n// Ordered keyframe index list for lerp computation\nlet kf_index_list: Vec<(u64, bool)> = keyframes.iter()\n    .map(|kf| (kf.frame_index, kf.scene_cut_before))\n    .collect();\n```\n\n**Pass 2 — full-res grade:**\n```rust\nlet frames = ffmpeg::decode_frames(&args.input, &info)?;\nlet mut kf_cursor = 0usize;\nlet mut frame_count = 0u64;\n\nfor frame_result in frames {\n    let frame = frame_result?;\n    let fi = frame.index;\n\n    // Advance cursor: kf_index_list[kf_cursor].0 is the most recent keyframe ≤ fi\n    while kf_cursor + 1 < kf_index_list.len() && kf_index_list[kf_cursor + 1].0 <= fi {\n        kf_cursor += 1;\n    }\n\n    let (prev_kf_idx, _) = kf_index_list[kf_cursor];\n    let prev_depth = keyframe_depths.get(&prev_kf_idx)\n        .expect(\"prev keyframe depth missing — logic error\");\n\n    let depth = if fi == prev_kf_idx {\n        prev_depth.clone()\n    } else if let Some(&(next_kf_idx, scene_cut_before_next)) = kf_index_list.get(kf_cursor + 1) {",
+  "source_version": "plans/2026-04-03-batch-depth-inference-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836687350Z",
+  "valid_from": "2026-04-11T00:10:08.836687350Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-batch-depth-inference-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 266,
+    "end_line": 303,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

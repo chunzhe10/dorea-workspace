@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c2cc608ffc2c",
+  "content": "5))\n                row.append(placeholder)\n        cell_images.append(row)\n\n    # Determine canvas size\n    cell_w = max(img.width for row in cell_images for img in row)\n    cell_h = max(img.height for row in cell_images for img in row)\n    header_h = 100\n    footer_h = 180\n    label_h = 40\n    padding = 12\n    col_label_h = 40\n\n    canvas_w = n_cols * (cell_w + padding) + padding + 120  # 120px left gutter for row labels\n    canvas_h = header_h + col_label_h + n_frames * (cell_h + padding + label_h) + footer_h\n\n    canvas = Image.new(\"RGB\", (canvas_w, canvas_h), (16, 16, 16))\n    draw = ImageDraw.Draw(canvas)\n    font = _load_font(20)\n    font_small = _load_font(14)\n    font_header = _load_font(22)\n\n    # Header band\n    header_text = (\n        f\"Delta Upscale Benchmark  |  {run_metadata.get('date', '?')}  |  \"\n        f\"clip: {run_metadata.get('clip', '?')}  |  \"\n        f\"weights: {run_metadata.get('weights_sha', '?')}  |  \"\n        f\"git: {run_metadata.get('git_sha', '?')}\"\n    )\n    draw.text((padding, padding), header_text, fill=(220, 220, 220), font=font_header)\n\n    # Gold paths per frame (second header line)\n    gold_paths_text = \"  \".join(\n        f\"frame {fd.frame_idx}: {run_metadata.get('gold_paths', {}).get(fd.frame_idx, '?')}\"\n        for fd in frames_data\n    )\n    draw.text((padding, padding + 32), gold_paths_text, fill=(180, 180, 180), font=font_small)\n\n    # Column labels (method name + timing)\n    y_col = header_h\n    for c, col_name in enumerate(columns):",
+  "source_version": "benchmarks/upscale_bench/visualize.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230276761Z",
+  "valid_from": "2026-04-11T00:04:13.230276761Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/visualize.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 104,
+    "end_line": 136,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

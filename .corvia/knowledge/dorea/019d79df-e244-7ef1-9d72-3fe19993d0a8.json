@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-3fe19993d0a8",
+  "content": " grep -E \"FAILED|ok\\.\"\n```\nExpected: all 10 grading tests pass.\n\n- [ ] **Step 5: Commit**\n\n```bash\ngit add crates/dorea-cli/src/pipeline/grading.rs\ngit commit -m \"feat(pipeline): GradingStage — DepthInterpolateNode (borrowed lerp) + BlendTNode\"\n```\n\n---\n\n### Task 6: Wire stages into `grade.rs` + delete old code\n\n**Files:**\n- Modify: `crates/dorea-cli/src/grade.rs`\n\nReplace the monolithic `run()` body with four stage constructions and `.run()` calls. Delete `PagedCalibrationStore`, `SegmentCalibration`, `lerp_depth`, and `KeyframeEntry` (now in pipeline modules). Delete the old fused batch, calibration, and grading pass blocks.\n\n- [ ] **Step 1: Rewrite `grade.rs::run`**\n\n```rust\npub fn run(args: GradeArgs, cfg: &crate::config::DoreaConfig) -> Result<()> {\n    // --- Config resolution (unchanged) ---\n    let warmth              = args.warmth.or(cfg.grade.warmth).unwrap_or(1.0_f32);\n    let strength            = args.strength.or(cfg.grade.strength).unwrap_or(0.8_f32);\n    let contrast            = args.contrast.or(cfg.grade.contrast).unwrap_or(1.0_f32);\n    let proxy_size          = args.proxy_size.or(cfg.inference.proxy_size).unwrap_or(1080_usize);\n    let depth_skip_threshold= args.depth_skip_threshold.or(cfg.grade.depth_skip_threshold).unwrap_or(0.005_f32);\n    let depth_max_interval  = args.depth_max_interval.or(cfg.grade.depth_max_interval).unwrap_or(12_usize);\n    let fused_batch_size    = args.fused_batch_size.or(cfg.grade.fused_batch_size).unwrap_or(32_usize);\n    let depth_zones         = args.depth_zones.or(cfg.grade.depth_zones).unwrap_or(8_usize);\n    let base_lut_zones      = args.base_lut_zones.or(cfg.grade.base_lut_zones).unwrap_or(32_usize);\n    let scene_threshold     = args.scene_threshold.or(cfg.grade.scene_threshold).unwrap_or(0.15_f32);",
+  "source_version": "plans/2026-04-05-pipeline-dag-refactor.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836999024Z",
+  "valid_from": "2026-04-11T00:10:08.836999024Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-05-pipeline-dag-refactor.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1726,
+    "end_line": 1747,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

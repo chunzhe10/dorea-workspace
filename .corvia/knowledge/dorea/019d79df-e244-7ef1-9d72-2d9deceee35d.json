@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-2d9deceee35d",
+  "content": "sk 5.\n\n- [ ] **Step 7: Commit**\n\n```bash\ngit add crates/dorea-gpu/Cargo.toml crates/dorea-gpu/build.rs crates/dorea-gpu/src/cuda/kernels/\ngit commit -m \"build(dorea-gpu): switch from .cu→.o→.a to .cu→.ptx, add cudarc dep, strip C launchers\"\n```\n\n---\n\n## Task 4: Device Types — BorrowedDeviceSlice and Helpers\n\n**Files:**\n- Create: `crates/dorea-gpu/src/device.rs`\n- Modify: `crates/dorea-gpu/src/lib.rs` (add `pub mod device;`)\n- Test: `cargo test -p dorea-gpu` (compile-time checks; runtime tests need GPU)\n\n- [ ] **Step 1: Create `device.rs`**\n\n```rust\n//! Device memory types for GPU tensor sharing and RAII frame buffers.\n//!\n//! `BorrowedDeviceSlice` — borrows a device pointer owned by Python (PyTorch).\n//! Lifetime-bound to the GIL token to prevent use-after-free at compile time.\n//!\n//! Only compiled when the `cuda` feature is enabled.\n\n#[cfg(feature = \"cuda\")]\nuse std::marker::PhantomData;\n\n/// A borrowed device pointer — NOT owned by Rust.\n///\n/// Carries lifetime `'a` tied to the scope that guarantees the pointer's validity\n/// (typically the GIL scope via `Python<'py>`). The borrow checker prevents this\n/// from escaping that scope. No `Drop` impl — no `cudaFree`.\n#[cfg(feature = \"cuda\")]\npub struct BorrowedDeviceSlice<'a, T> {\n    ptr: *mut T,\n    len: usize,\n    _phantom: PhantomData<&'a T>,\n}\n\n#[cfg(feature = \"cuda\")]",
+  "source_version": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836714317Z",
+  "valid_from": "2026-04-11T00:10:08.836714317Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 754,
+    "end_line": 786,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d1eb73423e58",
+  "content": "pub fn lerp_depth(a: &[f32], b: &[f32], t: f32) -> Vec<f32> {\n    let t = t.clamp(0.0, 1.0);\n    a.iter().zip(b.iter())\n        .map(|(&va, &vb)| va + (vb - va) * t)\n        .collect()\n}",
+  "source_version": "crates/dorea-cli/src/pipeline/grading.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229437882Z",
+  "valid_from": "2026-04-11T00:04:13.229437882Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/pipeline/grading.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 29,
+    "end_line": 34,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

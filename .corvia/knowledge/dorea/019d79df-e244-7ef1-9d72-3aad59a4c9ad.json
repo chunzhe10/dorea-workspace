@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-3aad59a4c9ad",
+  "content": "s, &weights),\n            &params, dorea_lut::build::LUT_SIZE, depth_zones,\n        ).context(\"AdaptiveGrader init failed\")?;\n\n        log::info!(\"Adaptive CUDA grader initialized ({base_lut_zones} base zones, {depth_zones} runtime zones)\");\n        grader\n    };\n\n    // Build first keyframe's runtime texture\n    #[cfg(feature = \"cuda\")]\n    {\n        adaptive_grader.prepare_keyframe(&smoothed_kf_zones[0])\n            .context(\"prepare initial keyframe texture failed\")?;\n        adaptive_grader.swap_textures();\n        // Pre-build second keyframe if available\n        if smoothed_kf_zones.len() > 1 {\n            adaptive_grader.prepare_keyframe(&smoothed_kf_zones[1])\n                .context(\"prepare second keyframe texture failed\")?;\n        }\n    }\n```\n\n- [ ] **Step 4: Restructure grading pass with texture swaps + blending**\n\nReplace lines 613–679 with:\n\n```rust\n    // Ordered list for pass-2 lookup\n    let kf_index_list: Vec<(u64, bool)> = keyframes.iter()\n        .map(|kf| (kf.frame_index, kf.scene_cut_before))\n        .collect();\n\n    // -----------------------------------------------------------------------\n    // Pass 2: full-resolution decode + adaptive depth grading\n    // -----------------------------------------------------------------------\n    let decode_source = maxine_temp_path.as_deref().unwrap_or(args.input.as_path());\n    let frames = ffmpeg::decode_frames(decode_source, &info)\n        .context(\"failed to spawn ffmpeg full-res decoder\")?;\n\n    let mut kf_cursor = 0usize;\n    let mut frame_count = 0u64;\n    let mut current_segment = kf_to_segment[0];\n\n    for frame_result in frames {\n        let frame = frame_result.context(\"frame decode error\")?;\n        let fi = frame.index;\n\n        // Advance cursor\n        while kf_cursor + 1 < kf_index_list.len() && kf_index_list[kf_cursor + 1].0 <= fi {\n            let old_cursor = kf_cursor;\n            kf_cursor += 1;\n",
+  "source_version": "plans/2026-04-04-per-keyframe-adaptive-depth-zones-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836915868Z",
+  "valid_from": "2026-04-11T00:10:08.836915868Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-per-keyframe-adaptive-depth-zones-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1572,
+    "end_line": 1617,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

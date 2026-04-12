@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d7c94182ea46",
+  "content": "pub struct InferDefaults {\n    /// Proxy long-edge resolution for RAUNE + depth inference (default: 1080)\n    pub proxy_size: Option<usize>,\n    /// Compute device: `\"cuda\"` or `\"cpu\"` (default: auto-detect)\n    pub device: Option<String>,\n}\npub struct GradeDefaults {\n    /// Grading mode: `\"lut\"` (default) or `\"direct\"` (per-frame RAUNE, no LUT pipeline)\n    pub mode: Option<String>,\n    /// RAUNE proxy resolution for direct mode (long-edge pixels, default: 1920)\n    pub raune_proxy_size: Option<usize>,\n    /// Batch size for direct-mode RAUNE inference (number of frames per forward pass)\n    pub direct_batch_size: Option<usize>,\n    /// Warmth multiplier [0.0–2.0] (default: 1.0)\n    pub warmth: Option<f32>,\n    /// LUT/HSL blend strength [0.0–1.0] (default: 0.8)\n    pub strength: Option<f32>,\n    /// Ambiance contrast multiplier [0.0–1.0] (default: 1.0)\n    pub contrast: Option<f32>,\n    /// MSE threshold for keyframe detection (default: 0.005)\n    pub depth_skip_threshold: Option<f32>,\n    /// Maximum frames between forced keyframes (default: 12)\n    pub depth_max_interval: Option<usize>,\n    /// Frames per fused RAUNE+depth inference batch (default: 32)\n    pub fused_batch_size: Option<usize>,\n    /// Number of adaptive depth zones for calibration LUT (default: 16)\n    pub depth_zones: Option<usize>,\n    /// Fine zones for segment-level base LUT (default: 32)\n    pub base_lut_zones: Option<usize>,\n    /// Wasserstein-1 distance threshold for scene segment boundary (default: 0.15)\n    pub scene_threshold: Option<f32>,\n    /// Minimum keyframes per scene segment before merge (default: 5)\n    pub min_segment_keyframes: Option<usize>,\n    /// Zone boundary smoothing window width; 1 = no smoothing (default: 3)\n    pub zone_smoothing_window: Option<usize>,\n    /// Input encoding override (default: auto-detect from container/codec)\n    pub input_encoding: Option<String>,\n    /// Output codec (default: \"h264\" for 8-bit, \"prores\" for 10-bit)\n    pub output_codec: Option<String>,\n    /// Enabled grading stages (comma-separated). Default: all.\n    pub stages: Option<String>,\n}",
+  "source_version": "crates/dorea-cli/src/config.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229510777Z",
+  "valid_from": "2026-04-11T00:04:13.229510777Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/config.rs",
+    "language": "rs",
+    "chunk_type": "struct_item",
+    "start_line": 53,
+    "end_line": 88,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

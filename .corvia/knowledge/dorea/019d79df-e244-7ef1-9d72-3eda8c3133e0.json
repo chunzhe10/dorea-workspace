@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-3eda8c3133e0",
+  "content": "g_depths, base_lut_zones);\n    let mut builder = StreamingLutBuilder::new(base_boundaries);\n    for &i in kf_indices {\n        let (w, h) = store.dims(i);\n        let (pixels_u8, target_u8) = store.pixtar_slices(i);\n        let depth = store.read_depth(i);\n        let original: Vec<[f32; 3]> = pixels_u8.chunks_exact(3)\n            .map(|c| [c[0] as f32 / 255.0, c[1] as f32 / 255.0, c[2] as f32 / 255.0])\n            .collect();\n        let target: Vec<[f32; 3]> = target_u8.chunks_exact(3)\n            .map(|c| [c[0] as f32 / 255.0, c[1] as f32 / 255.0, c[2] as f32 / 255.0])\n            .collect();\n        let importance = compute_importance(&depth, w, h);\n        builder.add_frame(&original, &target, &depth, &importance);\n    }\n    builder.finish()\n}\n\n// ── Node: HslAverageNode ──────────────────────────────────────────────────────\n\n/// Streaming HSL accumulator. Feed one (lut_output, target) pair per keyframe\n/// via `process(...)`, then call `finish()` to get corrections.\n/// Call `reset()` between segments.\n///\n/// No Vec of pairs is allocated — state is accumulated in-place via f64 scalars.\npub struct HslAverageNode {\n    h_acc:  Vec<f64>,\n    s_acc:  Vec<f64>,\n    v_acc:  Vec<f64>,\n    tw_acc: Vec<f64>,\n    active: Vec<bool>,\n}\n\nimpl HslAverageNode {\n    pub fn new() -> Self {\n        let n = HSL_QUALIFIERS.len();\n        Self {\n            h_acc:  vec![0.0; n],\n            s_acc:  vec![0.0; n],\n            v_acc:  vec![0.0; n],\n            tw_acc: vec![0.0; n],\n            active: vec![false; n],\n        }\n    }\n\n    /// Reset all accumulators for the next segment.\n    pub fn reset(&mut self) {\n        for qi in 0..HSL_QUALIFIERS.len() {\n            self.h_acc[qi]  = 0.0;\n            self.s_acc[qi]  = 0.0;\n            self.v_acc[qi]  = 0.0;\n            self.tw_acc[qi] = 0.0;\n            self.active[qi] = false;\n        }\n    }\n\n    /// Return the weighted-average HslCorrections from accumulated state.\n    /// Call after all keyframes in a segment have been fed via `process`.\n    pub fn finish(&self) -> HslCorrections {",
+  "source_version": "plans/2026-04-05-pipeline-dag-refactor.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836981591Z",
+  "valid_from": "2026-04-11T00:10:08.836981591Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-05-pipeline-dag-refactor.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1071,
+    "end_line": 1123,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

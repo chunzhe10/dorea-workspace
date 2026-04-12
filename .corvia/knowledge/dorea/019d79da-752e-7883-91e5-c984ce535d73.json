@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c984ce535d73",
+  "content": "f-distribution for a model likely trained on small patches; gold is _what RAUNE produces at 4K_, not ground truth.\")\n    lines.append(f\"- Open `{out_dir.name}/summary_grid.png` for the full visual comparison.\")\n\n    report_path.write_text(\"\\n\".join(lines))\ndef best(metric_getter, lower_better=True):\n            per_method = {}\n            for r in ok_results:\n                per_method.setdefault(r.method, []).append(metric_getter(r))\n            means = {m: sum(v) / len(v) for m, v in per_method.items()}\n            return sorted(means.items(), key=lambda kv: kv[1] if lower_better else -kv[1])[0]",
+  "source_version": "benchmarks/upscale_bench/run.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230373738Z",
+  "valid_from": "2026-04-11T00:04:13.230373738Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/run.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 415,
+    "end_line": 420,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

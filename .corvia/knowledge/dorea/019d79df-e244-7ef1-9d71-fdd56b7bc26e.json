@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d71-fdd56b7bc26e",
+  "content": "### Configuration\n### User Experience\n\n### Known Limitations\n\n**8-bit bottleneck:** Maxine SDK accepts only uint8 BGRA input. When enhancement is enabled, the\ngraded f32 output is quantized to u8 before entering Maxine, and the enhanced u8 output is what\ngets encoded. This effectively forces 8-bit precision through the enhancement stage, even in a\n10-bit pipeline. The encoder receives u8 data in a 10-bit container. Users should understand that\nenabling Maxine trades bit-depth precision for AI-enhanced spatial quality. For footage where\nbanding is a primary concern, disabling Maxine and relying on the 10-bit grading path may be\npreferable.\n\n**Artifact reduction training domain:** NVIDIA's artifact reduction filter is documented as\n\"optimized for H.264 encoder artifacts.\" The dorea pipeline processes H.265/HEVC footage. H.264\nand H.265 share the same fundamental block-based transform coding approach, so the filter will\nstill reduce common artifacts (blocking, ringing, mosquito noise). However, effectiveness on\nH.265-specific artifacts (larger CTU boundaries, SAO interactions) is unvalidated. A/B test on\nreal footage early in implementation to confirm benefit.\n\n**Processing order tradeoff:** Enhancement runs post-grade, meaning the grading pipeline may\namplify compression artifacts before Maxine tries to remove them (LUT stretching expands\nquantized steps, contrast boost amplifies blocking). Running artifact reduction pre-grade would\navoid this, but pre-grade footage is D-Log M (flat, low-contrast) — likely outside the model's\ntraining distribution. Post-grade is the pragmatic choice; the tradeoff is acknowledged.\n",
+  "source_version": "decisions/2026-04-02-maxine-post-grading-enhancement.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836103564Z",
+  "valid_from": "2026-04-11T00:10:08.836103564Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-02-maxine-post-grading-enhancement.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 230,
+    "end_line": 252,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

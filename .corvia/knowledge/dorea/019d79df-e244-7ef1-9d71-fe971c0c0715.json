@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d71-fe971c0c0715",
+  "content": "### Quality Characteristics\n### Test Plan\n\n### Performance Estimates\n\n| Frame type | Current (depth interp) | With 3D LUT |\n|-----------|------------------------|-------------|\n| Keyframe (~17%) | ~1.5s | ~1.5s (unchanged) |\n| Non-keyframe (~83%) | ~40ms | ~15-25ms (rayon, pending real benchmark) |\n| LUT build (once) | — | ~2-3s |\n| **1671 frames, 4K 120fps** | **11m 37s** | **~6-8m** (est) |\n\nTiming breakdown of current ~40ms non-keyframe cost:\n- GPU LUT apply + HSL correct: ~5ms\n- GPU Clarity: ~5ms\n- CPU fused_ambiance_warmth (rayon, LAB roundtrip): ~25ms ← eliminated by 3D LUT\n- CPU blend + f32→u8: ~5ms ← eliminated by 3D LUT\n\n\n### Future: CUDA Texture Acceleration\n\nThe 3D LUT lookup maps directly to GPU texture hardware:\n- Upload each depth-band LUT as a CUDA 3D texture with trilinear filtering\n- Single texture fetch per pixel per depth band (hardware-interpolated)\n- Per-pixel cost drops from ~45 ALU ops to ~2 texture fetches + 1 lerp\n- Expected: ~2ms per 4K frame\n\nThis is a follow-up optimization — the CPU/rayon path is the initial implementation.\n",
+  "source_version": "decisions/2026-04-03-3d-lut-temporal-interpolation.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836112154Z",
+  "valid_from": "2026-04-11T00:10:08.836112154Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-03-3d-lut-temporal-interpolation.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 196,
+    "end_line": 220,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

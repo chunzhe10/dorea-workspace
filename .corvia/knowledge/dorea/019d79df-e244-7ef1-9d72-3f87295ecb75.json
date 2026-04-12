@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-3f87295ecb75",
+  "content": "    /// `(next_kf_idx, scene_cut_before_next)` — None if fi is past the last keyframe.\n    pub next: Option<(u64, bool)>,\n}\n\nimpl Node for BlendTNode {\n    type Input = BlendTInput;\n    type Output = f32;\n\n    fn name(&self) -> &'static str { \"blend_t\" }\n\n    fn process(&mut self, input: BlendTInput) -> Result<f32> {\n        Ok(if input.fi == input.prev_kf_idx {\n            0.0\n        } else if let Some((next_kf_idx, scene_cut)) = input.next {\n            if scene_cut { 0.0 }\n            else {\n                ((input.fi - input.prev_kf_idx) as f32\n                 / (next_kf_idx - input.prev_kf_idx) as f32)\n                    .clamp(0.0, 1.0)\n            }\n        } else {\n            0.0\n        })\n    }\n}\n\n// ── Stage: GradingStage ───────────────────────────────────────────────────────\n\npub struct GradingStage {\n    depth_interp: DepthInterpolateNode,\n    blend_t:      BlendTNode,\n}\n\nimpl GradingStage {\n    pub fn new() -> Self {\n        Self {\n            depth_interp: DepthInterpolateNode,\n            blend_t:      BlendTNode,\n        }\n    }\n}\n\nimpl Stage for GradingStage {\n    type Input = GradingStageInput;\n    type Output = (); // side effect: writes to encoder\n\n    fn name(&self) -> &'static str { \"grading_render_stage\" }\n\n    fn run(&mut self, input: Self::Input) -> Result<()> {\n        log::info!(\"=== {} ===\", self.name());\n        let GradingStageInput {\n            calibration_output,\n            video_path,\n            video_info,\n            mut encoder,\n            grade_params,\n            depth_zones,\n            base_lut_zones,\n        } = input;\n\n        let CalibrationStageOutput {\n            segment_calibrations,\n            smoothed_kf_zones,\n            kf_to_segment,",
+  "source_version": "plans/2026-04-05-pipeline-dag-refactor.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836990959Z",
+  "valid_from": "2026-04-11T00:10:08.836990959Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-05-pipeline-dag-refactor.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1505,
+    "end_line": 1559,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

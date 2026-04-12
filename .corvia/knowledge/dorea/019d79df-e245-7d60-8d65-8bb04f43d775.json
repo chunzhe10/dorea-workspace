@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-8bb04f43d775",
+  "content": "\n./target/release/dorea grade \\\n  --input \"/workspaces/dorea-workspace/footage/raw/2025-11-01/DJI_20251101111428_0055_D_3s.MP4\" \\\n  --output \"/workspaces/dorea-workspace/working/oklab_compile_run2.mov\" \\\n  --output-codec prores \\\n  --direct \\\n  --verbose \\\n  2>&1 | tail -20\n```\n\nExpected on the SECOND run:\n- Same log lines but `torch.compile ready (X.Xs ...)` should be MUCH faster (< 5s, ideally < 2s)\n- Same throughput as run 1 (steady state)\n- Cache hit confirmed\n\nReport the compile duration on run 2.\n\n- [ ] **Step 6: Visual quality check vs previous fp16 output**\n\n```bash\nffmpeg -v quiet -ss 1.5 -i \"/workspaces/dorea-workspace/working/oklab_compile_run2.mov\" \\\n  -frames:v 1 \"/workspaces/dorea-workspace/working/oklab_compile_frame.png\" -y\n\nffmpeg -v error \\\n  -i /workspaces/dorea-workspace/working/oklab_compile_frame.png \\\n  -i /workspaces/dorea-workspace/working/oklab_fp16_e2e_frame.png \\\n  -filter_complex \"format=rgb24[a];[1:v]format=rgb24[b];[a][b]blend=all_mode=difference,signalstats\" \\\n  -f null - 2>&1 | grep -E \"YAVG|YMAX\"\n```\n\nExpected: YAVG < 1.0, YMAX < 5 (Inductor-fused kernels may introduce sub-1/255 numerical noise but visual output should be identical).\n\nIf YMAX > 5, investigate — Inductor may have introduced a reordering that changes fp16 rounding.\n\n- [ ] **Step 7: If torch.compile fails (fallback path works)**\n\nIf `torch.compile` raises an exception on first call, the fallback should print a warning and the pipeline should still complete successfully at eager-mode speed (~4.25 fps). Check that the `WARNING: torch.compile failed` line appears in stderr and the run completes.\n\nIf compile works, skip this step.",
+  "source_version": "plans/2026-04-10-torch-compile-raune.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837117375Z",
+  "valid_from": "2026-04-11T00:10:08.837117375Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-10-torch-compile-raune.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 176,
+    "end_line": 207,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-3e5ba25a5b46",
+  "content": ";\n                store.push(&kf.proxy_pixels, &enhanced_proxy, &depth_for_store, proxy_w, proxy_h)\n                    .context(\"failed to push to calibration store\")?;\n\n                // keyframe_depths keeps native (Maxine-resolution) depth for Pass 2.\n                keyframe_depths.insert(kf.frame_index, (depth, dw, dh));\n            }\n        }\n\n        log::info!(\"{}: fused inference complete ({} keyframes)\", self.name(), keyframes.len());\n        debug_assert_eq!(store.len(), keyframes.len(), \"store/keyframes length diverged\");\n        let _ = inference_node.server.shutdown();\n        store.seal().context(\"failed to seal calibration store\")?;\n\n        Ok(FeatureStageOutput { store, keyframe_depths, keyframes })\n    }\n}\n\n// ── PagedCalibrationStore ────────────────────────────────────────────────────\n// (moved verbatim from grade.rs)\n\n/// Temporary on-disk store for calibration frames.\n///\n/// Two packed binary files, both memory-mapped after inference:\n///   depths.bin  — all depth maps concatenated (f32 LE)\n///   pixtar.bin  — all [pixels | target] pairs concatenated (u8 RGB)\npub struct PagedCalibrationStore {\n    // ... (copy verbatim from grade.rs lines 686–970)\n}\n```\n\n> **Copy `PagedCalibrationStore` exactly from `grade.rs` lines 686–970** (the struct definition + all impl methods: `new`, `push`, `seal`, `len`, `depth_bytes`, `read_depth`, `dims`, `pixtar_slices`). Do not change any logic.\n\n- [ ] **Step 4: Run tests**\n\n```bash\ncargo test -p dorea-cli --features cuda pipeline::feature 2>&1 | grep -E \"FAILED|ok\\.\"\n```\nExpected: all 3 feature tests pass.\n\n- [ ] **Step 5: Commit**\n\n```bash\ngit add crates/dorea-cli/src/pipeline/feature.rs\ngit commit -m \"feat(pipeline): FeatureStage — FusedInferenceNode (fully impl) + EnhancedDownscaleNode + PagedCalibrationStore\"\n```\n\n---\n",
+  "source_version": "plans/2026-04-05-pipeline-dag-refactor.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836973798Z",
+  "valid_from": "2026-04-11T00:10:08.836973798Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-05-pipeline-dag-refactor.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 814,
+    "end_line": 857,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

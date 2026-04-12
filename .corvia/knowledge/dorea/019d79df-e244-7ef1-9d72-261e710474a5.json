@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-261e710474a5",
+  "content": "## Task 1: Raw RGB IPC Protocol\n\n)\n```\n\nThen replace the image decoding in the `raune` handler (line 131) and `depth` handler (line 143):\n\nFor `raune` (replace line 131: `img = decode_png(req[\"image_b64\"])`):\n```python\n            elif req_type == \"raune\":\n                if raune_model is None:\n                    raise RuntimeError(\"RAUNE-Net model not loaded (--no-raune or load failed)\")\n                fmt = req.get(\"format\", \"png\")\n                if fmt == \"raw_rgb\":\n                    img = decode_raw_rgb(req[\"image_b64\"], int(req[\"width\"]), int(req[\"height\"]))\n                else:\n                    img = decode_png(req[\"image_b64\"])\n                max_size = int(req.get(\"max_size\", 1024))\n                result = raune_model.infer(img, max_size=max_size)\n```\n\nFor `depth` (replace line 143: `img = decode_png(req[\"image_b64\"])`):\n```python\n            elif req_type == \"depth\":\n                if depth_model is None:\n                    raise RuntimeError(\"Depth Anything model not loaded (--no-depth or load failed)\")\n                fmt = req.get(\"format\", \"png\")\n                if fmt == \"raw_rgb\":\n                    img = decode_raw_rgb(req[\"image_b64\"], int(req[\"width\"]), int(req[\"height\"]))\n                else:\n                    img = decode_png(req[\"image_b64\"])\n                max_size = int(req.get(\"max_size\", 518))\n                depth = depth_model.infer(img, max_size=max_size)\n```\n\n- [ ] **Step 3: Switch Rust `run_depth` to raw RGB encoding**\n\nIn `crates/dorea-video/src/inference.rs`, replace the body of `run_depth` (lines 242-249). Change from:\n\n```rust\n        let png = encode_png_bytes(image_rgb, width, height)?;",
+  "source_version": "plans/2026-04-02-grading-pipeline-perf-v3.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836598464Z",
+  "valid_from": "2026-04-11T00:10:08.836598464Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-grading-pipeline-perf-v3.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 69,
+    "end_line": 107,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

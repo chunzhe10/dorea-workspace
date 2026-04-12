@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-061bd49d0602",
+  "content": "# one-time per clone\n# stores the pattern in .gitattributes; idempotent\n\n### 2. Download RAUNE weights (`scripts/download_raune_weights.sh`)\n\nNew script at `repos/dorea/scripts/download_raune_weights.sh`:\n\n```bash\n#!/bin/bash\nset -euo pipefail\nDEST=\"/workspaces/dorea-workspace/repos/dorea/models/raune_net/weights_95.pth\"\nEXPECTED_SHA256=\"<pinned after first download>\"\nGDRIVE_FOLDER_ID=\"1pjEh6s6-a3p7qBtkONSlYLmKrfgD6rBk\"\n\nmkdir -p \"$(dirname \"$DEST\")\"\n\nif [ -f \"$DEST\" ]; then\n    actual=$(sha256sum \"$DEST\" | awk '{print $1}')\n    if [ \"$actual\" = \"$EXPECTED_SHA256\" ]; then\n        echo \"weights already present and verified: $DEST\"\n        exit 0\n    else\n        echo \"weights present but checksum mismatch — re-downloading\"\n    fi\nfi\n",
+  "source_version": "decisions/2026-04-10-delta-upscale-bench-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836203038Z",
+  "valid_from": "2026-04-11T00:10:08.836203038Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-10-delta-upscale-bench-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 407,
+    "end_line": 429,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

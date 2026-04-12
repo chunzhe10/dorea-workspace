@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d09cfec918ab",
+  "content": "pub struct GradeArgs {\n    /// Input video file (MP4/MOV/MKV)\n    #[arg(long)]\n    pub input: PathBuf,\n\n    /// Output video file [default: <input-stem>_graded.mp4]\n    #[arg(long)]\n    pub output: Option<PathBuf>,\n\n    /// Warmth multiplier [0.0–2.0] (config: [grade].warmth, built-in default: 1.0)\n    #[arg(long)]\n    pub warmth: Option<f32>,\n\n    /// LUT/HSL blend strength [0.0–1.0] (config: [grade].strength, built-in default: 0.8)\n    #[arg(long)]\n    pub strength: Option<f32>,\n\n    /// Ambiance contrast multiplier [0.0–1.0] (config: [grade].contrast, built-in default: 1.0)\n    #[arg(long)]\n    pub contrast: Option<f32>,\n\n    /// Proxy resolution for inference (long edge, pixels) (config: [inference].proxy_size, built-in default: 1080)\n    #[arg(long)]\n    pub proxy_size: Option<usize>,\n\n    /// MSE threshold for keyframe detection (config: [grade].depth_skip_threshold, built-in default: 0.005)\n    #[arg(long)]\n    pub depth_skip_threshold: Option<f32>,\n\n    /// Maximum frames between keyframes (config: [grade].depth_max_interval, built-in default: 12)\n    #[arg(long)]\n    pub depth_max_interval: Option<usize>,\n\n    /// Frames per fused RAUNE+depth batch (config: [grade].fused_batch_size, built-in default: 32)\n    #[arg(long)]\n    pub fused_batch_size: Option<usize>,\n\n    /// Adaptive depth zones for calibration LUT (config: [grade].depth_zones, built-in default: 16)\n    #[arg(long)]\n    pub depth_zones: Option<usize>,\n\n    /// Fine zones for segment-level base LUT (config: [grade].base_lut_zones, built-in default: 32)\n    #[arg(long)]\n    pub base_lut_zones: Option<usize>,\n\n    /// Wasserstein-1 threshold for scene segment detection (config: [grade].scene_threshold, built-in default: 0.15)\n    #[arg(long)]\n    pub scene_threshold: Option<f32>,\n\n    /// Disable temporal interpolation — run full pipeline on every frame\n    #[arg(long)]\n    pub no_depth_interp: bool,\n\n    /// Path to RAUNE-Net weights .pth (config: [models].raune_weights)\n    #[arg(long)]\n    pub raune_weights: Option<PathBuf>,",
+  "source_version": "crates/dorea-cli/src/grade.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229421175Z",
+  "valid_from": "2026-04-11T00:04:13.229421175Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/grade.rs",
+    "language": "rs",
+    "chunk_type": "struct_item",
+    "start_line": 17,
+    "end_line": 72,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

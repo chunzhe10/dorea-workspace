@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c92dd442d0e0",
+  "content": "ld_final=gold_final,\n                method_finals=method_finals,\n                method_deltas=method_deltas,\n                method_metrics=method_metrics,\n                method_order=method_names,\n                out_path=per_frame_path,\n            )\n\n            # Store for summary grid\n            frames_data.append(FrameCellData(\n                frame_idx=frame_idx,\n                orig_proxy_final=F.interpolate(orig_proxy_final, size=(2160, 3840), mode=\"bilinear\", align_corners=False),\n                gold_final=gold_final,\n                method_finals=method_finals,\n                method_metrics=method_metrics,\n            ))\n\n            # Free memory between frames\n            del frame_4k, gold, orig_proxy, raune_proxy, delta_proxy, method_finals, method_deltas\n            torch.cuda.empty_cache()\n    finally:\n        clear_injected_raune_model()\n\n    # Aggregate timings (median across frames) for the summary grid\n    aggregate_timings: dict[str, float] = {}\n    for name in method_names:\n        vals = [r.wall_time_ms_end_to_end for r in all_results\n                if r.method == name and r.status == \"ok\"]\n        aggregate_timings[name] = sum(vals) / len(vals) if vals else float(\"nan\")\n\n    # Summary grid\n    grid_path = out_dir / \"summary_grid.png\"\n    generate_summary_grid(\n        frames_data=frames_data,\n        method_order=method_names,\n        method_timings=aggregate_timings,\n        run_metadata={\n            **env_info,\n            \"clip\": clip_path.name,\n            \"gold_paths\": gold_paths,\n        },",
+  "source_version": "benchmarks/upscale_bench/run.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230366485Z",
+  "valid_from": "2026-04-11T00:04:13.230366485Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/run.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 320,
+    "end_line": 352,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

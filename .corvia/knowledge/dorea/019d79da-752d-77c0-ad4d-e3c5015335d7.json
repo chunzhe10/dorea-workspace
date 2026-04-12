@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-e3c5015335d7",
+  "content": "});\n\n        self.send_line(&request.to_string())?;\n        let response = self.recv_line()?;\n        let v: serde_json::Value = serde_json::from_str(&response)\n            .map_err(|e| InferenceError::Ipc(format!(\"yolo_seg_batch response parse: {e}\")))?;\n\n        if v[\"type\"].as_str() == Some(\"error\") {\n            return Err(InferenceError::ServerError(\n                v[\"message\"].as_str().unwrap_or(\"unknown error\").to_string(),\n            ));\n        }\n        if v[\"type\"].as_str() != Some(\"yolo_seg_batch_result\") {\n            return Err(InferenceError::Ipc(format!(\n                \"expected yolo_seg_batch_result, got: {response}\"\n            )));\n        }\n\n        let results = v[\"results\"].as_array()\n            .ok_or_else(|| InferenceError::Ipc(\"missing results array\".into()))?;\n\n        let mut out = Vec::with_capacity(items.len());\n        for (i, result) in results.iter().enumerate() {\n            let id = result[\"id\"].as_str().unwrap_or(\"\").to_string();\n            let mask_b64 = result[\"mask_b64\"].as_str()\n                .ok_or_else(|| InferenceError::Ipc(format!(\"missing mask_b64 for result {i}\")))?;\n            let mask_bytes = B64.decode(mask_b64)\n                .map_err(|e| InferenceError::Ipc(format!(\"base64 decode mask {i}: {e}\")))?;\n            let w = result[\"width\"].as_u64().unwrap_or(0) as usize;\n            let h = result[\"height\"].as_u64().unwrap_or(0) as usize;\n            out.push((id, mask_bytes, w, h));\n        }\n\n        Ok(out)\n    }",
+  "source_version": "crates/dorea-video/src/inference_subprocess.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229655617Z",
+  "valid_from": "2026-04-11T00:04:13.229655617Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference_subprocess.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 752,
+    "end_line": 779,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

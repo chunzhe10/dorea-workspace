@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d68881bb2ac6",
+  "content": "pub fn new() -> Self {\n        Self { reference: None, last_flow: None }\n    }\npub fn last_motion_field(&self) -> Option<&MotionField> {\n        self.last_flow.as_ref()\n    }\nimpl Default for OpticalFlowDetector {\n    fn default() -> Self { Self::new() }\n}",
+  "source_version": "crates/dorea-cli/src/optical_flow.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229495421Z",
+  "valid_from": "2026-04-11T00:04:13.229495421Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/optical_flow.rs",
+    "language": "rs",
+    "chunk_type": "impl_item",
+    "start_line": 139,
+    "end_line": 141,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

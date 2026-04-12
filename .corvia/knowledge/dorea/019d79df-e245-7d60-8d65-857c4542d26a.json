@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-857c4542d26a",
+  "content": "hift = 0.35f;\n    r_out = r + fminf(fmaxf(r_out - r, -max_shift), max_shift) * depth_strength;\n    g_out = g + fminf(fmaxf(g_out - g, -max_shift), max_shift) * depth_strength;\n    b_out = b + fminf(fmaxf(b_out - b, -max_shift), max_shift) * depth_strength;\n\n    // --- Output dithering — scaled for 16-bit (±1/65535 instead of ±1/255) ---\n    {\n        unsigned int h1 = (unsigned int)(idx * 2654435761u);\n        unsigned int h2 = (unsigned int)(idx * 340573321u + 1013904223u);\n        float u1 = (float)(h1 & 0xFFFF) / 65536.0f;\n        float u2 = (float)(h2 & 0xFFFF) / 65536.0f;\n        float tri = (u1 + u2 - 1.0f);\n        float dither = tri / 65535.0f;\n        r_out += dither;\n        unsigned int h3 = h1 ^ (h2 << 13);\n        unsigned int h4 = h2 ^ (h1 >> 7);\n        float u3 = (float)(h3 & 0xFFFF) / 65536.0f;\n        float u4 = (float)(h4 & 0xFFFF) / 65536.0f;\n        g_out += (u3 + u4 - 1.0f) / 65535.0f;\n        unsigned int h5 = h1 ^ (h2 >> 5) ^ 0xDEADBEEF;\n        unsigned int h6 = h2 ^ (h1 << 11) ^ 0xCAFEBABE;\n        float u5 = (float)(h5 & 0xFFFF) / 65536.0f;\n        float u6 = (float)(h6 & 0xFFFF) / 65536.0f;\n        b_out += (u5 + u6 - 1.0f) / 65535.0f;\n    }\n\n    // f32 → u16 output\n    pixels_out[idx * 3 + 0] = (unsigned short)(__float2uint_rn(fminf(fmaxf(r_out, 0.0f), 1.0f) * 65535.0f));\n    pixels_out[idx * 3 + 1] = (unsigned short)(__float2uint_rn(fminf(fmaxf(g_out, 0.0f), 1.0f) * 65535.0f));\n    pixels_out[idx * 3 + 2] = (unsigned short)(__float2uint_rn(fminf(fmaxf(b_out, 0.0f), 1.0f) * 65535.0f));\n}\n```",
+  "source_version": "plans/2026-04-08-10bit-pipeline-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837034773Z",
+  "valid_from": "2026-04-11T00:10:08.837034773Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-08-10bit-pipeline-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1327,
+    "end_line": 1354,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

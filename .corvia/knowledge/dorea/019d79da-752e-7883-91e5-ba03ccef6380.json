@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-ba03ccef6380",
+  "content": "resized:\n            arr = np.array(r).astype(np.float32) / 255.0\n            arr = (arr - self._MEAN) / self._STD\n            arrays.append(torch.from_numpy(arr).permute(2, 0, 1))\n\n        batch = torch.stack(arrays)\n        if self.device.type == \"cuda\":\n            batch = batch.pin_memory().to(self.device, non_blocking=True)\n        else:\n            batch = batch.to(self.device)\n\n        with torch.no_grad():\n            outputs = self.model(pixel_values=batch)\n\n        depths = outputs.predicted_depth.cpu().numpy()  # (N, H, W)\n\n        result = []\n        for i in range(len(imgs)):\n            depth = depths[i]\n            d_min, d_max = float(depth.min()), float(depth.max())\n            if d_max - d_min < 1e-6:\n                depth = np.zeros_like(depth, dtype=np.float32)\n            else:\n                depth = ((depth - d_min) / (d_max - d_min)).astype(np.float32)\n            result.append(depth)\n\n        return result\n\n    def infer_gpu(self, img_rgb: np.ndarray, max_size: int = 518) -> \"torch.Tensor\":\n        \"\"\"Run depth estimation, return on-device f32 tensor (not copied to CPU).\n\n        Returns a 2D float32 CUDA tensor normalized to [0, 1] at inference resolution.\n        The caller must keep a reference to prevent GC.\n        \"\"\"\n        import torch\n        from PIL import Image as _Image\n\n        pil = _Image.fromarray(img_rgb)\n        capped = _resize_for_depth(pil, max_size)\n\n        # Direct tensor construction — bypass AutoImageProcessor\n        arr = np.array(capped).astype(np.float32) / 255.0\n        arr = (arr - self._MEAN) / self._STD\n        tensor = torch.from_numpy(arr).permute(2, 0, 1).unsqueeze(0).to(self.device)\n\n        with torch.no_grad():\n            outputs = self.model(pixel_values=tensor)\n\n        depth = outputs.predicted_depth.squeeze(0)  # stays on device\n\n        d_min = float(depth.min())\n        d_max = float(depth.max())\n        if d_max - d_min < 1e-6:\n            depth = torch.zeros_like(depth)\n        else:\n            depth = (depth - d_min) / (d_max - d_min)\n\n        return depth.to(torch.float32).contiguous()\n\n    def infer_batch_from_tensors(\n        self,",
+  "source_version": "python/dorea_inference/depth_anything.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230030521Z",
+  "valid_from": "2026-04-11T00:04:13.230030521Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/depth_anything.py",
+    "language": "py",
+    "chunk_type": "class_definition",
+    "start_line": 148,
+    "end_line": 201,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d6267f25fdbe",
+  "content": "pub struct MotionField {\n    /// (dx, dy) displacement per pixel, row-major.\n    pub vectors: Vec<[f32; 2]>,\n    pub width: usize,\n    pub height: usize,\n}\npub fn compute_flow(prev: &[u8], curr: &[u8], width: usize, height: usize) -> MotionField {\n    let bw = width / BLOCK_SIZE;\n    let bh = height / BLOCK_SIZE;\n    let mut block_vectors = vec![[0.0f32; 2]; bw * bh];\n\n    // For each block in the current frame, find the best matching block in the\n    // previous frame within the search radius (minimize SAD).\n    for by in 0..bh {\n        for bx in 0..bw {\n            let cx = bx * BLOCK_SIZE;\n            let cy = by * BLOCK_SIZE;\n            let mut best_dx = 0i32;\n            let mut best_dy = 0i32;\n            let mut best_sad = u64::MAX;\n\n            let sr = SEARCH_RADIUS as i32;\n            for dy in -sr..=sr {\n                for dx in -sr..=sr {\n                    let px = cx as i32 + dx;\n                    let py = cy as i32 + dy;\n                    if px < 0 || py < 0\n                        || (px + BLOCK_SIZE as i32) > width as i32\n                        || (py + BLOCK_SIZE as i32) > height as i32\n                    {\n                        continue;\n                    }\n\n                    let mut sad = 0u64;\n                    for row in 0..BLOCK_SIZE {\n                        for col in 0..BLOCK_SIZE {\n                            let ci = ((cy + row) * width + cx + col) * 3;\n                            let pi = ((py as usize + row) * width + px as usize + col) * 3;\n                            for c in 0..3 {\n                                sad += (curr[ci + c] as i64 - prev[pi + c] as i64).unsigned_abs();\n                            }\n                        }\n                    }\n\n                    if sad < best_sad {",
+  "source_version": "crates/dorea-cli/src/optical_flow.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229491698Z",
+  "valid_from": "2026-04-11T00:04:13.229491698Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/optical_flow.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 28,
+    "end_line": 66,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

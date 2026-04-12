@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-be91ebf93450",
+  "content": "                 raise RuntimeError(\"Depth Anything model not loaded (--no-depth or load failed)\")\n                items = req.get(\"items\", [])\n                imgs = []\n                for item in items:\n                    fmt = item.get(\"format\", \"png\")\n                    if fmt == \"raw_rgb\":\n                        imgs.append(decode_raw_rgb(item[\"image_b64\"], int(item[\"width\"]), int(item[\"height\"])))\n                    else:\n                        imgs.append(decode_png(item[\"image_b64\"]))\n                max_size = int(items[0].get(\"max_size\", 518)) if items else 518\n                depths = depth_model.infer_batch(imgs, max_size=max_size)\n                results = [\n                    DepthResult.from_array(item.get(\"id\"), depth).to_dict()\n                    for item, depth in zip(items, depths)\n                ]\n                resp = DepthBatchResult(results=results)\n            elif req_type == \"raune_depth_batch\":\n                if raune_model is None:\n                    raise RuntimeError(\"RAUNE-Net not loaded — pass --raune-weights\")\n                if depth_model is None:\n                    raise RuntimeError(\"Depth Anything not loaded — pass --depth-model\")\n\n                import torch\n\n                items = req.get(\"items\", [])\n                imgs = []\n                for item in items:\n                    fmt = item.get(\"format\", \"png\")",
+  "source_version": "python/dorea_inference/server.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230222184Z",
+  "valid_from": "2026-04-11T00:04:13.230222184Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/server.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 190,
+    "end_line": 212,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

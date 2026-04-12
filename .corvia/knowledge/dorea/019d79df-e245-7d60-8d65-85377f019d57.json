@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-85377f019d57",
+  "content": "### Task 8: CUDA Kernel — combined_lut_kernel_16 (u16 I/O)\n\n        int x0 = (int)sx;\n        int y0 = (int)sy;\n        int x1 = min(x0 + 1, depth_w - 1);\n        int y1 = min(y0 + 1, depth_h - 1);\n        float fx = sx - (float)x0;\n        float fy = sy - (float)y0;\n        d = depth[y0 * depth_w + x0] * (1.0f - fx) * (1.0f - fy)\n          + depth[y0 * depth_w + x1] * fx * (1.0f - fy)\n          + depth[y1 * depth_w + x0] * (1.0f - fx) * fy\n          + depth[y1 * depth_w + x1] * fx * fy;\n    }\n\n    // --- Depth dithering (identical) ---\n    {\n        unsigned int hash = (unsigned int)(idx * 2654435761u);\n        float noise = ((float)(hash & 0xFFFF) / 65535.0f - 0.5f);\n        float avg_zone_width = 1.0f / (float)n_zones;\n        d += noise * avg_zone_width * 0.5f;\n        d = fminf(fmaxf(d, 0.0f), 1.0f);\n    }\n\n    // --- YOLO-seg mask (identical) ---\n    if (class_mask != 0) {\n        int px = idx % frame_w;\n        int py = idx / frame_w;\n        float mx = (float)px * (float)(mask_w - 1) / (float)(frame_w - 1);\n        float my = (float)py * (float)(mask_h - 1) / (float)(frame_h - 1);\n        int mi = min((int)my, mask_h - 1) * mask_w + min((int)mx, mask_w - 1);",
+  "source_version": "plans/2026-04-08-10bit-pipeline-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837031543Z",
+  "valid_from": "2026-04-11T00:10:08.837031543Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-08-10bit-pipeline-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1213,
+    "end_line": 1240,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

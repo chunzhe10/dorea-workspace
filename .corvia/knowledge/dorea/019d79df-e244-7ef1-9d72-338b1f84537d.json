@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-338b1f84537d",
+  "content": "### Task 1: Python Protocol Extension (issue #16)\n\n    # Decode the b64 to verify pixel data\n    raw = base64.b64decode(result.image_b64)\n    assert len(raw) == 10 * 20 * 3\n    assert raw[0] == 255\n    assert raw[1] == 128\n    assert raw[2] == 64\n\n\ndef test_enhance_result_to_dict_fields():\n    \"\"\"to_dict must include all required fields.\"\"\"\n    img = np.zeros((4, 6, 3), dtype=np.uint8)\n    d = EnhanceResult.from_array(\"x\", img).to_dict()\n    assert d[\"type\"] == \"enhance_result\"\n    assert d[\"id\"] == \"x\"\n    assert d[\"width\"] == 6\n    assert d[\"height\"] == 4\n    assert \"image_b64\" in d\n```\n\n- [ ] **Step 2: Run tests to verify they fail**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\npython -m pytest python/tests/test_maxine_protocol.py -v 2>&1 | tail -20\n```\n\nExpected: ImportError — `encode_raw_rgb` and `EnhanceResult` do not exist yet.\n\n- [ ] **Step 3: Add `encode_raw_rgb` to protocol.py**\n\nIn `python/dorea_inference/protocol.py`, after the `decode_raw_rgb` function (after line 183), add:\n\n```python\ndef encode_raw_rgb(img: \"np.ndarray\") -> str:\n    \"\"\"Encode HxWx3 RGB uint8 array to base64 raw interleaved bytes.\"\"\"\n    import numpy as np\n    arr = np.ascontiguousarray(img, dtype=np.uint8)\n    if arr.ndim != 3 or arr.shape[2] != 3:\n        raise ValueError(f\"expected HxWx3 RGB, got shape {arr.shape}\")\n    return base64.b64encode(arr.tobytes()).decode(\"ascii\")\n```\n\n- [ ] **Step 4: Add `EnhanceResult` dataclass to protocol.py**\n\nAfter the `DepthResult` class (after line 113, before `DepthBatchResult`), add:",
+  "source_version": "plans/2026-04-04-maxine-enhancement-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836801636Z",
+  "valid_from": "2026-04-11T00:10:08.836801636Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-maxine-enhancement-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 78,
+    "end_line": 122,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

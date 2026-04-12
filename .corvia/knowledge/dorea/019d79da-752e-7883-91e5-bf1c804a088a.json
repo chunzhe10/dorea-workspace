@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-bf1c804a088a",
+  "content": "             # Unload existing model first to avoid OOM on 6 GB VRAM budget\n                if depth_model is not None:\n                    del depth_model\n                    depth_model = None\n                    try:\n                        import torch\n                        if torch.cuda.is_available():\n                            torch.cuda.empty_cache()\n                    except ImportError:\n                        pass\n                from .depth_anything import DepthAnythingInference\n                depth_model = DepthAnythingInference(\n                    model_path=req.get(\"model_path\"),\n                    device=device,\n                )\n                print(\"[dorea-inference] Depth Anything V2 loaded (on demand)\", file=sys.stderr, flush=True)\n                resp = OkResponse()\n\n            elif req_type == \"yolo_seg_batch\":\n                if yolo_seg_model is None:\n                    raise RuntimeError(\"YOLO-seg model not loaded — pass --yolo-seg\")\n\n                items = req.get(\"items\", [])\n                imgs = []\n                for item in items:\n                    fmt = item.get(\"format\", \"png\")\n                    if fmt == \"raw_rgb\":\n                        imgs.append(decode_raw_rgb(item[\"image_b64\"], int(item[\"width\"]), int(item[\"height\"])))\n                    else:",
+  "source_version": "python/dorea_inference/server.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230229329Z",
+  "valid_from": "2026-04-11T00:04:13.230229329Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/server.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 373,
+    "end_line": 395,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

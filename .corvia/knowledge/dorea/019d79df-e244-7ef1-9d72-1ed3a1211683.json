@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-1ed3a1211683",
+  "content": " test -p dorea-video`\nExpected: All pass (including new 16-bit test and existing 8-bit tests).\n\n- [ ] **Step 6: Commit**\n\n```bash\ngit add crates/dorea-video/src/inference.rs\ngit commit -m \"feat(video): 16-bit PNG encode/decode in inference codec\"\n```\n\n---\n\n### Task 5: load_rgb_image 16-Bit Upgrade\n\n**Files:**\n- Modify: `crates/dorea-cli/src/calibrate.rs:371-384`\n\n- [ ] **Step 1: Update load_rgb_image to use into_rgb16**\n\nIn `crates/dorea-cli/src/calibrate.rs`, change `load_rgb_image`:\n\nFrom:\n\n```rust\nfn load_rgb_image(path: &Path) -> Result<(Vec<[f32; 3]>, usize, usize)> {\n    let img = ImageReader::open(path)\n        .with_context(|| format!(\"Cannot open {}\", path.display()))?\n        .decode()\n        .with_context(|| format!(\"Cannot decode {}\", path.display()))?\n        .into_rgb8();\n\n    let (w, h) = (img.width() as usize, img.height() as usize);\n    let pixels: Vec<[f32; 3]> = img\n        .pixels()\n        .map(|p| [p[0] as f32 / 255.0, p[1] as f32 / 255.0, p[2] as f32 / 255.0])\n        .collect();\n    Ok((pixels, w, h))\n}\n```\n\nTo:\n\n```rust\nfn load_rgb_image(path: &Path) -> Result<(Vec<[f32; 3]>, usize, usize)> {\n    let img = ImageReader::open(path)\n        .with_context(|| format!(\"Cannot open {}\", path.display()))?\n        .decode()\n        .with_context(|| format!(\"Cannot decode {}\", path.display()))?\n        .into_rgb16();\n\n    let (w, h) = (img.width() as usize, img.height() as usize);\n    let pixels: Vec<[f32; 3]> = img\n        .pixels()\n        .map(|p| [p[0] as f32 / 65535.0, p[1] as f32 / 65535.0, p[2] as f32 / 65535.0])\n        .collect();\n    Ok((pixels, w, h))\n}\n```\n\n- [ ] **Step 2: Verify it compiles**\n\nRun: `cd /workspaces/dorea-workspace/repos/dorea && cargo build -p dorea-cli`\nExpected: Compiles. The `image` crate's `into_rgb16()` is available on `DynamicImage`.\n\n- [ ] **Step 3: Run existing tests**\n\nRun: `cd /workspaces/dorea-workspace/repos/dorea && cargo test -p dorea-cli`\nExpected: All existing tests pass. 8-bit PNGs loaded via `into_rgb16()` produce values\nat multiples of 257 (e.g., 255 → 65535, 128 → 32896), which normalize to the same\nfloat range. The math is unchanged.\n\n- [ ] **Step 4: Commit**\n\n```bash\ngit add crates/dorea-cli/src/calibrate.rs\ngit commit -m \"feat(cli): upgrade load_rgb_image to 16-bit precision\"\n```\n\n---\n",
+  "source_version": "plans/2026-04-02-10bit-pipeline-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836497382Z",
+  "valid_from": "2026-04-11T00:10:08.836497382Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-10bit-pipeline-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 717,
+    "end_line": 784,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

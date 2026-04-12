@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-bfe2e79e8f97",
+  "content": "]\n\n    def test_mixed_dims_falls_back_to_sequential(self):\n        model = _fake_raune_model()\n        imgs = [_make_rgb(60, 80), _make_rgb(40, 60)]  # different sizes\n        results = model.infer_batch(imgs, max_size=160)\n        assert len(results) == 2\ndef test_returns_same_count(self):\n        model = _fake_raune_model()\n        imgs = [_make_rgb(60, 80) for _ in range(5)]\n        results = model.infer_batch(imgs, max_size=80)\n        assert len(results) == 5",
+  "source_version": "python/tests/test_infer_batch.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230239498Z",
+  "valid_from": "2026-04-11T00:04:13.230239498Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/tests/test_infer_batch.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 34,
+    "end_line": 38,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

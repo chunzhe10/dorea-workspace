@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d71-fb0bf2f898aa",
+  "content": "### CUDA kernel signature: u8 -> f32\n### Batched depth inference\n\n### ffmpeg decode: NVDEC for H.265 10-bit\n\nRTX 3060 NVDEC supports HEVC 10-bit natively. ProRes has no NVDEC support (CPU only,\nbut ProRes all-intra decode is fast enough at ~200+ fps).\n\n\n### ffmpeg encode: 10-bit output\n\n`--output-codec` flag:\n\n| Value | Codec | Bit depth | GPU | Use case |\n|-------|-------|-----------|-----|----------|\n| `prores` (default) | `prores_ks -profile:v 3` | 10-bit 4:2:2 | No | DaVinci Resolve |\n| `hevc` | `hevc_nvenc -profile:v main10` | 10-bit 4:2:0 | Yes | Fast preview |\n| `h264` | `libx264 -crf 18` | 8-bit | No | Legacy |\n",
+  "source_version": "decisions/2026-04-02-10bit-pipeline-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836066866Z",
+  "valid_from": "2026-04-11T00:10:08.836066866Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-02-10bit-pipeline-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 201,
+    "end_line": 215,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

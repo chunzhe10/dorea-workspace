@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-37122c8ddf7c",
+  "content": "pass\n\n- [ ] **Step 6: Commit**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ngit add crates/dorea-video/src/inference_subprocess.rs\ngit commit -m \"feat(inference): add skip_depth, unload_maxine, load_raune, load_depth to subprocess backend\"\n```\n\n---\n\n### Task 4: pyo3 backend — Maxine + lifecycle support\n\n**Files:**\n- Modify: `crates/dorea-video/src/inference/pyo3_backend.rs`\n\nMirror the subprocess backend changes: add `maxine`, `maxine_upscale_factor`, `skip_depth` to `InferenceConfig`; add `device` field to `InferenceServer` (needed by `load_raune`/`load_depth` to pass device to Python); add `enhance`, `unload_maxine`, `load_raune`, `load_depth` methods.\n\n- [ ] **Step 1: Write the failing tests**\n\nIn `crates/dorea-video/src/inference/pyo3_backend.rs`, add a test module at the bottom:\n\n```rust\n#[cfg(test)]\nmod tests {\n    use super::*;\n\n    #[test]\n    fn inference_config_default_has_maxine_fields() {\n        let cfg = InferenceConfig::default();\n        assert!(!cfg.maxine, \"maxine should default to false\");\n        assert_eq!(cfg.maxine_upscale_factor, 2);\n        assert!(!cfg.skip_depth, \"skip_depth should default to false\");\n    }\n}\n```\n\n- [ ] **Step 2: Run tests to verify they fail**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ncargo test -p dorea-video --features python -- pyo3_backend::tests 2>&1 | tail -10\n```\n\nExpected: compile error — `maxine` field not found on `InferenceConfig`\n\n- [ ] **Step 3: Add fields to InferenceConfig**\n\nIn `pyo3_backend.rs`, in the `InferenceConfig` struct, add after `startup_timeout`:\n\n```rust\n    /// Enable Maxine enhancement.\n    pub maxine: bool,\n    /// Maxine super-resolution upscale factor (default 2).\n    pub maxine_upscale_factor: u32,\n    /// Skip Depth Anything at spawn (load on demand via load_depth()).\n    pub skip_depth: bool,\n```\n\nIn `impl Default for InferenceConfig`, add after `startup_timeout`:\n\n```rust\n            maxine: false,\n            maxine_upscale_factor: 2,\n            skip_depth: false,\n```\n\n- [ ] **Step 4: Add device field to InferenceServer**\n\nIn `pyo3_backend.rs`, change `InferenceServer` struct from:",
+  "source_version": "plans/2026-04-04-maxine-pipeline-architecture.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836854583Z",
+  "valid_from": "2026-04-11T00:10:08.836854583Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-maxine-pipeline-architecture.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 534,
+    "end_line": 592,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

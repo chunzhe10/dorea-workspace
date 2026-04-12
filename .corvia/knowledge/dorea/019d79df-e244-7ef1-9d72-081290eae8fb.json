@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-081290eae8fb",
+  "content": "# torch.compile RAUNE-Net for Inductor JIT Fusion\n\n## Problem\n\nAfter fp16 landed (chunzhe10/dorea#67), direct mode is at 4.25 fps with RAUNE forward\npass at 230 ms/frame. Issue #68 proved that PCIe upload batching is NOT the bottleneck —\nCUDA streams already overlap transfers with compute. The critical path stage is RAUNE\nitself.\n\n\n## Decision\n\nWrap the fp16 RAUNE model with `torch.compile(model, mode=\"reduce-overhead\", dynamic=False)`\nafter the `model.half()` + InstanceNorm fp32 restoration. This enables Inductor JIT\nfusion of the 30 residual blocks.\n",
+  "source_version": "decisions/2026-04-10-torch-compile-raune.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836226812Z",
+  "valid_from": "2026-04-11T00:10:08.836226812Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-10-torch-compile-raune.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 3,
+    "end_line": 15,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

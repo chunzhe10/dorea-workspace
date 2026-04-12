@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c53d2d79bb1d",
+  "content": "raded_proxy[0])  # (3, ph, pw) → (3, fh, fw)\n    graded_4k = torch.from_dlpack(result.image).clone().unsqueeze(0)  # (1, 3, fh, fw)\n\n    # 3. Delta vs orig_full in OKLab\n    delta_4k = rgb_to_oklab(graded_4k) - rgb_to_oklab(orig_full)\n    return delta_4k\ndef _get_realesrgan_sr():\n    \"\"\"Lazy-load RealESRGANer with the RealESRGAN_x2plus model.\"\"\"\n    global _REALESRGAN_SR\n    if _REALESRGAN_SR is not None:\n        return _REALESRGAN_SR\n    if not _REALESRGAN_AVAILABLE:\n        raise RuntimeError(\"Real-ESRGAN not installed\")\n\n    model = RRDBNet(num_in_ch=3, num_out_ch=3, num_feat=64, num_block=23, num_grow_ch=32, scale=2)\n    # repo root: methods.py → upscale_bench/ → benchmarks/ → dorea/\n    _repo_root = Path(__file__).resolve().parents[2]\n    model_path = _repo_root / \"models\" / \"realesrgan\" / \"RealESRGAN_x2plus.pth\"\n    if not model_path.exists():\n        model_path.parent.mkdir(parents=True, exist_ok=True)\n        import os\n        import urllib.request\n        url = \"https://github.com/xinntao/Real-ESRGAN/releases/download/v0.2.1/RealESRGAN_x2plus.pth\"\n        print(f\"[sr_realesrgan] downloading {url}\")\n        tmp_path = model_path.with_suffix(model_path.suffix + \".tmp\")\n        try:\n            urllib.request.urlretrieve(url, tmp_path)\n            os.replace(tmp_path, model_path)\n        except Exception:\n            if tmp_path.exists():\n                tmp_path.unlink()\n            raise\n\n    upsampler = RealESRGANer(\n        scale=2,\n        model_path=str(model_path),\n        model=model,\n        tile=0,\n        pre_pad=0,\n        half=True,\n    )\n    _REALESRGAN_SR = upsampler\n    return upsampler",
+  "source_version": "benchmarks/upscale_bench/methods.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230313022Z",
+  "valid_from": "2026-04-11T00:04:13.230313022Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/methods.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 549,
+    "end_line": 585,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

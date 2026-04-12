@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c16858e41710",
+  "content": "])\n    try:\n        main(argv=argv)\n    except SystemExit:\n        pass\n    finally:\n        sys.stdin, sys.stdout = old_stdin, old_stdout\n    output = captured.getvalue().strip()\n    return [json.loads(line) for line in output.split(\"\\n\") if line.strip()]\ndef test_unload_maxine_returns_ok():\n    responses = _run_server([{\"type\": \"unload_maxine\"}], extra_argv=[\"--maxine\"])\n    assert responses[0][\"type\"] == \"ok\"",
+  "source_version": "python/tests/test_lifecycle_server.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230259769Z",
+  "valid_from": "2026-04-11T00:04:13.230259769Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/tests/test_lifecycle_server.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 33,
+    "end_line": 35,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

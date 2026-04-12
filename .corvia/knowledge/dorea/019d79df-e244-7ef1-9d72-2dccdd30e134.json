@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-2dccdd30e134",
+  "content": "ests pass (per_frame_vram_1080p only runs with cuda feature).\n\n- [ ] **Step 4: Commit**\n\n```bash\ngit add crates/dorea-gpu/src/device.rs crates/dorea-gpu/src/lib.rs\ngit commit -m \"feat(dorea-gpu): add BorrowedDeviceSlice and device memory helpers\"\n```\n\n---\n\n## Task 5: Rewrite CUDA Kernel Launching with cudarc\n\n**Files:**\n- Modify: `crates/dorea-gpu/src/cuda/mod.rs` (full rewrite)\n- Modify: `crates/dorea-gpu/src/lib.rs` (update grade_frame for fallback chain)\n- Test: `cargo build -p dorea-gpu` (full test requires GPU)\n\n- [ ] **Step 1: Rewrite `cuda/mod.rs` with cudarc**\n\nReplace the entire file `crates/dorea-gpu/src/cuda/mod.rs`:\n\n```rust\n//! CUDA-backed grading pipeline using cudarc.\n//!\n//! Loads PTX modules embedded at compile time, launches kernels via cudarc's\n//! typed API. Device memory is RAII-managed (CudaSlice<T> drops = cudaFree).\n//!\n//! Only compiled when the `cuda` feature is enabled (detected by build.rs).\n\nuse std::sync::Arc;\n\nuse cudarc::driver::{CudaDevice, CudaSlice, DeviceRepr, LaunchAsync, LaunchConfig};\nuse cudarc::driver::sys::CUdeviceptr;\n\nuse crate::{GradeParams, GpuError};\nuse dorea_cal::Calibration;\n\n// Embedded PTX — compiled from .cu files by build.rs, placed in OUT_DIR.\n#[cfg(feature = \"cuda\")]\nconst LUT_APPLY_PTX: &str = include_str!(concat!(env!(\"OUT_DIR\"), \"/lut_apply.ptx\"));",
+  "source_version": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836716910Z",
+  "valid_from": "2026-04-11T00:10:08.836716910Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 889,
+    "end_line": 918,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

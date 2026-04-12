@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c5103c06f254",
+  "content": "_DIMS\n    if cur_dims != (output_width, output_height):\n        _MAXINE_SR.output_width = output_width\n        _MAXINE_SR.output_height = output_height\n        _MAXINE_SR.load()\n        _MAXINE_SR_DIMS = (output_width, output_height)\n\n    return _MAXINE_SR\ndef clear_maxine_sr() -> None:\n    \"\"\"Release the Maxine VideoSuperRes effect to free VRAM.\n\n    The driver calls this between methods when VRAM pressure is a concern\n    (e.g. before running higher_proxy, which needs RAUNE at full 4K).\"\"\"\n    global _MAXINE_SR, _MAXINE_SR_DIMS\n    _MAXINE_SR = None\n    _MAXINE_SR_DIMS = None",
+  "source_version": "benchmarks/upscale_bench/methods.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230311292Z",
+  "valid_from": "2026-04-11T00:04:13.230311292Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/methods.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 486,
+    "end_line": 493,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

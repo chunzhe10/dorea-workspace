@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-ea877a4ef6ff",
+  "content": "    }\n    }\n\n    #[test]\n    fn resize_rgb_bilinear_identity_same_size() {\n        let src: Vec<u8> = (0u8..48).collect();\n        let dst = resize_rgb_bilinear(&src, 4, 4, 4, 4);\n        assert_eq!(dst, src, \"same-size resize should be identity\");\n    }\n}\nfn proxy_dims_no_change_when_within_bounds() {\n        assert_eq!(proxy_dims(518, 292, 518), (518, 292));\n        assert_eq!(proxy_dims(100, 50, 1000), (100, 50));\n    }",
+  "source_version": "crates/dorea-video/src/resize.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229744157Z",
+  "valid_from": "2026-04-11T00:04:13.229744157Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/resize.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 65,
+    "end_line": 68,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

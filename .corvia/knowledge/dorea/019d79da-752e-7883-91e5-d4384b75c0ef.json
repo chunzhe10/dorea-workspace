@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-d4384b75c0ef",
+  "content": "    p = 1\n        else:\n            raise NotImplementedError('padding [%s] is not implemented' % padding_type)\n        conv_block += [nn.Conv2d(dim, dim, kernel_size=3, padding=p, bias=use_bias), norm_layer(dim)]\n\n        return nn.Sequential(*conv_block)\ndef forward(self, x):\n        \"\"\"Forward function (with skip connections)\"\"\"\n        out = x + self.conv_block(x)  # add skip connections\n        return out",
+  "source_version": "models/raune_net/models/RAUNE-Net/models/resnet.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230550805Z",
+  "valid_from": "2026-04-11T00:04:13.230550805Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "models/raune_net/models/RAUNE-Net/models/resnet.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 61,
+    "end_line": 64,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

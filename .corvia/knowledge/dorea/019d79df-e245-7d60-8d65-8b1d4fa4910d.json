@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-8b1d4fa4910d",
+  "content": "# torch.compile RAUNE-Net — Implementation Plan\n\n> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development or superpowers:executing-plans.\n\n**Goal:** Wrap the fp16 RAUNE model with `torch.compile()` for Inductor JIT fusion. No other changes.\n\n**Architecture:** Single-function change in `main()` of `raune_filter.py`. After `model.half()` + InstanceNorm restoration, add a `torch.compile` wrapper with try/except fallback and a warmup forward pass.\n\n**Tech Stack:** PyTorch 2.6 + Inductor + CUDA 12.4.\n\n**Spec:** `docs/decisions/2026-04-10-torch-compile-raune.md`\n\n**Issue:** chunzhe10/dorea#69\n\n---\n",
+  "source_version": "plans/2026-04-10-torch-compile-raune.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837109715Z",
+  "valid_from": "2026-04-11T00:10:08.837109715Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-10-torch-compile-raune.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1,
+    "end_line": 16,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-1fa3ac7731df",
+  "content": "u`\nExpected: Compiles (CUDA paths only active with feature flag).\n\n- [ ] **Step 4: Commit**\n\n```bash\ngit add crates/dorea-gpu/src/cuda/mod.rs crates/dorea-gpu/src/lib.rs\ngit commit -m \"feat(gpu): persistent GPU LUT resources (upload once, reuse)\"\n```\n\n---\n\n### Task 10: InputEncoding Extended + Projection Enum\n\n**Files:**\n- Modify: `crates/dorea-cli/src/calibrate.rs:163-176`\n- Modify: `crates/dorea-cli/src/grade.rs:15-72`\n\n- [ ] **Step 1: Extend InputEncoding enum**\n\nIn `crates/dorea-cli/src/calibrate.rs`, update:\n\n```rust\n/// Supported input encodings for keyframe images.\n#[derive(Debug, Clone, PartialEq)]\npub enum InputEncoding {\n    Srgb,\n    DlogM,\n    ILog,\n    Custom(std::path::PathBuf),\n}\n\nfn parse_input_encoding(s: &str) -> std::result::Result<InputEncoding, String> {\n    match s {\n        \"srgb\" => Ok(InputEncoding::Srgb),\n        \"dlog_m\" => Ok(InputEncoding::DlogM),\n        \"ilog\" => Ok(InputEncoding::ILog),\n        other => {\n            let path = std::path::PathBuf::from(other);\n            if path.exists() {\n                Ok(InputEncoding::Custom(path))\n            } else {\n                Err(format!(\n                    \"unknown input encoding '{other}'; expected 'srgb', 'dlog_m', 'ilog', or path to 1D .cube\"\n                ))\n            }\n        }\n    }\n}\n```\n\n- [ ] **Step 2: Add Projection enum**\n\nAdd to `crates/dorea-cli/src/calibrate.rs`:",
+  "source_version": "plans/2026-04-02-10bit-pipeline-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836508064Z",
+  "valid_from": "2026-04-11T00:10:08.836508064Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-10bit-pipeline-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1267,
+    "end_line": 1308,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

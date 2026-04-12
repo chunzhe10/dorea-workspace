@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c220ce6f99e1",
+  "content": "def srgb_to_linear(x: torch.Tensor) -> torch.Tensor:\n    return torch.where(x <= 0.04045, x / 12.92, ((x + 0.055) / 1.055) ** 2.4)",
+  "source_version": "benchmarks/upscale_bench/oklab.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230269627Z",
+  "valid_from": "2026-04-11T00:04:13.230269627Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/oklab.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 13,
+    "end_line": 14,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

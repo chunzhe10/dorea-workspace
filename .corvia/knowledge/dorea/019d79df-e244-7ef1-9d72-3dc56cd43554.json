@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-3dc56cd43554",
+  "content": "tage\" }\n\n    fn run(&mut self, input: Self::Input) -> Result<Self::Output> {\n        log::info!(\"=== {} ===\", self.name());\n\n        // ProxyDecodeNode returns a streaming iterator — no frames are buffered.\n        let decoder = self.decode_node.process(\n            (input.video_path, input.video_info, input.proxy_w, input.proxy_h)\n        )?;\n\n        let mut keyframes: Vec<KeyframeEntry> = Vec::new();\n        for frame_result in decoder {\n            let frame = frame_result.context(\"proxy frame decode error\")?;\n            // Score using select_node's internal detector to avoid moving pixels\n            // into an intermediate FrameScore before the score is known.\n            let score = self.select_node.detector.score(&frame.pixels);\n            if let Some(kf) = self.select_node.process(FrameScore {\n                frame_index: frame.index,\n                pixels: frame.pixels, // moved, not copied\n                change_score: score,\n            })? {\n                keyframes.push(kf);\n            }\n        }\n\n        log::info!(\"{}: {} keyframes detected\", self.name(), keyframes.len());\n        anyhow::ensure!(!keyframes.is_empty(), \"keyframe stage produced no keyframes\");\n        Ok(KeyframeStageOutput { keyframes, proxy_dims: (input.proxy_w, input.proxy_h) })\n    }\n}\n```\n\n- [ ] **Step 4: Run tests**\n\n```bash\ncargo test -p dorea-cli --features cuda pipeline::keyframe 2>&1 | grep -E \"FAILED|ok\\.\"\n```\nExpected: all 3 keyframe tests pass.\n\n- [ ] **Step 5: Commit**\n\n```bash\ngit add crates/dorea-cli/src/pipeline/keyframe.rs\ngit commit -m \"feat(pipeline): KeyframeStage — ProxyDecodeNode (streaming) + ChangeDetectNode + KeyframeSelectNode\"\n```\n\n---\n",
+  "source_version": "plans/2026-04-05-pipeline-dag-refactor.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836965687Z",
+  "valid_from": "2026-04-11T00:10:08.836965687Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-05-pipeline-dag-refactor.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 469,
+    "end_line": 509,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

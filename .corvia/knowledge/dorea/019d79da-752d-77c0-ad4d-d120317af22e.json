@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d120317af22e",
+  "content": "sk == 0 { 1 } else { depth_zones };\n    let base_lut_zones = if stage_mask == 0 { 1 } else { base_lut_zones };\n\n    log::info!(\"Stages: {}\", dorea_gpu::stages::format(stage_mask));\n\n    let pipeline_cfg = PipelineConfig {\n        input: args.input.clone(),\n        warmth,\n        strength,\n        contrast,\n        proxy_size,\n        depth_skip_threshold,\n        depth_max_interval,\n        fused_batch_size,\n        depth_zones,\n        base_lut_zones,\n        scene_threshold,\n        min_segment_kfs,\n        zone_smoothing_w,\n        maxine_upscale_factor,\n        interp_enabled: !args.no_depth_interp,\n        maxine_in_fused_batch: false, // Maxine disabled — SDK not available in devcontainer\n        input_encoding,\n        output_codec,\n        stage_mask,\n    };\n\n    // -----------------------------------------------------------------------\n    // Stage 1: Keyframe detection (proxy decode → change detect → select)\n    // -----------------------------------------------------------------------\n    let kf_out = pipeline::keyframe::run_keyframe_stage(&pipeline_cfg, &info)?;\n\n    // -----------------------------------------------------------------------\n    // Stage 2: Feature extraction (fused RAUNE+Maxine+depth → paged store)\n    // -----------------------------------------------------------------------\n    let mut inf_server = InferenceServer::spawn(&InferenceConfig {\n        skip_raune: true,\n        skip_depth: true,\n        ..inf_cfg",
+  "source_version": "crates/dorea-cli/src/grade.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229429259Z",
+  "valid_from": "2026-04-11T00:04:13.229429259Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/grade.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 320,
+    "end_line": 351,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

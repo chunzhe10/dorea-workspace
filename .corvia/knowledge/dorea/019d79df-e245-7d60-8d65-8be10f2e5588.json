@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-8be10f2e5588",
+  "content": "## Notes for the Implementer\n\n### Why `try/except` is OK here but wasn't for `model.half()`\n\nThe 5-persona review of PR #67 flagged the `model.half()` try/except as a fail-fast violation. That was correct because fp16 is a correctness-sensitive choice — silently falling back to fp32 means the user thinks they're getting fp16 behavior but they're not.\n\ntorch.compile is different. It's purely a performance optimization. If compile fails:\n- The model still runs correctly (in eager mode)\n- The output is still numerically valid (same as without compile)\n- The only thing lost is some speedup\n\nSilently falling back doesn't mask a correctness issue. The stderr warning is sufficient observability.\n\n\n### Why `mode=\"reduce-overhead\"` instead of default\n\nPyTorch's `torch.compile` has three main modes:\n- `mode=None` (default): basic Inductor fusion, no CUDA graphs\n- `mode=\"reduce-overhead\"`: CUDA graphs + Inductor fusion, best for small batches\n- `mode=\"max-autotune\"`: most aggressive, longest compile time, best for large batches\n\nOur workload is 4K at batch=4-16, which is \"small batch\" in ML terms. `reduce-overhead` is the right choice.\n",
+  "source_version": "plans/2026-04-10-torch-compile-raune.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837119280Z",
+  "valid_from": "2026-04-11T00:10:08.837119280Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-10-torch-compile-raune.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 242,
+    "end_line": 261,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

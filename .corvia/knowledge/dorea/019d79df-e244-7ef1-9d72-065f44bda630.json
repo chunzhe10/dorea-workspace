@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-065f44bda630",
+  "content": "# Core: already installed in Dockerfile, but ensure\n# Maxine: nvidia-vfx wheel-stub pulls real binary from pypi.nvidia.com\n\n# Real-ESRGAN: optional, soft-failing dep\n$VENV_PIP install --quiet basicsr realesrgan || \\\n    echo \"WARNING: Real-ESRGAN install failed; sr_realesrgan will be skipped at bench time\"\n\n\n# torchmetrics for SSIM (optional; inlined fallback if missing)\n$VENV_PIP install --quiet torchmetrics || true\n",
+  "source_version": "decisions/2026-04-10-delta-upscale-bench-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836205662Z",
+  "valid_from": "2026-04-11T00:10:08.836205662Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-10-delta-upscale-bench-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 490,
+    "end_line": 496,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

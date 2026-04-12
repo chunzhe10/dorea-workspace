@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-d4cb2d145084",
+  "content": "def __init__(self, channel=512,reduction=16,kernel_size=7):\n        super().__init__()\n        self.ca=ChannelAttention(channel=channel,reduction=reduction)\n        self.sa=SpatialAttention(kernel_size=kernel_size)\ndef init_weights(self):\n        for m in self.modules():\n            if isinstance(m, nn.Conv2d):\n                init.kaiming_normal_(m.weight, mode='fan_out')\n                if m.bias is not None:\n                    init.constant_(m.bias, 0)\n            elif isinstance(m, nn.BatchNorm2d):\n                init.constant_(m.weight, 1)\n                init.constant_(m.bias, 0)\n            elif isinstance(m, nn.Linear):\n                init.normal_(m.weight, std=0.001)\n                if m.bias is not None:\n                    init.constant_(m.bias, 0)",
+  "source_version": "models/raune_net/models/RAUNE-Net/models/cbam.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230558033Z",
+  "valid_from": "2026-04-11T00:04:13.230558033Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "models/raune_net/models/RAUNE-Net/models/cbam.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 50,
+    "end_line": 62,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

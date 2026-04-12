@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-e73859ec0ccb",
+  "content": "he GPU until the guard is released or dropped,\n    /// enabling zero-copy sharing with CUDA kernels.\n    pub fn run_depth_gpu(\n        &self,\n        _id: &str,\n        image_rgb: &[u8],\n        width: usize,\n        height: usize,\n        max_size: usize,\n    ) -> Result<DepthTensorGuard, InferenceError> {\n        Python::with_gil(|py| {\n            let bridge = self.bridge.bind(py);\n\n            let np_flat = numpy::PyArray1::from_slice_bound(py, image_rgb);\n            let np_reshaped = np_flat.call_method1(\"reshape\", ((height, width, 3),))\n                .map_err(|e| InferenceError::Ipc(format!(\"reshape: {e}\")))?;\n\n            let guard_py = bridge.call_method1(\"run_depth_gpu\", (np_reshaped, max_size))\n                .map_err(|e| Self::map_python_error(py, e))?;\n\n            let data_ptr: usize = guard_py.getattr(\"data_ptr\")\n                .map_err(|e| InferenceError::Ipc(format!(\"get data_ptr: {e}\")))?\n                .extract()\n                .map_err(|e| InferenceError::Ipc(format!(\"extract data_ptr: {e}\")))?;\n            let numel: usize = guard_py.getattr(\"numel\")\n                .map_err(|e| InferenceError::Ipc(format!(\"get numel: {e}\")))?\n                .extract()\n                .map_err(|e| InferenceError::Ipc(format!(\"extract numel: {e}\")))?;\n            let shape: Vec<usize> = guard_py.getattr(\"shape\")\n                .map_err(|e| InferenceError::Ipc(format!(\"get shape: {e}\")))?\n                .extract()\n                .map_err(|e| InferenceError::Ipc(format!(\"extract shape: {e}\")))?;\n\n            let guard_height = shape.first().copied().unwrap_or(0);\n            let guard_width = shape.get(1).copied().unwrap_or(0);\n\n            Ok(DepthTensorGuard {\n                py_guard: guard_py.unbind(),\n                data_ptr,\n                numel,\n                width: guard_width,\n                height: guard_height,\n                _not_send: std::marker::PhantomData,\n            })\n        })\n    }\n\n    /// Run Depth Anything V2 on a batch of images in a single Python call.\n    ///\n    /// Returns `Vec<(id, depth_f32, out_width, out_height)>` in the same order as `items`.\n    #[allow(clippy::type_complexity)]",
+  "source_version": "crates/dorea-video/src/inference/pyo3_backend.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229701535Z",
+  "valid_from": "2026-04-11T00:04:13.229701535Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference/pyo3_backend.rs",
+    "language": "rs",
+    "chunk_type": "impl_item",
+    "start_line": 317,
+    "end_line": 358,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

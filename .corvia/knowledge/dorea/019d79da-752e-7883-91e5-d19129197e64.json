@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-d19129197e64",
+  "content": "lloc per frame\n\nResolutionBuffers and CalibrationBuffers hold all device slices.\ngrade_frame_cuda now uses htod_sync_copy_into (copy only, no allocation)\nin steady state. Buffers are reallocated only when resolution or\ncalibration shape changes.\"\n```\n\n---\n\n### Task 5: Update `per_frame_vram_bytes` for the new 4-RGB-plane layout\n\n**Files:**\n- Modify: `crates/dorea-gpu/src/device.rs`\n\nAfter the refactor, `CudaGrader` holds 4 RGB planes simultaneously (`d_rgb_in`, `d_rgb_after_lut`, `d_rgb_after_hsl`, `d_rgb_out`) instead of 3. The `AdaptiveBatcher` uses `per_frame_vram_bytes` to size frame batches — it must reflect the actual persistent held layout.\n\n- [ ] **Step 1: Update the function body in `device.rs`**\n\n  In `crates/dorea-gpu/src/device.rs`, change:\n  ```rust\n  // Peak during LUT stage: d_rgb_in + d_depth + d_luts + d_rgb_after_lut\n  // Peak during clarity: d_rgb_after_hsl + d_proxy_l + d_blur_a + d_blur_b + d_rgb_out\n  // Conservative: 3 RGB planes + depth + LUT budget + 3 proxy planes\n  3 * rgb_f32 + depth_f32 + lut_budget + 3 * proxy_f32\n  ```\n\n  To:\n  ```rust\n  // Pre-allocated buffers held for full frame lifetime (4 RGB planes, not 3):\n  // d_rgb_in, d_rgb_after_lut, d_rgb_after_hsl, d_rgb_out (all n*3*4 bytes)\n  // + d_depth (n*4) + d_proxy_l + d_blur_a + d_blur_b (proxy*4 each)\n  // + lut_budget for CalibrationBuffers\n  4 * rgb_f32 + depth_f32 + lut_budget + 3 * proxy_f32\n  ```\n\n- [ ] **Step 2: Update the `per_frame_vram_1080p` test in `device.rs`**\n\n  Find the test at line ~100. Change the expected computation from `3 * rgb_f32` to `4 * rgb_f32`:\n  ```rust\n  let expected = 4 * rgb_f32 + depth_f32 + lut_budget + 3 * proxy_f32;\n  ```\n\n  Also update the comment block above: `// Conservative: 4 RGB planes + depth + LUT budget + 3 proxy planes`\n\n- [ ] **Step 3: Run the test to confirm it passes**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ncargo test -p dorea-gpu --features cuda -- device::tests 2>&1 | tail -10\n```\n\nExpected: `per_frame_vram_1080p` PASS.\n\n- [ ] **Step 4: Commit**\n\n```bash\ngit add crates/dorea-gpu/src/device.rs\ngit commit -m \"fix(dorea-gpu): per_frame_vram_bytes accounts for 4 RGB planes after pre-allocation\"\n```\n\n---\n",
+  "source_version": "docs/plans/2026-04-03-cuda-grader-buffer-pre-allocation.md",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230513252Z",
+  "valid_from": "2026-04-11T00:04:13.230513252Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "docs/plans/2026-04-03-cuda-grader-buffer-pre-allocation.md",
+    "language": "markdown",
+    "chunk_type": "heading_section",
+    "start_line": 771,
+    "end_line": 823,
+    "content_role": "plan",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

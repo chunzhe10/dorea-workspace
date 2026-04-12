@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-10787d7bf9de",
+  "content": "ed: Compiles and tests pass\n\n- [ ] **Step 6: Commit**\n\n```bash\ncd /workspaces/corvia-workspace/repos/corvia\ngit add crates/corvia-server/src/mcp.rs\ngit commit -m \"feat(server): add content_role/source_origin filters to MCP search and write tools\"\n```\n\n---\n\n### Task 1.7: Run full workspace test suite\n\n- [ ] **Step 1: Run all tests**\n\nRun: `cd /workspaces/corvia-workspace/repos/corvia && cargo test --workspace`\nExpected: All 433+ tests pass. No regressions from metadata changes.\n\n- [ ] **Step 2: Verify existing `.corvia/knowledge/` entries still load**\n\nThe `#[serde(default)]` on the new fields means all existing JSON entries deserialize without changes. Verify by running `corvia search \"test\"` if the server is running, or by running the LiteStore deserialization tests.\n\n- [ ] **Step 3: Commit any fixups if needed, then push**\n\n```bash\ncd /workspaces/corvia-workspace/repos/corvia && git push\n```\n\n---\n",
+  "source_version": "plans/2026-03-13-docs-workflow-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836329796Z",
+  "valid_from": "2026-04-11T00:10:08.836329796Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-13-docs-workflow-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 721,
+    "end_line": 739,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

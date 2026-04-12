@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-20cbc36a3ad4",
+  "content": "rgo build && cargo test`\nExpected: Compiles, all tests pass.\n\n- [ ] **Step 5: Commit**\n\n```bash\ngit add crates/dorea-cli/src/grade.rs crates/dorea-gpu/src/lib.rs\ngit commit -m \"feat(cli): tiny planet depth-skip path with degenerate depth warning\"\n```\n\n---\n\n### Task 16: Calibration Format Upgrade\n\n**Files:**\n- Modify: `crates/dorea-cal/src/format.rs`\n\n- [ ] **Step 1: Add camera profile to Calibration**\n\nIn `crates/dorea-cal/src/format.rs`, update the struct:\n\n```rust\nconst FORMAT_VERSION: u8 = 3; // bumped from 2\n\n#[derive(Debug, Clone, Serialize, Deserialize)]\npub struct Calibration {\n    pub version: u8,\n    pub depth_luts: DepthLuts,\n    pub hsl_corrections: HslCorrections,\n    pub created_at_unix_secs: u64,\n    pub keyframe_count: usize,\n    pub source_description: String,\n    /// Camera encoding used during calibration (e.g. \"dlog_m\", \"ilog\").\n    #[serde(default = \"default_encoding\")]\n    pub source_encoding: String,\n    /// LUT grid size (33 or 65).\n    #[serde(default = \"default_lut_size\")]\n    pub lut_size: usize,\n}\n\nfn default_encoding() -> String { \"dlog_m\".to_string() }\nfn default_lut_size() -> usize { 33 }\n```\n\nThe `#[serde(default)]` annotations ensure old .dorea-cal files (version 2) load\nsuccessfully with defaults.\n\n- [ ] **Step 2: Update load() to accept old versions**\n\nIn `Calibration::load`, change version check from `!= FORMAT_VERSION` to\n`> FORMAT_VERSION`:\n\n```rust\nif cal.version > FORMAT_VERSION {\n    return Err(CalError::UnsupportedVersion(cal.version, FORMAT_VERSION));\n}\n```\n\nThis allows loading v2 and v3 files.\n\n- [ ] **Step 3: Update new() to set new fields**\n\nUpdate the constructor and callers to pass `source_encoding` and `lut_size`.\n\n- [ ] **Step 4: Run tests**\n\nRun: `cd /workspaces/dorea-workspace/repos/dorea && cargo test -p dorea-cal`\nExpected: All pass.\n\n- [ ] **Step 5: Commit**\n\n```bash\ngit add crates/dorea-cal/src/format.rs\ngit commit -m \"feat(cal): bump format to v3 with source_encoding and lut_size\"\n```\n\n---\n",
+  "source_version": "plans/2026-04-02-10bit-pipeline-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836522517Z",
+  "valid_from": "2026-04-11T00:10:08.836522517Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-10bit-pipeline-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 2077,
+    "end_line": 2142,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-2481b7cbf338",
+  "content": "### Goal\n\n## New Crate: `dorea-gpu`\n\n```\ncrates/dorea-gpu/\n├── Cargo.toml\n├── build.rs               # nvcc detection; compiles .cu → .fatbin; skips if no nvcc\n└── src/\n    ├── lib.rs             # feature-gated: re-exports cpu::* always; cuda::* with feature \"cuda\"\n    ├── cpu.rs             # depth_aware_ambiance (CPU, no deps beyond dorea-color)\n    │                      # grade_frame_cpu (LUT apply + HSL + ambiance in sequence)\n    └── cuda/              # guarded by cfg(feature = \"cuda\")\n        ├── mod.rs         # CUDA context init, device query\n        ├── kernels/\n        │   ├── lut_apply.cu       # fused trilinear LUT + depth blending\n        │   ├── hsl_correct.cu     # HSL qualifier correction\n        │   └── clarity.cu         # clarity at proxy + bilinear upscale\n        └── grade.rs       # grade_frame_cuda: launches kernels, falls back to CPU on error\n```\n",
+  "source_version": "plans/2026-04-02-dorea-v2-phase2-3-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836578675Z",
+  "valid_from": "2026-04-11T00:10:08.836578675Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-dorea-v2-phase2-3-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 29,
+    "end_line": 47,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

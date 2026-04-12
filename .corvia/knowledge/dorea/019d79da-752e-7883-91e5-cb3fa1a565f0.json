@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-cb3fa1a565f0",
+  "content": "## Disk space\n## VRAM budget\n\n## Known limitations\n\n- **8-bit bottleneck**: Maxine accepts only uint8 input. Full pipeline operates in 8-bit\n  color depth when Maxine is enabled (vs 10-bit without Maxine).\n- **H.265 source**: Artifact reduction is trained for H.264. Effectiveness on H.265/HEVC\n  footage is unvalidated, but expected to reduce common blocking/ringing artifacts.\n- **Supported scale factors**: 2, 3, 4 only (`--maxine-upscale-factor`).\n  Factors 3 and 4 require more VRAM — validate with `nvidia-smi` on first use.\n\n\n## CI / Testing without the SDK\n\nSet `DOREA_MAXINE_MOCK=1` to enable passthrough mode (identity transform — no nvvfx needed):\n\n```bash\nDOREA_MAXINE_MOCK=1 dorea grade --input test.mp4 --maxine\n```\n\nAll IPC paths, the temp file creation/deletion lifecycle, and keyframe detection on\nMaxine-proxied frames are exercised even in mock mode.",
+  "source_version": "docs/guides/maxine-setup.md",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230405595Z",
+  "valid_from": "2026-04-11T00:04:13.230405595Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "docs/guides/maxine-setup.md",
+    "language": "markdown",
+    "chunk_type": "heading_section",
+    "start_line": 86,
+    "end_line": 104,
+    "content_role": "design",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

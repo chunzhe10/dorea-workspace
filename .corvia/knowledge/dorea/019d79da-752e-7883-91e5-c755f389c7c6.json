@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c755f389c7c6",
+  "content": "Tensor) -> torch.Tensor:\n    \"\"\"Run RAUNE on a full-size frame tensor. Handles [0,1] ↔ [-1,1] normalization.\"\"\"\n    x = frame * 2.0 - 1.0\n    x = x.half()\n    with torch.no_grad():\n        y = model(x).float()\n    return ((y + 1.0) / 2.0).clamp(0.0, 1.0)\ndef _load_raune_model(weights_path: Path, models_dir: Path) -> torch.nn.Module:\n    \"\"\"Load RauneNet, apply model.half() with InstanceNorm→fp32 fix from PR #67.\"\"\"\n    import torch.nn as nn\n\n    # Add the models_dir/models/RAUNE-Net path so `from models.raune_net import RauneNet` works\n    sys_path_entry = str(models_dir / \"models\" / \"RAUNE-Net\")\n    if sys_path_entry not in sys.path:\n        sys.path.insert(0, sys_path_entry)\n    from models.raune_net import RauneNet  # type: ignore\n\n    model = RauneNet(input_nc=3, output_nc=3, n_blocks=30, n_down=2)\n    state = torch.load(weights_path, map_location=\"cpu\", weights_only=True)\n    if isinstance(state, dict) and \"model\" in state:\n        state = state[\"model\"]\n    model.load_state_dict(state)\n    model = model.cuda().eval()\n    model.half()\n    # InstanceNorm fp32 restoration (PR #67)\n    for m in model.modules():\n        if isinstance(m, (nn.InstanceNorm1d, nn.InstanceNorm2d, nn.InstanceNorm3d)):\n            m.float()\n    return model",
+  "source_version": "benchmarks/upscale_bench/gold.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230340719Z",
+  "valid_from": "2026-04-11T00:04:13.230340719Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/gold.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 43,
+    "end_line": 64,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

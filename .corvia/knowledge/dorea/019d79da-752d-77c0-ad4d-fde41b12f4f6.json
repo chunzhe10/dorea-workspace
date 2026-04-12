@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-fde41b12f4f6",
+  "content": "h_gpu(self, imgs: \"list[np.ndarray]\", max_size: int = 1080) -> \"tuple[torch.Tensor, int, int]\":\n        \"\"\"Run RAUNE-Net batch, returning enhanced tensors on device (no dtoh).\n\n        Returns (batch_tensor, out_w, out_h) where batch_tensor is (N, 3, H, W)\n        float32 in [0, 1], still on self.device. Caller must not let it be GC'd.\n        Falls back to sequential per-image forward passes (results stacked on device) if dims differ.\n        \"\"\"\n        import torch\n        import torchvision.transforms as transforms\n        from PIL import Image as _Image\n\n        if not imgs:\n            return torch.zeros(0, 3, 0, 0, device=self.device), 0, 0\n\n        normalize = transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))\n        tensors = []\n        wh_set = set()\n        out_w, out_h = 0, 0\n        for img in imgs:\n            r, tw, th = _resize_maintain_aspect(_Image.fromarray(img), max_size)\n            wh_set.add((tw, th))\n            out_w, out_h = tw, th\n            tensors.append(normalize(transforms.ToTensor()(r)))\n\n        if len(wh_set) > 1:\n            # Different post-resize dimensions: stacking is not possible.\n            # Raise a clear error — the fused GPU path requires uniform input dims.\n            raise ValueError(",
+  "source_version": "python/dorea_inference/raune_net.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229996173Z",
+  "valid_from": "2026-04-11T00:04:13.229996173Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/raune_net.py",
+    "language": "py",
+    "chunk_type": "class_definition",
+    "start_line": 185,
+    "end_line": 208,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

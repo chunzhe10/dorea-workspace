@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-e75e014d890a",
+  "content": "m) in items.iter().enumerate() {\n                let arr = result_list\n                    .get_item(i)\n                    .map_err(|e| InferenceError::Ipc(format!(\"get result[{i}] for id={}: {e}\", item.id)))?;\n\n                let shape: Vec<usize> = arr\n                    .getattr(\"shape\")\n                    .map_err(|e| InferenceError::Ipc(format!(\"get shape[{i}]: {e}\")))?\n                    .extract()\n                    .map_err(|e| InferenceError::Ipc(format!(\"extract shape[{i}]: {e}\")))?;\n\n                let out_h = shape[0];\n                let out_w = shape[1];\n\n                let flat = arr\n                    .call_method1(\"reshape\", ((-1_i32,),))\n                    .map_err(|e| InferenceError::Ipc(format!(\"flatten result[{i}]: {e}\")))?;\n                let depth_data: Vec<f32> = flat\n                    .call_method0(\"tolist\")\n                    .map_err(|e| InferenceError::Ipc(format!(\"tolist[{i}]: {e}\")))?\n                    .extract()\n                    .map_err(|e| InferenceError::Ipc(format!(\"extract depth[{i}]: {e}\")))?;\n\n                out.push((item.id.clone(), depth_data, out_w, out_h));\n            }\n\n            Ok(out)\n        })\n    }\n\n    /// Run fused RAUNE + Depth inference on a batch of images.\n    ///\n    /// For each item: RAUNE enhancement → (optional Maxine upscale) → depth estimation.\n    /// Returns `Vec<(id, enhanced_rgb_u8, enh_w, enh_h, depth_f32, depth_w, depth_h)>`.\n    ///\n    /// `enable_maxine`: if true, Maxine super-resolution runs between RAUNE and Depth.\n    #[allow(clippy::type_complexity)]\n    pub fn run_raune_depth_batch(\n        &mut self,\n        items: &[RauneDepthBatchItem],\n        enable_maxine: bool,\n    ) -> Result<Vec<(String, Vec<u8>, usize, usize, Vec<f32>, usize, usize)>, InferenceError> {\n        if items.is_empty() {\n            return Ok(vec![]);\n        }\n\n        Python::with_gil(|py| {\n            let bridge = self.bridge.bind(py);",
+  "source_version": "crates/dorea-video/src/inference/pyo3_backend.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229702847Z",
+  "valid_from": "2026-04-11T00:04:13.229702847Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference/pyo3_backend.rs",
+    "language": "rs",
+    "chunk_type": "impl_item",
+    "start_line": 401,
+    "end_line": 442,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

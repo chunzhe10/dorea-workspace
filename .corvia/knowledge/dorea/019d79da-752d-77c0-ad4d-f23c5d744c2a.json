@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-f23c5d744c2a",
+  "content": ").cuTexObjectCreate(&mut tex, &res_desc, &tex_desc, std::ptr::null());\n            if rc != cudaError_enum::CUDA_SUCCESS {\n                return Err(GpuError::CudaFail(format!(\"cuTexObjectCreate: {rc:?}\")));\n            }\n        }\n        Ok(tex)\n    }\n}\nfn allocate(n_zones: usize, grid_size: usize) -> Result<Self, GpuError> {\n        let n = grid_size;\n        let mut arrays: Vec<CUarray>     = Vec::with_capacity(n_zones);\n        let mut textures: Vec<CUtexObject> = Vec::with_capacity(n_zones);\n\n        for _ in 0..n_zones {\n            let mut arr: CUarray = std::ptr::null_mut();\n            let desc = CUDA_ARRAY3D_DESCRIPTOR {\n                Width:       n,\n                Height:      n,\n                Depth:       n,\n                Format:      CUarray_format_enum::CU_AD_FORMAT_FLOAT,\n                NumChannels: 4,\n                Flags:       0,\n            };\n            unsafe {\n                let rc = sys::lib().cuArray3DCreate_v2(&mut arr, &desc);\n                if rc != cudaError_enum::CUDA_SUCCESS {\n                    // clean up already-created resources\n                    for &tex in &textures { let _ = sys::lib().cuTexObjectDestroy(tex); }\n                    for &a in &arrays    { let _ = sys::lib().cuArrayDestroy(a); }\n                    return Err(GpuError::CudaFail(format!(\"cuArray3DCreate: {rc:?}\")));\n                }\n            }\n            arrays.push(arr);\n\n            let tex = Self::create_texture(arr).map_err(|e| {\n                // arr was just pushed; clean up all accumulated resources\n                unsafe {\n                    for &t in &textures { let _ = sys::lib().cuTexObjectDestroy(t); }\n                    for &a in &arrays   { let _ = sys::lib().cuArrayDestroy(a); }\n                }\n                e\n            })?;\n            textures.push(tex);\n        }\n\n        Ok(Self {\n            arrays,\n            textures,\n            zone_boundaries: vec![0.0; n_zones + 1],\n        })\n    }",
+  "source_version": "crates/dorea-gpu/src/cuda/combined_lut.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229839751Z",
+  "valid_from": "2026-04-11T00:04:13.229839751Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cuda/combined_lut.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 257,
+    "end_line": 299,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

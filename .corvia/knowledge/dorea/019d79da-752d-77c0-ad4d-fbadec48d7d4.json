@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-fbadec48d7d4",
+  "content": "s.zone_boundaries[z + 1]) / 2.0\n        }).collect();\n\n        let result = apply_depth_luts(&pixels, &depth, &depth_luts);\n\n        for (i, (orig, out)) in pixels.iter().zip(result.iter()).enumerate() {\n            for c in 0..3 {\n                assert!(\n                    (orig[c] - out[c]).abs() < 1e-4,\n                    \"pixel {i} channel {c}: expected {:.4} got {:.4}\",\n                    orig[c],\n                    out[c]\n                );\n            }\n        }\n    }\n\n    // ---------------------------------------------------------------------------\n    // I5b: test_adaptive_zone_boundaries_edge_cases\n    // ---------------------------------------------------------------------------\n\n    #[test]\n    fn test_adaptive_zone_boundaries_empty_input() {\n        let bounds = adaptive_zone_boundaries(&[], N_DEPTH_ZONES);\n        assert_eq!(bounds.len(), N_DEPTH_ZONES + 1);\n        // Should be uniform linspace 0, 0.2, 0.4, 0.6, 0.8, 1.0\n        for (i, &b) in bounds.iter().enumerate() {\n            let expected = i as f32 / N_DEPTH_ZONES as f32;\n            assert!(\n                (b - expected).abs() < 1e-6,\n                \"bounds[{i}] expected {expected}, got {b}\"\n            );\n        }\n    }\n\n    #[test]\n    fn test_adaptive_zone_boundaries_all_equal() {\n        // All depths equal — quantile boundaries degenerate to the same value.\n        let depths = vec![0.5_f32; 100];\n        let bounds = adaptive_zone_boundaries(&depths, N_DEPTH_ZONES);\n        assert_eq!(bounds.len(), N_DEPTH_ZONES + 1);\n        // First boundary must be 0.0 and last must be 1.0.\n        assert!((bounds[0] - 0.0).abs() < 1e-6);\n        assert!((bounds[N_DEPTH_ZONES] - 1.0).abs() < 1e-6);\n        // Interior boundaries all equal the single depth value.\n        for &b in &bounds[1..N_DEPTH_ZONES] {\n            assert!(\n                (b - 0.5).abs() < 1e-6,\n                \"interior boundary should be 0.5 for uniform depths, got {b}\"\n            );\n        }\n    }\n\n    #[test]\n    fn test_adaptive_zone_boundaries_single_value() {\n        let bounds = adaptive_zone_boundaries(&[0.3_f32], N_DEPTH_ZONES);\n        assert_eq!(bounds.len(), N_DEPTH_ZONES + 1);\n        assert!((bounds[0] - 0.0).abs() < 1e-6);\n        assert!((bounds[N_DEPTH_ZONES] - 1.0).abs() < 1e-6);\n    }\n}",
+  "source_version": "crates/dorea-lut/src/apply.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229967839Z",
+  "valid_from": "2026-04-11T00:04:13.229967839Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-lut/src/apply.rs",
+    "language": "rs",
+    "chunk_type": "mod_item",
+    "start_line": 171,
+    "end_line": 223,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

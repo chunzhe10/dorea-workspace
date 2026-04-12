@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-07e4b72ca786",
+  "content": "### Risk: RAUNE-Net layers don't support fp16\n### Risk: fp16 numerical differences cause visible quality regression\n\n### Risk: batch=8 OOMs on 6GB VRAM\n**Mitigation**: fp16 halves activation memory, so net VRAM should be similar to\nbatch=4 fp32. If OOM occurs, the error is immediate and the CLI flag allows rollback.\n\n\n### Risk: CLI flag conflicts with existing behavior\n**Mitigation**: Default of 8 changes the previous hardcoded default of 4. The flag\nis opt-out (always present), so users can set 4 to restore old behavior.\n",
+  "source_version": "decisions/2026-04-10-direct-mode-fp16-batch.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836224064Z",
+  "valid_from": "2026-04-11T00:10:08.836224064Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-10-direct-mode-fp16-batch.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 70,
+    "end_line": 77,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c413ba9e993f",
+  "content": "sor,\n    orig_full: torch.Tensor,\n    full_size: Tuple[int, int],\n) -> torch.Tensor:\n    \"\"\"Non-edge-aware bicubic upscale — one-line improvement over bilinear.\"\"\"\n    return F.interpolate(delta_proxy, size=full_size, mode=\"bicubic\", align_corners=False)\ndef _lanczos_weight(x: torch.Tensor, a: int = 3) -> torch.Tensor:\n    \"\"\"Lanczos kernel: sinc(x) * sinc(x/a) for |x| < a, else 0.\"\"\"\n    pi_x = torch.pi * x\n    pi_x_over_a = pi_x / a\n    # sinc(x) = sin(pi*x) / (pi*x), with limit 1 at x=0\n    sinc_x = torch.where(x.abs() < 1e-8, torch.ones_like(x), torch.sin(pi_x) / pi_x)\n    sinc_x_a = torch.where(x.abs() < 1e-8, torch.ones_like(x), torch.sin(pi_x_over_a) / pi_x_over_a)\n    weight = sinc_x * sinc_x_a\n    return torch.where(x.abs() < a, weight, torch.zeros_like(weight))",
+  "source_version": "benchmarks/upscale_bench/methods.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230296078Z",
+  "valid_from": "2026-04-11T00:04:13.230296078Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/methods.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 57,
+    "end_line": 65,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

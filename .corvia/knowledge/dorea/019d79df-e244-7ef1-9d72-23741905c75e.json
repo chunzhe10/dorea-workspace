@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-23741905c75e",
+  "content": "### 1. D-Log M Transfer Function (`dorea-color/src/dlog_m.rs`)\n### 2. RGB ↔ CIELAB D65 (`dorea-color/src/lab.rs`)\n\n### 3. RGB ↔ HSV (`dorea-color/src/hsv.rs`)\n\nStandard algorithm. H in [0,360), S in [0,1], V in [0,1].\nInput/output RGB in [0,1].\n\n\n### 4. Depth-Stratified LUT Build (`dorea-lut/src/build.rs`)\n\nPort from `run_fixed_hsl_lut_poc.py::build_fixed_depth_luts()`.\n\n**Constants:**\n- `LUT_SIZE = 33`\n- `N_DEPTH_ZONES = 5`\n- `EDGE_SCALE = 0.3`\n- `CONTRAST_SCALE = 0.3`\n\n**Zone boundaries:** Adaptive density-weighted (not linear linspace).\n- Pool all depth values from all keyframes\n- Sort and compute percentile boundaries so each zone covers ~20% of pixels\n- Fall back to linspace if depth distribution is degenerate\n\n**Per-keyframe:**\n1. Load original (sRGB) + RAUNE target (sRGB) + depth map (f32 [0,1])\n2. Compute importance map = depth × (1 + EDGE_SCALE × edge_norm) × (1 + CONTRAST_SCALE × contrast_norm)\n   - Edge: Sobel gradient of depth map\n   - Contrast: local variance of depth map (31×31 window)\n3. For each depth zone [lo, hi]:\n   - Mask pixels in zone\n   - Bin original pixels into 33³ grid (floor index)\n   - Accumulate: `lut_wsum[r,g,b] += raune_rgb × importance`; `lut_wcount[r,g,b] += importance`\n4. Normalize: `lut[r,g,b] = lut_wsum / lut_wcount` for populated cells\n5. NN fill for empty cells:\n   - Collect populated (i,j,k) coords\n   - For each empty cell, find nearest populated cell in L2 distance (brute force — N=33 is small)\n   - Fill with that cell's value\n\n**No Gaussian smoothing (σ=0). Critical fix.**\n",
+  "source_version": "plans/2026-04-02-dorea-v2-phase1-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836566349Z",
+  "valid_from": "2026-04-11T00:10:08.836566349Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-dorea-v2-phase1-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 117,
+    "end_line": 153,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

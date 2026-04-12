@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d3fcd0d9f99a",
+  "content": "pub struct KeyframeEntry {\n    pub frame_index: u64,\n    pub proxy_pixels: Vec<u8>,\n    /// True if this keyframe follows a scene cut (suppresses lerp across cuts).\n    pub scene_cut_before: bool,\n}\npub fn run_keyframe_stage(cfg: &PipelineConfig, info: &ffmpeg::VideoInfo) -> Result<KeyframeStageOutput> {\n    let (proxy_w, proxy_h) = dorea_video::resize::proxy_dims(info.width, info.height, cfg.proxy_size);\n\n    let mut keyframes: Vec<KeyframeEntry> = Vec::new();\n    let mut detector: Box<dyn ChangeDetector> = Box::new(MseDetector::default());\n    let mut frames_since_kf = 0usize;\n    let scene_cut_threshold = cfg.depth_skip_threshold * 10.0;\n\n    let proxy_frames = ffmpeg::decode_frames_scaled(&cfg.input, info, proxy_w, proxy_h)\n        .context(\"failed to spawn ffmpeg proxy decoder\")?;\n\n    for frame_result in proxy_frames {\n        let frame = frame_result.context(\"proxy frame decode error\")?;\n        let change = detector.score(&frame.pixels);\n        let scene_cut = change < f32::MAX && change > scene_cut_threshold;\n        let is_keyframe = !cfg.interp_enabled\n            || keyframes.is_empty()\n            || scene_cut\n            || frames_since_kf >= cfg.depth_max_interval\n            || (change < f32::MAX && change > cfg.depth_skip_threshold);\n\n        if is_keyframe {\n            if scene_cut {\n                log::info!(\"Scene cut at frame {} (change={:.6})\", frame.index, change);\n                detector.reset();",
+  "source_version": "crates/dorea-cli/src/pipeline/keyframe.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229465781Z",
+  "valid_from": "2026-04-11T00:04:13.229465781Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/pipeline/keyframe.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 21,
+    "end_line": 45,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

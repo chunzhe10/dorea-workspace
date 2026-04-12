@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-00881f8b267a",
+  "content": "# Maxine Pre-Processing Integration — Design Spec\n\n## Summary\n\nAdd NVIDIA Maxine VFX SDK as the **first-stage preprocessor** in the dorea grading pipeline.\nMaxine runs on **every frame at full resolution** in Pass 1. The Maxine-enhanced frames are\nwritten to a **temporary lossless video file** (ffv1/mkv) and reused in Pass 2 — Maxine runs\nexactly once per frame, never twice.\n\nAll derivative algorithms (RAUNE, Depth Anything, LUT calibration, GPU grading) operate on\nMaxine-enhanced frames, never on raw camera frames.\n\nThis corrects the original design (post-grading, keyframes only) to match the actual intent:\nMaxine is an input-enhancement stage, not an output-beautification stage.\n\n---\n\n\n## Architecture\n",
+  "source_version": "decisions/2026-04-04-maxine-preprocessor-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836136947Z",
+  "valid_from": "2026-04-11T00:10:08.836136947Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-04-maxine-preprocessor-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 10,
+    "end_line": 26,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

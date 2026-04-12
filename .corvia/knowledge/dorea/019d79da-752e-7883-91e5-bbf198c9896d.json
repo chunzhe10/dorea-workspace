@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-bbf198c9896d",
+  "content": " = \"AUTO\"\n    total_frames = in_stream.frames or 0\n    from fractions import Fraction\n    fps_frac = in_stream.average_rate or in_stream.rate or Fraction(30, 1)\n    fps = float(fps_frac)\n\n    # Open output\n    out_container = av.open(args.output, mode=\"w\")\n    codec_name = args.output_codec or \"prores_ks\"\n    out_stream = out_container.add_stream(codec_name, rate=fps_frac)\n    out_stream.width = fw\n    out_stream.height = fh\n    out_stream.thread_type = \"AUTO\"\n\n    # Configure codec\n    if codec_name == \"prores_ks\":\n        out_stream.pix_fmt = \"yuv422p10le\"\n        out_stream.options = {\"profile\": \"3\"}  # ProRes 422 HQ\n    elif codec_name in (\"hevc\", \"libx265\"):\n        out_stream.pix_fmt = \"yuv420p10le\"\n    else:\n        out_stream.pix_fmt = \"yuv420p\"\n\n    print(f\"[raune-filter] single-process: {fw}x{fh}, proxy={pw}x{ph}, \"\n          f\"batch={batch_size}, codec={codec_name}, fps={fps:.3f}, \"\n          f\"dtype={model_dtype}\",\n          file=sys.stderr, flush=True)\n\n    # ─── 3-thread pipeline: decoder → GPU → encoder ────────────────────────\n    # Bounded queues provide backpressure (memory bound: ~200MB at 4K)\n    q_decoded = queue.Queue(maxsize=2)   # holds: list[np.ndarray] (one batch)\n    q_processed = queue.Queue(maxsize=2) # holds: list[np.ndarray] (one batch)\n\n    # Shared error state\n    errors: list[BaseException] = []\n    errors_lock = threading.Lock()\n    stop_event = threading.Event()\n\n    def record_error(exc: BaseException) -> None:\n        with errors_lock:\n            errors.append(exc)",
+  "source_version": "python/dorea_inference/raune_filter.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230057379Z",
+  "valid_from": "2026-04-11T00:04:13.230057379Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/raune_filter.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 234,
+    "end_line": 266,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

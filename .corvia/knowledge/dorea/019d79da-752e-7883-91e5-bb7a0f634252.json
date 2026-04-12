@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-bb7a0f634252",
+  "content": "def srgb_to_linear(c):\n    return torch.where(c <= 0.04045, c / 12.92, ((c + 0.055) / 1.055) ** 2.4)\ndef linear_to_srgb(c):\n    return torch.where(c <= 0.0031308, c * 12.92, 1.055 * c.clamp(min=1e-7) ** (1.0 / 2.4) - 0.055)",
+  "source_version": "python/dorea_inference/raune_filter.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230049846Z",
+  "valid_from": "2026-04-11T00:04:13.230049846Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/raune_filter.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 49,
+    "end_line": 53,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

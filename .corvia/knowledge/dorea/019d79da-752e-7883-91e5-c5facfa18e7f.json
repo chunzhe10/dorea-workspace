@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c5facfa18e7f",
+  "content": "             \"clip\": \"test.mp4\", \"git_sha\": \"abc123\",\n                                        \"gold_paths\": {30: \"native_4k\", 180: \"native_4k\", 300: \"native_4k\"}},\n                          out_path=out)\n    assert out.exists()\n    Image.open(out).verify()\ndef test_generate_per_frame_sheet_writes_png(tmp_path):\n    method_order = [\"bilinear\", \"bicubic\"]\n    out = tmp_path / \"frame.png\"\n    generate_per_frame_sheet(\n        frame_idx=30,\n        orig_proxy_final=_rand_final(),\n        gold_final=_rand_final(),\n        method_finals={name: _rand_final() for name in method_order},\n        method_deltas={name: _rand_delta() for name in method_order},\n        method_metrics={name: {\"delta_l1\": 0.01, \"final_delta_e\": 0.5, \"final_delta_e_p95\": 0.8, \"ssim\": 0.99}\n                        for name in method_order},\n        method_order=method_order,\n        out_path=out,\n        crop_size=64,\n    )\n    assert out.exists()\n    Image.open(out).verify()",
+  "source_version": "benchmarks/upscale_bench/tests/test_visualize.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230323218Z",
+  "valid_from": "2026-04-11T00:04:13.230323218Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/tests/test_visualize.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 54,
+    "end_line": 70,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

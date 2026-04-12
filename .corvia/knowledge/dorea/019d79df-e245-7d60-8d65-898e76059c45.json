@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-898e76059c45",
+  "content": "    # ─── Thread 1: Decoder ─────────────────────────────────────────────────\n    # ─── Thread 2: GPU processing ──────────────────────────────────────────\n\n    # ─── Thread 3: Encoder ─────────────────────────────────────────────────\n    def encoder_thread() -> None:\n        nonlocal encoded_count\n        try:\n            while True:\n                if stop_event.is_set():\n                    return\n                results = q_processed.get()\n                if results is None:\n                    return\n                for result_np in results:\n                    out_frame = av.VideoFrame.from_ndarray(result_np, format=\"rgb24\")\n                    out_frame.pts = encoded_count\n                    for pkt in out_stream.encode(out_frame):\n                        out_container.mux(pkt)\n                    encoded_count += 1\n                    if encoded_count % (batch_size * 4) == 0:\n                        elapsed = time.time() - t_start\n                        fps_actual = encoded_count / elapsed if elapsed > 0 else 0\n                        pct = (encoded_count / total_frames * 100\n                               if total_frames else 0)\n                        print(f\"[raune-filter] {encoded_count} frames \"\n                              f\"({pct:.0f}%, {fps_actual:.1f} fps)\",\n                              file=sys.stderr, flush=True)\n        except BaseException as e:\n            record_error(e)\n\n\n    # Spawn threads\n    t_dec = threading.Thread(target=decoder_thread, name=\"decoder\", daemon=False)\n    t_gpu = threading.Thread(target=gpu_thread, name=\"gpu\", daemon=False)\n    t_enc = threading.Thread(target=encoder_thread, name=\"encoder\", daemon=False)\n\n    t_dec.start()\n    t_gpu.start()\n    t_enc.start()\n",
+  "source_version": "plans/2026-04-10-direct-mode-3thread-pipeline.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837090961Z",
+  "valid_from": "2026-04-11T00:10:08.837090961Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-10-direct-mode-3thread-pipeline.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 115,
+    "end_line": 150,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

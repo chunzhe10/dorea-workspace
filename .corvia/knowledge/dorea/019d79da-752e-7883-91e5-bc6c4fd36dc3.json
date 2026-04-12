@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-bc6c4fd36dc3",
+  "content": "g (busy ms/frame): \"\n          f\"decode={decode_busy*1000/n:.1f} \"\n          f\"gpu={gpu_busy*1000/n:.1f} \"\n          f\"encode={encode_busy*1000/n:.1f} \"\n          f\"wall={elapsed*1000/n:.1f}\",\n          file=sys.stderr, flush=True)\n    return encoded_count\ndef record_error(exc: BaseException) -> None:\n        with errors_lock:\n            errors.append(exc)\n        stop_event.set()",
+  "source_version": "python/dorea_inference/raune_filter.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230187419Z",
+  "valid_from": "2026-04-11T00:04:13.230187419Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/raune_filter.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 264,
+    "end_line": 267,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-e7eda245071a",
+  "content": "-----------\n    // Private helpers\n    // -----------------------------------------------------------------------\n\n    /// Find the `python/` directory adjacent to the binary (same logic as subprocess version).\n    fn find_python_dir() -> Option<PathBuf> {\n        std::env::current_exe().ok().and_then(|exe| {\n            // .parent() = target/debug|release, .parent() = target, .parent() = workspace root\n            exe.parent()\n                .and_then(|p| p.parent())\n                .and_then(|p| p.parent())\n                .map(|root| root.join(\"python\"))\n        }).filter(|p| p.exists())\n    }\n\n    /// Load the depth model via the Python bridge.\n    fn call_load_depth(\n        py: Python<'_>,\n        bridge: &Bound<'_, PyModule>,\n        model_path: Option<&str>,\n        device: &str,\n    ) -> Result<(), InferenceError> {\n        let py_model_path = match model_path {\n            Some(p) => p.into_py(py),\n            None => py.None(),\n        };\n        bridge.call_method1(\"load_depth_model\", (py_model_path, device))\n            .map_err(|e| InferenceError::InitFailed(format!(\"load_depth_model: {e}\")))?;\n        Ok(())\n    }\n\n    /// Load the RAUNE model via the Python bridge.\n    fn call_load_raune(\n        py: Python<'_>,\n        bridge: &Bound<'_, PyModule>,\n        weights_path: Option<&str>,\n        device: &str,\n        models_dir: Option<&str>,\n    ) -> Result<(), InferenceError> {\n        let py_weights = match weights_path {\n            Some(p) => p.into_py(py),\n            None => py.None(),\n        };\n        let py_models_dir = match models_dir {\n            Some(p) => p.into_py(py),\n            None => py.None(),\n        };\n        bridge.call_method1(\"load_raune_model\", (py_weights, device, py_models_dir))",
+  "source_version": "crates/dorea-video/src/inference/pyo3_backend.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229709584Z",
+  "valid_from": "2026-04-11T00:04:13.229709584Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference/pyo3_backend.rs",
+    "language": "rs",
+    "chunk_type": "impl_item",
+    "start_line": 738,
+    "end_line": 779,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

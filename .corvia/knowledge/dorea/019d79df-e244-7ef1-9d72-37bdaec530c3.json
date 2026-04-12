@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-37bdaec530c3",
+  "content": "kv\", std::process::id())))\n    } else {\n        None\n    };\n    let _maxine_temp_guard = maxine_temp_path.as_ref().map(|p| TempFileGuard::new(p.clone()));\n```\n\n**Replace the Pass 1 branch — use `inf_server` directly instead of `maxine_server`:**\n\n```rust\n    if use_maxine {\n        // Maxine path: full-res decode → enhance → write temp → proxy downscale → keyframe detect\n        use dorea_video::resize::resize_rgb_bilinear;\n\n        let temp_path = maxine_temp_path.as_ref().unwrap();\n        let mut temp_enc = FrameEncoder::new_lossless_temp(\n            temp_path, info.width, info.height, info.fps,\n        ).context(\"failed to create Maxine temp encoder\")?;\n\n        let full_frames = ffmpeg::decode_frames(&args.input, &info)\n            .context(\"failed to spawn full-res decoder for Maxine pass\")?;\n\n        for frame_result in full_frames {\n            let frame = frame_result.context(\"Maxine pass frame decode error\")?;\n\n            let maxine_full = inf_server.enhance(\n                &frame.index.to_string(),\n                &frame.pixels,\n                frame.width,\n                frame.height,\n                !args.no_maxine_artifact_reduction,\n            ).unwrap_or_else(|e| {\n                log::warn!(\"enhance() failed for frame {} — using original: {e}\", frame.index);\n                frame.pixels.clone()\n            });\n\n            temp_enc.write_frame(&maxine_full)\n                .context(\"failed to write Maxine-enhanced frame to temp file\")?;\n",
+  "source_version": "plans/2026-04-04-maxine-pipeline-architecture.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836864733Z",
+  "valid_from": "2026-04-11T00:10:08.836864733Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-maxine-pipeline-architecture.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1010,
+    "end_line": 1038,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

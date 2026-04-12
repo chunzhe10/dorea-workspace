@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c996490f5fbd",
+  "content": "n ok_results:\n                per_method.setdefault(r.method, []).append(metric_getter(r))\n            means = {m: sum(v) / len(v) for m, v in per_method.items()}\n            return sorted(means.items(), key=lambda kv: kv[1] if lower_better else -kv[1])[0]\ndef main() -> None:\n    parser = argparse.ArgumentParser(description=\"Delta upscale benchmark.\")\n    parser.add_argument(\"--clip\", default=str(DEFAULT_CLIP))\n    parser.add_argument(\"--frames\", default=\"auto\", help='\"auto\" or comma-separated indices')\n    parser.add_argument(\"--methods\", default=\"all\", help='\"all\" or comma-separated method names')\n    parser.add_argument(\"--out-dir\", default=str(DEFAULT_OUT_DIR))\n    parser.add_argument(\"--weights\", default=str(DEFAULT_WEIGHTS))\n    parser.add_argument(\"--models-dir\", default=str(DEFAULT_MODELS_DIR))\n    parser.add_argument(\"--proxy-size\", type=int, default=1080)\n    parser.add_argument(\"--regen-gold\", action=\"store_true\")\n    parser.add_argument(\"--gold-sanity-check\", action=\"store_true\")\n    parser.add_argument(\"--timing-runs\", type=int, default=10)\n    parser.add_argument(\"--timing-warmup\", type=int, default=3)\n    parser.add_argument(\"--verbose\", action=\"store_true\")\n    args = parser.parse_args()\n    run(args)",
+  "source_version": "benchmarks/upscale_bench/run.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230374506Z",
+  "valid_from": "2026-04-11T00:04:13.230374506Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/run.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 453,
+    "end_line": 468,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

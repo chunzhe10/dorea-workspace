@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d71-f8cba5bb222b",
+  "content": "## Section 2: Metadata Extensions & Repo-Aware `corvia_write`\n\n### Extended `EntryMetadata`\n\n```rust\npub struct EntryMetadata {\n    // Existing fields (unchanged)\n    pub source_file: Option<String>,\n    pub language: Option<String>,\n    pub chunk_type: Option<String>,\n    pub start_line: Option<u32>,\n    pub end_line: Option<u32>,\n\n    // New — docs workflow\n    #[serde(default)]\n    pub content_role: Option<String>,    // \"design\", \"decision\", \"plan\", \"code\",\n                                         // \"memory\", \"finding\", \"instruction\",\n                                         // \"learning\"\n    #[serde(default)]\n    pub source_origin: Option<String>,   // \"repo:corvia\", \"repo:foo\",\n                                         // \"workspace\", \"memory\"\n}\n```\n\n**Serde compatibility:** `#[serde(default)]` on the new fields ensures existing serialized\nentries in `.corvia/knowledge/` deserialize correctly (missing fields default to `None`).\n\n**`content_role` values:**\n- `\"design\"` — full design specification or RFC\n- `\"decision\"` — point-in-time architectural choice (lighter than a full design doc)\n- `\"plan\"` — implementation plan or task breakdown\n- `\"code\"` — source code chunk\n- `\"memory\"` — agent session context (Claude memory, etc.)\n- `\"finding\"` — Reasoner-generated health check finding\n- `\"instruction\"` — AGENTS.md, CLAUDE.md, configuration docs\n- `\"learning\"` — operational knowledge, troubleshooting notes\n\nArbitrary strings are accepted for forward compatibility, but the above values are\nthe recognized set used for dashboard filtering and node styling.\n\n**DTOs requiring update:** The following response types must thread through the new fields:\n- `SearchResultDto` in `crates/corvia-server/src/rest.rs`\n- MCP search response formatting in `crates/corvia-server/src/mcp.rs`\n- MCP write response (should echo back stored `content_role` and `source_origin`)\n```\n",
+  "source_version": "decisions/2026-03-13-docs-workflow-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836039134Z",
+  "valid_from": "2026-04-11T00:10:08.836039134Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-03-13-docs-workflow-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 166,
+    "end_line": 209,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

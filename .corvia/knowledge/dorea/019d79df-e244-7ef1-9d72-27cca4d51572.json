@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-27cca4d51572",
+  "content": "## Root Cause Summary\n\n### Bug 1 — O(N×radius) box blur (primary bottleneck, ~9 s/frame)\n\n`crates/dorea-gpu/src/cpu.rs:215-243` — `box_blur_rows` and `box_blur_cols` recompute the window sum from scratch for every pixel:\n\n```rust\nfor k in lo..=hi {       // ← 181 iterations per pixel at radius=90\n    s += src[base + k];\n}\n```\n\nFor 4K (3840×2160 = 8.3M pixels), radius=90, 3 passes × 2 directions:\n`8.3M × 181 × 6 = 9 billion inner-loop iterations per frame`.\n\n`box_blur_cols` also accesses memory with a 15 KB stride (column stride = `width × 4 bytes = 15 KB`), defeating all hardware prefetch and causing ~2.5 s of cache misses on top.\n\n\n### Bug 2 — Full 4K frame serialized for Python depth inference (~5–10 s/frame)\n\n`crates/dorea-cli/src/grade.rs:142` sends `frame.pixels` (3840×2160×3 = 24 MB raw) to the Python inference server, which immediately resizes it to 518 px. Per-frame cost on Rust side:\n\n- `encode_png_bytes` (store mode): copy 24 MB + Adler-32 over 24 M bytes\n- `B64.encode`: 24 MB → 32 MB\n- 32 MB JSON write to pipe\n\nPython receives 32 MB, decodes, resizes 4K→518 px, runs DepthAnything (~100 ms GPU), returns ~200 KB. The 32 MB encode/transmit dominates.\n\n---\n",
+  "source_version": "plans/2026-04-02-inference-perf-fix.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836625744Z",
+  "valid_from": "2026-04-11T00:10:08.836625744Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-inference-perf-fix.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 15,
+    "end_line": 41,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

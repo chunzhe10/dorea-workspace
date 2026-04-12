@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-295aa8beaafc",
+  "content": "## Task 3: Parallelize NN fill in `build_depth_luts` (empty-cell-parallel)\n\n        if !populated.is_empty() && !empty.is_empty() {\n            for &ec in &empty {\n                let mut best_dist = u64::MAX;\n                let mut best_pop = populated[0];\n                for &pc in &populated {\n                    let dr = (ec[0] as i64 - pc[0] as i64).pow(2) as u64;\n                    let dg = (ec[1] as i64 - pc[1] as i64).pow(2) as u64;\n                    let db = (ec[2] as i64 - pc[2] as i64).pow(2) as u64;\n                    let dist = dr + dg + db;\n                    if dist < best_dist {\n                        best_dist = dist;\n                        best_pop = pc;\n                    }\n                }\n                let val = lut.get(best_pop[0], best_pop[1], best_pop[2]);\n                lut.set(ec[0], ec[1], ec[2], val);\n            }\n        }\n```\n\nWith:\n\n```rust\n        // NN fill: brute-force L2 in index space (parallel per empty cell)\n        if !populated.is_empty() && !empty.is_empty() {\n            // Each empty cell search is fully independent — populated is read-only.\n            let filled: Vec<([usize; 3], [usize; 3])> = empty\n                .par_iter()\n                .map(|ec| find_nearest(ec, &populated))\n                .collect();\n            // Sequential write-back (each cell is distinct, no conflicts).\n            for (ec, best_pop) in filled {\n                let val = lut.get(best_pop[0], best_pop[1], best_pop[2]);\n                lut.set(ec[0], ec[1], ec[2], val);\n            }\n        }\n```\n\n- [ ] **Step 5: Run tests**\n\n```bash\ncd repos/dorea && cargo test -p dorea-lut 2>&1\n```\n\nExpected: all tests pass including `test_nn_fill_no_identity`.\n\n- [ ] **Step 6: Commit**\n\n```bash\ncd repos/dorea\ngit add crates/dorea-lut/src/build.rs\ngit commit -m \"perf(dorea-lut): parallelize NN fill with rayon par_iter\"\n```\n\n---\n",
+  "source_version": "plans/2026-04-02-rayon-cpu-parallelization-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836648464Z",
+  "valid_from": "2026-04-11T00:10:08.836648464Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-rayon-cpu-parallelization-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 292,
+    "end_line": 347,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

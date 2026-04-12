@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-ca550d41adbf",
+  "content": "# Motion-Aware Content-Adaptive Grading Design\n\n**Date:** 2026-04-08\n**Status:** Approved\n**Issues:** chunzhe10/dorea#50, #52, #51\n",
+  "source_version": "docs/decisions/2026-04-08-motion-aware-grading-design.md",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230388138Z",
+  "valid_from": "2026-04-11T00:04:13.230388138Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "docs/decisions/2026-04-08-motion-aware-grading-design.md",
+    "language": "markdown",
+    "chunk_type": "heading_section",
+    "start_line": 1,
+    "end_line": 6,
+    "content_role": "decision",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

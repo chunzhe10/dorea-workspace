@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-f9b7b6900a4e",
+  "content": ") {\n        let (l, a, b) = srgb_to_lab(0.0, 0.0, 0.0);\n        assert!(l.abs() < 1e-3, \"Black L: expected 0, got {l}\");\n        assert!(a.abs() < 1e-3, \"Black a: expected 0, got {a}\");\n        assert!(b.abs() < 1e-3, \"Black b: expected 0, got {b}\");\n    }\nfn test_l_range() {\n        // L should span [0, 100] for sRGB gamut\n        let (l_black, _, _) = srgb_to_lab(0.0, 0.0, 0.0);\n        let (l_white, _, _) = srgb_to_lab(1.0, 1.0, 1.0);\n        assert!(l_black < 1.0, \"Black L should be near 0, got {l_black}\");\n        assert!(l_white > 99.0, \"White L should be near 100, got {l_white}\");\n    }",
+  "source_version": "crates/dorea-color/src/lab.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229943676Z",
+  "valid_from": "2026-04-11T00:04:13.229943676Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-color/src/lab.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 135,
+    "end_line": 141,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-e6d4e7ffb812",
+  "content": "fn drop(&mut self) {\n        Python::with_gil(|py| {\n            if let Err(e) = self.py_guard.call_method0(py, \"release\") {\n                log::warn!(\"TensorGuard.release() failed during drop: {e}\");\n            }\n        });\n    }\npub struct InferenceServer {\n    /// Cached bridge module — avoids re-importing on every inference call.\n    bridge: Py<PyModule>,\n    /// Device string captured at spawn time (e.g. \"cuda\" or \"cpu\").\n    device: String,\n    _not_send: PhantomData<*const ()>,\n}",
+  "source_version": "crates/dorea-video/src/inference/pyo3_backend.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229696285Z",
+  "valid_from": "2026-04-11T00:04:13.229696285Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference/pyo3_backend.rs",
+    "language": "rs",
+    "chunk_type": "struct_item",
+    "start_line": 141,
+    "end_line": 147,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-85f31601141d",
+  "content": "## Phase D: Pipeline Integration\n\n### Task 10: CLI Flags — --input-encoding, --output-codec\n\n**Files:**\n- Modify: `crates/dorea-cli/src/grade.rs`\n- Modify: `crates/dorea-cli/src/config.rs`\n- Modify: `crates/dorea-cli/src/pipeline/mod.rs`\n\n- [ ] **Step 1: Add config fields**\n\nIn `crates/dorea-cli/src/config.rs`, add to `GradeDefaults`:\n\n```rust\n/// Input encoding override (default: auto-detect from container/codec)\npub input_encoding: Option<String>,\n/// Output codec (default: \"h264\" for 8-bit, \"prores\" for 10-bit)\npub output_codec: Option<String>,\n```\n\n- [ ] **Step 2: Add CLI args**\n\nIn `crates/dorea-cli/src/grade.rs`, add to `GradeArgs`:\n\n```rust\n/// Input encoding: dlog-m, ilog, srgb (default: auto-detect from container)\n#[arg(long)]\npub input_encoding: Option<String>,\n\n/// Output codec: prores, hevc10, h264 (default: auto for source bit depth)\n#[arg(long)]\npub output_codec: Option<String>,\n```\n\n- [ ] **Step 3: Add fields to PipelineConfig**\n\nIn `crates/dorea-cli/src/pipeline/mod.rs`, add to `PipelineConfig`:\n\n```rust\npub input_encoding: dorea_video::ffmpeg::InputEncoding,\npub output_codec: dorea_video::ffmpeg::OutputCodec,\n```\n\n- [ ] **Step 4: Wire up in grade.rs run()**\n\nIn the `run()` function in `grade.rs`, after existing config resolution:\n\n```rust\nuse dorea_video::ffmpeg::{InputEncoding, OutputCodec};\n\n// After probing video info:\nlet input_encoding = args.input_encoding.as_deref()\n    .or(cfg.grade.input_encoding.as_deref())\n    .map(|s| s.parse::<InputEncoding>())\n    .transpose()\n    .context(\"invalid --input-encoding\")?",
+  "source_version": "plans/2026-04-08-10bit-pipeline-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837041574Z",
+  "valid_from": "2026-04-11T00:10:08.837041574Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-08-10bit-pipeline-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1600,
+    "end_line": 1653,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

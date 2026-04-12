@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-e98a6b2f1692",
+  "content": " bridge is CUDA-only today\n    ) -> Result<(), InferenceError> {\n        bridge\n            .call_method1(\"load_maxine_model\", (upscale_factor,))\n            .map_err(|e| InferenceError::InitFailed(format!(\"load_maxine_model: {e}\")))?;\n        Ok(())\n    }\nfn map_python_error(py: Python<'_>, err: PyErr) -> InferenceError {\n        // Try to detect CUDA OOM errors.\n        // torch.cuda.OutOfMemoryError is a subclass of RuntimeError.\n        let msg = format!(\"{err}\");\n        if msg.contains(\"OutOfMemoryError\") || msg.contains(\"CUDA out of memory\") {\n            return InferenceError::Oom(msg);\n        }\n\n        // Check if it's a torch.cuda.OutOfMemoryError by trying to import and check.\n        let is_oom = (|| -> Result<bool, PyErr> {\n            let torch = py.import_bound(\"torch\")?;\n            let cuda = torch.getattr(\"cuda\")?;\n            let oom_type = cuda.getattr(\"OutOfMemoryError\")?;\n            let err_value = err.value_bound(py);\n            Ok(err_value.is_instance(&oom_type)?)\n        })();\n\n        if matches!(is_oom, Ok(true)) {\n            return InferenceError::Oom(msg);\n        }\n\n        InferenceError::ServerError(msg)\n    }",
+  "source_version": "crates/dorea-video/src/inference/pyo3_backend.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229730286Z",
+  "valid_from": "2026-04-11T00:04:13.229730286Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference/pyo3_backend.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 799,
+    "end_line": 821,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

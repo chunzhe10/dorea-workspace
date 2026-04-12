@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-037b8b03ec1b",
+  "content": "### Benchmark validation\n\n## Files Changed\n\n| File | Change |\n|---|---|\n| `crates/dorea-color/src/lab.rs` | Replace `srgb_to_lab` / `lab_to_srgb` internals with OKLab + rescale. Keep function signatures identical. Update round-trip tests. |\n| `crates/dorea-gpu/src/cuda/kernels/grade_pixel.cuh` | Replace CUDA `srgb_to_lab` / `lab_to_srgb` with OKLab equivalents. Remove XN/YN/ZN constants, `f_lab`/`f_lab_inv`, DELTA constants. Add OKLab matrix constants and rescale factors. Switch `powf` → `__powf` in `srgb_to_linear` / `linear_to_srgb`. |\n| `crates/dorea-gpu/src/cpu.rs` | No change — calls `dorea_color::lab::*` which swaps underneath. |\n| `crates/dorea-gpu/src/cuda/kernels/postprocess.cu` | No change — includes `grade_pixel.cuh` which swaps underneath. |\n| `crates/dorea-gpu/src/cuda/kernels/build_combined_lut.cu` | No change — includes `grade_pixel.cuh`. |\n",
+  "source_version": "decisions/2026-04-09-oklab-grade-pipeline.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836172935Z",
+  "valid_from": "2026-04-11T00:10:08.836172935Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-09-oklab-grade-pipeline.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 94,
+    "end_line": 103,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

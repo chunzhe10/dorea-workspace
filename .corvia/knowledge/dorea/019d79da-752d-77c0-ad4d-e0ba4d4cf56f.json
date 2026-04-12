@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-e0ba4d4cf56f",
+  "content": "   pixels: vec![0xFF00u16, 0x8000u16, 0x0100u16],\n            width: 1,\n            height: 1,\n        };\n        let eight = frame.to_8bit();\n        assert_eq!(eight[0], 0xFF);\n        assert_eq!(eight[1], 0x80);\n        assert_eq!(eight[2], 0x01);\n    }\nfn output_codec_is_10bit() {\n        assert!(OutputCodec::ProRes.is_10bit());\n        assert!(OutputCodec::Hevc10.is_10bit());\n        assert!(!OutputCodec::H264.is_10bit());\n    }",
+  "source_version": "crates/dorea-video/src/ffmpeg.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229617325Z",
+  "valid_from": "2026-04-11T00:04:13.229617325Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/ffmpeg.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 1177,
+    "end_line": 1181,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

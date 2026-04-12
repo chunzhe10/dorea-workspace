@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-07aecd407cd7",
+  "content": "## Why these two together\n## Expected outcome\n\n## Scope\n\n- `python/dorea_inference/raune_filter.py` — `main()` calls `model.half()` after\n  loading state dict, `_process_batch()` converts proxy tensors to half before model\n  call and casts output back to float32\n- `crates/dorea-cli/src/grade.rs` — add `--direct-batch-size` CLI flag, default 8\n- `crates/dorea-cli/src/pipeline/grading.rs` — `DirectModeConfig.batch_size` already\n  exists; just thread the new CLI value through\n- `crates/dorea-cli/src/config.rs` — add `direct_batch_size` to `[grade]` config\n  section\n",
+  "source_version": "decisions/2026-04-10-direct-mode-fp16-batch.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836221531Z",
+  "valid_from": "2026-04-11T00:10:08.836221531Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-10-direct-mode-fp16-batch.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 40,
+    "end_line": 50,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

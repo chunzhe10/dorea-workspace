@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-ed05963cbb9a",
+  "content": "ant per session)\n    frame_bufs:   RefCell<Option<FrameBuffers>>, // resolution-keyed, reallocated on size change\n    device:       Arc<CudaDevice>,          // dropped last — destroys CUDA context\n    _not_send:    std::marker::PhantomData<*const ()>,\n}\nimpl CudaGrader {\n    /// Initialise CUDA device 0, load per-frame kernel PTX, and build combined LUT textures.\n    ///\n    /// Texture handles and zone boundaries are uploaded to device once here and reused\n    /// across all frames (they are constant for the lifetime of the grader).\n    pub fn new(calibration: &Calibration, params: &GradeParams) -> Result<Self, GpuError> {\n        let device = CudaDevice::new(0).map_err(|e| {\n            GpuError::ModuleLoad(format!(\"CudaDevice::new(0) failed: {e}\"))\n        })?;\n\n        // Load the per-frame lookup kernel PTX\n        device.load_ptx(\n            Ptx::from_src(COMBINED_LUT_PTX),\n            \"combined_lut\",\n            &[\"combined_lut_kernel\", \"combined_lut_kernel_16\"],\n        ).map_err(|e| GpuError::ModuleLoad(format!(\"load combined_lut PTX: {e}\")))?;\n\n        // Build combined LUT textures (GPU build kernel runs here, ~<1ms)\n        let combined_lut = CombinedLut::build(&device, calibration, params)?;\n\n        // Upload constant data to device once — these never change for this grader.\n        let d_textures = device.htod_sync_copy(&combined_lut.textures).map_err(map_cudarc_error)?;\n        let d_boundaries = device.htod_sync_copy(&combined_lut.zone_boundaries).map_err(map_cudarc_error)?;\n\n        Ok(Self {\n            combined_lut,\n            d_textures,\n            d_boundaries,\n            frame_bufs: RefCell::new(None),\n            device,\n            _not_send: std::marker::PhantomData,\n        })\n    }",
+  "source_version": "crates/dorea-gpu/src/cuda/mod.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229773565Z",
+  "valid_from": "2026-04-11T00:04:13.229773565Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cuda/mod.rs",
+    "language": "rs",
+    "chunk_type": "impl_item",
+    "start_line": 111,
+    "end_line": 143,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d63f7a1b4b51",
+  "content": "                       for c in 0..3 {\n                                sad += (curr[ci + c] as i64 - prev[pi + c] as i64).unsigned_abs();\n                            }\n                        }\n                    }\n\n                    if sad < best_sad {\n                        best_sad = sad;\n                        best_dx = dx;\n                        best_dy = dy;\n                    }\n                }\n            }\n\n            block_vectors[by * bw + bx] = [best_dx as f32, best_dy as f32];\n        }\n    }\n\n    // Upsample block vectors to pixel resolution via bilinear interpolation\n    let mut vectors = vec![[0.0f32; 2]; width * height];\n    for y in 0..height {\n        for x in 0..width {\n            let bx_f = (x as f32 + 0.5) / BLOCK_SIZE as f32 - 0.5;\n            let by_f = (y as f32 + 0.5) / BLOCK_SIZE as f32 - 0.5;\n            let bx0 = (bx_f.floor() as i32).clamp(0, bw as i32 - 1) as usize;\n            let by0 = (by_f.floor() as i32).clamp(0, bh as i32 - 1) as usize;\n            let bx1 = (bx0 + 1).min(bw - 1);\n            let by1 = (by0 + 1).min(bh - 1);\n            let fx = (bx_f - bx0 as f32).clamp(0.0, 1.0);\n            let fy = (by_f - by0 as f32).clamp(0.0, 1.0);\n\n            for c in 0..2 {\n                let v00 = block_vectors[by0 * bw + bx0][c];\n                let v10 = block_vectors[by0 * bw + bx1][c];\n                let v01 = block_vectors[by1 * bw + bx0][c];\n                let v11 = block_vectors[by1 * bw + bx1][c];\n                vectors[y * width + x][c] = v00 * (1.0 - fx) * (1.0 - fy)\n                    + v10 * fx * (1.0 - fy)\n                    + v01 * (1.0 - fx) * fy\n                    + v11 * fx * fy;\n            }\n        }\n    }\n\n    MotionField { vectors, width, height }\n}",
+  "source_version": "crates/dorea-cli/src/optical_flow.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229492836Z",
+  "valid_from": "2026-04-11T00:04:13.229492836Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/optical_flow.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 67,
+    "end_line": 105,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

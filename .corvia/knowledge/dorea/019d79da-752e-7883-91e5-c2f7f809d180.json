@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c2f7f809d180",
+  "content": ", fill=(220, 220, 220), font=font_small)\n        x += col_widths[3]\n        draw.text((x, y_footer), f\"{t:.1f}\", fill=(220, 220, 220), font=font_small)\n        y_footer += 16\n\n    out_path.parent.mkdir(parents=True, exist_ok=True)\n    canvas.save(out_path)\ndef _find_disagreement_crop(\n    method_deltas: dict[str, torch.Tensor],\n    crop_size: int = 400,\n) -> tuple[int, int]:\n    \"\"\"Find the top-left (y, x) of the crop_size × crop_size window with the\n    highest across-method variance in delta_method.\n\n    All values in ``method_deltas`` must have the same (1, 3, H, W) shape.\n    The driver is responsible for filtering out OOM/failed methods before\n    calling this function.\n    \"\"\"\n    stacked = torch.stack([d.squeeze(0) for d in method_deltas.values()], dim=0)  # (M, 3, H, W)\n    var = stacked.var(dim=0).mean(dim=0)  # (H, W)\n    H, W = var.shape\n    # Coarse integral image to find max-sum window\n    import torch.nn.functional as F\n    kernel = torch.ones(1, 1, crop_size, crop_size, device=var.device)\n    summed = F.conv2d(var.unsqueeze(0).unsqueeze(0), kernel, stride=crop_size // 4)\n    idx = summed.flatten().argmax().item()\n    sh, sw = summed.shape[-2], summed.shape[-1]\n    r = idx // sw\n    c = idx % sw\n    y = r * (crop_size // 4)\n    x = c * (crop_size // 4)\n    y = min(max(y, 0), H - crop_size)\n    x = min(max(x, 0), W - crop_size)\n    return y, x",
+  "source_version": "benchmarks/upscale_bench/visualize.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230280865Z",
+  "valid_from": "2026-04-11T00:04:13.230280865Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/visualize.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 208,
+    "end_line": 234,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

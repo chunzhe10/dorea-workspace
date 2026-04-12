@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-ecf50cd7512a",
+  "content": "ame dimensions overflow usize\".into())\n    })?;\n    Ok(FrameBuffers16 {\n        width,\n        height,\n        d_pixels_in: dev.alloc_zeros(n * 3).map_err(map_cudarc_error)?,\n        d_pixels_out: dev.alloc_zeros(n * 3).map_err(map_cudarc_error)?,\n    })\n}\npub struct CudaGrader {\n    combined_lut: CombinedLut,              // dropped first — CUDA APIs require live context\n    d_textures:   CudaSlice<u64>,           // texture handles (constant per session)\n    d_boundaries: CudaSlice<f32>,           // zone boundaries (constant per session)\n    frame_bufs:   RefCell<Option<FrameBuffers>>, // resolution-keyed, reallocated on size change\n    device:       Arc<CudaDevice>,          // dropped last — destroys CUDA context\n    _not_send:    std::marker::PhantomData<*const ()>,\n}",
+  "source_version": "crates/dorea-gpu/src/cuda/mod.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229773027Z",
+  "valid_from": "2026-04-11T00:04:13.229773027Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cuda/mod.rs",
+    "language": "rs",
+    "chunk_type": "struct_item",
+    "start_line": 101,
+    "end_line": 108,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

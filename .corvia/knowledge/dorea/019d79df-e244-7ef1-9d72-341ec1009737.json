@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-341ec1009737",
+  "content": "### Task 3: Python Server Enhancement Handler (issue #18)\n\n# Force mock mode before any imports\nos.environ[\"DOREA_MAXINE_MOCK\"] = \"1\"\n\n\ndef _make_enhance_req(width: int, height: int, req_id: str = \"f001\") -> dict:\n    pixels = np.zeros((height, width, 3), dtype=np.uint8)\n    b64 = base64.b64encode(pixels.tobytes()).decode(\"ascii\")\n    return {\n        \"type\": \"enhance\",\n        \"id\": req_id,\n        \"format\": \"raw_rgb\",\n        \"image_b64\": b64,\n        \"width\": width,\n        \"height\": height,\n        \"artifact_reduce\": True,\n        \"upscale_factor\": 2,\n    }\n\n\ndef _run_server_with_reqs(requests: list, extra_argv: list = None) -> list:\n    \"\"\"Run main() with a sequence of requests, return parsed responses.\"\"\"\n    from dorea_inference.server import main\n\n    lines = [json.dumps(r) for r in requests] + ['{\"type\": \"shutdown\"}']\n    stdin_data = \"\\n\".join(lines) + \"\\n\"\n\n    captured = io.StringIO()\n    old_stdin = sys.stdin\n    old_stdout = sys.stdout\n    sys.stdin = io.StringIO(stdin_data)\n    sys.stdout = captured\n\n    argv = [\"--no-raune\", \"--no-depth\"] + (extra_argv or [])\n    try:\n        main(argv=argv)\n    except SystemExit:\n        pass\n    finally:\n        sys.stdin = old_stdin\n        sys.stdout = old_stdout\n\n    output = captured.getvalue().strip()\n    return [json.loads(line) for line in output.split(\"\\n\") if line.strip()]\n\n\ndef test_enhance_handler_returns_enhance_result():\n    req = _make_enhance_req(4, 6)\n    responses = _run_server_with_reqs([req], extra_argv=[\"--maxine\"])",
+  "source_version": "plans/2026-04-04-maxine-enhancement-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836808978Z",
+  "valid_from": "2026-04-11T00:10:08.836808978Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-maxine-enhancement-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 385,
+    "end_line": 432,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-372e8525a1ef",
+  "content": "### Task 4: pyo3 backend — Maxine + lifecycle support\n\n\n```rust\npub struct InferenceServer {\n    bridge: Py<PyModule>,\n    _not_send: PhantomData<*const ()>,\n}\n```\n\nTo:\n\n```rust\npub struct InferenceServer {\n    bridge: Py<PyModule>,\n    /// Device string captured at spawn time (e.g. \"cuda\" or \"cpu\").\n    device: String,\n    _not_send: PhantomData<*const ()>,\n}\n```\n\nUpdate `spawn()` — find the `Ok(Self { ... })` at the end and add `device: device.to_string()`:\n\n```rust\n            Ok(Self {\n                bridge: bridge.unbind(),\n                device: device.to_string(),\n                _not_send: PhantomData,\n            })\n```\n\n- [ ] **Step 5: Update spawn() to conditionally load Maxine**\n\nIn `spawn()`, after the `if !config.skip_raune { Self::call_load_raune(...) }` block and before `Ok(Self { ... })`, add:\n\n```rust\n            // Load depth model unless skipped.\n            if !config.skip_depth {\n                Self::call_load_depth(py, &bridge, depth_path, device)?;\n            }\n\n            // Load Maxine model if requested.\n            if config.maxine {\n                Self::call_load_maxine(py, &bridge, config.maxine_upscale_factor, device)?;\n            }\n```\n\n**Note:** Remove the existing `Self::call_load_depth(...)` call that's currently unconditional (it's at the top of the `Python::with_gil` block). The new code replaces it with a conditional version.\n\nAdd the new private helper:\n\n```rust\n    fn call_load_maxine(\n        py: Python<'_>,\n        bridge: &Bound<'_, PyModule>,\n        upscale_factor: u32,\n        _device: &str,\n    ) -> Result<(), InferenceError> {\n        bridge\n            .call_method1(\"load_maxine_model\", (upscale_factor as i64,))\n            .map_err(|e| InferenceError::InitFailed(format!(\"load_maxine_model: {e}\")))?;\n        Ok(())",
+  "source_version": "plans/2026-04-04-maxine-pipeline-architecture.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836855025Z",
+  "valid_from": "2026-04-11T00:10:08.836855025Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-maxine-pipeline-architecture.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 593,
+    "end_line": 652,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

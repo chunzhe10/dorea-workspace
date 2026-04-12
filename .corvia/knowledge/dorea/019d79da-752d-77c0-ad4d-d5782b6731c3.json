@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d5782b6731c3",
+  "content": ") -> std::result::Result<InputEncoding, String> {\n    match s {\n        \"srgb\" => Ok(InputEncoding::Srgb),\n        \"dlog_m\" => Ok(InputEncoding::DlogM),\n        other => Err(format!(\"unknown input encoding '{other}'; expected 'srgb' or 'dlog_m'\")),\n    }\n}\npub fn run(args: CalibrateArgs, cfg: &crate::config::DoreaConfig) -> Result<()> {\n    // Logging is already initialised by main() based on the verbose flag.\n    log::info!(\"dorea calibrate — scanning keyframes in {:?}\", args.keyframes);\n\n    // Determine whether we need the inference subprocess\n    let need_inference = args.targets.is_none() || args.depth.is_none();\n    let mut inf_server: Option<InferenceServer> = None;\n\n    if need_inference {\n        let python = args.python.clone()\n            .or_else(|| cfg.models.python.clone())\n            .unwrap_or_else(|| std::path::PathBuf::from(\"/opt/dorea-venv/bin/python\"));\n        let raune_weights = args.raune_weights.clone().or_else(|| cfg.models.raune_weights.clone());\n        let raune_models_dir = args.raune_models_dir.clone().or_else(|| cfg.models.raune_models_dir.clone());\n        let depth_model = args.depth_model.clone().or_else(|| cfg.models.depth_model.clone());\n        let device = if args.cpu_only { Some(\"cpu\".to_string()) } else { cfg.inference.device.clone() };\n\n        log::info!(\"Spawning inference subprocess for auto-generation of missing inputs...\");\n        let cfg = InferenceConfig {\n            python_exe: python,\n            raune_weights,\n            raune_models_dir,\n            skip_raune: false,\n            depth_model,",
+  "source_version": "crates/dorea-cli/src/calibrate.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229483001Z",
+  "valid_from": "2026-04-11T00:04:13.229483001Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/calibrate.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 178,
+    "end_line": 201,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

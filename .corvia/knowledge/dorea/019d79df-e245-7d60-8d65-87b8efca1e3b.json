@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-87b8efca1e3b",
+  "content": "034186147f*mc + 1.6825422694f*sc;\n\n    *r_out = fminf(fmaxf(linear_to_srgb(fmaxf(rl, 0.0f)), 0.0f), 1.0f);\n    *g_out = fminf(fmaxf(linear_to_srgb(fmaxf(gl, 0.0f)), 0.0f), 1.0f);\n    *b_out = fminf(fmaxf(linear_to_srgb(fmaxf(bl, 0.0f)), 0.0f), 1.0f);\n}\n```\n\n- [ ] **Step 6: Build the CUDA kernels**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ncargo build -p dorea-gpu\n```\n\nExpected: compiles without errors. All three `.cu` files that include `grade_pixel.cuh` (`build_combined_lut.cu`, `combined_lut.cu`, `postprocess.cu`) pick up the new OKLab functions.\n\n- [ ] **Step 7: Run full test suite**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ncargo test -p dorea-gpu --lib\n```\n\nExpected: all tests pass. If any test compares CPU output against CUDA output with tight tolerances, the tolerances may need loosening slightly since OKLab produces different values than CIELab for the same input. Acceptable delta: any pixel-level difference < 3/255 (imperceptible).\n\n- [ ] **Step 8: Commit**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ngit add crates/dorea-gpu/src/cuda/kernels/grade_pixel.cuh\ngit commit -m \"feat(gpu): OKLab + __powf in CUDA grade pipeline\n\nReplace CIELab with OKLab in grade_pixel.cuh (matches lab.rs change).\nSwitch powf → __powf for sRGB gamma (~2× faster on SFU, ~2 ULP accuracy,\ninvisible at 10-bit).\n\nRef: docs/decisions/2026-04-09-oklab-grade-pipeline.md\"\n```\n\n---\n",
+  "source_version": "plans/2026-04-09-oklab-grade-pipeline.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837064505Z",
+  "valid_from": "2026-04-11T00:10:08.837064505Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-09-oklab-grade-pipeline.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 346,
+    "end_line": 380,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

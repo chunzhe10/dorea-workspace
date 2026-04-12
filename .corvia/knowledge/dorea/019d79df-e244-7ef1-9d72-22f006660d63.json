@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-22f006660d63",
+  "content": " width,\n                    height,\n                    params,\n                    calibration,\n                ));\n            }\n            Err(e) => {\n                log::warn!(\"CUDA grading failed ({e}), falling back to CPU\");\n            }\n        }\n    }\n\n    cpu::grade_frame_cpu(pixels, depth, width, height, calibration, params)\n        .map_err(|e| GpuError::InvalidInput(e.to_string()))\n}\n```\n\n- [ ] **Step 4: Fix any unused import warnings in `cuda/mod.rs`**\n\nRemove `use dorea_color::lab::{srgb_to_lab, lab_to_srgb};` from the `#[cfg(feature = \"cuda\")]` imports at the top of `cuda/mod.rs` (it's no longer needed since warmth calculation was removed):\n\nThe `use` block at lines 7-12 of `cuda/mod.rs` should become:\n\n```rust\n#[cfg(feature = \"cuda\")]\nuse crate::{GradeParams, GpuError};\n#[cfg(feature = \"cuda\")]\nuse dorea_cal::Calibration;\n```\n\n(Remove the `dorea_color` import line.)\n\n- [ ] **Step 5: Build and verify**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ncargo build -p dorea-gpu 2>&1 | tail -30\n```\n\nExpected: compiles cleanly, no errors, possibly no warnings.\n\n- [ ] **Step 6: Run all tests**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ncargo test -p dorea-gpu 2>&1 | tail -30\n```\n\nExpected: all tests pass.\n\n- [ ] **Step 7: Commit**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ngit add crates/dorea-gpu/src/cuda/mod.rs crates/dorea-gpu/src/lib.rs\ngit commit -m \"fix(dorea-gpu): move depth_aware_ambiance out of CUDA path to CPU-only finish pass\"\n```\n\n---\n",
+  "source_version": "plans/2026-04-02-depth-aware-ambiance-cpu-move.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836559674Z",
+  "valid_from": "2026-04-11T00:10:08.836559674Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-depth-aware-ambiance-cpu-move.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 357,
+    "end_line": 406,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

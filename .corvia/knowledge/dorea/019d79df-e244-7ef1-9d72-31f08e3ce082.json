@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-31f08e3ce082",
+  "content": "        # Lazy init on first call (needs dimensions)\n        # RGB → BGRA (Maxine expects BGRA interleaved uint8)\n\n        # Upload to CUDA tensor via DLPack\n        tensor = torch.from_numpy(bgra).cuda()\n\n\n        # 1. Artifact reduction at original resolution (if enabled and ≤1080p)\n        if artifact_reduce:\n            if height <= 1080 and width <= 1920:\n                tensor = self._ar_effect.run(tensor)\n            elif self._total_count == 1:\n                log.warning(\n                    \"Artifact reduction skipped: input %dx%d exceeds 1080p limit\",\n                    width, height,\n                )\n",
+  "source_version": "plans/2026-04-03-maxine-enhancement-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836779670Z",
+  "valid_from": "2026-04-11T00:10:08.836779670Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-maxine-enhancement-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 231,
+    "end_line": 243,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

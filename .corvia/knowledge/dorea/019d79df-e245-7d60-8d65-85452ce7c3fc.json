@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-85452ce7c3fc",
+  "content": "    int py = idx / frame_w;\n        float mx = (float)px * (float)(mask_w - 1) / (float)(frame_w - 1);\n        float my = (float)py * (float)(mask_h - 1) / (float)(frame_h - 1);\n        int mi = min((int)my, mask_h - 1) * mask_w + min((int)mx, mask_w - 1);\n        if (class_mask[mi] > 0) {\n            d = diver_depth;\n        }\n    }\n\n    float gs = (float)(grid_size - 1);\n\n    // --- Sample texture set A (identical) ---\n    float total_w_a = 0.0f;\n    float4 blended_a = {0.0f, 0.0f, 0.0f, 0.0f};\n    for (int z = 0; z < n_zones; z++) {\n        float z_lo = zone_boundaries_a[z];\n        float z_hi = zone_boundaries_a[z + 1];\n        float z_width = z_hi - z_lo;\n        if (z_width < 1e-6f) continue;\n        float z_center = 0.5f * (z_lo + z_hi);\n        float dist = fabsf(d - z_center);\n        float blend_radius = z_width * 2.0f;\n        float w = fmaxf(1.0f - dist / blend_radius, 0.0f);\n        w = w * w;\n        if (w < 1e-6f) continue;\n        cudaTextureObject_t tex = (cudaTextureObject_t)textures_a[z];\n        float4 s = tex3D<float4>(tex, r * gs, g * gs, b * gs);\n        blended_a.x += s.x * w;\n        blended_a.y += s.y * w;\n        blended_a.z += s.z * w;\n        total_w_a += w;\n    }\n",
+  "source_version": "plans/2026-04-08-10bit-pipeline-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837032269Z",
+  "valid_from": "2026-04-11T00:10:08.837032269Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-08-10bit-pipeline-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1241,
+    "end_line": 1269,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

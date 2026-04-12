@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-39c7d99ff6db",
+  "content": "NEW active index.\n    pub(crate) fn swap(&mut self) -> usize {\n        self.active = 1 - self.active;\n        self.active\n    }\n\n    /// Get the active and inactive texture sets for dual-texture grading.\n    pub(crate) fn active_textures(&self) -> &[u64] {\n        &self.sets[self.active].textures\n    }\n\n    pub(crate) fn active_boundaries(&self) -> &[f32] {\n        &self.sets[self.active].zone_boundaries\n    }\n\n    pub(crate) fn inactive_textures(&self) -> &[u64] {\n        &self.sets[1 - self.active].textures\n    }\n\n    pub(crate) fn inactive_boundaries(&self) -> &[f32] {\n        &self.sets[1 - self.active].zone_boundaries\n    }\n}\n```\n\n- [ ] **Step 5: Load build_combined_lut PTX in mod.rs**\n\nIn `crates/dorea-gpu/src/cuda/mod.rs`, add alongside the existing PTX include (near line 26):\n\n```rust\n#[cfg(feature = \"cuda\")]\nconst BUILD_COMBINED_LUT_PTX: &str = include_str!(concat!(env!(\"OUT_DIR\"), \"/build_combined_lut.ptx\"));\n```\n\nAnd load it in the grader initialization (we'll add this in Task 6).\n\n- [ ] **Step 6: Verify it compiles**\n\nRun: `cd /workspaces/dorea-workspace/repos/dorea && cargo check -p dorea-gpu --features cuda`\nExpected: compiles (existing CudaGrader still exists, AdaptiveLut is additive)\n\n- [ ] **Step 7: Commit**\n\n```bash\ngit add crates/dorea-gpu/src/cuda/combined_lut.rs crates/dorea-gpu/src/cuda/mod.rs\ngit commit -m \"feat(cuda): AdaptiveLut with double-buffer texture management\n\nReplaces single-shot CombinedLut::build with AdaptiveLut that holds\ntwo TextureSets, supports per-keyframe rebuild_set() and per-segment\nload_segment(). Kernel reads from 32-zone base LUT, outputs to\n8-zone runtime textures.\"\n```\n\n---\n",
+  "source_version": "plans/2026-04-04-per-keyframe-adaptive-depth-zones-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836901327Z",
+  "valid_from": "2026-04-11T00:10:08.836901327Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-per-keyframe-adaptive-depth-zones-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 968,
+    "end_line": 1014,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

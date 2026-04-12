@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-376030b934a0",
+  "content": "pected: no errors\n\n- [ ] **Step 8: Commit**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ngit add crates/dorea-video/src/inference/pyo3_backend.rs\ngit commit -m \"feat(pyo3): add Maxine support, skip_depth, lifecycle methods to pyo3 backend\"\n```\n\n---\n\n### Task 5: grade.rs — single-server lifecycle, remove Path B, --no-maxine default\n\n**Files:**\n- Modify: `crates/dorea-cli/src/grade.rs`\n\nThis is the largest single-file change. Three things happen together because they're all interdependent:\n1. Remove Path B (`--calibration` flag)\n2. Change `--maxine` opt-in to `--no-maxine` opt-out\n3. Restructure to single-server lifecycle (Maxine-only at spawn → lifecycle transition after Pass 1)\n\n- [ ] **Step 1: Write the failing tests**\n\nAt the bottom of `grade.rs`, in `mod tests { ... }`, add:\n\n```rust\n    #[test]\n    fn build_inference_config_maxine_true_by_default() {\n        let args = GradeArgs {\n            input: PathBuf::from(\"/dev/null\"),\n            output: None,\n            no_maxine: false,\n            no_maxine_artifact_reduction: false,\n            maxine_upscale_factor: 2,\n            warmth: 1.0,\n            strength: 0.8,\n            contrast: 1.0,\n            proxy_size: 518,\n            depth_skip_threshold: 0.005,\n            depth_max_interval: 12,",
+  "source_version": "plans/2026-04-04-maxine-pipeline-architecture.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836858870Z",
+  "valid_from": "2026-04-11T00:10:08.836858870Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-maxine-pipeline-architecture.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 773,
+    "end_line": 801,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

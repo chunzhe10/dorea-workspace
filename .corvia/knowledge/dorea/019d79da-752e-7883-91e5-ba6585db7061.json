@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-ba6585db7061",
+  "content": "NING: infer_batch: images have different post-resize \"\n                f\"dims {dims}; falling back to sequential inference (performance penalty)\",\n                file=sys.stderr,\n            )\n            return [self.infer(img, max_size) for img in imgs]\n\n        arrays = []\n        for r in resized:\n            arr = np.array(r).astype(np.float32) / 255.0\n            arr = (arr - self._MEAN) / self._STD\n            arrays.append(torch.from_numpy(arr).permute(2, 0, 1))\n\n        batch = torch.stack(arrays)\n        if self.device.type == \"cuda\":\n            batch = batch.pin_memory().to(self.device, non_blocking=True)\n        else:\n            batch = batch.to(self.device)\n\n        with torch.no_grad():\n            outputs = self.model(pixel_values=batch)\n\n        depths = outputs.predicted_depth.cpu().numpy()  # (N, H, W)\n\n        result = []\n        for i in range(len(imgs)):\n            depth = depths[i]\n            d_min, d_max = float(depth.min()), float(depth.max())\n            if d_max - d_min < 1e-6:\n                depth = np.zeros_like(depth, dtype=np.float32)\n            else:\n                depth = ((depth - d_min) / (d_max - d_min)).astype(np.float32)\n            result.append(depth)\n\n        return result",
+  "source_version": "python/dorea_inference/depth_anything.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230034925Z",
+  "valid_from": "2026-04-11T00:04:13.230034925Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/depth_anything.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 139,
+    "end_line": 167,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

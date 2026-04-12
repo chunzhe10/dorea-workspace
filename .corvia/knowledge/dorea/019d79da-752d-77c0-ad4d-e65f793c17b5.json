@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-e65f793c17b5",
+  "content": ",\n            skip_raune: false,\n            depth_model: None,\n            device: None,\n            startup_timeout: Duration::from_secs(120),\n            maxine: false,\n            maxine_upscale_factor: 2,\n            skip_depth: false,\n        }\n    }\npub struct RauneDepthBatchItem {\n    pub id: String,\n    /// Raw RGB24 pixels, row-major.\n    pub pixels: Vec<u8>,\n    pub width: usize,\n    pub height: usize,\n    /// Max long-edge for RAUNE resize (pixels).\n    pub raune_max_size: usize,\n    /// Max long-edge for depth resize (pixels, must be ≤518 for Depth Anything).\n    pub depth_max_size: usize,\n}",
+  "source_version": "crates/dorea-video/src/inference/pyo3_backend.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229690354Z",
+  "valid_from": "2026-04-11T00:04:13.229690354Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference/pyo3_backend.rs",
+    "language": "rs",
+    "chunk_type": "struct_item",
+    "start_line": 71,
+    "end_line": 81,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

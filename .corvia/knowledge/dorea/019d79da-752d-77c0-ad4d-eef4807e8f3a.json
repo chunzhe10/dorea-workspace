@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-eef4807e8f3a",
+  "content": "// resolution-keyed (u16 path)\n    stage_mask:   u32,                         // per-frame kernel stage bitmask\n    device:       Arc<CudaDevice>,            // dropped last — destroys CUDA context\n    _not_send:    std::marker::PhantomData<*const ()>,\n}\nimpl AdaptiveGrader {\n    /// Initialize CUDA device, load both kernels, allocate double-buffered textures.\n    ///\n    /// Texture handles are uploaded to device once. Boundaries are uploaded and\n    /// refreshed on `prepare_keyframe()` / `swap_textures()`.\n    pub fn new(\n        base_luts_flat: &[f32],\n        base_boundaries: &[f32],\n        base_n_zones: usize,\n        hsl_data: (&[f32], &[f32], &[f32], &[f32]),\n        params: &GradeParams,\n        lut_size: usize,\n        runtime_n_zones: usize,\n    ) -> Result<Self, GpuError> {\n        let device = CudaDevice::new(0).map_err(|e| {\n            GpuError::ModuleLoad(format!(\"CudaDevice::new(0) failed: {e}\"))\n        })?;\n\n        device.load_ptx(\n            Ptx::from_src(COMBINED_LUT_PTX),\n            \"combined_lut\",\n            &[\"combined_lut_kernel\", \"combined_lut_kernel_16\"],\n        ).map_err(|e| GpuError::ModuleLoad(format!(\"load combined_lut PTX: {e}\")))?;\n\n        device.load_ptx(\n            Ptx::from_src(BUILD_COMBINED_LUT_PTX),\n            \"build_combined_lut\",\n            &[\"build_combined_lut_kernel\"],\n        ).map_err(|e| GpuError::ModuleLoad(format!(\"load build_combined_lut PTX: {e}\")))?;\n\n        let adaptive_lut = combined_lut::AdaptiveLut::new(\n            &device,\n            base_luts_flat,\n            base_boundaries,\n            base_n_zones,\n            hsl_data,\n            (params.warmth, params.strength, params.contrast),\n            lut_size,\n            runtime_n_zones,\n            params.stage_mask,\n        )?;\n\n        // Cache texture handles on device — CUtexObject values are stable after\n        // TextureSet::allocate(); only the 3D array content changes on rebuild.\n        let d_textures_a = device.htod_sync_copy(adaptive_lut.active_textures()).map_err(map_cudarc_error)?;\n        let d_textures_b = device.htod_sync_copy(adaptive_lut.inactive_textures()).map_err(map_cudarc_error)?;\n        let d_bounds_a = device.htod_sync_copy(adaptive_lut.active_boundaries()).map_err(map_cudarc_error)?;",
+  "source_version": "crates/dorea-gpu/src/cuda/mod.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229797345Z",
+  "valid_from": "2026-04-11T00:04:13.229797345Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cuda/mod.rs",
+    "language": "rs",
+    "chunk_type": "impl_item",
+    "start_line": 560,
+    "end_line": 606,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

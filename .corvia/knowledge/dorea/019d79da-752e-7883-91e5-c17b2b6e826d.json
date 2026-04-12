@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c17b2b6e826d",
+  "content": "def test_unload_maxine_returns_ok():\n    responses = _run_server([{\"type\": \"unload_maxine\"}], extra_argv=[\"--maxine\"])\n    assert responses[0][\"type\"] == \"ok\"\ndef test_load_raune_returns_ok():\n    import dorea_inference.raune_net as rn_mod\n    original_class = rn_mod.RauneNetInference\n\n    class _FakeRaune:\n        def __init__(self, **kwargs):\n            pass  # no-op — avoid real weight loading in test environment\n\n    rn_mod.RauneNetInference = _FakeRaune\n    try:\n        responses = _run_server([{\"type\": \"load_raune\", \"weights\": None, \"models_dir\": None}])\n        assert responses[0][\"type\"] == \"ok\"\n    finally:\n        rn_mod.RauneNetInference = original_class",
+  "source_version": "python/tests/test_lifecycle_server.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230260485Z",
+  "valid_from": "2026-04-11T00:04:13.230260485Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/tests/test_lifecycle_server.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 38,
+    "end_line": 51,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

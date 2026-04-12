@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-06ab9421e83e",
+  "content": "## Reproducibility\n## Testing\n\n### Per-method smoke tests (`tests/test_methods.py`)\n\n```python\nimport pytest\nimport torch\nfrom benchmarks.upscale_bench.methods import REGISTRY\n\n@pytest.mark.parametrize(\"method_name\", list(REGISTRY.keys()))\ndef test_method_smoke(method_name):\n    method = REGISTRY[method_name]\n    delta_proxy = torch.randn(1, 3, 36, 64, device=\"cuda\", dtype=torch.float32) * 0.1\n    orig_full = torch.rand(1, 3, 72, 128, device=\"cuda\", dtype=torch.float32)\n    out = method(delta_proxy, orig_full, full_size=(72, 128))\n    assert out.shape == (1, 3, 72, 128)\n    assert out.dtype == torch.float32\n    assert out.device.type == \"cuda\"\n    assert torch.isfinite(out).all()\n    assert out.abs().max() < 1.0  # OKLab deltas are small\n```\n\nTests that rely on heavy deps (`nvvfx`, `realesrgan`) use `pytest.importorskip`.\n\n\n### End-to-end smoke test (`tests/test_e2e.py`)\n\nOne pytest that invokes `python -m benchmarks.upscale_bench.run --methods bilinear,bicubic --frames <single frame> --out-dir <tmp>` via `subprocess` on a tiny synthetic 10-frame 4K clip (generated once via `ffmpeg` at test collection time, cached in `tests/fixtures/`). Asserts:\n\n- `metrics.csv` exists and has exactly 2 method rows\n- `summary_grid.png` exists and is a valid PNG\n- `run_report.md` exists\n- Return code is 0\n\nThis catches integration breakage (bad CLI wiring, wrong output paths) without being slow.\n",
+  "source_version": "decisions/2026-04-10-delta-upscale-bench-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836209721Z",
+  "valid_from": "2026-04-11T00:10:08.836209721Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-10-delta-upscale-bench-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 575,
+    "end_line": 607,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

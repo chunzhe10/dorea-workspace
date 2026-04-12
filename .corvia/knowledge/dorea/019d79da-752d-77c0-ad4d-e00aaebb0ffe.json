@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-e00aaebb0ffe",
+  "content": "Encoding::ILog));\n        assert_eq!(\"srgb\".parse::<InputEncoding>(), Ok(InputEncoding::Srgb));\n        assert_eq!(\"rec709\".parse::<InputEncoding>(), Ok(InputEncoding::Srgb));\n        assert!(\"unknown\".parse::<InputEncoding>().is_err());\n    }\n\n    #[test]\n    fn input_encoding_is_10bit() {\n        assert!(InputEncoding::DLogM.is_10bit());\n        assert!(InputEncoding::ILog.is_10bit());\n        assert!(!InputEncoding::Srgb.is_10bit());\n    }\n\n    #[test]\n    fn input_encoding_display() {\n        assert_eq!(InputEncoding::DLogM.to_string(), \"dlog-m\");\n        assert_eq!(InputEncoding::ILog.to_string(), \"ilog\");\n        assert_eq!(InputEncoding::Srgb.to_string(), \"srgb\");\n    }\n\n    // ---- Task 6 tests ----\n\n    #[test]\n    fn frame16_to_8bit() {\n        // u16 value 0xFF00 should downshift to 0xFF.\n        let frame = Frame16 {\n            index: 0,\n            pixels: vec![0xFF00u16, 0x8000u16, 0x0100u16],\n            width: 1,\n            height: 1,\n        };\n        let eight = frame.to_8bit();\n        assert_eq!(eight[0], 0xFF);\n        assert_eq!(eight[1], 0x80);\n        assert_eq!(eight[2], 0x01);\n    }\n\n    // ---- Task 7 tests ----\n\n    #[test]\n    fn output_codec_is_10bit() {\n        assert!(OutputCodec::ProRes.is_10bit());\n        assert!(OutputCodec::Hevc10.is_10bit());\n        assert!(!OutputCodec::H264.is_10bit());\n    }\n\n    #[test]\n    fn output_codec_bytes_per_pixel() {\n        assert_eq!(OutputCodec::ProRes.bytes_per_pixel(), 6);\n        assert_eq!(OutputCodec::Hevc10.bytes_per_pixel(), 6);\n        assert_eq!(OutputCodec::H264.bytes_per_pixel(), 3);\n    }\n\n    #[test]",
+  "source_version": "crates/dorea-video/src/ffmpeg.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229607810Z",
+  "valid_from": "2026-04-11T00:04:13.229607810Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/ffmpeg.rs",
+    "language": "rs",
+    "chunk_type": "mod_item",
+    "start_line": 1144,
+    "end_line": 1190,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

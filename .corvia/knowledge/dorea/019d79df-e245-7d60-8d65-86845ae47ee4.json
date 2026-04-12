@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-86845ae47ee4",
+  "content": "# ... existing fields ...\n# input_encoding = \"auto\"  # auto-detect from container/codec\n\n# output_codec = \"auto\"    # \"prores\" for 10-bit, \"h264\" for 8-bit\n```\n\nThese are commented out since auto-detection is the default. Document them for users.\n\n- [ ] **Step 2: Commit**\n\n```bash\ngit add dorea.toml\ngit commit -m \"chore: document 10-bit config options in dorea.toml\"\n```\n\n---\n",
+  "source_version": "plans/2026-04-08-10bit-pipeline-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837049498Z",
+  "valid_from": "2026-04-11T00:10:08.837049498Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-08-10bit-pipeline-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1963,
+    "end_line": 1976,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

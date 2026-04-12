@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-3a9c638c447a",
+  "content": "                   h_width:  qual.h_width,\n                    h_offset: 0.0,\n                    s_ratio:  1.0,\n                    v_offset: 0.0,\n                    weight:   0.0,\n                });\n            }\n        }\n\n        SegmentCalibration {\n            depth_luts,\n            hsl_corrections: HslCorrections(avg_corrections),\n        }\n    }).collect();\n\n    log::info!(\n        \"Pre-compute complete: {} segments, {} per-KF zone sets\",\n        segment_calibrations.len(), smoothed_kf_zones.len(),\n    );\n\n    // Build segment-to-keyframe index lookup\n    let kf_to_segment: Vec<usize> = {\n        let mut map = vec![0usize; store.len()];\n        for (si, seg) in segments.iter().enumerate() {\n            for ki in seg.start..seg.end {\n                map[ki] = si;\n            }\n        }\n        map\n    };\n```\n\n- [ ] **Step 3: Replace CudaGrader init with AdaptiveGrader**\n\nReplace lines 595–606 with:\n\n```rust\n    // Initialize adaptive CUDA grader with first segment's base LUT\n    #[cfg(feature = \"cuda\")]\n    let mut adaptive_grader = {\n        let seg0 = &segment_calibrations[0];\n        let base_flat = seg0.depth_luts.flat_data();\n        let base_bounds = seg0.depth_luts.zone_boundaries();\n        let hsl = &seg0.hsl_corrections;\n        let h_offsets: Vec<f32> = hsl.0.iter().map(|q| q.h_offset).collect();\n        let s_ratios: Vec<f32> = hsl.0.iter().map(|q| q.s_ratio).collect();\n        let v_offsets: Vec<f32> = hsl.0.iter().map(|q| q.v_offset).collect();\n        let weights: Vec<f32> = hsl.0.iter().map(|q| q.weight).collect();\n\n        let grader = dorea_gpu::AdaptiveGrader::new(\n            &base_flat, base_bounds, base_lut_zones,\n            (&h_offsets, &s_ratios, &v_offsets, &weights),\n            &params, dorea_lut::build::LUT_SIZE, depth_zones,\n        ).context(\"AdaptiveGrader init failed\")?;\n\n        log::info!(\"Adaptive CUDA grader initialized ({base_lut_zones} base zones, {depth_zones} runtime zones)\");\n        grader",
+  "source_version": "plans/2026-04-04-per-keyframe-adaptive-depth-zones-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836915336Z",
+  "valid_from": "2026-04-11T00:10:08.836915336Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-per-keyframe-adaptive-depth-zones-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1525,
+    "end_line": 1571,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

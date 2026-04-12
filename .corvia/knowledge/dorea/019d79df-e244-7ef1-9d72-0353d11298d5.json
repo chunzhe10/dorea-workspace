@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-0353d11298d5",
+  "content": "### Rescale mapping\n### OKLab conversion path\n\n### `__powf` fast intrinsic for sRGB gamma\n\nThe sRGB piecewise gamma (`powf(2.4)` and `powf(1/2.4)`) is the most expensive per-pixel\noperation in both CIELab and OKLab paths. Replace `powf` with CUDA's `__powf` fast-math\nintrinsic, which uses 2 SFU cycles instead of ~10+ for IEEE-compliant `powf`.\n\nAccuracy drops from ~1 ULP to ~2 ULP — invisible at 10-bit (1024 levels need ~10 bits of\nprecision, `__powf` provides ~21 bits). Applied to both `srgb_to_linear` and\n`linear_to_srgb` in the CUDA kernel. The Rust CPU path (`lab.rs`) keeps standard `powf`\nsince CPU performance is not a bottleneck.\n\n\n### Performance impact\n\nTwo improvements stack:\n1. **OKLab conversion** — fewer ALU ops per pixel (drop XYZ step, drop `f_lab` conditional).\n   Estimated 5-15% faster on the LAB stage.\n2. **`__powf` intrinsic** — ~2× faster on the sRGB gamma step, which is the dominant cost\n   in the conversion. Estimated additional 10-20% on the LAB stage.\n\nCombined: estimated **15-30% faster on the LAB stage** of the per-pixel kernel. Since the\nLAB stage is one of four stages (LUT → HSL → LAB → strength), overall per-frame\nimprovement is estimated at **5-10%**.\n\nThe primary motivation remains perceptual uniformity, not speed.\n",
+  "source_version": "decisions/2026-04-09-oklab-grade-pipeline.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836171722Z",
+  "valid_from": "2026-04-11T00:10:08.836171722Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-09-oklab-grade-pipeline.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 56,
+    "end_line": 80,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

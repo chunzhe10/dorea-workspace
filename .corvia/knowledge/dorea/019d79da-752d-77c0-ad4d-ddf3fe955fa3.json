@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-ddf3fe955fa3",
+  "content": "pub struct Frame16 {\n    pub index: u64,\n    pub pixels: Vec<u16>, // RGB48: width * height * 3\n    pub width: usize,\n    pub height: usize,\n}\nimpl Frame16 {\n    /// Down-convert to 8-bit by keeping the high byte of each u16.\n    pub fn to_8bit(&self) -> Vec<u8> {\n        self.pixels.iter().map(|&v| (v >> 8) as u8).collect()\n    }\n}",
+  "source_version": "crates/dorea-video/src/ffmpeg.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229580830Z",
+  "valid_from": "2026-04-11T00:04:13.229580830Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/ffmpeg.rs",
+    "language": "rs",
+    "chunk_type": "impl_item",
+    "start_line": 512,
+    "end_line": 517,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

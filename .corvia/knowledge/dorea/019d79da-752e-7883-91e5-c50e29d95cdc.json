@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c50e29d95cdc",
+  "content": "nch, no thread-local needed).\n    delta_proxy is unused and discarded — the full-res pipeline recomputes\n    the delta from orig_full directly.\"\"\"\n    model = _get_injected_raune_model()\n    gold = _compute_gold(orig_full, model)\n    return gold.delta_4k\ndef _get_maxine_sr(output_width: int, output_height: int):\n    \"\"\"Lazy-load the Maxine VideoSuperRes effect. Hard-errors if nvvfx is missing.\n\n    The returned effect is configured for the given output dimensions. If those\n    match the current cached configuration, the expensive load() call is skipped.\n    \"\"\"\n    global _MAXINE_SR, _MAXINE_SR_DIMS\n    try:\n        from nvvfx import VideoSuperRes\n    except ImportError as e:\n        raise RuntimeError(\n            \"sr_maxine requires nvidia-vfx (imports as nvvfx). \"\n            \"Run scripts/setup_bench.sh or: pip install nvidia-vfx\"\n        ) from e\n\n    if _MAXINE_SR is None:\n        _MAXINE_SR = VideoSuperRes(quality=VideoSuperRes.QualityLevel.HIGH)\n\n    cur_dims = _MAXINE_SR_DIMS\n    if cur_dims != (output_width, output_height):\n        _MAXINE_SR.output_width = output_width\n        _MAXINE_SR.output_height = output_height\n        _MAXINE_SR.load()\n        _MAXINE_SR_DIMS = (output_width, output_height)\n\n    return _MAXINE_SR",
+  "source_version": "benchmarks/upscale_bench/methods.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230309896Z",
+  "valid_from": "2026-04-11T00:04:13.230309896Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/methods.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 458,
+    "end_line": 483,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

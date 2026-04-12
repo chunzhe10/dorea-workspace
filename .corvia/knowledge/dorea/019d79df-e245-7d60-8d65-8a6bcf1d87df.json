@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-8a6bcf1d87df",
+  "content": "        # Cast to model's dtype (fp16 if model.half() was called, fp32 otherwise).\n        # Match input dtype to model dtype to avoid PyTorch type mismatch errors.\n\n        # RAUNE inference (may run in fp16)\n        raune_out = model(proxy_batch)\n\n        # Cast back to fp32 for downstream OKLab math\n        raune_out = raune_out.float()\n        raune_out = ((raune_out + 1.0) / 2.0).clamp(0.0, 1.0)\n```\n\nThe key changes:\n1. Match input dtype to model dtype (`proxy_batch.to(model_dtype)`) — avoids type mismatch errors\n2. Cast `raune_out.float()` immediately after the forward pass — downstream OKLab math runs in fp32 (the Triton kernel already handles fp16 internally for memory but expects fp32 inputs, and the PyTorch fallback uses fp32)\n\nNote: `orig_proxy = (proxy_batch * 0.5 + 0.5)` is computed below this — it will use the fp16 `proxy_batch`. We need to fix that too.\n\n- [ ] **Step 3: Cast orig_proxy to fp32 in _process_batch**\n\nA few lines below the model call, find:\n\n```python",
+  "source_version": "plans/2026-04-10-direct-mode-fp16-batch.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837100945Z",
+  "valid_from": "2026-04-11T00:10:08.837100945Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-10-direct-mode-fp16-batch.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 90,
+    "end_line": 107,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

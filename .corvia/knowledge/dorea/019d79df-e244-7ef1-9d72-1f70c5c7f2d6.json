@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-1f70c5c7f2d6",
+  "content": "s (CUDA tests may skip if no GPU in container — that's fine,\nthe CPU fallback tests exercise the signature).\n\n- [ ] **Step 7: Commit**\n\n```bash\ngit add crates/dorea-gpu/\ngit commit -m \"feat(gpu): update CUDA kernels from u8 to f32 pixel format\"\n```\n\n---\n\n### Task 9: Persistent GPU LUT Resources\n\n**Files:**\n- Modify: `crates/dorea-gpu/src/cuda/mod.rs`\n- Modify: `crates/dorea-gpu/src/lib.rs`\n\n- [ ] **Step 1: Define GpuResources struct**\n\nAdd to `crates/dorea-gpu/src/cuda/mod.rs`:\n\n```rust\n#[cfg(feature = \"cuda\")]\nextern \"C\" {\n    fn cudaMalloc(devPtr: *mut *mut std::ffi::c_void, size: usize) -> i32;\n    fn cudaMemcpy(dst: *mut std::ffi::c_void, src: *const std::ffi::c_void, count: usize, kind: i32) -> i32;\n    fn cudaFree(devPtr: *mut std::ffi::c_void) -> i32;\n}\n\n#[cfg(feature = \"cuda\")]\nconst CUDA_MEMCPY_HOST_TO_DEVICE: i32 = 1;\n\n/// Persistent GPU resources for LUT data. Uploaded once, reused across frames.\n#[cfg(feature = \"cuda\")]\npub struct GpuResources {\n    d_luts: *mut f32,\n    d_zone_boundaries: *mut f32,\n    lut_size: usize,\n    n_zones: usize,\n    luts_bytes: usize,\n    bounds_bytes: usize,",
+  "source_version": "plans/2026-04-02-10bit-pipeline-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836506307Z",
+  "valid_from": "2026-04-11T00:10:08.836506307Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-10bit-pipeline-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1147,
+    "end_line": 1176,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

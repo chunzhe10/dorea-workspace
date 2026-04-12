@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-dd301f895406",
+  "content": "put_str,\n            \"-f\", \"rawvideo\",\n            \"-pix_fmt\", \"rgb24\",\n            \"pipe:1\",\n        ])\n        .stdin(Stdio::null())\n        .stdout(Stdio::piped())\n        .stderr(Stdio::null())\n        .spawn()\n        .map_err(FfmpegError::NotFound)\n}\nstruct FrameReader {\n    child: Child,\n    frame_index: u64,\n    width: usize,\n    height: usize,\n    frame_bytes: usize,\n    done: bool,\n}",
+  "source_version": "crates/dorea-video/src/ffmpeg.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229573029Z",
+  "valid_from": "2026-04-11T00:04:13.229573029Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/ffmpeg.rs",
+    "language": "rs",
+    "chunk_type": "struct_item",
+    "start_line": 320,
+    "end_line": 327,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

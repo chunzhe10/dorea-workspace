@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-07992c74d65d",
+  "content": "## Problem\n## Decision\n\n## Why these two together\n\n- fp16 alone gives ~2× on Ampere fp16 throughput\n- Larger batch alone gives ~10-20% from amortizing per-call overhead and improving SM\n  occupancy\n- They stack cleanly: fp16 frees the VRAM that larger batch needs\n- Both are bit-preserving from a perceptual standpoint:\n  - fp16 has 11 bits of mantissa precision (10 explicit + 1 implicit), more than enough\n    for 8-bit (or even 10-bit) output\n  - Batch size doesn't change the mathematical operation, only its scheduling\n\n\n## Expected outcome\n\n- Throughput: 2.47 fps → ~5 fps (combination of 2× fp16 and 1.1-1.2× larger batch)\n- Output: visually equivalent to baseline (fp16 introduces sub-1/255 noise)\n- VRAM: comparable to current usage (fp16 halves activations, batch=8 doubles them)\n",
+  "source_version": "decisions/2026-04-10-direct-mode-fp16-batch.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836221042Z",
+  "valid_from": "2026-04-11T00:10:08.836221042Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-10-direct-mode-fp16-batch.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 23,
+    "end_line": 39,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

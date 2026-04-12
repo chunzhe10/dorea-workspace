@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c5a704055017",
+  "content": "e} wrong device\"\n    assert torch.isfinite(out).all(), f\"{method_name} produced non-finite values\"\n    # OKLab deltas for reasonable inputs should stay bounded\n    assert out.abs().max() < 1.0, f\"{method_name} delta too large: max={out.abs().max().item()}\"\ndef test_bilateral_constant_delta_textured_guide():\n    \"\"\"A constant delta must round-trip to itself regardless of guide texture.\n    This test failed silently under the original nearest-corner guide sampling\n    bug — would have caught Task 7 C1 at review time.\n    \"\"\"\n    torch.manual_seed(42)\n    delta = torch.full((1, 3, 36, 64), 0.1, device=\"cuda\", dtype=torch.float32)\n    # Highly textured orig_full — high-frequency noise\n    orig = torch.rand(1, 3, 72, 128, device=\"cuda\", dtype=torch.float32)\n    full_size = (72, 128)\n\n    for name in (\"joint_bilateral\", \"asymmetric_bilateral\"):\n        out = REGISTRY[name](delta, orig, full_size)\n        err = (out - 0.1).abs().max().item()\n        assert err < 1e-5, f\"{name} failed constant-delta + textured-guide: max err {err:.2e}\"",
+  "source_version": "benchmarks/upscale_bench/tests/test_methods.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230319424Z",
+  "valid_from": "2026-04-11T00:04:13.230319424Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/tests/test_methods.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 36,
+    "end_line": 50,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c252e40f1f3b",
+  "content": "0).pow(1.0 / 3.0)\n    L = 0.2104542553 * l_ + 0.7936177850 * m_ - 0.0040720468 * s_\n    a = 1.9779984951 * l_ - 2.4285922050 * m_ + 0.4505937099 * s_\n    bb = 0.0259040371 * l_ + 0.7827717662 * m_ - 0.8086757660 * s_\n    return torch.cat([L, a, bb], dim=1)\ndef oklab_to_rgb(lab: torch.Tensor) -> torch.Tensor:\n    \"\"\"(N, 3, H, W) OKLab → sRGB in [0,1] fp32 (clipped).\"\"\"\n    L, a, b = lab[:, 0:1], lab[:, 1:2], lab[:, 2:3]\n    l_ = L + 0.3963377774 * a + 0.2158037573 * b\n    m_ = L - 0.1055613458 * a - 0.0638541728 * b\n    s_ = L - 0.0894841775 * a - 1.2914855480 * b\n    l = l_.pow(3)\n    m = m_.pow(3)\n    s = s_.pow(3)\n    r = 4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s\n    g = -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s\n    bb = -0.0041960863 * l - 0.7034186147 * m + 1.7076147010 * s\n    return linear_to_srgb(torch.cat([r, g, bb], dim=1)).clamp(0, 1)",
+  "source_version": "benchmarks/upscale_bench/oklab.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230272307Z",
+  "valid_from": "2026-04-11T00:04:13.230272307Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/oklab.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 38,
+    "end_line": 50,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

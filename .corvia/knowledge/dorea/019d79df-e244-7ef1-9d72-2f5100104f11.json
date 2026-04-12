@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-2f5100104f11",
+  "content": " OOM specifically.\nfn map_python_error(py: Python<'_>, err: PyErr) -> InferenceError {\n    // Check for torch.cuda.OutOfMemoryError\n    if let Ok(torch_cuda) = py.import(\"torch.cuda\") {\n        if let Ok(oom_type) = torch_cuda.getattr(\"OutOfMemoryError\") {\n            if let Ok(oom_cls) = oom_type.downcast::<pyo3::types::PyType>() {\n                if err.is_instance(py, oom_cls) {\n                    return InferenceError::Oom(format!(\"{err}\"));\n                }\n            }\n        }\n    }\n    InferenceError::ServerError(format!(\"{err}\"))\n}\n```\n\n- [ ] **Step 5: Update `lib.rs` for conditional modules**\n\nReplace `crates/dorea-video/src/lib.rs`:\n\n```rust\n// dorea-video — Video I/O (ffmpeg subprocess) + inference integration.\n//\n// Public API:\n// - `ffmpeg::probe` — probe video metadata\n// - `ffmpeg::decode_frames` — iterate decoded frames\n// - `ffmpeg::encode_frames` — encode frame stream to output file\n// - `ffmpeg::extract_frame_at` — extract single frame at timestamp\n// - `scene::histogram_distance` — compare two frames for scene change\n// - `inference::InferenceServer` — inference backend (PyO3 or subprocess)\n\npub mod ffmpeg;\npub mod inference;\npub mod inference_subprocess;\npub mod resize;\npub mod scene;\n```\n\n- [ ] **Step 6: Build**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea && cargo build -p dorea-video 2>&1\n```\n\nExpected: Builds without `python` feature (uses subprocess fallback). The PyO3 path compiles only with `--features python`.\n\n- [ ] **Step 7: Commit**\n\n```bash\ngit add crates/dorea-video/\ngit commit -m \"feat(dorea-video): add PyO3 inference backend behind python feature flag\"\n```\n\n---\n",
+  "source_version": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836740115Z",
+  "valid_from": "2026-04-11T00:10:08.836740115Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1745,
+    "end_line": 1794,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

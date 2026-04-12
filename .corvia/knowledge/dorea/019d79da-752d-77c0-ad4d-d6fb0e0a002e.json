@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d6fb0e0a002e",
+  "content": "0.5, \"shifted spot should be at x=6\");\n    }\n\n    #[test]\n    fn detector_returns_max_without_reference() {\n        let det = OpticalFlowDetector::new();\n        let pixels = vec![0u8; 64 * 64 * 3];\n        assert_eq!(det.score(&pixels), f32::MAX);\n    }\n}\nfn zero_motion_returns_zero_magnitude() {\n        let w = 32;\n        let h = 32;\n        let pixels: Vec<u8> = vec![128; w * h * 3];\n        let flow = compute_flow(&pixels, &pixels, w, h);\n        let mag = mean_flow_magnitude(&flow);\n        assert!(mag < 0.01, \"identical frames should have near-zero flow, got {mag}\");\n    }",
+  "source_version": "crates/dorea-cli/src/optical_flow.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229500620Z",
+  "valid_from": "2026-04-11T00:04:13.229500620Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/optical_flow.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 237,
+    "end_line": 244,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

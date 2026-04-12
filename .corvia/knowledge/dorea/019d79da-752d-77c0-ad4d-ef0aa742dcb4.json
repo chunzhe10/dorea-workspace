@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-ef0aa742dcb4",
+  "content": "tures()).map_err(map_cudarc_error)?;\n        let d_textures_b = device.htod_sync_copy(adaptive_lut.inactive_textures()).map_err(map_cudarc_error)?;\n        let d_bounds_a = device.htod_sync_copy(adaptive_lut.active_boundaries()).map_err(map_cudarc_error)?;\n        let d_bounds_b = device.htod_sync_copy(adaptive_lut.inactive_boundaries()).map_err(map_cudarc_error)?;\n\n        Ok(Self {\n            adaptive_lut,\n            d_textures_a,\n            d_textures_b,\n            d_bounds_a: RefCell::new(d_bounds_a),\n            d_bounds_b: RefCell::new(d_bounds_b),\n            frame_bufs: RefCell::new(None),\n            frame_bufs_16: RefCell::new(None),\n            stage_mask: params.stage_mask,\n            device,\n            _not_send: std::marker::PhantomData,\n        })\n    }\n\n    /// Build runtime textures for the next keyframe into the inactive set.\n    ///\n    /// Re-uploads the inactive set's boundary device slice (boundaries change per keyframe).\n    /// Texture handles remain stable — only the 3D array content is rebuilt.\n    /// `runtime_n_zones` is fixed at construction, so boundary slice size is constant.\n    pub fn prepare_keyframe(&mut self, runtime_boundaries: &[f32]) -> Result<(), GpuError> {\n        let inactive = 1 - self.adaptive_lut.active_index();",
+  "source_version": "crates/dorea-gpu/src/cuda/mod.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229798188Z",
+  "valid_from": "2026-04-11T00:04:13.229798188Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cuda/mod.rs",
+    "language": "rs",
+    "chunk_type": "impl_item",
+    "start_line": 607,
+    "end_line": 629,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-05cd39e7e3c7",
+  "content": "### Directory layout\n### Summary grid (`summary_grid.png`) — contact sheet A\n\n### Per-frame sheets (`per_frame/frame{idx}_sheet.png`) — 3 files\n\n~2400 × 2400 px per frame. Layout:\n\n- **Top band**: full gold image at ~1920 px wide, with a red rectangle indicating the auto-selected crop region.\n- **Middle band**: row of 11 small thumbnails, same order as the summary grid.\n- **Crop band**: row of 11 × 400×400 crops, taken from the same spatial location in every thumbnail.\n- **Crop location selection**: automatic per frame. Compute `variance_across_methods(delta_method at each pixel)`, find the 400×400 window with the highest total variance, crop there. This zooms into the region where methods disagree most — the \"argument area\" — without manual intervention.\n- **Metrics strip** (bottom): compact table of all metrics for this frame alone, all methods.\n\n\n### Error heatmaps (`heatmaps/frame{idx}_{method}.png`) — 27 files\n\n~1920 × 1080 px per heatmap. Each pixel shows `|delta_method(x,y) - delta_gold(x,y)|` — averaged across L/a/b channels — as a colormap.\n\n- Colormap: `turbo`\n- Normalization: `[0, frame_p95]` **per frame**, shared across all methods on that frame. Method-by-method comparison on a single frame is directly visual (10× worse = 10× hotter, not clipped).\n- Small legend bar overlaid.\n- Filename encodes both frame index and method, for straightforward grepping.\n",
+  "source_version": "decisions/2026-04-10-delta-upscale-bench-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836198880Z",
+  "valid_from": "2026-04-11T00:10:08.836198880Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-10-delta-upscale-bench-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 342,
+    "end_line": 360,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

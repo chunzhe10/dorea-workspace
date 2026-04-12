@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-39f895f47fc0",
+  "content": "t tex = (cudaTextureObject_t)textures_b[z];\n            float4 s = tex3D<float4>(tex, r * gs, g * gs, b * gs);\n            blended_b.x += s.x * w;\n            blended_b.y += s.y * w;\n            blended_b.z += s.z * w;\n            total_w_b += w;\n        }\n\n        float r_b, g_b, b_b;\n        if (total_w_b > 1e-6f) {\n            r_b = blended_b.x / total_w_b;\n            g_b = blended_b.y / total_w_b;\n            b_b = blended_b.z / total_w_b;\n        } else {\n            r_b = r; g_b = g; b_b = b;\n        }\n\n        // Temporal blend\n        float inv_t = 1.0f - blend_t;\n        r_out = r_a * inv_t + r_b * blend_t;\n        g_out = g_a * inv_t + g_b * blend_t;\n        b_out = b_a * inv_t + b_b * blend_t;\n    }\n\n    pixels_out[idx * 3 + 0] = (unsigned char)(__float2uint_rn(fminf(fmaxf(r_out, 0.0f), 1.0f) * 255.0f));\n    pixels_out[idx * 3 + 1] = (unsigned char)(__float2uint_rn(fminf(fmaxf(g_out, 0.0f), 1.0f) * 255.0f));\n    pixels_out[idx * 3 + 2] = (unsigned char)(__float2uint_rn(fminf(fmaxf(b_out, 0.0f), 1.0f) * 255.0f));\n}\n```\n\n- [ ] **Step 2: Add AdaptiveGrader to mod.rs**\n\nIn `crates/dorea-gpu/src/cuda/mod.rs`, add after the existing `CudaGrader` impl:\n\n```rust\n#[cfg(feature = \"cuda\")]\nconst BUILD_COMBINED_LUT_PTX: &str = include_str!(concat!(env!(\"OUT_DIR\"), \"/build_combined_lut.ptx\"));\n\n/// Adaptive grader with per-keyframe zone boundaries and dual-texture blending.\n#[cfg(feature = \"cuda\")]\npub struct AdaptiveGrader {\n    adaptive_lut: combined_lut::AdaptiveLut,\n    device: Arc<CudaDevice>,\n    _not_send: std::marker::PhantomData<*const ()>,\n}\n\n#[cfg(feature = \"cuda\")]\nimpl AdaptiveGrader {\n    /// Initialize CUDA device, load kernels, allocate double-buffered textures.\n    pub fn new(\n        base_luts_flat: &[f32],\n        base_boundaries: &[f32],\n        base_n_zones: usize,",
+  "source_version": "plans/2026-04-04-per-keyframe-adaptive-depth-zones-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836904528Z",
+  "valid_from": "2026-04-11T00:10:08.836904528Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-per-keyframe-adaptive-depth-zones-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1107,
+    "end_line": 1152,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

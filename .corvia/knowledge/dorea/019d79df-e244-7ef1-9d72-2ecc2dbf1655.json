@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-2ecc2dbf1655",
+  "content": "# PyO3 + numpy for in-process Python embedding (optional)\n\n\nuse std::path::PathBuf;\nuse std::time::Duration;\nuse thiserror::Error;\n\nuse pyo3::prelude::*;\nuse pyo3::types::PyModule;\n\n#[derive(Debug, Error)]\npub enum InferenceError {\n    #[error(\"failed to spawn inference server: {0}\")]\n    SpawnFailed(#[from] std::io::Error),\n    #[error(\"IPC error: {0}\")]\n    Ipc(String),\n    #[error(\"inference server error: {0}\")]\n    ServerError(String),\n    #[error(\"timeout waiting for inference server\")]\n    Timeout,\n    #[error(\"PNG encode/decode error: {0}\")]\n    ImageError(String),\n    #[error(\"CUDA OOM during inference: {0}\")]\n    Oom(String),\n    #[error(\"PyO3 initialization failed: {0}\")]\n    InitFailed(String),\n}\n\n/// Configuration for the inference backend.\n#[derive(Debug, Clone)]\npub struct InferenceConfig {\n    pub python_exe: PathBuf,\n    pub raune_weights: Option<PathBuf>,\n    pub raune_models_dir: Option<PathBuf>,\n    pub skip_raune: bool,\n    pub depth_model: Option<PathBuf>,\n    pub device: Option<String>,\n    pub startup_timeout: Duration,\n}\n\nimpl Default for InferenceConfig {\n    fn default() -> Self {\n        Self {\n            python_exe: PathBuf::from(\"/opt/dorea-venv/bin/python\"),\n            raune_weights: None,\n            raune_models_dir: None,\n            skip_raune: false,\n            depth_model: None,\n            device: None,\n            startup_timeout: Duration::from_secs(120),\n        }\n    }",
+  "source_version": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836731931Z",
+  "valid_from": "2026-04-11T00:10:08.836731931Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1448,
+    "end_line": 1497,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

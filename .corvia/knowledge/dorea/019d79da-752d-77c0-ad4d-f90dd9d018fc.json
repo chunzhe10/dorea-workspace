@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-f90dd9d018fc",
+  "content": "      let linear = lut.to_linear(v);\n            let back = lut.from_linear(linear);\n            assert!(\n                (back - v).abs() < 0.01,\n                \"Gamma round-trip failed at {v}: linear={linear}, back={back}\"\n            );\n        }\n    }\nfn test_lerp_lut_boundaries() {\n        let lut = vec![0.0, 0.5, 1.0];\n        assert!((lerp_lut(&lut, 0.0) - 0.0).abs() < 1e-6);\n        assert!((lerp_lut(&lut, 0.5) - 0.5).abs() < 1e-6);\n        assert!((lerp_lut(&lut, 1.0) - 1.0).abs() < 1e-6);\n        assert!((lerp_lut(&lut, 0.25) - 0.25).abs() < 1e-6);\n    }",
+  "source_version": "crates/dorea-color/src/lut_transfer.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229934938Z",
+  "valid_from": "2026-04-11T00:04:13.229934938Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-color/src/lut_transfer.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 172,
+    "end_line": 178,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

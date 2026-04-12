@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c8369b082e56",
+  "content": " 0.045 * Cp_mean\n    Sh = 1 + 0.015 * Cp_mean * T\n    Rt = -torch.sin(2 * d_theta * torch.pi / 180) * Rc\n\n    dE = ((dLp / Sl).pow(2)\n          + (dCp / Sc).pow(2)\n          + (dHp / Sh).pow(2)\n          + Rt * (dCp / Sc) * (dHp / Sh)).sqrt()\n    return dE\ndef _atan2_deg(y, x):\n        return torch.atan2(y, x) * (180.0 / torch.pi) % 360.0",
+  "source_version": "benchmarks/upscale_bench/metrics.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230351612Z",
+  "valid_from": "2026-04-11T00:04:13.230351612Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/metrics.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 127,
+    "end_line": 128,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

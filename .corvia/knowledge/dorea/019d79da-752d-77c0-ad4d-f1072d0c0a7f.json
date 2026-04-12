@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-f1072d0c0a7f",
+  "content": "        unsafe {\n            for &tex in &self.textures {\n                let _ = sys::lib().cuTexObjectDestroy(tex);\n            }\n            for &arr in &self.arrays {\n                let _ = sys::lib().cuArrayDestroy(arr);\n            }\n        }\n    }\nimpl CombinedLut {\n    /// Build the combined LUT textures from calibration data.\n    ///\n    /// Call once at grader construction. This:\n    ///   1. Uploads calibration to device\n    ///   2. Launches build_combined_lut_kernel (fills float4 device buffer)\n    ///   3. Copies each zone's slice into a CUarray (device-to-device via cuMemcpy3D)\n    ///   4. Creates an unnormalized-coordinate linear texture object per zone\n    ///   5. Frees the build buffer (73MB freed after this fn returns)\n    pub(crate) fn build(\n        device: &Arc<CudaDevice>,\n        calibration: &Calibration,\n        params: &GradeParams,\n    ) -> Result<Self, GpuError> {\n        let n_zones = calibration.depth_luts.n_zones();\n        if n_zones == 0 {\n            return Err(GpuError::InvalidInput(\"n_zones must be >= 1\".into()));\n        }\n        let n = COMBINED_LUT_GRID;\n        let lut_size = calibration.depth_luts.luts[0].size;\n\n        // --- Upload calibration data ---\n        let luts_flat: Vec<f32> = calibration.depth_luts.luts.iter()\n            .flat_map(|lg| lg.data.iter().copied())",
+  "source_version": "crates/dorea-gpu/src/cuda/combined_lut.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229822204Z",
+  "valid_from": "2026-04-11T00:04:13.229822204Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cuda/combined_lut.rs",
+    "language": "rs",
+    "chunk_type": "impl_item",
+    "start_line": 49,
+    "end_line": 72,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

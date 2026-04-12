@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c782f9e6c1ee",
+  "content": ")\n        out[:, :, top:top + tile_h, left:left + tile_w] += enhanced * mask\n        weight[:, :, top:top + tile_h, left:left + tile_w] += mask\n\n    assert (weight > 0).all(), \"tile stitching left gaps\"\n    out = out / weight\n    return out.clamp(0.0, 1.0)\ndef _feather_mask(top: int, left: int) -> torch.Tensor:\n        mask = torch.ones(1, 1, tile_h, tile_w, device=frame_4k.device, dtype=torch.float32)\n        # If top > 0, the top edge is inner → ramp from 0→1 across first `overlap` rows.\n        if top > 0:\n            ramp = torch.linspace(0, 1, overlap, device=frame_4k.device, dtype=torch.float32).view(1, 1, -1, 1)\n            mask[:, :, :overlap, :] *= ramp\n        if top + tile_h < fh:\n            ramp = torch.linspace(1, 0, overlap, device=frame_4k.device, dtype=torch.float32).view(1, 1, -1, 1)\n            mask[:, :, -overlap:, :] *= ramp\n        if left > 0:\n            ramp = torch.linspace(0, 1, overlap, device=frame_4k.device, dtype=torch.float32).view(1, 1, 1, -1)\n            mask[:, :, :, :overlap] *= ramp\n        if left + tile_w < fw:\n            ramp = torch.linspace(1, 0, overlap, device=frame_4k.device, dtype=torch.float32).view(1, 1, 1, -1)\n            mask[:, :, :, -overlap:] *= ramp\n        return mask",
+  "source_version": "benchmarks/upscale_bench/gold.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230343714Z",
+  "valid_from": "2026-04-11T00:04:13.230343714Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/gold.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 91,
+    "end_line": 106,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

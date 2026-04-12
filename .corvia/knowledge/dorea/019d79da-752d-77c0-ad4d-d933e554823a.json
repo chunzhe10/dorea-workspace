@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d933e554823a",
+  "content": "32::MAX);\n    }\n\n    #[test]\n    fn mse_detector_same_as_reference_returns_zero() {\n        let mut det = MseDetector::default();\n        let pixels = vec![200u8; 300];\n        det.set_reference(&pixels);\n        assert_eq!(det.score(&pixels), 0.0);\n    }\n\n    #[test]\n    fn mse_detector_set_reference_compares_to_set_frame_not_latest() {\n        let mut det = MseDetector::default();\n        let ref_frame = vec![0u8; 3];\n        let other_frame = vec![255u8; 3];\n        det.set_reference(&ref_frame);\n\n        // score returns MSE vs ref_frame — not updated by calling score itself\n        let s1 = det.score(&other_frame);\n        let s2 = det.score(&other_frame);\n        assert_eq!(s1, s2, \"score should be deterministic without set_reference\");\n        assert!((s1 - 1.0).abs() < 1e-5);\n    }\n\n    #[test]\n    fn mse_detector_reset_clears_reference() {\n        let mut det = MseDetector::default();\n        det.set_reference(&vec![0u8; 3]);\n        det.reset();\n        assert_eq!(det.score(&vec![0u8; 3]), f32::MAX);\n    }\n\n    #[test]\n    fn depth_dist_identical_is_zero() {\n        let a = vec![0.1, 0.3, 0.5, 0.7, 0.9];\n        assert!((depth_distribution_distance(&a, &a, 64) - 0.0).abs() < 1e-6);\n    }\n\n    #[test]\n    fn depth_dist_opposite_is_high() {\n        let near = vec![0.0; 100];\n        let far = vec![1.0; 100];\n        let d = depth_distribution_distance(&near, &far, 64);\n        assert!(d > 0.9, \"expected >0.9 for opposite distributions, got {d}\");\n    }\n\n    #[test]\n    fn depth_dist_symmetric() {\n        let a: Vec<f32> = (0..50).map(|i| i as f32 / 50.0).collect();\n        let b: Vec<f32> = (0..50).map(|i| (i as f32 / 50.0).powi(2)).collect();\n        let d_ab = depth_distribution_distance(&a, &b, 64);\n        let d_ba = depth_distribution_distance(&b, &a, 64);\n        assert!((d_ab - d_ba).abs() < 1e-6, \"not symmetric: {d_ab} vs {d_ba}\");\n    }\n\n    #[test]\n    fn depth_dist_empty_is_zero() {",
+  "source_version": "crates/dorea-cli/src/change_detect.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229527417Z",
+  "valid_from": "2026-04-11T00:04:13.229527417Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/change_detect.rs",
+    "language": "rs",
+    "chunk_type": "mod_item",
+    "start_line": 272,
+    "end_line": 318,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

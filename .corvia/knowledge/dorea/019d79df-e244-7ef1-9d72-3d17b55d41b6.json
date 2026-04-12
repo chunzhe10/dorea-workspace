@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-3d17b55d41b6",
+  "content": "## File Structure\n\n### Task 1: `Node` + `Stage` traits + shared I/O types (`pipeline/mod.rs`)\n\n**Files:**\n- Create: `crates/dorea-cli/src/pipeline/mod.rs`\n- Modify: `crates/dorea-cli/src/lib.rs` (add `pub mod pipeline;`)\n\n- [ ] **Step 1: Write failing test**\n\nAdd to `pipeline/mod.rs` (will be created in step 3):\n\n```rust\n#[cfg(test)]\nmod tests {\n    use super::*;\n\n    struct Double;\n    impl Node for Double {\n        type Input = i32;\n        type Output = i32;\n        fn name(&self) -> &'static str { \"double\" }\n        fn process(&mut self, input: i32) -> anyhow::Result<i32> { Ok(input * 2) }\n    }\n\n    #[test]\n    fn node_process_called() {\n        let mut n = Double;\n        assert_eq!(n.process(3).unwrap(), 6);\n    }\n\n    #[test]\n    fn node_name_returns_str() {\n        assert_eq!(Double.name(), \"double\");\n    }\n}\n```\n\n- [ ] **Step 2: Run — verify FAIL**\n\n```bash",
+  "source_version": "plans/2026-04-05-pipeline-dag-refactor.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836954786Z",
+  "valid_from": "2026-04-11T00:10:08.836954786Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-05-pipeline-dag-refactor.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 28,
+    "end_line": 66,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

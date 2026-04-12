@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d71-f5d3e0326f19",
+  "content": "# Capture workspace root (where devcontainer mounts the workspace)\n# Build Corvia from source (repos cloned by workspace init)\n\n# Install corvia-workspace toggle command\nchmod +x .devcontainer/scripts/corvia-workspace.sh\nln -sf \"$WORKSPACE_ROOT/.devcontainer/scripts/corvia-workspace.sh\" /usr/local/bin/corvia-workspace\n\necho \"=== Post-Create Complete ===\"\necho \"Run 'corvia-workspace status' to see available services.\"\necho \"Run 'corvia-workspace enable ollama' for Ollama embeddings.\"\necho \"Run 'corvia-workspace enable surrealdb' for SurrealDB FullStore.\"\n```\n\nKey changes:\n- Removed `ollama serve &`, `ollama pull nomic-embed-text`, and the kill logic (lines 20-26 of original)\n- Added `cargo install --path crates/corvia-inference` so the fastembed binary is available\n- Added symlink install for `corvia-workspace` toggle command\n\n**Step 2: Verify the script is syntactically valid**\n\nRun: `bash -n /root/corvia-project/corvia-workspace/.devcontainer/scripts/post-create.sh`\nExpected: No output (no syntax errors).\n\n**Step 3: Commit**\n\n```bash\ngit add .devcontainer/scripts/post-create.sh\ngit commit -m \"chore: remove Ollama from post-create, add corvia-workspace install (D70)\"\n```\n\n---\n",
+  "source_version": "decisions/2026-03-03-optional-devcontainer-services.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836001579Z",
+  "valid_from": "2026-04-11T00:10:08.836001579Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-03-03-optional-devcontainer-services.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 115,
+    "end_line": 143,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-f9113574c72c",
+  "content": ", 0.5, 1.0];\n        assert!((lerp_lut(&lut, 0.0) - 0.0).abs() < 1e-6);\n        assert!((lerp_lut(&lut, 0.5) - 0.5).abs() < 1e-6);\n        assert!((lerp_lut(&lut, 1.0) - 1.0).abs() < 1e-6);\n        assert!((lerp_lut(&lut, 0.25) - 0.25).abs() < 1e-6);\n    }\nfn test_trait_impl() {\n        let lut = LutBased::new(identity_lut(256), 0.90, \"test\".to_string());\n        let tf: &dyn crate::TransferFunction = &lut;\n        assert_eq!(tf.shoulder(), 0.90);\n        assert_eq!(tf.name(), \"test\");\n    }",
+  "source_version": "crates/dorea-color/src/lut_transfer.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229935692Z",
+  "valid_from": "2026-04-11T00:04:13.229935692Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-color/src/lut_transfer.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 181,
+    "end_line": 186,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d102b01f4cc1",
+  "content": "ip_threshold, depth_max_interval, fused_batch_size,\n            depth_zones, base_lut_zones, scene_threshold, min_segment_kfs,\n            zone_smoothing_w, maxine_upscale_factor,\n            interp_enabled: false,\n            maxine_in_fused_batch: false,\n            input_encoding, output_codec,\n            stage_mask: 0,\n        };\n\n        let direct_cfg = pipeline::grading::DirectModeConfig {\n            python: python.clone(),\n            raune_weights: rw.clone(),\n            raune_models_dir: rmd.clone(),\n            raune_proxy_size,\n            batch_size: direct_batch_size,\n            output: output.clone(),\n        };\n\n        let frame_count = pipeline::grading::run_grading_stage_direct(\n            &pipeline_cfg, &info, &direct_cfg,\n        )?;\n\n        if info.frame_count > 0 && frame_count < info.frame_count {\n            log::warn!(\n                \"Incomplete direct-mode grading: {frame_count} frames processed, {} expected\",\n                info.frame_count\n            );\n        }\n        log::info!(\"Done. Direct-mode graded {frame_count} frames → {}\", output.display());\n        return Ok(());\n    }\n\n    // Open encoder first — validate output path before doing expensive calibration.\n    let audio_src = if info.has_audio { Some(args.input.as_path()) } else { None };\n    let encoder = if output_codec.is_10bit() {\n        FrameEncoder::new_10bit(&output, info.width, info.height, info.fps, output_codec, audio_src)",
+  "source_version": "crates/dorea-cli/src/grade.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229426743Z",
+  "valid_from": "2026-04-11T00:04:13.229426743Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/grade.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 257,
+    "end_line": 287,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

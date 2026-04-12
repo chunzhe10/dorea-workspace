@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-f519c4bedb05",
+  "content": "e = 0 should still run without panic\n        depth_aware_ambiance(&mut rgb, &depth, width, height, 0.0);\n\n        // Values should remain in [0, 1]\n        for &v in &rgb {\n            assert!((0.0..=1.0).contains(&v), \"out-of-range: {v}\");\n        }\n    }\nfn finish_grade_runs_without_panic() {\n        use crate::GradeParams;\n        use dorea_cal::Calibration;\n        use dorea_hsl::HslCorrections;\n        use dorea_lut::types::{DepthLuts, LutGrid};\n\n        let width = 4; let height = 4; let n = width * height;\n        let mut lut = LutGrid::new(2);\n        for ri in 0..2usize { for gi in 0..2usize { for bi in 0..2usize {\n            lut.set(ri, gi, bi, [ri as f32, gi as f32, bi as f32]);\n        }}}\n        let cal = Calibration::new(\n            DepthLuts::new(vec![lut], vec![0.0, 1.0]),\n            HslCorrections(vec![]),\n            0,\n        );\n\n        let mut rgb_f32: Vec<f32> = vec![0.5; n * 3];\n        let orig: Vec<u8>  = vec![128u8; n * 3];\n        let depth: Vec<f32> = vec![0.5; n];\n\n        // must not panic, output must be in [0,255]\n        let out = finish_grade(&mut rgb_f32, &orig, &depth, width, height,\n                               &GradeParams::default(), &cal);\n        assert_eq!(out.len(), n * 3);\n        for &v in &out { assert!(v <= 255, \"out of range: {v}\"); }\n\n        // second call: same shape, must not panic\n        let mut rgb_f32b: Vec<f32> = vec![0.5; n * 3];\n        let out2 = finish_grade(&mut rgb_f32b, &orig, &depth, width, height,\n                                &GradeParams::default(), &cal);\n        assert_eq!(out2.len(), n * 3);\n    }",
+  "source_version": "crates/dorea-gpu/src/cpu.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229877920Z",
+  "valid_from": "2026-04-11T00:04:13.229877920Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cpu.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 441,
+    "end_line": 473,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

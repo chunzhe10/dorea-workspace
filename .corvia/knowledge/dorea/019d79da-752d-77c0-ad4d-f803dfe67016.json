@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-f803dfe67016",
+  "content": "() {\n        // S-Log3 middle grey: 18% linear ≈ 0.41 encoded\n        let encoded = linear_to_ilog(0.18);\n        assert!(\n            (0.35..0.50).contains(&encoded),\n            \"Middle grey encode: expected 0.35–0.50, got {encoded}\"\n        );\n    }\nfn test_ilog_monotonic() {\n        let mut prev = ilog_to_linear(0.0);\n        for i in 1..=100 {\n            let x = i as f32 / 100.0;\n            let lin = ilog_to_linear(x);\n            assert!(lin >= prev, \"Non-monotonic at x={x}: {lin} < {prev}\");\n            prev = lin;\n        }\n    }",
+  "source_version": "crates/dorea-color/src/ilog.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229921527Z",
+  "valid_from": "2026-04-11T00:04:13.229921527Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-color/src/ilog.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 96,
+    "end_line": 104,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

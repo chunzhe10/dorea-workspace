@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-f3c64407797c",
+  "content": "oxy L plane\n\n    // With pre-allocated buffers: d_rgb_in + d_rgb_after_lut + d_rgb_after_hsl + d_rgb_out held simultaneously.\n    // Conservative: 4 RGB planes + depth + LUT budget + 3 proxy planes\n    4 * rgb_f32 + depth_f32 + lut_budget + 3 * proxy_f32\n}\npub fn verify_cuda_context(device: &std::sync::Arc<cudarc::driver::CudaDevice>) -> Result<(), crate::GpuError> {\n    let _probe = device.alloc_zeros::<f32>(1)\n        .map_err(|e| crate::GpuError::CudaFail(format!(\"context health check failed: {e}\")))?;\n    Ok(())\n}",
+  "source_version": "crates/dorea-gpu/src/device.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229860398Z",
+  "valid_from": "2026-04-11T00:04:13.229860398Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/device.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 91,
+    "end_line": 95,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

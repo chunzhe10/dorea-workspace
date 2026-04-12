@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-f70e0ed75381",
+  "content": " {\n        // Middle grey ~0.39 in D-Log M should decode to ~0.18 linear\n        let linear = dlog_m_to_linear(0.39);\n        assert!(\n            (linear - 0.18).abs() < 0.02,\n            \"Middle grey decode: expected ~0.18, got {linear}\"\n        );\n    }\nfn test_dlog_m_as_trait_object() {\n        let tf: Box<dyn crate::TransferFunction> = Box::new(super::DLogM);\n        let encoded = tf.from_linear(0.18);\n        let decoded = tf.to_linear(encoded);\n        assert!((decoded - 0.18).abs() < 1e-4, \"Trait round-trip: expected ~0.18, got {decoded}\");\n        assert_eq!(tf.shoulder(), 0.85);\n        assert_eq!(tf.name(), \"D-Log M\");\n    }",
+  "source_version": "crates/dorea-color/src/dlog_m.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229907975Z",
+  "valid_from": "2026-04-11T00:04:13.229907975Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-color/src/dlog_m.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 111,
+    "end_line": 118,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

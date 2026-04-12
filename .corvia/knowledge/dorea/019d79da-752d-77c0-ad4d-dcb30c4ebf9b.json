@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-dcb30c4ebf9b",
+  "content": "       \"hevc10\" | \"hevc\" | \"h265\" | \"h265_10\" => Ok(Self::Hevc10),\n            \"h264\" | \"avc\" => Ok(Self::H264),\n            other => Err(format!(\n                \"unknown codec '{other}'; expected prores, hevc10, or h264\"\n            )),\n        }\n    }\n}\nfn from_str(s: &str) -> Result<Self, String> {\n        match s.to_lowercase().as_str() {\n            \"prores\" | \"prores_ks\" => Ok(Self::ProRes),\n            \"hevc10\" | \"hevc\" | \"h265\" | \"h265_10\" => Ok(Self::Hevc10),\n            \"h264\" | \"avc\" => Ok(Self::H264),\n            other => Err(format!(\n                \"unknown codec '{other}'; expected prores, hevc10, or h264\"\n            )),\n        }\n    }",
+  "source_version": "crates/dorea-video/src/ffmpeg.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229567618Z",
+  "valid_from": "2026-04-11T00:04:13.229567618Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/ffmpeg.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 124,
+    "end_line": 133,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

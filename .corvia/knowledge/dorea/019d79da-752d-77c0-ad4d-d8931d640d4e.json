@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d8931d640d4e",
+  "content": "pub struct MseDetector {\n    reference: Option<Vec<u8>>,\n}\npub fn frame_mse(a: &[u8], b: &[u8]) -> f32 {\n    debug_assert_eq!(a.len(), b.len());\n    if a.is_empty() {\n        return 0.0;\n    }\n    let n = a.len() as f64;\n    let sum_sq: f64 = a.iter().zip(b.iter())\n        .map(|(&av, &bv)| {\n            let d = av as f64 - bv as f64;\n            d * d\n        })\n        .sum();\n    (sum_sq / (n * 255.0 * 255.0)) as f32\n}",
+  "source_version": "crates/dorea-cli/src/change_detect.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229520104Z",
+  "valid_from": "2026-04-11T00:04:13.229520104Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/change_detect.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 29,
+    "end_line": 42,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

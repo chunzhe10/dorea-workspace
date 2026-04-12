@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-ee87fe9870d4",
+  "content": "se(|e| panic!(\"grade_frame_cuda failed at {w}×{h}: {e}\"));\n            let expected_len = w * h * 3;\n            assert_eq!(out.len(), expected_len,\n                \"output length for {w}×{h} should be {expected_len}, got {}\", out.len());\n        }\n    }\nfn combined_lut_builds_without_panic() {\n        use crate::cuda::combined_lut::CombinedLut;\n        let cal = make_calibration(5);\n        let params = crate::GradeParams::default();\n        let device = match cudarc::driver::CudaDevice::new(0) {\n            Ok(d) => d,\n            Err(e) => { eprintln!(\"SKIP: no CUDA device ({e})\"); return; }\n        };\n        let _lut = CombinedLut::build(&device, &cal, &params).expect(\"CombinedLut::build failed\");\n    }",
+  "source_version": "crates/dorea-gpu/src/cuda/mod.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229791877Z",
+  "valid_from": "2026-04-11T00:04:13.229791877Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cuda/mod.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 370,
+    "end_line": 379,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

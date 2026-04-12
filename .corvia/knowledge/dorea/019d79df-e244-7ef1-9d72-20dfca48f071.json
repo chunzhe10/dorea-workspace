@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-20dfca48f071",
+  "content": "### Task 16: Calibration Format Upgrade\n\n### Task 17: ProRes Frame Selection (All-Intra)\n\n**Files:**\n- Modify: `crates/dorea-video/src/ffmpeg.rs`\n\n- [ ] **Step 1: Add codec-aware frame extraction**\n\nIn `crates/dorea-video/src/ffmpeg.rs`, update `spawn_decoder` to detect ProRes and\nskip the I-frame select filter. Add a helper:\n\n```rust\n/// Check if a codec is all-intra (every frame is a keyframe).\nfn is_all_intra_codec(codec_name: &str) -> bool {\n    matches!(codec_name, \"prores\" | \"dnxhd\" | \"dnxhr\" | \"mjpeg\" | \"ffv1\")\n}\n```\n\nIn the frame extraction path (used by auto-calibration in grade.rs), when building\nthe ffmpeg `-vf` filter string, skip `select=eq(pict_type,I)` for all-intra codecs.\nThe interval/scene-change selection still applies.\n\n- [ ] **Step 2: Build**\n\nRun: `cd /workspaces/dorea-workspace/repos/dorea && cargo build -p dorea-video`\nExpected: Compiles.\n\n- [ ] **Step 3: Commit**\n\n```bash\ngit add crates/dorea-video/src/ffmpeg.rs\ngit commit -m \"feat(video): codec-aware frame selection (skip I-frame filter for ProRes)\"\n```\n\n---\n",
+  "source_version": "plans/2026-04-02-10bit-pipeline-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836523052Z",
+  "valid_from": "2026-04-11T00:10:08.836523052Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-10bit-pipeline-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 2143,
+    "end_line": 2177,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

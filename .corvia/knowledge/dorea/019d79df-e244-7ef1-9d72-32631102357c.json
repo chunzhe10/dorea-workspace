@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-32631102357c",
+  "content": "ault 2).\n    pub maxine_upscale_factor: u32,\n```\n\n- [ ] **Step 4: Add `build_args()` method to `InferenceConfig`**\n\nAdd a method to `InferenceConfig` that builds the CLI args vector. This extracts the arg-building logic that will also be used by `spawn()`:\n\n```rust\nimpl InferenceConfig {\n    /// Build CLI argument list for the Python inference server.\n    pub fn build_args(&self) -> Vec<String> {\n        let mut args = vec![\"-m\".to_string(), \"dorea_inference.server\".to_string()];\n\n        if self.skip_raune {\n            args.push(\"--no-raune\".to_string());\n        } else if let Some(p) = &self.raune_weights {\n            args.push(\"--raune-weights\".to_string());\n            args.push(p.display().to_string());\n        }\n\n        if let Some(p) = &self.raune_models_dir {\n            args.push(\"--raune-models-dir\".to_string());\n            args.push(p.display().to_string());\n        }\n\n        if let Some(p) = &self.depth_model {\n            args.push(\"--depth-model\".to_string());\n            args.push(p.display().to_string());\n        }\n\n        if let Some(d) = &self.device {\n            args.push(\"--device\".to_string());\n            args.push(d.clone());\n        }\n\n        if self.maxine {\n            args.push(\"--maxine\".to_string());\n            args.push(\"--maxine-upscale-factor\".to_string());\n            args.push(self.maxine_upscale_factor.to_string());\n        }\n\n        args",
+  "source_version": "plans/2026-04-03-maxine-enhancement-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836786076Z",
+  "valid_from": "2026-04-11T00:10:08.836786076Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-maxine-enhancement-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 439,
+    "end_line": 474,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

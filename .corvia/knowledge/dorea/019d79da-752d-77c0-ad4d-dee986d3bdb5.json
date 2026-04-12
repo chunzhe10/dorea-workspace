@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-dee986d3bdb5",
+  "content": "             buf\n                })\n                .unwrap_or_default();\n            return Err(FfmpegError::EncodeFailed(format!(\n                \"ffv1 encoder exited immediately (code {:?}): {}\",\n                status.code(),\n                msg.trim()\n            )));\n        }\n\n        Ok(Self {\n            child,\n            stdin,\n            stderr,\n            frame_bytes: width * height * 3,\n            write_buf: Vec::new(),\n        })\n    }\n\n    /// Spawn a 10-bit encoder subprocess.\n    ///\n    /// Accepts `rgb48le` raw frames (6 bytes/pixel) from `write_frame_16`.\n    /// Codec selection:\n    /// - `OutputCodec::ProRes` → `prores_ks -profile:v 3 -pix_fmt yuv422p10le`\n    /// - `OutputCodec::Hevc10` → `hevc_nvenc -profile:v main10` (fallback: `libx265 -profile:v main10`)\n    /// - `OutputCodec::H264`  → standard H.264 (ffmpeg down-converts rgb48le → yuv420p)\n    pub fn new_10bit(\n        output: &Path,\n        width: usize,\n        height: usize,\n        fps: f64,\n        codec: OutputCodec,\n        input_for_audio: Option<&Path>,\n    ) -> Result<Self, FfmpegError> {\n        if let Some(parent) = output.parent() {\n            if !parent.as_os_str().is_empty() && !parent.exists() {\n                return Err(FfmpegError::EncodeFailed(format!(\n                    \"output directory does not exist: {}\",\n                    parent.display()\n                )));\n            }\n        }\n\n        let fps_s = format!(\"{fps:.3}\");\n        let size_s = format!(\"{width}x{height}\");\n        let out_s = output.to_str().unwrap_or(\"output.mov\");\n\n        let bytes_per_pixel = codec.bytes_per_pixel();\n        // For rgb48le the pixel_format name ffmpeg understands:\n        let input_pix_fmt = if codec.is_10bit() { \"rgb48le\" } else { \"rgb24\" };\n\n        let mut cmd = Command::new(\"ffmpeg\");\n        cmd.args([\n            \"-y\",\n            \"-f\", \"rawvideo\",\n            \"-pixel_format\", input_pix_fmt,\n            \"-s\", &size_s,",
+  "source_version": "crates/dorea-video/src/ffmpeg.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229593014Z",
+  "valid_from": "2026-04-11T00:04:13.229593014Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/ffmpeg.rs",
+    "language": "rs",
+    "chunk_type": "impl_item",
+    "start_line": 798,
+    "end_line": 847,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

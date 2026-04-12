@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-0465b8c48a8b",
+  "content": "## Summary\n## Motivation\n\n# line 514 in raune_filter.py\ndelta_full = F.interpolate(delta_lab, size=(fh, fw), mode=\"bilinear\", align_corners=False)\n```\n\nVisual inspection of the output suggests the bilinear upscale introduces edge halos and chroma bleed where RAUNE's correction changes locally (e.g. across object boundaries). The current fp16 pipeline delivers 4.25 fps at the GPU-stage ceiling, so further speedups require a different axis. Quality-preserving improvements to the delta upscale are on the table and need empirical comparison before we commit to a specific replacement.\n\nThis spec does not implement a replacement. It implements the benchmark needed to decide which replacement to implement.\n",
+  "source_version": "decisions/2026-04-10-delta-upscale-bench-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836183813Z",
+  "valid_from": "2026-04-11T00:10:08.836183813Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-10-delta-upscale-bench-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 20,
+    "end_line": 27,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-8c24a30cf1b8",
+  "content": "# corvia-dev CLI — Redesigning Workspace Management\n\n## Problem\n\nThe current dev environment management is spread across three fragile scripts:\n\n1. **corvia-workspace.sh** — service toggles, config mutation via `sed`, health checks, auto-healing, binary rebuilds. 390 lines of bash with no structured output.\n2. **corvia-supervisor.sh** — process restart daemon with exponential backoff. Uses PID files in `/tmp`.\n3. **extension.js** — VS Code dashboard with 481 lines of inline HTML/CSS/JS, 6 parallel data sources (2 CLI text parsers, 2 HTTP checks, 1 agent list, 1 log tail).\n\nKey problems:\n- Config mutation via `sed` on `corvia.toml` is fragile and bypasses the Rust `CorviaConfig` type system.\n- The VS Code extension parses unstructured CLI text output — breaks when output format changes.\n- No JSON output for machine consumption.\n- Supervisor state scattered across PID files in `/tmp`.\n- Tight coupling between extension and multiple data sources.\n\n\n## Decision: Approach B — Unified CLI + Thin Extension\n\nA Python CLI (`corvia-dev`) owns all logic. The VS Code extension becomes a thin webview that polls `corvia-dev status --json` and sends commands back. One JSON contract is the only interface between them.\n",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-cli-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837121884Z",
+  "valid_from": "2026-04-11T00:10:08.837121884Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-cli-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 8,
+    "end_line": 26,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

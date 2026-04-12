@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-d3e2eb39bea6",
+  "content": "",
+  "source_version": "models/raune_net/models/RAUNE-Net/models/__init__.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230545141Z",
+  "valid_from": "2026-04-11T00:04:13.230545141Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "models/raune_net/models/RAUNE-Net/models/__init__.py",
+    "language": "py",
+    "chunk_type": "file",
+    "start_line": 1,
+    "end_line": 0,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

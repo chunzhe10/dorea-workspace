@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-3cdf8358725d",
+  "content": "## Fused Batch → Dual Output\n\n## Resolution\n\nRAUNE runs at proxy resolution (`--proxy-size`, default 518px) in the unified path. Current `auto_calibrate` uses 1024px for RAUNE. The quality difference is tracked under issue #41. A `--raune-proxy-size` override can be added if the delta is significant. For now proxy res is the default — the architecture is resolution-agnostic.\n\n`FUSED_BATCH_SIZE = 8` retained conservatively (issue #44 tracks tuning).\n\n---\n\n\n## CLI Changes\n\n| Arg | Change |\n|---|---|\n| `--keyframe-interval` | **Removed** — subsumed by `--depth-max-interval` |\n| `--depth-skip-threshold` | Unchanged — governs both change detection and scene cut |\n| `--depth-max-interval` | Unchanged — caps interval between keyframes |\n| `--no-depth-interp` | Unchanged — forces every frame as a keyframe |\n\n---\n",
+  "source_version": "plans/2026-04-04-unified-keyframe-sampling.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836950675Z",
+  "valid_from": "2026-04-11T00:10:08.836950675Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-unified-keyframe-sampling.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 162,
+    "end_line": 180,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

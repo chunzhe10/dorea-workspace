@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-276607d2bb60",
+  "content": "ays a keyframe)\n        // but handle gracefully by dropping buffered frames\n        buffer.clear();\n        return Ok(());\n    };\n\n    let n_buffered = buffer.len();\n    let interval = (n_buffered + 1) as f32;\n\n    let same_keyframe = match graded_after {\n        Some(after) => std::ptr::eq(before.as_ptr(), after.as_ptr()),\n        None => true,\n    };\n\n    for (buf_idx, bf) in buffer.drain(..).enumerate() {\n        let output = if same_keyframe {\n            before.clone()\n        } else {\n            let t = (buf_idx + 1) as f32 / interval;\n            lerp_graded(before, graded_after.as_ref().unwrap(), t)\n        };\n\n        // Verify dimensions match (graded output must match buffered frame dims)\n        let expected = bf.width * bf.height * 3;\n        if output.len() != expected {\n            return Err(anyhow::anyhow!(\n                \"Interpolated frame size mismatch at frame {}: got {}, expected {}\",\n                bf.index, output.len(), expected\n            ));\n        }\n\n        encoder.write_frame(&output).context(\"encoder write failed\")?;\n        *frame_count += 1;\n\n        if *frame_count % 100 == 0 {\n            let pct = *frame_count as f64 / info.frame_count.max(1) as f64 * 100.0;\n            log::info!(\"Progress: {frame_count}/{} frames ({:.1}%)\", info.frame_count, pct);\n        }\n    }\n    Ok(())\n}\n```\n\n- [ ] **Step 5: Remove old `prev_frame` variable and unused imports**\n\nThe old `prev_frame` and scene detection code (lines 125-139) is replaced by the new keyframe MSE logic. Remove:",
+  "source_version": "plans/2026-04-02-grading-pipeline-perf-v3.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836620734Z",
+  "valid_from": "2026-04-11T00:10:08.836620734Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-grading-pipeline-perf-v3.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 858,
+    "end_line": 893,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

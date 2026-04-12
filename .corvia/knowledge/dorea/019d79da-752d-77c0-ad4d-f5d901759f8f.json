@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-f5d901759f8f",
+  "content": "name}.cu\"));\n        let ptx = out_dir.join(format!(\"{name}.ptx\"));\n\n        let mut args = vec![\n            \"--ptx\".to_string(),\n            \"-O2\".to_string(),\n            \"-arch=sm_86\".to_string(),\n            \"--allow-unsupported-compiler\".to_string(),\n            \"--compiler-bindir\".to_string(),\n            \"/usr/bin/gcc-12\".to_string(),\n        ];\n        if let Some(ref inc) = cuda_include {\n            args.push(\"-isystem\".to_string());\n            args.push(inc.to_str().unwrap().to_string());\n        }\n        args.push(src.to_str().unwrap().to_string());\n        args.push(\"-o\".to_string());\n        args.push(ptx.to_str().unwrap().to_string());\n\n        let status = std::process::Command::new(&nvcc)\n            .args(&args)\n            .status()\n            .expect(\"failed to run nvcc\");\n\n        if !status.success() {\n            println!(\n                \"cargo:warning=nvcc failed to compile {name}.cu to PTX — \\\n                 falling back to CPU-only (GCC/CUDA version mismatch?). \\\n                 Install gcc-12 or gcc-13 and set CUDAHOSTCXX to enable CUDA kernels.\"\n            );\n            return;\n        }\n    }\n\n    // cudarc links its own CUDA driver/runtime libs, but we provide the search path\n    if let Some(cuda_lib) = nvcc.parent()\n        .and_then(|p| p.parent())\n        .map(|p| p.join(\"targets/x86_64-linux/lib\"))\n        .filter(|p| p.exists())\n    {\n        println!(\"cargo:rustc-link-search=native={}\", cuda_lib.display());\n    }\n\n    println!(\"cargo:rustc-cfg=feature=\\\"cuda\\\"\");\n}",
+  "source_version": "crates/dorea-gpu/build.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229891531Z",
+  "valid_from": "2026-04-11T00:04:13.229891531Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/build.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 100,
+    "end_line": 136,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

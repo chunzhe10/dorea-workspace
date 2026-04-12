@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-0a5dfb1d4a70",
+  "content": "## Decision\n## Context\n\n## Consequences\n\n- `EntryMetadata` extended with `content_role` (design, decision, plan, code, memory,\n  finding, instruction, learning) and `source_origin` (repo:corvia, workspace, memory).\n- `corvia_write` and `corvia_search` MCP tools accept optional `content_role` and\n  `source_origin` filter parameters. Dashboard filter dropdowns map to these API params.\n- Dashboard redesigned as an interactive graphed document reader (Heptabase + Neo4j Bloom\n  patterns): split-panel with graph navigation on the left and content reader on the\n  right. Nodes styled by role (color), connection count (size), and origin (shape).\n- `corvia docs check` CLI command extends the Reasoner with three new check types:\n  `MisplacedDoc`, `TemporalContradiction`, and `CoverageGap`.\n- Defense in depth: PreToolUse hooks block wrong write paths (real-time), CLAUDE.md\n  guides correct behavior (soft), aggregator detects drift (periodic).\n- `DocsConfig` and `DocsRulesConfig` structs in `corvia-common/src/config.rs`,\n  configured via `[workspace.docs]` section in `corvia.toml`.\n- Phased delivery: metadata extensions -> dashboard reader -> reasoner checks -> hooks.\n\n**Source:** `docs/decisions/2026-03-13-docs-workflow-design.md`",
+  "source_version": "decisions/docs-workflow.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836253916Z",
+  "valid_from": "2026-04-11T00:10:08.836253916Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/docs-workflow.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 25,
+    "end_line": 42,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

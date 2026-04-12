@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c5d13f7f8de9",
+  "content": "def _rand_final(h=128, w=200):\n    return torch.rand(1, 3, h, w, device=\"cuda\", dtype=torch.float32)\ndef _rand_delta(h=128, w=200):\n    return torch.randn(1, 3, h, w, device=\"cuda\", dtype=torch.float32) * 0.05\ndef test_generate_heatmap_writes_png(tmp_path):\n    d_method = _rand_delta()\n    d_gold = _rand_delta()\n    out = tmp_path / \"hm.png\"\n    generate_heatmap(d_method, d_gold, frame_p95=0.1, out_path=out, method_name=\"smoke_method\")\n    assert out.exists()\n    Image.open(out).verify()",
+  "source_version": "benchmarks/upscale_bench/tests/test_visualize.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230321755Z",
+  "valid_from": "2026-04-11T00:04:13.230321755Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/tests/test_visualize.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 23,
+    "end_line": 29,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

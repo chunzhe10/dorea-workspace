@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-2ebc2452fea5",
+  "content": "# base64 and flate2 are only needed for the subprocess IPC fallback\n\n# PyO3 + numpy for in-process Python embedding (optional)\npyo3 = { version = \"0.22\", optional = true }\nnumpy = { version = \"0.22\", optional = true }\n\n[features]\ndefault = []\npython = [\"dep:pyo3\", \"dep:numpy\"]\n```\n\n- [ ] **Step 2: Rename existing `inference.rs` to `inference_subprocess.rs`**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ngit mv crates/dorea-video/src/inference.rs crates/dorea-video/src/inference_subprocess.rs\n```\n\n- [ ] **Step 3: Create new `inference.rs` with conditional module selection**\n\nCreate `crates/dorea-video/src/inference.rs`:\n\n```rust\n//! Inference integration — PyO3 in-process embedding or subprocess fallback.\n//!\n//! When the `python` feature is enabled, inference runs in-process via PyO3.\n//! Otherwise, the subprocess JSON-lines IPC implementation is used.\n\n// Re-export the active implementation so consumers use a single import path.\n// The public API (InferenceServer, InferenceConfig, InferenceError) is the same\n// regardless of which backend is active.\n\n#[cfg(feature = \"python\")]\nmod pyo3_backend;\n\n#[cfg(feature = \"python\")]\npub use pyo3_backend::*;\n\n#[cfg(not(feature = \"python\"))]\npub use crate::inference_subprocess::*;\n```\n\n- [ ] **Step 4: Create `pyo3_backend.rs` submodule**\n\nCreate `crates/dorea-video/src/pyo3_backend.rs`:\n\n```rust\n//! PyO3-based inference — embeds Python interpreter for zero-copy inference.\n//!\n//! Replaces the subprocess JSON-lines IPC with direct PyO3 function calls.\n//! GPU tensor sharing via TensorGuard prevents unnecessary device-to-host copies.",
+  "source_version": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836730620Z",
+  "valid_from": "2026-04-11T00:10:08.836730620Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1399,
+    "end_line": 1447,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

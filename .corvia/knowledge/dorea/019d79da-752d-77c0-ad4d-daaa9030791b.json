@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-daaa9030791b",
+  "content": "    if found {\n            return true;\n        }\n    }\n\n    // 4. Common fixed paths\n    for candidate in &[\"/usr/local/cuda/bin/nvcc\", \"/usr/bin/nvcc\"] {\n        if PathBuf::from(candidate).exists() {\n            return true;\n        }\n    }\n\n    false\n}\nfn main() {\n    println!(\"cargo:rerun-if-env-changed=CUDA_HOME\");\n    println!(\"cargo:rerun-if-env-changed=PATH\");\n\n    // Tell rustc that \"cuda\" is a valid feature value (suppresses unexpected_cfgs warning)\n    println!(\"cargo:rustc-check-cfg=cfg(feature, values(\\\"cuda\\\"))\");\n\n    if nvcc_available() {\n        println!(\"cargo:warning=Found nvcc — enabling CUDA grader reuse in dorea-cli\");\n        println!(\"cargo:rustc-cfg=feature=\\\"cuda\\\"\");\n    }\n}",
+  "source_version": "crates/dorea-cli/build.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229543705Z",
+  "valid_from": "2026-04-11T00:04:13.229543705Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/build.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 45,
+    "end_line": 56,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

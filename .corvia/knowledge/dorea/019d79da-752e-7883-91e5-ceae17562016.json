@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-ceae17562016",
+  "content": "let width_in_bytes = (N * 4 * std::mem::size_of::<f32>()) as usize;\n\n        for zone in 0..n_zones {\n            // --- Create CUarray ---\n            let arr_desc = CUDA_ARRAY3D_DESCRIPTOR {\n                Width:       N,\n                Height:      N,\n                Depth:       N,\n                Format:      CUarray_format_enum::CU_AD_FORMAT_FLOAT,\n                NumChannels: 4,\n                Flags:       0,\n            };\n            let mut arr: CUarray = std::ptr::null_mut();\n            unsafe {\n                // dynamic-linking: must dispatch through sys::lib()\n                let rc = sys::lib().cuArray3DCreate_v2(&mut arr, &arr_desc);\n                if rc != CUresult::CUDA_SUCCESS {\n                    return Err(GpuError::CudaFail(format!(\"cuArray3DCreate zone {zone}: {rc:?}\")));\n                }\n            }\n            arrays.push(arr);\n\n            // --- cuMemcpy3D: linear device buffer → CUarray (no PCIe roundtrip) ---\n            let zone_ptr = build_base + zone as u64 * zone_bytes;\n            let mut cpy: CUDA_MEMCPY3D = unsafe { std::mem::zeroed() };\n            cpy.srcMemoryType = CUmemorytype_enum::CU_MEMORYTYPE_DEVICE;\n            cpy.srcDevice     = zone_ptr;\n            cpy.srcPitch      = width_in_bytes;\n            cpy.srcHeight     = N;\n            cpy.dstMemoryType = CUmemorytype_enum::CU_MEMORYTYPE_ARRAY;\n            cpy.dstArray      = arr;\n            cpy.WidthInBytes  = width_in_bytes;\n            cpy.Height        = N;\n            cpy.Depth         = N;\n\n            unsafe {\n                let rc = sys::lib().cuMemcpy3D_v2(&cpy);\n                if rc != CUresult::CUDA_SUCCESS {\n                    return Err(GpuError::CudaFail(format!(\"cuMemcpy3D zone {zone}: {rc:?}\")));\n                }\n            }\n\n            // --- Create texture object ---\n            let mut res_desc: CUDA_RESOURCE_DESC = unsafe { std::mem::zeroed() };\n            res_desc.resType = CUresourcetype_enum::CU_RESOURCE_TYPE_ARRAY;",
+  "source_version": "docs/plans/2026-04-03-combined-lut-cuda-texture-plan.md",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230464270Z",
+  "valid_from": "2026-04-11T00:04:13.230464270Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "docs/plans/2026-04-03-combined-lut-cuda-texture-plan.md",
+    "language": "markdown",
+    "chunk_type": "heading_section",
+    "start_line": 1236,
+    "end_line": 1273,
+    "content_role": "plan",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

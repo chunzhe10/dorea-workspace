@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-1989e518b168",
+  "content": "## Chunk 6: Pipeline Scaffolding (repos/dorea)\n\n### Task 19: Initialize dorea repo\n\n**Files:**\n- Create: `repos/dorea/` directory structure\n\n- [ ] **Step 1: Clone dorea repo**\n\n```bash\ncd /home/chunzhe/corvia-project/dorea-workspace\ngit clone https://github.com/chunzhe10/dorea.git repos/dorea\n```\n\n- [ ] **Step 2: Create directory structure**\n\n```bash\ncd /home/chunzhe/corvia-project/dorea-workspace/repos/dorea\nmkdir -p scripts luts templates references\n```\n\n\n### Task 20: Create pipeline script stubs\n\n**Files:**\n- Create: `repos/dorea/scripts/00_generate_lut.py`\n- Create: `repos/dorea/scripts/01_extract_frames.py`\n- Create: `repos/dorea/scripts/02_claude_scene_analysis.py`\n- Create: `repos/dorea/scripts/03_run_sam2.py`\n- Create: `repos/dorea/scripts/04_run_depth.py`\n- Create: `repos/dorea/scripts/05_resolve_setup.py`\n\n- [ ] **Step 1: Create 00_generate_lut.py**\n\n```python\n\"\"\"Phase 0: Reference LUT Generation (One-Time Setup)\n\nAnalyses reference underwater images and generates a 33x33x33 3D .cube LUT\nthat captures the target colour look. This LUT is applied as Node 1 on every\nclip in DaVinci Resolve.\n\nRun once per look. Re-run when developing a new visual aesthetic.\n\nUsage:\n    python 00_generate_lut.py --references /path/to/reference/images --output /path/to/output.cube\n\nInputs:\n    - 20-30 underwater reference images in references/ directory\n    - Images should cover: different depths, lighting, subject types\n\nOutputs:\n    - luts/underwater_base.cube (33x33x33 3D LUT)\n\nDependencies:\n    - colour-science, numpy, Pillow\n    - No GPU required (CPU only)\n\nArchitecture doc: Section 4.0\n\"\"\"\n\nimport argparse\nimport sys\n\n\ndef main():\n    parser = argparse.ArgumentParser(description=\"Generate underwater reference LUT from images\")\n    parser.add_argument(\"--references\", required=True, help=\"Directory of reference images\")\n    parser.add_argument(\"--output\", default=\"luts/underwater_base.cube\", help=\"Output .cube file path\")\n    args = parser.parse_args()\n",
+  "source_version": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836435418Z",
+  "valid_from": "2026-04-11T00:10:08.836435418Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1065,
+    "end_line": 1131,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-361ab809c7e9",
+  "content": "## Known limitations\n## CI / Testing without the SDK\n\n## Verification Checklist\n\nAfter all tasks complete, verify:\n\n- [ ] `cargo build` succeeds, no warnings\n- [ ] `cargo test` all pass\n- [ ] `dorea grade --help` shows `--maxine`, `--maxine-upscale-factor`, `--no-maxine-artifact-reduction`\n- [ ] `dorea grade --input test.mp4 --maxine --maxine-upscale-factor 5` exits with \"not supported\" error\n- [ ] `DOREA_MAXINE_MOCK=1 dorea grade --input test.mp4 --maxine` completes, temp file created and deleted\n- [ ] `dorea grade --input test.mp4` (no `--maxine`) produces same output as before (byte-identical)\n- [ ] Python tests pass: `DOREA_MAXINE_MOCK=1 python -m pytest python/tests/ -v`",
+  "source_version": "plans/2026-04-04-maxine-enhancement-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836838979Z",
+  "valid_from": "2026-04-11T00:10:08.836838979Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-maxine-enhancement-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1554,
+    "end_line": 1564,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

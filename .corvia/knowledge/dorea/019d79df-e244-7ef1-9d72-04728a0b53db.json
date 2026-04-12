@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-04728a0b53db",
+  "content": "# line 514 in raune_filter.py\n\n## Goals\n\n1. Produce an objective comparison of 9 delta-upscale candidates on 3 hand-selected frames from `DJI_20251101111428_0055_D_3s.MP4`.\n2. Measure both **quality** (delta-space error vs. gold, final-image ΔE2000, SSIM) and **performance** (wall time for upscale-only and end-to-end).\n3. Emit a visual contact sheet that makes the trade-offs legible at a glance (grid summary, per-frame zoomed crops, error heatmaps).\n4. Be re-runnable as the pipeline evolves — adding a new method is a single-function addition; re-running is `python -m benchmarks.upscale_bench.run`.\n5. Cache the expensive gold-standard computation so iterating on method implementations is fast.\n\n\n## Non-goals\n\n- **No production integration** in this spec. Wiring the winning method into `raune_filter.py` is a separate PR, after results are reviewed.\n- **No regression / CI gating.** This is a characterization bench, not a test suite. Numbers are expected to change as RAUNE or methods evolve.\n- **No automatic winner selection.** Humans pick the winner by looking at the contact sheet and the metrics CSV.\n- **No speed optimization of the bench itself.** Correctness and clarity over throughput. First-run cost is acceptable because gold is cached.\n",
+  "source_version": "decisions/2026-04-10-delta-upscale-bench-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836184689Z",
+  "valid_from": "2026-04-11T00:10:08.836184689Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-10-delta-upscale-bench-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 28,
+    "end_line": 42,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

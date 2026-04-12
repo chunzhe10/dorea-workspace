@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-d3d853dd2bb3",
+  "content": "      nn.InstanceNorm2d(out_channels),\n            nn.ReLU(),\n        ]\n        if use_dropout:\n            layers.append(nn.Dropout(dropout_rate))\n        if use_att:\n            layers.append(CBAMBlock(out_channels))\n        return nn.Sequential(*layers)\ndef forward(self, input):\n        \"\"\"Forward function.\n\n        Args:\n            input: Input images. Type of `torch.Tensor`.\n        \"\"\"\n        return self.model(input)",
+  "source_version": "models/raune_net/models/RAUNE-Net/models/raune_net.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230544353Z",
+  "valid_from": "2026-04-11T00:04:13.230544353Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "models/raune_net/models/RAUNE-Net/models/raune_net.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 109,
+    "end_line": 115,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

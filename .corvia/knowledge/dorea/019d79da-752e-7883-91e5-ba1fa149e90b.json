@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-ba1fa149e90b",
+  "content": "th.max())\n        if d_max - d_min < 1e-6:\n            depth = torch.zeros_like(depth)\n        else:\n            depth = (depth - d_min) / (d_max - d_min)\n\n        return depth.to(torch.float32).contiguous()\n\n    def infer_batch_from_tensors(\n        self,\n        enhanced: \"torch.Tensor\",\n        depth_max_size: int = 518,\n    ) -> \"list[np.ndarray]\":\n        \"\"\"Run depth estimation on a batch of RAUNE-output GPU tensors.\n\n        Args:\n            enhanced: (N, 3, H_r, W_r) float32 in [0, 1], on self.device.\n                      This is the direct output of RauneNetInference.infer_batch_gpu().\n            depth_max_size: max long-edge for depth model (default 518).\n\n        Returns list of (H_d, W_d) float32 depth maps normalized to [0, 1].\n        The resize and re-normalisation happen on-device — no dtoh between models.\n        \"\"\"\n        if enhanced.device.type != self.device.type or (enhanced.device.index or 0) != (self.device.index or 0):\n            raise ValueError(\n                f\"infer_batch_from_tensors: enhanced tensor is on {enhanced.device} \"\n                f\"but model is on {self.device}. Caller must keep tensors on the same device.\"\n            )\n\n        if enhanced.numel() == 0:\n            return []\n\n        import torch\n        import torch.nn.functional as F\n\n        N, _, H_r, W_r = enhanced.shape\n",
+  "source_version": "python/dorea_inference/depth_anything.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230031248Z",
+  "valid_from": "2026-04-11T00:04:13.230031248Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/depth_anything.py",
+    "language": "py",
+    "chunk_type": "class_definition",
+    "start_line": 202,
+    "end_line": 228,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

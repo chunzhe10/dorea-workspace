@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-85060f78aa36",
+  "content": "              buf\n            }).unwrap_or_default();\n            return Err(FfmpegError::EncodeFailed(format!(\n                \"10-bit encoder exited immediately (code {:?}): {}\",\n                status.code(), stderr_msg.trim()\n            )));\n        }\n\n        Ok(Self {\n            child,\n            stdin,\n            stderr,\n            frame_bytes: width * height * 6, // rgb48le = 6 bytes per pixel\n        })\n    }\n\n    /// Write one RGB48LE frame (u16 data) to the 10-bit encoder.\n    pub fn write_frame_16(&mut self, pixels: &[u16]) -> Result<(), FfmpegError> {\n        let bytes: Vec<u8> = pixels.iter()\n            .flat_map(|v| v.to_le_bytes())\n            .collect();\n        if bytes.len() != self.frame_bytes {\n            return Err(FfmpegError::EncodeFailed(format!(\n                \"16-bit frame size mismatch: expected {} bytes, got {}\",\n                self.frame_bytes, bytes.len()\n            )));\n        }\n        self.write_frame(&bytes)\n    }\n}\n```\n\n- [ ] **Step 3: Add tests**\n\n```rust\n#[test]\nfn output_codec_parse() {\n    assert_eq!(\"prores\".parse::<OutputCodec>().unwrap(), OutputCodec::ProRes);\n    assert_eq!(\"hevc10\".parse::<OutputCodec>().unwrap(), OutputCodec::Hevc10);\n    assert_eq!(\"h264\".parse::<OutputCodec>().unwrap(), OutputCodec::H264);\n    assert!(\"bogus\".parse::<OutputCodec>().is_err());\n}\n\n#[test]\nfn output_codec_10bit_flag() {\n    assert!(OutputCodec::ProRes.is_10bit());\n    assert!(OutputCodec::Hevc10.is_10bit());\n    assert!(!OutputCodec::H264.is_10bit());\n}\n```\n\n- [ ] **Step 4: Run tests**\n\nRun: `cd /workspaces/dorea-workspace/repos/dorea && cargo test -p dorea-video`\nExpected: All pass.\n\n- [ ] **Step 5: Commit**\n\n```bash\ngit add crates/dorea-video/src/ffmpeg.rs\ngit commit -m \"feat(video): add OutputCodec enum and 10-bit ProRes/HEVC encoder\"\n```\n\n---\n",
+  "source_version": "plans/2026-04-08-10bit-pipeline-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837028971Z",
+  "valid_from": "2026-04-11T00:10:08.837028971Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-08-10bit-pipeline-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1094,
+    "end_line": 1151,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

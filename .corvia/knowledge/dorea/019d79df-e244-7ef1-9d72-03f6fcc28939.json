@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-03f6fcc28939",
+  "content": "## Triton Wrapper Change\n## Expected Outcome\n\n## Scope\n\n- `python/dorea_inference/raune_filter.py`:\n  - `_process_batch()` rewritten to use batched ops\n  - `triton_oklab_transfer()` wrapper accepts (N, 3, H, W) input\n  - `_oklab_transfer_kernel` itself UNCHANGED (still single-frame conceptually,\n    just processes a flattened pixel range)\n- `run_pipe_mode()` unchanged — pipe mode is rarely used and the per-frame structure\n  is required by the rgb48le streaming protocol\n\n\n## Backward Compatibility\n\n- Single-frame call (`N=1`) still works — permute is a no-op for that case\n- `pytorch_oklab_transfer` already handles batches via NCHW math\n- Output must remain bit-identical to current per-frame loop\n",
+  "source_version": "decisions/2026-04-10-batched-process-batch.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836178638Z",
+  "valid_from": "2026-04-11T00:10:08.836178638Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-10-batched-process-batch.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 56,
+    "end_line": 71,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-846e4e4f3f44",
+  "content": "spaces/dorea-workspace/repos/dorea && cargo test -p dorea-video`\nExpected: All pass.\n\n- [ ] **Step 6: Commit**\n\n```bash\ngit add crates/dorea-video/src/ffmpeg.rs\ngit commit -m \"feat(video): add codec_name, pix_fmt, bits_per_component to VideoInfo\"\n```\n\n---\n\n### Task 5: InputEncoding Enum and Auto-Detection\n\n**Files:**\n- Modify: `crates/dorea-video/src/ffmpeg.rs`\n\n- [ ] **Step 1: Define InputEncoding enum**\n\nAdd near the top of `crates/dorea-video/src/ffmpeg.rs` (after the error types):\n\n```rust\n/// Camera input encoding — determines the transfer function applied during calibration.\n#[derive(Debug, Clone, Copy, PartialEq, Eq)]\npub enum InputEncoding {\n    /// DJI Action 4 D-Log M (default for .mp4 H.265 10-bit)\n    DLogM,\n    /// Insta360 X5 I-Log (default for .mov ProRes 10-bit)\n    ILog,\n    /// Standard sRGB (8-bit consumer cameras)\n    Srgb,\n}\n\nimpl InputEncoding {\n    /// Auto-detect encoding from codec and container metadata.\n    ///\n    /// Heuristic:\n    /// - ProRes in .mov → ILog (Insta360 X5)\n    /// - H.265 10-bit in .mp4 → DLogM (DJI Action 4)\n    /// - Everything else → Srgb\n    pub fn auto_detect(info: &VideoInfo, path: &std::path::Path) -> Self {\n        let ext = path.extension()\n            .map(|e| e.to_string_lossy().to_lowercase())\n            .unwrap_or_default();\n\n        if info.codec_name == \"prores\" || ext == \"mov\" {\n            return Self::ILog;\n        }\n        if info.bits_per_component >= 10\n            && (info.codec_name == \"hevc\" || info.codec_name == \"h265\")\n        {\n            return Self::DLogM;\n        }\n        Self::Srgb\n    }\n\n    /// Whether this encoding comes from a 10-bit source.\n    pub fn is_10bit(&self) -> bool {\n        matches!(self, Self::DLogM | Self::ILog)\n    }\n}\n\nimpl std::fmt::Display for InputEncoding {\n    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {\n        match self {\n            Self::DLogM => write!(f, \"dlog-m\"),\n            Self::ILog => write!(f, \"ilog\"),\n            Self::Srgb => write!(f, \"srgb\"),\n        }\n    }\n}\n\nimpl std::str::FromStr for InputEncoding {\n    type Err = String;",
+  "source_version": "plans/2026-04-08-10bit-pipeline-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837019672Z",
+  "valid_from": "2026-04-11T00:10:08.837019672Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-08-10bit-pipeline-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 621,
+    "end_line": 682,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

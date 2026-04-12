@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-88188affb857",
+  "content": "    # channel's pixels are stored contiguously. After permute we have:\n    # channel 0 = [b0_p0, b0_p1, ..., b0_pHW, b1_p0, ..., bN_pHW]\n\n    # Reverse the permutation: (3, N*H*W) → (3, N, H, W) → (N, 3, H, W)\n    return out_flat.reshape(3, N, H, W).permute(1, 0, 2, 3).contiguous().float()\n```\n\n- [ ] **Step 2: Smoke-test the wrapper with the existing single-frame benchmark**\n\n```bash\ncd /workspaces/dorea-workspace\npython3 working/sea_thru_poc/bench_oklab_transfer.py --iters 5 --warmup 2 2>&1 | tail -25\n```\n\nThe benchmark uses single-frame input (shape (1,3,H,W)). The wrapper change must still work for N=1. Expected: similar timing (~3 ms/frame for the Triton path) and identical visual output to the previous implementation.\n\nIf the benchmark fails or produces wildly different numbers, the wrapper change broke something — investigate before proceeding.\n\n---\n",
+  "source_version": "plans/2026-04-10-batched-process-batch.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837069852Z",
+  "valid_from": "2026-04-11T00:10:08.837069852Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-10-batched-process-batch.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 82,
+    "end_line": 98,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

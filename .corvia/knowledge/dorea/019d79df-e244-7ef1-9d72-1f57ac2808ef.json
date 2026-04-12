@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-1f57ac2808ef",
+  "content": ": All pass.\n\n- [ ] **Step 8: Commit**\n\n```bash\ngit add crates/dorea-gpu/src/lib.rs crates/dorea-gpu/src/cpu.rs \\\n       crates/dorea-cli/src/grade.rs crates/dorea-cli/src/preview.rs\ngit commit -m \"feat(gpu): change grade_frame API from u8 to f32\"\n```\n\n---\n\n### Task 8: CUDA Kernels f32 Signature\n\n**Files:**\n- Modify: `crates/dorea-gpu/src/cuda/kernels/lut_apply.cu`\n- Modify: `crates/dorea-gpu/src/cuda/kernels/hsl_correct.cu`\n- Modify: `crates/dorea-gpu/src/cuda/kernels/clarity.cu`\n- Modify: `crates/dorea-gpu/src/cuda/mod.rs:17-49` (extern \"C\" signatures)\n- Modify: `crates/dorea-gpu/src/cuda/mod.rs:74-171` (grade_frame_cuda)\n\n- [ ] **Step 1: Update lut_apply.cu**\n\nIn `crates/dorea-gpu/src/cuda/kernels/lut_apply.cu`:\n\nChange the kernel signature and host launcher from `unsigned char*` to `float*`.\nRemove the `uchar→float / 255.0` conversion at kernel start.\nRemove the `float→uchar * 255.0` conversion at kernel end.\nChange `h_pixels_in` and `h_pixels_out` from `const unsigned char*` / `unsigned char*`\nto `const float*` / `float*`.\nUpdate `pixels_bytes` calculation from `n_pixels * 3 * sizeof(unsigned char)` to\n`n_pixels * 3 * sizeof(float)`.\n\nThe host launcher signature becomes:\n\n```c\nextern \"C\" int dorea_lut_apply_gpu(\n    const float* h_pixels_in,\n    const float* h_depth,\n    const float* h_luts,\n    const float* h_zone_boundaries,\n    float* h_pixels_out,\n    int width,\n    int height,\n    int lut_size,\n    int n_zones\n)\n```\n\n- [ ] **Step 2: Update hsl_correct.cu**\n\nSame pattern: `unsigned char*` → `float*`, remove byte↔float conversions.\n\n```c\nextern \"C\" int dorea_hsl_correct_gpu(\n    const float* h_pixels_in,\n    float* h_pixels_out,\n    const float* h_offsets,\n    const float* h_s_ratios,\n    const float* h_v_offsets,\n    const float* h_weights,\n    int width,\n    int height,\n    int n_qualifiers\n)\n```\n\n- [ ] **Step 3: Update clarity.cu**\n\nSame pattern: `unsigned char*` → `float*`.\n\n```c\nextern \"C\" int dorea_clarity_gpu(\n    const float* h_rgb_in,\n    float* h_rgb_out,\n    int full_w,\n    int full_h,\n    int proxy_w,\n    int proxy_h,\n    float strength\n)\n```\n",
+  "source_version": "plans/2026-04-02-10bit-pipeline-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836504807Z",
+  "valid_from": "2026-04-11T00:10:08.836504807Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-10bit-pipeline-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1004,
+    "end_line": 1074,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-2cfd5e901831",
+  "content": "# Test vram_free_bytes (returns 0 if no GPU)\n\n## Task 2: Expand GpuError and Add AdaptiveBatcher\n\n**Files:**\n- Modify: `crates/dorea-gpu/src/lib.rs`\n- Create: `crates/dorea-gpu/src/batcher.rs`\n- Test: `cargo test -p dorea-gpu`\n\nPure Rust, no GPU needed. Fully testable.\n\n- [ ] **Step 1: Write failing test for AdaptiveBatcher**\n\nCreate `crates/dorea-gpu/src/batcher.rs`:\n\n```rust\n/// Adaptive batch sizing for GPU grading.\n///\n/// Probes VRAM, starts at the maximum safe batch size, and adjusts at runtime:\n/// - On OOM: halve batch size (floor at 1)\n/// - After `grow_threshold` consecutive successes: grow by 50% (cap at max_batch)\n/// - Batch size does NOT persist across runs\npub struct AdaptiveBatcher {\n    batch_size: usize,\n    max_batch: usize,\n    min_batch: usize,\n    successes: usize,\n    grow_threshold: usize,\n}\n\nimpl AdaptiveBatcher {\n    /// Create a new batcher from VRAM probe results.\n    ///\n    /// `vram_free`: free VRAM in bytes (after `torch.cuda.empty_cache()`)\n    /// `per_frame_bytes`: estimated bytes per frame (e.g. 56MB for 1080p)\n    /// `safety_margin`: fraction reserved for fragmentation (0.15 = 15%)\n    pub fn new(vram_free: usize, per_frame_bytes: usize, safety_margin: f64) -> Self {\n        let usable = (vram_free as f64 * (1.0 - safety_margin)) as usize;\n        let max_batch = if per_frame_bytes > 0 {\n            (usable / per_frame_bytes).max(1)\n        } else {\n            1\n        };\n        Self {\n            batch_size: max_batch,\n            max_batch,\n            min_batch: 1,\n            successes: 0,\n            grow_threshold: 10,\n        }\n    }\n\n    /// Create a batcher with a fixed batch size (no adaptation).\n    pub fn fixed(batch_size: usize) -> Self {\n        Self {\n            batch_size: batch_size.max(1),\n            max_batch: batch_size.max(1),\n            min_batch: 1,\n            successes: 0,\n            grow_threshold: usize::MAX,\n        }\n    }\n",
+  "source_version": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836703591Z",
+  "valid_from": "2026-04-11T00:10:08.836703591Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 286,
+    "end_line": 346,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

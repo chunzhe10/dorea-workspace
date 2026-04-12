@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-1bbd91a435a2",
+  "content": "# Architecture doc: Section 10\n# Phase 0 (00_generate_lut.py) is NOT included here — it is a one-time setup\n\n# that runs once per visual look, not per dive session.\n\n# Run manually: python scripts/00_generate_lut.py --references references/look_v1/ --output luts/underwater_base.cube\n\necho \"=== Phase 1: Extract keyframes ===\"\npython \"$SCRIPT_DIR/01_extract_frames.py\" --date \"$DATE\"\n\necho \"=== Phase 2: Claude scene analysis ===\"\npython \"$SCRIPT_DIR/02_claude_scene_analysis.py\" --date \"$DATE\"\n\necho \"=== Phase 3: SAM2 subject tracking ===\"\npython \"$SCRIPT_DIR/03_run_sam2.py\" --date \"$DATE\"\n\necho \"=== Phase 4: Depth estimation ===\"\npython \"$SCRIPT_DIR/04_run_depth.py\" --date \"$DATE\"\n\necho \"\"\necho \"=== Phases 1-4 complete ===\"\necho \"\"\necho \"Phase 5 must run on the HOST (requires DaVinci Resolve).\"\necho \"Open a terminal on the host and run:\"\necho \"\"\necho \"  cd $(dirname \"$SCRIPT_DIR\")\"\necho \"  python scripts/05_resolve_setup.py --date $DATE\"\necho \"\"\necho \"Then open Resolve — your timeline is ready for creative grading.\"\n```\n\n- [ ] **Step 2: Make executable**\n\n```bash\nchmod +x repos/dorea/scripts/run_all.sh\n```\n",
+  "source_version": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836460795Z",
+  "valid_from": "2026-04-11T00:10:08.836460795Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1458,
+    "end_line": 1490,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

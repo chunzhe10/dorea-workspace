@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c331cd553b5b",
+  "content": "(thumbs):\n        tx = padding + i * thumb_w\n        canvas.paste(img, (tx, ty + label_h))\n        draw.text((tx, ty), name, fill=(220, 220, 220), font=font_small)\n\n    # Crops row\n    cy = ty + thumb_h + padding\n    for i, (name, img) in enumerate(crops):\n        cx = padding + i * crop_w\n        canvas.paste(img, (cx, cy + label_h))\n        draw.text((cx, cy), name, fill=(220, 220, 220), font=font_small)\n\n    # Metrics strip\n    my = cy + crop_h + padding\n    draw.text((padding, my), \"Per-method metrics for this frame:\", fill=(220, 220, 220), font=font_small)\n    my += 20\n    header_cols = [\"method\", \"delta_l1\", \"final_ΔE\", \"ΔE p95\", \"SSIM\"]\n    cw = [180, 100, 100, 100, 80]\n    x = padding\n    for hc, w in zip(header_cols, cw):\n        draw.text((x, my), hc, fill=(160, 160, 160), font=font_small)\n        x += w\n    my += 18\n    for name in method_order:\n        m = method_metrics.get(name, {})\n        x = padding\n        draw.text((x, my), name, fill=(220, 220, 220), font=font_small)\n        x += cw[0]\n        draw.text((x, my), f\"{m.get('delta_l1', float('nan')):.4f}\", fill=(220, 220, 220), font=font_small)\n        x += cw[1]\n        draw.text((x, my), f\"{m.get('final_delta_e', float('nan')):.3f}\", fill=(220, 220, 220), font=font_small)\n        x += cw[2]\n        draw.text((x, my), f\"{m.get('final_delta_e_p95', float('nan')):.3f}\", fill=(220, 220, 220), font=font_small)\n        x += cw[3]\n        draw.text((x, my), f\"{m.get('ssim', float('nan')):.4f}\", fill=(220, 220, 220), font=font_small)\n        my += 16\n\n    out_path.parent.mkdir(parents=True, exist_ok=True)\n    canvas.save(out_path)",
+  "source_version": "benchmarks/upscale_bench/visualize.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230284005Z",
+  "valid_from": "2026-04-11T00:04:13.230284005Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/visualize.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 330,
+    "end_line": 360,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

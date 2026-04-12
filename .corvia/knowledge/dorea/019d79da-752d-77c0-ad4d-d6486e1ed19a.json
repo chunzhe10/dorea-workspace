@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d6486e1ed19a",
+  "content": "ctors[y * width + x][c] = v00 * (1.0 - fx) * (1.0 - fy)\n                    + v10 * fx * (1.0 - fy)\n                    + v01 * (1.0 - fx) * fy\n                    + v11 * fx * fy;\n            }\n        }\n    }\n\n    MotionField { vectors, width, height }\n}\npub fn mean_flow_magnitude(field: &MotionField) -> f32 {\n    if field.vectors.is_empty() {\n        return 0.0;\n    }\n    let sum: f32 = field.vectors.iter()\n        .map(|[dx, dy]| (dx * dx + dy * dy).sqrt())\n        .sum();\n    sum / field.vectors.len() as f32\n}",
+  "source_version": "crates/dorea-cli/src/optical_flow.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229493337Z",
+  "valid_from": "2026-04-11T00:04:13.229493337Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/optical_flow.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 108,
+    "end_line": 116,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

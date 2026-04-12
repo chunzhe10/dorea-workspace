@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-35fd39b05392",
+  "content": "## Usage\n## What it does\n\n## Disk space\n\nThe temp file is created in `$TMPDIR` and deleted automatically after grading.\nEstimated size: `width × height × fps × duration_s × 0.5 bits/px`.\n\n| Clip | Resolution | Duration | Approx temp size |\n|------|------------|----------|-----------------|\n| Short | 1080p | 1 min | ~0.5 GB |\n| Medium | 1080p | 5 min | ~2–4 GB |\n| Long | 4K | 10 min | ~15–20 GB |\n\nEnsure `$TMPDIR` has sufficient free space before running with `--maxine`.\n\n\n## VRAM budget\n\nAll models (Maxine + RAUNE + Depth) are loaded simultaneously in one Python process\nduring Pass 1 and calibration (~4.8–5.6 GB peak on RTX 3060 6 GB).\n\nAfter calibration, the inference server shuts down — Pass 2 grading uses only\nthe CUDA grader (~300 MB).\n\nIf you run out of VRAM:\n- Try `--no-maxine-artifact-reduction` to save ~500 MB\n- Or disable Maxine entirely (`dorea grade --input footage.mp4` without `--maxine`)\n",
+  "source_version": "plans/2026-04-04-maxine-enhancement-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836837731Z",
+  "valid_from": "2026-04-11T00:10:08.836837731Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-maxine-enhancement-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1498,
+    "end_line": 1522,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

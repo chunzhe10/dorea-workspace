@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-219747f361fe",
+  "content": "## Task 2: Write `clarity.cu`\n\n__device__ static float lab_f_d(float t) {\n    return (t > 0.008856f) ? cbrtf(t) : (7.787f * t + 16.0f / 116.0f);\n}\n\n__device__ static float lab_f_inv_d(float t) {\n    float t3 = t * t * t;\n    return (t3 > 0.008856f) ? t3 : ((t - 16.0f / 116.0f) / 7.787f);\n}\n\n#define D65_XN 0.95047f\n#define D65_YN 1.00000f\n#define D65_ZN 1.08883f\n\n__device__ static void srgb_to_lab_d(float r, float g, float b,\n                                       float* L, float* A, float* B) {\n    float rl = srgb_to_linear_d(r);\n    float gl = srgb_to_linear_d(g);\n    float bl = srgb_to_linear_d(b);\n\n    float x = 0.4124564f * rl + 0.3575761f * gl + 0.1804375f * bl;\n    float y = 0.2126729f * rl + 0.7151522f * gl + 0.0721750f * bl;\n    float z = 0.0193339f * rl + 0.1191920f * gl + 0.9503041f * bl;\n\n    float fx = lab_f_d(x / D65_XN);\n    float fy = lab_f_d(y / D65_YN);\n    float fz = lab_f_d(z / D65_ZN);\n\n    *L = 116.0f * fy - 16.0f;\n    *A = 500.0f * (fx - fy);\n    *B = 200.0f * (fy - fz);\n}\n\n__device__ static void lab_to_srgb_d(float L, float A, float B,\n                                       float* r, float* g, float* b) {\n    float fy = (L + 16.0f) / 116.0f;\n    float fx = A / 500.0f + fy;\n    float fz = fy - B / 200.0f;\n\n    float x = lab_f_inv_d(fx) * D65_XN;\n    float y = lab_f_inv_d(fy) * D65_YN;\n    float z = lab_f_inv_d(fz) * D65_ZN;\n\n    float rl =  3.2404542f * x - 1.5371385f * y - 0.4985314f * z;\n    float gl = -0.9692660f * x + 1.8760108f * y + 0.0415560f * z;\n    float bl_out =  0.0556434f * x - 0.2040259f * y + 1.0572252f * z;",
+  "source_version": "plans/2026-04-02-clarity-cuda-kernel.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836536320Z",
+  "valid_from": "2026-04-11T00:10:08.836536320Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-clarity-cuda-kernel.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 291,
+    "end_line": 335,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

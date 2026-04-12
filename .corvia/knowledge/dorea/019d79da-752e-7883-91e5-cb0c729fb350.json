@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-cb0c729fb350",
+  "content": "# NVIDIA Maxine VFX SDK Setup\n\n## Prerequisites\n\n- NVIDIA GPU: Turing, Ampere, Ada, or Blackwell with Tensor Cores (RTX 3060 ✓)\n- Linux driver: 570.190+, 580.82+, or 590.44+\n- Python 3.10+\n- dorea inference venv active (`/opt/dorea-venv`)\n\n\n## Installation\n\n1. Download the Maxine Video Effects SDK from\n   [NVIDIA NGC](https://catalog.ngc.nvidia.com/orgs/nvidia/teams/maxine/resources/maxine_linux_vfx_sdk_ga)\n\n2. Install the Python bindings:\n\n   ```bash\n   source /opt/dorea-venv/bin/activate\n   pip install nvvfx\n   ```\n\n3. Verify installation:\n\n   ```bash\n   python -c \"import nvvfx; print('nvvfx OK')\"\n   ```\n",
+  "source_version": "docs/guides/maxine-setup.md",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230402927Z",
+  "valid_from": "2026-04-11T00:04:13.230402927Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "docs/guides/maxine-setup.md",
+    "language": "markdown",
+    "chunk_type": "heading_section",
+    "start_line": 6,
+    "end_line": 30,
+    "content_role": "design",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

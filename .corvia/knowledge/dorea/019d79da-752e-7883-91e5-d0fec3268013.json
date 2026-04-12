@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-d0fec3268013",
+  "content": "### Task 3: Add `res_bufs` and `cal_bufs` fields to `CudaGrader`\n\n      _not_send: std::marker::PhantomData<*const ()>,\n  }\n  ```\n\n- [ ] **Step 3: Update `CudaGrader::new()` to initialise both fields as `None`**\n\n  In `CudaGrader::new()`, replace the `Ok(Self { ... })` at the end:\n\n  Before:\n  ```rust\n  Ok(Self {\n      device,\n      _not_send: std::marker::PhantomData,\n  })\n  ```\n\n  After:\n  ```rust\n  Ok(Self {\n      device,\n      res_bufs: RefCell::new(None),\n      cal_bufs: RefCell::new(None),\n      _not_send: std::marker::PhantomData,\n  })\n  ```\n\n- [ ] **Step 4: Verify it compiles**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ncargo check -p dorea-gpu 2>&1 | tail -20\n```\n\nExpected: no errors.\n\n- [ ] **Step 5: Commit**\n\n```bash\ngit add crates/dorea-gpu/src/cuda/mod.rs\ngit commit -m \"feat(dorea-gpu): add res_bufs/cal_bufs RefCell fields to CudaGrader\"\n```\n\n---\n",
+  "source_version": "docs/plans/2026-04-03-cuda-grader-buffer-pre-allocation.md",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230502448Z",
+  "valid_from": "2026-04-11T00:04:13.230502448Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "docs/plans/2026-04-03-cuda-grader-buffer-pre-allocation.md",
+    "language": "markdown",
+    "chunk_type": "heading_section",
+    "start_line": 356,
+    "end_line": 399,
+    "content_role": "plan",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

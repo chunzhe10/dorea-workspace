@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-031fdb9e9b4a",
+  "content": "## Decision\n## Stages\n\n## File Structure\n\n| File | Content |\n|------|---------|\n| `pipeline/mod.rs` | Boundary I/O structs (no traits — stages are concrete, not generic) |\n| `pipeline/keyframe.rs` | `KeyframeEntry`, `run_keyframe_stage()` |\n| `pipeline/feature.rs` | `PagedCalibrationStore`, `run_feature_stage()` |\n| `pipeline/calibration.rs` | `SegmentCalibration`, `run_calibration_stage()` |\n| `pipeline/grading.rs` | `lerp_depth`, `run_grading_stage()` |\n| `grade.rs` | Config resolution, probe, encoder setup, stage orchestration |\n\n\n## Design Decisions\n\n1. **Free functions, not trait objects.** Each stage is a `pub fn run_*_stage(input) -> Result<Output>`.\n   The Node/Stage traits from the original issue add abstraction without benefit — the pipeline\n   is strictly sequential, never recomposed, and the stages have different signatures.\n\n2. **Boundary structs carry data between stages.** `KeyframeStageOutput`, `FeatureStageOutput`,\n   `CalibrationStageOutput` — each consumed by the next stage.\n\n3. **PagedCalibrationStore moves to feature.rs.** It's an implementation detail of the feature\n   stage, not shared.\n\n4. **Config struct passed to each stage.** A `PipelineConfig` struct in mod.rs holds all resolved\n   config values. Stages receive `&PipelineConfig` instead of reconstructing from GradeArgs.\n\n5. **GradingStage takes ownership of encoder.** It writes frames directly. Returns final stats.",
+  "source_version": "decisions/2026-04-08-pipeline-dag-refactor-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836168904Z",
+  "valid_from": "2026-04-11T00:10:08.836168904Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-08-pipeline-dag-refactor-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 19,
+    "end_line": 45,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

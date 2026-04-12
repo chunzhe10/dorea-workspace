@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-0ff6d9434a2d",
+  "content": "### Task 1.4: Implement post-filter in retriever\n\n    }\n\n    #[test]\n    fn test_post_filter_by_source_origin() {\n        let results = vec![\n            make_result(Some(\"design\"), Some(\"repo:corvia\"), 0.9),\n            make_result(Some(\"code\"), Some(\"repo:corvia\"), 0.8),\n            make_result(Some(\"design\"), Some(\"workspace\"), 0.7),\n        ];\n        let filtered = super::post_filter_metadata(\n            results,\n            None,\n            Some(\"repo:corvia\"),\n        );\n        assert_eq!(filtered.len(), 2);\n    }\n\n    #[test]\n    fn test_post_filter_no_filters_returns_all() {\n        let results = vec![\n            make_result(Some(\"design\"), Some(\"repo:corvia\"), 0.9),\n            make_result(None, None, 0.8),\n        ];\n        let filtered = super::post_filter_metadata(results, None, None);\n        assert_eq!(filtered.len(), 2);\n    }\n}\n```\n\n- [ ] **Step 2: Run test to verify it fails**\n\nRun: `cd /workspaces/corvia-workspace/repos/corvia && cargo test -p corvia-kernel filter_tests -- --nocapture`\nExpected: FAIL — `post_filter_metadata` function doesn't exist\n\n- [ ] **Step 3: Implement `post_filter_metadata` function**\n\nAdd to `retriever.rs` (above the test module):",
+  "source_version": "plans/2026-03-13-docs-workflow-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836323054Z",
+  "valid_from": "2026-04-11T00:10:08.836323054Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-13-docs-workflow-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 375,
+    "end_line": 411,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

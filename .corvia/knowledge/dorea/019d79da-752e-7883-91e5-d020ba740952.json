@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-d020ba740952",
+  "content": "## Self-Review Checklist\n\n### Spec coverage\n- ✅ Hard delete clarity — Task 2\n- ✅ grade_pixel.cuh with full pipeline — Task 4\n- ✅ GPU build kernel via cudaMemcpy3D (device-to-device) — Task 5+6\n- ✅ float4 texture format — Task 6+7\n- ✅ u8 I/O in per-frame kernel — Task 7\n- ✅ COMBINED_LUT_GRID = 97 constant — Task 6 (combined_lut.rs)\n- ✅ CudaGrader::new(cal, params) — Task 8\n- ✅ grade_frame_with_grader drops cal+params — Task 9\n- ✅ Accuracy test within 2/255 — Task 10\n- ✅ Criterion benchmark — Task 10\n\n\n### Type consistency\n- `CombinedLut::build(device, calibration, params)` defined in Task 6, referenced in Task 8 ✅\n- `grade_frame_cuda(&pixels, &depth, w, h) → Vec<u8>` defined in Task 8, used in Task 9 ✅\n- `grade_frame_with_grader(grader, pixels, depth, w, h)` defined in Task 9, used in bench ✅\n- `COMBINED_LUT_GRID` defined in `combined_lut.rs` (Task 6), used in `build_combined_lut.cu` (Task 5) — **Note:** the `.cu` file uses a hardcoded `grid_size` parameter passed from Rust; the Rust constant is `COMBINED_LUT_GRID = 97`. The kernel receives it as `int grid_size` at launch.\n- `grade_pixel_device` defined in `grade_pixel.cuh` (Task 4), `#include`d in `build_combined_lut.cu` (Task 5) ✅\n- `grade_pixel_cpu` defined in `cpu.rs` (Task 3), tested against `grade_frame_cpu` ✅\n",
+  "source_version": "docs/plans/2026-04-03-combined-lut-cuda-texture-plan.md",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230487912Z",
+  "valid_from": "2026-04-11T00:04:13.230487912Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "docs/plans/2026-04-03-combined-lut-cuda-texture-plan.md",
+    "language": "markdown",
+    "chunk_type": "heading_section",
+    "start_line": 2129,
+    "end_line": 2148,
+    "content_role": "plan",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

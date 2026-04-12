@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-bcf7dc3050c6",
+  "content": "e_count += n\n        if frame_count % (batch_size * 4) == 0:\n            print(f\"[raune-filter] {frame_count} frames\", file=sys.stderr, flush=True)\n\n    print(f\"[raune-filter] done: {frame_count} frames\", file=sys.stderr, flush=True)\n    return frame_count\ndef main():\n    parser = argparse.ArgumentParser(description=\"RAUNE-Net OKLab chroma transfer\")\n    parser.add_argument(\"--weights\", required=True)\n    parser.add_argument(\"--models-dir\", required=True)\n    parser.add_argument(\"--full-width\", type=int, required=True)\n    parser.add_argument(\"--full-height\", type=int, required=True)\n    parser.add_argument(\"--proxy-width\", type=int, required=True)\n    parser.add_argument(\"--proxy-height\", type=int, required=True)\n    parser.add_argument(\"--batch-size\", type=int, default=4,\n                        help=\"Frames per batch (default: 4). Must match grade.rs default.\")\n    # Single-process mode args\n    parser.add_argument(\"--input\", help=\"Input video file (enables single-process mode)\")\n    parser.add_argument(\"--output\", help=\"Output video file (required with --input)\")\n    parser.add_argument(\"--output-codec\", default=\"prores_ks\",\n                        help=\"Output codec: prores_ks, hevc, libx265, h264 (default: prores_ks)\")\n    args = parser.parse_args()\n\n    # Load RAUNE model\n    models_dir = Path(args.models_dir)\n    if (models_dir / \"models\" / \"raune_net.py\").exists():\n        raune_dir = models_dir\n    elif (models_dir / \"models\" / \"RAUNE-Net\" / \"models\" / \"raune_net.py\").exists():\n        raune_dir = models_dir / \"models\" / \"RAUNE-Net\"\n    else:\n        raune_dir = models_dir\n    if str(raune_dir) not in sys.path:\n        sys.path.insert(0, str(raune_dir))\n\n    from models.raune_net import RauneNet\n\n    model = RauneNet(input_nc=3, output_nc=3, n_blocks=30, n_down=2, ngf=64).cuda()",
+  "source_version": "python/dorea_inference/raune_filter.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230197046Z",
+  "valid_from": "2026-04-11T00:04:13.230197046Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/raune_filter.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 634,
+    "end_line": 664,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

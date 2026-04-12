@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-e13829044bff",
+  "content": "            skip_raune: false,\n            skip_depth: false,\n            depth_model: None,\n            device: None,\n            startup_timeout: Duration::from_secs(120),\n            maxine: false,\n            maxine_upscale_factor: 2,\n        }\n    }\n}\nfn default() -> Self {\n        Self {\n            python_exe: PathBuf::from(\"/opt/dorea-venv/bin/python\"),\n            raune_weights: None,\n            raune_models_dir: None,\n            skip_raune: false,\n            skip_depth: false,\n            depth_model: None,\n            device: None,\n            startup_timeout: Duration::from_secs(120),\n            maxine: false,\n            maxine_upscale_factor: 2,\n        }\n    }",
+  "source_version": "crates/dorea-video/src/inference_subprocess.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229623890Z",
+  "valid_from": "2026-04-11T00:04:13.229623890Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference_subprocess.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 58,
+    "end_line": 71,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c94589cde251",
+  "content": "   report_path = out_dir / \"run_report.md\"\n    _write_run_report(\n        report_path, env_info, frame_indices, gold_paths, oom_events,\n        all_results, method_names, out_dir,\n    )\n    print(f\"run report:   {report_path}\")\n\n    print(\"\\n=== done ===\")\ndef _upscale_only():\n                        return fn(delta_proxy, frame_4k, (2160, 3840))",
+  "source_version": "benchmarks/upscale_bench/run.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230368193Z",
+  "valid_from": "2026-04-11T00:04:13.230368193Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/run.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 241,
+    "end_line": 242,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

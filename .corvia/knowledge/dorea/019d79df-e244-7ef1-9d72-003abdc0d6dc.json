@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-003abdc0d6dc",
+  "content": "## Scope and Non-Goals\n## Build and CI\n\n### Feature flags\n\n```\ndorea-cli depends on:\n  dorea-gpu (features = [\"cuda\"])   — optional, auto-detected\n  dorea-video (features = [])       — NO python feature by default\n\ndorea-video:\n  default features: []\n  \"python\" feature: enables pyo3 + numpy\n  Without \"python\": uses inference_subprocess.rs (JSON-lines IPC, current approach)\n\ndorea-gpu:\n  default features: []\n  \"cuda\" feature: enables cudarc, set by build.rs when nvcc is found\n  Without \"cuda\": CPU-only fallback (cpu.rs)\n```\n\n\n### CI builds\n\n- **Standard CI** (no GPU, no Python): builds all crates with default features.\n  dorea-gpu compiles without CUDA (CPU fallback). dorea-video compiles without\n  PyO3 (subprocess fallback). All unit tests run.\n- **GPU CI** (CUDA toolkit + Python): builds with `--features cuda,python`.\n  Runs integration tests including cudarc kernel launches and PyO3 inference.\n- **Build-time requirements** for `python` feature: `python3-dev`, `numpy`\n  installed, `PYO3_PYTHON` env var set. Documented in repo README.\n",
+  "source_version": "decisions/2026-04-03-gpu-space-ipc-adaptive-batching-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836132799Z",
+  "valid_from": "2026-04-11T00:10:08.836132799Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-03-gpu-space-ipc-adaptive-batching-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 650,
+    "end_line": 677,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

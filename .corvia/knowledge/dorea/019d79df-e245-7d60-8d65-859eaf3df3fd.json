@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-859eaf3df3fd",
+  "content": " | tail -20`\nExpected: Compiles without errors.\n\n- [ ] **Step 4: Commit**\n\n```bash\ngit add crates/dorea-gpu/src/cuda/kernels/combined_lut.cu crates/dorea-gpu/src/cuda/mod.rs\ngit commit -m \"feat(gpu): add combined_lut_kernel_16 for 10-bit u16 I/O\"\n```\n\n---\n\n### Task 9: CudaGrader and AdaptiveGrader — u16 Methods\n\n**Files:**\n- Modify: `crates/dorea-gpu/src/cuda/mod.rs`\n- Modify: `crates/dorea-gpu/src/lib.rs`\n\n- [ ] **Step 1: Add FrameBuffers16 struct**\n\nAdd alongside existing `FrameBuffers`:\n\n```rust\n#[cfg(feature = \"cuda\")]\nstruct FrameBuffers16 {\n    width: usize,\n    height: usize,\n    d_pixels_in: CudaSlice<u16>,   // n * 3\n    d_depth: CudaSlice<f32>,        // n\n    d_pixels_out: CudaSlice<u16>,   // n * 3\n}\n\n#[cfg(feature = \"cuda\")]\nfn alloc_frame_buffers_16(dev: &Arc<CudaDevice>, width: usize, height: usize) -> Result<FrameBuffers16, GpuError> {\n    let n = width.checked_mul(height).ok_or_else(|| {\n        GpuError::InvalidInput(\"frame dimensions overflow usize\".into())\n    })?;\n    Ok(FrameBuffers16 {\n        width,\n        height,\n        d_pixels_in: dev.alloc_zeros(n * 3).map_err(map_cudarc_error)?,\n        d_depth: dev.alloc_zeros(n).map_err(map_cudarc_error)?,\n        d_pixels_out: dev.alloc_zeros(n * 3).map_err(map_cudarc_error)?,\n    })\n}\n```\n\n- [ ] **Step 2: Add frame_bufs_16 field to AdaptiveGrader**\n\nAdd to the `AdaptiveGrader` struct:\n\n```rust\nframe_bufs_16: RefCell<Option<FrameBuffers16>>,\n```\n\nInitialize it as `RefCell::new(None)` in `AdaptiveGrader::new()`.\n\n- [ ] **Step 3: Add grade_frame_blended_16 to AdaptiveGrader**\n\nAdd a u16 variant of `grade_frame_blended`:\n\n```rust\n/// Grade one frame at 10-bit precision (u16 I/O).\n///\n/// Same semantics as `grade_frame_blended` but accepts and returns u16 pixels.",
+  "source_version": "plans/2026-04-08-10bit-pipeline-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837036814Z",
+  "valid_from": "2026-04-11T00:10:08.837036814Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-08-10bit-pipeline-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1384,
+    "end_line": 1436,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

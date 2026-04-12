@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c813146bf5af",
+  "content": "def _f(t):\n        return torch.where(t > delta ** 3, t.clamp_min(1e-12).pow(1.0 / 3.0), t / (3 * delta * delta) + 4 / 29)\ndef delta_e_2000(\n    rgb_a: torch.Tensor,\n    rgb_b: torch.Tensor,\n) -> torch.Tensor:\n    \"\"\"Per-pixel ΔE2000 in CIELab between two sRGB [0,1] tensors.\n\n    Returns (1, 1, H, W) of ΔE2000 values.\n    \"\"\"\n    lab1 = _xyz_to_lab_d65(_srgb_to_xyz_d65(rgb_a))\n    lab2 = _xyz_to_lab_d65(_srgb_to_xyz_d65(rgb_b))\n    L1, a1, b1 = lab1[:, 0:1], lab1[:, 1:2], lab1[:, 2:3]\n    L2, a2, b2 = lab2[:, 0:1], lab2[:, 1:2], lab2[:, 2:3]\n\n    C1 = (a1 * a1 + b1 * b1).sqrt()\n    C2 = (a2 * a2 + b2 * b2).sqrt()\n    Cm = (C1 + C2) / 2\n\n    G = 0.5 * (1 - (Cm.pow(7) / (Cm.pow(7) + 25 ** 7)).sqrt())\n    a1p = (1 + G) * a1\n    a2p = (1 + G) * a2\n    C1p = (a1p * a1p + b1 * b1).sqrt()\n    C2p = (a2p * a2p + b2 * b2).sqrt()\n\n    def _atan2_deg(y, x):\n        return torch.atan2(y, x) * (180.0 / torch.pi) % 360.0\n\n    h1p = _atan2_deg(b1, a1p)\n    h2p = _atan2_deg(b2, a2p)\n\n    dLp = L2 - L1\n    dCp = C2p - C1p\n    dhp = h2p - h1p",
+  "source_version": "benchmarks/upscale_bench/metrics.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230349795Z",
+  "valid_from": "2026-04-11T00:04:13.230349795Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/metrics.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 104,
+    "end_line": 135,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

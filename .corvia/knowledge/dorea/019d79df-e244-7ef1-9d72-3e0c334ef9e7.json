@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-3e0c334ef9e7",
+  "content": "tch via\n/// `process(chunk_kfs.to_vec())`.\n///\n/// Builds the `RauneDepthBatchItem` list inline per batch — never pre-allocates\n/// items for all keyframes at once.\npub struct FusedInferenceNode {\n    pub server: InferenceServer,\n    enable_maxine: bool,\n    proxy_w: usize,\n    proxy_h: usize,\n    proxy_size: usize,\n}\n\nimpl FusedInferenceNode {\n    pub fn new(\n        server: InferenceServer,\n        enable_maxine: bool,\n        proxy_w: usize,\n        proxy_h: usize,\n        proxy_size: usize,\n    ) -> Self {\n        Self { server, enable_maxine, proxy_w, proxy_h, proxy_size }\n    }\n}\n\nimpl Node for FusedInferenceNode {\n    /// Input: one batch of KeyframeEntry (proxy pixels).\n    type Input = Vec<KeyframeEntry>;\n    /// Output: (id, enhanced_rgb, enh_w, enh_h, depth_f32, dw, dh) per keyframe.\n    type Output = Vec<(String, Vec<u8>, usize, usize, Vec<f32>, usize, usize)>;\n\n    fn name(&self) -> &'static str { \"fused_inference\" }\n\n    fn process(&mut self, batch: Vec<KeyframeEntry>) -> Result<Self::Output> {\n        // Build items inline — no pre-allocation across all keyframes.\n        let items: Vec<RauneDepthBatchItem> = batch.iter().map(|kf| {\n            RauneDepthBatchItem {\n                id: format!(\"kf_f{}\", kf.frame_index),\n                pixels: kf.proxy_pixels.clone(),\n                width: self.proxy_w,\n                height: self.proxy_h,\n                raune_max_size: self.proxy_w.max(self.proxy_h),\n                depth_max_size: self.proxy_size.min(1036),\n            }\n        }).collect();\n\n        let mut results = self.server\n            .run_raune_depth_batch(&items, self.enable_maxine)\n            .unwrap_or_else(|e| {\n                log::warn!(\"Fused batch failed: {e} — using originals + uniform depth\");\n                items.iter().map(|item| (\n                    item.id.clone(), item.pixels.clone(),",
+  "source_version": "plans/2026-04-05-pipeline-dag-refactor.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836968619Z",
+  "valid_from": "2026-04-11T00:10:08.836968619Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-05-pipeline-dag-refactor.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 640,
+    "end_line": 683,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

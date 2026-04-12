@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-37a1284decd2",
+  "content": "l.clone(),\n        skip_depth: false,\n        device: if args.cpu_only { Some(\"cpu\".to_string()) } else { None },\n        startup_timeout: Duration::from_secs(180),\n        maxine: !args.no_maxine,\n        maxine_upscale_factor: args.maxine_upscale_factor,\n    }\n}\n```\n\n- [ ] **Step 5: Verify tests pass at this point**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ncargo test -p dorea-cli -- tests::build_inference_config 2>&1 | tail -10\n```\n\nExpected: both new tests pass, existing `lerp_depth` tests still pass\n\n- [ ] **Step 6: Restructure run() — single-server lifecycle**\n\nReplace the server spawn block (currently lines ~222–234, which spawns `maxine_server: Option<InferenceServer>`) and the entire `if let Some(cal_path) = &args.calibration { ... } else { ... }` block (Path B + Path A).\n\nThe new structure:\n\n**Replace the old server spawn block:**\n\n```rust\n    // Validate upscale factor before spawning\n    let use_maxine = !args.no_maxine;\n    if use_maxine {\n        let valid_factors = [2u32, 3, 4];\n        if !valid_factors.contains(&args.maxine_upscale_factor) {\n            anyhow::bail!(\n                \"--maxine-upscale-factor {} is not supported. Supported: {:?}\",\n                args.maxine_upscale_factor, valid_factors,\n            );\n        }\n    }\n\n    // Spawn ONE inference server for the entire run.\n    // Starts with Maxine loaded only (RAUNE+Depth loaded lazily after Pass 1).\n    let maxine_start_cfg = InferenceConfig {\n        skip_raune: true,\n        skip_depth: true,\n        ..build_inference_config(&args)\n        // Note: build_inference_config sets maxine = !args.no_maxine\n    };\n    let mut inf_server = InferenceServer::spawn(&maxine_start_cfg)\n        .context(\"failed to spawn inference server\")?;\n```\n\n**Replace the `maxine_temp_path` block — keep as-is but make it unconditional when `use_maxine`:**\n\n```rust\n    let maxine_temp_path: Option<std::path::PathBuf> = if use_maxine {\n        Some(std::env::temp_dir().join(format!(\"dorea_maxine_{}.mkv\", std::process::id())))\n    } else {\n        None\n    };\n    let _maxine_temp_guard = maxine_temp_path.as_ref().map(|p| TempFileGuard::new(p.clone()));\n```\n\n**Replace the Pass 1 branch — use `inf_server` directly instead of `maxine_server`:**\n\n```rust",
+  "source_version": "plans/2026-04-04-maxine-pipeline-architecture.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836864176Z",
+  "valid_from": "2026-04-11T00:10:08.836864176Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-maxine-pipeline-architecture.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 950,
+    "end_line": 1009,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

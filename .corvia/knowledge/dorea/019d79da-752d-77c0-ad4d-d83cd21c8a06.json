@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d83cd21c8a06",
+  "content": "struct Cli {\n    #[command(subcommand)]\n    command: Command,\n}\nenum Command {\n    /// Build calibration from keyframes + depth maps + RAUNE targets\n    Calibrate(dorea_cli::calibrate::CalibrateArgs),\n    /// Grade a video end-to-end using calibration (auto-derives if none provided)\n    Grade(dorea_cli::grade::GradeArgs),\n    /// Generate a before/after contact sheet (5-10 frames)\n    Preview(dorea_cli::preview::PreviewArgs),\n    /// Detect container, codec, bit depth, and suggest flags\n    Probe(dorea_cli::probe::ProbeArgs),\n}",
+  "source_version": "crates/dorea-cli/src/main.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229514913Z",
+  "valid_from": "2026-04-11T00:04:13.229514913Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/main.rs",
+    "language": "rs",
+    "chunk_type": "enum_item",
+    "start_line": 12,
+    "end_line": 21,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

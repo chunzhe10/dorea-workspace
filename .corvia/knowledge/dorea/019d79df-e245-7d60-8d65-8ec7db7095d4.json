@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-8ec7db7095d4",
+  "content": "n if absent.\n    \"\"\"\n    if provider not in VALID_PROVIDERS:\n        raise ValueError(\n            f\"Unknown provider '{provider}'. Valid: {sorted(VALID_PROVIDERS)}\"\n        )\n\n    mapping = PROVIDER_MAP[provider]\n    raw = tomllib.loads(path.read_text())\n\n    # Mutate embedding\n    if \"embedding\" not in raw:\n        raw[\"embedding\"] = {}\n    raw[\"embedding\"][\"provider\"] = mapping[\"provider\"]\n    raw[\"embedding\"][\"url\"] = mapping[\"url\"]\n\n\n    # Mutate merge (create if absent)\n    if \"merge\" not in raw:\n        raw[\"merge\"] = {}\n    raw[\"merge\"][\"provider\"] = mapping[\"provider\"]\n    raw[\"merge\"][\"url\"] = mapping[\"url\"]\n\n    path.write_text(tomli_w.dumps(raw))\n\n\ndef read_enabled_services(flags_path: Path) -> list[str]:\n    \"\"\"Read the list of enabled optional services from the flags file.\"\"\"\n    if not flags_path.exists():\n        return []\n    enabled: list[str] = []\n    for line in flags_path.read_text().splitlines():\n        line = line.strip()\n        if \"=\" in line:\n            name, value = line.split(\"=\", 1)\n            if value.strip() == \"enabled\":\n                enabled.append(name.strip())\n    return enabled\n\n\ndef set_enabled_service(name: str, enabled: bool, flags_path: Path) -> None:\n    \"\"\"Set a service as enabled or disabled in the flags file.\"\"\"",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-cli.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837156074Z",
+  "valid_from": "2026-04-11T00:10:08.837156074Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-cli.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 748,
+    "end_line": 778,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

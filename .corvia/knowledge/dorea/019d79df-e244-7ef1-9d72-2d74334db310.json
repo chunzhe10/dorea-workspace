@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-2d74334db310",
+  "content": "Found nvcc at {}\", nvcc.display());\n\n    // Compile each .cu file to PTX (was .o → .a; now PTX for cudarc module loading)\n    let out_dir = PathBuf::from(std::env::var(\"OUT_DIR\").unwrap());\n    let kernel_names = [\"lut_apply\", \"hsl_correct\", \"clarity\"];\n\n    // Make CUDA includes take priority over system includes so that\n    // CUDA's crt/math_functions.h declarations don't conflict with glibc 2.35+\n    let cuda_include = nvcc.parent()\n        .and_then(|p| p.parent())\n        .map(|p| p.join(\"targets/x86_64-linux/include\"))\n        .filter(|p| p.exists());\n\n    for name in &kernel_names {\n        let src = kernels_dir.join(format!(\"{name}.cu\"));\n        let ptx = out_dir.join(format!(\"{name}.ptx\"));\n\n        let mut args = vec![\n            \"--ptx\".to_string(),\n            \"-O2\".to_string(),\n            \"-arch=sm_86\".to_string(), // RTX 3060 is Ampere sm_86\n            \"--allow-unsupported-compiler\".to_string(),\n            // Use gcc-12 from Debian bookworm as host compiler\n            \"--compiler-bindir\".to_string(),\n            \"/usr/bin/gcc-12\".to_string(),\n        ];\n        if let Some(ref inc) = cuda_include {\n            args.push(\"-isystem\".to_string());\n            args.push(inc.to_str().unwrap().to_string());\n        }\n        args.push(src.to_str().unwrap().to_string());\n        args.push(\"-o\".to_string());\n        args.push(ptx.to_str().unwrap().to_string());\n\n        let status = std::process::Command::new(&nvcc)\n            .args(&args)\n            .status()\n            .expect(\"failed to run nvcc\");\n\n        if !status.success() {\n            println!(\n                \"cargo:warning=nvcc failed to compile {name}.cu to PTX — \\\n                 falling back to CPU-only (GCC/CUDA version mismatch?). \\\n                 Install gcc-12 or gcc-13 and set CUDAHOSTCXX to enable CUDA kernels.\"\n            );\n            return;\n        }\n    }\n\n    // No more static lib linking — PTX is embedded via include_str! in cuda/mod.rs.\n    // We still need the CUDA driver library for cudarc.\n    if let Some(cuda_lib) = nvcc.parent()\n        .and_then(|p| p.parent())",
+  "source_version": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836711303Z",
+  "valid_from": "2026-04-11T00:10:08.836711303Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 659,
+    "end_line": 705,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

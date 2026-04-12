@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-ca2fb7235a34",
+  "content": "### `grade_pixel.cuh` — shared device function\n### `build_combined_lut.cu` — GPU LUT build (startup)\n\n### `CombinedLut` (combined_lut.rs)\n\n```rust\npub(crate) struct CombinedLut {\n    arrays:          [cudaArray_t; MAX_ZONES],\n    textures:        [cudaTextureObject_t; MAX_ZONES],\n    n_zones:         usize,\n    grid_size:       usize,           // COMBINED_LUT_GRID = 97\n    zone_boundaries: Vec<f32>,\n}\nimpl Drop for CombinedLut { /* cudaDestroyTextureObject + cudaFreeArray */ }\n```\n\nBuild sequence in `CombinedLut::build(device, calibration, params)`:\n1. Upload calibration data to device (depth luts + HSL params, ~2.1MB)\n2. Launch `build_combined_lut_kernel` → 55MB device buffer\n3. Per zone: `cudaMemcpy3D` device→`cudaArray3D` (device-to-device, no PCIe)\n4. Create `cudaTextureObject_t`: `filterMode=Linear`, `addressMode=Clamp`,\n   `normalizedCoords=true`, channel format `float4`\n5. Free 55MB device build buffer\n\n\n### `combined_lut.cu` — per-frame kernel\n\n```c\n__global__ void combined_lut_kernel(\n    const uint8_t* pixels_in,    // u8 RGB interleaved [n * 3]\n    const float*   depth,         // f32 [n]\n    cudaTextureObject_t tex[MAX_ZONES],\n    const float* zone_boundaries,\n    uint8_t* pixels_out,          // u8 RGB interleaved [n * 3]\n    int n_pixels, int n_zones\n)\n// Per pixel:\n//   u8→f32 in-kernel → find 2 bounding zones → tex3D<float4> × 2 → lerp → f32→u8\n```\n\n1D grid, 256 threads/block. No shared memory (texture cache handles locality).\n`float4` texture: all 3 output channels from a single hardware-interpolated fetch.\n",
+  "source_version": "docs/decisions/2026-04-03-combined-lut-cuda-texture-design.md",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230385440Z",
+  "valid_from": "2026-04-11T00:04:13.230385440Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "docs/decisions/2026-04-03-combined-lut-cuda-texture-design.md",
+    "language": "markdown",
+    "chunk_type": "heading_section",
+    "start_line": 96,
+    "end_line": 134,
+    "content_role": "decision",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

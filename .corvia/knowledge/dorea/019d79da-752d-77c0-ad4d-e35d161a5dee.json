@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-e35d161a5dee",
+  "content": "       let depth: Vec<f32> = raw.chunks_exact(4)\n                .map(|b| f32::from_le_bytes([b[0], b[1], b[2], b[3]]))\n                .collect();\n\n            out.push((id, enh_rgb, enh_w, enh_h, depth, depth_w, depth_h));\n        }\n        Ok(out)\n    }\npub fn enhance(\n        &mut self,\n        id: &str,\n        image_rgb: &[u8],\n        width: usize,\n        height: usize,\n        artifact_reduce: bool,\n    ) -> Result<Vec<u8>, InferenceError> {\n        let b64 = B64.encode(image_rgb);\n\n        let req = serde_json::json!({\n            \"type\": \"enhance\",\n            \"id\": id,\n            \"format\": \"raw_rgb\",\n            \"image_b64\": b64,\n            \"width\": width,\n            \"height\": height,\n            \"no_artifact_reduce\": !artifact_reduce,\n        });\n\n        self.send_line(&req.to_string())?;\n        let resp = self.recv_line()?;\n        let (pixels, _w, _h) = parse_enhance_response(&resp, id, width, height)?;\n        Ok(pixels)\n    }",
+  "source_version": "crates/dorea-video/src/inference_subprocess.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229650601Z",
+  "valid_from": "2026-04-11T00:04:13.229650601Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference_subprocess.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 580,
+    "end_line": 604,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

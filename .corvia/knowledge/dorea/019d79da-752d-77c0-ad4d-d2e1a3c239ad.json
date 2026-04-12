@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d2e1a3c239ad",
+  "content": " = encoder;\n            let mut frame_count = 0u64;\n            for graded in graded_rx {\n                encoder.write_frame_16(&graded).context(\"16-bit encoder write failed\")?;\n                frame_count += 1;\n                if frame_count % 100 == 0 {\n                    let pct = frame_count as f64 / total_frames.max(1) as f64 * 100.0;\n                    log::info!(\"Progress: {frame_count}/{} frames ({:.1}%)\", total_frames, pct);\n                }\n            }\n            encoder.finish().context(\"ffmpeg encoder failed to finalize\")?;\n            Ok(frame_count)\n        });\n\n        // ---------------------------------------------------------------\n        // GPU thread (main) — depth interp + 16-bit grade\n        // ---------------------------------------------------------------\n        let gpu_result: Result<()> = (|| {\n            let mut kf_cursor = 0usize;\n            #[cfg(feature = \"cuda\")]\n            let mut current_segment = kf_to_segment.first().copied().unwrap_or(0);\n\n            for frame in decoded_rx {\n                let fi = frame.index;\n\n                // Advance cursor to most recent keyframe ≤ fi\n                while kf_cursor + 1 < kf_index_list.len() && kf_index_list[kf_cursor + 1].0 <= fi {\n                    kf_cursor += 1;\n\n                    #[cfg(feature = \"cuda\")]\n                    {\n                        let new_seg = kf_to_segment[kf_cursor];\n                        if new_seg != current_segment {\n                            let seg_cal = &segment_calibrations[new_seg];\n                            let base_flat: Vec<f32> = seg_cal.depth_luts.luts.iter()\n                                .flat_map(|lut| lut.data.iter().copied())\n                                .collect();",
+  "source_version": "crates/dorea-cli/src/pipeline/grading.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229451485Z",
+  "valid_from": "2026-04-11T00:04:13.229451485Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/pipeline/grading.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 485,
+    "end_line": 515,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

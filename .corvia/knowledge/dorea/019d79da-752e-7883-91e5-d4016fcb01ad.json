@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-d4016fcb01ad",
+  "content": "e_dropout (bool)  -- if use dropout layers.\n            use_bias (bool)     -- if the conv layer uses bias or not\n\n        Returns a conv block (with a conv layer, a normalization layer, and a non-linearity layer (ReLU))\n        \"\"\"\n        conv_block = []\n        p = 0\n        if padding_type == 'reflect':\n            conv_block += [nn.ReflectionPad2d(1)]\n        elif padding_type == 'replicate':\n            conv_block += [nn.ReplicationPad2d(1)]\n        elif padding_type == 'zero':\n            p = 1\n        else:\n            raise NotImplementedError('padding [%s] is not implemented' % padding_type)\n\n        conv_block += [nn.Conv2d(dim, dim, kernel_size=3, padding=p, bias=use_bias), norm_layer(dim), nn.ReLU(True)]\n        if use_dropout:\n            conv_block += [nn.Dropout(0.5)]\n\n        p = 0\n        if padding_type == 'reflect':\n            conv_block += [nn.ReflectionPad2d(1)]\n        elif padding_type == 'replicate':\n            conv_block += [nn.ReplicationPad2d(1)]\n        elif padding_type == 'zero':\n            p = 1\n        else:\n            raise NotImplementedError('padding [%s] is not implemented' % padding_type)\n        conv_block += [nn.Conv2d(dim, dim, kernel_size=3, padding=p, bias=use_bias), norm_layer(dim)]\n\n        return nn.Sequential(*conv_block)\n\n    def forward(self, x):\n        \"\"\"Forward function (with skip connections)\"\"\"\n        out = x + self.conv_block(x)  # add skip connections\n        return out",
+  "source_version": "models/raune_net/models/RAUNE-Net/models/resnet.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230548083Z",
+  "valid_from": "2026-04-11T00:04:13.230548083Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "models/raune_net/models/RAUNE-Net/models/resnet.py",
+    "language": "py",
+    "chunk_type": "class_definition",
+    "start_line": 34,
+    "end_line": 64,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-0298722ab2cc",
+  "content": "## Problem\n## Current Per-Frame Operations\n\n### CudaGrader (6 per frame)\n\n| # | Operation | Size (1080p) | Needed every frame? |\n|---|-----------|-------------|---------------------|\n| 1 | `htod_sync_copy(pixels)` u8 | 6.2 MB | Yes — new pixels |\n| 2 | `htod_sync_copy(depth)` f32 | 8.3 MB | Yes — new depth |\n| 3 | `htod_sync_copy(textures)` u64 | ~64 B | **No — constant** |\n| 4 | `htod_sync_copy(boundaries)` f32 | ~24 B | **No — constant** |\n| 5 | `alloc_zeros(n*3)` output u8 | 6.2 MB | **No — reusable** |\n| 6 | `dtoh_sync_copy(output)` → Vec | 6.2 MB | Yes — but alloc reusable |\n\n\n### AdaptiveGrader (8 per frame)\n\nSame as CudaGrader #1-2, plus 4 texture/boundary uploads (stable between\n`swap_textures()` calls), output alloc, and dtoh.\n",
+  "source_version": "decisions/2026-04-08-pcie-barrier-reduction-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836163448Z",
+  "valid_from": "2026-04-11T00:10:08.836163448Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-08-pcie-barrier-reduction-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 20,
+    "end_line": 35,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

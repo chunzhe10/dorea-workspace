@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d71-fbe6d5447ce7",
+  "content": "## Problem\n## Decision\n\n## Dependency wiring\n\n`rayon = \"1\"` added to `[workspace.dependencies]` in the root `Cargo.toml`, then declared in:\n\n- `crates/dorea-lut/Cargo.toml` — `rayon.workspace = true`\n- `crates/dorea-hsl/Cargo.toml` — `rayon.workspace = true`\n\n`dorea-video` and `dorea-cli` are unchanged.\n\n\n## Per-target strategy\n",
+  "source_version": "decisions/2026-04-02-cpu-parallelization-rayon.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836076419Z",
+  "valid_from": "2026-04-11T00:10:08.836076419Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-02-cpu-parallelization-rayon.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 30,
+    "end_line": 40,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

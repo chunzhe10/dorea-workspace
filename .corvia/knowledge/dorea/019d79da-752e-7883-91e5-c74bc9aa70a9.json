@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c74bc9aa70a9",
+  "content": ": Path, length: int = 8) -> str:\n    h = hashlib.sha1()\n    with path.open(\"rb\") as f:\n        while True:\n            chunk = f.read(1024 * 1024)\n            if not chunk:\n                break\n            h.update(chunk)\n    return h.hexdigest()[:length]\ndef _raune_forward(model, frame: torch.Tensor) -> torch.Tensor:\n    \"\"\"Run RAUNE on a full-size frame tensor. Handles [0,1] ↔ [-1,1] normalization.\"\"\"\n    x = frame * 2.0 - 1.0\n    x = x.half()\n    with torch.no_grad():\n        y = model(x).float()\n    return ((y + 1.0) / 2.0).clamp(0.0, 1.0)",
+  "source_version": "benchmarks/upscale_bench/gold.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230340013Z",
+  "valid_from": "2026-04-11T00:04:13.230340013Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/gold.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 34,
+    "end_line": 40,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

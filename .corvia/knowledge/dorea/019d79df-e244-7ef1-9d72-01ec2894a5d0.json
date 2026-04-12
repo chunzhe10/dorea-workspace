@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-01ec2894a5d0",
+  "content": "## Per-Frame Grading Kernel\n\n### Dual-texture temporal blending\n\nEach non-keyframe frame sits between two keyframes with potentially different zone boundaries and textures. The grading kernel samples both and blends by temporal position:\n\n```\nFor frame at position t (0.0 = KF_before, 1.0 = KF_after):\n  For each pixel:\n    color_a = sample_combined_texture(texture_A, zones_A, pixel_rgb, pixel_depth)\n    color_b = sample_combined_texture(texture_B, zones_B, pixel_rgb, pixel_depth)\n    output = color_a * (1 - t) + color_b * t\n```\n\nEach `sample_combined_texture` call does the existing zone-blending logic: soft triangular weights based on depth proximity to zone centers, hardware trilinear tex3D sampling per zone.\n\n\n### Performance\n\n- Current kernel: ~10–20ms at 1080p, ~80ms at 4K (single texture set)\n- New kernel: ~2× texture lookups → ~20–35ms at 1080p, ~140ms at 4K\n- On keyframes (t = 0.0): kernel can skip texture B sampling entirely — same speed as current\n",
+  "source_version": "decisions/2026-04-04-per-keyframe-adaptive-depth-zones.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836153695Z",
+  "valid_from": "2026-04-11T00:10:08.836153695Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-04-per-keyframe-adaptive-depth-zones.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 152,
+    "end_line": 171,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

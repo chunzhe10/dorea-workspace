@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-91b693f5a446",
+  "content": "### Task 1: Create `rebuild.py` — staleness check\n\n\n        installed = install_dir / name\n        installed.write_text(\"new\")\n        os.utime(installed, (2000, 2000))\n\n    result = check_staleness(\n        workspace_root=tmp_path,\n        target_dir=target_dir,\n        install_dir=install_dir,\n    )\n    assert result == []\n```\n\n**Step 2: Run test to verify it fails**\n\nRun: `cd /workspaces/corvia-workspace/tools/corvia-dev && python -m pytest tests/test_rebuild.py -v`\nExpected: FAIL with `ImportError: cannot import name 'check_staleness'`\n\n**Step 3: Write minimal implementation**\n\nCreate `tools/corvia-dev/corvia_dev/rebuild.py`:\n\n```python\n\"\"\"Build, install, and staleness detection for corvia binaries.\"\"\"\n\nfrom __future__ import annotations\n\nfrom pathlib import Path\n\nBINARY_NAMES = [\"corvia\", \"corvia-inference\"]\nDEFAULT_INSTALL_DIR = Path(\"/usr/local/bin\")\n\n\ndef check_staleness(\n    workspace_root: Path,\n    target_dir: Path | None = None,\n    install_dir: Path = DEFAULT_INSTALL_DIR,\n) -> list[str]:\n    \"\"\"Check which installed binaries are older than their local build.\n\n    Returns a list of binary names that are stale (target is newer than installed).\n    Returns empty list if no target binaries exist or all are up to date.\n    \"\"\"\n    if target_dir is None:\n        target_dir = workspace_root / \"repos\" / \"corvia\" / \"target\" / \"debug\"\n\n    stale: list[str] = []\n    for name in BINARY_NAMES:\n        target = target_dir / name\n        installed = install_dir / name\n        if not target.exists() or not installed.exists():\n            continue\n        if target.stat().st_mtime > installed.stat().st_mtime:\n            stale.append(name)\n    return stale\n```\n\n**Step 4: Run test to verify it passes**\n\nRun: `cd /workspaces/corvia-workspace/tools/corvia-dev && python -m pytest tests/test_rebuild.py -v`\nExpected: PASS (3 tests)\n\n**Step 5: Commit**\n\n```bash\ngit add tools/corvia-dev/corvia_dev/rebuild.py tools/corvia-dev/tests/test_rebuild.py\ngit commit -m \"feat(corvia-dev): add staleness check for installed binaries\"\n```\n\n---\n",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-rebuild.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837196429Z",
+  "valid_from": "2026-04-11T00:10:08.837196429Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-rebuild.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 83,
+    "end_line": 153,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-f53c693cb73b",
+  "content": "rance 0.05 in normalized RGB (~13/255).\n        for i in 0..rgb_new.len() {\n            let diff = (rgb_new[i] - rgb_old[i]).abs();\n            assert!(diff < 0.05, \"pixel {i}: old={:.4} new={:.4} diff={:.4}\", rgb_old[i], rgb_new[i], diff);\n        }\n    }\nfn fused_ambiance_warmth_neutral_warmth() {\n        let width = 2;\n        let height = 2;\n        let n = width * height;\n        let original: Vec<f32> = vec![0.5; n * 3];\n        let depth: Vec<f32> = vec![0.5; n];\n\n        // warmth_factor = 1.0 means no user warmth scaling\n        let mut rgb = original.clone();\n        fused_ambiance_warmth(&mut rgb, &depth, width, height, 1.0, 1.0);\n\n        // All values should be in [0, 1]\n        for &v in &rgb {\n            assert!((0.0..=1.0).contains(&v), \"out-of-range: {v}\");\n        }\n    }",
+  "source_version": "crates/dorea-gpu/src/cpu.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229879261Z",
+  "valid_from": "2026-04-11T00:04:13.229879261Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cpu.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 511,
+    "end_line": 526,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

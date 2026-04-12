@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c461a20d90c7",
+  "content": "                         # (1, 3, fh, fw)\n\n    mean_a = _box_filter(a, r)                        # (1, 3, fh, fw)\n    mean_b = _box_filter(b, r)                        # (1, 3, fh, fw)\n\n    return mean_a * guide + mean_b                    # (1, 3, fh, fw)\ndef _joint_bilateral_kernel(\n    # Delta at proxy: (3, ph, pw) fp32, channel-first flat\n    delta_proxy_ptr,\n    ph, pw,                                    # runtime ints — no constexpr recompile per resolution\n    # Guide at full res: (fh, fw) fp32 — for g_out lookups\n    guide_out_ptr,\n    # Guide at proxy res: (ph, pw) fp32 — area-downsampled, for neighbor lookups (spec line 154)\n    guide_proxy_ptr,\n    # Output delta at full res: (3, fh, fw) fp32, channel-first flat\n    out_ptr,\n    fh, fw,                                    # runtime ints\n    # Hyperparameters (constexpr — baked into the JIT kernel)\n    sigma_spatial_L: tl.constexpr,\n    sigma_spatial_ab: tl.constexpr,\n    sigma_luma_sq_inv: tl.constexpr,\n    BLOCK: tl.constexpr,\n):\n    pid = tl.program_id(0)\n    offs = pid * BLOCK + tl.arange(0, BLOCK)\n    n_pixels = fh * fw\n    mask = offs < n_pixels\n\n    y = offs // fw\n    x = offs % fw\n\n    # Map output pixel to proxy-grid coordinate (subpixel)\n    scale_y = ph / fh\n    scale_x = pw / fw\n    py_f = (y.to(tl.float32) + 0.5) * scale_y - 0.5\n    px_f = (x.to(tl.float32) + 0.5) * scale_x - 0.5\n\n    py0 = tl.floor(py_f).to(tl.int32)\n    px0 = tl.floor(px_f).to(tl.int32)",
+  "source_version": "benchmarks/upscale_bench/methods.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230301261Z",
+  "valid_from": "2026-04-11T00:04:13.230301261Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/methods.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 200,
+    "end_line": 232,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

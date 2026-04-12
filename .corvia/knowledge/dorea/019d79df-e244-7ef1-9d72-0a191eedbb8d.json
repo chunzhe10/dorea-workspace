@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-0a191eedbb8d",
+  "content": "# D72: JSONL IPC Adapter Protocol\n\n## Decision\n\nCross-language ingestion adapters communicate with the corvia kernel via a JSONL protocol\nover stdin/stdout. Adapters are standalone binaries discovered at runtime through PATH\nscanning and `~/.config/corvia/adapters/`. The kernel never touches the filesystem for\nsource discovery -- adapters handle all domain-specific file walking and content\nextraction.\n\n\n## Context\n\nAdapters need to work across languages (Rust, Python, future community adapters) without\nrequiring shared memory or FFI. A standard protocol enables third-party adapters without\nforking the core. The bottom-up approach (IPC layer first, test with adapter-basic, then\nmigrate repos) ensured protocol correctness before committing to the architecture.\n",
+  "source_version": "decisions/d72-adapter-protocol.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836250212Z",
+  "valid_from": "2026-04-11T00:10:08.836250212Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/d72-adapter-protocol.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 7,
+    "end_line": 21,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c57c63f6a1d2",
+  "content": "def test_e2e_bilinear_bicubic_on_real_clip(tmp_path):\n    \"\"\"Runs the driver on a single frame with only fast methods.\n\n    This is an integration sanity check — not a performance test. Uses\n    bilinear + bicubic (both run in a few ms) and a tmp out-dir so we\n    don't pollute the real working directory. The gold is computed fresh\n    (no cache pollution) but cached for the duration of the test.\n    \"\"\"\n    out_dir = tmp_path / \"bench_out\"\n    result = subprocess.run(\n        [\n            str(VENV_PY), \"-m\", \"benchmarks.upscale_bench.run\",\n            \"--clip\", str(REAL_CLIP),\n            \"--frames\", \"30\",\n            \"--methods\", \"bilinear,bicubic\",\n            \"--out-dir\", str(out_dir),\n            \"--timing-runs\", \"2\",\n            \"--timing-warmup\", \"1\",\n        ],\n        cwd=str(REPO),\n        capture_output=True, text=True,\n    )\n    if result.returncode != 0:\n        print(\"STDOUT:\", result.stdout)\n        print(\"STDERR:\", result.stderr)\n    assert result.returncode == 0, f\"run.py exited with {result.returncode}\"\n    assert (out_dir / \"summary_grid.png\").exists()\n    assert (out_dir / \"metrics.csv\").exists()\n    assert (out_dir / \"run_report.md\").exists()\n    # Verify the CSV has the expected rows (2 methods × 1 frame + 2 aggregate rows)\n    with (out_dir / \"metrics.csv\").open() as f:\n        rows = list(csv.DictReader(f))\n    ok_rows = [r for r in rows if r[\"status\"] == \"ok\" and r[\"frame_idx\"] != \"ALL_MEAN\"]\n    assert len(ok_rows) == 2, f\"expected 2 ok rows, got {len(ok_rows)}: {ok_rows}\"",
+  "source_version": "benchmarks/upscale_bench/tests/test_e2e.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230316383Z",
+  "valid_from": "2026-04-11T00:04:13.230316383Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/tests/test_e2e.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 17,
+    "end_line": 50,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

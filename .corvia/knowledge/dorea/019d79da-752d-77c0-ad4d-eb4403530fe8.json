@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-eb4403530fe8",
+  "content": "        (usable / per_frame_bytes).max(1)\n        } else {\n            1\n        };\n        Self {\n            batch_size: max_batch,\n            max_batch,\n            min_batch: 1,\n            successes: 0,\n            grow_threshold: 10,\n        }\n    }\npub fn fixed(batch_size: usize) -> Self {\n        Self {\n            batch_size: batch_size.max(1),\n            max_batch: batch_size.max(1),\n            min_batch: 1,\n            successes: 0,\n            grow_threshold: usize::MAX,\n        }\n    }",
+  "source_version": "crates/dorea-gpu/src/batcher.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229753736Z",
+  "valid_from": "2026-04-11T00:04:13.229753736Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/batcher.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 38,
+    "end_line": 46,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

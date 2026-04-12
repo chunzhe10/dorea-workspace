@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-f8f5ab55b966",
+  "content": "r = lut.to_linear(x);\n            let encoded = lut.from_linear(linear);\n            assert!(\n                (encoded - x).abs() < 0.01,\n                \"Identity round-trip failed at {x}: linear={linear}, encoded={encoded}\"\n            );\n        }\n    }\nfn test_gamma_lut_round_trip() {\n        let n = 1024;\n        let forward: Vec<f32> = (0..n)\n            .map(|i| (i as f32 / (n - 1) as f32).powf(2.2))\n            .collect();\n        let lut = LutBased::new(forward, 0.85, \"gamma2.2\".to_string());\n        let values = [0.0, 0.1, 0.18, 0.5, 0.8, 1.0];\n        for &v in &values {\n            let linear = lut.to_linear(v);\n            let back = lut.from_linear(linear);\n            assert!(\n                (back - v).abs() < 0.01,\n                \"Gamma round-trip failed at {v}: linear={linear}, back={back}\"\n            );\n        }\n    }",
+  "source_version": "crates/dorea-color/src/lut_transfer.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229934473Z",
+  "valid_from": "2026-04-11T00:04:13.229934473Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-color/src/lut_transfer.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 154,
+    "end_line": 169,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

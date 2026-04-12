@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-89b75fe51916",
+  "content": "    # Propagate any error from worker threads\n\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\n./target/release/dorea grade \\\n  --input \"/workspaces/dorea-workspace/footage/raw/2025-11-01/DJI_20251101111428_0055_D_3s.MP4\" \\\n  --output \"/workspaces/dorea-workspace/working/oklab_3thread.mov\" \\\n  --output-codec prores \\\n  --direct \\\n  --verbose \\\n  2>&1 | tail -20\n```\n\nExpected output:\n- Filter prints `[raune-filter] Using Triton fused kernel`\n- Filter prints `[raune-filter] single-process: 3840x2160, ...`\n- Progress lines like `[raune-filter] 64 frames (18%, X.X fps)` where X.X is significantly higher than 2.4 fps (target ~7 fps)\n- `[raune-filter] done: 360 frames in YYY.Ys (Z.ZZ fps)` where Z.ZZ ≥ 5.0\n- No traceback, exit code 0\n- Output file `oklab_3thread.mov` exists, ~1.3GB, 3.003s duration\n\nIf the throughput is below 5 fps, the pipeline isn't actually parallel — investigate GIL contention or stage imbalance before proceeding.\n\n- [ ] **Step 5: Frame-by-frame visual parity check**\n\nCompare a frame from the new 3-thread output against the existing single-threaded output:\n\n```bash\nffmpeg -v quiet -ss 1.5 -i \"/workspaces/dorea-workspace/working/oklab_3thread.mov\" \\\n  -frames:v 1 \"/workspaces/dorea-workspace/working/oklab_3thread_frame.png\" -y\n\nffmpeg -v quiet -ss 1.5 -i \"/workspaces/dorea-workspace/working/oklab_single_process.mov\" \\\n  -frames:v 1 \"/workspaces/dorea-workspace/working/oklab_single_process_frame.png\" -y\n",
+  "source_version": "plans/2026-04-10-direct-mode-3thread-pipeline.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837092547Z",
+  "valid_from": "2026-04-11T00:10:08.837092547Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-10-direct-mode-3thread-pipeline.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 196,
+    "end_line": 228,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c5933d3924f9",
+  "content": "def deterministic():\n    torch.manual_seed(0)\n    yield\ndef test_method_smoke(method_name, synthetic_proxy_delta, synthetic_full_rgb):\n    \"\"\"Every registered method must produce the expected shape/dtype/device\n    on tiny synthetic input, and finite values.\"\"\"\n    method = REGISTRY[method_name]\n    full_size = (synthetic_full_rgb.shape[-2], synthetic_full_rgb.shape[-1])\n    out = method(synthetic_proxy_delta, synthetic_full_rgb, full_size=full_size)\n    assert out.shape == (1, 3, *full_size), f\"{method_name} wrong shape: {out.shape}\"\n    assert out.dtype == torch.float32, f\"{method_name} wrong dtype\"\n    assert out.device.type == \"cuda\", f\"{method_name} wrong device\"\n    assert torch.isfinite(out).all(), f\"{method_name} produced non-finite values\"\n    # OKLab deltas for reasonable inputs should stay bounded\n    assert out.abs().max() < 1.0, f\"{method_name} delta too large: max={out.abs().max().item()}\"",
+  "source_version": "benchmarks/upscale_bench/tests/test_methods.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230317793Z",
+  "valid_from": "2026-04-11T00:04:13.230317793Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/tests/test_methods.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 22,
+    "end_line": 33,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

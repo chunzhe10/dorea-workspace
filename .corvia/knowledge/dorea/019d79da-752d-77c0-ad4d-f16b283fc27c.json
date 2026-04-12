@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-f16b283fc27c",
+  "content": ":CU_MEMORYTYPE_DEVICE;\n            cpy.srcDevice     = zone_ptr;\n            cpy.srcPitch      = width_in_bytes;\n            cpy.srcHeight     = n;\n            cpy.dstMemoryType = CUmemorytype_enum::CU_MEMORYTYPE_ARRAY;\n            cpy.dstArray      = arr;\n            cpy.WidthInBytes  = width_in_bytes;\n            cpy.Height        = n;\n            cpy.Depth         = n;\n\n            unsafe {\n                let rc = sys::lib().cuMemcpy3D_v2(&cpy);\n                if rc != cudaError_enum::CUDA_SUCCESS {\n                    // arr was pushed; destroy it along with all previously created resources.\n                    for &tex in &textures { let _ = sys::lib().cuTexObjectDestroy(tex); }\n                    for &a in &arrays    { let _ = sys::lib().cuArrayDestroy(a); }\n                    return Err(GpuError::CudaFail(format!(\"cuMemcpy3D zone {zone}: {rc:?}\")));\n                }\n            }\n\n            // --- Create texture object (unnormalized coords, linear filter) ---\n            let mut res_desc: CUDA_RESOURCE_DESC = unsafe { std::mem::zeroed() };\n            res_desc.resType = CUresourcetype_enum::CU_RESOURCE_TYPE_ARRAY;\n            res_desc.res.array.hArray = arr;\n\n            let mut tex_desc: CUDA_TEXTURE_DESC = unsafe { std::mem::zeroed() };\n            tex_desc.addressMode[0] = CUaddress_mode_enum::CU_TR_ADDRESS_MODE_CLAMP;\n            tex_desc.addressMode[1] = CUaddress_mode_enum::CU_TR_ADDRESS_MODE_CLAMP;\n            tex_desc.addressMode[2] = CUaddress_mode_enum::CU_TR_ADDRESS_MODE_CLAMP;\n            tex_desc.filterMode     = CUfilter_mode_enum::CU_TR_FILTER_MODE_LINEAR;",
+  "source_version": "crates/dorea-gpu/src/cuda/combined_lut.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229827254Z",
+  "valid_from": "2026-04-11T00:04:13.229827254Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cuda/combined_lut.rs",
+    "language": "rs",
+    "chunk_type": "impl_item",
+    "start_line": 194,
+    "end_line": 217,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

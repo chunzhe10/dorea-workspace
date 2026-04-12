@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c6942deeeadf",
+  "content": "def test_compute_ssim_identical_is_one():\n    img = torch.rand(1, 3, 32, 32, device=\"cuda\")\n    s = compute_ssim(img, img)\n    assert s > 0.999\ndef test_timed_run_returns_positive_ms():\n    def fn():\n        x = torch.randn(100, 100, device=\"cuda\")\n        y = x @ x\n        return y\n\n    ms = timed_run(fn, warmup=1, runs=3)\n    assert ms > 0.0",
+  "source_version": "benchmarks/upscale_bench/tests/test_metrics.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230330283Z",
+  "valid_from": "2026-04-11T00:04:13.230330283Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/tests/test_metrics.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 50,
+    "end_line": 57,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-2fc4cb54ab6d",
+  "content": "# GPU Inference Saturation — Fused RAUNE+Depth Batch\n\n> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.\n\n**Goal:** Eliminate GPU idle valleys during `auto_calibrate` by (1) fusing RAUNE and depth inference into a single IPC call so the enhanced tensor never leaves the GPU between models, and (2) enabling depth estimation on RAUNE-enhanced frames for better zone-boundary quality.\n\n**Architecture:** One new fused IPC message `raune_depth_batch`. Python receives original frames, runs RAUNE → keeps enhanced tensors on GPU → GPU-resize + re-normalise → Depth Anything → dtoh both results together. Rust calls this once per chunk instead of two separate batch calls. Replaces the two-phase (all RAUNE, then all depth) approach in the previous plan with a single fused phase.\n\n**Batching clarification:** \"Batch\" here means N frames stacked into one `(N, 3, H, W)` tensor passed through a single forward pass — GPU tensor-core parallelism, not multiple processes or threads. `N=32` keeps the GPU saturated; `N=1` leaves ~80% of CUDA cores idle.\n\n**Tech Stack:** Python (torch, torch.nn.functional, numpy, PIL, pytest), Rust (serde_json, base64), existing JSON-lines IPC protocol.\n\n---\n",
+  "source_version": "plans/2026-04-03-inference-gpu-saturation.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836744942Z",
+  "valid_from": "2026-04-11T00:10:08.836744942Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-inference-gpu-saturation.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1,
+    "end_line": 14,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-127a11b3874b",
+  "content": "### Task 3.6: Add `corvia docs check` CLI subcommand\n\n\n```rust\nasync fn cmd_docs_check(\n    check: Option<&str>,\n    fix: bool,\n    yes: bool,\n) -> Result<()> {\n    let config = load_config()?;\n    let ws = config.workspace.as_ref()\n        .ok_or_else(|| anyhow::anyhow!(\"Not a workspace — 'docs check' requires [workspace] config\"))?;\n    let docs_rules = ws.docs.as_ref()\n        .and_then(|d| d.rules.clone())\n        .unwrap_or_default();\n    let scope_id = &config.project.scope_id;\n\n    // Determine which checks to run\n    let checks: Vec<CheckType> = if let Some(c) = check {\n        vec![c.parse().map_err(|e: String| anyhow::anyhow!(e))?]\n    } else {\n        vec![CheckType::MisplacedDoc, CheckType::CoverageGap, CheckType::TemporalContradiction]\n    };\n\n    println!(\"Running documentation health checks...\");\n\n    // Try routing through running server first (same pattern as cmd_reason)\n    if let Some(client) = server_client::ServerClient::detect(&config).await {\n        println!(\"(via server at {})\\n\", client.url());\n        // Route each check through the server's /v1/reason endpoint\n        for check_type in &checks {\n            let response = client.reason(scope_id, Some(check_type.as_str())).await?;\n            for (i, finding) in response.findings.iter().enumerate() {\n                println!(\"  [{}] {} (confidence: {:.0}%)\", i + 1, finding.check_type, finding.confidence * 100.0);\n                println!(\"      {}\", finding.rationale);\n            }\n        }\n        return Ok(());\n    }\n\n    // Fallback: run locally (same pattern as cmd_reason lines 1532-1536)",
+  "source_version": "plans/2026-03-13-docs-workflow-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836352027Z",
+  "valid_from": "2026-04-11T00:10:08.836352027Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-13-docs-workflow-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1935,
+    "end_line": 1973,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

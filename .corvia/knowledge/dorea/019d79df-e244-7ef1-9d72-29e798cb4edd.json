@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-29e798cb4edd",
+  "content": "# 3D LUT Temporal Interpolation — Implementation Plan\n\n> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.\n\n**Goal:** Replace `grade_frame` on non-keyframe frames with a precomputed 65x65x65 per-depth-band 3D LUT to eliminate the expensive sRGB↔LAB roundtrip (~25ms/frame).\n\n**Architecture:** Build a `GradeLut` (array of 7 zone-aligned 3D LUTs) once after calibration by evaluating the real pipeline on synthetic 1x1 frames. For non-keyframes, trilinear-interpolate each pixel through two bracketing depth-band LUTs and blend. The `grade_frame_inner` function (extracted from existing `grade_frame_cpu`) provides the single-pixel evaluation with skip_clarity support.\n\n**Tech Stack:** Rust, rayon (parallel build + apply), existing dorea-lut `LutGrid` type, existing dorea-cal `Calibration`.\n\n**Spec:** `docs/decisions/2026-04-03-3d-lut-temporal-interpolation.md`\n\n---\n",
+  "source_version": "plans/2026-04-03-3d-lut-temporal-interpolation.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836657305Z",
+  "valid_from": "2026-04-11T00:10:08.836657305Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-3d-lut-temporal-interpolation.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1,
+    "end_line": 14,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

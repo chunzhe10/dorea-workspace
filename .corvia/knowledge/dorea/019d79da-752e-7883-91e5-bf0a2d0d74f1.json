@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-bf0a2d0d74f1",
+  "content": "tderr, flush=True)\n                resp = OkResponse()\n            elif req_type == \"load_raune\":\n                # Unload existing model first to avoid OOM on 6 GB VRAM budget\n                if raune_model is not None:\n                    del raune_model\n                    raune_model = None\n                    try:\n                        import torch\n                        if torch.cuda.is_available():\n                            torch.cuda.empty_cache()\n                    except ImportError:\n                        pass\n                from .raune_net import RauneNetInference\n                raune_model = RauneNetInference(\n                    weights_path=req.get(\"weights\"),\n                    device=device,\n                    raune_models_dir=req.get(\"models_dir\"),\n                )\n                print(\"[dorea-inference] RAUNE-Net loaded (on demand)\", file=sys.stderr, flush=True)\n                resp = OkResponse()\n\n            elif req_type == \"load_depth\":\n                # Unload existing model first to avoid OOM on 6 GB VRAM budget\n                if depth_model is not None:\n                    del depth_model\n                    depth_model = None\n                    try:\n                        import torch",
+  "source_version": "python/dorea_inference/server.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230228423Z",
+  "valid_from": "2026-04-11T00:04:13.230228423Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/server.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 350,
+    "end_line": 372,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

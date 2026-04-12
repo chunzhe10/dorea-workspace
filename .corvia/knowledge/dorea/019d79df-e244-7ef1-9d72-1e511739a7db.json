@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-1e511739a7db",
+  "content": "     let content = std::fs::read_to_string(path)\n            .map_err(|e| format!(\"cannot read {}: {e}\", path.display()))?;\n\n        let mut size: Option<usize> = None;\n        let mut values: Vec<f32> = Vec::new();\n        let mut title = path.file_stem()\n            .map(|s| s.to_string_lossy().to_string())\n            .unwrap_or_else(|| \"custom\".to_string());\n\n        for line in content.lines() {\n            let line = line.trim();\n            if line.is_empty() || line.starts_with('#') {\n                continue;\n            }\n            if let Some(rest) = line.strip_prefix(\"TITLE\") {\n                title = rest.trim().trim_matches('\"').to_string();\n                continue;\n            }\n            if let Some(rest) = line.strip_prefix(\"LUT_1D_SIZE\") {\n                size = Some(rest.trim().parse::<usize>()\n                    .map_err(|e| format!(\"bad LUT_1D_SIZE: {e}\"))?);\n                continue;\n            }\n            // Skip 3D LUT directives\n            if line.starts_with(\"LUT_3D_SIZE\") || line.starts_with(\"DOMAIN_\") {\n                continue;\n            }\n            // Data line: single float (1D) or three floats (use first channel)\n            let first_token = line.split_whitespace().next().unwrap_or(\"\");\n            if let Ok(v) = first_token.parse::<f32>() {\n                values.push(v);\n            }\n        }\n\n        if let Some(sz) = size {\n            if values.len() != sz {\n                return Err(format!(\n                    \"LUT_1D_SIZE={sz} but found {} values\", values.len()",
+  "source_version": "plans/2026-04-02-10bit-pipeline-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836491260Z",
+  "valid_from": "2026-04-11T00:10:08.836491260Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-10bit-pipeline-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 342,
+    "end_line": 373,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

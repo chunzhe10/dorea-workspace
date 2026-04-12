@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-2007f0d75a53",
+  "content": "\".to_string(), 65, \"prores\".to_string()),\n            (ContainerHint::Mp4, \"hevc\") | (ContainerHint::Mp4, \"h265\") =>\n                (\"dlog_m\".to_string(), 65, \"prores\".to_string()),\n            _ => (\"srgb\".to_string(), 33, \"h264\".to_string()),\n        };\n\n    Ok(ProbeResult {\n        info,\n        container,\n        codec_name,\n        bit_depth,\n        suggested_encoding,\n        suggested_lut_size,\n        suggested_output_codec,\n    })\n}\n```\n\n- [ ] **Step 2: Register in dorea-video/src/lib.rs**\n\nAdd `pub mod probe;` to `crates/dorea-video/src/lib.rs`.\n\n- [ ] **Step 3: Create CLI probe subcommand**\n\nCreate `crates/dorea-cli/src/probe.rs`:\n\n```rust\nuse clap::Args;\nuse std::path::PathBuf;\nuse anyhow::{Context, Result};\n\n#[derive(Args, Debug)]\npub struct ProbeArgs {\n    /// Input video file to probe\n    #[arg(long)]\n    pub input: PathBuf,\n}\n\npub fn run(args: ProbeArgs) -> Result<()> {\n    let result = dorea_video::probe::probe_file(&args.input)\n        .context(\"probe failed\")?;\n\n    println!(\"File:       {}\", args.input.display());\n    println!(\"Container:  {:?}\", result.container);\n    println!(\"Codec:      {}\", result.codec_name);\n    if let Some(bd) = result.bit_depth {\n        println!(\"Bit depth:  {bd}-bit\");\n    }\n    println!(\"Resolution: {}x{} @ {:.2}fps\", result.info.width, result.info.height, result.info.fps);\n    println!(\"Duration:   {:.1}s ({} frames)\", result.info.duration_secs, result.info.frame_count);\n    println!(\"Suggested:  --input-encoding {} --output-codec {} --lut-size {}\",\n        result.suggested_encoding, result.suggested_output_codec, result.suggested_lut_size);\n\n    Ok(())\n}\n```\n\n- [ ] **Step 4: Register probe in main.rs**\n\nIn `crates/dorea-cli/src/main.rs`, add `Probe(probe::ProbeArgs)` to the `Command` enum\nand dispatch it in the match arm:\n\n```rust\nCommand::Probe(args) => probe::run(args),\n```\n\nAdd `pub mod probe;` to the module declarations.\n\n- [ ] **Step 5: Build**\n\nRun: `cd /workspaces/dorea-workspace/repos/dorea && cargo build -p dorea-cli`\nExpected: Compiles.\n\n- [ ] **Step 6: Commit**\n\n```bash\ngit add crates/dorea-video/src/probe.rs crates/dorea-video/src/lib.rs \\\n       crates/dorea-cli/src/probe.rs crates/dorea-cli/src/main.rs\ngit commit -m \"feat(cli): add dorea probe command for container auto-detection\"\n```\n\n---\n",
+  "source_version": "plans/2026-04-02-10bit-pipeline-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836513040Z",
+  "valid_from": "2026-04-11T00:10:08.836513040Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-10bit-pipeline-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1513,
+    "end_line": 1590,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

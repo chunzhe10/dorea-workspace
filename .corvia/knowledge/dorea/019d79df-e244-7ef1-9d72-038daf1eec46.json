@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-038daf1eec46",
+  "content": "## Files Changed\n\n### What does NOT change\n\n- Function signatures (`srgb_to_lab`, `lab_to_srgb`) — callers are unaffected\n- Ambiance constants (shadow lift, S-curve, highlight compress)\n- Warmth constants (a*/b* push magnitudes, warmth_factor scaling)\n- Vibrance constants (chroma threshold `40.0`, boost formula)\n- a/b clamping ranges (`[-128, 127]`)\n- L clamping range (`[0, 100]`)\n- Stage bitmask logic\n- 10-bit pipeline path (uses same `grade_pixel_device`)\n",
+  "source_version": "decisions/2026-04-09-oklab-grade-pipeline.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836173368Z",
+  "valid_from": "2026-04-11T00:10:08.836173368Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-09-oklab-grade-pipeline.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 104,
+    "end_line": 114,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

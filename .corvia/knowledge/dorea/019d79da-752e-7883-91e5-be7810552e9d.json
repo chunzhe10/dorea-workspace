@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-be7810552e9d",
+  "content": "reduction})\",\n            file=sys.stderr, flush=True,\n        )\n\n    # Load YOLO-seg if requested\n    if args.yolo_seg:\n        from .yolo_seg import YoloSegInference\n        yolo_seg_model = YoloSegInference(model_path=args.yolo_seg_model, device=device)\n        print(\"[dorea-inference] YOLO-seg loaded (binary diver/water)\", file=sys.stderr, flush=True)\n\n    print(\"[dorea-inference] ready\", file=sys.stderr, flush=True)\n\n    # Main request loop\n    for line in sys.stdin:\n        line = line.strip()\n        if not line:\n            continue\n\n        try:\n            req = json.loads(line)\n        except json.JSONDecodeError as e:\n            resp = ErrorResponse(id=None, message=f\"invalid JSON: {e}\")\n            try:\n                print(json.dumps(resp.to_dict()), flush=True)\n            except BrokenPipeError:\n                break\n            continue\n\n        if not isinstance(req, dict):\n            resp = ErrorResponse(id=None, message=f\"expected JSON object, got {type(req).__name__}\")\n            try:\n                print(json.dumps(resp.to_dict()), flush=True)\n            except BrokenPipeError:\n                break\n            continue\n\n        req_type = req.get(\"type\", \"\")\n        req_id = req.get(\"id\")\n\n        try:\n            if req_type == \"ping\":\n                resp = PongResponse(version=__version__)\n            elif req_type == \"raune\":\n                if raune_model is None:\n                    raise RuntimeError(\"RAUNE-Net model not loaded (--no-raune or load failed)\")\n                fmt = req.get(\"format\", \"png\")\n                if fmt == \"raw_rgb\":\n                    img = decode_raw_rgb(req[\"image_b64\"], int(req[\"width\"]), int(req[\"height\"]))\n                else:\n                    img = decode_png(req[\"image_b64\"])\n                max_size = int(req.get(\"max_size\", 1080))\n                result = raune_model.infer(img, max_size=max_size)\n                resp = RauneResult(\n                    id=req_id,",
+  "source_version": "python/dorea_inference/server.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230220131Z",
+  "valid_from": "2026-04-11T00:04:13.230220131Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/server.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 122,
+    "end_line": 167,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

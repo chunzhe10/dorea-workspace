@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-28db314a1c16",
+  "content": "#   2. Proxy downscale before depth inference: 24 MB/frame → ~200 KB/frame\n#   Measured wall time for DJI_20251101111428_0055_D.MP4 (4K, 14s, 1671 frames): <actual time>\"\n\n## Self-Review Checklist\n\n**Spec coverage:**\n- [x] Bug 1 (O(N×radius) blur) → Task 1 (sliding window + transpose)\n- [x] Bug 2 (full-frame pipe I/O) → Task 2 (proxy_dims + resize) + Task 3 (wired in grade.rs)\n- [x] Cache miss for column blur → Task 1 (transpose approach)\n- [x] End-to-end verification → Task 4\n\n**Placeholder scan:** No TBDs. All code blocks are complete and compilable.\n\n**Type consistency:**\n- `proxy_dims` returns `(usize, usize)` — used correctly in Task 3\n- `resize_rgb_bilinear` takes `&[u8]`, returns `Vec<u8>` — matches `frame.pixels` type and `run_depth` signature\n- `box_blur_rows_sliding` and `box_blur_cols_via_transpose` have identical signatures to the functions they replace — `three_pass_box_blur` call sites are unchanged",
+  "source_version": "plans/2026-04-02-inference-perf-fix.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836641490Z",
+  "valid_from": "2026-04-11T00:10:08.836641490Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-inference-perf-fix.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 582,
+    "end_line": 595,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

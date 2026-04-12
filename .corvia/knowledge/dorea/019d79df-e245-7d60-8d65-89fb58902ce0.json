@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-89fb58902ce0",
+  "content": "### Why bounded queues\n### Why None sentinel and not exceptions\n\n### Why daemon=False\nWe want clean shutdown. If main thread exits while daemon threads are running, encoded video could be truncated. `daemon=False` plus explicit `join()` ensures all work completes before main returns.\n\n\n### CUDA thread safety\nPyTorch's CUDA context is process-wide and shared across threads. The `_process_batch()` function only runs from Thread 2 (GPU thread) — there's no concurrent CUDA access from multiple threads. This is the correct way to use CUDA from Python threads.\n",
+  "source_version": "plans/2026-04-10-direct-mode-3thread-pipeline.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837095488Z",
+  "valid_from": "2026-04-11T00:10:08.837095488Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-10-direct-mode-3thread-pipeline.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 273,
+    "end_line": 278,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-e20186ffd4e8",
+  "content": "r::Ipc(format!(\"base64 decode: {e}\")))?;\n\n        if raw.len() != w * h * 4 {\n            return Err(InferenceError::Ipc(format!(\n                \"depth buffer size mismatch: got {} bytes, expected {}\",\n                raw.len(), w * h * 4\n            )));\n        }\n\n        let depth: Vec<f32> = raw.chunks_exact(4)\n            .map(|b| f32::from_le_bytes([b[0], b[1], b[2], b[3]]))\n            .collect();\n\n        Ok((depth, w, h))\n    }\n\n    /// Run Depth Anything V2 on a batch of images in a single IPC round-trip.\n    ///\n    /// Returns `Vec<(id, depth_f32, out_width, out_height)>` in the same order as `items`.\n    #[allow(clippy::type_complexity)]\n    pub fn run_depth_batch(\n        &mut self,\n        items: &[DepthBatchItem],\n    ) -> Result<Vec<(String, Vec<f32>, usize, usize)>, InferenceError> {\n        if items.is_empty() {\n            return Ok(vec![]);\n        }\n\n        let json_items: Vec<serde_json::Value> = items.iter().map(|item| {\n            let b64 = B64.encode(&item.pixels);\n            serde_json::json!({\n                \"id\": item.id,\n                \"image_b64\": b64,\n                \"format\": \"raw_rgb\",\n                \"width\": item.width,\n                \"height\": item.height,\n                \"max_size\": item.max_size\n            })\n        }).collect();\n\n        let req = serde_json::json!({\n            \"type\": \"depth_batch\",\n            \"items\": json_items\n        });\n        self.send_line(&req.to_string())?;\n\n        let resp = self.recv_line()?;",
+  "source_version": "crates/dorea-video/src/inference_subprocess.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229634302Z",
+  "valid_from": "2026-04-11T00:04:13.229634302Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference_subprocess.rs",
+    "language": "rs",
+    "chunk_type": "impl_item",
+    "start_line": 402,
+    "end_line": 441,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

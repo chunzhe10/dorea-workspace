@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d9b2b5458410",
+  "content": "fn mse_detector_no_reference_returns_max() {\n        let det = MseDetector::default();\n        let pixels = vec![128u8; 100];\n        assert_eq!(det.score(&pixels), f32::MAX);\n    }\nfn mse_detector_same_as_reference_returns_zero() {\n        let mut det = MseDetector::default();\n        let pixels = vec![200u8; 300];\n        det.set_reference(&pixels);\n        assert_eq!(det.score(&pixels), 0.0);\n    }",
+  "source_version": "crates/dorea-cli/src/change_detect.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229532560Z",
+  "valid_from": "2026-04-11T00:04:13.229532560Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/change_detect.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 265,
+    "end_line": 270,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

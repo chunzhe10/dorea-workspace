@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-8b65448056ab",
+  "content": "    # Wrap with torch.compile for Inductor JIT fusion.\n    # torch.compile is a pure performance optimization — if it fails on any\n\n    # layer we fall back to eager mode, which still works (just slower).\n\n    # This is DIFFERENT from the fp16 try/except which we removed in PR #67:",
+  "source_version": "plans/2026-04-10-torch-compile-raune.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837113126Z",
+  "valid_from": "2026-04-11T00:10:08.837113126Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-10-torch-compile-raune.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 68,
+    "end_line": 69,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

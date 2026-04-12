@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c11c68e42248",
+  "content": ").decode(\"ascii\")\n    return {\n        \"type\": \"enhance\",\n        \"id\": req_id,\n        \"format\": \"raw_rgb\",\n        \"image_b64\": b64,\n        \"width\": width,\n        \"height\": height,\n        \"no_artifact_reduce\": False,\n        \"upscale_factor\": 2,\n    }\ndef _run_server_with_reqs(requests: list, extra_argv: list = None) -> list:\n    \"\"\"Run main() with a sequence of requests, return parsed responses.\"\"\"\n    from dorea_inference.server import main\n\n    lines = [json.dumps(r) for r in requests] + ['{\"type\": \"shutdown\"}']\n    stdin_data = \"\\n\".join(lines) + \"\\n\"\n\n    captured = io.StringIO()\n    old_stdin = sys.stdin\n    old_stdout = sys.stdout\n    sys.stdin = io.StringIO(stdin_data)\n    sys.stdout = captured\n\n    argv = [\"--no-raune\", \"--no-depth\"] + (extra_argv or [])\n    try:\n        main(argv=argv)\n    except SystemExit:\n        pass\n    finally:\n        sys.stdin = old_stdin\n        sys.stdout = old_stdout\n\n    output = captured.getvalue().strip()\n    return [json.loads(line) for line in output.split(\"\\n\") if line.strip()]",
+  "source_version": "python/tests/test_maxine_server.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230255358Z",
+  "valid_from": "2026-04-11T00:04:13.230255358Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/tests/test_maxine_server.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 29,
+    "end_line": 52,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

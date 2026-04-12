@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-2f0a809fe2e5",
+  "content": " .map_err(|e| InferenceError::Ipc(format!(\"import bridge: {e}\")))?;\n            let np = py.import(\"numpy\")\n                .map_err(|e| InferenceError::Ipc(format!(\"import numpy: {e}\")))?;\n\n            // Create numpy array from raw bytes (zero-copy view)\n            let arr = numpy::PyArray1::from_slice(py, image_rgb);\n            let reshaped = arr.call_method1(\"reshape\", ((height, width, 3),))\n                .map_err(|e| InferenceError::Ipc(format!(\"reshape: {e}\")))?;\n\n            // Call run_depth_cpu (returns numpy array — works on any device)\n            let result = bridge.call_method1(\"run_depth_cpu\", (reshaped, max_size))\n                .map_err(|e| map_python_error(py, e))?;\n\n            // Extract numpy array\n            let depth_arr: &numpy::PyArray2<f32> = result.extract()\n                .map_err(|e| InferenceError::Ipc(format!(\"extract depth: {e}\")))?;\n            let depth_vec = depth_arr.to_vec()\n                .map_err(|e| InferenceError::Ipc(format!(\"depth to_vec: {e}\")))?;\n            let shape = depth_arr.shape();\n            let out_h = shape[0];\n            let out_w = shape[1];\n\n            Ok((depth_vec, out_w, out_h))\n        })\n    }\n\n    /// Run depth inference, returning a GPU tensor guard for zero-copy sharing.\n    ///\n    /// The returned `DepthTensorGuard` holds the device pointer and prevents GC.\n    /// Call `release()` when done to free the GPU tensor.",
+  "source_version": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836735589Z",
+  "valid_from": "2026-04-11T00:10:08.836735589Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1572,
+    "end_line": 1596,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

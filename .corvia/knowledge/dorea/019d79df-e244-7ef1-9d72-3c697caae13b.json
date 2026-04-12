@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-3c697caae13b",
+  "content": "## What is removed\n## What is added\n\n## Depends on\n`docs/plans/2026-04-03-inference-gpu-saturation.md` (fused RAUNE+depth batch API)\n\n\n## Spec\n`docs/plans/2026-04-04-unified-keyframe-sampling.md`\n`docs/plans/2026-04-04-unified-keyframe-sampling-impl.md`\nEOF\n)\"\n```\n\n- [ ] **Step 5.2: Smoke test (if dive footage is available)**\n\n```bash\ntime dorea grade \\\n  --input /workspaces/dorea-workspace/footage/raw/2025-11-01/DJI_20251101112849_0057_D.MP4 \\\n  --output /workspaces/dorea-workspace/working/graded/unified_test_$(date +%Y%m%d).mp4 \\\n  --raune-weights /workspaces/dorea-workspace/models/raune_net.pth \\\n  --raune-models-dir /workspaces/dorea-workspace/models/RAUNE-Net \\\n  --depth-model /workspaces/dorea-workspace/models/depth_anything_v2_vits \\\n  --depth-max-interval 5 \\\n  2>&1 | tee /tmp/unified_run.log\n```\n\nExpected: single `[dorea-inference] ready` message (not two), calibration log shows `Auto-calibration complete (N keyframes)`, grading completes successfully.\n\n- [ ] **Step 5.3: Save result to corvia**\n\n```\ncorvia_write: record result — calibration keyframe count, wall time, any anomalies\nsource_origin: repo:dorea, content_role: decision\n```\n\n---\n",
+  "source_version": "plans/2026-04-04-unified-keyframe-sampling-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836944633Z",
+  "valid_from": "2026-04-11T00:10:08.836944633Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-unified-keyframe-sampling-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 824,
+    "end_line": 857,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

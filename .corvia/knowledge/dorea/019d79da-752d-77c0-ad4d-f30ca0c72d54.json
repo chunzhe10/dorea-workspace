@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-f30ca0c72d54",
+  "content": " self.d_s_ratios  = device.htod_sync_copy(sr).map_err(map_cudarc_error)?;\n        self.d_v_offsets = device.htod_sync_copy(vo).map_err(map_cudarc_error)?;\n        self.d_weights   = device.htod_sync_copy(wt).map_err(map_cudarc_error)?;\n        Ok(())\n    }\npub(crate) fn swap(&mut self) -> usize {\n        self.active = 1 - self.active;\n        self.active\n    }\npub(crate) fn active_index(&self) -> usize {\n        self.active\n    }",
+  "source_version": "crates/dorea-gpu/src/cuda/combined_lut.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229850453Z",
+  "valid_from": "2026-04-11T00:04:13.229850453Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cuda/combined_lut.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 522,
+    "end_line": 530,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

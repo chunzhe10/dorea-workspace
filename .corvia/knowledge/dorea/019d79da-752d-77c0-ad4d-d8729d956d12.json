@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d8729d956d12",
+  "content": "pub trait ChangeDetector: Send {\n    /// Change score from `pixels` vs the stored reference frame.\n    /// Returns `f32::MAX` when no reference has been set yet.\n    fn score(&self, pixels: &[u8]) -> f32;\n\n    /// Accept `pixels` as the new reference for future `score()` calls.\n    fn set_reference(&mut self, pixels: &[u8]);\n\n    /// Clear the reference — next `score()` will return `f32::MAX`.\n    fn reset(&mut self);\n}",
+  "source_version": "crates/dorea-cli/src/change_detect.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229518763Z",
+  "valid_from": "2026-04-11T00:04:13.229518763Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/change_detect.rs",
+    "language": "rs",
+    "chunk_type": "trait_item",
+    "start_line": 9,
+    "end_line": 19,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

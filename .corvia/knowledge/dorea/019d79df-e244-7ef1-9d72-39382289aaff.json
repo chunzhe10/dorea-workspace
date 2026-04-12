@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-39382289aaff",
+  "content": "### Task 4: build_combined_lut.cu — separate base/runtime zone params\n\n    int runtime_n_zones,\n    // HSL + grade params (unchanged)\n    const float* __restrict__ h_offsets,\n    const float* __restrict__ s_ratios,\n    const float* __restrict__ v_offsets,\n    const float* __restrict__ weights,\n    float warmth, float strength, float contrast,\n    int grid_size, int lut_size,\n    int total_threads\n)\n```\n\n- [ ] **Step 2: Update the kernel body**\n\nReplace the zone index computation and grade_pixel_device call. The key changes:\n- `zone` indexes into `runtime_zone_boundaries` (8 zones) for output placement and depth center\n- `grade_pixel_device` receives `base_luts`, `base_zone_boundaries`, `base_n_zones` for its internal LUT lookup\n\n```c\n{\n    int idx = blockIdx.x * blockDim.x + threadIdx.x;\n    if (idx >= total_threads) return;\n\n    int N = grid_size;\n    int N3 = N * N * N;",
+  "source_version": "plans/2026-04-04-per-keyframe-adaptive-depth-zones-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836891569Z",
+  "valid_from": "2026-04-11T00:10:08.836891569Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-per-keyframe-adaptive-depth-zones-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 565,
+    "end_line": 589,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

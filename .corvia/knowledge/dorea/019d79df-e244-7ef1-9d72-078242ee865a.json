@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-078242ee865a",
+  "content": "# Direct Mode GPU Optimization: fp16 RAUNE + Larger Batch\n\n## Problem\n\nAfter the 3-thread pipeline landed (chunzhe10/dorea#65), direct mode is GPU-bound at\n~398 ms/frame. RAUNE inference dominates. Per the user constraint, optimizations must\npreserve quality (no proxy reduction, no frame skipping).\n\nThis decision covers the first PR in a multi-PR sweep targeting the GPU stage.\n\n\n## Decision\n\nTwo stacked, low-risk optimizations:\n\n1. **fp16 RAUNE inference**: call `model.half()` after loading, convert input tensors\n   to half precision before forward pass. Output is upcast to fp32 for the OKLab\n   transfer (which already runs in mixed precision via the Triton kernel).\n\n2. **Larger batch size**: raise the default from 4 to 8, expose `--direct-batch-size`\n   CLI flag for tuning. fp16 halves activation memory, so batch=8 has the same VRAM\n   footprint as batch=4 in fp32 — no risk of OOM on the 6GB RTX 3060.\n",
+  "source_version": "decisions/2026-04-10-direct-mode-fp16-batch.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836220210Z",
+  "valid_from": "2026-04-11T00:10:08.836220210Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-10-direct-mode-fp16-batch.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 3,
+    "end_line": 22,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

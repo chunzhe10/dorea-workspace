@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-8a5f9aa7d2d6",
+  "content": "    # outputs fp16; we cast back to fp32 in _process_batch before the OKLab transfer.\n        # RAUNE inference\n\n        # Cast to model's dtype (fp16 if model.half() was called, fp32 otherwise).\n\n        # Match input dtype to model dtype to avoid PyTorch type mismatch errors.\n        model_dtype = next(model.parameters()).dtype\n        if proxy_batch.dtype != model_dtype:\n            proxy_batch = proxy_batch.to(model_dtype)\n",
+  "source_version": "plans/2026-04-10-direct-mode-fp16-batch.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837100442Z",
+  "valid_from": "2026-04-11T00:10:08.837100442Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-10-direct-mode-fp16-batch.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 84,
+    "end_line": 89,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

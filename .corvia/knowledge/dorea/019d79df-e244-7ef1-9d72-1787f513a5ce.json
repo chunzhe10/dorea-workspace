@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-1787f513a5ce",
+  "content": "### WSL memory leak from orphaned processes\n\n## Documentation Save Locations\n\n- Pipeline designs and decisions → `docs/decisions/`\n- Implementation plans → `docs/plans/`\n- Learnings → `docs/learnings/`\n\nDo NOT create `docs/superpowers/` — that path is blocked by enforcement hooks.\n\n\n## Recording Decisions\n\nUse `corvia_write` with `content_role` and `source_origin` params:\n- Pipeline decisions: `source_origin = \"repo:dorea\"`\n- Workspace decisions: `source_origin = \"workspace\"`\n```\n",
+  "source_version": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836411815Z",
+  "valid_from": "2026-04-11T00:10:08.836411815Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 478,
+    "end_line": 492,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

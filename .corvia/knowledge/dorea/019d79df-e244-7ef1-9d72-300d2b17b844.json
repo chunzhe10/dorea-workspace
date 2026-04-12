@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-300d2b17b844",
+  "content": "## File Map\n## Constants\n\n## Task 1: Add `infer_batch` to `RauneNetInference`\n\nThis is the building block. The fused handler in Task 3 calls a GPU-tensor variant, but `infer_batch` (returns numpy) is still useful standalone and makes the fused path testable in pieces.\n\n**Files:**\n- Modify: `repos/dorea/python/dorea_inference/raune_net.py`\n- Create: `repos/dorea/python/tests/__init__.py` (empty)\n- Create: `repos/dorea/python/tests/test_infer_batch.py`\n\n- [ ] **Step 1.1: Write failing tests**\n\nCreate `repos/dorea/python/tests/__init__.py` — empty file.\n\nCreate `repos/dorea/python/tests/test_infer_batch.py`:\n\n```python\n\"\"\"Tests for infer_batch methods — CPU mode, no GPU or real weights required.\"\"\"\nimport numpy as np\nimport pytest\nimport torch\n\n\ndef _make_rgb(h: int, w: int) -> np.ndarray:\n    return np.random.default_rng(42).integers(0, 256, (h, w, 3), dtype=np.uint8)\n\n\ndef _fake_raune_model():\n    \"\"\"Identity RauneNetInference on CPU, no weights file needed.\"\"\"\n    import types, sys\n    fake_mod = types.ModuleType(\"models\")\n    fake_mod.raune_net = types.ModuleType(\"models.raune_net\")\n\n    class _IdentityNet(torch.nn.Module):\n        def forward(self, x):\n            return x  # identity; output in same range as input ([-1,1] after normalize)\n\n    fake_mod.raune_net.RauneNet = lambda **_: _IdentityNet()\n    sys.modules.setdefault(\"models\", fake_mod)",
+  "source_version": "plans/2026-04-03-inference-gpu-saturation.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836749284Z",
+  "valid_from": "2026-04-11T00:10:08.836749284Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-inference-gpu-saturation.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 77,
+    "end_line": 114,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

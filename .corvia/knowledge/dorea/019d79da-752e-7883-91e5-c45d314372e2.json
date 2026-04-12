@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c45d314372e2",
+  "content": "    k = 2 * r + 1\n    # Separable: horizontal then vertical average pool is a box filter\n    x = F.pad(x, (r, r, r, r), mode=\"reflect\")\n    x = F.avg_pool2d(x, kernel_size=(1, k), stride=1)\n    x = F.avg_pool2d(x, kernel_size=(k, 1), stride=1)\n    return x\ndef guided_filter(\n    delta_proxy: torch.Tensor,\n    orig_full: torch.Tensor,\n    full_size: Tuple[int, int],\n) -> torch.Tensor:\n    \"\"\"Joint bilateral-style upscale via the He/Sun/Tang 2010 guided filter.\n\n    The guide is the full-resolution OKLab-L channel. The filter is run\n    after a cheap initial upsample of the delta to full size. All three\n    delta channels are processed together by broadcasting against the\n    (1, 1, fh, fw) guide.\n\n    Hyperparameters: r=8 (full-res pixels), eps=1e-4.\n    \"\"\"\n    r = 8\n    eps = 1e-4\n\n    # 1. Compute the full-res luma guide from RGB\n    guide = _rgb_to_oklab(orig_full)[:, 0:1]  # (1, 1, fh, fw) OKLab-L\n\n    # 2. Cheap initial upsample of the delta to full size, 3 channels\n    p = F.interpolate(delta_proxy, size=full_size, mode=\"bilinear\", align_corners=False)\n\n    # 3. Guide-only statistics (channel-independent, hoisted out of the broadcast)\n    mean_I = _box_filter(guide, r)                    # (1, 1, fh, fw)\n    mean_II = _box_filter(guide * guide, r)           # (1, 1, fh, fw)\n    var_I = mean_II - mean_I * mean_I                 # (1, 1, fh, fw)\n\n    # 4. Vectorized per-channel steps via broadcasting against the guide\n    mean_p = _box_filter(p, r)                        # (1, 3, fh, fw)\n    mean_Ip = _box_filter(guide * p, r)               # (1, 3, fh, fw)  broadcast\n    cov_Ip = mean_Ip - mean_I * mean_p                # (1, 3, fh, fw)\n\n    a = cov_Ip / (var_I + eps)                        # (1, 3, fh, fw)\n    b = mean_p - a * mean_I                           # (1, 3, fh, fw)\n\n    mean_a = _box_filter(a, r)                        # (1, 3, fh, fw)\n    mean_b = _box_filter(b, r)                        # (1, 3, fh, fw)\n\n    return mean_a * guide + mean_b                    # (1, 3, fh, fw)",
+  "source_version": "benchmarks/upscale_bench/methods.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230300603Z",
+  "valid_from": "2026-04-11T00:04:13.230300603Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/methods.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 151,
+    "end_line": 190,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

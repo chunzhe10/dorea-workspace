@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d15818dd7035",
+  "content": "th_model.map(|p| p.to_path_buf()),\n        skip_depth: false,\n        device,\n        startup_timeout: Duration::from_secs(180),\n        maxine: false, // Maxine requires NVIDIA VFX SDK — disabled when not available\n        maxine_upscale_factor,\n    }\n}\nmod tests {\n    use super::*;\n    use crate::pipeline::grading::lerp_depth;\n\n    #[test]\n    fn lerp_depth_at_zero() {\n        let a: Vec<f32> = vec![0.1, 0.2, 0.3];\n        let b: Vec<f32> = vec![0.5, 0.6, 0.7];\n        let result = lerp_depth(&a, &b, 0.0);\n        assert_eq!(result, vec![0.1, 0.2, 0.3]);\n    }\n\n    #[test]\n    fn lerp_depth_at_one() {\n        let a: Vec<f32> = vec![0.1, 0.2, 0.3];\n        let b: Vec<f32> = vec![0.5, 0.6, 0.7];\n        let result = lerp_depth(&a, &b, 1.0);\n        assert_eq!(result, vec![0.5, 0.6, 0.7]);\n    }\n\n    #[test]\n    fn lerp_depth_at_half() {\n        let a: Vec<f32> = vec![0.0, 0.4, 0.8];\n        let b: Vec<f32> = vec![1.0, 0.8, 0.6];\n        let result = lerp_depth(&a, &b, 0.5);\n        for (r, e) in result.iter().zip([0.5f32, 0.6, 0.7].iter()) {\n            assert!((r - e).abs() < 1e-6, \"expected {e}, got {r}\");\n        }\n    }\n\n    #[test]\n    fn lerp_depth_clamps_t() {\n        let a: Vec<f32> = vec![0.1, 0.2];\n        let b: Vec<f32> = vec![0.9, 0.8];\n        assert_eq!(lerp_depth(&a, &b, 2.0), vec![0.9, 0.8]);\n        assert_eq!(lerp_depth(&a, &b, -1.0), vec![0.1, 0.2]);\n    }\n\n    #[test]\n    fn build_inference_config_defaults() {",
+  "source_version": "crates/dorea-cli/src/grade.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229431613Z",
+  "valid_from": "2026-04-11T00:04:13.229431613Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/grade.rs",
+    "language": "rs",
+    "chunk_type": "mod_item",
+    "start_line": 408,
+    "end_line": 447,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

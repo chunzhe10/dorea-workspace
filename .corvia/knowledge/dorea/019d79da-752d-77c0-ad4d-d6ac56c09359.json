@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d6ac56c09359",
+  "content": "     // assuming the same proxy dimensions used throughout Pass 1.\n        self.reference = Some((pixels.to_vec(), 0, 0));\n        self.last_flow = None;\n    }\n\n    fn reset(&mut self) {\n        self.reference = None;\n        self.last_flow = None;\n    }\n}\nfn score(&self, pixels: &[u8]) -> f32 {\n        // NOTE: ChangeDetector::score takes &self, but we need to store last_flow.\n        // This is a design tension — for now, return magnitude without storing.\n        // The caller should use compute_flow + mean_flow_magnitude directly\n        // when they need both the score AND the motion field.\n        match &self.reference {\n            Some((ref_pixels, w, h)) => {\n                if pixels.len() != ref_pixels.len() {\n                    return f32::MAX;\n                }\n                let flow = compute_flow(ref_pixels, pixels, *w, *h);\n                mean_flow_magnitude(&flow)\n            }\n            None => f32::MAX,\n        }\n    }",
+  "source_version": "crates/dorea-cli/src/optical_flow.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229497575Z",
+  "valid_from": "2026-04-11T00:04:13.229497575Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/optical_flow.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 144,
+    "end_line": 159,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-30ee2f704eaa",
+  "content": "                # dtoh enhanced frames for output\n\n## Task 4: Add `run_raune_depth_batch` to Rust IPC client\n\n**Files:**\n- Modify: `repos/dorea/crates/dorea-video/src/inference_subprocess.rs`\n\n- [ ] **Step 4.1: Write failing compile test**\n\nIn the `#[cfg(test)]` module of `inference_subprocess.rs`, add:\n\n```rust\n#[test]\nfn raune_depth_batch_item_fields_compile() {\n    let item = RauneDepthBatchItem {\n        id: \"kf0000\".to_string(),\n        pixels: vec![0u8; 60 * 80 * 3],\n        width: 80,\n        height: 60,\n        raune_max_size: 80,\n        depth_max_size: 56,\n    };\n    assert_eq!(item.id, \"kf0000\");\n}\n```\n\nRun:\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ncargo test -p dorea-video raune_depth_batch_item_fields_compile 2>&1 | tail -5\n```\nExpected: `error[E0412]: cannot find type 'RauneDepthBatchItem'`\n\n- [ ] **Step 4.2: Add `RauneDepthBatchItem` and `run_raune_depth_batch`**\n\nAfter `DepthBatchItem` (around line 74 of `inference_subprocess.rs`):\n\n```rust\n/// A single image for the fused raune_depth_batch IPC call.\npub struct RauneDepthBatchItem {\n    pub id: String,",
+  "source_version": "plans/2026-04-03-inference-gpu-saturation.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836762199Z",
+  "valid_from": "2026-04-11T00:10:08.836762199Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-inference-gpu-saturation.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 575,
+    "end_line": 613,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

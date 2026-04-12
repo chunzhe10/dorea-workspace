@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-8835bf542325",
+  "content": "## Task 2: Rewrite _process_batch with batched operations\n\n        # Build proxy batch for RAUNE\n        proxy_tensors = []\n        for rgb_np in batch_frames_np:\n            full_t = torch.from_numpy(rgb_np).cuda().float() / 255.0\n            full_t = full_t.permute(2, 0, 1).unsqueeze(0)\n            proxy_t = F.interpolate(full_t, size=(ph, pw), mode=\"bilinear\", align_corners=False)\n            proxy_norm = (proxy_t - 0.5) / 0.5\n            proxy_tensors.append(proxy_norm.squeeze(0))\n            del full_t\n\n        proxy_batch = torch.stack(proxy_tensors).cuda()\n        del proxy_tensors\n\n        if proxy_batch.dtype != model_dtype:\n            proxy_batch = proxy_batch.to(model_dtype)\n\n        raune_out = model(proxy_batch)\n        raune_out = raune_out.float()\n        raune_out = ((raune_out + 1.0) / 2.0).clamp(0.0, 1.0)\n\n        rh, rw = raune_out.shape[2], raune_out.shape[3]\n        if rh != ph or rw != pw:\n            raune_out = F.interpolate(raune_out, size=(ph, pw), mode=\"bilinear\", align_corners=False)\n\n        orig_proxy = (proxy_batch.float() * 0.5 + 0.5).clamp(0.0, 1.0)\n        del proxy_batch\n\n        raune_lab = rgb_to_lab(raune_out)\n        orig_lab = rgb_to_lab(orig_proxy)\n        delta_lab = raune_lab - orig_lab\n        del raune_out, orig_proxy, raune_lab, orig_lab\n\n        delta_full = F.interpolate(delta_lab, size=(fh, fw), mode=\"bilinear\", align_corners=False)",
+  "source_version": "plans/2026-04-10-batched-process-batch.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837071691Z",
+  "valid_from": "2026-04-11T00:10:08.837071691Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-10-batched-process-batch.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 113,
+    "end_line": 145,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

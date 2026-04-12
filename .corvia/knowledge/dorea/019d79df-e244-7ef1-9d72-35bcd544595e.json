@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-35bcd544595e",
+  "content": "0\n```\n\nExpected: all tests pass.\n\n- [ ] **Step 10: Commit**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ngit add crates/dorea-cli/src/grade.rs\ngit commit -m \"feat(grade): Maxine preprocessing — full-res Pass 1, temp-file reuse in Pass 2\"\n```\n\n---\n\n### Task 8: Maxine Setup Guide (issue #22)\n\n**Files:**\n- Create: `docs/guides/maxine-setup.md`\n\n- [ ] **Step 1: Create the guide**\n\nCreate `docs/guides/maxine-setup.md` (in the `repos/dorea/` repo):\n\n```markdown",
+  "source_version": "plans/2026-04-04-maxine-enhancement-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836834024Z",
+  "valid_from": "2026-04-11T00:10:08.836834024Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-maxine-enhancement-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1428,
+    "end_line": 1437,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

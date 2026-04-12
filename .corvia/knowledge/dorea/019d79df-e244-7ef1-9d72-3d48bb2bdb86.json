@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-3d48bb2bdb86",
+  "content": "    /// Per-keyframe smoothed zone boundaries (runtime zones, `depth_zones + 1` values each).\n    pub smoothed_kf_zones: Vec<Vec<f32>>,\n    /// Maps keyframe index → segment index.\n    pub kf_to_segment: Vec<usize>,\n    /// Segments from scene detection.\n    pub segments: Vec<crate::change_detect::SegmentRange>,\n    /// Keyframe metadata (frame_index, scene_cut_before).\n    pub kf_index_list: Vec<(u64, bool)>,\n    /// Native depth per keyframe (for Pass 2 depth interpolation).\n    pub keyframe_depths: std::collections::HashMap<u64, (Vec<f32>, usize, usize)>,\n}\n```\n\n- [ ] **Step 4: Add `pub mod pipeline;` to `lib.rs`**\n\nIn `crates/dorea-cli/src/lib.rs`, add:\n```rust\npub mod pipeline;\n```\n\nCreate stub files so the submodule declarations compile:\n\n```bash\ntouch crates/dorea-cli/src/pipeline/keyframe.rs\ntouch crates/dorea-cli/src/pipeline/feature.rs\ntouch crates/dorea-cli/src/pipeline/calibration.rs\ntouch crates/dorea-cli/src/pipeline/grading.rs\n```\n\n- [ ] **Step 5: Run — verify PASS**\n\n```bash\ncargo test -p dorea-cli --features cuda 2>&1 | grep -E \"FAILED|^test result\"\n```\nExpected: `test result: ok. N passed`\n\n- [ ] **Step 6: Commit**\n\n```bash\ngit add crates/dorea-cli/src/pipeline/ crates/dorea-cli/src/lib.rs\ngit commit -m \"feat(pipeline): Node + Stage traits + shared I/O types\"\n```\n\n---\n",
+  "source_version": "plans/2026-04-05-pipeline-dag-refactor.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836957352Z",
+  "valid_from": "2026-04-11T00:10:08.836957352Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-05-pipeline-dag-refactor.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 147,
+    "end_line": 186,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

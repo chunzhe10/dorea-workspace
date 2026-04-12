@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-09b4501e6a6e",
+  "content": "# D70: Optional Devcontainer Services\n\n## Decision\n\nLight default devcontainer -- no Ollama, no SurrealDB by default. The container ships\nwith Rust toolchain + corvia-inference (fastembed/ONNX for CPU embeddings) + LiteStore\nonly. Ollama and SurrealDB are independently toggleable after entering the container via\na `corvia-workspace enable/disable` shell script.\n\n\n## Context\n\nThe original devcontainer unconditionally installed Ollama (~500MB), pulled an embedding\nmodel (~274MB), and auto-started both Ollama and the corvia server. This was heavy for\ndevelopment and code review where full experimentation was not needed. Most dev work only\nrequires LiteStore + corvia-inference, making the heavy defaults wasteful of both time\nand RAM.\n",
+  "source_version": "decisions/d70-optional-services.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836246478Z",
+  "valid_from": "2026-04-11T00:10:08.836246478Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/d70-optional-services.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 7,
+    "end_line": 21,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

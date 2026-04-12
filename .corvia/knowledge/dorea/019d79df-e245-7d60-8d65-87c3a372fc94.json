@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-87c3a372fc94",
+  "content": " CUDA grade pipeline\n\nReplace CIELab with OKLab in grade_pixel.cuh (matches lab.rs change).\nSwitch powf → __powf for sRGB gamma (~2× faster on SFU, ~2 ULP accuracy,\ninvisible at 10-bit).\n\nRef: docs/decisions/2026-04-09-oklab-grade-pipeline.md\"\n```\n\n---\n\n## Task 3: Verify CPU/GPU parity\n\n**Files:**\n- No file changes — verification only.\n\n- [ ] **Step 1: Run the combined LUT accuracy test**\n\nThe existing test `combined_lut_accuracy` in `crates/dorea-gpu/src/cuda/mod.rs` compares `grade_pixel_cpu()` (Rust, uses `lab.rs`) against `grade_pixel_device()` (CUDA, uses `grade_pixel.cuh`). Both now use OKLab, so they should match.\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ncargo test -p dorea-gpu -- combined_lut 2>&1\n```\n\nExpected: passes. If the test enforces tight per-pixel tolerances, the `__powf` vs `powf` difference (~2 ULP) may cause failures. In that case, loosen the tolerance from 1/255 to 2/255 — this is expected and documented in the spec.\n\n- [ ] **Step 2: Run full workspace tests**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ncargo test --workspace 2>&1\n```\n\nExpected: all tests pass.\n\n- [ ] **Step 3: Commit any tolerance adjustments**\n\nIf Step 1 or 2 required tolerance changes:\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ngit add -A\ngit commit -m \"test: adjust CPU/GPU parity tolerances for OKLab + __powf\n\n__powf has ~2 ULP vs powf's ~1 ULP accuracy. This is invisible at 10-bit\nbut may cause 1-count (1/255) differences in CPU vs GPU comparison tests.\"\n```\n\nIf no changes were needed, skip this step.",
+  "source_version": "plans/2026-04-09-oklab-grade-pipeline.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837065673Z",
+  "valid_from": "2026-04-11T00:10:08.837065673Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-09-oklab-grade-pipeline.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 381,
+    "end_line": 419,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

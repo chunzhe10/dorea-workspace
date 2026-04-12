@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d71-fff4d1a9d5f9",
+  "content": "### Python exception handling\n### CUDA context health check after OOM\n\n### Borrowed device pointer safety\n\nWhen Rust wraps a device pointer from PyTorch, the memory is owned by Python's\ngarbage collector. Rust must NOT call `cudaFree` on it.\n\nThe `BorrowedDeviceSlice` carries a lifetime `'py` tied to the `Python<'py>` GIL\ntoken, enforced by the compiler — not by convention:\n\n```rust\npub struct BorrowedDeviceSlice<'py, T> {\n    ptr: *mut T,\n    len: usize,\n    _phantom: PhantomData<&'py T>,\n}\n\nimpl<'py, T> BorrowedDeviceSlice<'py, T> {\n    /// # Safety\n    /// ptr must be a valid device pointer with at least len elements,\n    /// and must remain valid for the lifetime 'py (the GIL scope).\n    pub unsafe fn from_raw(_py: Python<'py>, ptr: *mut T, len: usize) -> Self {\n        Self { ptr, len, _phantom: PhantomData }\n    }\n\n    pub fn as_device_ptr(&self) -> *const T { self.ptr as *const T }\n    pub fn len(&self) -> usize { self.len }\n}\n\n// No Drop impl — no cudaFree.\n```\n\n**Compile-time enforcement**: `BorrowedDeviceSlice<'py, T>` borrows from\n`Python<'py>`. The borrow checker prevents it from being stored in a struct,\nreturned from the `with_gil` closure, or sent to another thread. This replaces\nthe convention-based enforcement in the original design.\n\n**Interfacing with cudarc**: `BorrowedDeviceSlice` does NOT implement cudarc's\n`DeviceSlice` trait. To pass borrowed data to cudarc kernel launches, use raw\n`cuMemcpyDtoD` via cudarc's unsafe driver API, or copy to an owned `CudaSlice`:\n\n```rust\n// Device-to-device copy for when data must outlive the GIL (~0.1ms for 1080p depth)\nlet owned: CudaSlice<f32> = device.alloc_zeros(borrowed.len())?;\nunsafe {\n    cudarc::driver::sys::cuMemcpyDtoD_v2(\n        owned.device_ptr().0 as _,\n        borrowed.as_device_ptr() as u64,\n        borrowed.len() * std::mem::size_of::<f32>(),\n    );\n}\n```\n\nFor kernel launches that accept raw device pointers (via cudarc's\n`LaunchConfig`), the `as_device_ptr()` method provides the pointer directly.\n",
+  "source_version": "decisions/2026-04-03-gpu-space-ipc-adaptive-batching-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836130194Z",
+  "valid_from": "2026-04-11T00:10:08.836130194Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-03-gpu-space-ipc-adaptive-batching-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 511,
+    "end_line": 564,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c03328e0f37b",
+  "content": "h.rand(1, 3, 100, 180)\n        depths = model.infer_batch_from_tensors(fake_enhanced, depth_max_size=98)\n        H, W = depths[0].shape\n        assert H % 14 == 0, f\"height {H} not multiple of 14\"\n        assert W % 14 == 0, f\"width {W} not multiple of 14\"\ndef test_accepts_gpu_tensor_shape(self):\n        \"\"\"infer_batch_from_tensors returns one depth map per input tensor.\"\"\"\n        from dorea_inference.depth_anything import DepthAnythingInference\n\n        class _FakeDepthModel(torch.nn.Module):\n            class _Out:\n                def __init__(self, t): self.predicted_depth = t\n            def forward(self, pixel_values=None):\n                N, _, H, W = pixel_values.shape\n                return self._Out(pixel_values[:, 0, :, :])  # (N, H, W) dummy\n\n        model = DepthAnythingInference.__new__(DepthAnythingInference)\n        model.device = torch.device(\"cpu\")\n        model.model = _FakeDepthModel()\n\n        # Simulate RAUNE output: (3, 3, H, W) float32 in [0, 1]\n        fake_enhanced = torch.rand(3, 3, 56, 84)  # 3 frames, not yet patch-aligned\n        depths = model.infer_batch_from_tensors(fake_enhanced, depth_max_size=56)\n        assert len(depths) == 3\n        assert all(isinstance(d, np.ndarray) for d in depths)\n        assert all(d.dtype == np.float32 for d in depths)",
+  "source_version": "python/tests/test_infer_batch.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230244425Z",
+  "valid_from": "2026-04-11T00:04:13.230244425Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/tests/test_infer_batch.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 59,
+    "end_line": 79,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

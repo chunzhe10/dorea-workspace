@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-dd6adccab127",
+  "content": "fn new(child: Child, width: usize, height: usize) -> Self {\n        Self {\n            child,\n            frame_index: 0,\n            width,\n            height,\n            frame_bytes: width * height * 3,\n            done: false,\n        }\n    }\nimpl Drop for FrameReader {\n    fn drop(&mut self) {\n        // Kill the child so it doesn't block waiting for a reader that's gone.\n        let _ = self.child.kill();\n        let _ = self.child.wait();\n    }\n}",
+  "source_version": "crates/dorea-video/src/ffmpeg.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229574914Z",
+  "valid_from": "2026-04-11T00:04:13.229574914Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/ffmpeg.rs",
+    "language": "rs",
+    "chunk_type": "impl_item",
+    "start_line": 342,
+    "end_line": 348,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

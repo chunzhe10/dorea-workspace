@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-04eed9e5f720",
+  "content": "### `bilinear`\n### Core methods (7)\n\n#### 1. `bicubic`\nOne-line swap from baseline: `F.interpolate(mode=\"bicubic\", align_corners=False)`. Better frequency response than bilinear, still not edge-aware. No new dependencies. If it wins, ship a 1-character config change and move on.\n\n\n#### 2. `lanczos3`\n3-lobe Lanczos filter. Implementation: precompute a separable 1-D Lanczos kernel, apply via `F.conv2d` row-then-column. PyTorch does not provide Lanczos in `F.interpolate`, so this requires a small helper. The classical \"best non-edge-aware upscale\". Included alongside bicubic because the delta to bicubic is small but non-zero, and the user wants both.\n",
+  "source_version": "decisions/2026-04-10-delta-upscale-bench-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836189852Z",
+  "valid_from": "2026-04-11T00:10:08.836189852Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-10-delta-upscale-bench-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 130,
+    "end_line": 135,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

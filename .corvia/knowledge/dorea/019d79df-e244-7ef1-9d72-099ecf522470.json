@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-099ecf522470",
+  "content": "## Decision\n## Context\n\n## Consequences\n\n- Two new crates: `corvia-proto` (shared protobuf definitions) and `corvia-inference`\n  (gRPC server binary).\n- Three proto services: `EmbeddingService` (Embed, EmbedBatch, ModelInfo),\n  `ChatService` (Chat, ChatStream), `ModelManager` (ListModels, LoadModel, Health).\n- Default port 8030 with `nomic-embed-text-v1.5` (768 dimensions) as default embedding\n  model. Models auto-downloaded from HuggingFace Hub on first use.\n- `InferenceProvider` enum gains `Corvia` as the new default variant alongside `Ollama`\n  and `Vllm`.\n- `GrpcInferenceEngine` implements `InferenceEngine` trait; `GrpcChatEngine` implements\n  `ChatEngine` trait. MergeWorker now takes `Arc<dyn ChatEngine>` instead of a raw\n  Ollama URL.\n- Existing tests unaffected -- all use `MockEngine`. Real model tests gated behind\n  `--features real-inference`.\n\n**Source:** `repos/corvia/docs/rfcs/2026-03-02-grpc-inference-server-design.md`",
+  "source_version": "decisions/d60-grpc-inference.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836244322Z",
+  "valid_from": "2026-04-11T00:10:08.836244322Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/d60-grpc-inference.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 24,
+    "end_line": 40,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

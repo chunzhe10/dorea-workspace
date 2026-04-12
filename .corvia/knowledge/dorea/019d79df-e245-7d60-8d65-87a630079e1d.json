@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-87a630079e1d",
+  "content": "  *l_out     = (0.2104542553f*l_ + 0.7936177850f*m_ - 0.0040720468f*s_) * L_SCALE;\n    *a_out     = (1.9779984951f*l_ - 2.4285922050f*m_ + 0.4505937099f*s_) * AB_SCALE;\n    *b_lab_out = (0.0259040371f*l_ + 0.7827717662f*m_ - 0.8086757660f*s_) * AB_SCALE;\n}\n```\n\n- [ ] **Step 5: Replace `lab_to_srgb`**\n\nReplace the existing `lab_to_srgb` function (was lines 74–91) with:\n\n```cuda\n__device__ void lab_to_srgb(float l, float a, float b_lab,\n                              float* r_out, float* g_out, float* b_out) {\n    // Unscale from CIELab-compatible ranges to native OKLab\n    float ok_l = l / L_SCALE;\n    float ok_a = a / AB_SCALE;\n    float ok_b = b_lab / AB_SCALE;\n\n    // OKLab → LMS'\n    float l_ = ok_l + 0.3963377774f*ok_a + 0.2158037573f*ok_b;\n    float m_ = ok_l - 0.1055613458f*ok_a - 0.0638541728f*ok_b;\n    float s_ = ok_l - 0.0894841775f*ok_a - 1.2914855480f*ok_b;\n\n    // Cube (inverse of cube root)\n    float lc = l_ * l_ * l_;\n    float mc = m_ * m_ * m_;\n    float sc = s_ * s_ * s_;\n\n    // LMS → linear RGB\n    float rl =  4.0767416621f*lc - 3.3077115913f*mc + 0.2309699292f*sc;\n    float gl = -1.2684380046f*lc + 2.6097574011f*mc - 0.3413193965f*sc;\n    float bl =  0.0208763419f*lc - 0.7034186147f*mc + 1.6825422694f*sc;\n\n    *r_out = fminf(fmaxf(linear_to_srgb(fmaxf(rl, 0.0f)), 0.0f), 1.0f);\n    *g_out = fminf(fmaxf(linear_to_srgb(fmaxf(gl, 0.0f)), 0.0f), 1.0f);\n    *b_out = fminf(fmaxf(linear_to_srgb(fmaxf(bl, 0.0f)), 0.0f), 1.0f);\n}\n```",
+  "source_version": "plans/2026-04-09-oklab-grade-pipeline.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837063986Z",
+  "valid_from": "2026-04-11T00:10:08.837063986Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-09-oklab-grade-pipeline.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 312,
+    "end_line": 345,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

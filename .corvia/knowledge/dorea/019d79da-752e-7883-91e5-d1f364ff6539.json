@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-d1f364ff6539",
+  "content": "### Task 8: Run the benchmark and record the improvement\n\n## Self-Review\n\n**Spec coverage check:**\n- ✅ `ResolutionBuffers` struct → Task 2\n- ✅ `CalibrationBuffers` struct → Task 2\n- ✅ `RefCell<Option<...>>` fields on `CudaGrader` → Task 3\n- ✅ `None` init in `CudaGrader::new()` → Task 3\n- ✅ Resolution-change reallocation → Task 4\n- ✅ Calibration-shape-change reallocation → Task 4\n- ✅ `htod_sync_copy_into` replacing `htod_sync_copy` → Task 4\n- ✅ Input length guards before borrow_mut (review fix) → Task 4\n- ✅ `n_zones == 0` guard with InvalidInput (review fix) → Task 4\n- ✅ `// SAFETY:` stream-ordering comment (review fix) → Task 4\n- ✅ Public API unchanged (signature unchanged) → Task 4\n- ✅ Resolution-switch regression test → Task 1\n- ✅ Calibration-switch regression test → Task 1\n- ✅ `per_frame_vram_bytes` updated to 4 RGB planes → Task 5\n- ✅ `CudaGrader::with_capacity(max_w, max_h)` for zero-reallocation sessions → Task 6\n- ✅ `grade_frames_with_capacity` public batch wrapper → Task 6\n- ✅ Oversized-frame guard in `grade_frame_cuda` → Task 6\n- ✅ Tests for `with_capacity` and `grade_frames_with_capacity` → Task 6\n- ✅ Benchmark validation with ≥80% gate → Task 8\n\n**Placeholder scan:** None found.\n\n**Type consistency:** `CudaSlice<f32>` used throughout. `alloc_resolution_buffers` and `alloc_calibration_buffers` return the exact structs used in Tasks 3 and 4. `htod_sync_copy_into` signature `(&[T], &mut CudaSlice<T>)` matches usage. `n_zones` is always `> 0` at the point `depth_luts.luts[0].size` is accessed (guarded by the early return).",
+  "source_version": "docs/plans/2026-04-03-cuda-grader-buffer-pre-allocation.md",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230519906Z",
+  "valid_from": "2026-04-11T00:04:13.230519906Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "docs/plans/2026-04-03-cuda-grader-buffer-pre-allocation.md",
+    "language": "markdown",
+    "chunk_type": "heading_section",
+    "start_line": 1057,
+    "end_line": 1082,
+    "content_role": "plan",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

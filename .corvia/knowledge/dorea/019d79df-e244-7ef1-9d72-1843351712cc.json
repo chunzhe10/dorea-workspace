@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-1843351712cc",
+  "content": "# dorea development workspace\n\n## Services\n\n| Service | URL | Description |\n|---------|-----|-------------|\n| **API server** | `http://localhost:8120` | REST + MCP protocol server (host port) |\n| **Dashboard** | `http://localhost:8121` | Knowledge browser and system health |\n| **Inference** | `http://localhost:8130` | gRPC embedding + chat (CPU mode) |\n\nAll services start automatically in the devcontainer via `post-start.sh`.\n\n\n## Quick start\n",
+  "source_version": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836420413Z",
+  "valid_from": "2026-04-11T00:10:08.836420413Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 652,
+    "end_line": 663,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

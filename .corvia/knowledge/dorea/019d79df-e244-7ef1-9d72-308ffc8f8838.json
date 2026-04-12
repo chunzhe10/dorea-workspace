@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-308ffc8f8838",
+  "content": "        # After:\n        # GPU resize: keep aspect, snap to multiples of _PATCH_SIZE\n\n        # Re-normalise [0,1] → ImageNet stats Depth Anything expects\n        mean = torch.tensor(self._MEAN, dtype=torch.float32, device=enhanced.device).view(1, 3, 1, 1)\n        std  = torch.tensor(self._STD,  dtype=torch.float32, device=enhanced.device).view(1, 3, 1, 1)\n        depth_input = (resized - mean) / std  # (N, 3, H_d, W_d)\n\n        with torch.no_grad():\n            outputs = self.model(pixel_values=depth_input)\n\n        depths_raw = outputs.predicted_depth.cpu().numpy()  # (N, H_d, W_d)\n\n        result = []\n        for i in range(N):\n            d = depths_raw[i]\n            d_min, d_max = float(d.min()), float(d.max())\n            if d_max - d_min < 1e-6:\n                result.append(np.zeros_like(d, dtype=np.float32))\n            else:\n                result.append(((d - d_min) / (d_max - d_min)).astype(np.float32))\n        return result\n```\n\n- [ ] **Step 2.3: Run tests**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea/python\n/opt/dorea-venv/bin/pytest tests/test_infer_batch.py -v\n```\nExpected: all tests PASS.\n\n- [ ] **Step 2.4: Commit**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ngit add python/dorea_inference/depth_anything.py python/tests/test_infer_batch.py\ngit commit -m \"feat(inference): add infer_batch_from_tensors for GPU-tensor depth; pinned memory in infer_batch\"\n```\n\n---\n",
+  "source_version": "plans/2026-04-03-inference-gpu-saturation.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836757246Z",
+  "valid_from": "2026-04-11T00:10:08.836757246Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-inference-gpu-saturation.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 389,
+    "end_line": 427,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

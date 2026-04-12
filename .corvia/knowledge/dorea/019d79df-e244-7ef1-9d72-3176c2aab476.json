@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-3176c2aab476",
+  "content": "# Maxine Post-Grading Enhancement Implementation Plan\n\n> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.\n\n**Goal:** Add optional NVIDIA Maxine VFX SDK post-grading enhancement (in-resolution oversample) to the dorea pipeline.\n\n**Architecture:** Extend the existing `dorea_inference` Python subprocess with an `enhance` message type. The Rust side calls `enhance()` sequentially after `grade_frame()` in the single-threaded frame loop. Maxine models (VideoSuperRes + ArtifactReduction) share the same Python process and CUDA context as depth inference. A `DOREA_MAXINE_MOCK=1` env var enables CI testing without the proprietary SDK.\n\n**Tech Stack:** Rust (clap CLI, serde_json IPC, base64), Python (nvvfx, torch, cv2, numpy), NVIDIA Maxine VFX SDK\n\n**Spec:** `docs/decisions/2026-04-02-maxine-post-grading-enhancement.md`\n\n---\n",
+  "source_version": "plans/2026-04-03-maxine-enhancement-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836771466Z",
+  "valid_from": "2026-04-11T00:10:08.836771466Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-maxine-enhancement-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1,
+    "end_line": 14,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

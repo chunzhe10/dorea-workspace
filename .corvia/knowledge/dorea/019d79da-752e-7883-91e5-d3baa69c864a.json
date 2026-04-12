@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-d3baa69c864a",
+  "content": "le (FMSM) and Tanh Activation Layer\n        model.append(nn.Sequential(\n            nn.ReflectionPad2d(3),\n            nn.Conv2d(ngf, output_nc, kernel_size=7, padding=0),\n            nn.Tanh()\n        ))\n        \n        self.model = nn.Sequential(*model)\ndef _down(self, in_channels, out_channels, norm_layer=None, use_att=True, use_dropout=False, dropout_rate=0.5):\n        \"\"\"Attention Down-sampling Block.\n\n        Args:\n            in_channels: Number of channels of input tensor.\n            out_channels: Number of channels of output tensor.\n            norm_layer: Type of Normalization layer.\n            use_att: Whether to use attention.\n            use_dropout: Whether to use dropout.\n            dropout_rate: Probability of dropout layer.\n        \"\"\"\n        use_bias = False if norm_layer else True\n        layers = [nn.Conv2d(in_channels, out_channels, 4, 2, 1, bias=use_bias)]\n        if norm_layer:\n            layers.append(norm_layer(out_channels))\n        layers.append(nn.LeakyReLU(0.2))\n        if use_dropout:\n            layers.append(nn.Dropout(dropout_rate))\n        if use_att:\n            layers.append(CBAMBlock(out_channels))\n        return nn.Sequential(*layers)",
+  "source_version": "models/raune_net/models/RAUNE-Net/models/raune_net.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230542986Z",
+  "valid_from": "2026-04-11T00:04:13.230542986Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "models/raune_net/models/RAUNE-Net/models/raune_net.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 66,
+    "end_line": 86,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

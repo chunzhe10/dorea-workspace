@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-870c6aab2586",
+  "content": "### Step 2.1: Add cached device slices to AdaptiveGrader\n### Step 2.2: Update AdaptiveGrader::new()\n\n### Step 2.3: Update prepare_keyframe() and swap_textures()\n\nRe-upload boundary device slices when they change (once per keyframe, not per frame).\n\n\n### Step 2.4: Refactor grade_frame_blended()\n\nSame pattern as Task 1.4 — use cached data, pre-allocated FrameBuffers.\n\n---\n",
+  "source_version": "plans/2026-04-08-pcie-barrier-reduction-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837055114Z",
+  "valid_from": "2026-04-11T00:10:08.837055114Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-08-pcie-barrier-reduction-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 69,
+    "end_line": 78,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-bc465f611eb4",
+  "content": " we empty here, its next loop iteration\n            # sees stop_event and exits cleanly.\n            try:\n                while True:\n                    _ = q_processed.get_nowait()\n            except queue.Empty:\n                pass\n\n    # Spawn threads\n    t_dec = threading.Thread(target=decoder_thread, name=\"decoder\", daemon=False)\n    t_gpu = threading.Thread(target=gpu_thread, name=\"gpu\", daemon=False)\n    t_enc = threading.Thread(target=encoder_thread, name=\"encoder\", daemon=False)\n\n    t_dec.start()\n    t_gpu.start()\n    t_enc.start()\n\n    # Wait for all threads to finish\n    t_dec.join()\n    t_gpu.join()\n    t_enc.join()\n\n    # Determine whether any worker thread raised; read under lock.\n    error_to_raise: BaseException | None = None\n    with errors_lock:\n        if errors:\n            error_to_raise = errors[0]\n\n    # Flush encoder only on success — flushing after a failure can write\n    # trailing packets to an already-broken output file.\n    if error_to_raise is None:\n        try:\n            for pkt in out_stream.encode():\n                out_container.mux(pkt)\n        except BaseException as flush_err:\n            error_to_raise = flush_err\n\n    # Always close containers, but do not let a secondary close() failure\n    # (e.g. disk-full on trailer write) mask the original error.\n    try:\n        out_container.close()\n    except BaseException as close_err:",
+  "source_version": "python/dorea_inference/raune_filter.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230185121Z",
+  "valid_from": "2026-04-11T00:04:13.230185121Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/raune_filter.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 399,
+    "end_line": 431,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

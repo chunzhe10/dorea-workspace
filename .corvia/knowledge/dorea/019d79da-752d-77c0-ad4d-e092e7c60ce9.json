@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-e092e7c60ce9",
+  "content": "fn input_encoding_is_10bit() {\n        assert!(InputEncoding::DLogM.is_10bit());\n        assert!(InputEncoding::ILog.is_10bit());\n        assert!(!InputEncoding::Srgb.is_10bit());\n    }\nfn input_encoding_display() {\n        assert_eq!(InputEncoding::DLogM.to_string(), \"dlog-m\");\n        assert_eq!(InputEncoding::ILog.to_string(), \"ilog\");\n        assert_eq!(InputEncoding::Srgb.to_string(), \"srgb\");\n    }",
+  "source_version": "crates/dorea-video/src/ffmpeg.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229616053Z",
+  "valid_from": "2026-04-11T00:04:13.229616053Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/ffmpeg.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 1151,
+    "end_line": 1155,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

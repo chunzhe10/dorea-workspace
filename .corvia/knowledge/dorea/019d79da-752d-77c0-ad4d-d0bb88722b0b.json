@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d0bb88722b0b",
+  "content": "default: 4). On RTX 3060 (6GB), values\n    /// above 8 show diminishing returns due to PCIe upload overhead in the\n    /// per-frame loop in _process_batch. batch=8 ~4.36 fps, batch=16 ~3.47 fps.\n    #[arg(long)]\n    pub direct_batch_size: Option<usize>,\n}\npub fn run(args: GradeArgs, cfg: &crate::config::DoreaConfig) -> Result<()> {\n    // Resolve config → CLI → built-in defaults\n    let warmth              = args.warmth.or(cfg.grade.warmth).unwrap_or(1.0_f32);\n    let strength            = args.strength.or(cfg.grade.strength).unwrap_or(0.8_f32);\n    let contrast            = args.contrast.or(cfg.grade.contrast).unwrap_or(1.0_f32);\n    let proxy_size          = args.proxy_size.or(cfg.inference.proxy_size).unwrap_or(1080_usize);\n    let depth_skip_threshold = args.depth_skip_threshold.or(cfg.grade.depth_skip_threshold).unwrap_or(0.005_f32);\n    let depth_max_interval  = args.depth_max_interval.or(cfg.grade.depth_max_interval).unwrap_or(12_usize);\n    let fused_batch_size    = args.fused_batch_size.or(cfg.grade.fused_batch_size).unwrap_or(32_usize);\n    let depth_zones         = args.depth_zones.or(cfg.grade.depth_zones).unwrap_or(16_usize);\n    let base_lut_zones      = args.base_lut_zones.or(cfg.grade.base_lut_zones).unwrap_or(32_usize);\n    let scene_threshold     = args.scene_threshold.or(cfg.grade.scene_threshold).unwrap_or(0.15_f32);\n    let min_segment_kfs     = cfg.grade.min_segment_keyframes.unwrap_or(5_usize);\n    let zone_smoothing_w    = cfg.grade.zone_smoothing_window.unwrap_or(3_usize);\n    let maxine_upscale_factor = args.maxine_upscale_factor.or(cfg.maxine.upscale_factor).unwrap_or(2_u32);",
+  "source_version": "crates/dorea-cli/src/grade.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229422737Z",
+  "valid_from": "2026-04-11T00:04:13.229422737Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/grade.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 131,
+    "end_line": 145,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

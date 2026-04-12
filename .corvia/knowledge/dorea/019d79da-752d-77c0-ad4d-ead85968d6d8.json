@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-ead85968d6d8",
+  "content": "src, 4, 4, 2, 2);\n        for chunk in dst.chunks_exact(3) {\n            assert_eq!(chunk[0], 200, \"R channel changed\");\n            assert_eq!(chunk[1], 100, \"G channel changed\");\n            assert_eq!(chunk[2], 50,  \"B channel changed\");\n        }\n    }\nfn resize_rgb_bilinear_identity_same_size() {\n        let src: Vec<u8> = (0u8..48).collect();\n        let dst = resize_rgb_bilinear(&src, 4, 4, 4, 4);\n        assert_eq!(dst, src, \"same-size resize should be identity\");\n    }",
+  "source_version": "crates/dorea-video/src/resize.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229748522Z",
+  "valid_from": "2026-04-11T00:04:13.229748522Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/resize.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 104,
+    "end_line": 108,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

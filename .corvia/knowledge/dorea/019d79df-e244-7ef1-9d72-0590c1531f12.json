@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-0590c1531f12",
+  "content": "## Metrics\n\n### Per-(frame × method) measurements\n\n**Delta-space error** (how well does each upscale reconstruct the ideal OKLab delta?):\n- `delta_l1_L` — mean absolute error on L channel\n- `delta_l1_a` — mean absolute error on a channel\n- `delta_l1_b` — mean absolute error on b channel\n- `delta_l1` — mean absolute error overall (average of the three)\n- `delta_l2` — RMSE overall\n- `delta_max` — max absolute error anywhere in the frame (worst-case halo)\n- `delta_p95` — 95th percentile of `|delta_method - delta_gold|` (halo behavior without outlier dominance)\n\n**Final-image error** (what the viewer sees after the delta is applied):\n- `final_delta_e` — mean ΔE2000 between `final_method` and `raune_4k`, computed in **CIELab** (D65 white point), not OKLab. CIELab is the industry-standard color space for ΔE2000; both images are converted from sRGB → CIELab for this metric only.\n- `final_delta_e_p95` — 95th percentile of per-pixel ΔE2000\n- `ssim` — single-number SSIM computed on **BT.709 luma** (Y from Y'CbCr, not OKLab-L). Uses `torchmetrics.image.StructuralSimilarityIndexMeasure` if available, else a small inlined implementation.\n\n**Performance**:\n- `wall_time_ms_upscale` — median of 10 runs after 3 warm-ups, upscale function only, `torch.cuda.synchronize()` bracketed\n- `wall_time_ms_end_to_end` — same timing methodology, full (upscale + `triton_oklab_transfer` + GPU→CPU→uint8 pipeline). Two timings because `sr_maxine` does its main work in the transfer path rather than the upscale itself; upscale-only would mislead.\n\n\n### Aggregation\n\nPer-method summary across frames, written as the last block of rows in `metrics.csv` and in the `run_report.md`:\n- Mean of each metric across the 3 frames\n- Stddev of each metric across the 3 frames\n- Rank position on each metric (1 = best)\n",
+  "source_version": "decisions/2026-04-10-delta-upscale-bench-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836197258Z",
+  "valid_from": "2026-04-11T00:10:08.836197258Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-10-delta-upscale-bench-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 286,
+    "end_line": 312,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

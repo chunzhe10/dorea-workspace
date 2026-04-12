@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-dc817d16a9ff",
+  "content": "pub fn is_10bit(&self) -> bool {\n        matches!(self, Self::ProRes | Self::Hevc10)\n    }\npub fn bytes_per_pixel(&self) -> usize {\n        if self.is_10bit() { 6 } else { 3 }\n    }\nimpl std::fmt::Display for OutputCodec {\n    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {\n        match self {\n            Self::ProRes => write!(f, \"prores\"),\n            Self::Hevc10 => write!(f, \"hevc10\"),\n            Self::H264 => write!(f, \"h264\"),\n        }\n    }\n}",
+  "source_version": "crates/dorea-video/src/ffmpeg.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229564970Z",
+  "valid_from": "2026-04-11T00:04:13.229564970Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/ffmpeg.rs",
+    "language": "rs",
+    "chunk_type": "impl_item",
+    "start_line": 112,
+    "end_line": 120,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

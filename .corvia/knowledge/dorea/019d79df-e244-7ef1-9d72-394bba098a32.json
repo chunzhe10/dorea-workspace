@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-394bba098a32",
+  "content": "`grade_pixel_device` receives `base_luts`, `base_zone_boundaries`, `base_n_zones` for its internal LUT lookup\n\n```c\n{\n    int idx = blockIdx.x * blockDim.x + threadIdx.x;\n    if (idx >= total_threads) return;\n\n    int N = grid_size;\n    int N3 = N * N * N;\n\n    // runtime zone index (0..runtime_n_zones-1) determines output slot\n    int zone = idx / N3;\n    int rem  = idx % N3;\n\n    int bi = rem / (N * N);\n    int gi = (rem / N) % N;\n    int ri = rem % N;\n\n    float r = (float)ri / (float)(N - 1);\n    float g = (float)gi / (float)(N - 1);\n    float b = (float)bi / (float)(N - 1);\n\n    // Depth at runtime zone center\n    float z_lo = runtime_zone_boundaries[zone];\n    float z_hi = runtime_zone_boundaries[zone + 1];\n    float depth = 0.5f * (z_lo + z_hi);\n\n    // Grade using BASE LUT (32 fine zones)\n    float3 graded = grade_pixel_device(\n        r, g, b, depth,\n        base_luts, base_zone_boundaries,\n        lut_size, base_n_zones,\n        h_offsets, s_ratios, v_offsets, weights,\n        warmth, strength, contrast\n    );\n\n    output[idx] = make_float4(graded.x, graded.y, graded.z, 0.0f);\n}\n```\n\n- [ ] **Step 3: Verify kernel compiles**\n\nRun: `cd /workspaces/dorea-workspace/repos/dorea && cargo build -p dorea-gpu --features cuda 2>&1 | head -30`\nExpected: build.rs invokes nvcc, kernel compiles. If there are Rust-side call sites that don't match the new signature yet, the PTX will still compile but the Rust launch will fail — that's expected (we fix the Rust side in Task 5).\n\n- [ ] **Step 4: Commit**\n\n```bash\ngit add crates/dorea-gpu/src/cuda/kernels/build_combined_lut.cu\ngit commit -m \"feat(cuda): separate base/runtime zone params in build_combined_lut\n\nKernel now accepts base_luts + base_zone_boundaries + base_n_zones\n(for grade_pixel_device internal lookup) separately from\nruntime_zone_boundaries + runtime_n_zones (for output indexing\nand depth center computation). grade_pixel_device is unchanged.\"\n```\n\n---\n",
+  "source_version": "plans/2026-04-04-per-keyframe-adaptive-depth-zones-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836892360Z",
+  "valid_from": "2026-04-11T00:10:08.836892360Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-per-keyframe-adaptive-depth-zones-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 590,
+    "end_line": 639,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

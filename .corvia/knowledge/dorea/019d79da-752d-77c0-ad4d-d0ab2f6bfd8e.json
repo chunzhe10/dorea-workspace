@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d0ab2f6bfd8e",
+  "content": ",\n\n    /// Disable temporal interpolation — run full pipeline on every frame\n    #[arg(long)]\n    pub no_depth_interp: bool,\n\n    /// Path to RAUNE-Net weights .pth (config: [models].raune_weights)\n    #[arg(long)]\n    pub raune_weights: Option<PathBuf>,\n\n    /// Path to RAUNE-Net checkout directory (config: [models].raune_models_dir)\n    #[arg(long)]\n    pub raune_models_dir: Option<PathBuf>,\n\n    /// Path to Depth Anything V2 model directory (config: [models].depth_model)\n    #[arg(long)]\n    pub depth_model: Option<PathBuf>,\n\n    /// Python executable (config: [models].python, built-in default: /opt/dorea-venv/bin/python)\n    #[arg(long)]\n    pub python: Option<PathBuf>,\n\n    /// Force CPU-only mode (no CUDA)\n    #[arg(long)]\n    pub cpu_only: bool,\n\n    /// Enable verbose logging\n    #[arg(short, long)]\n    pub verbose: bool,\n\n    /// Maxine super-resolution upscale factor for RAUNE→Maxine→Depth fused batch\n    /// (config: [maxine].upscale_factor, built-in default: 2)\n    #[arg(long)]\n    pub maxine_upscale_factor: Option<u32>,\n\n    /// Input encoding: dlog-m, ilog, srgb (default: auto-detect from container)\n    #[arg(long)]\n    pub input_encoding: Option<String>,\n\n    /// Output codec: prores, hevc10, h264 (default: auto for source bit depth)\n    #[arg(long)]\n    pub output_codec: Option<String>,\n\n    /// Enabled grading stages (comma-separated). Default: all.\n    /// Stages: hsl, ambiance, warmth, vibrance, strength, depth_mod, depth_dither, yolo_mask\n    #[arg(long)]\n    pub stages: Option<String>,\n\n    /// Flat mode: RAUNE-only LUT (equivalent to --stages with no stages)\n    #[arg(long)]\n    pub flat: bool,\n\n    /// Direct mode: per-frame RAUNE, no LUT pipeline (skips keyframe/calibration/CUDA stages)\n    #[arg(long)]\n    pub direct: bool,\n\n    /// RAUNE proxy resolution for direct mode (long-edge pixels, default: 1920)\n    #[arg(long)]\n    pub raune_proxy_size: Option<usize>,\n\n    /// Frames per batch in direct mode (default: 4). On RTX 3060 (6GB), values\n    /// above 8 show diminishing returns due to PCIe upload overhead in the\n    /// per-frame loop in _process_batch. batch=8 ~4.36 fps, batch=16 ~3.47 fps.\n    #[arg(long)]\n    pub direct_batch_size: Option<usize>,\n}",
+  "source_version": "crates/dorea-cli/src/grade.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229422213Z",
+  "valid_from": "2026-04-11T00:04:13.229422213Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/grade.rs",
+    "language": "rs",
+    "chunk_type": "struct_item",
+    "start_line": 73,
+    "end_line": 129,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

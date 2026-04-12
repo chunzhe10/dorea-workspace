@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-ed4c42db41fa",
+  "content": "       // Download result\n        let slot = self.frame_bufs.borrow();\n        let bufs = slot.as_ref().expect(\"frame_bufs allocated above\");\n        let result = dev.dtoh_sync_copy(&bufs.d_pixels_out).map_err(map_cudarc_error)?;\n        Ok(result)\n    }\n}\npub fn new(calibration: &Calibration, params: &GradeParams) -> Result<Self, GpuError> {\n        let device = CudaDevice::new(0).map_err(|e| {\n            GpuError::ModuleLoad(format!(\"CudaDevice::new(0) failed: {e}\"))\n        })?;\n\n        // Load the per-frame lookup kernel PTX\n        device.load_ptx(\n            Ptx::from_src(COMBINED_LUT_PTX),\n            \"combined_lut\",\n            &[\"combined_lut_kernel\", \"combined_lut_kernel_16\"],\n        ).map_err(|e| GpuError::ModuleLoad(format!(\"load combined_lut PTX: {e}\")))?;\n\n        // Build combined LUT textures (GPU build kernel runs here, ~<1ms)\n        let combined_lut = CombinedLut::build(&device, calibration, params)?;\n\n        // Upload constant data to device once — these never change for this grader.\n        let d_textures = device.htod_sync_copy(&combined_lut.textures).map_err(map_cudarc_error)?;\n        let d_boundaries = device.htod_sync_copy(&combined_lut.zone_boundaries).map_err(map_cudarc_error)?;\n\n        Ok(Self {\n            combined_lut,\n            d_textures,\n            d_boundaries,\n            frame_bufs: RefCell::new(None),\n            device,\n            _not_send: std::marker::PhantomData,\n        })\n    }",
+  "source_version": "crates/dorea-gpu/src/cuda/mod.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229777256Z",
+  "valid_from": "2026-04-11T00:04:13.229777256Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cuda/mod.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 116,
+    "end_line": 143,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

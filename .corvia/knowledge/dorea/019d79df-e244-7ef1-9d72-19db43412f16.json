@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-19db43412f16",
+  "content": "    # TODO: Implement frame extraction\n    # 1. Scan footage/raw/{date}/ and footage/flat/{date}/ for video files\n\n    # 2. For each clip, generate clip_id from filename\n\n    # 3. Run: ffmpeg -i {clip} -vf fps=0.5,scale=1280:-1 -q:v 5 working/keyframes/{clip_id}/frame_%06d.jpg",
+  "source_version": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836439836Z",
+  "valid_from": "2026-04-11T00:10:08.836439836Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1182,
+    "end_line": 1183,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

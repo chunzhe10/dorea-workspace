@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-253bb76a4096",
+  "content": "        # Run model.forward(), de-normalize: (out + 1) / 2\n        # Return uint8 RGB array at inference resolution\n\n### `depth_anything.py`\n\n```python\nclass DepthAnythingInference:\n    def __init__(self, model_path: str, device: str):",
+  "source_version": "plans/2026-04-02-dorea-v2-phase2-3-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836586345Z",
+  "valid_from": "2026-04-11T00:10:08.836586345Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-dorea-v2-phase2-3-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 210,
+    "end_line": 214,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d118af814185",
+  "content": "g expensive calibration.\n    let audio_src = if info.has_audio { Some(args.input.as_path()) } else { None };\n    let encoder = if output_codec.is_10bit() {\n        FrameEncoder::new_10bit(&output, info.width, info.height, info.fps, output_codec, audio_src)\n            .context(\"failed to spawn 10-bit ffmpeg encoder\")?\n    } else {\n        FrameEncoder::new(&output, info.width, info.height, info.fps, audio_src)\n            .context(\"failed to spawn ffmpeg encoder\")?\n    };\n\n    let inf_cfg = build_inference_config(\n        &python, raune_weights.as_deref(), raune_models_dir.as_deref(),\n        depth_model.as_deref(), device.clone(), maxine_upscale_factor,\n    );\n\n    // Resolve stage mask: --flat → 0 (no stages), --stages → parse, default → all\n    let stage_mask = if args.flat {\n        0u32\n    } else if let Some(ref stages_str) = args.stages {\n        dorea_gpu::stages::parse(stages_str)\n            .map_err(|e| anyhow::anyhow!(\"invalid --stages: {e}\"))?\n    } else if let Some(ref stages_str) = cfg.grade.stages {\n        dorea_gpu::stages::parse(stages_str)\n            .map_err(|e| anyhow::anyhow!(\"invalid [grade].stages config: {e}\"))?\n    } else {\n        dorea_gpu::stages::ALL\n    };\n\n    // In flat mode (stage_mask=0), force single zone — no depth stratification.\n    let depth_zones = if stage_mask == 0 { 1 } else { depth_zones };\n    let base_lut_zones = if stage_mask == 0 { 1 } else { base_lut_zones };\n\n    log::info!(\"Stages: {}\", dorea_gpu::stages::format(stage_mask));\n\n    let pipeline_cfg = PipelineConfig {\n        input: args.input.clone(),",
+  "source_version": "crates/dorea-cli/src/grade.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229428352Z",
+  "valid_from": "2026-04-11T00:04:13.229428352Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/grade.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 288,
+    "end_line": 319,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

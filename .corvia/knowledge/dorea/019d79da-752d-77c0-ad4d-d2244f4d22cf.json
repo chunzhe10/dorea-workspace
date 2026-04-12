@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d2244f4d22cf",
+  "content": "_CAPACITY);\n\n    // Use std::thread::scope so spawned threads can borrow from this stack frame.\n    let total_frames = info.frame_count;\n\n    std::thread::scope(|s| -> Result<u64> {\n        // ---------------------------------------------------------------\n        // Thread 1: Decoder — reads frames from ffmpeg, sends to GPU thread\n        // ---------------------------------------------------------------\n        let decoder_handle = s.spawn(|| -> Result<()> {\n            let frames = ffmpeg::decode_frames(&cfg.input, info)\n                .context(\"failed to spawn ffmpeg full-res decoder\")?;\n            for frame_result in frames {\n                let frame = frame_result.context(\"frame decode error\")?;\n                if decoded_tx.send(frame).is_err() {\n                    // GPU thread dropped its receiver — likely hit an error\n                    break;\n                }\n            }\n            drop(decoded_tx);\n            Ok(())\n        });\n\n        // ---------------------------------------------------------------\n        // Thread 3: Encoder — receives graded frames, writes to ffmpeg\n        // ---------------------------------------------------------------\n        let encoder_handle = s.spawn(move || -> Result<u64> {\n            let mut encoder = encoder;\n            let mut frame_count = 0u64;\n            for graded in graded_rx {\n                encoder.write_frame(&graded).context(\"encoder write failed\")?;\n                frame_count += 1;\n                if frame_count % 100 == 0 {\n                    let pct = frame_count as f64 / total_frames.max(1) as f64 * 100.0;\n                    log::info!(\"Progress: {frame_count}/{} frames ({:.1}%)\", total_frames, pct);\n                }\n            }\n            encoder.finish().context(\"ffmpeg encoder failed to finalize\")?;\n            Ok(frame_count)",
+  "source_version": "crates/dorea-cli/src/pipeline/grading.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229441270Z",
+  "valid_from": "2026-04-11T00:04:13.229441270Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/pipeline/grading.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 115,
+    "end_line": 146,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

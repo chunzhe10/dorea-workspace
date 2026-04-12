@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-f8bd4defa291",
+  "content": "{\n    let n = lut.len();\n    if n == 0 { return x; }\n    let x = x.clamp(0.0, 1.0);\n    let pos = x * (n - 1) as f32;\n    let lo = (pos as usize).min(n - 2);\n    let hi = lo + 1;\n    let frac = pos - lo as f32;\n    lut[lo] * (1.0 - frac) + lut[hi] * frac\n}\nfn invert_1d_lut(forward: &[f32]) -> Vec<f32> {\n    let n = forward.len();\n    let mut inverse = vec![0.0f32; n];\n    let out_min = forward[0];\n    let out_max = forward[n - 1];\n    let range = (out_max - out_min).max(1e-10);\n\n    for i in 0..n {\n        let target = i as f32 / (n - 1) as f32;\n        let target_scaled = out_min + target * range;\n        let mut lo = 0usize;\n        let mut hi = n - 1;\n        while lo < hi - 1 {\n            let mid = (lo + hi) / 2;\n            if forward[mid] <= target_scaled {\n                lo = mid;\n            } else {\n                hi = mid;\n            }\n        }\n        let denom = (forward[hi] - forward[lo]).max(1e-10);\n        let frac = (target_scaled - forward[lo]) / denom;\n        inverse[i] = (lo as f32 + frac) / (n - 1) as f32;\n    }\n    inverse\n}",
+  "source_version": "crates/dorea-color/src/lut_transfer.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229931027Z",
+  "valid_from": "2026-04-11T00:04:13.229931027Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-color/src/lut_transfer.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 104,
+    "end_line": 129,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d71-fe876bc1f2da",
+  "content": "### Maxine Interaction\n### Invariant Enforcement\n\n### Quality Characteristics\n\n**Numerical validation** (100K random samples at 65x65x65 grid, 7 zone-aligned\ndepth bands, fused_ambiance_warmth + blend pipeline):\n- **Mean error**: 0.072/255\n- **p50**: 0.035/255\n- **p95**: 0.253/255\n- **p99**: 0.812/255\n- **Max**: 2.607/255 (0.03% of pixels, extreme highlights at tanh knee)\n\n**Error budget breakdown**:\n- Trilinear RGB quantization: dominant source, worst at highlight knees (L=0.88,\n  output=0.92) where `tanh` second derivative is high\n- Depth band interpolation: minimal — zone-aligned sampling captures transitions\n- HSV hue shift: known property of all 3D LUTs in RGB space. Negligible for\n  underwater footage (blues/greens, moderate saturation). Validated for saturated\n  primaries in boundary condition tests.\n\n**Other characteristics**:\n- **No ghosting**: Source pixels come from the actual frame\n- **Keyframe quality**: Unchanged — full pipeline including clarity\n\n\n### Test Plan\n\n**Unit tests** (in `dorea-gpu/src/lut3d.rs`):\n1. `trilinear_accuracy`: 10K random (R,G,B,d) samples. Assert max error < 3/255,\n   p99 < 1/255 at grid=65.\n2. `boundary_conditions`: Black (0,0,0), white (1,1,1), midgray (0.5,0.5,0.5),\n   saturated primaries (R,G,B,C,M,Y) at each depth band. Assert exact match at\n   grid nodes (error = 0). Verify hue shift < 2 degrees for saturated primaries\n   at off-grid positions.\n3. `lut_validity_check`: Assert `is_valid_for` returns false when params change.\n\n**Integration test**:\n4. Grade a short clip with `--no-grade-lut` (full pipeline) and with LUT enabled.\n   Compare frame-by-frame: assert max per-pixel error < 3/255 for non-keyframes.\n",
+  "source_version": "decisions/2026-04-03-3d-lut-temporal-interpolation.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836111624Z",
+  "valid_from": "2026-04-11T00:10:08.836111624Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-03-3d-lut-temporal-interpolation.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 159,
+    "end_line": 195,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

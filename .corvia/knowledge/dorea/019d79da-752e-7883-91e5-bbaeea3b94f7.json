@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-bbaeea3b94f7",
+  "content": "r =  4.0767416613*l - 3.3077115904*m + 0.2309699287*s\n    g = -1.2684380041*l + 2.6097574007*m - 0.3413193963*s\n    b =  -0.0041960863*l - 0.7034186145*m + 1.7076147010*s\n    return linear_to_srgb(torch.cat([r, g, b], dim=1).clamp(min=0.0)).clamp(0.0, 1.0)\ndef _oklab_transfer_kernel(\n        frame_ptr, delta_ptr, out_ptr,\n        n_pixels,\n        BLOCK_SIZE: tl.constexpr,\n    ):\n        \"\"\"One kernel: sRGB→linear→OKLab→+delta→OKLab⁻¹→linear→sRGB per pixel.\"\"\"\n        pid = tl.program_id(0)\n        offs = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)\n        mask = offs < n_pixels\n\n        sr = tl.load(frame_ptr + 0 * n_pixels + offs, mask=mask).to(tl.float32)\n        sg = tl.load(frame_ptr + 1 * n_pixels + offs, mask=mask).to(tl.float32)\n        sb = tl.load(frame_ptr + 2 * n_pixels + offs, mask=mask).to(tl.float32)\n\n        threshold = 0.04045\n        lr = tl.where(sr <= threshold, sr / 12.92,\n                      tl.extra.cuda.libdevice.pow(((sr + 0.055) / 1.055), 2.4))\n        lg = tl.where(sg <= threshold, sg / 12.92,\n                      tl.extra.cuda.libdevice.pow(((sg + 0.055) / 1.055), 2.4))\n        lb = tl.where(sb <= threshold, sb / 12.92,\n                      tl.extra.cuda.libdevice.pow(((sb + 0.055) / 1.055), 2.4))\n\n        l = 0.4122214708*lr + 0.5363325363*lg + 0.0514459929*lb\n        m = 0.2119034982*lr + 0.6806995451*lg + 0.1073969566*lb\n        s = 0.0883024619*lr + 0.2817188376*lg + 0.6299787005*lb\n\n        l = tl.maximum(l, 0.0)\n        m = tl.maximum(m, 0.0)\n        s = tl.maximum(s, 0.0)\n        l_ = tl.extra.cuda.libdevice.cbrt(l)\n        m_ = tl.extra.cuda.libdevice.cbrt(m)\n        s_ = tl.extra.cuda.libdevice.cbrt(s)\n\n        ok_L = 0.2104542553*l_ + 0.7936177850*m_ - 0.0040720468*s_\n        ok_a = 1.9779984951*l_ - 2.4285922050*m_ + 0.4505937099*s_\n        ok_b = 0.0259040371*l_ + 0.7827717662*m_ - 0.8086757660*s_\n\n        dL = tl.load(delta_ptr + 0 * n_pixels + offs, mask=mask).to(tl.float32)",
+  "source_version": "python/dorea_inference/raune_filter.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230052561Z",
+  "valid_from": "2026-04-11T00:04:13.230052561Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/raune_filter.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 94,
+    "end_line": 131,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

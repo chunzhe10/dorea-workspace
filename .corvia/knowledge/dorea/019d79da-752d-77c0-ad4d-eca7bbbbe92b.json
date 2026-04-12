@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-eca7bbbbe92b",
+  "content": "nvalidInput(format!(\n            \"pixels length {} != width*height*3 {}\",\n            pixels.len(),\n            width * height * 3\n        )));\n    }\n    grader.grade_frame_blended(pixels, depth, width, height, depth_w, depth_h, blend_t, None, 0, 0, 0.5)\n}\npub fn grade_frame_with_adaptive_grader_16(\n    grader: &cuda::AdaptiveGrader,\n    pixels: &[u16],\n    depth: &[f32],\n    width: usize,\n    height: usize,\n    depth_w: usize,\n    depth_h: usize,\n    blend_t: f32,\n) -> Result<Vec<u16>, GpuError> {\n    if pixels.len() != width * height * 3 {\n        return Err(GpuError::InvalidInput(format!(\n            \"pixels length {} != width*height*3 {}\",\n            pixels.len(),\n            width * height * 3\n        )));\n    }\n    grader.grade_frame_blended_16(pixels, depth, width, height, depth_w, depth_h, blend_t, None, 0, 0, 0.5)\n}",
+  "source_version": "crates/dorea-gpu/src/lib.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229769125Z",
+  "valid_from": "2026-04-11T00:04:13.229769125Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/lib.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 205,
+    "end_line": 223,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

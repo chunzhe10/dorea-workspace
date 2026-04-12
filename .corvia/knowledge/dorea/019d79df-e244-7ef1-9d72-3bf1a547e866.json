@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-3bf1a547e866",
+  "content": "ly::apply_depth_luts;\n        use dorea_lut::build::{adaptive_zone_boundaries, compute_importance, StreamingLutBuilder, N_DEPTH_ZONES};\n\n        // Pass 1: reservoir-sample depths → adaptive zone boundaries\n        const RESERVOIR_CAP: usize = 1_000_000;\n        let mut reservoir: Vec<f32> = Vec::with_capacity(RESERVOIR_CAP);\n        let mut total_seen: u64 = 0;\n        let mut rng: u64 = 0x853c49e6748fea9b_u64;\n\n        for i in 0..store.len() {\n            for d in store.depth_bytes(i).chunks_exact(4)\n                .map(|b| f32::from_le_bytes([b[0], b[1], b[2], b[3]]))\n            {\n                total_seen += 1;\n                if reservoir.len() < RESERVOIR_CAP {\n                    reservoir.push(d);\n                } else {\n                    rng ^= rng << 13;\n                    rng ^= rng >> 7;\n                    rng ^= rng << 17;\n                    let j = (rng % total_seen) as usize;\n                    if j < RESERVOIR_CAP {\n                        reservoir[j] = d;\n                    }\n                }\n            }\n        }\n        let zone_boundaries = adaptive_zone_boundaries(&reservoir, N_DEPTH_ZONES);\n        drop(reservoir);\n\n        // Pass 2: stream frames → build LUT\n        let mut lut_builder = StreamingLutBuilder::new(zone_boundaries);\n        for i in 0..store.len() {\n            let (w, h) = store.dims(i);\n            let (pixels_u8, target_u8) = store.pixtar_slices(i);\n            let depth = store.read_depth(i);\n            let original: Vec<[f32; 3]> = pixels_u8.chunks_exact(3)\n                .map(|c| [c[0] as f32 / 255.0, c[1] as f32 / 255.0, c[2] as f32 / 255.0])\n                .collect();\n            let target: Vec<[f32; 3]> = target_u8.chunks_exact(3)\n                .map(|c| [c[0] as f32 / 255.0, c[1] as f32 / 255.0, c[2] as f32 / 255.0])\n                .collect();\n            let importance = compute_importance(&depth, w, h);\n            lut_builder.add_frame(&original, &target, &depth, &importance);\n        }\n        let depth_luts = lut_builder.finish();\n\n        // Pass 3: stream frames → HSL corrections\n        let n_quals = HSL_QUALIFIERS.len();\n        let mut h_offset_acc    = vec![0.0_f64; n_quals];",
+  "source_version": "plans/2026-04-04-unified-keyframe-sampling-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836939118Z",
+  "valid_from": "2026-04-11T00:10:08.836939118Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-unified-keyframe-sampling-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 612,
+    "end_line": 656,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

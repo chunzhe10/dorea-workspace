@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c6354581c45a",
+  "content": "def test_auto_select_returns_three_distinct_indices():\n    picks = auto_select(CLIP, every_n=60)\n    assert len(picks) == 3\n    assert len(set(picks)) == 3\n    assert all(0 <= i for i in picks)\ndef test_decode_frame_shape():\n    frame = decode_frame(CLIP, frame_idx=0)\n    assert frame.shape[0] == 1\n    assert frame.shape[1] == 3\n    assert frame.shape[2] == 2160\n    assert frame.shape[3] == 3840\n    assert frame.dtype.is_floating_point\n    assert frame.min().item() >= 0.0\n    assert frame.max().item() <= 1.0",
+  "source_version": "benchmarks/upscale_bench/tests/test_frame_select.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230326674Z",
+  "valid_from": "2026-04-11T00:04:13.230326674Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/tests/test_frame_select.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 21,
+    "end_line": 29,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-ec50031fe7ff",
+  "content": "impl Default for GradeParams {\n    fn default() -> Self {\n        Self { warmth: 1.0, strength: 0.8, contrast: 1.0 }\n    }\n}\nfn default() -> Self {\n        Self { warmth: 1.0, strength: 0.8, contrast: 1.0 }\n    }\npub enum GpuError {\n    #[error(\"CUDA OOM: {0}\")]\n    Oom(String),\n    #[error(\"CUDA error: {0}\")]\n    CudaFail(String),\n    #[error(\"CUDA module load failed: {0}\")]\n    ModuleLoad(String),\n    #[error(\"invalid input: {0}\")]\n    InvalidInput(String),\n}",
+  "source_version": "crates/dorea-gpu/src/lib.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229766274Z",
+  "valid_from": "2026-04-11T00:04:13.229766274Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/lib.rs",
+    "language": "rs",
+    "chunk_type": "enum_item",
+    "start_line": 41,
+    "end_line": 50,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

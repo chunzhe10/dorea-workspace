@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-8608ff550cd7",
+  "content": "### Task 10: CLI Flags — --input-encoding, --output-codec\n\n    .unwrap_or_else(|| InputEncoding::auto_detect(&info, &args.input));\n\nlet output_codec = args.output_codec.as_deref()\n    .or(cfg.grade.output_codec.as_deref())\n    .map(|s| s.parse::<OutputCodec>())\n    .transpose()\n    .context(\"invalid --output-codec\")?\n    .unwrap_or_else(|| {\n        if input_encoding.is_10bit() { OutputCodec::ProRes } else { OutputCodec::H264 }\n    });\n\nlog::info!(\n    \"Encoding: input={input_encoding}, output={output_codec}, 10-bit={}\",\n    output_codec.is_10bit()\n);\n```\n\nUpdate the output filename default to use `.mov` for ProRes:\n\n```rust\nlet output = args.output.clone().unwrap_or_else(|| {\n    let stem = args.input.file_stem().unwrap_or_default().to_string_lossy();\n    let ext = if output_codec == OutputCodec::ProRes { \"mov\" } else { \"mp4\" };\n    args.input.with_file_name(format!(\"{stem}_graded.{ext}\"))\n});\n```\n\nUpdate the encoder creation to use the 10-bit path when appropriate:\n\n```rust\nlet encoder = if output_codec.is_10bit() {\n    FrameEncoder::new_10bit(&output, info.width, info.height, info.fps, output_codec, audio_src)\n        .context(\"failed to spawn 10-bit ffmpeg encoder\")?\n} else {\n    FrameEncoder::new(&output, info.width, info.height, info.fps, audio_src)\n        .context(\"failed to spawn ffmpeg encoder\")?\n};\n```\n\nAdd `input_encoding` and `output_codec` to the `PipelineConfig` struct construction.\n\n- [ ] **Step 5: Build**\n\nRun: `cd /workspaces/dorea-workspace/repos/dorea && cargo build -p dorea-cli 2>&1 | tail -20`\nExpected: Compiles.\n\n- [ ] **Step 6: Commit**\n\n```bash\ngit add crates/dorea-cli/src/grade.rs crates/dorea-cli/src/config.rs crates/dorea-cli/src/pipeline/mod.rs\ngit commit -m \"feat(cli): add --input-encoding and --output-codec flags\"\n```\n\n---\n",
+  "source_version": "plans/2026-04-08-10bit-pipeline-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837042925Z",
+  "valid_from": "2026-04-11T00:10:08.837042925Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-08-10bit-pipeline-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1654,
+    "end_line": 1708,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

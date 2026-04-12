@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-2b7b6681139e",
+  "content": "### `depth_anything.py`: add `infer_batch`\n### `bridge.py`: add `run_depth_batch_cpu`\n\n### `protocol.py`: add `DepthBatchResult`\n\n```python\n@dataclass\nclass DepthBatchResult:\n    results: list  # list of DepthResult.to_dict()\n    type: str = \"depth_batch_result\"\n\n    def to_dict(self) -> dict:\n        return {\"type\": self.type, \"results\": self.results}\n```\n\n\n### `server.py`: add `depth_batch` handler\n\n```python\nelif req_type == \"depth_batch\":\n    if depth_model is None:\n        raise RuntimeError(\"Depth Anything model not loaded\")\n    items = req.get(\"items\", [])\n    imgs = []\n    for item in items:\n        fmt = item.get(\"format\", \"png\")\n        if fmt == \"raw_rgb\":\n            imgs.append(decode_raw_rgb(item[\"image_b64\"], int(item[\"width\"]), int(item[\"height\"])))\n        else:\n            imgs.append(decode_png(item[\"image_b64\"]))\n    max_size = int(items[0].get(\"max_size\", 518)) if items else 518\n    depths = depth_model.infer_batch(imgs, max_size=max_size)\n    results = [\n        DepthResult.from_array(item.get(\"id\"), depth).to_dict()\n        for item, depth in zip(items, depths)\n    ]\n    resp = DepthBatchResult(results=results)\n```\n\nAlso import `DepthBatchResult` in server.py.\n\n---\n",
+  "source_version": "plans/2026-04-03-batch-depth-inference-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836682675Z",
+  "valid_from": "2026-04-11T00:10:08.836682675Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-batch-depth-inference-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 91,
+    "end_line": 129,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

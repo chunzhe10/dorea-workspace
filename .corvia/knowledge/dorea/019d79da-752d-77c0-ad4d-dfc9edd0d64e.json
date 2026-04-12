@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-dfc9edd0d64e",
+  "content": "    format!(\"{e}{exit_code}\")\n            } else {\n                format!(\"{}{exit_code}: {}\", e, stderr_msg.trim())\n            };\n            return Err(FfmpegError::EncodeFailed(format!(\"ffmpeg encoder died: {detail}\")));\n        }\n        Ok(())\n    }\npub fn write_frame_16(&mut self, pixels: &[u16]) -> Result<(), FfmpegError> {\n        let expected_bytes = pixels.len() * 2;\n        if expected_bytes != self.frame_bytes {\n            return Err(FfmpegError::EncodeFailed(format!(\n                \"16-bit frame size mismatch: expected {} bytes, got {}\",\n                self.frame_bytes, expected_bytes\n            )));\n        }\n        self.write_buf.clear();\n        self.write_buf.reserve(expected_bytes);\n        for &v in pixels {\n            self.write_buf.extend_from_slice(&v.to_le_bytes());\n        }\n        if let Err(e) = self.stdin.write_all(&self.write_buf) {\n            let stderr_msg = self.stderr.as_mut().map(|s| {\n                let mut buf = String::new();\n                let _ = s.read_to_string(&mut buf);\n                buf\n            }).unwrap_or_default();\n            let exit_code = self.child.try_wait().ok().flatten()\n                .and_then(|s| s.code())\n                .map(|c| format!(\" (exit code {c})\"))\n                .unwrap_or_default();\n            let detail = if stderr_msg.trim().is_empty() {\n                format!(\"{e}{exit_code}\")\n            } else {\n                format!(\"{}{exit_code}: {}\", e, stderr_msg.trim())\n            };\n            return Err(FfmpegError::EncodeFailed(format!(\"ffmpeg encoder died: {detail}\")));\n        }\n        Ok(())\n    }",
+  "source_version": "crates/dorea-video/src/ffmpeg.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229603993Z",
+  "valid_from": "2026-04-11T00:04:13.229603993Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/ffmpeg.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 982,
+    "end_line": 1013,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

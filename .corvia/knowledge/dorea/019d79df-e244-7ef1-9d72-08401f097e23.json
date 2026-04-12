@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-08401f097e23",
+  "content": "### `mode=\"reduce-overhead\"`\n### `dynamic=False`\n\n### `try/except` around compile (unlike model.half())\ntorch.compile is genuinely optional — if Inductor fails on an exotic layer, the model\nstill works in eager mode. The try/except here is NOT the same fail-fast violation as\nthe original model.half() wrapper, because:\n- fp16 conversion is a *required* optimization — failure means broken assumptions\n- torch.compile is a *pure performance* optimization — failure means no speedup\n\nFalls back to eager mode with a clear stderr warning. The pipeline still works.\n\n\n### Persistent Inductor cache\nSet `TORCHINDUCTOR_CACHE_DIR` to a workspace-persistent path so subsequent runs skip\nthe ~10-30s compile. First run pays the cost, all subsequent runs reuse the compiled\nkernels.\n",
+  "source_version": "decisions/2026-04-10-torch-compile-raune.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836228773Z",
+  "valid_from": "2026-04-11T00:10:08.836228773Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-10-torch-compile-raune.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 27,
+    "end_line": 40,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

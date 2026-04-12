@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d71-fc118d8071a6",
+  "content": "### 3. NN fill — empty-cell-parallel\n### 4. `derive_hsl_corrections` — parallel conversion + fold/reduce\n\n## Correctness bar\n\nThe existing test suite is the correctness bar — no new tests required:\n\n- `test_nn_fill_no_identity`\n- `test_apply_identity_lut`\n- `test_adaptive_zone_boundaries_*`\n- `test_derive_same_image`\n\nAll must pass unchanged. Parallel output must be numerically identical to serial output\nexcept for the documented ~1e-6 f64 fold/reduce variance in `derive_hsl_corrections`.\n\nA non-identity integration test for `derive_hsl_corrections` (input ≠ target) is recommended\nas a follow-up to provide a stronger regression guard for the parallel reduction path.\n\n\n## Expected outcome\n\n~3–8× speedup on the four CPU steps on 8–16 core workstations (estimates; no benchmarks\nyet — `criterion` benchmarks are a recommended follow-up to validate claims).\nAt 4K (8.3M pixels vs 2.1M), gains scale ~4× larger in absolute terms.\nRAUNE-Net inference (dominant at ~7–20s for 5 frames) is unchanged.\n\n`--cpu-only` is unaffected: it controls whether inference uses CUDA, not the Rust thread\ncount. The rayon thread pool uses all available cores regardless of `--cpu-only`.",
+  "source_version": "decisions/2026-04-02-cpu-parallelization-rayon.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836079169Z",
+  "valid_from": "2026-04-11T00:10:08.836079169Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-02-cpu-parallelization-rayon.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 98,
+    "end_line": 121,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

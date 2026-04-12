@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-ef24e1598105",
+  "content": "hange on swap. The d_textures_a/b and d_bounds_a/b were associated with sets[0]/sets[1]\n    /// at construction, and `active_index()` determines which is \"active\" at launch time.\n    pub fn swap_textures(&mut self) {\n        self.adaptive_lut.swap();\n    }\n\n    /// Load new segment base LUT + HSL corrections.\n    ///\n    /// # Invariant\n    ///\n    /// After calling `load_segment`, both texture sets must be rebuilt via\n    /// `prepare_keyframe` + `swap_textures` before the next `grade_frame_blended`.\n    /// This is because `load_segment` updates the base LUT data used by\n    /// `rebuild_set`, but does NOT re-upload cached boundary device slices or\n    /// texture handles. The cached `d_textures_a/b` remain valid (texture handles\n    /// are stable across rebuilds — only the 3D array content changes), but\n    /// `d_bounds_a/b` will be stale until `prepare_keyframe` re-uploads them.\n    pub fn load_segment(\n        &mut self,\n        base_luts_flat: &[f32],\n        base_boundaries: &[f32],\n        hsl_data: (&[f32], &[f32], &[f32], &[f32]),\n    ) -> Result<(), GpuError> {\n        self.adaptive_lut.load_segment(\n            &self.device, base_luts_flat, base_boundaries, hsl_data,\n        )\n    }\n\n    /// Grade one frame with dual-texture temporal blending.\n    ///\n    /// `blend_t`: 0.0 = keyframe (uses active set only), 0.0–1.0 between keyframes.\n    ///\n    /// Steady-state per-frame cost: 2 htod barriers (pixels + depth) + 1 dtoh barrier.\n    /// Texture handles, boundaries, and output buffer are pre-allocated/cached.\n    pub fn grade_frame_blended(\n        &self,\n        pixels: &[u8],\n        depth: &[f32],\n        width: usize,\n        height: usize,\n        depth_w: usize,\n        depth_h: usize,\n        blend_t: f32,\n        class_mask: Option<&[u8]>,\n        mask_w: usize,\n        mask_h: usize,\n        diver_depth: f32,\n    ) -> Result<Vec<u8>, GpuError> {\n        let n = width.checked_mul(height).ok_or_else(|| {\n            GpuError::InvalidInput(\"frame dimensions overflow usize\".into())\n        })?;\n        if pixels.len() != n * 3 {",
+  "source_version": "crates/dorea-gpu/src/cuda/mod.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229799242Z",
+  "valid_from": "2026-04-11T00:04:13.229799242Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cuda/mod.rs",
+    "language": "rs",
+    "chunk_type": "impl_item",
+    "start_line": 654,
+    "end_line": 700,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-e87a6a049641",
+  "content": " {e}\")))?\n                    .extract()\n                    .map_err(|e| InferenceError::Ipc(format!(\"extract depth[{i}]: {e}\")))?;\n\n                out.push((item.id.clone(), depth_data, out_w, out_h));\n            }\n\n            Ok(out)\n        })\n    }\npub fn run_raune_depth_batch(\n        &mut self,\n        items: &[RauneDepthBatchItem],\n        enable_maxine: bool,\n    ) -> Result<Vec<(String, Vec<u8>, usize, usize, Vec<f32>, usize, usize)>, InferenceError> {\n        if items.is_empty() {\n            return Ok(vec![]);\n        }\n\n        Python::with_gil(|py| {\n            let bridge = self.bridge.bind(py);\n\n            // Build Python list of (H, W, 3) numpy arrays\n            let py_list = pyo3::types::PyList::empty_bound(py);\n            for item in items {\n                let np_flat = numpy::PyArray1::from_slice_bound(py, &item.pixels);\n                let np_reshaped = np_flat\n                    .call_method1(\"reshape\", ((item.height, item.width, 3),))\n                    .map_err(|e| InferenceError::Ipc(format!(\"reshape for id={}: {e}\", item.id)))?;\n                py_list\n                    .append(np_reshaped)\n                    .map_err(|e| InferenceError::Ipc(format!(\"list append for id={}: {e}\", item.id)))?;\n            }\n",
+  "source_version": "crates/dorea-video/src/inference/pyo3_backend.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229716231Z",
+  "valid_from": "2026-04-11T00:04:13.229716231Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference/pyo3_backend.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 432,
+    "end_line": 455,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-8a03a7510898",
+  "content": "### Why daemon=False\n### CUDA thread safety\n\n### What if `_process_batch()` blocks indefinitely\nIf RAUNE inference hangs (e.g., GPU OOM, model crash), the GPU thread blocks in `_process_batch()`. The decoder thread will eventually fill `q_decoded` and block on `put()`. The encoder thread will block on empty `q_processed`. Main thread blocks on `t_dec.join()`. This is a deadlock — but no worse than the existing single-threaded code, which would also hang on a stuck GPU call. CTRL+C from terminal will still terminate the process.\n\n\n### Don't add features\nThe plan only changes the threading model. Do NOT:\n- Modify `_process_batch()` (that's a separate optimization for a different issue)\n- Add the 16-bit precision fix (option B from the deep dive — separate issue)\n- Cache full-res tensors on GPU (option C — separate issue)\n- Add NVENC support (option D — separate issue)\n\nKeep the change focused on threading.",
+  "source_version": "plans/2026-04-10-direct-mode-3thread-pipeline.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837097047Z",
+  "valid_from": "2026-04-11T00:10:08.837097047Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-10-direct-mode-3thread-pipeline.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 279,
+    "end_line": 289,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

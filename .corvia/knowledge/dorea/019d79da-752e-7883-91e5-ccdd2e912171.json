@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-ccdd2e912171",
+  "content": "## File Map\n\n### New files\n\n| File | Responsibility |\n|------|---------------|\n| `crates/dorea-gpu/src/cuda/kernels/grade_pixel.cuh` | `__device__ grade_pixel_device()` — full pipeline in one CUDA fn |\n| `crates/dorea-gpu/src/cuda/kernels/build_combined_lut.cu` | GPU LUT build kernel (startup, once) |\n| `crates/dorea-gpu/src/cuda/kernels/combined_lut.cu` | Per-frame lookup kernel |\n| `crates/dorea-gpu/src/cuda/combined_lut.rs` | `CombinedLut` struct — CUarray + texture object lifecycle |\n\n\n### Deleted files\n\n| File | Reason |\n|------|--------|\n| `crates/dorea-gpu/src/cuda/kernels/clarity.cu` | Hard-deleted; Maxine will handle sharpening |\n| `crates/dorea-gpu/src/cuda/kernels/lut_apply.cu` | Replaced by combined LUT |\n| `crates/dorea-gpu/src/cuda/kernels/hsl_correct.cu` | Replaced by combined LUT |\n",
+  "source_version": "docs/plans/2026-04-03-combined-lut-cuda-texture-plan.md",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230433865Z",
+  "valid_from": "2026-04-11T00:04:13.230433865Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "docs/plans/2026-04-03-combined-lut-cuda-texture-plan.md",
+    "language": "markdown",
+    "chunk_type": "heading_section",
+    "start_line": 15,
+    "end_line": 31,
+    "content_role": "plan",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

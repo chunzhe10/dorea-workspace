@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c32b25fc8540",
+  "content": "humb_h = max(t.height for _, t in thumbs) + label_h\n    crop_w = crop_size + padding\n    crop_h = crop_size + label_h\n\n    canvas_w = max(\n        gold_img.width + padding * 2,\n        len(thumbs) * thumb_w + padding,\n        len(crops) * crop_w + padding,\n    )\n    canvas_h = header_h + gold_img.height + padding + thumb_h + padding + crop_h + padding + metrics_h\n\n    canvas = Image.new(\"RGB\", (canvas_w, canvas_h), (16, 16, 16))\n    draw = ImageDraw.Draw(canvas)\n    font = _load_font(22)\n    font_small = _load_font(14)\n\n    # Header\n    draw.text((padding, padding), f\"Frame {frame_idx}  —  crop @ ({crop_x}, {crop_y}) {crop_size}×{crop_size}\",\n              fill=(220, 220, 220), font=font)\n\n    # Gold image + crop rectangle\n    gy = header_h\n    canvas.paste(gold_img, (padding, gy))\n    rx0 = padding + int(crop_x * draw_scale_x)\n    ry0 = gy + int(crop_y * draw_scale_y)\n    rx1 = padding + int((crop_x + crop_size) * draw_scale_x)\n    ry1 = gy + int((crop_y + crop_size) * draw_scale_y)\n    draw.rectangle((rx0, ry0, rx1, ry1), outline=(255, 0, 0), width=4)\n\n    # Thumbnails row\n    ty = gy + gold_img.height + padding\n    for i, (name, img) in enumerate(thumbs):\n        tx = padding + i * thumb_w\n        canvas.paste(img, (tx, ty + label_h))\n        draw.text((tx, ty), name, fill=(220, 220, 220), font=font_small)\n\n    # Crops row\n    cy = ty + thumb_h + padding\n    for i, (name, img) in enumerate(crops):",
+  "source_version": "benchmarks/upscale_bench/visualize.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230283350Z",
+  "valid_from": "2026-04-11T00:04:13.230283350Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/visualize.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 299,
+    "end_line": 329,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

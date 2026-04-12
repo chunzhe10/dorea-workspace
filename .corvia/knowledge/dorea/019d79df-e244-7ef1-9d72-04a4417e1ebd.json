@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-04a4417e1ebd",
+  "content": "### Package layout\n\n### Method contract\n\nEvery upscale method is a function registered via a decorator. The contract is fixed so the driver can treat all methods uniformly:\n\n```python\n@register(\"bilinear\")\ndef bilinear(\n    delta_proxy: torch.Tensor,       # (1, 3, ph, pw) fp32 OKLab delta on CUDA\n    orig_full:   torch.Tensor,       # (1, 3, fh, fw) fp32 RGB [0,1] on CUDA (for edge-aware methods)\n    full_size:   tuple[int, int],    # (fh, fw)\n) -> torch.Tensor:                   # (1, 3, fh, fw) fp32 OKLab delta on CUDA\n    return F.interpolate(delta_proxy, size=full_size, mode=\"bilinear\", align_corners=False)\n```\n\n**Contract rules:**\n- Input: `delta_proxy` (at proxy resolution in OKLab) + `orig_full` (full-res RGB guide, always passed; methods that don't need it ignore it).\n- Output: upscaled delta at `full_size`, in OKLab, `(1, 3, H, W)` fp32, on CUDA. Same shape and dtype contract every time.\n- The driver applies the returned delta to `orig_full` via the existing `triton_oklab_transfer` from `raune_filter.py`, so the downstream RGB-conversion path is bit-identical across methods. The only thing that varies is the upscale function itself. This eliminates measurement noise from reimplementing the transfer.\n- Method functions must not mutate their inputs.\n- Method functions must be pure — no module-level state, no cached tensors between frames. The driver handles warm-up and gold caching; methods do not cache anything between calls.\n- Any preprocessing a method needs (e.g. `joint_bilateral`'s RGB→OKLab luma guide conversion) happens **inside** the method function and is **included** in its timing. This is the fair comparison: a production implementation would pay the same cost per frame.\n- Adding a new method: one function, one decorator, zero other files touched.\n",
+  "source_version": "decisions/2026-04-10-delta-upscale-bench-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836186469Z",
+  "valid_from": "2026-04-11T00:10:08.836186469Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-10-delta-upscale-bench-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 63,
+    "end_line": 85,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

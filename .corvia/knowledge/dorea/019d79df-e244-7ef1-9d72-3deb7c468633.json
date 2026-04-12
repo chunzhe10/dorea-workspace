@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-3deb7c468633",
+  "content": "### Task 3: Feature stage (`pipeline/feature.rs`)\n\n        }).unwrap();\n        assert_eq!(out.pixels.len(), 2 * 2 * 3);\n        assert_eq!(out.width, 2);\n        assert_eq!(out.height, 2);\n    }\n\n    #[test]\n    fn paged_calibration_store_push_and_read() {\n        let mut store = PagedCalibrationStore::new().unwrap();\n        let pixels = vec![10u8, 20, 30, 40, 50, 60]; // 2 pixels\n        let target = vec![11u8, 21, 31, 41, 51, 61];\n        let depth = vec![0.1f32, 0.9];\n        store.push(&pixels, &target, &depth, 2, 1).unwrap();\n        store.seal().unwrap();\n\n        let (p, t) = store.pixtar_slices(0);\n        assert_eq!(p, pixels.as_slice());\n        assert_eq!(t, target.as_slice());\n        let d = store.read_depth(0);\n        assert!((d[0] - 0.1).abs() < 1e-5);\n        assert!((d[1] - 0.9).abs() < 1e-5);\n    }\n}\n```\n\n> Note: `FusedInferenceNode` requires a live inference server and is exercised by integration tests (Task 6 compile + end-to-end run), not by unit tests here.\n\n- [ ] **Step 2: Run — verify FAIL**\n\n```bash\ncargo test -p dorea-cli --features cuda pipeline::feature 2>&1 | grep -E \"error|FAILED\"\n```\n\n- [ ] **Step 3: Implement `feature.rs`**\n\n```rust\n//! Feature stage: keyframes → RAUNE → Maxine (2×) → Depth.\n//!\n//! Nodes:\n//!   FusedInferenceNode    — batched RAUNE→Maxine→Depth; owns InferenceServer\n//!   EnhancedDownscaleNode — downscales Maxine-upscaled enhanced to proxy dims\n//!\n//! The stage manages keyframe_depths (HashMap) directly — no DepthCacheNode.\n",
+  "source_version": "plans/2026-04-05-pipeline-dag-refactor.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836966857Z",
+  "valid_from": "2026-04-11T00:10:08.836966857Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-05-pipeline-dag-refactor.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 553,
+    "end_line": 596,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

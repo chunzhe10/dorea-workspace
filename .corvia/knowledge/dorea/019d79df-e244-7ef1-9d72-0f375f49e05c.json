@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-0f375f49e05c",
+  "content": "# Docs Workflow & Interactive Knowledge Dashboard — Implementation Plan\n\n> **Status:** Active\n\n**Goal:** Implement the Docs Workflow design spec (Approach B — Full Loop) across 4 phases: metadata extensions, dashboard graphed document reader, intelligence checks, and hook enforcement.\n\n**Architecture:** Extend `EntryMetadata` with `content_role`/`source_origin` fields. Add post-filter to retrieval pipeline. Build split-panel graph+reader dashboard. Extend Reasoner with doc-specific checks. Generate enforcement hooks from `corvia.toml`.\n\n**Tech Stack:** Rust (corvia kernel/server/CLI), Preact + TypeScript (dashboard), Bash (hook scripts), TOML (config)\n\n**Spec:** `docs/decisions/2026-03-13-docs-workflow-design.md`\n\n---\n",
+  "source_version": "plans/2026-03-13-docs-workflow-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836313056Z",
+  "valid_from": "2026-04-11T00:10:08.836313056Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-13-docs-workflow-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1,
+    "end_line": 14,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

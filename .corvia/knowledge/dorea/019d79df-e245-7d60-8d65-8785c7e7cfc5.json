@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-8785c7e7cfc5",
+  "content": "erceptual uniformity for color manipulation.\nOutput rescaled to match CIELab numeric ranges (L×100, a×300, b×300)\nso all downstream constants (ambiance, warmth, vibrance) stay unchanged.\n\nRef: docs/decisions/2026-04-09-oklab-grade-pipeline.md\"\n```\n\n---\n\n## Task 2: Replace CIELab with OKLab + `__powf` in CUDA kernel (`grade_pixel.cuh`)\n\n**Files:**\n- Modify: `crates/dorea-gpu/src/cuda/kernels/grade_pixel.cuh`\n\n- [ ] **Step 1: Replace the colorspace section header and constants**\n\nReplace lines 28–36 of `grade_pixel.cuh` (the CIELab header and constants):\n\n```cuda\n// -------------------------------------------------------------------------\n// OKLab colorspace, rescaled to CIELab-compatible ranges.\n// Matches dorea-color/src/lab.rs exactly.\n//\n// OKLab (Björn Ottosson, 2020) with output rescaled:\n//   L: OKLab [0,1] × 100 → [0,100]\n//   a: OKLab [-0.4,0.4] × 300 → [-120,120]\n//   b: OKLab [-0.4,0.4] × 300 → [-120,120]\n// -------------------------------------------------------------------------\n\n#define L_SCALE  100.0f\n#define AB_SCALE 300.0f\n```\n\n- [ ] **Step 2: Replace `srgb_to_linear` and `linear_to_srgb` with `__powf`**\n\nReplace lines 38–44 with:\n\n```cuda\n__device__ __forceinline__ float srgb_to_linear(float v) {\n    return (v <= 0.04045f) ? (v / 12.92f) : __powf((v + 0.055f) / 1.055f, 2.4f);\n}\n\n__device__ __forceinline__ float linear_to_srgb(float v) {",
+  "source_version": "plans/2026-04-09-oklab-grade-pipeline.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837061999Z",
+  "valid_from": "2026-04-11T00:10:08.837061999Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-09-oklab-grade-pipeline.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 244,
+    "end_line": 277,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

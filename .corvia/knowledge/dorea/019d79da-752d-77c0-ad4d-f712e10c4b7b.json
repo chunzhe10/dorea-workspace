@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-f712e10c4b7b",
+  "content": "pub trait TransferFunction {\n    /// Decode a log-encoded value to scene-linear light.\n    fn to_linear(&self, encoded: f32) -> f32;\n    /// Encode a scene-linear light value to log encoding.\n    fn from_linear(&self, linear: f32) -> f32;\n    /// Highlight rolloff shoulder (0.0–1.0). Higher = later compression.\n    fn shoulder(&self) -> f32;\n    /// Human-readable name (e.g. \"D-Log M\").\n    fn name(&self) -> &str;\n}",
+  "source_version": "crates/dorea-color/src/lib.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229908470Z",
+  "valid_from": "2026-04-11T00:04:13.229908470Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-color/src/lib.rs",
+    "language": "rs",
+    "chunk_type": "trait_item",
+    "start_line": 9,
+    "end_line": 18,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d654685f3d82",
+  "content": "mean_flow_magnitude(field: &MotionField) -> f32 {\n    if field.vectors.is_empty() {\n        return 0.0;\n    }\n    let sum: f32 = field.vectors.iter()\n        .map(|[dx, dy]| (dx * dx + dy * dy).sqrt())\n        .sum();\n    sum / field.vectors.len() as f32\n}\npub struct OpticalFlowDetector {\n    reference: Option<(Vec<u8>, usize, usize)>,  // (pixels, width, height)\n    last_flow: Option<MotionField>,\n}",
+  "source_version": "crates/dorea-cli/src/optical_flow.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229493793Z",
+  "valid_from": "2026-04-11T00:04:13.229493793Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/optical_flow.rs",
+    "language": "rs",
+    "chunk_type": "struct_item",
+    "start_line": 122,
+    "end_line": 125,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

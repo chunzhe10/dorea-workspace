@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-1029cfef9779",
+  "content": " pass\n\n- [ ] **Step 7: Commit**\n\n```bash\ncd /workspaces/corvia-workspace/repos/corvia\ngit add crates/corvia-kernel/src/retriever.rs crates/corvia-kernel/src/rag_types.rs\ngit commit -m \"feat(kernel): add metadata post-filter to retrieval pipeline\"\n```\n\n---\n\n### Task 1.5: Extend REST DTOs with new metadata fields\n\n**Files:**\n- Modify: `repos/corvia/crates/corvia-server/src/rest.rs:52-88`\n\n- [ ] **Step 1: Add `content_role` and `source_origin` to `SearchResultDto`**\n\nUpdate `SearchResultDto` (rest.rs ~line 66):\n\n```rust\n#[derive(Serialize)]\npub struct SearchResultDto {\n    pub content: String,\n    pub score: f32,\n    pub source_file: Option<String>,\n    pub language: Option<String>,\n    pub chunk_type: Option<String>,\n    pub start_line: Option<u32>,\n    pub end_line: Option<u32>,\n    pub content_role: Option<String>,\n    pub source_origin: Option<String>,\n}\n```\n\nUpdate `From<SearchResult>` impl:\n\n```rust\nimpl From<SearchResult> for SearchResultDto {\n    fn from(r: SearchResult) -> Self {\n        Self {\n            content: r.entry.content,\n            score: r.score,\n            source_file: r.entry.metadata.source_file,\n            language: r.entry.metadata.language,\n            chunk_type: r.entry.metadata.chunk_type,\n            start_line: r.entry.metadata.start_line,\n            end_line: r.entry.metadata.end_line,\n            content_role: r.entry.metadata.content_role,\n            source_origin: r.entry.metadata.source_origin,\n        }\n    }\n}\n```\n\n- [ ] **Step 2: Add filter params to `SearchRequest`**\n\n```rust\n#[derive(Deserialize)]\npub struct SearchRequest {\n    pub query: String,\n    pub scope_id: String,\n    pub limit: Option<usize>,\n    pub content_role: Option<String>,",
+  "source_version": "plans/2026-03-13-docs-workflow-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836325202Z",
+  "valid_from": "2026-04-11T00:10:08.836325202Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-13-docs-workflow-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 485,
+    "end_line": 537,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

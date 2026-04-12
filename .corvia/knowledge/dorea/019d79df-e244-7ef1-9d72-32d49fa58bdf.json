@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-32d49fa58bdf",
+  "content": "### Task 6: Rust Grade Pipeline Integration\n\n```rust\n    let maxine_enabled = args.maxine && !args.no_maxine;\n\n    if maxine_enabled {\n        let valid_factors = [2, 3, 4]; // 1.33 and 1.5 deferred — integer only for v1\n        if !valid_factors.contains(&args.maxine_upscale_factor) {\n            anyhow::bail!(\n                \"unsupported maxine_upscale_factor: {}. Supported: {:?}\",\n                args.maxine_upscale_factor, valid_factors,\n            );\n        }\n        log::info!(\n            \"Maxine enhancement enabled: upscale_factor={}, artifact_reduction={}\",\n            args.maxine_upscale_factor, args.maxine_artifact_reduction,\n        );\n    }\n```\n\n- [ ] **Step 3: Pass `--maxine` to the grading inference server only**\n\nFind the `InferenceConfig` construction for the grading server (line ~216) and set:\n\n```rust\n        maxine: maxine_enabled,\n        maxine_upscale_factor: args.maxine_upscale_factor,\n```\n\nEnsure the calibration server (line ~209) keeps `maxine: false`.\n\n- [ ] **Step 4: Insert enhance() call in the keyframe path**\n\nFind the keyframe path where `grade_frame()` is called (line ~295) and `encoder.write_frame()` is called (line ~308). Modify to:\n",
+  "source_version": "plans/2026-04-03-maxine-enhancement-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836792564Z",
+  "valid_from": "2026-04-11T00:10:08.836792564Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-maxine-enhancement-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 732,
+    "end_line": 764,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

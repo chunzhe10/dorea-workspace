@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c30f2453bf11",
+  "content": "atten().argmax().item()\n    sh, sw = summed.shape[-2], summed.shape[-1]\n    r = idx // sw\n    c = idx % sw\n    y = r * (crop_size // 4)\n    x = c * (crop_size // 4)\n    y = min(max(y, 0), H - crop_size)\n    x = min(max(x, 0), W - crop_size)\n    return y, x\ndef generate_per_frame_sheet(\n    frame_idx: int,\n    orig_proxy_final: torch.Tensor,\n    gold_final: torch.Tensor,\n    method_finals: dict[str, torch.Tensor],\n    method_deltas: dict[str, torch.Tensor],\n    method_metrics: dict[str, dict],\n    method_order: Sequence[str],\n    out_path: Path,\n    crop_size: int = 400,\n) -> None:\n    \"\"\"Per-frame detail sheet with full gold, method thumbnails, and zoomed crops.\"\"\"\n    # Crop selection\n    crop_y, crop_x = _find_disagreement_crop(method_deltas, crop_size=crop_size)\n\n    # Gold full-width top\n    gold_img = _resize_pil(_tensor_to_pil(gold_final), 1920)\n    draw_scale_y = gold_img.height / gold_final.shape[-2]\n    draw_scale_x = gold_img.width / gold_final.shape[-1]\n\n    # Thumbnails (row of orig_proxy + gold + methods)\n    thumb_long_edge = 300\n    thumbs = [(\"orig_proxy\", _resize_pil(_tensor_to_pil(orig_proxy_final), thumb_long_edge)),\n              (\"gold\", _resize_pil(_tensor_to_pil(gold_final), thumb_long_edge))]\n    for name in method_order:\n        if name in method_finals:\n            thumbs.append((name, _resize_pil(_tensor_to_pil(method_finals[name]), thumb_long_edge)))\n        else:\n            p = Image.new(\"RGB\", (thumb_long_edge, thumb_long_edge * 9 // 16), (64, 0, 0))\n            ImageDraw.Draw(p).text((10, 10), \"OOM\", fill=(255, 255, 255))\n            thumbs.append((name, p))",
+  "source_version": "benchmarks/upscale_bench/visualize.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230281537Z",
+  "valid_from": "2026-04-11T00:04:13.230281537Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/visualize.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 237,
+    "end_line": 267,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

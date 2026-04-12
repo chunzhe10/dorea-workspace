@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-847fc97866c5",
+  "content": "### Task 5: InputEncoding Enum and Auto-Detection\n\n    fn from_str(s: &str) -> Result<Self, String> {\n        match s.to_lowercase().as_str() {\n            \"dlog-m\" | \"dlogm\" | \"dlog_m\" => Ok(Self::DLogM),\n            \"ilog\" | \"i-log\" => Ok(Self::ILog),\n            \"srgb\" | \"rec709\" => Ok(Self::Srgb),\n            other => Err(format!(\"unknown encoding '{other}'; expected dlog-m, ilog, or srgb\")),\n        }\n    }\n}\n```\n\n- [ ] **Step 2: Add tests**\n\n```rust\n#[test]\nfn input_encoding_auto_detect_dji() {\n    let info = VideoInfo {\n        width: 3840, height: 2160, fps: 29.97, duration_secs: 3.0,\n        frame_count: 90, has_audio: true,\n        codec_name: \"hevc\".to_string(),\n        pix_fmt: \"yuv420p10le\".to_string(),\n        bits_per_component: 10,\n    };\n    let enc = InputEncoding::auto_detect(&info, std::path::Path::new(\"clip.mp4\"));\n    assert_eq!(enc, InputEncoding::DLogM);\n}\n\n#[test]\nfn input_encoding_auto_detect_x5() {\n    let info = VideoInfo {\n        width: 5760, height: 2880, fps: 30.0, duration_secs: 5.0,\n        frame_count: 150, has_audio: false,\n        codec_name: \"prores\".to_string(),\n        pix_fmt: \"yuv422p10le\".to_string(),\n        bits_per_component: 10,\n    };\n    let enc = InputEncoding::auto_detect(&info, std::path::Path::new(\"clip.mov\"));\n    assert_eq!(enc, InputEncoding::ILog);\n}\n\n#[test]\nfn input_encoding_parse() {\n    assert_eq!(\"dlog-m\".parse::<InputEncoding>().unwrap(), InputEncoding::DLogM);\n    assert_eq!(\"ilog\".parse::<InputEncoding>().unwrap(), InputEncoding::ILog);\n    assert_eq!(\"srgb\".parse::<InputEncoding>().unwrap(), InputEncoding::Srgb);\n    assert!(\"bogus\".parse::<InputEncoding>().is_err());\n}\n```\n\n- [ ] **Step 3: Run tests**\n\nRun: `cd /workspaces/dorea-workspace/repos/dorea && cargo test -p dorea-video`\nExpected: All pass.\n\n- [ ] **Step 4: Commit**\n\n```bash\ngit add crates/dorea-video/src/ffmpeg.rs\ngit commit -m \"feat(video): add InputEncoding enum with auto-detection\"\n```\n\n---\n",
+  "source_version": "plans/2026-04-08-10bit-pipeline-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837020922Z",
+  "valid_from": "2026-04-11T00:10:08.837020922Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-08-10bit-pipeline-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 683,
+    "end_line": 745,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

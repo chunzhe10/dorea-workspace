@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c34a4a266b11",
+  "content": "=(220, 220, 220), font=font_small)\n        x += cw[3]\n        draw.text((x, my), f\"{m.get('ssim', float('nan')):.4f}\", fill=(220, 220, 220), font=font_small)\n        my += 16\n\n    out_path.parent.mkdir(parents=True, exist_ok=True)\n    canvas.save(out_path)\ndef _crop_of(t: torch.Tensor) -> Image.Image:\n        c = t[:, :, crop_y:crop_y + crop_size, crop_x:crop_x + crop_size]\n        return _tensor_to_pil(c)",
+  "source_version": "benchmarks/upscale_bench/visualize.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230284524Z",
+  "valid_from": "2026-04-11T00:04:13.230284524Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/visualize.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 270,
+    "end_line": 272,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

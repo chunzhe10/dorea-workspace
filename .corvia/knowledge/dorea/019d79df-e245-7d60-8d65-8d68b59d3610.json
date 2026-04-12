@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-8d68b59d3610",
+  "content": "### What stays but changes\n### Installation\n\n## Implementation Decisions (post-design)\n\nDecisions made during and after initial implementation that refine the design above.\n",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-cli-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837136745Z",
+  "valid_from": "2026-04-11T00:10:08.837136745Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-cli-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 235,
+    "end_line": 238,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-e292ad12573d",
+  "content": "s_str().unwrap_or(\"unknown error\").to_string(),\n            ));\n        }\n        if v[\"type\"].as_str() != Some(\"yolo_seg_batch_result\") {\n            return Err(InferenceError::Ipc(format!(\n                \"expected yolo_seg_batch_result, got: {response}\"\n            )));\n        }\n\n        let results = v[\"results\"].as_array()\n            .ok_or_else(|| InferenceError::Ipc(\"missing results array\".into()))?;\n\n        let mut out = Vec::with_capacity(items.len());\n        for (i, result) in results.iter().enumerate() {\n            let id = result[\"id\"].as_str().unwrap_or(\"\").to_string();\n            let mask_b64 = result[\"mask_b64\"].as_str()\n                .ok_or_else(|| InferenceError::Ipc(format!(\"missing mask_b64 for result {i}\")))?;\n            let mask_bytes = B64.decode(mask_b64)\n                .map_err(|e| InferenceError::Ipc(format!(\"base64 decode mask {i}: {e}\")))?;\n            let w = result[\"width\"].as_u64().unwrap_or(0) as usize;\n            let h = result[\"height\"].as_u64().unwrap_or(0) as usize;\n            out.push((id, mask_bytes, w, h));\n        }\n\n        Ok(out)\n    }\n\n    /// Bilinearly upscale a depth map from (src_w, src_h) to (dst_w, dst_h).\n    pub fn upscale_depth(\n        depth: &[f32],\n        src_w: usize,\n        src_h: usize,\n        dst_w: usize,\n        dst_h: usize,\n    ) -> Vec<f32> {\n        let mut out = vec![0.0_f32; dst_w * dst_h];\n        for dy in 0..dst_h {\n            for dx in 0..dst_w {\n                let sx = dx as f32 * (src_w as f32 - 1.0) / (dst_w as f32 - 1.0).max(1.0);\n                let sy = dy as f32 * (src_h as f32 - 1.0) / (dst_h as f32 - 1.0).max(1.0);\n                let x0 = sx.floor() as usize;\n                let y0 = sy.floor() as usize;\n                let x1 = (x0 + 1).min(src_w - 1);\n                let y1 = (y0 + 1).min(src_h - 1);\n                let fx = sx - x0 as f32;\n                let fy = sy - y0 as f32;",
+  "source_version": "crates/dorea-video/src/inference_subprocess.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229641179Z",
+  "valid_from": "2026-04-11T00:04:13.229641179Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference_subprocess.rs",
+    "language": "rs",
+    "chunk_type": "impl_item",
+    "start_line": 760,
+    "end_line": 799,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

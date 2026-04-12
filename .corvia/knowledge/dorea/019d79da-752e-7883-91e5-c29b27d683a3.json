@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c29b27d683a3",
+  "content": "      r = np.clip(1.5 - np.abs(4 * arr - 3), 0, 1)\n        g = np.clip(1.5 - np.abs(4 * arr - 2), 0, 1)\n        b = np.clip(1.5 - np.abs(4 * arr - 1), 0, 1)\n        rgb = (np.stack([r, g, b], axis=-1) * 255).astype(np.uint8)\n    return Image.fromarray(rgb)\ndef _load_font(size: int = 20) -> ImageFont.FreeTypeFont:\n    for candidate in (\"/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf\",\n                      \"/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf\"):\n        try:\n            return ImageFont.truetype(candidate, size)\n        except OSError:\n            continue\n    return ImageFont.load_default()",
+  "source_version": "benchmarks/upscale_bench/visualize.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230274810Z",
+  "valid_from": "2026-04-11T00:04:13.230274810Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/visualize.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 50,
+    "end_line": 57,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-041ac8b84105",
+  "content": "## Risks\n\n### Risk: Permute layout error causes frame ordering corruption\n**Mitigation**: Frame parity test must show YAVG=0, YMAX=0 vs PR #67 baseline.\n\n\n### Risk: VRAM peak grows\nKeeping `full_batch` on GPU through the whole batch instead of freeing per-frame\nadds ~N × 25MB peak VRAM. At batch=8 that's ~200MB extra. At batch=16 it's ~400MB.\nWithin the 6GB budget but worth measuring with `torch.cuda.max_memory_allocated()`.\n",
+  "source_version": "decisions/2026-04-10-batched-process-batch.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836179853Z",
+  "valid_from": "2026-04-11T00:10:08.836179853Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-10-batched-process-batch.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 74,
+    "end_line": 81,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

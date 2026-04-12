@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-d3654736cbd5",
+  "content": "class RauneNet(nn.Module):\n    \"\"\"Residual and Attention-driven underwater enhancement Network.\n    \"\"\"\n    def __init__(self, input_nc, output_nc, n_blocks, n_down, ngf=64,\n                 padding_type='reflect', use_dropout=False, use_att_down=True, use_att_up=False,\n                 norm_layer=nn.InstanceNorm2d):\n        \"\"\"Initializes the RAUNE-Net.\n\n        Args:\n            input_nc: Number of channels of input images.\n            output_nc: Number of chnnels of output images.\n            n_blocks: Number of residual blocks.\n            n_down: Number of down-sampling blocks.\n            ngf: Number of kernels of Conv2d layer in `WRPM`.\n            padding_type: Type of padding layer in Residual Block.\n            use_dropout: Whether to use dropout.\n            use_att_down: Whether to use attention block in down-sampling.\n            use_att_up: Whether to use attention block in up-sampling.\n            norm_layer: Type of Normalization layer.\n        \"\"\"\n        assert (n_blocks >= 0 and n_down >= 0)\n        super().__init__()\n        use_bias = False if norm_layer else True\n\n        model = []\n\n        # Wide-range Perception Module (WRPM)",
+  "source_version": "models/raune_net/models/RAUNE-Net/models/raune_net.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230538570Z",
+  "valid_from": "2026-04-11T00:04:13.230538570Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "models/raune_net/models/RAUNE-Net/models/raune_net.py",
+    "language": "py",
+    "chunk_type": "class_definition",
+    "start_line": 7,
+    "end_line": 33,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

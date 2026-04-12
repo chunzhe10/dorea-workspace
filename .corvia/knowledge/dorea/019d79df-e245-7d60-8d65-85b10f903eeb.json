@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-85b10f903eeb",
+  "content": ", d_tex_inactive, d_bounds_inactive) = if active_idx == 0 {\n        (&self.d_textures_a, &self.d_bounds_a, &self.d_textures_b, &self.d_bounds_b)\n    } else {\n        (&self.d_textures_b, &self.d_bounds_b, &self.d_textures_a, &self.d_bounds_a)\n    };\n\n    {\n        let slot = self.frame_bufs_16.borrow();\n        let bufs = slot.as_ref().expect(\"frame_bufs_16 allocated above\");\n        let bounds_a = d_bounds_active.borrow();\n        let bounds_b = d_bounds_inactive.borrow();\n\n        let func = dev.get_func(\"combined_lut\", \"combined_lut_kernel_16\")\n            .ok_or_else(|| GpuError::ModuleLoad(\"combined_lut_kernel_16 not found\".into()))?;\n        let cfg = LaunchConfig {\n            grid_dim: (div_ceil(n as u32, 256), 1, 1),\n            block_dim: (256, 1, 1),\n            shared_mem_bytes: 0,\n        };\n\n        let n_i32 = n as i32;\n        let nz_i32 = self.adaptive_lut.runtime_n_zones as i32;\n        let gs_i32 = self.adaptive_lut.grid_size as i32;\n        let fw_i32 = width as i32;\n        let fh_i32 = height as i32;\n        let dw_i32 = depth_w as i32;\n        let dh_i32 = depth_h as i32;\n        let mw_i32 = mask_w as i32;\n        let mh_i32 = mask_h as i32;\n        use cudarc::driver::{DeviceRepr, DevicePtr};\n\n        let d_mask: Option<CudaSlice<u8>> = class_mask.map(|m| {\n            dev.htod_sync_copy(m).expect(\"mask upload failed\")",
+  "source_version": "plans/2026-04-08-10bit-pipeline-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837038447Z",
+  "valid_from": "2026-04-11T00:10:08.837038447Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-08-10bit-pipeline-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1490,
+    "end_line": 1515,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

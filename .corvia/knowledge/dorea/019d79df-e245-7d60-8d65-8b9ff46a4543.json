@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-8b9ff46a4543",
+  "content": "        # real frame doesn't pay the cold-start cost.\n\n        # Warmup forward pass to trigger compilation during startup\n        with torch.no_grad():\n            dummy_input = torch.zeros(\n                args.batch_size, 3, args.proxy_height, args.proxy_width,\n                device=\"cuda\", dtype=model_dtype,\n            )\n            _ = model(dummy_input)\n            torch.cuda.synchronize()\n            del dummy_input\n\n        compile_duration = time.time() - t_compile_start\n        print(f\"[raune-filter] torch.compile ready ({compile_duration:.1f}s, \"\n              f\"Inductor reduce-overhead mode, static shape \"\n              f\"[{args.batch_size}, 3, {args.proxy_height}, {args.proxy_width}])\",\n              file=sys.stderr, flush=True)\n    except Exception as e:\n        print(f\"[raune-filter] WARNING: torch.compile failed ({e}); \"\n              f\"using eager mode (no Inductor fusion)\",\n              file=sys.stderr, flush=True)\n```\n\nUse this simpler version.\n\n- [ ] **Step 3: Verify Python syntax**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\npython3 -c \"import ast; ast.parse(open('python/dorea_inference/raune_filter.py').read()); print('OK')\"\n```\n\nExpected: `OK`",
+  "source_version": "plans/2026-04-10-torch-compile-raune.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837114813Z",
+  "valid_from": "2026-04-11T00:10:08.837114813Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-10-torch-compile-raune.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 113,
+    "end_line": 143,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

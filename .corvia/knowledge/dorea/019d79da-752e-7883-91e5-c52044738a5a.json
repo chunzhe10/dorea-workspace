@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c52044738a5a",
+  "content": "effect to free VRAM.\n\n    The driver calls this between methods when VRAM pressure is a concern\n    (e.g. before running higher_proxy, which needs RAUNE at full 4K).\"\"\"\n    global _MAXINE_SR, _MAXINE_SR_DIMS\n    _MAXINE_SR = None\n    _MAXINE_SR_DIMS = None\ndef sr_maxine(\n    delta_proxy: torch.Tensor,\n    orig_full: torch.Tensor,\n    full_size: Tuple[int, int],\n) -> torch.Tensor:\n    \"\"\"Learned SR on the graded proxy (not the delta).\n\n    Flow:\n      1. Downscale orig_full to proxy resolution\n      2. Apply delta_proxy to orig_proxy in OKLab → graded_proxy\n      3. Upscale graded_proxy (1080→2160 or whatever fh/ph) via Maxine VideoSuperRes\n      4. Compute delta_method = lab(graded_4k) - lab(orig_full)\n    \"\"\"\n    from .oklab import oklab_to_rgb, rgb_to_oklab\n\n    fh, fw = full_size\n    _, _, ph, pw = delta_proxy.shape\n\n    # 1. Build graded_proxy from orig_proxy + delta\n    orig_proxy = F.interpolate(orig_full, size=(ph, pw), mode=\"bilinear\", align_corners=False)\n    orig_proxy_lab = rgb_to_oklab(orig_proxy)\n    graded_proxy_lab = orig_proxy_lab + delta_proxy\n    graded_proxy = oklab_to_rgb(graded_proxy_lab)  # (1, 3, ph, pw) in [0, 1]\n\n    # 2. Maxine VideoSuperRes expects (3, H, W) fp32 in [0, 1] on CUDA\n    # _get_maxine_sr handles lazy init + dimension-change guard on load()\n    vsr = _get_maxine_sr(output_width=fw, output_height=fh)\n    result = vsr.run(graded_proxy[0])  # (3, ph, pw) → (3, fh, fw)\n    graded_4k = torch.from_dlpack(result.image).clone().unsqueeze(0)  # (1, 3, fh, fw)\n\n    # 3. Delta vs orig_full in OKLab\n    delta_4k = rgb_to_oklab(graded_4k) - rgb_to_oklab(orig_full)\n    return delta_4k",
+  "source_version": "benchmarks/upscale_bench/methods.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230311862Z",
+  "valid_from": "2026-04-11T00:04:13.230311862Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/methods.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 497,
+    "end_line": 529,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

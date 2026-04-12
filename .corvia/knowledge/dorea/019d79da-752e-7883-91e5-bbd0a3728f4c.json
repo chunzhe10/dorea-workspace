@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-bbd0a3728f4c",
+  "content": "_SIZE = 1024\n    grid = ((n_pixels + BLOCK_SIZE - 1) // BLOCK_SIZE,)\n    _oklab_transfer_kernel[grid](\n        frame_flat, delta_flat, out_flat,\n        n_pixels=n_pixels,\n        BLOCK_SIZE=BLOCK_SIZE,\n    )\n    return out_flat.reshape(1, 3, H, W).float()\ndef pytorch_oklab_transfer(frame_nchw_f32, delta_nchw_f32):\n    \"\"\"PyTorch fallback: OKLab transfer without Triton.\"\"\"\n    lab = rgb_to_lab(frame_nchw_f32)\n    lab = lab + delta_nchw_f32\n    return lab_to_rgb(lab)",
+  "source_version": "python/dorea_inference/raune_filter.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230056084Z",
+  "valid_from": "2026-04-11T00:04:13.230056084Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/raune_filter.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 191,
+    "end_line": 195,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

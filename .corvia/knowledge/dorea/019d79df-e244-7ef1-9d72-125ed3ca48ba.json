@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-125ed3ca48ba",
+  "content": "### Task 3.5: Wire new checks into the Reasoner's `run` method\n\n\n```rust\nCheckType::MisplacedDoc => {\n    if let Some(ref rules) = self.docs_rules {\n        findings.extend(check_misplaced_doc(&entries, rules));\n    }\n},\nCheckType::CoverageGap => {\n    findings.extend(check_coverage_gap(&entries));\n},\nCheckType::TemporalContradiction => {\n    let threshold = 0.85; // same as merge similarity_threshold\n    findings.extend(check_temporal_contradiction(&entries, threshold));\n},\n```\n\n`MisplacedDoc` is a no-op if `docs_rules` is `None` (graceful degradation for non-workspace configs). `CoverageGap` is deterministic (no LLM needed). `TemporalContradiction` uses embeddings from stored entries (no live inference needed — entries already have embeddings).\n\n- [ ] **Step 3: Run full reasoner tests**\n\nRun: `cd /workspaces/corvia-workspace/repos/corvia && cargo test -p corvia-kernel reasoner -- --nocapture`\nExpected: All tests pass\n\n- [ ] **Step 4: Commit**\n\n```bash\ncd /workspaces/corvia-workspace/repos/corvia\ngit add crates/corvia-kernel/src/reasoner.rs\ngit commit -m \"feat(reasoner): wire new docs checks into Reasoner dispatch\"\n```\n\n---\n",
+  "source_version": "plans/2026-03-13-docs-workflow-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836350927Z",
+  "valid_from": "2026-04-11T00:10:08.836350927Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-13-docs-workflow-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1863,
+    "end_line": 1895,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

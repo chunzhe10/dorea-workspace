@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-ed86fdaca54f",
+  "content": "\n        // Download result\n        let slot = self.frame_bufs.borrow();\n        let bufs = slot.as_ref().expect(\"frame_bufs allocated above\");\n        let result = dev.dtoh_sync_copy(&bufs.d_pixels_out).map_err(map_cudarc_error)?;\n        Ok(result)\n    }\npub(crate) fn map_cudarc_error(e: cudarc::driver::result::DriverError) -> GpuError {\n    let msg = format!(\"{e}\");\n    if msg.contains(\"OUT_OF_MEMORY\") || msg.contains(\"out of memory\") {\n        GpuError::Oom(msg)\n    } else {\n        GpuError::CudaFail(msg)\n    }\n}",
+  "source_version": "crates/dorea-gpu/src/cuda/mod.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229780074Z",
+  "valid_from": "2026-04-11T00:04:13.229780074Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cuda/mod.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 248,
+    "end_line": 255,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

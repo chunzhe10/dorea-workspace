@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-e7160a78e078",
+  "content": "lt<(Vec<f32>, usize, usize), InferenceError> {\n        Python::with_gil(|py| {\n            let bridge = self.bridge.bind(py);\n\n            // Create numpy array from raw RGB bytes.\n            let np_flat = numpy::PyArray1::from_slice_bound(py, image_rgb);\n            let np_reshaped = np_flat.call_method1(\"reshape\", ((height, width, 3),))\n                .map_err(|e| InferenceError::Ipc(format!(\"reshape: {e}\")))?;\n\n            // Call bridge.run_depth_cpu(reshaped, max_size).\n            let result = bridge.call_method1(\"run_depth_cpu\", (np_reshaped, max_size))\n                .map_err(|e| Self::map_python_error(py, e))?;\n\n            // Result is a numpy array of shape (h, w) with float32 values.\n            let shape: Vec<usize> = result.getattr(\"shape\")\n                .map_err(|e| InferenceError::Ipc(format!(\"get shape: {e}\")))?\n                .extract()\n                .map_err(|e| InferenceError::Ipc(format!(\"extract shape: {e}\")))?;\n\n            let out_h = shape[0];\n            let out_w = shape[1];\n\n            // Flatten and extract as Vec<f32>.\n            let flat = result.call_method1(\"reshape\", ((-1,),))\n                .map_err(|e| InferenceError::Ipc(format!(\"flatten result: {e}\")))?;\n            let depth_data: Vec<f32> = flat.call_method0(\"tolist\")\n                .map_err(|e| InferenceError::Ipc(format!(\"tolist: {e}\")))?\n                .extract()\n                .map_err(|e| InferenceError::Ipc(format!(\"extract depth: {e}\")))?;\n\n            Ok((depth_data, out_w, out_h))\n        })\n    }\n\n    /// Run RAUNE-Net on an RGB image.\n    ///\n    /// `image_rgb`: HxWx3 u8 array flattened row-major.\n    /// Returns the enhanced image as `(rgb_u8, out_width, out_height)`.\n    pub fn run_raune(\n        &self,\n        _id: &str,\n        image_rgb: &[u8],\n        width: usize,\n        height: usize,\n        max_size: usize,\n    ) -> Result<(Vec<u8>, usize, usize), InferenceError> {\n        Python::with_gil(|py| {\n            let bridge = self.bridge.bind(py);",
+  "source_version": "crates/dorea-video/src/inference/pyo3_backend.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229699126Z",
+  "valid_from": "2026-04-11T00:04:13.229699126Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference/pyo3_backend.rs",
+    "language": "rs",
+    "chunk_type": "impl_item",
+    "start_line": 233,
+    "end_line": 274,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

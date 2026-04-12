@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-bb97dab09713",
+  "content": "2104542553*l_ + 0.7936177850*m_ - 0.0040720468*s_) * _L_SCALE\n    a = (1.9779984951*l_ - 2.4285922050*m_ + 0.4505937099*s_) * _AB_SCALE\n    b_lab = (0.0259040371*l_ + 0.7827717662*m_ - 0.8086757660*s_) * _AB_SCALE\n    return torch.cat([L, a, b_lab], dim=1)\ndef lab_to_rgb(lab):\n    \"\"\"(N,3,H,W) OKLab (rescaled) → (N,3,H,W) sRGB [0,1].\"\"\"\n    L, a, b_lab = lab[:,0:1], lab[:,1:2], lab[:,2:3]\n    ok_l = L / _L_SCALE\n    ok_a = a / _AB_SCALE\n    ok_b = b_lab / _AB_SCALE\n    l_ = ok_l + 0.3963377774*ok_a + 0.2158037573*ok_b\n    m_ = ok_l - 0.1055613458*ok_a - 0.0638541728*ok_b\n    s_ = ok_l - 0.0894841775*ok_a - 1.2914855480*ok_b\n    l = l_ * l_ * l_\n    m = m_ * m_ * m_\n    s = s_ * s_ * s_\n    r =  4.0767416613*l - 3.3077115904*m + 0.2309699287*s\n    g = -1.2684380041*l + 2.6097574007*m - 0.3413193963*s\n    b =  -0.0041960863*l - 0.7034186145*m + 1.7076147010*s\n    return linear_to_srgb(torch.cat([r, g, b], dim=1).clamp(min=0.0)).clamp(0.0, 1.0)",
+  "source_version": "python/dorea_inference/raune_filter.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230051941Z",
+  "valid_from": "2026-04-11T00:04:13.230051941Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/raune_filter.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 70,
+    "end_line": 85,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-03630bff5aef",
+  "content": "### `__powf` fast intrinsic for sRGB gamma\n### Performance impact\n\n### Benchmark validation\n\nPOC benchmark (`working/sea_thru_poc/bench_oklab_transfer.py`) on a 4K frame (3840×2160):\n\n| Approach | ms/frame | Speedup |\n|---|---|---|\n| CIELab fp32 (PyTorch, baseline) | 33.08 | 1× |\n| OKLab + torch.compile + fp16 | 6.81 | 4.9× |\n| OKLab fused Triton kernel | 2.89 | 11.4× |\n\nThese numbers reflect Python/PyTorch kernel launch overhead elimination, not directly\ncomparable to the production CUDA kernel which is already fused.\n",
+  "source_version": "decisions/2026-04-09-oklab-grade-pipeline.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836172269Z",
+  "valid_from": "2026-04-11T00:10:08.836172269Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-09-oklab-grade-pipeline.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 81,
+    "end_line": 93,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

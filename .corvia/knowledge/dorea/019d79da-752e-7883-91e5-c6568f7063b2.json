@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c6568f7063b2",
+  "content": "def test_compute_delta_errors_identical_inputs_zero():\n    d = torch.randn(1, 3, 32, 32, device=\"cuda\")\n    m = compute_delta_errors(d, d)\n    assert m[\"delta_l1\"] == 0.0\n    assert m[\"delta_max\"] == 0.0\n    assert m[\"delta_p95\"] == 0.0\ndef test_compute_delta_errors_shifted_inputs():\n    d1 = torch.zeros(1, 3, 32, 32, device=\"cuda\")\n    d2 = torch.ones(1, 3, 32, 32, device=\"cuda\")\n    m = compute_delta_errors(d1, d2)\n    assert abs(m[\"delta_l1\"] - 1.0) < 1e-6\n    assert abs(m[\"delta_max\"] - 1.0) < 1e-6",
+  "source_version": "benchmarks/upscale_bench/tests/test_metrics.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230327817Z",
+  "valid_from": "2026-04-11T00:04:13.230327817Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/tests/test_metrics.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 22,
+    "end_line": 27,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-85625148dae6",
+  "content": "z_center);\n            float blend_radius = z_width * 2.0f;\n            float w = fmaxf(1.0f - dist / blend_radius, 0.0f);\n            w = w * w;\n            if (w < 1e-6f) continue;\n            cudaTextureObject_t tex = (cudaTextureObject_t)textures_b[z];\n            float4 s = tex3D<float4>(tex, r * gs, g * gs, b * gs);\n            blended_b.x += s.x * w;\n            blended_b.y += s.y * w;\n            blended_b.z += s.z * w;\n            total_w_b += w;\n        }\n\n        float r_b, g_b, b_b;\n        if (total_w_b > 1e-6f) {\n            r_b = blended_b.x / total_w_b;\n            g_b = blended_b.y / total_w_b;\n            b_b = blended_b.z / total_w_b;\n        } else {\n            r_b = r; g_b = g; b_b = b;\n        }\n\n        float inv_t = 1.0f - blend_t;\n        r_out = r_a * inv_t + r_b * blend_t;\n        g_out = g_a * inv_t + g_b * blend_t;\n        b_out = b_a * inv_t + b_b * blend_t;\n    }\n\n    // --- Depth-dependent strength (identical) ---\n    float depth_strength = fminf(d / 0.15f, 1.0f);\n\n    float max_shift = 0.35f;\n    r_out = r + fminf(fmaxf(r_out - r, -max_shift), max_shift) * depth_strength;\n    g_out = g + fminf(fmaxf(g_out - g, -max_shift), max_shift) * depth_strength;\n    b_out = b + fminf(fmaxf(b_out - b, -max_shift), max_shift) * depth_strength;",
+  "source_version": "plans/2026-04-08-10bit-pipeline-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837034349Z",
+  "valid_from": "2026-04-11T00:10:08.837034349Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-08-10bit-pipeline-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1298,
+    "end_line": 1326,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

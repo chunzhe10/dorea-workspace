@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c931c5017041",
+  "content": "_summary_grid(\n        frames_data=frames_data,\n        method_order=method_names,\n        method_timings=aggregate_timings,\n        run_metadata={\n            **env_info,\n            \"clip\": clip_path.name,\n            \"gold_paths\": gold_paths,\n        },\n        out_path=grid_path,\n    )\n    print(f\"\\nsummary grid: {grid_path}\")\n\n    # CSV\n    csv_path = out_dir / \"metrics.csv\"\n    with csv_path.open(\"w\", newline=\"\") as f:\n        fields = list(all_results[0].to_csv_row().keys()) if all_results else []\n        writer = csv.DictWriter(f, fieldnames=fields)\n        writer.writeheader()\n        for r in all_results:\n            writer.writerow(r.to_csv_row())\n        # Aggregate rows\n        for name in method_names:\n            ok_rows = [r for r in all_results if r.method == name and r.status == \"ok\"]\n            if not ok_rows:\n                continue\n            mean_row = {\"frame_idx\": \"ALL_MEAN\", \"method\": name, \"status\": \"ok\"}\n            keys = [k for k in fields if k not in (\"frame_idx\", \"method\", \"status\")]\n            for k in keys:\n                vals = [getattr(r, k) for r in ok_rows]\n                mean_row[k] = sum(vals) / len(vals)\n            writer.writerow(mean_row)\n    print(f\"metrics csv:  {csv_path}\")\n\n    # Run report\n    report_path = out_dir / \"run_report.md\"\n    _write_run_report(\n        report_path, env_info, frame_indices, gold_paths, oom_events,\n        all_results, method_names, out_dir,\n    )\n    print(f\"run report:   {report_path}\")\n\n    print(\"\\n=== done ===\")",
+  "source_version": "benchmarks/upscale_bench/run.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230367050Z",
+  "valid_from": "2026-04-11T00:04:13.230367050Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/run.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 353,
+    "end_line": 386,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

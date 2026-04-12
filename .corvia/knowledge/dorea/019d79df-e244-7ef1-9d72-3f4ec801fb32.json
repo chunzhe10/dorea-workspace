@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-3f4ec801fb32",
+  "content": "### Task 5: Grading Render stage (`pipeline/grading.rs`)\n\n            fi: 15,\n            prev_kf_idx: 10,\n            next: Some((20, true)), // scene_cut_before = true\n        }).unwrap();\n        assert_eq!(t, 0.0);\n    }\n\n    #[test]\n    fn lerp_depth_midpoint() {\n        let a = vec![0.0f32, 1.0];\n        let b = vec![1.0f32, 0.0];\n        let out = lerp_depth(&a, &b, 0.5);\n        assert!((out[0] - 0.5).abs() < 1e-6);\n        assert!((out[1] - 0.5).abs() < 1e-6);\n    }\n\n    #[test]\n    fn lerp_depth_clamped() {\n        let a = vec![0.0f32];\n        let b = vec![1.0f32];\n        assert_eq!(lerp_depth(&a, &b, 2.0), vec![1.0]);\n        assert_eq!(lerp_depth(&a, &b, -1.0), vec![0.0]);\n    }\n\n    #[test]\n    fn depth_interpolate_at_keyframe_returns_prev() {\n        let node = DepthInterpolateNode;\n        let prev = vec![0.2f32, 0.8];\n        let result = node.lerp(10, 10, &prev, None);\n        assert_eq!(result, prev);\n    }\n\n    #[test]\n    fn depth_interpolate_past_last_kf_returns_prev() {\n        let node = DepthInterpolateNode;\n        let prev = vec![0.5f32, 0.5];\n        let result = node.lerp(99, 80, &prev, None);\n        assert_eq!(result, prev);\n    }\n\n    #[test]\n    fn depth_interpolate_midpoint() {\n        let node = DepthInterpolateNode;\n        let a = vec![0.0f32, 1.0];\n        let b = vec![1.0f32, 0.0];\n        let result = node.lerp(15, 10, &a, Some((20, false, &b)));\n        assert!((result[0] - 0.5).abs() < 1e-5);\n        assert!((result[1] - 0.5).abs() < 1e-5);\n    }\n\n    #[test]\n    fn depth_interpolate_scene_cut_returns_prev() {\n        let node = DepthInterpolateNode;\n        let a = vec![0.2f32];\n        let b = vec![0.9f32];",
+  "source_version": "plans/2026-04-05-pipeline-dag-refactor.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836987883Z",
+  "valid_from": "2026-04-11T00:10:08.836987883Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-05-pipeline-dag-refactor.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1340,
+    "end_line": 1394,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d24e28500d30",
+  "content": "ratios:  Vec<f32> = hsl.0.iter().map(|q| q.s_ratio).collect();\n                            let v_offsets: Vec<f32> = hsl.0.iter().map(|q| q.v_offset).collect();\n                            let weights:   Vec<f32> = hsl.0.iter().map(|q| q.weight).collect();\n                            adaptive_grader.load_segment(\n                                &base_flat, base_bounds,\n                                (&h_offsets, &s_ratios, &v_offsets, &weights),\n                            ).context(\"load_segment failed\")?;\n                            adaptive_grader.prepare_keyframe(&smoothed_kf_zones[kf_cursor])\n                                .context(\"prepare_keyframe at segment boundary failed\")?;\n                            current_segment = new_seg;\n                            log::info!(\"Segment switch to {new_seg} at keyframe {kf_cursor}\");\n                        }\n\n                        adaptive_grader.swap_textures();\n\n                        if kf_cursor + 1 < smoothed_kf_zones.len() {\n                            adaptive_grader.prepare_keyframe(&smoothed_kf_zones[kf_cursor + 1])\n                                .context(\"prepare_keyframe failed\")?;\n                        }\n                    }\n                }\n\n                let (prev_kf_idx, _) = kf_index_list[kf_cursor];\n                let (prev_depth_proxy, dpw, dph) = keyframe_depths\n                    .get(&prev_kf_idx)\n                    .expect(\"prev keyframe depth missing — logic error\");\n                let (dpw, dph) = (*dpw, *dph);\n\n                let depth_proxy = if fi == prev_kf_idx {\n                    prev_depth_proxy.clone()\n                } else if let Some(&(next_kf_idx, scene_cut_before_next)) = kf_index_list.get(kf_cursor + 1) {\n                    if scene_cut_before_next {\n                        prev_depth_proxy.clone()\n                    } else {\n                        let (next_depth_proxy, _, _) = keyframe_depths",
+  "source_version": "crates/dorea-cli/src/pipeline/grading.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229443665Z",
+  "valid_from": "2026-04-11T00:04:13.229443665Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/pipeline/grading.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 179,
+    "end_line": 210,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

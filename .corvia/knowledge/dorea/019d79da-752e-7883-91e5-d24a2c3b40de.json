@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-d24a2c3b40de",
+  "content": "  # moving-average window for per-KF zone boundary smoothing\n# input_encoding = \"auto\"    # auto-detect from container/codec; options: dlog-m, ilog, srgb\n# output_codec = \"auto\"      # auto: prores for 10-bit, h264 for 8-bit; options: prores, hevc10, h264\n\n[maxine]\nupscale_factor     = 2       # SR factor: 2, 3, or 4 (used when SR is re-enabled)\nartifact_reduction = true    # artifact reduction before upscale\n",
+  "source_version": "dorea.toml",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230523713Z",
+  "valid_from": "2026-04-11T00:04:13.230523713Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "dorea.toml",
+    "language": "toml",
+    "chunk_type": "section",
+    "start_line": 30,
+    "end_line": 33,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

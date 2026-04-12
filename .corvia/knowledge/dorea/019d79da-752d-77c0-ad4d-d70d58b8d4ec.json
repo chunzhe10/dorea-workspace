@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d70d58b8d4ec",
+  "content": " h = 32;\n        let pixels: Vec<u8> = vec![128; w * h * 3];\n        let flow = compute_flow(&pixels, &pixels, w, h);\n        let mag = mean_flow_magnitude(&flow);\n        assert!(mag < 0.01, \"identical frames should have near-zero flow, got {mag}\");\n    }\nfn warp_identity_preserves_depth() {\n        let w = 16;\n        let h = 16;\n        let depth: Vec<f32> = (0..w * h).map(|i| i as f32 / (w * h) as f32).collect();\n        let zero_flow = MotionField {\n            vectors: vec![[0.0, 0.0]; w * h],\n            width: w,\n            height: h,\n        };\n        let warped = warp_depth(&depth, &zero_flow, w, h, 0.5);\n        for (i, (&orig, &warp)) in depth.iter().zip(warped.iter()).enumerate() {\n            assert!(\n                (orig - warp).abs() < 1e-4,\n                \"pixel {i}: orig={orig}, warped={warp}\"\n            );\n        }\n    }",
+  "source_version": "crates/dorea-cli/src/optical_flow.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229501131Z",
+  "valid_from": "2026-04-11T00:04:13.229501131Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/optical_flow.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 247,
+    "end_line": 263,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

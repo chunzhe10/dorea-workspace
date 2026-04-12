@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-1a11d4ff44e1",
+  "content": "    # 2. Encode as base64, send to Claude API (claude-sonnet-4-6)\n    # 3. Claude returns structured JSON with subjects, bboxes, timestamps\n\n    #\n\n    # Pass 2: Around each detected appearance, sample every 10 frames",
+  "source_version": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836442230Z",
+  "valid_from": "2026-04-11T00:10:08.836442230Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1235,
+    "end_line": 1236,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

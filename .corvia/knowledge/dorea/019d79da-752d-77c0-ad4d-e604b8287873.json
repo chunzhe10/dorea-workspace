@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-e604b8287873",
+  "content": "//! Inference integration — PyO3 in-process embedding or subprocess fallback.\n//!\n//! When the `python` feature is enabled, inference runs in-process via PyO3.\n//! Otherwise, the subprocess JSON-lines IPC implementation is used.\n\n#[cfg(feature = \"python\")]\nmod pyo3_backend;\n\n#[cfg(feature = \"python\")]\npub use pyo3_backend::*;\n\n#[cfg(not(feature = \"python\"))]\npub use crate::inference_subprocess::*;\n",
+  "source_version": "crates/dorea-video/src/inference/mod.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229684936Z",
+  "valid_from": "2026-04-11T00:04:13.229684936Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference/mod.rs",
+    "language": "rs",
+    "chunk_type": "file",
+    "start_line": 1,
+    "end_line": 13,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

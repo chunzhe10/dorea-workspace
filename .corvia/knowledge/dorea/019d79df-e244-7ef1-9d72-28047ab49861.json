@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-28047ab49861",
+  "content": "  }\n}\n```\n\n- [ ] **Step 4: Run tests to confirm `box_blur_rows_sliding` passes**\n\n```bash\ncargo test -p dorea-gpu box_blur_rows_sliding 2>&1 | tail -10\n```\nExpected: `3 tests passed`.\n\n- [ ] **Step 5: Write failing tests for `box_blur_cols_via_transpose`**\n\nAdd to the `tests` block:\n\n```rust\n#[test]\nfn box_blur_cols_via_transpose_matches_naive_small() {\n    // 3-wide, 5-tall, radius 1\n    let src: Vec<f32> = vec![\n        1.0, 2.0, 3.0,\n        4.0, 5.0, 6.0,\n        7.0, 8.0, 9.0,\n        6.0, 5.0, 4.0,\n        3.0, 2.0, 1.0,\n    ];\n    let mut dst_transpose = vec![0.0f32; 15];\n    let mut dst_naive     = vec![0.0f32; 15];\n    box_blur_cols_via_transpose(&src, &mut dst_transpose, 3, 5, 1);\n    box_blur_cols(&src, &mut dst_naive, 3, 5, 1);\n    for (i, (a, b)) in dst_transpose.iter().zip(dst_naive.iter()).enumerate() {\n        assert!((a - b).abs() < 1e-5, \"pixel {i}: {a} vs {b}\");\n    }\n}\n```\n\n- [ ] **Step 6: Run to confirm failure**\n\n```bash\ncargo test -p dorea-gpu box_blur_cols_via_transpose 2>&1 | tail -5\n```\nExpected: compile error.\n\n- [ ] **Step 7: Add `box_blur_cols_via_transpose` to `cpu.rs`**\n\nAdd immediately after `box_blur_cols` (after line 243):\n\n```rust\n/// Column box blur using transpose → row blur → transpose back.\n/// This avoids the strided-memory cache thrash of direct column access.\nfn box_blur_cols_via_transpose(\n    src: &[f32],\n    dst: &mut [f32],\n    width: usize,\n    height: usize,\n    radius: usize,\n) {\n    // Transpose src (WxH layout) → transposed (HxW layout: height rows of width columns)\n    // In the transposed layout, \"rows\" are original columns → sequential access.\n    let mut transposed = vec![0.0f32; width * height];\n    for row in 0..height {\n        for col in 0..width {\n            transposed[col * height + row] = src[row * width + col];\n        }\n    }",
+  "source_version": "plans/2026-04-02-inference-perf-fix.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836629770Z",
+  "valid_from": "2026-04-11T00:10:08.836629770Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-inference-perf-fix.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 159,
+    "end_line": 211,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

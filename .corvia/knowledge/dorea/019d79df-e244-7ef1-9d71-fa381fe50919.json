@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d71-fa381fe50919",
+  "content": "# 10-Bit Pipeline Design: DJI D-Log M + Insta360 X5 I-Log\n\n## Problem\n\nDorea's pipeline quantizes 10-bit camera footage to 8-bit at two points before any\ncolor math happens:\n\n1. ffmpeg extracts keyframes as JPEG (8-bit)\n2. `load_rgb_image()` calls `.into_rgb8()` then divides by 255.0\n\nThis discards 75% of the tonal resolution from both cameras (DJI Action 4 D-Log M\n10-bit H.265, Insta360 X5 I-Log 10-bit ProRes 422 HQ). The result is visible banding\nin underwater blue/green gradients and reduced precision in shadow/highlight regions.\n\n\n## Decision\n\n**Approach A: 10-bit I/O, f32 internal.** Upgrade the I/O boundaries to handle 10-bit\n(16-bit PNG for keyframes, ProRes for X5), keep internal processing in f32, add I-Log\ntransfer function, output 10-bit to DaVinci Resolve. Resolve owns final SDR tone mapping,\ndithering, and 8-bit conversion.\n",
+  "source_version": "decisions/2026-04-02-10bit-pipeline-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836056466Z",
+  "valid_from": "2026-04-11T00:10:08.836056466Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-02-10bit-pipeline-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 7,
+    "end_line": 25,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

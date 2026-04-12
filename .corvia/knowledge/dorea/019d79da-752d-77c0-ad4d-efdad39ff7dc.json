@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-efdad39ff7dc",
+  "content": "     self.d_bounds_a.get_mut()\n        } else {\n            self.d_bounds_b.get_mut()\n        };\n        self.device.htod_sync_copy_into(\n            self.adaptive_lut.inactive_boundaries(), bounds\n        ).map_err(map_cudarc_error)?;\n        Ok(())\n    }\npub fn swap_textures(&mut self) {\n        self.adaptive_lut.swap();\n    }",
+  "source_version": "crates/dorea-gpu/src/cuda/mod.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229807267Z",
+  "valid_from": "2026-04-11T00:04:13.229807267Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cuda/mod.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 651,
+    "end_line": 653,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

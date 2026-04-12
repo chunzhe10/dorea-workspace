@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-2f7fe9a957ea",
+  "content": "## Task 7: CLI Integration — Adaptive Batching and Grader Reuse\n\n    buffer: &mut Vec<BufferedFrame>,\n    depth_before: &Option<Vec<f32>>,\n    depth_after: Option<&Vec<f32>>,\n    calibration: &Calibration,\n    params: &GradeParams,\n    encoder: &mut FrameEncoder,\n    frame_count: &mut u64,\n    info: &ffmpeg::VideoInfo,\n    #[cfg(feature = \"cuda\")] grader: Option<&CudaGrader>,\n) -> Result<()> {\n```\n\nAnd update the `grade_frame` call inside to:\n```rust\n        #[cfg(feature = \"cuda\")]\n        let graded = if let Some(g) = grader {\n            dorea_gpu::grade_frame_with_grader(g, &bf.pixels, &depth, bf.width, bf.height, calibration, params)\n                .map_err(|e| anyhow::anyhow!(\"Grading failed for buffered frame {}: {e}\", bf.index))?\n        } else {\n            grade_frame(&bf.pixels, &depth, bf.width, bf.height, calibration, params)\n                .map_err(|e| anyhow::anyhow!(\"Grading failed for buffered frame {}: {e}\", bf.index))?\n        };\n        #[cfg(not(feature = \"cuda\"))]\n        let graded = grade_frame(&bf.pixels, &depth, bf.width, bf.height, calibration, params)\n            .map_err(|e| anyhow::anyhow!(\"Grading failed for buffered frame {}: {e}\", bf.index))?;\n```\n\nSimilarly update the keyframe grading in `run()`.\n\n- [ ] **Step 4: Build and test**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea && cargo build -p dorea-cli 2>&1\ncargo test -p dorea-cli -- --nocapture\n```\n\nExpected: Compiles. Existing tests pass.\n\n- [ ] **Step 5: Commit**\n\n```bash\ngit add crates/dorea-cli/src/grade.rs\ngit commit -m \"feat(dorea-cli): use pre-initialized CudaGrader for frame-level PTX reuse\"\n```\n\n---\n",
+  "source_version": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836741914Z",
+  "valid_from": "2026-04-11T00:10:08.836741914Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1842,
+    "end_line": 1888,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

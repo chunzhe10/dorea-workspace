@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d71-ffb168ef2372",
+  "content": "### Algorithm\n\n### Batch grading flow\n\n```rust\nwhile let Some(chunk) = frame_iter.take_up_to(batcher.batch_size) {\n    loop {\n        match grade_batch(device, &chunk[..batcher.batch_size.min(chunk.len())], ...) {\n            Ok(results) => {\n                batcher.report_success();\n                encode_results(results);\n                break;\n            }\n            Err(GradeError::Oom) => {\n                let was_minimum = batcher.batch_size <= batcher.min_batch;\n                batcher.report_oom();\n                if was_minimum {\n                    // Already at batch_size=1 and still OOM — cannot fit\n                    return Err(GradeError::Oom);\n                }\n                // retry same chunk with smaller batch\n            }\n            Err(e) => return Err(e),\n        }\n    }\n}\n```\n",
+  "source_version": "decisions/2026-04-03-gpu-space-ipc-adaptive-batching-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836126575Z",
+  "valid_from": "2026-04-11T00:10:08.836126575Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-03-gpu-space-ipc-adaptive-batching-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 387,
+    "end_line": 412,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

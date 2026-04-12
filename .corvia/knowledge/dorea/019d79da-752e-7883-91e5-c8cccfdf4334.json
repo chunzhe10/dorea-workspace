@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c8cccfdf4334",
+  "content": "def _apply_delta(\n    delta_full: torch.Tensor,\n    orig_full: torch.Tensor,\n) -> torch.Tensor:\n    \"\"\"Reconstruct the final RGB image from a full-res OKLab delta + original.\"\"\"\n    lab = rgb_to_oklab(orig_full) + delta_full\n    return oklab_to_rgb(lab)\ndef run(args) -> None:\n    # Set determinism\n    torch.backends.cudnn.benchmark = False\n    torch.backends.cudnn.deterministic = True\n    torch.manual_seed(0)\n\n    clip_path = Path(args.clip)\n    weights_path = Path(args.weights)\n    models_dir = Path(args.models_dir)\n    out_dir = Path(args.out_dir)\n    out_dir.mkdir(parents=True, exist_ok=True)\n    gold_dir = out_dir / \"gold\"\n    heatmap_dir = out_dir / \"heatmaps\"\n    per_frame_dir = out_dir / \"per_frame\"\n\n    if not clip_path.exists():\n        raise FileNotFoundError(f\"clip not found: {clip_path}\")\n    if not weights_path.exists():\n        raise FileNotFoundError(\n            f\"RAUNE weights not found: {weights_path}. \"\n            f\"Run scripts/download_raune_weights.sh\"\n        )\n    if not torch.cuda.is_available():\n        raise RuntimeError(\"CUDA unavailable; this bench requires a GPU\")\n\n    env_info = _log_environment(args, weights_path, clip_path)\n    print(\"=== upscale_bench ===\")\n    for k, v in env_info.items():\n        print(f\" {k}: {v}\")\n\n    # Select methods\n    if args.methods == \"all\":\n        method_names = list(REGISTRY.keys())",
+  "source_version": "benchmarks/upscale_bench/run.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230357997Z",
+  "valid_from": "2026-04-11T00:04:13.230357997Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/run.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 122,
+    "end_line": 154,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

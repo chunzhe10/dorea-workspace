@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d0f571e95dfc",
+  "content": "    let (proxy_w, proxy_h) = dorea_video::resize::proxy_dims(\n            info.width, info.height, raune_proxy_size,\n        );\n\n        let direct_batch_size = args.direct_batch_size\n            .or(cfg.grade.direct_batch_size)\n            .unwrap_or(4);\n\n        // Validate batch size: zero causes silent regression in Python; values\n        // above 8 show diminishing returns and may regress on 6GB VRAM (RTX 3060)\n        if direct_batch_size == 0 {\n            anyhow::bail!(\"--direct-batch-size must be >= 1\");\n        }\n        if direct_batch_size > 32 {\n            anyhow::bail!(\n                \"--direct-batch-size {direct_batch_size} exceeds safe limit of 32 \\\n                 (would risk CUDA OOM on 6GB VRAM). Use a smaller value.\"\n            );\n        }\n        if direct_batch_size > 8 {\n            log::warn!(\n                \"--direct-batch-size={direct_batch_size}: values above 8 may regress \\\n                 throughput on 6GB VRAM (RTX 3060) due to per-frame upload overhead \\\n                 in _process_batch. Measured baseline: batch=8 ~4.36 fps, batch=16 ~3.47 fps.\"\n            );\n        }\n\n        log::info!(\n            \"Direct mode: single-process OKLab transfer, RAUNE proxy {}x{} (max {raune_proxy_size}), batch={direct_batch_size}, output {}x{}\",\n            proxy_w, proxy_h, info.width, info.height,\n        );\n\n        let pipeline_cfg = PipelineConfig {\n            input: args.input.clone(),\n            warmth, strength, contrast, proxy_size,\n            depth_skip_threshold, depth_max_interval, fused_batch_size,\n            depth_zones, base_lut_zones, scene_threshold, min_segment_kfs,\n            zone_smoothing_w, maxine_upscale_factor,\n            interp_enabled: false,\n            maxine_in_fused_batch: false,",
+  "source_version": "crates/dorea-cli/src/grade.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229425859Z",
+  "valid_from": "2026-04-11T00:04:13.229425859Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/grade.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 225,
+    "end_line": 256,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

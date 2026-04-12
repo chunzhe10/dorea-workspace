@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-bc27da0e80c3",
+  "content": "      except BaseException as e:\n            record_error(e)\n        finally:\n            # Sentinel for GPU thread; use put_or_stop so we cannot hang\n            # here if the consumer has already died.\n            put_or_stop(q_decoded, None, stop_event)\n\n    # ─── Thread 2: GPU processing ──────────────────────────────────────────\n    def gpu_thread() -> None:\n        nonlocal gpu_busy\n        try:\n            while True:\n                if stop_event.is_set():\n                    return\n                batch = q_decoded.get()\n                if batch is None:\n                    return\n                t0 = time.perf_counter()\n                results = _process_batch(\n                    batch, model, normalize,\n                    fw, fh, pw, ph, transfer_fn,\n                    model_dtype,\n                )\n                gpu_busy += time.perf_counter() - t0\n                if not put_or_stop(q_processed, results, stop_event):\n                    return\n        except BaseException as e:\n            record_error(e)\n        finally:\n            # Sentinel for encoder thread; use put_or_stop so we cannot hang.\n            put_or_stop(q_processed, None, stop_event)\n\n    # ─── Thread 3: Encoder ─────────────────────────────────────────────────\n    def encoder_thread() -> None:\n        nonlocal encoded_count, encode_busy\n        try:\n            while True:\n                if stop_event.is_set():\n                    return",
+  "source_version": "python/dorea_inference/raune_filter.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230182474Z",
+  "valid_from": "2026-04-11T00:04:13.230182474Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/raune_filter.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 333,
+    "end_line": 365,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

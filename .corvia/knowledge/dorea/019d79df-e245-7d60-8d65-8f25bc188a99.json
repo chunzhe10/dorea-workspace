@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-8f25bc188a99",
+  "content": "-v`\nExpected: FAIL with `ModuleNotFoundError`\n\n**Step 3: Write the implementation**\n\n```python\n\"\"\"Process manager for service supervision.\"\"\"\n\nfrom __future__ import annotations\n\nimport asyncio\nimport json\nimport logging\nimport os\nimport signal\nimport time\nfrom pathlib import Path\n\nfrom corvia_dev.health import check_service\nfrom corvia_dev.models import (\n    ConfigSummary,\n    ManagerStatus,\n    ServiceDefinition,\n    ServiceState,\n    ServiceStatus,\n    StatusResponse,\n)\n\nlogger = logging.getLogger(__name__)\n\nMAX_BACKOFF = 60.0\nBACKOFF_RESET_AFTER = 300.0  # reset after 5 min stable\nHEALTH_CHECK_INTERVAL = 5.0\nDEFAULT_STATE_PATH = Path(\"/tmp/corvia-dev-state.json\")\n\n\nclass ManagedProcess:\n    \"\"\"Tracks a single managed child process.\"\"\"\n\n    def __init__(self, service: ServiceDefinition) -> None:\n        self.service = service\n        self.state = ServiceState.STOPPED\n        self.pid: int | None = None\n        self.process: asyncio.subprocess.Process | None = None\n        self.restart_count: int = 0\n        self.backoff_s: float = 1.0\n        self.started_at: float | None = None\n\n    def escalate_backoff(self) -> None:\n        self.backoff_s = min(self.backoff_s * 2, MAX_BACKOFF)\n\n    def reset_backoff(self) -> None:\n        self.backoff_s = 1.0\n        self.restart_count = 0\n\n    @property\n    def uptime_s(self) -> float | None:\n        if self.started_at is None:\n            return None",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-cli.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837161270Z",
+  "valid_from": "2026-04-11T00:10:08.837161270Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-cli.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1016,
+    "end_line": 1058,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-bd8101e4e85d",
+  "content": "e:\n    \"\"\"Release Maxine model reference and free CUDA cache.\"\"\"\n    global _maxine_model\n    _maxine_model = None\n    try:\n        import torch\n        if torch.cuda.is_available():\n            torch.cuda.empty_cache()\n    except ImportError:\n        pass\ndef run_maxine(frame_rgb: np.ndarray, artifact_reduce: bool = True) -> np.ndarray:\n    \"\"\"Run Maxine enhancement (CUDA-backed), return same-resolution numpy uint8 array.\"\"\"\n    if _maxine_model is None:\n        raise RuntimeError(\"Maxine model not loaded — call load_maxine_model() first\")\n    h, w = frame_rgb.shape[:2]\n    return _maxine_model.enhance(frame_rgb, width=w, height=h, artifact_reduce=artifact_reduce)",
+  "source_version": "python/dorea_inference/bridge.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230204610Z",
+  "valid_from": "2026-04-11T00:04:13.230204610Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/bridge.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 84,
+    "end_line": 89,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-e9c041c18ae8",
+  "content": "fn upscale_depth_identity() {\n        let src = vec![0.1f32, 0.2, 0.3, 0.4];\n        let out = InferenceServer::upscale_depth(&src, 2, 2, 2, 2);\n        assert_eq!(out, src);\n    }\nfn upscale_depth_bilinear() {\n        let src = vec![0.0f32, 1.0, 0.0, 0.0];\n        let out = InferenceServer::upscale_depth(&src, 2, 2, 4, 4);\n        assert_eq!(out.len(), 16);\n        assert!(out[0] >= 0.0 && out[0] <= 1.0,\n                \"output should be in [0,1], got {}\", out[0]);\n        // Top-left of output should be close to top-left of input (0.0)\n        assert!(out[0] < 0.01, \"expected ~0.0, got {}\", out[0]);\n        // Top-right of output should be close to top-right of input (1.0)\n        assert!(out[3] > 0.9, \"expected ~1.0, got {}\", out[3]);\n    }",
+  "source_version": "crates/dorea-video/src/inference/pyo3_backend.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229733099Z",
+  "valid_from": "2026-04-11T00:04:13.229733099Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference/pyo3_backend.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 844,
+    "end_line": 854,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

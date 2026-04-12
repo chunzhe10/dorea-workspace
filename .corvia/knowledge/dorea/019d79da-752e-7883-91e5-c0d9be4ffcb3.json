@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c0d9be4ffcb3",
+  "content": "def test_load_and_run_maxine():\n    from dorea_inference import bridge\n    bridge.load_maxine_model(upscale_factor=2)\n    frame = np.zeros((8, 10, 3), dtype=np.uint8)\n    result = bridge.run_maxine(frame, artifact_reduce=True)\n    assert result.shape == (8, 10, 3)\n    assert result.dtype == np.uint8\n    # cleanup\n    bridge.unload_maxine()",
+  "source_version": "python/tests/test_bridge_maxine.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230252324Z",
+  "valid_from": "2026-04-11T00:04:13.230252324Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/tests/test_bridge_maxine.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 9,
+    "end_line": 17,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

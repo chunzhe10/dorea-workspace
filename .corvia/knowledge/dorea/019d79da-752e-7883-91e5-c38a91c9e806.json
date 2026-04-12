@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c38a91c9e806",
+  "content": "           t = torch.from_numpy(arr).to(\"cuda\", dtype=torch.float32) / 255.0\n            return t.permute(2, 0, 1).unsqueeze(0).contiguous()  # (1, 3, H, W)\n    container.close()\n    raise IndexError(f\"frame index {frame_idx} out of range for {clip_path}\")\ndef _thumbnail(frame: torch.Tensor, target_long_edge: int = 540) -> torch.Tensor:\n    \"\"\"Downscale a (1, 3, H, W) frame to a thumbnail with long edge ``target_long_edge``.\"\"\"\n    _, _, h, w = frame.shape\n    long_edge = max(h, w)\n    if long_edge <= target_long_edge:\n        return frame\n    scale = target_long_edge / long_edge\n    new_h = int(round(h * scale))\n    new_w = int(round(w * scale))\n    return F.interpolate(frame, size=(new_h, new_w), mode=\"bilinear\", align_corners=False)",
+  "source_version": "benchmarks/upscale_bench/frame_select.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230288496Z",
+  "valid_from": "2026-04-11T00:04:13.230288496Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/frame_select.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 36,
+    "end_line": 45,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

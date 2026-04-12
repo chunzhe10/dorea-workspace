@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-0da42e93bcd3",
+  "content": "### Pattern 1: Graph-to-Document Navigation Models\n### Pattern 2: Detail Panel Designs\n\n### Pattern 3: Large Graph Handling Strategies\n\n| Strategy | Tools | Description |\n|----------|-------|-------------|\n| **Local/ego graph** | Obsidian, Logseq, Roam | Show only N hops from current node |\n| **Filtering** | Obsidian, Neo4j Bloom, Graphistry | Filter by type, relationship, property value |\n| **Grouping/folding** | Neo4j Bloom, TheBrain | Collapse multiple nodes into one visual group |\n| **Separate boards** | Heptabase, Scrintal | Multiple canvases for different topics |\n| **GPU rendering** | Graphistry | Server-side GPU layout, client WebGL rendering |\n| **Progressive expansion** | Neo4j Bloom | Choose relationship types before expanding |\n| **Smart sorting** | GitHub | Tabular view with priority sorting (vulnerabilities first) |\n\n\n### Pattern 4: Filtering Mechanisms\n\n| Mechanism | Tools | Description |\n|-----------|-------|-------------|\n| **Depth slider** | Obsidian | Control number of hops shown |\n| **Relationship type filter** | Neo4j Bloom | Expand only specific edge types |\n| **Histogram range filter** | Graphistry | Click-drag on histogram to filter by value range |\n| **Text search** | All | Filter nodes by name/content |\n| **Tag/type filter** | Obsidian, Kumu, Heptabase | Show only nodes of specific types |\n| **Data-driven decorations** | Kumu, Graphistry | Size/color/shape from property values |\n\n---\n",
+  "source_version": "decisions/graph-document-ux-research.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836293269Z",
+  "valid_from": "2026-04-11T00:10:08.836293269Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/graph-document-ux-research.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 656,
+    "end_line": 680,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

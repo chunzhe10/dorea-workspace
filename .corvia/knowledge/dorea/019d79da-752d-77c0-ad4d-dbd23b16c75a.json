@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-dbd23b16c75a",
+  "content": "probe failed: {0}\")]\n    ProbeFailed(String),\n    #[error(\"ffmpeg decode failed: {0}\")]\n    DecodeFailed(String),\n    #[error(\"ffmpeg encode failed: {0}\")]\n    EncodeFailed(String),\n    #[error(\"invalid video metadata: {0}\")]\n    InvalidMetadata(String),\n}\npub enum InputEncoding {\n    /// DJI D-Log M (DJI Mini 4 Pro, Osmo Action 4/5, …).\n    DLogM,\n    /// Insta360 Log (X5, X4, …).\n    ILog,\n    /// Standard sRGB / Rec.709 gamma.\n    Srgb,\n}",
+  "source_version": "crates/dorea-video/src/ffmpeg.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229557598Z",
+  "valid_from": "2026-04-11T00:04:13.229557598Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/ffmpeg.rs",
+    "language": "rs",
+    "chunk_type": "enum_item",
+    "start_line": 29,
+    "end_line": 36,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

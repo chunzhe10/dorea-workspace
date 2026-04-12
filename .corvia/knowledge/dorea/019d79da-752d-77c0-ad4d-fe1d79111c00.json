@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-fe1d79111c00",
+  "content": "     )\n\n        self.model = RauneNet(input_nc=3, output_nc=3, n_blocks=30, n_down=2).to(self.device)\n        state = torch.load(str(weights), map_location=self.device, weights_only=False)\n        self.model.load_state_dict(state)\n        self.model.eval()\ndef infer(self, img_rgb: np.ndarray, max_size: int = 1080) -> np.ndarray:\n        \"\"\"Run RAUNE-Net on an uint8 HxWx3 RGB image.\n\n        Returns uint8 HxWx3 RGB array at inference resolution (≤ max_size).\n        \"\"\"\n        import torch\n        import torchvision.transforms as transforms\n        from PIL import Image as _Image\n\n        pil = _Image.fromarray(img_rgb)\n        resized, tw, th = _resize_maintain_aspect(pil, max_size)\n\n        normalize = transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))\n        tensor = normalize(transforms.ToTensor()(resized)).unsqueeze(0).to(self.device)\n\n        with torch.no_grad():\n            out = self.model(tensor)\n\n        # De-normalize: model output in [-1, 1], convert to [0, 1]\n        out = ((out.squeeze(0) + 1.0) / 2.0).clamp(0.0, 1.0)\n        result = (out.permute(1, 2, 0).cpu().numpy() * 255).astype(np.uint8)\n        return result",
+  "source_version": "python/dorea_inference/raune_net.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229998595Z",
+  "valid_from": "2026-04-11T00:04:13.229998595Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/raune_net.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 89,
+    "end_line": 110,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d71-ff133d345369",
+  "content": "## Crate Architecture\n\n### dorea-gpu changes\n\n```\ncrates/dorea-gpu/\n  Cargo.toml          # + cudarc dependency (behind \"cuda\" feature)\n  build.rs            # .cu -> .ptx (was .cu -> .o -> .a), embed via include_bytes!\n  src/\n    lib.rs            # grade_frame() public API unchanged\n    cpu.rs            # unchanged\n    device.rs         # NEW: DeviceFrameBuffer, BorrowedDeviceSlice, helpers\n    cuda/\n      mod.rs          # REWRITTEN: cudarc module loading + kernel launch\n      kernels/\n        lut_apply.cu    # delete host launcher, keep __global__ kernel only\n        hsl_correct.cu  # same\n        clarity.cu      # same\n```\n\n**build.rs change**: nvcc flag changes from `-c` (compile to .o) to `--ptx`\n(compile to .ptx). The `.ptx` files are placed in `OUT_DIR` and **embedded into\nthe binary** via `include_str!(concat!(env!(\"OUT_DIR\"), \"/lut_apply.ptx\"))` in\n`cuda/mod.rs`. This eliminates loose-file deployment issues — no runtime path\nresolution needed. The static archive (`libdorea_cuda_kernels.a`) and `extern \"C\"`\ndeclarations are removed.\n\n**PTX cold-start**: cudarc JIT-compiles embedded PTX on first use (~50-200ms per\nmodule). This is a one-time cost per `dorea grade` invocation, acceptable for a\nbatch pipeline. If profiling shows this matters, switch to fatbin embedding\n(`--fatbin` flag) which includes pre-compiled SASS and skips JIT.\n\n**Cargo.toml additions**:\n```toml\n[dependencies]\ncudarc = { version = \"0.12\", features = [\"driver\"], optional = true }\n\n[features]\ncuda = [\"dep:cudarc\"]\n```\n\nThe `cuda` feature is retained for conditional compilation. `build.rs` still\nauto-detects nvcc and sets `rustc-cfg=feature=\"cuda\"`.\n",
+  "source_version": "decisions/2026-04-03-gpu-space-ipc-adaptive-batching-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836118586Z",
+  "valid_from": "2026-04-11T00:10:08.836118586Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-03-gpu-space-ipc-adaptive-batching-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 48,
+    "end_line": 89,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

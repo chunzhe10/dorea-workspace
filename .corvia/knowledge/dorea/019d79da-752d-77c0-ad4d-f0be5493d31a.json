@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-f0be5493d31a",
+  "content": "_error)?,\n            warmth: params.warmth,\n            contrast: params.contrast,\n            stage_mask: params.stage_mask,\n            frame_bufs: RefCell::new(None),\n            _not_send: std::marker::PhantomData,\n            device,\n        })\n    }\npub fn postprocess_frame(\n        &self,\n        pixels: &[u16],\n        depth: &[f32],\n        width: usize,\n        height: usize,\n        depth_w: usize,\n        depth_h: usize,\n    ) -> Result<Vec<u16>, GpuError> {\n        let n = width * height;\n        let dev = &self.device;\n\n        {\n            let mut slot = self.frame_bufs.borrow_mut();\n            let needs = slot.as_ref().map_or(true, |b| b.width != width || b.height != height);\n            if needs {\n                *slot = Some(alloc_frame_buffers_16(dev, width, height)?);\n            }\n            let bufs = slot.as_mut().expect(\"allocated\");\n            dev.htod_sync_copy_into(pixels, &mut bufs.d_pixels_in).map_err(map_cudarc_error)?;\n        }\n\n        let d_depth = dev.htod_sync_copy(depth).map_err(map_cudarc_error)?;\n\n        {\n            let slot = self.frame_bufs.borrow();\n            let bufs = slot.as_ref().expect(\"allocated\");\n\n            let func = dev.get_func(\"postprocess\", \"postprocess_kernel_16\")\n                .ok_or_else(|| GpuError::ModuleLoad(\"postprocess_kernel_16 not found\".into()))?;\n            let cfg = LaunchConfig {\n                grid_dim: (div_ceil(n as u32, 256), 1, 1),\n                block_dim: (256, 1, 1),\n                shared_mem_bytes: 0,",
+  "source_version": "crates/dorea-gpu/src/cuda/mod.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229818764Z",
+  "valid_from": "2026-04-11T00:04:13.229818764Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cuda/mod.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 989,
+    "end_line": 1022,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

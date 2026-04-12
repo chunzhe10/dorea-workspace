@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-cdd3c227ad94",
+  "content": "           v001*(1-fr)*(1-fg)*fb     + v101*fr*(1-fg)*fb     +\n            v011*(1-fr)*fg*fb         + v111*fr*fg*fb;\n#undef IDX\n        if (c == 0) result.x = v;\n        else if (c == 1) result.y = v;\n        else result.z = v;\n    }\n    return result;\n}\n\n// -------------------------------------------------------------------------\n// HSV helpers (matches hsl_correct.cu)\n// -------------------------------------------------------------------------\n\n__device__ void rgb_to_hsv_gp(float r, float g, float b,\n                                float* h, float* s, float* v) {\n    float cmax = fmaxf(fmaxf(r,g),b);\n    float cmin = fminf(fminf(r,g),b);\n    float delta = cmax - cmin;\n    *v = cmax;\n    *s = (cmax > 1e-6f) ? (delta / cmax) : 0.0f;\n    if (delta < 1e-6f) { *h = 0.0f; return; }\n    float hh;\n    if      (cmax == r) hh = 60.0f * fmodf((g-b)/delta, 6.0f);\n    else if (cmax == g) hh = 60.0f * ((b-r)/delta + 2.0f);\n    else                hh = 60.0f * ((r-g)/delta + 4.0f);\n    if (hh < 0.0f) hh += 360.0f;\n    *h = hh;\n}\n\n__device__ void hsv_to_rgb_gp(float h, float s, float v,\n                                float* r, float* g, float* b) {\n    if (s < 1e-6f) { *r = *g = *b = v; return; }\n    float hh = fmodf(h, 360.0f); if (hh < 0.0f) hh += 360.0f; hh /= 60.0f;\n    int i = (int)hh; float f = hh - (float)i;\n    float p = v*(1.0f-s), q = v*(1.0f-s*f), t = v*(1.0f-s*(1.0f-f));\n    switch (i%6) {\n        case 0: *r=v;*g=t;*b=p; break; case 1: *r=q;*g=v;*b=p; break;\n        case 2: *r=p;*g=v;*b=t; break; case 3: *r=p;*g=q;*b=v; break;\n        case 4: *r=t;*g=p;*b=v; break; default:*r=v;*g=p;*b=q; break;\n    }\n}\n\n// HSL qualifier constants (matches hsl_correct.cu)\n__constant__ float GP_H_CENTERS[6] = {0.f, 40.f, 100.f, 170.f, 210.f, 290.f};\n__constant__ float GP_H_WIDTHS[6]  = {40.f, 40.f, 50.f, 40.f, 40.f, 50.f};\n\n// -------------------------------------------------------------------------\n// Full single-pixel grading pipeline\n// -------------------------------------------------------------------------\n\n/**\n * Grade one pixel through the complete pipeline:\n *   LUT apply (soft zone blend + trilinear) →\n *   HSL correct (6 qualifiers) →\n *   Fused ambiance + warmth (LAB) →",
+  "source_version": "docs/plans/2026-04-03-combined-lut-cuda-texture-plan.md",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230450696Z",
+  "valid_from": "2026-04-11T00:04:13.230450696Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "docs/plans/2026-04-03-combined-lut-cuda-texture-plan.md",
+    "language": "markdown",
+    "chunk_type": "heading_section",
+    "start_line": 691,
+    "end_line": 736,
+    "content_role": "plan",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

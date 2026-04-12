@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c4a1faf99e59",
+  "content": "d00_b + wC01 * d01_b + wC10 * d10_b + wC11 * d11_b) / (wC_sum + 1e-8)\n\n    tl.store(out_ptr + 0 * n_pixels + offs, out_L, mask=mask)\n    tl.store(out_ptr + 1 * n_pixels + offs, out_a, mask=mask)\n    tl.store(out_ptr + 2 * n_pixels + offs, out_b, mask=mask)\ndef _run_joint_bilateral_kernel(\n    delta_proxy: torch.Tensor,\n    orig_full: torch.Tensor,\n    full_size: Tuple[int, int],\n    sigma_spatial_L: float,\n    sigma_spatial_ab: float,\n    sigma_luma: float,\n) -> torch.Tensor:\n    \"\"\"Shared driver for joint_bilateral and asymmetric_bilateral.\"\"\"\n    fh, fw = full_size\n    assert delta_proxy.shape[0] == 1 and delta_proxy.shape[1] == 3\n    _, _, ph, pw = delta_proxy.shape\n\n    # Precompute both guide tensors on the host (spec line 154).\n    # guide_out: full-res OKLab-L, used to look up g_out at each output pixel.\n    # guide_proxy: area-downsampled OKLab-L at proxy dimensions, used for the\n    #   4 bilateral neighbor lookups — this is the area-average the spec requires.\n    guide_full_1chw = _rgb_to_oklab(orig_full)[:, 0:1]                          # (1, 1, fh, fw)\n    guide_proxy_1chw = F.interpolate(guide_full_1chw, size=(ph, pw), mode=\"area\")  # (1, 1, ph, pw)\n    guide_out = guide_full_1chw[0, 0].contiguous()    # (fh, fw)\n    guide_proxy = guide_proxy_1chw[0, 0].contiguous()  # (ph, pw)\n\n    # Delta proxy: channel-first flat\n    dp = delta_proxy[0].contiguous()  # (3, ph, pw)\n\n    # Output: channel-first flat — use same device as input (I4)\n    out = torch.empty(3, fh, fw, device=delta_proxy.device, dtype=torch.float32)\n\n    n_pixels = fh * fw\n    BLOCK = 1024\n    grid = ((n_pixels + BLOCK - 1) // BLOCK,)\n    sigma_luma_sq_inv = 1.0 / (sigma_luma * sigma_luma)\n    _joint_bilateral_kernel[grid](\n        dp, ph, pw,\n        guide_out,\n        guide_proxy,\n        out,\n        fh, fw,\n        sigma_spatial_L,\n        sigma_spatial_ab,\n        sigma_luma_sq_inv,\n        BLOCK=BLOCK,\n    )\n\n    return out.unsqueeze(0)  # (1, 3, fh, fw)",
+  "source_version": "benchmarks/upscale_bench/methods.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230306199Z",
+  "valid_from": "2026-04-11T00:04:13.230306199Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/methods.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 334,
+    "end_line": 378,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

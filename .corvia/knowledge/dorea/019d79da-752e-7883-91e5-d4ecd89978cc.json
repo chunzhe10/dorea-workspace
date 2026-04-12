@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-d4ecd89978cc",
+  "content": "def Weights_Normal(m):\n    # initialize weights as Normal(mean, std)\n    classname = m.__class__.__name__\n    if classname.find(\"Conv\") != -1:\n        nn.init.normal_(m.weight.data, 0.0, 0.02)\n    elif classname.find(\"BatchNorm2d\") != -1:\n        nn.init.normal_(m.weight.data, 1.0, 0.02)\n        nn.init.constant_(m.bias.data, 0.0)",
+  "source_version": "models/raune_net/models/RAUNE-Net/models/utils.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230559194Z",
+  "valid_from": "2026-04-11T00:04:13.230559194Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "models/raune_net/models/RAUNE-Net/models/utils.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 4,
+    "end_line": 11,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

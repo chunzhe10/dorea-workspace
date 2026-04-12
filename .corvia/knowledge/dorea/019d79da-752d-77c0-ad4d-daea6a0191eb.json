@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-daea6a0191eb",
+  "content": "pub struct Calibration {\n    /// Format version; current = 2\n    pub version: u8,\n    pub depth_luts: DepthLuts,\n    pub hsl_corrections: HslCorrections,\n    /// Unix timestamp (seconds since epoch) of calibration creation.\n    pub created_at_unix_secs: u64,\n    pub keyframe_count: usize,\n    /// Human-readable description, e.g. \"3 keyframes from 2026-04-01 dive\"\n    pub source_description: String,\n}",
+  "source_version": "crates/dorea-cal/src/format.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229546183Z",
+  "valid_from": "2026-04-11T00:04:13.229546183Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cal/src/format.rs",
+    "language": "rs",
+    "chunk_type": "struct_item",
+    "start_line": 16,
+    "end_line": 26,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

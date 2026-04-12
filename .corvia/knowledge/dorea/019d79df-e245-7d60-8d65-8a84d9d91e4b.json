@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-8a84d9d91e4b",
+  "content": "        # Original proxy (un-normalized)\n        # Original proxy (un-normalized) — cast back to fp32 for OKLab math\n\n            # Match input dtype to model dtype (fp16 if model.half() was called)\n            model_dtype = next(model.parameters()).dtype\n            if proxy_batch.dtype != model_dtype:\n                proxy_batch = proxy_batch.to(model_dtype)\n\n            raune_out = model(proxy_batch).float()\n            raune_out = ((raune_out + 1.0) / 2.0).clamp(0.0, 1.0)\n```\n\nAnd a few lines down, find:\n\n```python\n            orig_proxy = (proxy_batch * 0.5 + 0.5).clamp(0.0, 1.0)\n            del proxy_batch\n```\n\nReplace with:\n\n```python\n            orig_proxy = (proxy_batch.float() * 0.5 + 0.5).clamp(0.0, 1.0)\n            del proxy_batch\n```\n\n- [ ] **Step 5: Verify syntax**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\npython3 -c \"import ast; ast.parse(open('python/dorea_inference/raune_filter.py').read()); print('OK')\"\n```\n\nExpected: `OK`\n\n- [ ] **Step 6: Smoke test fp16 path with current default batch=4**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\n./target/release/dorea grade \\\n  --input \"/workspaces/dorea-workspace/footage/raw/2025-11-01/DJI_20251101111428_0055_D_3s.MP4\" \\\n  --output \"/workspaces/dorea-workspace/working/oklab_fp16.mov\" \\\n  --output-codec prores \\\n  --direct \\\n  --verbose \\\n  2>&1 | tail -10\n```\n\nExpected:\n- `[raune-filter] RAUNE model converted to fp16` in stderr\n- 360 frames complete\n- gpu busy time significantly lower than baseline ~398ms (target: ~200ms)\n- wall fps ~4-5 (up from 2.47)",
+  "source_version": "plans/2026-04-10-direct-mode-fp16-batch.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837102161Z",
+  "valid_from": "2026-04-11T00:10:08.837102161Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-10-direct-mode-fp16-batch.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 139,
+    "end_line": 188,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-381c1ea9b830",
+  "content": "h((\n                    item.id.clone(), item.pixels.clone(),\n                    item.width, item.height,\n                    vec![0.5f32; item.width * item.height],\n                    item.width, item.height,\n                ));\n            }\n        }\n\n        for (kf, (_, enhanced, enh_w, enh_h, depth, dw, dh)) in\n            chunk_kfs.iter().zip(results.into_iter())\n        {\n            debug_assert_eq!(enh_w, proxy_w, \"RAUNE enh_w {enh_w} != proxy_w {proxy_w}\");\n            debug_assert_eq!(enh_h, proxy_h, \"RAUNE enh_h {enh_h} != proxy_h {proxy_h}\");\n            let depth_for_store = if dw == proxy_w && dh == proxy_h {\n                depth.clone()\n            } else {\n                InferenceServer::upscale_depth(&depth, dw, dh, proxy_w, proxy_h)\n            };\n            store.push(&kf.proxy_pixels, &enhanced, &depth_for_store, proxy_w, proxy_h)\n                .context(\"failed to page fused result to store\")?;\n            kf_depths.insert(kf.frame_index, (depth, dw, dh));\n        }\n    }\n    log::info!(\"Fused inference complete ({} keyframes)\", keyframes.len());\n    let _ = inf_server.shutdown();\n\n    store.seal().context(\"failed to seal calibration store\")?;\n```\n\nThe rest of the calibration (3-pass LUT/HSL computation) stays exactly as-is after this block.\n\nAlso remove the `DepthBatchItem` import from the use statement at the top since Path B no longer uses it directly (it was only used in Path B's depth-only server). Check if `DepthBatchItem` is still used elsewhere; if not, remove from the import.\n\n- [ ] **Step 7: Run the full dorea-cli tests**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ncargo test -p dorea-cli 2>&1 | tail -20",
+  "source_version": "plans/2026-04-04-maxine-pipeline-architecture.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836870925Z",
+  "valid_from": "2026-04-11T00:10:08.836870925Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-maxine-pipeline-architecture.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1187,
+    "end_line": 1216,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-06c03a537b50",
+  "content": "### What's deliberately not tested\n\n## Follow-ups (out of scope for this spec)\n\nFiled as separate issues once the first bench run completes:\n\n1. **Integrate the winning method into `raune_filter.py`** — replace the `F.interpolate(mode=\"bilinear\")` call with the winner. Separate PR so the integration can be reviewed independently of the benchmark.\n2. **Wire Maxine into the devcontainer Dockerfile** — add `pip install nvidia-vfx` to the Dockerfile so `/opt/dorea-venv` survives rebuilds without manual reinstall.\n3. **Fix the outdated `docs/guides/maxine-setup.md`** — the guide references an NGC download step that's no longer needed with the `nvidia-vfx` wheel-stub package.\n4. **Pin `EXPECTED_SHA256` in `download_raune_weights.sh`** after the first download records it.\n\nThese are noted in the run_report.md footer the first time the bench runs end-to-end.",
+  "source_version": "decisions/2026-04-10-delta-upscale-bench-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836211189Z",
+  "valid_from": "2026-04-11T00:10:08.836211189Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-10-delta-upscale-bench-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 614,
+    "end_line": 623,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

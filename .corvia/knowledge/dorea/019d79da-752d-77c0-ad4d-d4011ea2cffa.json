@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d4011ea2cffa",
+  "content": "nterval\n            || (change < f32::MAX && change > cfg.depth_skip_threshold);\n\n        if is_keyframe {\n            if scene_cut {\n                log::info!(\"Scene cut at frame {} (change={:.6})\", frame.index, change);\n                detector.reset();\n            }\n            keyframes.push(KeyframeEntry {\n                frame_index: frame.index,\n                proxy_pixels: frame.pixels.clone(),\n                scene_cut_before: scene_cut,\n            });\n            detector.set_reference(&frame.pixels);\n            frames_since_kf = 0;\n        } else {\n            frames_since_kf += 1;\n        }\n    }\n    log::info!(\"Pass 1 complete: {} keyframes detected\", keyframes.len());\n\n    anyhow::ensure!(\n        !keyframes.is_empty(),\n        \"pass 1 detected no keyframes — video may be empty or undecodable\"\n    );\n\n    // Motion fields are populated when optical flow is enabled (future: OpticalFlowDetector).\n    // For now, no motion vectors are computed during keyframe detection.\n    let motion_fields = vec![None; keyframes.len()];\n\n    Ok(KeyframeStageOutput { keyframes, proxy_w, proxy_h, motion_fields })\n}",
+  "source_version": "crates/dorea-cli/src/pipeline/keyframe.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229466428Z",
+  "valid_from": "2026-04-11T00:04:13.229466428Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/pipeline/keyframe.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 46,
+    "end_line": 70,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

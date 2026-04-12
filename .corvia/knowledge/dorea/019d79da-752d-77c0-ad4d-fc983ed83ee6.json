@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-fc983ed83ee6",
+  "content": "t StreamingLutBuilder {\n    zone_boundaries: Vec<f32>,\n    n_zones: usize,\n    /// Per-zone weighted RGB sums: lut_wsums[z][cell * 3 + c]\n    lut_wsums: Vec<Vec<f64>>,\n    /// Per-zone weighted counts: lut_wcounts[z][cell]\n    lut_wcounts: Vec<Vec<f64>>,\n}\nimpl StreamingLutBuilder {\n    pub fn new(zone_boundaries: Vec<f32>) -> Self {\n        let n_zones = zone_boundaries.len().saturating_sub(1);\n        let n_cells = LUT_SIZE * LUT_SIZE * LUT_SIZE;\n        Self {\n            zone_boundaries,\n            n_zones,\n            lut_wsums: vec![vec![0.0_f64; n_cells * 3]; n_zones],\n            lut_wcounts: vec![vec![0.0_f64; n_cells]; n_zones],\n        }\n    }\n\n    /// Accumulate one keyframe's pixels into the LUT accumulators.\n    pub fn add_frame(\n        &mut self,\n        original: &[[f32; 3]],\n        target: &[[f32; 3]],\n        depth: &[f32],\n        importance: &[f32],\n    ) {\n        let n_px = original.len();\n        for z in 0..self.n_zones {\n            let d_lo = self.zone_boundaries[z];\n            let d_hi = self.zone_boundaries[z + 1];\n            let is_last = z == self.n_zones - 1;\n            let wsum = &mut self.lut_wsums[z];\n            let wcount = &mut self.lut_wcounts[z];",
+  "source_version": "crates/dorea-lut/src/build.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229978779Z",
+  "valid_from": "2026-04-11T00:04:13.229978779Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-lut/src/build.rs",
+    "language": "rs",
+    "chunk_type": "impl_item",
+    "start_line": 244,
+    "end_line": 270,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

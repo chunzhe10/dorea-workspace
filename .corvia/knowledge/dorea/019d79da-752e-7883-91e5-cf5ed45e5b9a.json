@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-cf5ed45e5b9a",
+  "content": "\", \"build_combined_lut\", \"combined_lut\"];\n```\nto:\n```rust\n    let kernel_names = [\"build_combined_lut\", \"combined_lut\"];\n```\n\n- [ ] **Step 6: Update existing CUDA tests to use the new API**\n\nIn `cuda/mod.rs` tests, change all `CudaGrader::new()` calls to:\n\n```rust\nlet cal = make_calibration(5);\nlet params = crate::GradeParams::default();\nlet grader = CudaGrader::new(&cal, &params).expect(\"CudaGrader::new() failed\");\n```\n\nUpdate `grade_frame_cuda` call sites to remove `calibration` and `params` arguments:\n\n```rust\ngrader.grade_frame_cuda(&pixels, &depth, 320, 240)\n```\n\nUpdate the `determinism` test — `grade_frame_cuda` now returns `Vec<u8>`, so remove the `.to_bits()` / `.is_finite()` check and use a direct equality assertion:\n\n```rust\n    #[test]\n    fn determinism() {\n        let cal = make_calibration(5);\n        let params = crate::GradeParams::default();\n        let (w, h) = (4, 4);\n        let (pixels, depth) = make_frame(w, h);\n        let grader = match CudaGrader::new(&cal, &params) {\n            Ok(g) => g,\n            Err(e) => { eprintln!(\"SKIP: {e}\"); return; }\n        };\n        let out1 = grader.grade_frame_cuda(&pixels, &depth, w, h).expect(\"first call failed\");\n        let out2 = grader.grade_frame_cuda(&pixels, &depth, w, h).expect(\"second call failed\");\n        assert_eq!(out1, out2, \"grade_frame_cuda must be deterministic (same grader, same inputs)\");\n    }\n```\n\nRemove `calibration_shape_switch` test (calibration is now baked at construction; switching calibration requires a new `CudaGrader`).\n\n- [ ] **Step 7: Verify it builds**\n\n```bash\ncd repos/dorea && cargo build -p dorea-gpu 2>&1 | grep \"^error\" | head -20\n```\n\n- [ ] **Step 8: Run tests**\n\n```bash\ncd repos/dorea && cargo test -p dorea-gpu 2>&1 | tail -20\n```\n\nExpected: CUDA tests pass if GPU available, CPU tests always pass.\n\n- [ ] **Step 9: Commit**\n\n```bash\ncd repos/dorea && git add -u crates/dorea-gpu/ && \\\n    git rm crates/dorea-gpu/src/cuda/kernels/lut_apply.cu \\\n           crates/dorea-gpu/src/cuda/kernels/hsl_correct.cu\ngit commit -m \"feat: wire CombinedLut into CudaGrader; simplify grade_frame_cuda to 1-kernel pipeline (Task 8)\"\n```\n\n---\n",
+  "source_version": "docs/plans/2026-04-03-combined-lut-cuda-texture-plan.md",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230475006Z",
+  "valid_from": "2026-04-11T00:04:13.230475006Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "docs/plans/2026-04-03-combined-lut-cuda-texture-plan.md",
+    "language": "markdown",
+    "chunk_type": "heading_section",
+    "start_line": 1654,
+    "end_line": 1711,
+    "content_role": "plan",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

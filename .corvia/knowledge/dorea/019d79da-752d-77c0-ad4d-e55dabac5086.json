@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-e55dabac5086",
+  "content": "   assert_eq!(&png[..8], b\"\\x89PNG\\r\\n\\x1a\\n\", \"PNG signature mismatch\");\n        // Decode should work (store-mode deflate)\n        let decoded = decode_png_bytes(&png).expect(\"decode failed\");\n        assert_eq!(decoded, rgb, \"roundtrip mismatch\");\n    }\nfn spawn_command_includes_maxine_flags() {\n        let config = InferenceConfig {\n            maxine: true,\n            maxine_upscale_factor: 2,\n            ..InferenceConfig::default()\n        };\n        let args = config.build_args();\n        assert!(args.contains(&\"--maxine\".to_string()), \"missing --maxine\");\n        assert!(args.contains(&\"--maxine-upscale-factor\".to_string()), \"missing --maxine-upscale-factor\");\n        assert!(args.contains(&\"2\".to_string()), \"missing upscale factor value\");\n    }",
+  "source_version": "crates/dorea-video/src/inference_subprocess.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229675152Z",
+  "valid_from": "2026-04-11T00:04:13.229675152Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference_subprocess.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 1151,
+    "end_line": 1161,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

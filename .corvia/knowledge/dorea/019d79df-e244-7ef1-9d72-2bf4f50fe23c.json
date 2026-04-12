@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-2bf4f50fe23c",
+  "content": "e_depths.get(&prev_kf_idx)\n        .expect(\"prev keyframe depth missing — logic error\");\n\n    let depth = if fi == prev_kf_idx {\n        prev_depth.clone()\n    } else if let Some(&(next_kf_idx, scene_cut_before_next)) = kf_index_list.get(kf_cursor + 1) {\n        if scene_cut_before_next {\n            prev_depth.clone()  // Don't lerp across scene cut\n        } else {\n            let next_depth = keyframe_depths.get(&next_kf_idx)\n                .expect(\"next keyframe depth missing — logic error\");\n            let t = (fi - prev_kf_idx) as f32 / (next_kf_idx - prev_kf_idx) as f32;\n            lerp_depth(prev_depth, next_depth, t)\n        }\n    } else {\n        prev_depth.clone()  // Past last keyframe\n    };\n\n    // Grade\n    #[cfg(feature = \"cuda\")]\n    let graded = grade_with_grader(\n        cuda_grader.as_ref(), &frame.pixels, &depth, frame.width, frame.height, &calibration, &params,\n    ).map_err(|e| anyhow::anyhow!(\"Grading failed for frame {}: {e}\", fi))?;\n    #[cfg(not(feature = \"cuda\"))]\n    let graded = grade_frame(\n        &frame.pixels, &depth, frame.width, frame.height, &calibration, &params,\n    ).map_err(|e| anyhow::anyhow!(\"Grading failed for frame {}: {e}\", fi))?;\n\n    encoder.write_frame(&graded)?;\n    frame_count += 1;\n\n    if frame_count % 100 == 0 {\n        let pct = frame_count as f64 / info.frame_count.max(1) as f64 * 100.0;\n        log::info!(\"Progress: {frame_count}/{} frames ({:.1}%)\", info.frame_count, pct);\n    }\n}\n\ninf_server.shutdown();\nencoder.finish()?;\nlog::info!(\"Done. Graded {frame_count} frames → {}\", output.display());\nOk(())\n```\n\n---\n",
+  "source_version": "plans/2026-04-03-batch-depth-inference-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836691006Z",
+  "valid_from": "2026-04-11T00:10:08.836691006Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-batch-depth-inference-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 304,
+    "end_line": 342,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

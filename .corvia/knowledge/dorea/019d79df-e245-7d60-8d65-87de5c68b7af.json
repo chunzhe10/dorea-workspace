@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-87de5c68b7af",
+  "content": "# Batched _process_batch — Implementation Plan\n\n> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task.\n\n**Goal:** Refactor `_process_batch()` to do single batched H2D upload, batched downscale, batched RAUNE+OKLab, single batched D2H. Update Triton wrapper to accept batched input.\n\n**Architecture:** Two changes in `raune_filter.py`. (1) `_process_batch()` rewritten to use np.stack + single .cuda() + batched ops throughout. (2) `triton_oklab_transfer()` wrapper accepts (N, 3, H, W) by permuting to channel-first and flattening N into the pixel dimension. The Triton kernel itself is unchanged.\n\n**Tech Stack:** Python (PyTorch, numpy, Triton).\n\n**Spec:** `docs/decisions/2026-04-10-batched-process-batch.md`\n\n**Issue:** chunzhe10/dorea#68\n\n---\n",
+  "source_version": "plans/2026-04-10-batched-process-batch.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837067194Z",
+  "valid_from": "2026-04-11T00:10:08.837067194Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-10-batched-process-batch.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1,
+    "end_line": 16,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

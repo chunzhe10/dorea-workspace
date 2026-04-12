@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-e4503996da86",
+  "content": "m_slice(chunk);\n    }\n\n    // Adler-32 checksum\n    let (mut s1, mut s2) = (1u32, 0u32);\n    for &b in data {\n        s1 = (s1 + b as u32) % 65521;\n        s2 = (s2 + s1) % 65521;\n    }\n    out.extend_from_slice(&((s2 << 16) | s1).to_be_bytes());\n    out\n}\nfn write_png_chunk(out: &mut Vec<u8>, chunk_type: &[u8; 4], data: &[u8]) {\n    out.extend_from_slice(&(data.len() as u32).to_be_bytes());\n    out.extend_from_slice(chunk_type);\n    out.extend_from_slice(data);\n    let crc = crc32(chunk_type, data);\n    out.extend_from_slice(&crc.to_be_bytes());\n}",
+  "source_version": "crates/dorea-video/src/inference_subprocess.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229662263Z",
+  "valid_from": "2026-04-11T00:04:13.229662263Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference_subprocess.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 930,
+    "end_line": 936,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

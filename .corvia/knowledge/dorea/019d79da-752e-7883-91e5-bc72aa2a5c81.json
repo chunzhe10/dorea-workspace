@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-bc72aa2a5c81",
+  "content": "def record_error(exc: BaseException) -> None:\n        with errors_lock:\n            errors.append(exc)\n        stop_event.set()\ndef put_or_stop(q: \"queue.Queue\", item, stop_event: threading.Event,\n                    poll_interval: float = 0.1) -> bool:\n        \"\"\"Put item on queue, periodically checking stop_event.\n\n        Returns True if put succeeded, False if stop_event was set first.\n        Ensures worker threads cannot get stuck forever in a blocking put()\n        when the downstream consumer has died.\n        \"\"\"\n        while not stop_event.is_set():\n            try:\n                q.put(item, timeout=poll_interval)\n                return True\n            except queue.Full:\n                continue\n        return False",
+  "source_version": "python/dorea_inference/raune_filter.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230188067Z",
+  "valid_from": "2026-04-11T00:04:13.230188067Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/raune_filter.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 269,
+    "end_line": 283,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

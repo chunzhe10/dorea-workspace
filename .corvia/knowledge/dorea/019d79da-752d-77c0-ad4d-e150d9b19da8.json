@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-e150d9b19da8",
+  "content": "push(d.clone());\n        }\n\n        if self.maxine {\n            args.push(\"--maxine\".to_string());\n            args.push(\"--maxine-upscale-factor\".to_string());\n            args.push(self.maxine_upscale_factor.to_string());\n        }\n\n        args\n    }\n}\npub fn build_args(&self) -> Vec<String> {\n        let mut args = vec![\"-m\".to_string(), \"dorea_inference.server\".to_string()];\n\n        if self.skip_raune {\n            args.push(\"--no-raune\".to_string());\n        } else {\n            if let Some(p) = &self.raune_weights {\n                args.push(\"--raune-weights\".to_string());\n                args.push(p.to_str().unwrap_or(\"\").to_string());\n            }\n        }\n\n        if let Some(p) = &self.raune_models_dir {\n            args.push(\"--raune-models-dir\".to_string());\n            args.push(p.to_str().unwrap_or(\"\").to_string());\n        }\n\n        if self.skip_depth {\n            args.push(\"--no-depth\".to_string());\n        } else if let Some(p) = &self.depth_model {\n            args.push(\"--depth-model\".to_string());\n            args.push(p.to_str().unwrap_or(\"\").to_string());\n        }\n\n        if let Some(d) = &self.device {\n            args.push(\"--device\".to_string());\n            args.push(d.clone());\n        }\n\n        if self.maxine {\n            args.push(\"--maxine\".to_string());\n            args.push(\"--maxine-upscale-factor\".to_string());\n            args.push(self.maxine_upscale_factor.to_string());\n        }\n\n        args\n    }",
+  "source_version": "crates/dorea-video/src/inference_subprocess.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229625348Z",
+  "valid_from": "2026-04-11T00:04:13.229625348Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference_subprocess.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 76,
+    "end_line": 112,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

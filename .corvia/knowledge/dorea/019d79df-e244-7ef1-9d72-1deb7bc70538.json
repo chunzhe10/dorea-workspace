@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-1deb7bc70538",
+  "content": "## Phase A: Foundation (Color Math + I/O + LUT Size)\n\n### Task 1: TransferFunction Trait in dorea-color\n\n**Files:**\n- Modify: `crates/dorea-color/src/lib.rs`\n- Modify: `crates/dorea-color/src/dlog_m.rs`\n\n- [ ] **Step 1: Define the TransferFunction trait**\n\nAdd to `crates/dorea-color/src/lib.rs`:\n\n```rust\npub mod dlog_m;\npub mod hsv;\npub mod lab;\n\n/// Camera log curve abstraction. Implementations decode/encode between\n/// a camera-specific log encoding and scene-linear light.\npub trait TransferFunction {\n    /// Decode a log-encoded value to scene-linear light.\n    fn to_linear(&self, encoded: f32) -> f32;\n    /// Encode a scene-linear light value to log encoding.\n    fn from_linear(&self, linear: f32) -> f32;\n    /// Highlight rolloff shoulder (0.0–1.0). Higher = later compression.\n    fn shoulder(&self) -> f32;\n    /// Human-readable name (e.g. \"D-Log M\").\n    fn name(&self) -> &'static str;\n}\n```\n\n- [ ] **Step 2: Implement TransferFunction for DLogM**\n\nAdd to the bottom of `crates/dorea-color/src/dlog_m.rs` (before `#[cfg(test)]`):\n\n```rust\nuse crate::TransferFunction;\n\n/// D-Log M transfer function (DJI Action 4).\npub struct DLogM;\n\nimpl TransferFunction for DLogM {\n    fn to_linear(&self, encoded: f32) -> f32 {\n        dlog_m_to_linear(encoded)\n    }\n\n    fn from_linear(&self, linear: f32) -> f32 {\n        linear_to_dlog_m(linear)\n    }\n",
+  "source_version": "plans/2026-04-02-10bit-pipeline-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836485377Z",
+  "valid_from": "2026-04-11T00:10:08.836485377Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-10bit-pipeline-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 21,
+    "end_line": 68,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

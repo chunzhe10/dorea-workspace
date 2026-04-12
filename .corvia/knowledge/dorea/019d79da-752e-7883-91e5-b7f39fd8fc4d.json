@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-b7f39fd8fc4d",
+  "content": "class PingRequest:\n    type: str = \"ping\"\n\n    def to_dict(self) -> dict:\n        return {\"type\": \"ping\"}\ndef to_dict(self) -> dict:\n        return {\"type\": \"ping\"}\nclass RauneRequest:\n    \"\"\"Run RAUNE-Net on a single image.\"\"\"\n    id: str\n    image_b64: str   # base64-encoded PNG bytes\n    max_size: int = 1080\n    type: str = \"raune\"\n\n    def to_dict(self) -> dict:\n        return {\"type\": self.type, \"id\": self.id,\n                \"image_b64\": self.image_b64, \"max_size\": self.max_size}",
+  "source_version": "python/dorea_inference/protocol.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230003999Z",
+  "valid_from": "2026-04-11T00:04:13.230003999Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/protocol.py",
+    "language": "py",
+    "chunk_type": "class_definition",
+    "start_line": 29,
+    "end_line": 38,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

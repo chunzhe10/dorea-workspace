@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d71-f845101af2b2",
+  "content": "## Architecture\n\n### Multi-Repo Doc Ownership Model\n\n```\n┌─────────────────────────────────────────────────────┐\n│                 corvia (aggregator)                  │\n│   unified search · cross-repo linking · reasoner    │\n│   \"show me all auth decisions across every repo\"    │\n└──────────┬──────────────────────────┬───────────────┘\n           │                          │\n    ┌──────▼──────┐            ┌──────▼──────┐\n    │ repos/corvia│            │ repos/foo   │\n    │ docs/       │            │ docs/       │\n    │ (product    │            │ (product    │\n    │  decisions) │            │  decisions) │\n    └─────────────┘            └─────────────┘\n           ▲                          ▲\n    ┌──────┴──────┐            ┌──────┴──────┐\n    │  workspace  │            │  .memory/   │\n    │  docs/      │            │  (Claude    │\n    │  (cross-repo│            │   memory,   │\n    │   decisions)│            │   git-tracked)\n    └─────────────┘            └─────────────┘\n```\n\n---\n",
+  "source_version": "decisions/2026-03-13-docs-workflow-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836031874Z",
+  "valid_from": "2026-04-11T00:10:08.836031874Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-03-13-docs-workflow-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 53,
+    "end_line": 78,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

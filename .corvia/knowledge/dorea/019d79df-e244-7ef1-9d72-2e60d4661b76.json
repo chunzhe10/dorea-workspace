@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-2e60d4661b76",
+  "content": "unction's CUDA path in `crates/dorea-gpu/src/lib.rs`:\n\n```rust\n/// Grade a single frame using the calibration and parameters.\n///\n/// `pixels`: interleaved sRGB u8, length = width * height * 3.\n/// `depth`: f32 depth map [0,1], length = width * height.\n///\n/// Returns graded sRGB u8 pixels with the same dimensions.\n///\n/// Uses CUDA if compiled with the `cuda` feature and the runtime is available;\n/// otherwise falls back to the CPU implementation.\npub fn grade_frame(\n    pixels: &[u8],\n    depth: &[f32],\n    width: usize,\n    height: usize,\n    calibration: &Calibration,\n    params: &GradeParams,\n) -> Result<Vec<u8>, GpuError> {\n    if pixels.len() != width * height * 3 {\n        return Err(GpuError::InvalidInput(format!(\n            \"pixels length {} != width*height*3 {}\",\n            pixels.len(),\n            width * height * 3\n        )));\n    }\n    if depth.len() != width * height {\n        return Err(GpuError::InvalidInput(format!(\n            \"depth length {} != width*height {}\",\n            depth.len(),\n            width * height\n        )));\n    }\n\n    #[cfg(feature = \"cuda\")]\n    {\n        // Try creating a CudaGrader. If module load fails, fall through to CPU error.",
+  "source_version": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836725843Z",
+  "valid_from": "2026-04-11T00:10:08.836725843Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1250,
+    "end_line": 1279,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

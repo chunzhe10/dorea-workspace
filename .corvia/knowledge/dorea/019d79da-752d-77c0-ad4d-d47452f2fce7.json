@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d47452f2fce7",
+  "content": "r.join(\"pixtar.bin\")).context(\"open pixtar.bin\")?;\n        self.depth_mmap = Some(unsafe { memmap2::Mmap::map(&df) }.context(\"mmap depths\")?);\n        self.pixtar_mmap = Some(unsafe { memmap2::Mmap::map(&pf) }.context(\"mmap pixtar\")?);\n        Ok(())\n    }\npub fn depth_bytes(&self, i: usize) -> &[u8] {\n        let mmap = self.depth_mmap.as_ref().expect(\"call seal() before reading\");\n        let off = self.depth_offsets[i];\n        let len = self.widths[i] * self.heights[i] * 4;\n        &mmap[off..off + len]\n    }",
+  "source_version": "crates/dorea-cli/src/pipeline/feature.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229471665Z",
+  "valid_from": "2026-04-11T00:04:13.229471665Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/pipeline/feature.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 91,
+    "end_line": 96,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

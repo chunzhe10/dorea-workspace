@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-89ce7bbf0fd2",
+  "content": "-frames:v 1 \"/workspaces/dorea-workspace/working/oklab_3thread_frame.png\" -y\n\nffmpeg -v quiet -ss 1.5 -i \"/workspaces/dorea-workspace/working/oklab_single_process.mov\" \\\n  -frames:v 1 \"/workspaces/dorea-workspace/working/oklab_single_process_frame.png\" -y\n\n# Compute pixel-level diff\nffmpeg -v error \\\n  -i /workspaces/dorea-workspace/working/oklab_3thread_frame.png \\\n  -i /workspaces/dorea-workspace/working/oklab_single_process_frame.png \\\n  -filter_complex \"blend=all_mode=difference,signalstats\" \\\n  -f null - 2>&1 | grep -E \"YAVG|YMAX\"\n```\n\nExpected: YAVG very small (under 1.0), YMAX small (under 5). Identical pipelines should produce identical pixels — any nonzero diff is a bug (frame ordering, race condition).\n\n- [ ] **Step 6: Commit**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ngit add python/dorea_inference/raune_filter.py\ngit commit -m \"$(cat <<'EOF'\nperf(direct): 3-thread pipeline for parallel decode/GPU/encode\n\nRefactor run_single_process() from serial loop to producer-consumer\nwith three threads and bounded queues. Decoder, GPU processing, and\nencoder now run on separate threads, hiding stage latency behind\neach other.\n\nPyAV and torch.cuda both release the GIL, so Python threads work\nfine here. Queue capacity bounded to 2 batches each (~200MB at 4K)\nfor backpressure.\n\nCloses #64\n\nCo-Authored-By: Claude Opus 4.6 (1M context) <noreply@anthropic.com>\nEOF\n)\"\n```\n\n---\n",
+  "source_version": "plans/2026-04-10-direct-mode-3thread-pipeline.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837093741Z",
+  "valid_from": "2026-04-11T00:10:08.837093741Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-10-direct-mode-3thread-pipeline.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 229,
+    "end_line": 264,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

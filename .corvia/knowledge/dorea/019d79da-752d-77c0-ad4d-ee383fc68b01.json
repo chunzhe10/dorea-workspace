@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-ee383fc68b01",
+  "content": "s f32 / (size - 1) as f32;\n                    let g = gi as f32 / (size - 1) as f32;\n                    let b = bi as f32 / (size - 1) as f32;\n                    lut.set(ri, gi, bi, [r, g, b]);\n                }\n            }\n        }\n        lut\n    }\nfn make_calibration(n_zones: usize) -> Calibration {\n        let luts: Vec<LutGrid> = (0..n_zones).map(|_| identity_lut(17)).collect();\n        let boundaries: Vec<f32> = (0..=n_zones).map(|i| i as f32 / n_zones as f32).collect();\n        let depth_luts = DepthLuts::new(luts, boundaries);\n        let hsl = HslCorrections(vec![QualifierCorrection {\n            h_center: 0.0,\n            h_width: 1.0,\n            h_offset: 0.0,\n            s_ratio: 1.0,\n            v_offset: 0.0,\n            weight: 0.0, // weight=0 → qualifier inactive, HSL stage is pass-through in tests\n        }]);\n        Calibration::new(depth_luts, hsl, 1)\n    }",
+  "source_version": "crates/dorea-gpu/src/cuda/mod.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229787853Z",
+  "valid_from": "2026-04-11T00:04:13.229787853Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cuda/mod.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 287,
+    "end_line": 300,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

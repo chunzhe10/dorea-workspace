@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-2389a12ab85b",
+  "content": "### 3. RGB ↔ HSV (`dorea-color/src/hsv.rs`)\n### 4. Depth-Stratified LUT Build (`dorea-lut/src/build.rs`)\n\n### 5. LUT Application (`dorea-lut/src/apply.rs`)\n\n**Trilinear interpolation:**\n- For each pixel (r,g,b) ∈ [0,1]³:\n  - Scaled = (r,g,b) × (LUT_SIZE - 1)\n  - Floor indices (i0,j0,k0) + fractions (fr,fg,fb)\n  - 8-corner trilinear interpolation\n\n**Depth-weighted blending:**\n- Compute soft zone weights: `weight_z = max(1 - |depth - zone_center_z| / zone_width, 0)` for each zone z\n- Apply each zone's LUT to get `result_z`\n- `result = Σ(result_z × weight_z) / Σ(weight_z)`\n\n\n### 6. HSL Qualifier Derivation (`dorea-hsl/src/derive.rs`)\n\nPort from `run_fixed_hsl_lut_poc.py::derive_hsl_corrections()`.\n\n**6 qualifiers:**\n```\nRed/Skin:  h_center=0,   h_width=40\nYellow:    h_center=40,  h_width=40\nGreen:     h_center=100, h_width=50\nCyan:      h_center=170, h_width=40\nBlue:      h_center=210, h_width=40\nMagenta:   h_center=290, h_width=50\n```\n\n**Per qualifier:**\n1. Soft mask: `w = max(1 - angular_dist(H, h_center) / h_width, 0.0) × (S > 0.08)`\n2. Skip if `total_weight < 100`\n3. `h_offset = weighted_circular_mean(H_target - H_lut)`\n4. `s_ratio = weighted_mean(S_target) / weighted_mean(S_lut)`\n5. `v_offset = weighted_mean(V_target - V_lut)` (in [0,1] units)\n",
+  "source_version": "plans/2026-04-02-dorea-v2-phase1-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836567232Z",
+  "valid_from": "2026-04-11T00:10:08.836567232Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-dorea-v2-phase1-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 154,
+    "end_line": 187,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

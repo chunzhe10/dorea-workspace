@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-ed6bc4f0c354",
+  "content": "n Err(GpuError::InvalidInput(format!(\n                \"depth len {} != width*height {}\", depth.len(), n\n            )));\n        }\n        let dev = &self.device;\n\n        // Ensure frame buffers exist at the correct resolution, then upload per-frame data.\n        // Single borrow_mut scope: check/allocate + copy-into (no per-frame cudaMalloc).\n        {\n            let mut slot = self.frame_bufs.borrow_mut();\n            let needs = slot.as_ref().map_or(true, |b| b.width != width || b.height != height);\n            if needs {\n                *slot = Some(alloc_frame_buffers(dev, width, height)?);\n            }\n            let bufs = slot.as_mut().expect(\"frame_bufs allocated above\");\n            dev.htod_sync_copy_into(pixels, &mut bufs.d_pixels_in).map_err(map_cudarc_error)?;\n            dev.htod_sync_copy_into(depth, &mut bufs.d_depth).map_err(map_cudarc_error)?;\n        }\n\n        // Launch combined_lut_kernel (11-arg dual-texture signature)\n        // blend_t=0.0 → early-out after set A, set B args are never sampled.\n        // d_textures and d_boundaries are cached from construction — no per-frame upload.\n        {\n            let slot = self.frame_bufs.borrow();\n            let bufs = slot.as_ref().expect(\"frame_bufs allocated above\");\n            let func = dev.get_func(\"combined_lut\", \"combined_lut_kernel\")\n                .ok_or_else(|| GpuError::ModuleLoad(\"combined_lut_kernel not found\".into()))?;\n            let cfg = LaunchConfig {\n                grid_dim: (div_ceil(n as u32, 256), 1, 1),\n                block_dim: (256, 1, 1),",
+  "source_version": "crates/dorea-gpu/src/cuda/mod.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229778498Z",
+  "valid_from": "2026-04-11T00:04:13.229778498Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cuda/mod.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 174,
+    "end_line": 196,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

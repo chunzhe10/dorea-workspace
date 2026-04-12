@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-bc879051ed28",
+  "content": "he downstream consumer has died.\n        \"\"\"\n        while not stop_event.is_set():\n            try:\n                q.put(item, timeout=poll_interval)\n                return True\n            except queue.Full:\n                continue\n        return False\ndef decoder_thread() -> None:\n        nonlocal decode_busy\n        try:\n            batch: list[np.ndarray] = []\n            for packet in in_container.demux(in_stream):\n                if stop_event.is_set():\n                    return\n                # Time the entire packet.decode() iteration so that the\n                # libavcodec decode work (which actually runs here) is\n                # captured, not just the to_ndarray() conversion.\n                t_decode_start = time.perf_counter()\n                frames = list(packet.decode())\n                decode_busy += time.perf_counter() - t_decode_start\n                for frame in frames:\n                    if stop_event.is_set():\n                        return\n                    t0 = time.perf_counter()\n                    rgb = frame.to_ndarray(format=\"rgb24\")  # (H, W, 3) uint8\n                    if rgb.shape[1] != fw or rgb.shape[0] != fh:\n                        rgb = np.array(\n                            frame.to_image().resize((fw, fh)),\n                            dtype=np.uint8,\n                        )\n                    decode_busy += time.perf_counter() - t0\n                    batch.append(rgb)\n                    if len(batch) >= batch_size:\n                        if not put_or_stop(q_decoded, batch, stop_event):\n                            return\n                        batch = []\n            if batch:\n                if not put_or_stop(q_decoded, batch, stop_event):\n                    return\n        except BaseException as e:\n            record_error(e)\n        finally:\n            # Sentinel for GPU thread; use put_or_stop so we cannot hang\n            # here if the consumer has already died.\n            put_or_stop(q_decoded, None, stop_event)",
+  "source_version": "python/dorea_inference/raune_filter.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230188704Z",
+  "valid_from": "2026-04-11T00:04:13.230188704Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/raune_filter.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 295,
+    "end_line": 332,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

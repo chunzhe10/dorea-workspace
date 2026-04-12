@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-86fa79dba901",
+  "content": "## Task 2: AdaptiveGrader — cache texture data + pre-allocate FrameBuffers\n\n### Step 2.1: Add cached device slices to AdaptiveGrader\n\n- `d_textures_a: CudaSlice<u64>` — texture handles for active set (constant after build)\n- `d_textures_b: CudaSlice<u64>` — texture handles for inactive set (constant after build)\n- `d_bounds_a: RefCell<CudaSlice<f32>>` — boundaries for active set (updated on swap/rebuild)\n- `d_bounds_b: RefCell<CudaSlice<f32>>` — boundaries for inactive set (updated on swap/rebuild)\n- `frame_bufs: RefCell<Option<FrameBuffers>>` — resolution-keyed\n\nNote: texture handles (CUtexObject) are allocated in TextureSet::allocate and never\nchange — only the 3D array content is updated via cuMemcpy3D. So d_textures_a/b are\ntruly constant. Boundaries change per keyframe.\n\n\n### Step 2.2: Update AdaptiveGrader::new()\n\nUpload texture handles and initial boundaries for both sets.\n",
+  "source_version": "plans/2026-04-08-pcie-barrier-reduction-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837054604Z",
+  "valid_from": "2026-04-11T00:10:08.837054604Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-08-pcie-barrier-reduction-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 53,
+    "end_line": 68,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

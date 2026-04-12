@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-274221742b30",
+  "content": "xy_h)\n                });\n\n            let depth = if dw == frame.width && dh == frame.height {\n                depth_proxy\n            } else {\n                InferenceServer::upscale_depth(&depth_proxy, dw, dh, frame.width, frame.height)\n            };\n\n            let graded = grade_frame(\n                &frame.pixels, &depth, frame.width, frame.height, &calibration, &params,\n            ).map_err(|e| anyhow::anyhow!(\"Grading failed for frame {}: {e}\", frame.index))?;\n\n            // Flush any buffered frames — interpolate between previous and this keyframe's graded output\n            if !frame_buffer.is_empty() {\n                flush_buffer_graded(\n                    &mut frame_buffer, &last_keyframe_graded, &Some(graded.clone()),\n                    &mut encoder, &mut frame_count, &info,\n                )?;\n            }\n\n            // Write this keyframe's graded output\n            encoder.write_frame(&graded).context(\"encoder write failed\")?;\n            frame_count += 1;\n\n            if frame_count % 100 == 0 {\n                let pct = frame_count as f64 / info.frame_count.max(1) as f64 * 100.0;\n                log::info!(\"Progress: {frame_count}/{} frames ({:.1}%)\", info.frame_count, pct);\n            }\n\n            // Update keyframe state\n            last_keyframe_proxy = Some(proxy_pixels);\n            last_keyframe_graded = Some(graded);\n            frames_since_keyframe = 0;\n        } else {\n            // Buffer this frame — will be interpolated when next keyframe is graded\n            frame_buffer.push(BufferedFrame {\n                index: frame.index,\n                width: frame.width,\n                height: frame.height,\n            });\n            frames_since_keyframe += 1;\n        }\n    }\n",
+  "source_version": "plans/2026-04-02-grading-pipeline-perf-v3.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836618654Z",
+  "valid_from": "2026-04-11T00:10:08.836618654Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-grading-pipeline-perf-v3.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 785,
+    "end_line": 820,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

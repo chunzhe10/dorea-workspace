@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-34bc2b1a91f8",
+  "content": "rc/inference_subprocess.rs \\\n        crates/dorea-cli/src/grade.rs \\\n        crates/dorea-cli/src/calibrate.rs \\\n        crates/dorea-cli/src/preview.rs\ngit commit -m \"feat(inference): add maxine fields to InferenceConfig and build_args() method\"\n```\n\n---\n\n### Task 5: Rust `enhance()` IPC Method (issue #20)\n\n**Files:**\n- Modify: `crates/dorea-video/src/inference_subprocess.rs`\n\n- [ ] **Step 1: Write failing tests**\n\nAdd to the `#[cfg(test)]` module in `inference_subprocess.rs`:\n\n```rust\n#[test]\nfn enhance_parses_valid_response() {\n    let width = 4usize;\n    let height = 2usize;\n    let pixels: Vec<u8> = vec![128u8; width * height * 3];\n    let b64 = B64.encode(&pixels);\n    let resp = serde_json::json!({\n        \"type\": \"enhance_result\",\n        \"id\": \"test_001\",\n        \"image_b64\": b64,\n        \"width\": width,\n        \"height\": height,\n    });\n    let (result_pixels, rw, rh) =\n        parse_enhance_response(&resp.to_string(), \"test_001\", width, height).unwrap();\n    assert_eq!(rw, width);\n    assert_eq!(rh, height);\n    assert_eq!(result_pixels.len(), width * height * 3);\n    assert_eq!(result_pixels[0], 128);\n}\n\n#[test]\nfn enhance_rejects_dimension_mismatch() {\n    let pixels: Vec<u8> = vec![0u8; 4 * 2 * 3];\n    let b64 = B64.encode(&pixels);\n    let resp = serde_json::json!({\n        \"type\": \"enhance_result\",\n        \"id\": \"test_001\",\n        \"image_b64\": b64,\n        \"width\": 8,   // mismatch: sent 4\n        \"height\": 4,  // mismatch: sent 2\n    });\n    let result = parse_enhance_response(&resp.to_string(), \"test_001\", 4, 2);\n    assert!(result.is_err(), \"should reject dimension mismatch\");",
+  "source_version": "plans/2026-04-04-maxine-enhancement-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836819873Z",
+  "valid_from": "2026-04-11T00:10:08.836819873Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-maxine-enhancement-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 802,
+    "end_line": 845,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

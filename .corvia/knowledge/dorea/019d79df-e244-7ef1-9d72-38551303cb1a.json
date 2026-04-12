@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-38551303cb1a",
+  "content": "# Per-Keyframe Adaptive Depth Zones — Implementation Plan\n\n## File Map\n\n| File | Action | Task |\n|------|--------|------|\n| `crates/dorea-cli/src/config.rs` | Modify — add `base_lut_zones`, `scene_threshold`, `min_segment_keyframes`, `zone_smoothing_window` to `GradeDefaults` | 1 |\n| `crates/dorea-cli/src/grade.rs:18-99` | Modify — add `--base-lut-zones`, `--scene-threshold` CLI args to `GradeArgs` | 1 |\n| `crates/dorea-cli/src/grade.rs:156-165` | Modify — resolve new config fields | 1 |\n| `crates/dorea-cli/src/change_detect.rs` | Modify — add `depth_distribution_distance()`, `SegmentRange`, `detect_scene_segments()`, `compute_per_kf_zones()`, `smooth_zone_boundaries()` | 2, 3 |\n| `crates/dorea-gpu/src/cuda/kernels/build_combined_lut.cu` | Modify — separate base zone params from runtime zone params | 4 |\n| `crates/dorea-gpu/src/cuda/combined_lut.rs` | Modify — restructure into `AdaptiveLut` with double-buffer, segment loading, per-KF rebuild | 5 |\n| `crates/dorea-gpu/src/cuda/mod.rs` | Modify — replace `CudaGrader` with `AdaptiveGrader`, new `grade_frame_blended` method | 5, 6 |\n| `crates/dorea-gpu/src/cuda/kernels/combined_lut.cu` | Modify — dual-texture sampling with blend factor `t` | 6 |\n| `crates/dorea-gpu/src/lib.rs` | Modify — expose `AdaptiveGrader` and new public API | 6 |\n| `crates/dorea-cli/src/grade.rs:482-606` | Modify — replace global reservoir/LUT/HSL with per-segment pre-compute | 7 |\n| `crates/dorea-cli/src/grade.rs:613-679` | Modify — restructure grading pass with texture swaps + blending | 7 |\n| `dorea.toml` | Modify — add new `[grade]` defaults | 1 |\n\n---\n",
+  "source_version": "plans/2026-04-04-per-keyframe-adaptive-depth-zones-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836875110Z",
+  "valid_from": "2026-04-11T00:10:08.836875110Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-per-keyframe-adaptive-depth-zones-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 15,
+    "end_line": 33,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

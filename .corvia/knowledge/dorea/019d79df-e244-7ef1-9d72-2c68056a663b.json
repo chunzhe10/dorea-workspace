@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-2c68056a663b",
+  "content": "# python/dorea_inference/bridge.py\n# ---------------------------------------------------------------------------\n\n# Model loading\n\n# ---------------------------------------------------------------------------\n\n_depth_model = None\n_raune_model = None\n\n\ndef load_depth_model(model_path: Optional[str] = None, device: str = \"cuda\") -> None:\n    \"\"\"Load the Depth Anything V2 model. Called once at init.\"\"\"\n    global _depth_model\n    from .depth_anything import DepthAnythingInference\n    _depth_model = DepthAnythingInference(model_path=model_path, device=device)\n\n\ndef load_raune_model(\n    weights_path: Optional[str] = None,\n    device: str = \"cuda\",\n    raune_models_dir: Optional[str] = None,\n) -> None:\n    \"\"\"Load the RAUNE-Net model. Called once at init.\"\"\"\n    global _raune_model\n    from .raune_net import RauneNetInference\n    _raune_model = RauneNetInference(\n        weights_path=weights_path, device=device, raune_models_dir=raune_models_dir,\n    )\n\n",
+  "source_version": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836695775Z",
+  "valid_from": "2026-04-11T00:10:08.836695775Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 97,
+    "end_line": 123,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

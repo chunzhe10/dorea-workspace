@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-1dfe2075da03",
+  "content": "### Task 1: TransferFunction Trait in dorea-color\n\n    fn shoulder(&self) -> f32 {\n        0.85\n    }\n\n    fn name(&self) -> &'static str {\n        \"D-Log M\"\n    }\n}\n```\n\n- [ ] **Step 3: Export DLogM struct from lib.rs**\n\nUpdate `crates/dorea-color/src/lib.rs` to re-export:\n\n```rust\npub use dlog_m::DLogM;\n```\n\n- [ ] **Step 4: Add trait object test**\n\nAdd test in `crates/dorea-color/src/dlog_m.rs` inside the `tests` module:\n\n```rust\n#[test]\nfn test_dlog_m_as_trait_object() {\n    let tf: Box<dyn crate::TransferFunction> = Box::new(super::DLogM);\n    let encoded = tf.from_linear(0.18);\n    let decoded = tf.to_linear(encoded);\n    assert!((decoded - 0.18).abs() < 1e-4, \"Trait round-trip: expected ~0.18, got {decoded}\");\n    assert_eq!(tf.shoulder(), 0.85);\n    assert_eq!(tf.name(), \"D-Log M\");\n}\n```\n\n- [ ] **Step 5: Run tests**\n\nRun: `cd /workspaces/dorea-workspace/repos/dorea && cargo test -p dorea-color`\nExpected: All tests pass including the new trait object test.\n\n- [ ] **Step 6: Commit**\n\n```bash\ngit add crates/dorea-color/src/lib.rs crates/dorea-color/src/dlog_m.rs\ngit commit -m \"feat(color): add TransferFunction trait, implement for DLogM\"\n```\n\n---\n",
+  "source_version": "plans/2026-04-02-10bit-pipeline-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836486137Z",
+  "valid_from": "2026-04-11T00:10:08.836486137Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-10bit-pipeline-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 69,
+    "end_line": 116,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-1241d07ea81a",
+  "content": "contradiction -- --nocapture`\n\n- [ ] **Step 4: Commit**\n\n```bash\ncd /workspaces/corvia-workspace/repos/corvia\ngit add crates/corvia-kernel/src/reasoner.rs\ngit commit -m \"feat(reasoner): implement TemporalContradiction check across source origins\"\n```\n\n---\n\n### Task 3.5: Wire new checks into the Reasoner's `run` method\n\n**Files:**\n- Modify: `repos/corvia/crates/corvia-kernel/src/reasoner.rs`\n\n- [ ] **Step 1: Add optional `DocsRulesConfig` field to the Reasoner**\n\nThe existing `Reasoner` struct holds 2 fields: `store: &dyn QueryableStore` and `graph: &dyn GraphStore`. Add a new optional field:\n\n```rust\npub struct Reasoner<'a> {\n    store: &'a dyn QueryableStore,\n    graph: &'a dyn GraphStore,\n    docs_rules: Option<corvia_common::config::DocsRulesConfig>, // new\n}\n```\n\nUpdate the constructor to default the new field to `None` (backward compat), and add a builder method:\n\n```rust\npub fn new(store: &'a dyn QueryableStore, graph: &'a dyn GraphStore) -> Self {\n    Self { store, graph, docs_rules: None }\n}\n\npub fn with_docs_rules(mut self, rules: corvia_common::config::DocsRulesConfig) -> Self {\n    self.docs_rules = Some(rules);\n    self\n}\n```\n\n- [ ] **Step 2: Add dispatch for new check types in `run_all` / `run_check`**\n\nIn the method that dispatches checks by `CheckType`, add:",
+  "source_version": "plans/2026-03-13-docs-workflow-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836350244Z",
+  "valid_from": "2026-04-11T00:10:08.836350244Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-13-docs-workflow-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1830,
+    "end_line": 1862,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

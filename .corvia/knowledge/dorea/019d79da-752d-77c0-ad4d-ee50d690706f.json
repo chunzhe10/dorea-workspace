@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-ee50d690706f",
+  "content": "> (Vec<u8>, Vec<f32>) {\n        let n = w * h;\n        let pixels: Vec<u8> = (0..n * 3).map(|i| ((i * 7 + 128) % 256) as u8).collect();\n        let depth: Vec<f32> = (0..n).map(|i| (i as f32) / n as f32 * 0.8 + 0.1).collect();\n        (pixels, depth)\n    }\nfn new_api_takes_calibration_and_params() {\n        let cal = make_calibration(5);\n        let params = crate::GradeParams::default();\n        match CudaGrader::new(&cal, &params) {\n            Ok(grader) => {\n                let (pixels, depth) = make_frame(4, 4);\n                let out: Vec<u8> = grader.grade_frame_cuda(&pixels, &depth, 4, 4)\n                    .expect(\"grade_frame_cuda failed\");\n                assert_eq!(out.len(), 4 * 4 * 3);\n            }\n            Err(e) => eprintln!(\"SKIP: no CUDA device ({e})\"),\n        }\n    }",
+  "source_version": "crates/dorea-gpu/src/cuda/mod.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229789930Z",
+  "valid_from": "2026-04-11T00:04:13.229789930Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cuda/mod.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 311,
+    "end_line": 323,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

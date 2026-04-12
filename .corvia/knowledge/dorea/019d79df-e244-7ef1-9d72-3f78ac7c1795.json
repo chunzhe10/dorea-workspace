@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-3f78ac7c1795",
+  "content": "ut_zones: usize,\n}\n\n// ── Node: DepthInterpolateNode ────────────────────────────────────────────────\n\n/// Lerps depth between adjacent keyframe depth maps.\n///\n/// Implemented as a plain `lerp` method rather than the `Node` trait because\n/// the operation takes borrowed `&[f32]` slices — wrapping them in an owned\n/// Input struct would require cloning potentially large depth Vecs on every frame.\n/// The `lerp` method borrows the caller's HashMap entries directly.\npub struct DepthInterpolateNode;\n\nimpl DepthInterpolateNode {\n    /// Returns the interpolated depth Vec for frame `fi`.\n    ///\n    /// - At a keyframe (`fi == prev_kf_idx`): returns a copy of `prev_depth`.\n    /// - Past the last keyframe (`next == None`): returns a copy of `prev_depth`.\n    /// - Across a scene cut (`scene_cut == true`): returns a copy of `prev_depth`.\n    /// - Otherwise: lerps between `prev_depth` and `next_depth` at the appropriate `t`.\n    ///\n    /// Allocates exactly one `Vec<f32>` per call (the interpolated result).\n    pub fn lerp(\n        &self,\n        fi: u64,\n        prev_kf_idx: u64,\n        prev_depth: &[f32],\n        next: Option<(u64, bool, &[f32])>,\n    ) -> Vec<f32> {\n        if fi == prev_kf_idx {\n            return prev_depth.to_vec();\n        }\n        if let Some((next_kf_idx, scene_cut, next_depth)) = next {\n            if scene_cut {\n                return prev_depth.to_vec();\n            }\n            let t = ((fi - prev_kf_idx) as f32 / (next_kf_idx - prev_kf_idx) as f32)\n                .clamp(0.0, 1.0);\n            lerp_depth(prev_depth, next_depth, t)\n        } else {\n            prev_depth.to_vec()\n        }\n    }\n}\n\n// ── Node: BlendTNode ──────────────────────────────────────────────────────────\n\npub struct BlendTNode;\n\npub struct BlendTInput {\n    pub fi: u64,\n    pub prev_kf_idx: u64,\n    /// `(next_kf_idx, scene_cut_before_next)` — None if fi is past the last keyframe.\n    pub next: Option<(u64, bool)>,\n}\n\nimpl Node for BlendTNode {\n    type Input = BlendTInput;\n    type Output = f32;\n\n    fn name(&self) -> &'static str { \"blend_t\" }",
+  "source_version": "plans/2026-04-05-pipeline-dag-refactor.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836990503Z",
+  "valid_from": "2026-04-11T00:10:08.836990503Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-05-pipeline-dag-refactor.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1450,
+    "end_line": 1504,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

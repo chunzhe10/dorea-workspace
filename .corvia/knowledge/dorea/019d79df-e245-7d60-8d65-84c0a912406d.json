@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-84c0a912406d",
+  "content": "n: `cd /workspaces/dorea-workspace/repos/dorea && cargo test -p dorea-video`\nExpected: All pass.\n\n- [ ] **Step 6: Commit**\n\n```bash\ngit add crates/dorea-video/src/ffmpeg.rs\ngit commit -m \"feat(video): add Frame16 and 10-bit decode path (rgb48le)\"\n```\n\n---\n\n### Task 7: OutputCodec Enum and 10-Bit Encoder\n\n**Files:**\n- Modify: `crates/dorea-video/src/ffmpeg.rs`\n\n- [ ] **Step 1: Define OutputCodec enum**\n\nAdd after `InputEncoding`:\n\n```rust\n/// Output video codec selection.\n#[derive(Debug, Clone, Copy, PartialEq, Eq)]\npub enum OutputCodec {\n    /// ProRes 422 HQ — 10-bit 4:2:2, DaVinci Resolve compatible (default for 10-bit)\n    ProRes,\n    /// HEVC 10-bit (NVENC) — fast, smaller files, 4:2:0\n    Hevc10,\n    /// H.264 8-bit (NVENC or libx264) — legacy, existing default\n    H264,\n}\n\nimpl OutputCodec {\n    /// Whether this codec carries 10-bit precision.\n    pub fn is_10bit(&self) -> bool {\n        matches!(self, Self::ProRes | Self::Hevc10)\n    }\n\n    /// Bytes per pixel for the raw frame input to the encoder.\n    /// ProRes/HEVC10: 6 (rgb48le). H264: 3 (rgb24).\n    pub fn bytes_per_pixel(&self) -> usize {\n        if self.is_10bit() { 6 } else { 3 }\n    }\n}\n\nimpl std::fmt::Display for OutputCodec {\n    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {\n        match self {\n            Self::ProRes => write!(f, \"prores\"),\n            Self::Hevc10 => write!(f, \"hevc10\"),\n            Self::H264 => write!(f, \"h264\"),\n        }\n    }\n}\n\nimpl std::str::FromStr for OutputCodec {\n    type Err = String;\n    fn from_str(s: &str) -> Result<Self, String> {\n        match s.to_lowercase().as_str() {\n            \"prores\" | \"prores422\" => Ok(Self::ProRes),\n            \"hevc10\" | \"hevc-10\" | \"hevc_10bit\" => Ok(Self::Hevc10),\n            \"h264\" | \"h.264\" | \"avc\" => Ok(Self::H264),\n            other => Err(format!(\"unknown codec '{other}'; expected prores, hevc10, or h264\")),\n        }\n    }\n}\n```\n",
+  "source_version": "plans/2026-04-08-10bit-pipeline-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837025353Z",
+  "valid_from": "2026-04-11T00:10:08.837025353Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-08-10bit-pipeline-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 922,
+    "end_line": 978,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

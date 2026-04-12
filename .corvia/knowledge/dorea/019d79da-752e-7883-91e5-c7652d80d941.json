@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c7652d80d941",
+  "content": "t(state)\n    model = model.cuda().eval()\n    model.half()\n    # InstanceNorm fp32 restoration (PR #67)\n    for m in model.modules():\n        if isinstance(m, (nn.InstanceNorm1d, nn.InstanceNorm2d, nn.InstanceNorm3d)):\n            m.float()\n    return model\ndef _tiled_4k_raune(model, frame_4k: torch.Tensor) -> torch.Tensor:\n    \"\"\"2×2 tiled RAUNE at 4K with 128-px overlap on inner seams, linear feathering.\n\n    Tile size: 1984×1144. Tile positions (top-left):\n      (0, 0), (0, fw - tile_w), (fh - tile_h, 0), (fh - tile_h, fw - tile_w).\n    The two inner seams overlap by 128 px each; outer edges have no overlap.\n    \"\"\"\n    assert frame_4k.shape == (1, 3, 2160, 3840), f\"unexpected shape {frame_4k.shape}\"\n    fh, fw = 2160, 3840\n    overlap = 128\n    tile_h = (fh + overlap) // 2  # 1144\n    tile_w = (fw + overlap) // 2  # 1984\n\n    positions = [\n        (0, 0),\n        (0, fw - tile_w),\n        (fh - tile_h, 0),\n        (fh - tile_h, fw - tile_w),\n    ]\n\n    out = torch.zeros_like(frame_4k)\n    weight = torch.zeros(1, 1, fh, fw, device=frame_4k.device, dtype=torch.float32)\n\n    # Per-tile feathering mask: linear ramp across the overlap band on the inner edges\n    def _feather_mask(top: int, left: int) -> torch.Tensor:",
+  "source_version": "benchmarks/upscale_bench/gold.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230341551Z",
+  "valid_from": "2026-04-11T00:04:13.230341551Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/gold.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 67,
+    "end_line": 91,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

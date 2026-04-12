@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-056352cf73fd",
+  "content": "### Test source\n### Frame selection\n\n### Gold computation (`gold.py`)\n\n`compute_gold(frame_4k: torch.Tensor, raune_model) → dict`:\n\n```\n1. Try native 4K RAUNE:\n     with torch.no_grad():\n       try:\n         raune_4k = raune_model((frame_4k * 2 - 1).half()).float()\n         raune_4k = ((raune_4k + 1) / 2).clamp(0, 1)\n         path_used = \"native_4k\"\n       except torch.cuda.OutOfMemoryError:\n         torch.cuda.empty_cache()\n         goto tiled\n\n2. Tiled fallback:\n     - split frame_4k into 2×2 tiles, each 1984×1144 ( = (3840+128)/2 × (2160+128)/2 ),\n       positioned so the two inner seams overlap by exactly 128 pixels and the\n       outer edges have no overlap\n     - run RAUNE on each tile independently\n     - feather the overlaps with linear alpha (0 → 1 across the 128-pixel overlap band)\n     - stitch back into a 3840×2160 raune_4k\n     - path_used = \"tiled_2x2_1984x1144_o128\"\n\n3. Compute delta_4k = lab(raune_4k) - lab(frame_4k) in OKLab\n\n4. Return {\n     \"raune_4k\":  raune_4k,\n     \"delta_4k\":  delta_4k,\n     \"path_used\": path_used,\n     \"weights_sha1_prefix\": WEIGHTS_SHA[:8],\n   }\n```\n\n\n### Gold caching\n\nFile: `working/upscale_bench/gold/{weights_sha1[:8]}_{frame_idx}.pt`\n\nContents: `torch.save` of a dict with `raune_4k`, `delta_4k`, `path_used`, and a version field (bumped if the cache format changes).\n\n- Cache key includes the weights SHA prefix — swap weights and caches auto-invalidate.\n- Cache key includes frame index — different frames don't collide.\n- `--regen-gold` forces recomputation (ignore cache, overwrite).\n- Corrupt cache: if `torch.load` throws, log a warning, recompute, and overwrite.\n",
+  "source_version": "decisions/2026-04-10-delta-upscale-bench-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836195531Z",
+  "valid_from": "2026-04-11T00:10:08.836195531Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-10-delta-upscale-bench-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 229,
+    "end_line": 273,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

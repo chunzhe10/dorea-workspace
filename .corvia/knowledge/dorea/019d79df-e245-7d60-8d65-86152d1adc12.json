@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-86152d1adc12",
+  "content": " | tail -20`\nExpected: Compiles.\n\n- [ ] **Step 6: Commit**\n\n```bash\ngit add crates/dorea-cli/src/grade.rs crates/dorea-cli/src/config.rs crates/dorea-cli/src/pipeline/mod.rs\ngit commit -m \"feat(cli): add --input-encoding and --output-codec flags\"\n```\n\n---\n\n### Task 11: Grading Stage — 10-Bit Frame Path\n\n**Files:**\n- Modify: `crates/dorea-cli/src/pipeline/grading.rs`\n\nThis is the core integration: the 3-thread grading pipeline gains a 10-bit path.\nWhen `output_codec.is_10bit()`, the decoder produces `Frame16`, the GPU grades with\n`grade_frame_blended_16`, and the encoder receives u16 data.\n\n- [ ] **Step 1: Update run_grading_stage signature**\n\nAdd `PipelineConfig` already has `input_encoding` and `output_codec`. The grading\nstage uses `output_codec.is_10bit()` to decide which path to run.\n\n- [ ] **Step 2: Add 10-bit decode → grade → encode path**\n\nIn `run_grading_stage`, after the existing code that sets up channels and threads,\nadd a branching point. The key changes:\n\n**Decoder thread (10-bit path):** Use `decode_frames_16bit()` instead of `decode_frames()`.\nSend `Frame16` through the channel instead of `Frame`.\n\n**GPU thread (10-bit path):** Call `grader.grade_frame_blended_16()` with `&frame.pixels`\n(u16). Produce `Vec<u16>` output.\n\n**Encoder thread (10-bit path):** Call `encoder.write_frame_16()` with the `&graded_u16`.\n\nThe channel types need to support both 8-bit and 16-bit frames. Use an enum:\n\n```rust\nenum GradedFrame {\n    Rgb8(Vec<u8>),\n    Rgb16(Vec<u16>),\n}\n```\n\nOr simpler: since the bit depth is known at pipeline start, use two separate code paths\n(the 3-thread structure is duplicated but with different types). This avoids runtime\nenum overhead on every frame.\n\nThe cleanest approach: extract the common pipeline logic into a helper, parameterized\nby decode/grade/encode closures. But for clarity and to avoid over-engineering,",
+  "source_version": "plans/2026-04-08-10bit-pipeline-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837043362Z",
+  "valid_from": "2026-04-11T00:10:08.837043362Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-08-10bit-pipeline-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1709,
+    "end_line": 1750,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

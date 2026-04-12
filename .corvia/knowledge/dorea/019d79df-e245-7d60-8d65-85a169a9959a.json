@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-85a169a9959a",
+  "content": "### Task 9: CudaGrader and AdaptiveGrader — u16 Methods\n\npub fn grade_frame_blended_16(\n    &self,\n    pixels: &[u16],\n    depth: &[f32],\n    width: usize,\n    height: usize,\n    depth_w: usize,\n    depth_h: usize,\n    blend_t: f32,\n    class_mask: Option<&[u8]>,\n    mask_w: usize,\n    mask_h: usize,\n    diver_depth: f32,\n) -> Result<Vec<u16>, GpuError> {\n    let n = width.checked_mul(height).ok_or_else(|| {\n        GpuError::InvalidInput(\"frame dimensions overflow usize\".into())\n    })?;\n    if pixels.len() != n * 3 {\n        return Err(GpuError::InvalidInput(format!(\n            \"pixels len {} != {}*3\", pixels.len(), n\n        )));\n    }\n    let dn = depth_w.checked_mul(depth_h).ok_or_else(|| {\n        GpuError::InvalidInput(\"depth dimensions overflow usize\".into())\n    })?;\n    if depth.len() != dn {\n        return Err(GpuError::InvalidInput(format!(\n            \"depth len {} != depth_w*depth_h {}\", depth.len(), dn\n        )));\n    }\n    let dev = &self.device;\n\n    // Allocate/reuse 16-bit frame buffers\n    {\n        let mut slot = self.frame_bufs_16.borrow_mut();\n        let needs = slot.as_ref().map_or(true, |b| b.width != width || b.height != height);\n        if needs {\n            *slot = Some(alloc_frame_buffers_16(dev, width, height)?);\n        }\n        let bufs = slot.as_mut().expect(\"frame_bufs_16 allocated above\");\n        dev.htod_sync_copy_into(pixels, &mut bufs.d_pixels_in).map_err(map_cudarc_error)?;\n    }\n\n    let d_depth = dev.htod_sync_copy(depth).map_err(map_cudarc_error)?;\n\n    let active_idx = self.adaptive_lut.active_index();\n    let (d_tex_active, d_bounds_active, d_tex_inactive, d_bounds_inactive) = if active_idx == 0 {\n        (&self.d_textures_a, &self.d_bounds_a, &self.d_textures_b, &self.d_bounds_b)\n    } else {\n        (&self.d_textures_b, &self.d_bounds_b, &self.d_textures_a, &self.d_bounds_a)\n    };\n\n    {",
+  "source_version": "plans/2026-04-08-10bit-pipeline-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837038072Z",
+  "valid_from": "2026-04-11T00:10:08.837038072Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-08-10bit-pipeline-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1437,
+    "end_line": 1489,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

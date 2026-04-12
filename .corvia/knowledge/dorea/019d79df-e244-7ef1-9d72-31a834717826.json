@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-31a834717826",
+  "content": "### Task 1: Python Protocol Extension\n\n### Task 2: Python MaxineEnhancer Class\n\nCreate the `MaxineEnhancer` class that wraps nvvfx with CUDA context sharing and mock mode.\n\n**Files:**\n- Create: `python/dorea_inference/maxine_enhancer.py`\n\n- [ ] **Step 1: Create `maxine_enhancer.py` with mock and real modes**\n\n```python\n\"\"\"NVIDIA Maxine VFX SDK wrapper for AI enhancement (super-resolution + artifact reduction).\n\nRequires the nvvfx package (NVIDIA Maxine Video Effects SDK Python bindings).\nInstall separately from NGC — not bundled with dorea. See docs/guides/maxine-setup.md.\n\nSet DOREA_MAXINE_MOCK=1 to enable mock mode for CI testing without the SDK.\n\"\"\"\nfrom __future__ import annotations\n\nimport os\nimport sys\nimport logging\nfrom typing import Optional\n\nimport cv2\nimport numpy as np\n\nlog = logging.getLogger(\"dorea-inference\")\n\n_MOCK_MODE = os.environ.get(\"DOREA_MAXINE_MOCK\", \"\") == \"1\"\n",
+  "source_version": "plans/2026-04-03-maxine-enhancement-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836773483Z",
+  "valid_from": "2026-04-11T00:10:08.836773483Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-maxine-enhancement-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 93,
+    "end_line": 123,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

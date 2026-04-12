@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-12d2eff8c161",
+  "content": "### Task 4.1: Add `--incremental --files` flags to Ingest command\n\n            let path = std::path::Path::new(file_path);\n            if !path.exists() {\n                println!(\"  Skipped (not found): {}\", file_path);\n                continue;\n            }\n            println!(\"  Re-indexing: {}\", file_path);\n\n            // 1. Read file and chunk through the standard pipeline\n            let content = std::fs::read_to_string(file_path)?;\n            let ext = path.extension().and_then(|e| e.to_str()).unwrap_or(\"\");\n            let meta = SourceMetadata {\n                file_path: file_path.to_string(),\n                extension: ext.to_string(),\n                language: None, // let pipeline infer\n                scope_id: scope_id.clone(),\n                source_version: \"incremental\".into(),\n            };\n            let (chunks, _relations) = pipeline.process(&content, &meta)?;\n            println!(\"    Chunked into {} pieces\", chunks.len());\n\n            // 2. Supersede old entries: find by source_file, set valid_to, link superseded_by\n            // This uses the LiteStore's file-based scan (via as_any downcast)",
+  "source_version": "plans/2026-03-13-docs-workflow-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836356696Z",
+  "valid_from": "2026-04-11T00:10:08.836356696Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-13-docs-workflow-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 2143,
+    "end_line": 2164,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

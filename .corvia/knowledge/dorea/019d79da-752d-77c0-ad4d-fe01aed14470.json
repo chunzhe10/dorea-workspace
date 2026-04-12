@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-fe01aed14470",
+  "content": "ight we report in JSON.\n        if out.shape[2] != out_h or out.shape[3] != out_w:\n            import torch.nn.functional as F\n            out = F.interpolate(out, size=(out_h, out_w), mode=\"bilinear\", align_corners=False)\n\n        return out, out_w, out_h\ndef __init__(\n        self,\n        weights_path: Optional[str] = None,\n        device: str = \"cpu\",\n        raune_models_dir: Optional[str] = None,\n    ) -> None:\n        import torch\n\n        self.device = torch.device(device if torch.cuda.is_available() or device == \"cpu\" else \"cpu\")\n\n        # Add the RAUNE-Net directory to sys.path so we can import models.raune_net.\n        # Accepts either the RAUNE-Net dir directly (has models/raune_net.py) or the\n        # parent sea_thru_poc dir (auto-descends to models/RAUNE-Net/).\n        given = Path(raune_models_dir) if raune_models_dir else _DEFAULT_RAUNE_MODELS_DIR\n        if (given / \"models\" / \"raune_net.py\").exists():\n            models_dir = given\n        elif (given / \"models\" / \"RAUNE-Net\" / \"models\" / \"raune_net.py\").exists():\n            models_dir = given / \"models\" / \"RAUNE-Net\"\n        else:\n            models_dir = given  # let the import fail with a clear error below\n\n        if str(models_dir) not in sys.path:\n            sys.path.insert(0, str(models_dir))\n\n        try:\n            from models.raune_net import RauneNet  # type: ignore\n        except ImportError as e:\n            raise ImportError(\n                f\"Could not import RauneNet from {models_dir}/models/raune_net.py: {e}\\n\"\n                f\"Pass --raune-models-dir pointing to the RAUNE-Net checkout directory \"\n                f\"(the one that contains a models/raune_net.py file).\"\n            ) from e\n\n        weights = Path(weights_path) if weights_path else _DEFAULT_WEIGHTS\n        if not weights.exists():\n            raise FileNotFoundError(\n                f\"RAUNE-Net weights not found at {weights}. \"\n                \"Pass --raune-weights to specify the .pth file.\"\n            )\n\n        self.model = RauneNet(input_nc=3, output_nc=3, n_blocks=30, n_down=2).to(self.device)\n        state = torch.load(str(weights), map_location=self.device, weights_only=False)\n        self.model.load_state_dict(state)\n        self.model.eval()",
+  "source_version": "python/dorea_inference/raune_net.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229997747Z",
+  "valid_from": "2026-04-11T00:04:13.229997747Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/raune_net.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 44,
+    "end_line": 87,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

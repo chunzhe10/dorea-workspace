@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-2c788bcfcb5b",
+  "content": "# Model loading\n# ---------------------------------------------------------------------------\n\n# ---------------------------------------------------------------------------\n\n# GPU inference (returns TensorGuard with on-device tensor)",
+  "source_version": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836696253Z",
+  "valid_from": "2026-04-11T00:10:08.836696253Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 124,
+    "end_line": 125,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

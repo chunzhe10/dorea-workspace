@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-00197be0c65e",
+  "content": "### Fallback chain\n\n## CUDA Context Sharing\n\nPyTorch (runtime API) and cudarc (driver API) must share the same CUDA context.\nBoth use the primary context for device 0 by default:\n- PyTorch: `cudaSetDevice(0)` retains the primary context\n- cudarc: `CudaDevice::new(0)` calls `cuDevicePrimaryCtxRetain`\n\n**Initialization order**: PyO3 initializes Python and loads PyTorch models first.\nThen cudarc creates its `CudaDevice`. Both bind to the same primary context.\n\n**Runtime validation**: at initialization (not just in a spike), assert that both\nsides see the same CUDA context:\n\n```rust\nfn validate_context_sharing(py: Python<'_>, device: &CudaDevice) -> Result<(), GpuError> {\n    // Get cudarc's context pointer\n    let cudarc_ctx = device.cu_primary_ctx();\n\n    // Get PyTorch's context via ctypes\n    let torch_ctx: u64 = py.eval(\n        \"torch.cuda.current_device()\",  // simplified; actual check uses driver API\n        None, None\n    )?.extract()?;\n\n    // Both should reference device 0's primary context\n    // If they differ, GPU tensor sharing will silently corrupt data\n    assert_eq!(cudarc_ctx, torch_ctx, \"CUDA context mismatch\");\n    Ok(())\n}\n```\n\n**Validation requirement**: before committing to this architecture, a spike must\nconfirm that a `CudaSlice` allocated by cudarc is readable by PyTorch and vice\nversa. The spike is ~20 lines of Rust + Python:\n1. cudarc allocates a `CudaSlice<f32>`, writes known values\n2. Pass device pointer to PyTorch via PyO3\n3. PyTorch wraps as tensor, reads values\n4. Assert values match\n\nIf the spike fails, the fallback is a single `cudaMemcpy` device-to-device at\nthe inference-to-grading boundary (still far better than the current host\nround-trip).\n",
+  "source_version": "decisions/2026-04-03-gpu-space-ipc-adaptive-batching-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836131651Z",
+  "valid_from": "2026-04-11T00:10:08.836131651Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-03-gpu-space-ipc-adaptive-batching-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 588,
+    "end_line": 630,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

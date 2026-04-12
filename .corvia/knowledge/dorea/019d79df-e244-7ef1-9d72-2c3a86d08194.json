@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-2c3a86d08194",
+  "content": "## File Structure\n\n### New files\n| File | Responsibility |\n|------|---------------|\n| `crates/dorea-gpu/src/device.rs` | `DeviceFrameBuffer`, `BorrowedDeviceSlice<'py, T>`, VRAM query helpers |\n| `crates/dorea-gpu/src/batcher.rs` | `AdaptiveBatcher` — halve-on-OOM / grow-on-success batch sizing |\n| `crates/dorea-video/src/inference_subprocess.rs` | Renamed from current `inference.rs` — subprocess fallback path |\n| `python/dorea_inference/bridge.py` | `TensorGuard`, PyO3-callable entry points for inference |\n\n\n### Modified files\n| File | Changes |\n|------|---------|\n| `crates/dorea-gpu/Cargo.toml` | Add `cudarc` dependency behind `cuda` feature |\n| `crates/dorea-gpu/build.rs` | Compile `.cu` → `.ptx` (was `.cu` → `.o` → `.a`) |\n| `crates/dorea-gpu/src/lib.rs` | Expand `GpuError` with `Oom`/`ModuleLoad`/`CudaFail`, re-export new modules |\n| `crates/dorea-gpu/src/cuda/mod.rs` | Rewrite: cudarc PTX loading + kernel launches (remove `extern \"C\"`) |\n| `crates/dorea-gpu/src/cuda/kernels/lut_apply.cu` | Remove C host launcher function, keep `__global__` kernel only |\n| `crates/dorea-gpu/src/cuda/kernels/hsl_correct.cu` | Remove C host launcher function, keep `__global__` kernel only |\n| `crates/dorea-gpu/src/cuda/kernels/clarity.cu` | Remove C host launcher functions, keep `__global__` kernels only |\n| `crates/dorea-video/Cargo.toml` | Add `pyo3`, `numpy` behind `python` feature; conditional `base64`/`flate2` |\n| `crates/dorea-video/src/lib.rs` | Conditional module selection: `inference` vs `inference_subprocess` |\n| `crates/dorea-video/src/inference.rs` | Rewrite: PyO3-based `InferenceServer` (replaces subprocess version) |\n| `python/dorea_inference/depth_anything.py` | Add `infer_gpu()` returning on-device tensor |\n| `python/dorea_inference/raune_net.py` | Add `infer_gpu()` returning on-device tensor |\n| `crates/dorea-cli/Cargo.toml` | No change (does NOT enable `python` feature) |\n| `crates/dorea-cli/src/grade.rs` | Update grading loop for batch API, VRAM probe, adaptive batching |\n\n---\n",
+  "source_version": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836693929Z",
+  "valid_from": "2026-04-11T00:10:08.836693929Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 19,
+    "end_line": 46,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

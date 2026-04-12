@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-129c681113d4",
+  "content": "tree\n        let status = std::process::Command::new(\"git\").args([\"status\", \"--porcelain\"]).output()?;\n        if !status.stdout.is_empty() {\n            return Err(anyhow::anyhow!(\"Working tree has uncommitted changes. Commit or stash first.\"));\n        }\n        if !yes {\n            println!(\"Would move {} file(s). Re-run with --yes to execute.\", misplaced.len());\n            return Ok(());\n        }\n        // Execute moves — resolve target from docs_rules.repo_docs_pattern\n        for finding in misplaced {\n            println!(\"  Moving: {}\", finding.rationale);\n            // TODO: resolve target path and execute std::fs::rename + git add + git commit\n            // This is intentionally left as a follow-up — the check output is the primary value\n        }\n    }\n\n    Ok(())\n}\n```\n\n- [ ] **Step 3: Wire into the match arm**\n\n```rust\nWorkspaceCommands::Docs { command } => match command {\n    DocsCommands::Check { check, fix, yes } =>\n        cmd_docs_check(check.as_deref(), fix, yes).await?,\n},\n```\n\n- [ ] **Step 4: Build and verify**\n\nRun: `cd /workspaces/corvia-workspace/repos/corvia && cargo build -p corvia-cli`\nExpected: Compiles. `corvia workspace docs check --help` shows the new command.\n\n- [ ] **Step 5: Commit**\n\n```bash\ncd /workspaces/corvia-workspace/repos/corvia\ngit add crates/corvia-cli/src/main.rs\ngit commit -m \"feat(cli): add 'corvia workspace docs check' subcommand\"\n```\n\n---\n",
+  "source_version": "plans/2026-03-13-docs-workflow-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836353969Z",
+  "valid_from": "2026-04-11T00:10:08.836353969Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-13-docs-workflow-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 2013,
+    "end_line": 2052,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

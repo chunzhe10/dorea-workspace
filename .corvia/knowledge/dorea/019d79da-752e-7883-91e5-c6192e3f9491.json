@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c6192e3f9491",
+  "content": "float32) * 0.05\n                     for name in method_order}\n    method_metrics = {\n        name: {\"delta_l1\": 0.01, \"final_delta_e\": 0.5, \"final_delta_e_p95\": 0.8, \"ssim\": 0.99}\n        for name in method_order\n    }\n    out = tmp_path / \"fullscale.png\"\n    generate_per_frame_sheet(\n        frame_idx=30,\n        orig_proxy_final=torch.rand(1, 3, 200, 320, device=\"cuda\", dtype=torch.float32),\n        gold_final=torch.rand(1, 3, 200, 320, device=\"cuda\", dtype=torch.float32),\n        method_finals=method_finals,\n        method_deltas=method_deltas,\n        method_metrics=method_metrics,\n        method_order=method_order,\n        out_path=out,\n        crop_size=128,  # smaller than default 400 but still > thumb_w / cell\n    )\n    assert out.exists()\n    img = Image.open(out)\n    img.verify()\n    # Re-open for reading pixels (verify() consumes the stream)\n    img = Image.open(out)\n    W, _ = img.size\n    n_cells = 2 + len(method_order)  # orig_proxy + gold + methods = 11\n    # At crop_size=128, crop_w = 128 + padding(12) = 140, thumb_w = max thumb width + 12\n    # Expected minimum canvas width: n_cells * 140 + 12 = 11*140 + 12 = 1552\n    assert W >= n_cells * 140 + 12, (\n        f\"canvas too narrow: {W} < {n_cells * 140 + 12} — \"\n        f\"crops row likely clipped\"\n    )",
+  "source_version": "benchmarks/upscale_bench/tests/test_visualize.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230324769Z",
+  "valid_from": "2026-04-11T00:04:13.230324769Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/tests/test_visualize.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 96,
+    "end_line": 119,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

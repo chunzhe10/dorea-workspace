@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d71420c1dd65",
+  "content": "&zero_flow, w, h, 0.5);\n        for (i, (&orig, &warp)) in depth.iter().zip(warped.iter()).enumerate() {\n            assert!(\n                (orig - warp).abs() < 1e-4,\n                \"pixel {i}: orig={orig}, warped={warp}\"\n            );\n        }\n    }\nfn warp_with_uniform_shift() {\n        let w = 16;\n        let h = 16;\n        let mut depth = vec![0.0f32; w * h];\n        // Put a bright spot at (8, 8)\n        depth[8 * w + 8] = 1.0;\n\n        // Shift everything right by 2 pixels\n        let flow = MotionField {\n            vectors: vec![[2.0, 0.0]; w * h],\n            width: w,\n            height: h,\n        };\n        let warped = warp_depth(&depth, &flow, w, h, 0.0);\n        // The bright spot should now appear at (6, 8) in the warped output\n        // (because we're warping backward: output[x] samples from source[x - dx])\n        assert!(warped[8 * w + 6] > 0.5, \"shifted spot should be at x=6\");\n    }",
+  "source_version": "crates/dorea-cli/src/optical_flow.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229501614Z",
+  "valid_from": "2026-04-11T00:04:13.229501614Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/optical_flow.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 266,
+    "end_line": 283,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-3bd674379d4c",
+  "content": "     }).collect();\n\n        let mut kf_depths: HashMap<u64, (Vec<f32>, usize, usize)> = HashMap::new();\n        for (chunk_kfs, chunk_items) in keyframes\n            .chunks(DEPTH_BATCH_SIZE)\n            .zip(batch_items.chunks(DEPTH_BATCH_SIZE))\n        {\n            let mut results = inf_server.run_depth_batch(chunk_items)\n                .unwrap_or_else(|e| {\n                    log::warn!(\"Depth batch failed: {e} — using uniform depth 0.5\");\n                    chunk_items.iter().map(|it| {\n                        (it.id.clone(), vec![0.5f32; proxy_w * proxy_h], proxy_w, proxy_h)\n                    }).collect()\n                });\n\n            if results.len() < chunk_items.len() {\n                log::warn!(\n                    \"Depth batch returned {} results for {} items — padding\",\n                    results.len(), chunk_items.len()\n                );\n                for it in &chunk_items[results.len()..] {\n                    results.push((it.id.clone(), vec![0.5f32; proxy_w * proxy_h], proxy_w, proxy_h));\n                }\n            }\n\n            for (kf, (_, depth_raw, dw, dh)) in chunk_kfs.iter().zip(results.iter()) {\n                kf_depths.insert(kf.frame_index, (depth_raw.clone(), *dw, *dh));\n            }\n        }\n        log::info!(\"Depth batch complete ({} keyframes)\", keyframes.len());\n        let _ = inf_server.shutdown();\n        keyframe_depths = kf_depths;\n\n    } else {\n        // Auto-calibrate: fused RAUNE+depth, dual output.\n        log::info!(\n            \"No calibration — auto-calibrating from {} keyframes (fused RAUNE+depth)\",\n            keyframes.len()\n        );\n\n        let inf_cfg = build_inference_config(&args);  // skip_raune: false\n        let mut inf_server = InferenceServer::spawn(&inf_cfg)\n            .context(\"failed to spawn fused inference server\")?;\n\n        let fused_items: Vec<RauneDepthBatchItem> = keyframes.iter().map(|kf| {\n            RauneDepthBatchItem {\n                id: format!(\"kf_f{}\", kf.frame_index),\n                pixels: kf.proxy_pixels.clone(),\n                width: proxy_w,\n                height: proxy_h,\n                raune_max_size: proxy_w,\n                depth_max_size: args.proxy_size,",
+  "source_version": "plans/2026-04-04-unified-keyframe-sampling-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836936072Z",
+  "valid_from": "2026-04-11T00:10:08.836936072Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-unified-keyframe-sampling-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 523,
+    "end_line": 567,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

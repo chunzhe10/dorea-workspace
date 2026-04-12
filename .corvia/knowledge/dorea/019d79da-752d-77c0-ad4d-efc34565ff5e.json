@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-efc34565ff5e",
+  "content": "_bounds_b: RefCell::new(d_bounds_b),\n            frame_bufs: RefCell::new(None),\n            frame_bufs_16: RefCell::new(None),\n            stage_mask: params.stage_mask,\n            device,\n            _not_send: std::marker::PhantomData,\n        })\n    }\npub fn prepare_keyframe(&mut self, runtime_boundaries: &[f32]) -> Result<(), GpuError> {\n        let inactive = 1 - self.adaptive_lut.active_index();\n        self.adaptive_lut.rebuild_set(&self.device, inactive, runtime_boundaries)?;\n\n        // Re-upload the inactive set's boundaries into the existing device slice\n        // (copy only, no cudaMalloc — boundary size is constant: runtime_n_zones + 1).\n        // Uses get_mut() since we have &mut self — skips runtime borrow check.\n        let bounds = if inactive == 0 {\n            self.d_bounds_a.get_mut()\n        } else {\n            self.d_bounds_b.get_mut()\n        };\n        self.device.htod_sync_copy_into(\n            self.adaptive_lut.inactive_boundaries(), bounds\n        ).map_err(map_cudarc_error)?;\n        Ok(())\n    }",
+  "source_version": "crates/dorea-gpu/src/cuda/mod.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229806704Z",
+  "valid_from": "2026-04-11T00:04:13.229806704Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cuda/mod.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 628,
+    "end_line": 644,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

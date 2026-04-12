@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c82c9b299806",
+  "content": ").sqrt()\n    C2p = (a2p * a2p + b2 * b2).sqrt()\n\n    def _atan2_deg(y, x):\n        return torch.atan2(y, x) * (180.0 / torch.pi) % 360.0\n\n    h1p = _atan2_deg(b1, a1p)\n    h2p = _atan2_deg(b2, a2p)\n\n    dLp = L2 - L1\n    dCp = C2p - C1p\n    dhp = h2p - h1p\n    dhp = torch.where(dhp > 180, dhp - 360, dhp)\n    dhp = torch.where(dhp < -180, dhp + 360, dhp)\n    dHp = 2 * (C1p * C2p).sqrt() * torch.sin(dhp * torch.pi / 360.0)\n\n    Lp_mean = (L1 + L2) / 2\n    Cp_mean = (C1p + C2p) / 2\n\n    hp_sum = h1p + h2p\n    hp_diff = (h1p - h2p).abs()\n    hp_mean = torch.where(\n        hp_diff <= 180,\n        hp_sum / 2,\n        torch.where(hp_sum < 360, (hp_sum + 360) / 2, (hp_sum - 360) / 2),\n    )\n\n    T = (1\n         - 0.17 * torch.cos((hp_mean - 30) * torch.pi / 180)\n         + 0.24 * torch.cos((2 * hp_mean) * torch.pi / 180)\n         + 0.32 * torch.cos((3 * hp_mean + 6) * torch.pi / 180)\n         - 0.20 * torch.cos((4 * hp_mean - 63) * torch.pi / 180))\n\n    d_theta = 30 * torch.exp(-(((hp_mean - 275) / 25) ** 2))\n    Rc = 2 * (Cp_mean.pow(7) / (Cp_mean.pow(7) + 25 ** 7)).sqrt()\n    Sl = 1 + (0.015 * (Lp_mean - 50).pow(2)) / (20 + (Lp_mean - 50).pow(2)).sqrt()\n    Sc = 1 + 0.045 * Cp_mean\n    Sh = 1 + 0.015 * Cp_mean * T\n    Rt = -torch.sin(2 * d_theta * torch.pi / 180) * Rc\n\n    dE = ((dLp / Sl).pow(2)\n          + (dCp / Sc).pow(2)\n          + (dHp / Sh).pow(2)\n          + Rt * (dCp / Sc) * (dHp / Sh)).sqrt()\n    return dE",
+  "source_version": "benchmarks/upscale_bench/metrics.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230351170Z",
+  "valid_from": "2026-04-11T00:04:13.230351170Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/metrics.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 136,
+    "end_line": 168,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

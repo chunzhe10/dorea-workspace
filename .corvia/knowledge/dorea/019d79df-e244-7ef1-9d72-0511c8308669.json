@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-0511c8308669",
+  "content": "#### 5. `asymmetric_bilateral`\n#### 6. `higher_proxy` (control, not an upscale)\n\n#### 7. `sr_maxine`\nLearned super-resolution on the *graded proxy*, not on the delta.\n\nFlow:\n```\n1. apply delta_proxy to orig_proxy (1080p) → graded_proxy (1080p)\n2. NVIDIA Maxine VideoSuperRes(quality=HIGH) upscales graded_proxy 1080 → 2160\n3. compute delta_method = lab(graded_4k) - lab(orig_full)\n4. driver applies delta_method via triton_oklab_transfer as usual\n```\n\nRationale: a learned SR model trained on natural images is in-distribution when upscaling a natural image (`graded_proxy`), but out-of-distribution when upscaling a signed delta field. Testing \"SR the image, not the delta\" is the honest question.\n\nMaxine verified working in this session:\n- Package: `nvidia-vfx` on PyPI (imports as `nvvfx`)\n- SDK version: 1.2.0\n- Wheel ABI: `cp312-abi3-manylinux_2_27_x86_64` (compatible with venv's Python 3.13)\n- Smoke test passed end-to-end on RTX 3060: 256×256 → 512×512 upscale ran clean\n",
+  "source_version": "decisions/2026-04-10-delta-upscale-bench-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836191708Z",
+  "valid_from": "2026-04-11T00:10:08.836191708Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-10-delta-upscale-bench-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 183,
+    "end_line": 201,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

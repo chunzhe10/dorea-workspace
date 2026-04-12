@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-84afa37a7626",
+  "content": "hunks_exact(2)\n            .map(|c| u16::from_le_bytes([c[0], c[1]]))\n            .collect();\n\n        let frame = Frame16 {\n            index: self.frame_index,\n            pixels,\n            width: self.width,\n            height: self.height,\n        };\n        self.frame_index += 1;\n        Some(Ok(frame))\n    }\n}\n```\n\n- [ ] **Step 3: Add spawn_decoder_16bit and decode_frames_16bit**\n\n```rust\nfn spawn_decoder_16bit(input: &Path, info: &VideoInfo) -> Result<Child, FfmpegError> {\n    let input_str = input.to_str().unwrap_or(\"\");\n    let size_str = format!(\"{}x{}\", info.width, info.height);\n\n    // Try hardware decode first\n    let hw_result = Command::new(\"ffmpeg\")\n        .args([\n            \"-hwaccel\", \"nvdec\",\n            \"-i\", input_str,\n            \"-vf\", &format!(\"scale={size_str}\"),\n            \"-f\", \"rawvideo\",\n            \"-pix_fmt\", \"rgb48le\",\n            \"pipe:1\",\n        ])\n        .stdin(Stdio::null())\n        .stdout(Stdio::piped())\n        .stderr(Stdio::null())\n        .spawn();\n\n    if let Ok(child) = hw_result {\n        return Ok(child);\n    } else if let Err(ref e) = hw_result {\n        log::debug!(\"nvdec 16-bit spawn failed ({e}), falling back to software decode\");\n    }\n\n    Command::new(\"ffmpeg\")\n        .args([\n            \"-i\", input_str,\n            \"-f\", \"rawvideo\",\n            \"-pix_fmt\", \"rgb48le\",\n            \"pipe:1\",\n        ])\n        .stdin(Stdio::null())\n        .stdout(Stdio::piped())\n        .stderr(Stdio::null())",
+  "source_version": "plans/2026-04-08-10bit-pipeline-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837023629Z",
+  "valid_from": "2026-04-11T00:10:08.837023629Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-08-10bit-pipeline-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 834,
+    "end_line": 877,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

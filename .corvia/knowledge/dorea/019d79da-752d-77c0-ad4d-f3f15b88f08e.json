@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-f3f15b88f08e",
+  "content": "pub fn depth_aware_ambiance(\n    rgb: &mut [f32],\n    depth: &[f32],\n    width: usize,\n    height: usize,\n    contrast_scale: f32,\n) {\n    if width == 0 || height == 0 {\n        return;\n    }\n    assert_eq!(rgb.len(), width * height * 3, \"rgb length mismatch\");\n    assert_eq!(depth.len(), width * height, \"depth length mismatch\");\n\n    let n = width * height;\n    for i in 0..n {\n        let d = depth[i];\n        let r = rgb[i * 3];\n        let g = rgb[i * 3 + 1];\n        let b = rgb[i * 3 + 2];\n\n        // --- RGB → LAB ---\n        let (mut l_norm, mut a_ab, mut b_ab) = {\n            let (l, a, b_l) = srgb_to_lab(r, g, b);\n            (l / 100.0, a, b_l)\n        };\n\n        // 1. Shadow lift\n        let lift_amount = 0.2 + 0.15 * d;\n        let toe = 0.15_f32;\n        let shadow_mask = ((toe - l_norm) / toe).clamp(0.0, 1.0);\n        l_norm += shadow_mask * lift_amount * toe;\n\n        // 2. S-curve contrast\n        let strength = (0.3 + 0.3 * d) * contrast_scale;\n        let slope = 4.0 + 4.0 * strength;\n        let s_curve = 1.0 / (1.0 + (-(l_norm - 0.5) * slope).exp());\n        l_norm += (s_curve - l_norm) * strength;\n\n        // 3. Highlight compress\n        let compress = 0.4 + 0.2 * (1.0 - d);\n        let knee_h = 0.88_f32;\n        if l_norm > knee_h {\n            let over = l_norm - knee_h;\n            let headroom = 1.0 - knee_h;",
+  "source_version": "crates/dorea-gpu/src/cpu.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229863385Z",
+  "valid_from": "2026-04-11T00:04:13.229863385Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cpu.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 21,
+    "end_line": 64,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

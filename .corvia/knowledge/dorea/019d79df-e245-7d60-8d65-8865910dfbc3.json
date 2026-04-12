@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-8865910dfbc3",
+  "content": "        # ── Step 1: Single batched H2D upload ──────────────────────────────\n        # Stack frames CPU-side, then one .cuda() call.\n\n        # (N, H, W, 3) → (N, 3, H, W)\n        full_batch = full_batch.permute(0, 3, 1, 2).contiguous()\n\n\n        # ── Step 2: Batched downscale to proxy ─────────────────────────────\n        proxy_batch = F.interpolate(\n            full_batch, size=(ph, pw), mode=\"bilinear\", align_corners=False\n        )",
+  "source_version": "plans/2026-04-10-batched-process-batch.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837074544Z",
+  "valid_from": "2026-04-11T00:10:08.837074544Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-10-batched-process-batch.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 183,
+    "end_line": 189,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

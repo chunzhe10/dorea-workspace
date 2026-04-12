@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-d4d0383cd553",
+  "content": "         init.constant_(m.weight, 1)\n                init.constant_(m.bias, 0)\n            elif isinstance(m, nn.Linear):\n                init.normal_(m.weight, std=0.001)\n                if m.bias is not None:\n                    init.constant_(m.bias, 0)\ndef forward(self, x):\n        b, c, _, _ = x.size()\n        residual=x\n        out=x*self.ca(x)\n        out=out*self.sa(out)\n        return out+residual",
+  "source_version": "models/raune_net/models/RAUNE-Net/models/cbam.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230558598Z",
+  "valid_from": "2026-04-11T00:04:13.230558598Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "models/raune_net/models/RAUNE-Net/models/cbam.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 64,
+    "end_line": 69,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

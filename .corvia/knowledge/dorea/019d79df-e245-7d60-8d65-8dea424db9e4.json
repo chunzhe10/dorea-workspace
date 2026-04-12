@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-8dea424db9e4",
+  "content": "space=\"corvia-workspace\",\n        ),\n        enabled_services=[],\n        logs=[],\n    )\n    data = resp.model_dump()\n    assert data[\"manager\"][\"pid\"] == 100\n    assert len(data[\"services\"]) == 2\n    assert data[\"config\"][\"embedding_provider\"] == \"corvia\"\n    # Verify JSON serialization works\n    json_str = resp.model_dump_json()\n    assert '\"corvia-inference\"' in json_str\n```\n\n**Step 2: Run test to verify it fails**\n\nRun: `cd /workspaces/corvia-workspace && python3 -m pytest tools/corvia-dev/tests/test_models.py -v`\nExpected: FAIL with `ModuleNotFoundError: No module named 'corvia_dev.models'`\n\n**Step 3: Write the implementation**\n\n```python\n\"\"\"Pydantic models for corvia-dev.\"\"\"\n\nfrom __future__ import annotations\n\nfrom enum import Enum\n\nfrom pydantic import BaseModel\n\n\nclass ServiceState(str, Enum):\n    \"\"\"Possible states for a managed service.\"\"\"\n\n    STARTING = \"starting\"\n    HEALTHY = \"healthy\"\n    UNHEALTHY = \"unhealthy\"\n    STOPPED = \"stopped\"\n    CRASHED = \"crashed\"\n\n\nclass ServiceDefinition(BaseModel):\n    \"\"\"Static definition of a service in the registry.\"\"\"\n\n    name: str\n    tier: int  # 0=core, 1=provider, 2=additive\n    port: int | None = None\n    health_path: str = \"/health\"\n    start_cmd: list[str] = []\n    stop_signal: str = \"SIGTERM\"\n    depends_on: list[str] = []\n    exclusive_group: str | None = None\n\n\nclass ServiceStatus(BaseModel):\n    \"\"\"Runtime status of a single service.\"\"\"\n",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-cli.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837143847Z",
+  "valid_from": "2026-04-11T00:10:08.837143847Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-cli.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 184,
+    "end_line": 231,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

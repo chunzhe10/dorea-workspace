@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-f20ffee232b4",
+  "content": "}\n\n        // d_build drops here — build buffer freed\n        Ok(Self {\n            arrays,\n            textures,\n            n_zones,\n            grid_size: n,\n            zone_boundaries: calibration.depth_luts.zone_boundaries.clone(),\n        })\n    }\nstruct TextureSet {\n    arrays: Vec<CUarray>,\n    textures: Vec<CUtexObject>,\n    zone_boundaries: Vec<f32>,\n}",
+  "source_version": "crates/dorea-gpu/src/cuda/combined_lut.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229837013Z",
+  "valid_from": "2026-04-11T00:04:13.229837013Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cuda/combined_lut.rs",
+    "language": "rs",
+    "chunk_type": "struct_item",
+    "start_line": 249,
+    "end_line": 253,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

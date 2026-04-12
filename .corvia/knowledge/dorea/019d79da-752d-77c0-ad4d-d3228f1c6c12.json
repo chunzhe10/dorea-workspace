@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d3228f1c6c12",
+  "content": "        };\n\n                // 16-bit grading — uses grade_frame_blended_16 with u16 pixel data.\n                let graded = adaptive_grader.grade_frame_blended_16(\n                    &frame.pixels, &depth, frame.width, frame.height, dpw, dph, blend_t,\n                    class_mask_slice, mask_w, mask_h, diver_depth,\n                ).map_err(|e| anyhow::anyhow!(\"16-bit grading failed for frame {fi}: {e}\"))?;\n\n                #[cfg(not(feature = \"cuda\"))]\n                {\n                    anyhow::bail!(\n                        \"10-bit grading requires CUDA. Build with --features cuda or use --output-codec h264 for 8-bit CPU grading.\"\n                    );\n                }\n\n                if graded_tx.send(graded).is_err() {\n                    break;\n                }\n            }\n            Ok(())\n        })();\n\n        // Signal encoder that no more frames are coming\n        drop(graded_tx);\n\n        // Always join threads — even when GPU errored — to collect all errors.\n        let decoder_result = decoder_handle.join()\n            .map_err(|_| anyhow::anyhow!(\"decoder thread panicked\"))?;\n        let encoder_result = encoder_handle.join()\n            .map_err(|_| anyhow::anyhow!(\"encoder thread panicked\"))?;\n\n        gpu_result.context(\"GPU grading failed\")?;\n        decoder_result.context(\"decoder thread failed\")?;\n        encoder_result\n    })\n}",
+  "source_version": "crates/dorea-cli/src/pipeline/grading.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229454156Z",
+  "valid_from": "2026-04-11T00:04:13.229454156Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/pipeline/grading.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 608,
+    "end_line": 638,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

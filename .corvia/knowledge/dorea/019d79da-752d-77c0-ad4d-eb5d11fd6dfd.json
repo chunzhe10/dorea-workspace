@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-eb5d11fd6dfd",
+  "content": "pub fn fixed(batch_size: usize) -> Self {\n        Self {\n            batch_size: batch_size.max(1),\n            max_batch: batch_size.max(1),\n            min_batch: 1,\n            successes: 0,\n            grow_threshold: usize::MAX,\n        }\n    }\npub fn batch_size(&self) -> usize {\n        self.batch_size\n    }",
+  "source_version": "crates/dorea-gpu/src/batcher.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229754431Z",
+  "valid_from": "2026-04-11T00:04:13.229754431Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/batcher.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 49,
+    "end_line": 51,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

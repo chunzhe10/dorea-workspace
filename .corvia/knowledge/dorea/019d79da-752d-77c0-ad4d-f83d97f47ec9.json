@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-f83d97f47ec9",
+  "content": "pub struct LutBased {\n    forward: Vec<f32>,\n    inverse: Vec<f32>,\n    shoulder: f32,\n    name: String,\n}\nimpl LutBased {\n    /// Build from a forward LUT (encoded → linear).\n    /// The inverse is computed by table inversion.\n    pub fn new(forward: Vec<f32>, shoulder: f32, name: String) -> Self {\n        let inverse = invert_1d_lut(&forward);\n        Self { forward, inverse, shoulder, name }\n    }\n\n    /// Load from a 1D .cube file.\n    pub fn from_cube_file(path: &Path, shoulder: f32) -> Result<Self, String> {\n        let content = std::fs::read_to_string(path)\n            .map_err(|e| format!(\"cannot read {}: {e}\", path.display()))?;\n\n        let mut size: Option<usize> = None;\n        let mut values: Vec<f32> = Vec::new();\n        let mut title = path.file_stem()\n            .map(|s| s.to_string_lossy().to_string())\n            .unwrap_or_else(|| \"custom\".to_string());\n\n        for line in content.lines() {\n            let line = line.trim();\n            if line.is_empty() || line.starts_with('#') {\n                continue;\n            }\n            if let Some(rest) = line.strip_prefix(\"TITLE\") {\n                title = rest.trim().trim_matches('\"').to_string();\n                continue;\n            }",
+  "source_version": "crates/dorea-color/src/lut_transfer.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229923951Z",
+  "valid_from": "2026-04-11T00:04:13.229923951Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-color/src/lut_transfer.rs",
+    "language": "rs",
+    "chunk_type": "impl_item",
+    "start_line": 18,
+    "end_line": 45,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

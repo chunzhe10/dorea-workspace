@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c4904ed6f064",
+  "content": "a_luma_sq_inv * 0.5)\n    luma01 = tl.exp(-(dg01 * dg01) * sigma_luma_sq_inv * 0.5)\n    luma10 = tl.exp(-(dg10 * dg10) * sigma_luma_sq_inv * 0.5)\n    luma11 = tl.exp(-(dg11 * dg11) * sigma_luma_sq_inv * 0.5)\n\n    luma_sum = luma00 + luma01 + luma10 + luma11\n    collapsed = luma_sum < 1e-4  # \"useful luma signal\" threshold\n\n    one = 1.0\n    luma00 = tl.where(collapsed, one, luma00)\n    luma01 = tl.where(collapsed, one, luma01)\n    luma10 = tl.where(collapsed, one, luma10)\n    luma11 = tl.where(collapsed, one, luma11)\n\n    wL00 = spatial00_L * luma00\n    wL01 = spatial01_L * luma01\n    wL10 = spatial10_L * luma10\n    wL11 = spatial11_L * luma11\n    wL_sum = wL00 + wL01 + wL10 + wL11\n    out_L = (wL00 * d00_L + wL01 * d01_L + wL10 * d10_L + wL11 * d11_L) / (wL_sum + 1e-8)\n\n    # a/b channels use sigma_spatial_ab\n    s2_C = sigma_spatial_ab * sigma_spatial_ab\n    spatial00_C = tl.exp(-(dy0 * dy0 + dx0 * dx0) / (2.0 * s2_C))\n    spatial01_C = tl.exp(-(dy0 * dy0 + dx1 * dx1) / (2.0 * s2_C))\n    spatial10_C = tl.exp(-(dy1 * dy1 + dx0 * dx0) / (2.0 * s2_C))\n    spatial11_C = tl.exp(-(dy1 * dy1 + dx1 * dx1) / (2.0 * s2_C))\n\n    wC00 = spatial00_C * luma00\n    wC01 = spatial01_C * luma01\n    wC10 = spatial10_C * luma10\n    wC11 = spatial11_C * luma11\n    wC_sum = wC00 + wC01 + wC10 + wC11\n    out_a = (wC00 * d00_a + wC01 * d01_a + wC10 * d10_a + wC11 * d11_a) / (wC_sum + 1e-8)\n    out_b = (wC00 * d00_b + wC01 * d01_b + wC10 * d10_b + wC11 * d11_b) / (wC_sum + 1e-8)\n\n    tl.store(out_ptr + 0 * n_pixels + offs, out_L, mask=mask)\n    tl.store(out_ptr + 1 * n_pixels + offs, out_a, mask=mask)\n    tl.store(out_ptr + 2 * n_pixels + offs, out_b, mask=mask)",
+  "source_version": "benchmarks/upscale_bench/methods.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230305356Z",
+  "valid_from": "2026-04-11T00:04:13.230305356Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/methods.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 299,
+    "end_line": 331,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

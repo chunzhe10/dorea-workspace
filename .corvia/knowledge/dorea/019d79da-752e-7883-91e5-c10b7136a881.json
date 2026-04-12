@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c10b7136a881",
+  "content": "def _make_enhance_req(width: int, height: int, req_id: str = \"f001\") -> dict:\n    pixels = np.zeros((height, width, 3), dtype=np.uint8)\n    b64 = base64.b64encode(pixels.tobytes()).decode(\"ascii\")\n    return {\n        \"type\": \"enhance\",\n        \"id\": req_id,\n        \"format\": \"raw_rgb\",\n        \"image_b64\": b64,\n        \"width\": width,\n        \"height\": height,\n        \"no_artifact_reduce\": False,\n        \"upscale_factor\": 2,\n    }",
+  "source_version": "python/tests/test_maxine_server.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230254525Z",
+  "valid_from": "2026-04-11T00:04:13.230254525Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/tests/test_maxine_server.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 14,
+    "end_line": 26,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

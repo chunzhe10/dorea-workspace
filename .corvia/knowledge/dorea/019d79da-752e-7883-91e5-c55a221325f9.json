@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c55a221325f9",
+  "content": "def clear_realesrgan_sr() -> None:\n    \"\"\"Release the Real-ESRGAN upsampler to free VRAM.\"\"\"\n    global _REALESRGAN_SR\n    _REALESRGAN_SR = None\ndef sr_realesrgan(\n        delta_proxy: torch.Tensor,\n        orig_full: torch.Tensor,\n        full_size: Tuple[int, int],\n    ) -> torch.Tensor:\n        \"\"\"Real-ESRGAN x2 on the graded proxy image.\"\"\"\n        from .oklab import oklab_to_rgb, rgb_to_oklab\n\n        fh, fw = full_size\n        _, _, ph, pw = delta_proxy.shape\n\n        orig_proxy = F.interpolate(orig_full, size=(ph, pw), mode=\"bilinear\", align_corners=False)\n        orig_proxy_lab = rgb_to_oklab(orig_proxy)\n        graded_proxy_lab = orig_proxy_lab + delta_proxy\n        graded_proxy = oklab_to_rgb(graded_proxy_lab)  # (1, 3, ph, pw) in [0,1]\n\n        # RealESRGANer.enhance expects an (H, W, 3) uint8 BGR numpy array\n        import numpy as np\n        arr = (graded_proxy[0].permute(1, 2, 0).cpu().numpy() * 255).clip(0, 255).astype(np.uint8)\n        arr_bgr = arr[:, :, ::-1]  # RGB → BGR\n\n        upsampler = _get_realesrgan_sr()\n        output_bgr, _ = upsampler.enhance(arr_bgr, outscale=fw / pw)\n        output_rgb = output_bgr[:, :, ::-1].copy()\n        graded_4k = torch.from_numpy(output_rgb).to(\"cuda\", dtype=torch.float32) / 255.0\n        graded_4k = graded_4k.permute(2, 0, 1).unsqueeze(0)  # (1, 3, fh, fw)\n\n        delta_4k = rgb_to_oklab(graded_4k) - rgb_to_oklab(orig_full)\n        return delta_4k",
+  "source_version": "benchmarks/upscale_bench/methods.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230314217Z",
+  "valid_from": "2026-04-11T00:04:13.230314217Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/methods.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 596,
+    "end_line": 624,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

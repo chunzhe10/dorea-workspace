@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-f61b8d8b46ca",
+  "content": "expect(\"grade_frame_with_grader failed\")\n                            });\n                        },\n                    );\n                }\n                Err(e) => {\n                    eprintln!(\"SKIP with_grader/{label}: CudaGrader::new failed: {e}\");\n                }\n            }\n        }\n\n        // --- Path B: grade_frame (new CudaGrader per call — shows PTX overhead) ---\n        #[cfg(feature = \"cuda\")]\n        {\n            use dorea_gpu::grade_frame;\n            group.bench_with_input(\n                BenchmarkId::new(\"per_call_init\", label),\n                &(w, h),\n                |b, _| {\n                    b.iter(|| {\n                        grade_frame(&pixels, &depth, w, h, &calibration, &params)\n                            .expect(\"grade_frame failed\")\n                    });\n                },\n            );\n        }\n\n        // --- Path C: CPU baseline ---\n        group.bench_with_input(\n            BenchmarkId::new(\"cpu\", label),\n            &(w, h),\n            |b, _| {\n                b.iter(|| {\n                    dorea_gpu::cpu::grade_frame_cpu(\n                        &pixels, &depth, w, h, &calibration, &params,\n                    )\n                    .expect(\"cpu grade failed\")\n                });\n            },\n        );\n    }\n\n    group.finish();\n}",
+  "source_version": "crates/dorea-gpu/benches/grade_bench.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229895900Z",
+  "valid_from": "2026-04-11T00:04:13.229895900Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/benches/grade_bench.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 95,
+    "end_line": 131,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

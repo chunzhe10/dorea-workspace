@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d4e607f86bc5",
+  "content": "   pixels: fullres_pixels[i].clone(),\n                width: info.width,\n                height: info.height,\n                max_size: depth_max_size,\n            }\n        }).collect();\n        let batch_results = inf_server.run_depth_batch(&depth_items)\n            .with_context(|| format!(\"Depth sub-batch {}/{} failed\", chunk_start / depth_sub_batch + 1,\n                (keyframes.len() + depth_sub_batch - 1) / depth_sub_batch))?;\n        depth_results.extend(batch_results);\n    }\n    log::info!(\"Depth complete\");\n\n    // --- Combine RAUNE + depth results ---\n    for (i, kf) in keyframes.iter().enumerate() {\n        let (enhanced, enh_w, enh_h) = &raune_enhanced[i];\n        let enhanced_proxy = if *enh_w == proxy_w && *enh_h == proxy_h {\n            enhanced.clone()\n        } else {\n            dorea_video::resize::resize_rgb_bilinear(enhanced, *enh_w, *enh_h, proxy_w, proxy_h)\n        };\n\n        let (_, ref depth, dw, dh) = depth_results[i];\n        let depth_for_store = if dw == proxy_w && dh == proxy_h {\n            depth.clone()\n        } else {\n            InferenceServer::upscale_depth(depth, dw, dh, proxy_w, proxy_h)\n        };\n        store.push(&kf.proxy_pixels, &enhanced_proxy, &depth_for_store, proxy_w, proxy_h)\n            .context(\"failed to page result to store\")?;\n        kf_depths.insert(kf.frame_index, (depth.clone(), dw, dh));\n    }\n    log::info!(\"Inference complete ({} keyframes)\", keyframes.len());\n    debug_assert_eq!(store.len(), keyframes.len(), \"store/keyframes length diverged\");\n\n    // --- YOLO-seg on proxy keyframes (diver detection) ---\n    // Runs after depth — uses freed VRAM from RAUNE unload.\n    log::info!(\"Loading YOLO-seg for diver detection...\");\n    if let Err(e) = inf_server.load_yolo_seg(None) {\n        log::warn!(\"Failed to load YOLO-seg ({}), proceeding without diver masks\", e);\n    }",
+  "source_version": "crates/dorea-cli/src/pipeline/feature.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229475740Z",
+  "valid_from": "2026-04-11T00:04:13.229475740Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/pipeline/feature.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 194,
+    "end_line": 227,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

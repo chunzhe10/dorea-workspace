@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c1f3c2c7fd2c",
+  "content": "[build-system]\nrequires = [\"setuptools>=68\"]\nbuild-backend = \"setuptools.backends.legacy:build\"\n",
+  "source_version": "python/pyproject.toml",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230267407Z",
+  "valid_from": "2026-04-11T00:04:13.230267407Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/pyproject.toml",
+    "language": "toml",
+    "chunk_type": "section",
+    "start_line": 1,
+    "end_line": 4,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

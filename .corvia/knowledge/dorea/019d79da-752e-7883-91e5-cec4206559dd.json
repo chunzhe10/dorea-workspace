@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-cec4206559dd",
+  "content": "n_zones,\n            grid_size: N,\n            zone_boundaries: calibration.depth_luts.zone_boundaries.clone(),\n        })\n    }\n}\n```\n\n- [ ] **Step 3: Add module declaration to cuda/mod.rs**\n\nAt the top of `crates/dorea-gpu/src/cuda/mod.rs`, add:\n\n```rust\n#[cfg(feature = \"cuda\")]\nmod combined_lut;\n#[cfg(feature = \"cuda\")]\npub(crate) use combined_lut::CombinedLut;\n```\n\nAlso, add `pub(crate) use combined_lut::map_cudarc_error;` is **wrong** — `map_cudarc_error` is in `mod.rs` itself. Instead, the `combined_lut.rs` module calls `super::map_cudarc_error`. In `mod.rs`, keep `map_cudarc_error` as is; the `combined_lut.rs` imports it with `use super::map_cudarc_error;`.\n\n`CudaDevice::synchronize()` is confirmed to exist in cudarc 0.12.1 — use it directly:\n```rust\n        device.synchronize().map_err(map_cudarc_error)?;\n```\n\n- [ ] **Step 4: Verify it compiles**\n\n```bash\ncd repos/dorea && cargo build -p dorea-gpu 2>&1 | grep -E \"^error\" | head -20\n```\n\nFix any type name mismatches in cudarc::driver::sys — the exact enum variant names (CUresult, CUmemorytype_enum, etc.) may differ slightly from the CUDA headers. Run `grep -r \"CU_AD_FORMAT_FLOAT\\|CUarray_format\" ~/.cargo/registry/src/` to find the correct names.\n\n- [ ] **Step 5: Run CUDA tests (if GPU available)**\n\n```bash\ncd repos/dorea && cargo test -p dorea-gpu --features cuda combined_lut_builds_without_panic 2>&1 | tail -10\n```\n\nExpected: PASS (if CUDA device present).\n\n- [ ] **Step 6: Commit**\n\n```bash\ncd repos/dorea && git add crates/dorea-gpu/src/cuda/combined_lut.rs crates/dorea-gpu/src/cuda/mod.rs\ngit commit -m \"feat: add CombinedLut — CUarray/CUtexObject lifecycle for combined LUT (Task 6)\"\n```\n\n---\n",
+  "source_version": "docs/plans/2026-04-03-combined-lut-cuda-texture-plan.md",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230466206Z",
+  "valid_from": "2026-04-11T00:04:13.230466206Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "docs/plans/2026-04-03-combined-lut-cuda-texture-plan.md",
+    "language": "markdown",
+    "chunk_type": "heading_section",
+    "start_line": 1311,
+    "end_line": 1348,
+    "content_role": "plan",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

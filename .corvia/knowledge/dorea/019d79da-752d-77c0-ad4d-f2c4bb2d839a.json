@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-f2c4bb2d839a",
+  "content": "].zone_boundaries\n    }\n\n    pub(crate) fn inactive_textures(&self) -> &[CUtexObject] {\n        &self.sets[1 - self.active].textures\n    }\n\n    pub(crate) fn inactive_boundaries(&self) -> &[f32] {\n        &self.sets[1 - self.active].zone_boundaries\n    }\n}\npub(crate) fn new(\n        device: &Arc<CudaDevice>,\n        base_luts_flat: &[f32],\n        base_boundaries: &[f32],\n        base_n_zones: usize,\n        hsl_data: (&[f32], &[f32], &[f32], &[f32]),\n        params: (f32, f32, f32),\n        lut_size: usize,\n        runtime_n_zones: usize,\n    ) -> Result<Self, GpuError> {\n        let grid_size = COMBINED_LUT_GRID;\n\n        let d_base_luts = device.htod_sync_copy(base_luts_flat).map_err(map_cudarc_error)?;\n        let d_base_boundaries = device.htod_sync_copy(base_boundaries).map_err(map_cudarc_error)?;\n\n        let (ho, sr, vo, wt) = hsl_data;\n        let d_h_offsets = device.htod_sync_copy(ho).map_err(map_cudarc_error)?;\n        let d_s_ratios  = device.htod_sync_copy(sr).map_err(map_cudarc_error)?;\n        let d_v_offsets = device.htod_sync_copy(vo).map_err(map_cudarc_error)?;\n        let d_weights   = device.htod_sync_copy(wt).map_err(map_cudarc_error)?;\n\n        let set_a = TextureSet::allocate(runtime_n_zones, grid_size)?;\n        let set_b = TextureSet::allocate(runtime_n_zones, grid_size)?;\n\n        Ok(Self {\n            sets: [set_a, set_b],\n            active: 0,\n            grid_size,\n            runtime_n_zones,\n            d_base_luts,\n            d_base_boundaries,\n            base_n_zones,\n            d_h_offsets,\n            d_s_ratios,\n            d_v_offsets,\n            d_weights,\n            warmth: params.0,\n            strength: params.1,\n            contrast: params.2,\n            lut_size,\n        })\n    }",
+  "source_version": "crates/dorea-gpu/src/cuda/combined_lut.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229846670Z",
+  "valid_from": "2026-04-11T00:04:13.229846670Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cuda/combined_lut.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 371,
+    "end_line": 412,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c86559b059f4",
+  "content": "def _rgb_to_luma_bt709(rgb: torch.Tensor) -> torch.Tensor:\n    return 0.2126 * rgb[:, 0:1] + 0.7152 * rgb[:, 1:2] + 0.0722 * rgb[:, 2:3]\ndef compute_ssim(final_method: torch.Tensor, final_gold: torch.Tensor) -> float:\n    \"\"\"SSIM on BT.709 luma. Uses torchmetrics if available, else inlined fallback.\"\"\"\n    y_a = _rgb_to_luma_bt709(final_method)\n    y_b = _rgb_to_luma_bt709(final_gold)\n    try:\n        from torchmetrics.image import StructuralSimilarityIndexMeasure\n        ssim_metric = StructuralSimilarityIndexMeasure(data_range=1.0).to(y_a.device)\n        return ssim_metric(y_a, y_b).item()\n    except ImportError:\n        mu_a = y_a.mean()\n        mu_b = y_b.mean()\n        var_a = y_a.var()\n        var_b = y_b.var()\n        cov = ((y_a - mu_a) * (y_b - mu_b)).mean()\n        C1 = (0.01) ** 2\n        C2 = (0.03) ** 2\n        num = (2 * mu_a * mu_b + C1) * (2 * cov + C2)\n        den = (mu_a ** 2 + mu_b ** 2 + C1) * (var_a + var_b + C2)\n        return (num / den).item()",
+  "source_version": "benchmarks/upscale_bench/metrics.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230354200Z",
+  "valid_from": "2026-04-11T00:04:13.230354200Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/metrics.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 189,
+    "end_line": 207,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

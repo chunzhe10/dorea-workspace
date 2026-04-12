@@ -1,0 +1,31 @@
+{
+  "id": "019d81a3-0491-71c1-aa3b-d0d491af8d19",
+  "content": "# TensorRT FP16 for RAUNE-Net — Design Decisions (2026-04-12)\n\n## What: Manual ONNX → TensorRT FP16 pipeline for RAUNE-Net inference acceleration\n\n## Key Decisions:\n\n1. **Chose manual ONNX→TRT over torch_tensorrt** because torch_tensorrt has no InstanceNorm converter (30 graph breaks per forward pass = slower than pure PyTorch) and doesn't support Python 3.13 in 2.6.x.\n\n2. **Chose manual TRT over ONNX Runtime TRT EP** for zero-copy PyTorch tensor integration via data_ptr(), smaller dependency footprint, and direct control over engine building.\n\n3. **FP16 only, no INT8** because INT8 has only 256 discrete activation levels — insufficient for 10-bit video pipeline which needs 1024 levels per channel.\n\n4. **TRT 10.x natively supports ALL RAUNE-Net ops** (including InstanceNorm2d, ReflectionPad2d, CBAM attention) — single unified engine with zero fallback partitions.\n\n5. **Must run onnxsim after ONNX export** — TRT requires InstanceNorm bias tensor to be a graph initializer, not a runtime input. Raw PyTorch ONNX export doesn't guarantee this.\n\n6. **Opt-in via --tensorrt flag** with fail-fast on missing dependencies (no silent fallback to PyTorch). Existing PyTorch path unchanged when flag absent.\n\n## Alternatives Rejected:\n- torch_tensorrt: Python 3.13 blocker + InstanceNorm fragmentation\n- ONNX Runtime TRT EP: Adds ORT dependency for same underlying TRT engine\n- INT8 quantization: Incompatible with 10-bit color fidelity requirements",
+  "source_version": "mcp",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-12T12:20:37.649059936Z",
+  "valid_from": "2026-04-12T12:20:37.649059936Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "decision",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

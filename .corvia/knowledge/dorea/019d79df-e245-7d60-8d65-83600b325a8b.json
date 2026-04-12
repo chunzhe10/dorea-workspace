@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-83600b325a8b",
+  "content": "## Self-Review\n\n- ✅ C: `FeatureStageInput` carries `raune_weights`, `raune_models_dir`, `depth_model`; `load_raune` uses configured paths\n- ✅ D/1: `ProxyDecodeNode::Output = ProxyDecoder` (streaming iterator); never collects frames into `Vec`\n- ✅ 2: `FusedInferenceNode::process` builds `RauneDepthBatchItem` list inline per batch; no full pre-collection\n- ✅ 3: `FrameScore.pixels: Vec<u8>` is a move not a copy; documented in keyframe.rs comment\n- ✅ 4: `HslAverageNode` uses running f64 accumulators; `process(pair)` accumulates, `finish()` returns result; no `Vec<pairs>` materialised\n\n**Placeholder scan:** None. All code blocks are complete.\n\n**Type consistency:**\n- `KeyframeStageOutput`: defined in `mod.rs`, consumed by `feature.rs`, passed from `grade.rs`\n- `FeatureStageOutput`: defined in `mod.rs`, consumed by `calibration.rs`, passed from `grade.rs`\n- `CalibrationStageOutput`: defined in `mod.rs`, consumed by `grading.rs`, passed from `grade.rs`\n- `SegmentCalibration`: defined in `calibration.rs`, referenced by `grading.rs` via `calibration::SegmentCalibration`\n- `KeyframeEntry`: defined in `keyframe.rs`, referenced by `feature.rs` via `keyframe::KeyframeEntry`\n- `DepthInterpolateNode::lerp` takes `&[f32]` — consistent with call sites in `GradingStage::run` that borrow from `keyframe_depths` HashMap\n- `HslAverageNode::process` accumulates `()`, `finish()` returns `HslCorrections` — `CalibrationStage::run` calls `reset()` per segment, `finish()` per segment after the loop",
+  "source_version": "plans/2026-04-05-pipeline-dag-refactor.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837004764Z",
+  "valid_from": "2026-04-11T00:10:08.837004764Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-05-pipeline-dag-refactor.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1917,
+    "end_line": 1932,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

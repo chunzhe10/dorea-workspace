@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-3a1d821e9e98",
+  "content": "nto the inactive set.\n    pub fn prepare_keyframe(&mut self, runtime_boundaries: &[f32]) -> Result<(), GpuError> {\n        let inactive = 1 - self.adaptive_lut.active;\n        self.adaptive_lut.rebuild_set(&self.device, inactive, runtime_boundaries)\n    }\n\n    /// Swap active/inactive texture sets (call at keyframe boundary).\n    pub fn swap_textures(&mut self) {\n        self.adaptive_lut.swap();\n    }\n\n    /// Load new segment base LUT + HSL data.\n    pub fn load_segment(\n        &mut self,\n        base_luts_flat: &[f32],\n        base_boundaries: &[f32],\n        hsl_data: (&[f32], &[f32], &[f32], &[f32]),\n    ) -> Result<(), GpuError> {\n        self.adaptive_lut.load_segment(\n            &self.device, base_luts_flat, base_boundaries, hsl_data,\n        )\n    }\n\n    /// Grade one frame with dual-texture temporal blending.\n    ///\n    /// `blend_t`: 0.0 = use active set only (keyframe), 1.0 = use inactive set only.\n    pub fn grade_frame_blended(\n        &self,\n        pixels: &[u8],\n        depth: &[f32],\n        width: usize,\n        height: usize,\n        blend_t: f32,\n    ) -> Result<Vec<u8>, GpuError> {\n        let n = width * height;\n        if pixels.len() != n * 3 {\n            return Err(GpuError::InvalidInput(format!(\n                \"pixels len {} != {}*3\", pixels.len(), n\n            )));\n        }\n        if depth.len() != n {\n            return Err(GpuError::InvalidInput(format!(\n                \"depth len {} != {}\", depth.len(), n\n            )));\n        }\n        let dev = &self.device;\n\n        let d_pixels_in = dev.htod_sync_copy(pixels).map_err(map_cudarc_error)?;\n        let d_depth = dev.htod_sync_copy(depth).map_err(map_cudarc_error)?;\n        let d_textures_a = dev.htod_sync_copy(self.adaptive_lut.active_textures())\n            .map_err(map_cudarc_error)?;\n        let d_boundaries_a = dev.htod_sync_copy(self.adaptive_lut.active_boundaries())",
+  "source_version": "plans/2026-04-04-per-keyframe-adaptive-depth-zones-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836906101Z",
+  "valid_from": "2026-04-11T00:10:08.836906101Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-per-keyframe-adaptive-depth-zones-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1200,
+    "end_line": 1245,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

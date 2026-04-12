@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-37748cd1b740",
+  "content": "### Task 5: grade.rs — single-server lifecycle, remove Path B, --no-maxine default\n\n            no_depth_interp: false,\n            raune_weights: None,\n            raune_models_dir: None,\n            depth_model: None,\n            python: PathBuf::from(\"/opt/dorea-venv/bin/python\"),\n            cpu_only: false,\n            verbose: false,\n        };\n        let cfg = build_inference_config(&args);\n        assert!(cfg.maxine, \"Maxine should be enabled by default\");\n        assert!(!cfg.skip_raune, \"RAUNE should not be skipped in config\");\n        assert!(!cfg.skip_depth, \"depth should not be skipped in config\");\n    }\n\n    #[test]\n    fn build_inference_config_no_maxine_flag_disables_maxine() {\n        let args = GradeArgs {\n            input: PathBuf::from(\"/dev/null\"),\n            output: None,\n            no_maxine: true,\n            no_maxine_artifact_reduction: false,\n            maxine_upscale_factor: 2,\n            warmth: 1.0,\n            strength: 0.8,\n            contrast: 1.0,\n            proxy_size: 518,\n            depth_skip_threshold: 0.005,\n            depth_max_interval: 12,\n            no_depth_interp: false,\n            raune_weights: None,",
+  "source_version": "plans/2026-04-04-maxine-pipeline-architecture.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836859564Z",
+  "valid_from": "2026-04-11T00:10:08.836859564Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-maxine-pipeline-architecture.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 802,
+    "end_line": 831,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

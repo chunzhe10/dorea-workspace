@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d71-fe68c1df7723",
+  "content": "### Pipeline Integration\n### CLI Flags\n\n### Code Location\n\n| File | Change |\n|------|--------|\n| `dorea-gpu/src/lut3d.rs` | New module: `GradeLut`, `Lut3D`, `build_grade_lut()`, `apply_grade_lut()` |\n| `dorea-gpu/src/lib.rs` | Extract `grade_frame_inner(skip_clarity)` from `grade_frame`; export `lut3d` |\n| `dorea-cli/src/grade.rs` | Build LUT after calibration; use in non-keyframe path; add `--no-grade-lut` |\n\n\n### Clarity Handling\n\nClarity (box blur detail extraction) is **skipped on non-keyframes**:\n- It's the only spatial operation — cannot be captured in a per-pixel LUT\n- At 120fps, frame-to-frame clarity difference is imperceptible\n- Clarity will be replaced by NVIDIA Maxine post-grading enhancement\n  (see `2026-04-02-maxine-post-grading-enhancement.md`)\n- Keyframes still run full clarity via `grade_frame`\n- **Low frame rate note**: For content below 60fps, recommend reducing\n  `--depth-max-interval` to 4-6 to increase keyframe density and reduce\n  the quality asymmetry between keyframes (with clarity) and non-keyframes.\n",
+  "source_version": "decisions/2026-04-03-3d-lut-temporal-interpolation.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836110259Z",
+  "valid_from": "2026-04-11T00:10:08.836110259Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-03-3d-lut-temporal-interpolation.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 109,
+    "end_line": 128,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-380e0c66849f",
+  "content": "e = PagedCalibrationStore::new()\n        .context(\"failed to create paged calibration store\")?;\n    let mut kf_depths: HashMap<u64, (Vec<f32>, usize, usize)> = HashMap::new();\n\n    for (chunk_kfs, chunk_items) in keyframes\n        .chunks(FUSED_BATCH_SIZE)\n        .zip(fused_items.chunks(FUSED_BATCH_SIZE))\n    {\n        let mut results = inf_server.run_raune_depth_batch(chunk_items)\n            .unwrap_or_else(|e| {\n                log::warn!(\n                    \"Fused RAUNE+depth batch failed: {e} — using originals + uniform depth\"\n                );\n                chunk_items.iter().map(|item| {\n                    (item.id.clone(), item.pixels.clone(),\n                     item.width, item.height,\n                     vec![0.5f32; item.width * item.height],\n                     item.width, item.height)\n                }).collect()\n            });\n\n        if results.len() < chunk_items.len() {\n            log::warn!(\n                \"Fused batch returned {} results for {} items — padding with originals\",\n                results.len(), chunk_items.len()\n            );\n            for item in &chunk_items[results.len()..] {\n                results.push((\n                    item.id.clone(), item.pixels.clone(),\n                    item.width, item.height,\n                    vec![0.5f32; item.width * item.height],\n                    item.width, item.height,\n                ));\n            }\n        }\n",
+  "source_version": "plans/2026-04-04-maxine-pipeline-architecture.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836869010Z",
+  "valid_from": "2026-04-11T00:10:08.836869010Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-maxine-pipeline-architecture.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1157,
+    "end_line": 1186,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

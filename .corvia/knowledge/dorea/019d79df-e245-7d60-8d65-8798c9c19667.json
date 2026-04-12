@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-8798c9c19667",
+  "content": "## Task 2: Replace CIELab with OKLab + `__powf` in CUDA kernel (`grade_pixel.cuh`)\n\n    return (v <= 0.0031308f) ? (v * 12.92f) : (1.055f * __powf(v, 1.0f / 2.4f) - 0.055f);\n}\n```\n\n- [ ] **Step 3: Remove CIELab helper functions**\n\nDelete `f_lab` and `f_lab_inv` functions entirely (lines 46–53 in the original). They are no longer needed.\n\n- [ ] **Step 4: Replace `srgb_to_lab`**\n\nReplace the existing `srgb_to_lab` function (was lines 55–72) with:\n\n```cuda\n__device__ void srgb_to_lab(float r, float g, float b,\n                              float* l_out, float* a_out, float* b_lab_out) {\n    float rl = srgb_to_linear(r);\n    float gl = srgb_to_linear(g);\n    float bl = srgb_to_linear(b);\n\n    // Linear RGB → LMS\n    float l = 0.4122214708f*rl + 0.5363325363f*gl + 0.0514459929f*bl;\n    float m = 0.2119034982f*rl + 0.6806995451f*gl + 0.1073969566f*bl;\n    float s = 0.0883024619f*rl + 0.2817188376f*gl + 0.6299787005f*bl;\n\n    // Cube root\n    float l_ = cbrtf(fmaxf(l, 0.0f));\n    float m_ = cbrtf(fmaxf(m, 0.0f));\n    float s_ = cbrtf(fmaxf(s, 0.0f));\n\n    // LMS' → OKLab, rescaled to CIELab ranges\n    *l_out     = (0.2104542553f*l_ + 0.7936177850f*m_ - 0.0040720468f*s_) * L_SCALE;\n    *a_out     = (1.9779984951f*l_ - 2.4285922050f*m_ + 0.4505937099f*s_) * AB_SCALE;\n    *b_lab_out = (0.0259040371f*l_ + 0.7827717662f*m_ - 0.8086757660f*s_) * AB_SCALE;\n}",
+  "source_version": "plans/2026-04-09-oklab-grade-pipeline.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837063378Z",
+  "valid_from": "2026-04-11T00:10:08.837063378Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-09-oklab-grade-pipeline.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 278,
+    "end_line": 311,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

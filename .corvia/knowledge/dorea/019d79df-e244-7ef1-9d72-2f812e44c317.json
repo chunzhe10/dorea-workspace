@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-2f812e44c317",
+  "content": "argo test -p dorea-cli -- --nocapture\n```\n\nExpected: Compiles. Existing tests pass.\n\n- [ ] **Step 5: Commit**\n\n```bash\ngit add crates/dorea-cli/src/grade.rs\ngit commit -m \"feat(dorea-cli): use pre-initialized CudaGrader for frame-level PTX reuse\"\n```\n\n---\n\n## Task 8: Integration Testing and Validation\n\n**Files:**\n- Test various paths\n- No new files (tests run existing code)\n\n- [ ] **Step 1: Run full test suite**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ncargo test --all 2>&1\n```\n\nExpected: All tests pass.\n\n- [ ] **Step 2: Run clippy**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ncargo clippy --all -- -D warnings 2>&1\n```\n\nExpected: No warnings.\n\n- [ ] **Step 3: Verify build without cuda feature**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea",
+  "source_version": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836742536Z",
+  "valid_from": "2026-04-11T00:10:08.836742536Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1889,
+    "end_line": 1916,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

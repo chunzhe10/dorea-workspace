@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-1f1929bf633e",
+  "content": "## Phase B: GPU + Grading Pipeline\n\n### Task 7: GPU Signature u8 → f32 (CPU Fallback)\n\n**Files:**\n- Modify: `crates/dorea-gpu/src/lib.rs:50-97` (grade_frame)\n- Modify: `crates/dorea-gpu/src/cpu.rs:321-361` (grade_frame_cpu)\n- Modify: `crates/dorea-gpu/src/cpu.rs:132-177` (finish_grade)\n\nThe public API changes from `pixels: &[u8]` → `pixels: &[f32]` (interleaved RGB,\n3 floats per pixel in [0,1]) and returns `Vec<f32>` instead of `Vec<u8>`.\n\n- [ ] **Step 1: Write failing test**\n\nAdd test in `crates/dorea-gpu/src/cpu.rs` inside the `tests` module:\n\n```rust\n#[test]\nfn test_grade_frame_f32_signature() {\n    // Create a 2x2 f32 image (instead of u8)\n    let pixels: Vec<f32> = vec![\n        0.5, 0.3, 0.2,  // pixel 0\n        0.6, 0.4, 0.3,  // pixel 1\n        0.4, 0.5, 0.6,  // pixel 2\n        0.7, 0.2, 0.1,  // pixel 3\n    ];\n    let depth = vec![0.5f32; 4];\n\n    // Minimal calibration with 33^3 identity-ish LUT\n    let cal = crate::tests::make_test_calibration();\n    let params = GradeParams::default();",
+  "source_version": "plans/2026-04-02-10bit-pipeline-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836499773Z",
+  "valid_from": "2026-04-11T00:10:08.836499773Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-10bit-pipeline-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 885,
+    "end_line": 913,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

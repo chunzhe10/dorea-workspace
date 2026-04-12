@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-eb25d4a4a292",
+  "content": "pub struct AdaptiveBatcher {\n    batch_size: usize,\n    max_batch: usize,\n    min_batch: usize,\n    successes: usize,\n    grow_threshold: usize,\n}\nimpl AdaptiveBatcher {\n    /// Create a new batcher from VRAM probe results.\n    ///\n    /// `vram_free`: free VRAM in bytes (after `torch.cuda.empty_cache()`)\n    /// `per_frame_bytes`: estimated bytes per frame (e.g. 56MB for 1080p)\n    /// `safety_margin`: fraction reserved for fragmentation (0.15 = 15%)\n    pub fn new(vram_free: usize, per_frame_bytes: usize, safety_margin: f64) -> Self {\n        let usable = (vram_free as f64 * (1.0 - safety_margin)) as usize;\n        let max_batch = if per_frame_bytes > 0 {\n            (usable / per_frame_bytes).max(1)\n        } else {\n            1\n        };\n        Self {\n            batch_size: max_batch,\n            max_batch,\n            min_batch: 1,\n            successes: 0,\n            grow_threshold: 10,\n        }\n    }\n\n    /// Create a batcher with a fixed batch size (no adaptation).\n    pub fn fixed(batch_size: usize) -> Self {\n        Self {\n            batch_size: batch_size.max(1),\n            max_batch: batch_size.max(1),\n            min_batch: 1,\n            successes: 0,\n            grow_threshold: usize::MAX,\n        }\n    }\n\n    /// Current batch size.\n    pub fn batch_size(&self) -> usize {\n        self.batch_size\n    }\n\n    /// Report a successful batch completion.\n    pub fn report_success(&mut self) {\n        self.successes += 1;\n        if self.successes >= self.grow_threshold && self.batch_size < self.max_batch {\n            self.batch_size = ((self.batch_size as f64 * 1.5).ceil() as usize).min(self.max_batch);\n            self.successes = 0;\n        }\n    }\n\n    /// Report an OOM failure. Returns true if batch_size was already at minimum\n    /// (meaning the frame genuinely cannot fit).\n    pub fn report_oom(&mut self) -> bool {\n        let was_min = self.batch_size <= self.min_batch;\n        self.successes = 0;\n        self.batch_size = (self.batch_size / 2).max(self.min_batch);\n        was_min\n    }\n}",
+  "source_version": "crates/dorea-gpu/src/batcher.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229752405Z",
+  "valid_from": "2026-04-11T00:04:13.229752405Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/batcher.rs",
+    "language": "rs",
+    "chunk_type": "impl_item",
+    "start_line": 15,
+    "end_line": 70,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

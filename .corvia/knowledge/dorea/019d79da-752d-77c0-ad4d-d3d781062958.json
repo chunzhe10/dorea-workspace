@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d3d781062958",
+  "content": "h_width,\n                    h_offset: 0.0,\n                    s_ratio:  1.0,\n                    v_offset: 0.0,\n                    weight:   0.0,\n                }\n            }\n        }).collect();\n\n        SegmentCalibration {\n            depth_luts,\n            hsl_corrections: HslCorrections(avg_corrections),\n        }\n    }).collect();\n\n    log::info!(\n        \"Pre-compute complete: {} segments, {} per-KF zone sets\",\n        segment_calibrations.len(), smoothed_kf_zones.len(),\n    );\n\n    // Build segment-to-keyframe index lookup\n    let kf_to_segment: Vec<usize> = {\n        let mut map = vec![0usize; store.len()];\n        for (si, seg) in segments.iter().enumerate() {\n            for ki in seg.start..seg.end {\n                map[ki] = si;\n            }\n        }\n        map\n    };\n\n    let kf_index_list: Vec<(u64, bool)> = keyframes.iter()\n        .map(|kf| (kf.frame_index, kf.scene_cut_before))\n        .collect();\n\n    let store_len = store.len();\n\n    Ok(CalibrationStageOutput {\n        segment_calibrations,\n        smoothed_kf_zones,\n        kf_to_segment,\n        keyframe_depths,\n        kf_index_list,\n        store_len,\n        keyframe_masks,\n    })\n}",
+  "source_version": "crates/dorea-cli/src/pipeline/calibration.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229463927Z",
+  "valid_from": "2026-04-11T00:04:13.229463927Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/pipeline/calibration.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 128,
+    "end_line": 163,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

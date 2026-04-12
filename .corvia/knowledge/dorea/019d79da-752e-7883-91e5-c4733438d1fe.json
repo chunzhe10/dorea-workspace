@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c4733438d1fe",
+  "content": "roxy-grid coordinate (subpixel)\n    scale_y = ph / fh\n    scale_x = pw / fw\n    py_f = (y.to(tl.float32) + 0.5) * scale_y - 0.5\n    px_f = (x.to(tl.float32) + 0.5) * scale_x - 0.5\n\n    py0 = tl.floor(py_f).to(tl.int32)\n    px0 = tl.floor(px_f).to(tl.int32)\n\n    # Clamp neighbor indices into [0, ph-1] / [0, pw-1]\n    py0c = tl.minimum(tl.maximum(py0, 0), ph - 1)\n    px0c = tl.minimum(tl.maximum(px0, 0), pw - 1)\n    py1c = tl.minimum(py0 + 1, ph - 1)\n    px1c = tl.minimum(px0 + 1, pw - 1)\n\n    # Load the 4 delta-proxy neighbors for each of the 3 channels\n    # channel stride = ph*pw\n    ch_stride = ph * pw\n    d00_L = tl.load(delta_proxy_ptr + 0 * ch_stride + py0c * pw + px0c, mask=mask)\n    d01_L = tl.load(delta_proxy_ptr + 0 * ch_stride + py0c * pw + px1c, mask=mask)\n    d10_L = tl.load(delta_proxy_ptr + 0 * ch_stride + py1c * pw + px0c, mask=mask)\n    d11_L = tl.load(delta_proxy_ptr + 0 * ch_stride + py1c * pw + px1c, mask=mask)\n\n    d00_a = tl.load(delta_proxy_ptr + 1 * ch_stride + py0c * pw + px0c, mask=mask)\n    d01_a = tl.load(delta_proxy_ptr + 1 * ch_stride + py0c * pw + px1c, mask=mask)\n    d10_a = tl.load(delta_proxy_ptr + 1 * ch_stride + py1c * pw + px0c, mask=mask)\n    d11_a = tl.load(delta_proxy_ptr + 1 * ch_stride + py1c * pw + px1c, mask=mask)\n\n    d00_b = tl.load(delta_proxy_ptr + 2 * ch_stride + py0c * pw + px0c, mask=mask)\n    d01_b = tl.load(delta_proxy_ptr + 2 * ch_stride + py0c * pw + px1c, mask=mask)\n    d10_b = tl.load(delta_proxy_ptr + 2 * ch_stride + py1c * pw + px0c, mask=mask)\n    d11_b = tl.load(delta_proxy_ptr + 2 * ch_stride + py1c * pw + px1c, mask=mask)\n\n    # Guide at output pixel (from the full-res guide)\n    g_out = tl.load(guide_out_ptr + y * fw + x, mask=mask)\n\n    # Guide at each of the 4 proxy neighbors (from the area-downsampled proxy guide).\n    # This matches the spec: L_guide(n) is the area-average of orig_full's OKLab-L\n    # downsampled to proxy dimensions — NOT the nearest corner of the full-res guide.\n    g00 = tl.load(guide_proxy_ptr + py0c * pw + px0c, mask=mask)\n    g01 = tl.load(guide_proxy_ptr + py0c * pw + px1c, mask=mask)",
+  "source_version": "benchmarks/upscale_bench/methods.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230302386Z",
+  "valid_from": "2026-04-11T00:04:13.230302386Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/methods.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 233,
+    "end_line": 265,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

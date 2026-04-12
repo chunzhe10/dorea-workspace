@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-897851b232d2",
+  "content": "    # Shared error state\n    # Frame counter shared with encoder thread for progress reporting\n\n    # ─── Thread 1: Decoder ─────────────────────────────────────────────────\n    def decoder_thread() -> None:\n        try:\n            batch: list[np.ndarray] = []\n            for packet in in_container.demux(in_stream):\n                if stop_event.is_set():\n                    return\n                for frame in packet.decode():\n                    if stop_event.is_set():\n                        return\n                    rgb = frame.to_ndarray(format=\"rgb24\")  # (H, W, 3) uint8\n                    if rgb.shape[1] != fw or rgb.shape[0] != fh:\n                        rgb = np.array(\n                            frame.to_image().resize((fw, fh)),\n                            dtype=np.uint8,\n                        )\n                    batch.append(rgb)\n                    if len(batch) >= batch_size:\n                        q_decoded.put(batch)\n                        batch = []\n            if batch:\n                q_decoded.put(batch)\n        except BaseException as e:\n            record_error(e)\n        finally:\n            q_decoded.put(None)  # sentinel: tell GPU thread we're done\n\n\n    # ─── Thread 2: GPU processing ──────────────────────────────────────────\n    def gpu_thread() -> None:\n        try:\n            while True:\n                if stop_event.is_set():\n                    return\n                batch = q_decoded.get()\n                if batch is None:\n                    return\n                results = _process_batch(\n                    batch, model, normalize,\n                    fw, fh, pw, ph, transfer_fn,\n                )\n                q_processed.put(results)\n        except BaseException as e:\n            record_error(e)\n        finally:\n            q_processed.put(None)  # sentinel: tell encoder we're done\n",
+  "source_version": "plans/2026-04-10-direct-mode-3thread-pipeline.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837089394Z",
+  "valid_from": "2026-04-11T00:10:08.837089394Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-10-direct-mode-3thread-pipeline.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 69,
+    "end_line": 114,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

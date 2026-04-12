@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-3efbef74145a",
+  "content": " Node for HslAverageNode {\n    /// Input: one (lut_output, target) pair for a single keyframe.\n    type Input = (Vec<[f32; 3]>, Vec<[f32; 3]>);\n    /// Output: () — state is accumulated internally; call `finish()` after the segment.\n    type Output = ();\n\n    fn name(&self) -> &'static str { \"hsl_average\" }\n\n    fn process(&mut self, (lut_out, target): Self::Input) -> Result<()> {\n        let corrs = derive_hsl_corrections(&lut_out, &target);\n        for (qi, corr) in corrs.0.iter().enumerate() {\n            if corr.weight >= MIN_WEIGHT {\n                let w = corr.weight as f64;\n                self.h_acc[qi] += corr.h_offset as f64 * w;\n                self.s_acc[qi] += corr.s_ratio  as f64 * w;\n                self.v_acc[qi] += corr.v_offset as f64 * w;\n                self.active[qi] = true;\n                self.tw_acc[qi] += w;\n            }\n        }\n        Ok(())\n    }\n}\n\n// ── Stage: CalibrationStage ───────────────────────────────────────────────────\n\npub struct CalibrationStage {\n    zone_compute:   ZoneComputeNode,\n    segment_detect: SegmentDetectNode,\n    zone_smooth:    ZoneSmoothNode,\n    hsl_node:       HslAverageNode,\n}",
+  "source_version": "plans/2026-04-05-pipeline-dag-refactor.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836983044Z",
+  "valid_from": "2026-04-11T00:10:08.836983044Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-05-pipeline-dag-refactor.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1151,
+    "end_line": 1177,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

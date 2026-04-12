@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-06f4d969e9b1",
+  "content": "## Problem\n## Decision\n\n### Why threads, not processes\n- PyAV releases the GIL during decode/encode (libav calls)\n- `torch.cuda` releases the GIL during CUDA operations\n- numpy operations release the GIL for large arrays\n- Shared memory — no IPC serialization overhead\n- The only GIL-bound work is short Python orchestration\n\n\n### Queue sizing\n- Capacity = 2 batches each (8 frames at batch_size=4)\n- Memory bound: ~200MB (8 × 25MB at 4K uint8)\n- Large enough to hide stage variability, small enough to bound memory\n",
+  "source_version": "decisions/2026-04-10-direct-mode-3thread-pipeline.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836214144Z",
+  "valid_from": "2026-04-11T00:10:08.836214144Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-10-direct-mode-3thread-pipeline.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 33,
+    "end_line": 44,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

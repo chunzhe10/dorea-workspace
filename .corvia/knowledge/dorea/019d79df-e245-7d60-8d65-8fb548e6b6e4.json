@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-8fb548e6b6e4",
+  "content": "            # Wait for health before starting dependents\n        # Supervision loop\n\n        # Shutdown: stop all services in reverse order\n        self._log(\"Shutting down all services\")\n        for name in reversed(list(self.processes.keys())):\n            await self.stop_service(name)\n        self._running = False\n        self.write_state()\n```\n\n**Step 4: Run test to verify it passes**\n\nRun: `cd /workspaces/corvia-workspace && python3 -m pytest tools/corvia-dev/tests/test_manager.py -v`\nExpected: All 4 tests PASS\n\n**Step 5: Commit**\n\n```bash\ngit add tools/corvia-dev/corvia_dev/manager.py tools/corvia-dev/tests/test_manager.py\ngit commit -m \"feat(corvia-dev): add process manager with health checks and restart\"\n```\n\n---\n",
+  "source_version": "plans/archive/2026-03-09-corvia-dev-cli.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837168458Z",
+  "valid_from": "2026-04-11T00:10:08.837168458Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/archive/2026-03-09-corvia-dev-cli.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1261,
+    "end_line": 1282,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

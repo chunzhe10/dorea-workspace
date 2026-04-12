@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-30df37f9020c",
+  "content": "                # RAUNE → enhanced tensors stay on GPU\n                # Depth on enhanced tensors — no dtoh between models\n\n                # dtoh enhanced frames for output\n                enhanced_np = (\n                    enhanced_batch.permute(0, 2, 3, 1).cpu().numpy() * 255\n                ).astype(\"uint8\")  # (N, H, W, 3)\n\n                results = []\n                for i, (item, depth) in enumerate(zip(items, depth_maps)):\n                    depth_result = DepthResult.from_array(item.get(\"id\"), depth)\n                    results.append({\n                        \"id\": item.get(\"id\"),\n                        \"image_b64\": encode_png(enhanced_np[i]),\n                        \"enhanced_width\": int(enh_w),\n                        \"enhanced_height\": int(enh_h),\n                        **{k: v for k, v in depth_result.to_dict().items()\n                           if k in (\"depth_f32_b64\", \"depth_width\", \"depth_height\", \"type\")},\n                    })\n                resp = RauneDepthBatchResult(results=results)\n```\n\n- [ ] **Step 3.4: Run tests**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea/python\n/opt/dorea-venv/bin/pytest tests/test_infer_batch.py -v\n```\nExpected: all tests PASS.\n\n- [ ] **Step 3.5: Commit**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ngit add python/dorea_inference/protocol.py python/dorea_inference/server.py python/tests/test_infer_batch.py\ngit commit -m \"feat(inference): add raune_depth_batch fused IPC handler — enhanced tensor stays on GPU\"\n```\n\n---\n",
+  "source_version": "plans/2026-04-03-inference-gpu-saturation.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836760735Z",
+  "valid_from": "2026-04-11T00:10:08.836760735Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-inference-gpu-saturation.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 538,
+    "end_line": 574,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

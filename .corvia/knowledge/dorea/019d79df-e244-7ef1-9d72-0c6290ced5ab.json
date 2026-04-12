@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-0c6290ced5ab",
+  "content": "## 8. Scrintal\n\n### Graph-to-Document Navigation UX\n\n- **Canvas IS the graph**: Unlike other tools where graph view is separate, Scrintal's\n  infinite canvas IS the primary workspace. Cards (notes) are placed spatially on the canvas\n  and connected with visual links.\n- **Click card to read**: Clicking a card on the canvas expands it for reading. Cards can\n  be resized from folded (post-it size) to full-screen.\n- **In-text linking**: [[wikilinks]] inside cards create bidirectional connections that also\n  appear as visual edges on the canvas.\n- **Visual linking**: Drag-to-connect creates visual links between cards independent of\n  text content.\n\n\n### Panel Pattern\n\n**Canvas-as-workspace with expandable cards + sidebar navigation**.\n\nThe canvas replaces both the graph view and the document editor. Cards are the documents\nand their spatial arrangement IS the graph. A sidebar provides access to all cards, boards,\ntags, and starred items for navigation beyond the current canvas view.\n",
+  "source_version": "decisions/graph-document-ux-research.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836278835Z",
+  "valid_from": "2026-04-11T00:10:08.836278835Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/graph-document-ux-research.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 362,
+    "end_line": 381,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

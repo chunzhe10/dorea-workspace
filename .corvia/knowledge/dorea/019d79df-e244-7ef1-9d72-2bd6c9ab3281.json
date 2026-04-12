@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-2bd6c9ab3281",
+  "content": "### `grade.rs`: refactor `run()` to two-pass\n\n    if is_keyframe {\n        keyframes.push(KeyframeEntry {\n            frame_index: frame.index,\n            proxy_pixels: frame.pixels.clone(),\n            scene_cut_before: scene_cut,\n        });\n        last_proxy = Some(frame.pixels);\n        frames_since_kf = 0;\n    } else {\n        frames_since_kf += 1;\n    }\n}\n```\n\n**Batch depth inference:**\n```rust\nlet batch_items: Vec<DepthBatchItem> = keyframes.iter().enumerate().map(|(i, kf)| {\n    DepthBatchItem {\n        id: format!(\"kf_{i:06}\"),\n        pixels: kf.proxy_pixels.clone(),\n        width: proxy_w,\n        height: proxy_h,\n        max_size: args.proxy_size,\n    }\n}).collect();\n\nlet mut keyframe_depths: HashMap<u64, Vec<f32>> = HashMap::new();\nfor (chunk_kfs, chunk_items) in keyframes.chunks(DEPTH_BATCH_SIZE)\n    .zip(batch_items.chunks(DEPTH_BATCH_SIZE))\n{\n    let results = inf_server.run_depth_batch(chunk_items)\n        .unwrap_or_else(|e| {\n            log::warn!(\"Depth batch failed: {e} — using uniform depth 0.5\");\n            chunk_items.iter().map(|it| {\n                (it.id.clone(), vec![0.5f32; proxy_w * proxy_h], proxy_w, proxy_h)\n            }).collect()\n        });\n",
+  "source_version": "plans/2026-04-03-batch-depth-inference-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836686768Z",
+  "valid_from": "2026-04-11T00:10:08.836686768Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-batch-depth-inference-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 228,
+    "end_line": 265,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

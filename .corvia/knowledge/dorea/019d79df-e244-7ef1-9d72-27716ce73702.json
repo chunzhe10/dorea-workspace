@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-27716ce73702",
+  "content": "mes ({:.1}%)\", info.frame_count, pct);\n        }\n    }\n    Ok(())\n}\n```\n\n- [ ] **Step 5: Remove old `prev_frame` variable and unused imports**\n\nThe old `prev_frame` and scene detection code (lines 125-139) is replaced by the new keyframe MSE logic. Remove:\n- `let mut prev_frame: Option<Vec<u8>> = None;` and the `is_cut` block\n- `use dorea_video::scene;` from the imports at the top (scene detection is now MSE-based)\n\n- [ ] **Step 6: Build and verify compilation**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ncargo build -p dorea-cli 2>&1 | tail -15\n```\n\nExpected: `Finished dev profile`.\n\n- [ ] **Step 7: Run workspace tests**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ncargo test --workspace 2>&1 | tail -20\n```\n\nExpected: all tests pass.\n\n- [ ] **Step 8: Commit**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ngit add crates/dorea-cli/src/grade.rs\ngit commit -m \"perf(dorea-cli): temporal grade interpolation — skip full pipeline for similar frames\n\nMotion-adaptive keyframe detection via proxy-frame MSE. Keyframe frames\nrun full pipeline (depth + grade). Non-keyframe frames interpolate the\ngraded RGB output between bracketing keyframes — skipping depth inference\nAND grading entirely. Scene cuts force keyframes (MSE > 10x threshold).\nBuffer overflow safety at 1.5x max_interval.\"\n```\n\n---\n",
+  "source_version": "plans/2026-04-02-grading-pipeline-perf-v3.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836622006Z",
+  "valid_from": "2026-04-11T00:10:08.836622006Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-grading-pipeline-perf-v3.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 894,
+    "end_line": 930,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

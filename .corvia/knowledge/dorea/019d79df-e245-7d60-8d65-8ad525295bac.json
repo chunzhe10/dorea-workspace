@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-8ad525295bac",
+  "content": "8 has comparable VRAM usage to the\nold batch=4 fp32.\n\nConfigurable via:\n  - CLI: --direct-batch-size N\n  - Config: [grade].direct_batch_size = N\n  - Default: 8\n\nRefs #66\n\nCo-Authored-By: Claude Opus 4.6 (1M context) <noreply@anthropic.com>\nEOF\n)\"\n```\n\n---\n\n## Notes for the Implementer\n",
+  "source_version": "plans/2026-04-10-direct-mode-fp16-batch.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837107473Z",
+  "valid_from": "2026-04-11T00:10:08.837107473Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-10-direct-mode-fp16-batch.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 381,
+    "end_line": 382,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-e9f8e03f7827",
+  "content": ") >> 8; // fast floor(v * BINS / 256)\n        let g_bin = (chunk[1] as usize * BINS) >> 8;\n        let b_bin = (chunk[2] as usize * BINS) >> 8;\n        hist[r_bin] += 1;\n        hist[BINS + g_bin] += 1;\n        hist[BINS * 2 + b_bin] += 1;\n    }\n    hist\n}\npub fn scene_change_threshold() -> f32 {\n    std::env::var(\"DOREA_SCENE_THRESHOLD\")\n        .ok()\n        .and_then(|s| s.parse().ok())\n        .unwrap_or(0.15)\n}",
+  "source_version": "crates/dorea-video/src/scene.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229736732Z",
+  "valid_from": "2026-04-11T00:04:13.229736732Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/scene.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 52,
+    "end_line": 57,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

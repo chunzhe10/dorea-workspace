@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-ecbddffd3e50",
+  "content": "struct FrameBuffers {\n    width: usize,\n    height: usize,\n    d_pixels_in: CudaSlice<u8>,    // n * 3\n    d_depth: CudaSlice<f32>,        // n\n    d_pixels_out: CudaSlice<u8>,    // n * 3\n}",
+  "source_version": "crates/dorea-gpu/src/cuda/mod.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229770560Z",
+  "valid_from": "2026-04-11T00:04:13.229770560Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-gpu/src/cuda/mod.rs",
+    "language": "rs",
+    "chunk_type": "struct_item",
+    "start_line": 42,
+    "end_line": 48,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

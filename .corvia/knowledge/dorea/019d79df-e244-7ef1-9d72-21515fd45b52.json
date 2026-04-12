@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-21515fd45b52",
+  "content": "## Task 1: Refactor `cpu.rs` — extract clarity so the CUDA path can skip it\n\n\n- [ ] **Step 2: Run to confirm it fails (signature mismatch)**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ncargo test -p dorea-gpu finish_grade_skip_clarity 2>&1 | tail -5\n```\nExpected: compile error — `finish_grade` does not take 8 arguments.\n\n- [ ] **Step 3: Refactor `cpu.rs`**\n\n**3a. Remove `apply_clarity` call from `depth_aware_ambiance`** (lines 112–114 currently):\n\nIn `depth_aware_ambiance`, delete these three lines at the end of the function body:\n\n```rust\n    // Clarity: separable box-blur approximation of Gaussian (σ=30px at proxy).\n    // We run a 3-pass box blur (approximates Gaussian well).\n    let radius = (30.0_f32 * 3.0).ceil() as usize;\n    let clarity_amount = (0.2 + 0.25 * mean_d) * contrast_scale;\n    apply_clarity(rgb, width, height, radius, clarity_amount);\n```\n\n**3b. Add a `pub(crate) fn apply_cpu_clarity`** immediately above `finish_grade`:\n\n```rust\n/// Run the clarity pass (box-blur detail extraction) at full resolution on CPU.\n/// Called by `finish_grade` when `skip_clarity` is false (CPU-only path).\npub(crate) fn apply_cpu_clarity(\n    rgb: &mut [f32],\n    depth: &[f32],\n    width: usize,\n    height: usize,\n    contrast_scale: f32,\n) {\n    let mean_d: f32 = depth.iter().sum::<f32>() / depth.len() as f32;\n    let radius = (30.0_f32 * 3.0).ceil() as usize;\n    let clarity_amount = (0.2 + 0.25 * mean_d) * contrast_scale;\n    apply_clarity(rgb, width, height, radius, clarity_amount);\n}\n```\n\n**3c. Add `skip_clarity: bool` parameter to `finish_grade` and call `apply_cpu_clarity` conditionally.**\n\nReplace the current `finish_grade` signature and step 1 body:\n\n```rust",
+  "source_version": "plans/2026-04-02-clarity-cuda-kernel.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836531473Z",
+  "valid_from": "2026-04-11T00:10:08.836531473Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-clarity-cuda-kernel.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 105,
+    "end_line": 151,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

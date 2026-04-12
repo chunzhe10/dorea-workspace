@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d736c7619702",
+  "content": "pub struct PreviewArgs {\n    /// Input video file\n    #[arg(long)]\n    pub input: PathBuf,\n\n    /// Pre-computed .dorea-cal file (optional — auto-derives from sampled frames)\n    #[arg(long)]\n    pub calibration: Option<PathBuf>,\n\n    /// Output contact sheet PNG [default: preview.png]\n    #[arg(long, default_value = \"preview.png\")]\n    pub output: PathBuf,\n\n    /// Number of frames to sample (config: [preview].frames, built-in default: 8)\n    #[arg(long)]\n    pub frames: Option<usize>,\n\n    /// Warmth multiplier (config: [preview].warmth or [grade].warmth, built-in default: 1.0)\n    #[arg(long)]\n    pub warmth: Option<f32>,\n\n    /// Blend strength (config: [preview].strength or [grade].strength, built-in default: 0.8)\n    #[arg(long)]\n    pub strength: Option<f32>,\n\n    /// Contrast multiplier (config: [preview].contrast or [grade].contrast, built-in default: 1.0)\n    #[arg(long)]\n    pub contrast: Option<f32>,\n\n    /// Path to RAUNE-Net weights .pth (config: [models].raune_weights)\n    #[arg(long)]\n    pub raune_weights: Option<PathBuf>,\n\n    /// Path to RAUNE-Net checkout directory (config: [models].raune_models_dir)\n    #[arg(long)]\n    pub raune_models_dir: Option<PathBuf>,\n\n    /// Path to Depth Anything V2 model directory (config: [models].depth_model)\n    #[arg(long)]\n    pub depth_model: Option<PathBuf>,\n\n    /// Python executable (config: [models].python, built-in default: /opt/dorea-venv/bin/python)\n    #[arg(long)]\n    pub python: Option<PathBuf>,\n\n    /// Force CPU-only mode\n    #[arg(long)]\n    pub cpu_only: bool,\n\n    /// Enable verbose logging\n    #[arg(short, long)]\n    pub verbose: bool,\n}",
+  "source_version": "crates/dorea-cli/src/preview.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229503541Z",
+  "valid_from": "2026-04-11T00:04:13.229503541Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/preview.rs",
+    "language": "rs",
+    "chunk_type": "struct_item",
+    "start_line": 15,
+    "end_line": 67,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d71-fd2971ce88f1",
+  "content": "### Pipeline Integration\n### Temporal Interpolation Interaction\n\n### Inference Server Extension\n\nThe existing `dorea_inference` Python server is extended with a new `enhance` message type. Both\nthe depth model and Maxine models live in the same Python process.\n\n**CUDA context sharing (critical implementation detail):** PyTorch and nvvfx create CUDA contexts\nindependently. To share a single context and avoid ~500MB duplicate overhead, `MaxineEnhancer`\nmust explicitly pass PyTorch's CUDA stream to nvvfx:\n```python\nNvVFX_SetCudaStream(effect, torch.cuda.current_stream().cuda_stream)\n```\nThis must be done during `MaxineEnhancer.__init__()` after PyTorch has initialized CUDA.\n\n**Request (Rust → Python):**\n```json\n{\n  \"type\": \"enhance\",\n  \"id\": \"frame_042\",\n  \"format\": \"raw_rgb\",\n  \"image_b64\": \"<base64 raw RGB u8 bytes>\",\n  \"width\": 1920,\n  \"height\": 1080,\n  \"artifact_reduce\": true,\n  \"upscale_factor\": 2\n}\n```\n\n**Response (Python → Rust):**\n```json\n{\n  \"type\": \"enhance_result\",\n  \"id\": \"frame_042\",\n  \"format\": \"raw_rgb\",\n  \"image_b64\": \"<base64 raw RGB u8 bytes>\",\n  \"width\": 1920,\n  \"height\": 1080\n}\n```\n\nIPC uses raw RGB format (`\"format\": \"raw_rgb\"`), consistent with the existing depth and RAUNE\nprotocol. Response dimensions match the input — the Python side handles the full\nupscale→downsample round-trip internally. The Rust `enhance()` method validates that response\nwidth/height match the request, returning an error on mismatch.\n\n**Startup:**\n- New CLI flags: `--maxine` (enable model loading), `--maxine-upscale-factor <N>`\n- Maxine models loaded at startup only when `--maxine` is passed\n- If `--maxine` passed but `nvvfx` import fails: hard error with install instructions\n  (user explicitly enabled Maxine but SDK is missing — fail fast, don't silently degrade)\n- If `--maxine` NOT passed: `nvvfx` is never imported, zero overhead\n\n\n### Python Enhancement Pipeline\n\nA new `MaxineEnhancer` class in `python/dorea_inference/maxine_enhancer.py`:\n\n```python\nclass MaxineEnhancer:\n    def __init__(self, upscale_factor=2):",
+  "source_version": "decisions/2026-04-02-maxine-post-grading-enhancement.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836095630Z",
+  "valid_from": "2026-04-11T00:10:08.836095630Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-02-maxine-post-grading-enhancement.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 65,
+    "end_line": 122,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

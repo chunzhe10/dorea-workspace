@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-e725821025f5",
+  "content": "lf,\n        _id: &str,\n        image_rgb: &[u8],\n        width: usize,\n        height: usize,\n        max_size: usize,\n    ) -> Result<(Vec<u8>, usize, usize), InferenceError> {\n        Python::with_gil(|py| {\n            let bridge = self.bridge.bind(py);\n\n            // Create numpy array from raw RGB bytes.\n            let np_flat = numpy::PyArray1::from_slice_bound(py, image_rgb);\n            let np_reshaped = np_flat.call_method1(\"reshape\", ((height, width, 3),))\n                .map_err(|e| InferenceError::Ipc(format!(\"reshape: {e}\")))?;\n\n            // Call bridge.run_raune_cpu(reshaped, max_size).\n            let result = bridge.call_method1(\"run_raune_cpu\", (np_reshaped, max_size))\n                .map_err(|e| Self::map_python_error(py, e))?;\n\n            // Result is a numpy array of shape (h, w, 3) with uint8 values.\n            let shape: Vec<usize> = result.getattr(\"shape\")\n                .map_err(|e| InferenceError::Ipc(format!(\"get shape: {e}\")))?\n                .extract()\n                .map_err(|e| InferenceError::Ipc(format!(\"extract shape: {e}\")))?;\n\n            let out_h = shape[0];\n            let out_w = shape[1];\n\n            // Flatten and extract as Vec<u8>.\n            let flat = result.call_method1(\"reshape\", ((-1,),))\n                .map_err(|e| InferenceError::Ipc(format!(\"flatten result: {e}\")))?;\n            let rgb_data: Vec<u8> = flat.call_method0(\"tolist\")\n                .map_err(|e| InferenceError::Ipc(format!(\"tolist: {e}\")))?\n                .extract()\n                .map_err(|e| InferenceError::Ipc(format!(\"extract rgb: {e}\")))?;\n\n            Ok((rgb_data, out_w, out_h))\n        })\n    }\n\n    /// Run depth inference on the GPU, returning a guard that holds the on-device tensor.\n    ///\n    /// The tensor stays on the GPU until the guard is released or dropped,\n    /// enabling zero-copy sharing with CUDA kernels.\n    pub fn run_depth_gpu(\n        &self,\n        _id: &str,\n        image_rgb: &[u8],\n        width: usize,\n        height: usize,\n        max_size: usize,",
+  "source_version": "crates/dorea-video/src/inference/pyo3_backend.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229700515Z",
+  "valid_from": "2026-04-11T00:04:13.229700515Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference/pyo3_backend.rs",
+    "language": "rs",
+    "chunk_type": "impl_item",
+    "start_line": 275,
+    "end_line": 316,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

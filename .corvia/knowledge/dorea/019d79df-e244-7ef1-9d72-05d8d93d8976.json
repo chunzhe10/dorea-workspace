@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-05d8d93d8976",
+  "content": "### Per-frame sheets (`per_frame/frame{idx}_sheet.png`) — 3 files\n### Error heatmaps (`heatmaps/frame{idx}_{method}.png`) — 27 files\n\n### `metrics.csv`\n\nOne row per (frame, method) pair. Columns:\n\n```\nframe_idx,method,delta_l1_L,delta_l1_a,delta_l1_b,delta_l1,delta_l2,delta_max,delta_p95,final_delta_e,final_delta_e_p95,ssim,wall_time_ms_upscale,wall_time_ms_end_to_end,status\n```\n\n`status` is `ok`, `oom`, or `skipped`. Aggregate summary rows at the bottom with `frame_idx = \"ALL_MEAN\"` and `\"ALL_STDDEV\"`.\n\n\n### `run_report.md`\n\nAuto-generated at end of run. Sections:\n\n1. **Environment**: Python/torch/cuda versions, GPU, VRAM, weights SHA, clip SHA, git SHA, dirty flag, nvvfx version, Real-ESRGAN version if present.\n2. **Run metadata**: date, frames used, gold paths per frame, OOM events.\n3. **Winners** (highlighted):\n   - Best `final_delta_e`: `<method>` (<value>)\n   - Best `delta_l1`: `<method>` (<value>)\n   - Best `wall_time_ms_upscale`: `<method>` (<value>)\n   - Best `wall_time_ms_end_to_end`: `<method>` (<value>)\n4. **Per-method table**: mean ± stddev across frames for all metrics, sorted by `final_delta_e`.\n5. **Per-frame thumbnails**: inline embedded per-frame sheet PNGs (via relative markdown image refs).\n6. **Notes / caveats**: out-of-distribution warning for RAUNE-at-4K, gold-sanity-check results if flag was set.\n7. **Footer**: \"Open `summary_grid.png` for the full visual comparison.\"\n\nThis is the file to skim first after a run.\n",
+  "source_version": "decisions/2026-04-10-delta-upscale-bench-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836199590Z",
+  "valid_from": "2026-04-11T00:10:08.836199590Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-10-delta-upscale-bench-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 361,
+    "end_line": 388,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

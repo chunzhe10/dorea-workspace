@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-3870041f3ae6",
+  "content": "### Task 1: Config + CLI flags (issue #TBD)\n\n\nIn `crates/dorea-cli/src/grade.rs`, add after line 165 (`let depth_zones = ...`):\n\n```rust\n    let base_lut_zones      = args.base_lut_zones.or(cfg.grade.base_lut_zones).unwrap_or(32_usize);\n    let scene_threshold     = args.scene_threshold.or(cfg.grade.scene_threshold).unwrap_or(0.15_f32);\n    let min_segment_kfs     = cfg.grade.min_segment_keyframes.unwrap_or(5_usize);\n    let zone_smoothing_w    = cfg.grade.zone_smoothing_window.unwrap_or(3_usize);\n```\n\n- [ ] **Step 4: Update dorea.toml**\n\nAdd after `depth_zones = 8` in `dorea.toml`:\n\n```toml\nbase_lut_zones       = 32   # fine zones for segment-level base LUT\nscene_threshold      = 0.15 # Wasserstein-1 distance for scene segment boundary\nmin_segment_keyframes = 5   # minimum keyframes per segment before merge\nzone_smoothing_window = 3   # boundary smoothing kernel width (1 = off)\n```\n\n- [ ] **Step 5: Verify it compiles**\n\nRun: `cd /workspaces/dorea-workspace/repos/dorea && cargo check -p dorea-cli`\nExpected: compiles with no errors (new fields are `Option`, unused variables are warnings only)\n\n- [ ] **Step 6: Commit**\n\n```bash\ngit add crates/dorea-cli/src/config.rs crates/dorea-cli/src/grade.rs\ngit commit -m \"feat(config): add adaptive depth zone config fields\n\nbase_lut_zones, scene_threshold, min_segment_keyframes,\nzone_smoothing_window in [grade] config + CLI flags.\"\n```\n\n---\n",
+  "source_version": "plans/2026-04-04-per-keyframe-adaptive-depth-zones-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836876177Z",
+  "valid_from": "2026-04-11T00:10:08.836876177Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-per-keyframe-adaptive-depth-zones-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 72,
+    "end_line": 109,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

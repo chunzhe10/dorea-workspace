@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-3c9e861def5c",
+  "content": "# Unified Keyframe Sampling — Design Spec\n\n## Problem\n\nThe current `dorea grade` pipeline runs two independent keyframe selection passes:\n\n| Pass | Selection method | Keyframes | Inference |\n|---|---|---|---|\n| `auto_calibrate` | Uniform `--keyframe-interval` | ~988 (at interval 5) | RAUNE + depth, sequential |\n| Grading pass 1 | MSE-adaptive `--depth-max-interval` | ~941 (at interval 5) | depth-only batch |\n\nTwo proxy decodes. Two inference servers. Two independent keyframe sets. Depth inferred twice on different frames. The calibration LUT is built from frames the grading pass never even looked at.\n\n---\n\n\n## Goal\n\nOne change detection pass → one keyframe list → one fused RAUNE+depth inference run → results feed **both** calibration **and** the grading depth cache.\n\n---\n",
+  "source_version": "plans/2026-04-04-unified-keyframe-sampling.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836947180Z",
+  "valid_from": "2026-04-11T00:10:08.836947180Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-unified-keyframe-sampling.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 10,
+    "end_line": 28,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

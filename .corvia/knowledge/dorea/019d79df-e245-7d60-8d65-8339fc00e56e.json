@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-8339fc00e56e",
+  "content": "       video_path: args.input.clone(),\n        video_info: info.clone(),\n        proxy_w,\n        proxy_h,\n        config: KeyframeConfig {\n            depth_skip_threshold,\n            depth_max_interval,\n            interp_enabled: !args.no_depth_interp,\n            scene_cut_threshold: depth_skip_threshold * 10.0,\n        },\n    })?;\n\n    // ── Stage 2: Feature ────────────────────────────────────────────────────\n    use crate::pipeline::feature::{FeatureStage, FeatureStageInput};\n    let mut stage2 = FeatureStage::new(proxy_w, proxy_h);\n    let feat_out = stage2.run(FeatureStageInput {\n        keyframe_output: kf_out,\n        inf_server,\n        fused_batch_size,\n        proxy_size,\n        enable_maxine: true,\n        raune_weights,    // configured paths passed through — not dropped\n        raune_models_dir,\n        depth_model,\n    })?;\n\n    // ── Stage 3: LUT Calibration ────────────────────────────────────────────\n    use crate::pipeline::calibration::{CalibrationStage, CalibrationStageInput, CalibrationConfig};\n    let cal_cfg = CalibrationConfig {\n        depth_zones, base_lut_zones, scene_threshold, min_segment_kfs, zone_smoothing_w,\n    };\n    let mut stage3 = CalibrationStage::new(&cal_cfg);\n    let cal_out = stage3.run(CalibrationStageInput {\n        feature_output: feat_out,\n        config: cal_cfg,\n        grade_params: params.clone(),\n    })?;\n\n    // ── Stage 4: Grading Render ─────────────────────────────────────────────\n    use crate::pipeline::grading::{GradingStage, GradingStageInput};\n    let mut stage4 = GradingStage::new();\n    stage4.run(GradingStageInput {\n        calibration_output: cal_out,\n        video_path: args.input,\n        video_info: info,\n        encoder,\n        grade_params: params,\n        depth_zones,\n        base_lut_zones,\n    })?;\n\n    Ok(())",
+  "source_version": "plans/2026-04-05-pipeline-dag-refactor.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837002379Z",
+  "valid_from": "2026-04-11T00:10:08.837002379Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-05-pipeline-dag-refactor.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1814,
+    "end_line": 1857,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

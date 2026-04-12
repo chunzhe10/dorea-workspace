@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d04c1c555a89",
+  "content": "       print(f\"  zone {z} [{boundaries[z]:.3f}-{boundaries[z+1]:.3f}]: {pct:5.1f}% {bar}\")\n\n    # 9. Check for banding — look at graded frame's color histogram\n    print(f\"\\nGraded frame color statistics:\")\n    for ch, name in enumerate([\"R\", \"G\", \"B\"]):\n        vals = graded[:,:,ch].flatten()\n        unique = len(np.unique(vals))\n        print(f\"  {name}: mean={vals.mean():.1f}, std={vals.std():.1f}, unique_values={unique}/256\")\n\n    # 10. Check for macro-blocking — compute local variance in 8x8 blocks\n    gray_graded = np.mean(graded.astype(np.float32), axis=2)\n    bh, bw = h // 8, w // 8\n    block_vars = np.zeros((bh, bw))\n    for by in range(bh):\n        for bx in range(bw):\n            block = gray_graded[by*8:(by+1)*8, bx*8:(bx+1)*8]\n            block_vars[by, bx] = block.var()\n\n    low_var_pct = np.sum(block_vars < 1.0) / block_vars.size * 100\n    print(f\"\\n8x8 block variance analysis:\")\n    print(f\"  Blocks with variance < 1.0 (flat/banded): {low_var_pct:.1f}%\")\n    print(f\"  Mean block variance: {block_vars.mean():.1f}\")\n    print(f\"  Min/Max block variance: {block_vars.min():.2f} / {block_vars.max():.1f}\")\n\n    # Save block variance as heatmap\n    bv_norm = ((block_vars - block_vars.min()) / (block_vars.max() - block_vars.min() + 1e-8) * 255).astype(np.uint8)\n    bv_img = cv2.resize(bv_norm, (w, h), interpolation=cv2.INTER_NEAREST)\n    save(bv_img, \"08_block_variance\")\n\n    print(f\"\\nAll outputs in {OUT}/\")",
+  "source_version": "investigate_artifacts.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229415513Z",
+  "valid_from": "2026-04-11T00:04:13.229415513Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "investigate_artifacts.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 112,
+    "end_line": 136,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

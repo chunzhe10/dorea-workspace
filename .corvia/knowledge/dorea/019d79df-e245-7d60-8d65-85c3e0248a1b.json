@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e245-7d60-8d65-85c3e0248a1b",
+  "content": "2;\n        let mw_i32 = mask_w as i32;\n        let mh_i32 = mask_h as i32;\n        use cudarc::driver::{DeviceRepr, DevicePtr};\n\n        let d_mask: Option<CudaSlice<u8>> = class_mask.map(|m| {\n            dev.htod_sync_copy(m).expect(\"mask upload failed\")\n        });\n        let mask_ptr: u64 = match &d_mask {\n            Some(s) => *s.device_ptr() as u64,\n            None => 0u64,\n        };\n\n        let mut args: [*mut std::ffi::c_void; 19] = [\n            (&bufs.d_pixels_in).as_kernel_param(),\n            (&d_depth).as_kernel_param(),\n            d_tex_active.as_kernel_param(),\n            (&*bounds_a).as_kernel_param(),\n            d_tex_inactive.as_kernel_param(),\n            (&*bounds_b).as_kernel_param(),\n            blend_t.as_kernel_param(),\n            (&bufs.d_pixels_out).as_kernel_param(),\n            n_i32.as_kernel_param(),\n            nz_i32.as_kernel_param(),\n            gs_i32.as_kernel_param(),\n            fw_i32.as_kernel_param(),\n            fh_i32.as_kernel_param(),\n            dw_i32.as_kernel_param(),\n            dh_i32.as_kernel_param(),\n            mask_ptr.as_kernel_param(),\n            mw_i32.as_kernel_param(),\n            mh_i32.as_kernel_param(),\n            diver_depth.as_kernel_param(),\n        ];",
+  "source_version": "plans/2026-04-08-10bit-pipeline-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.837039359Z",
+  "valid_from": "2026-04-11T00:10:08.837039359Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-08-10bit-pipeline-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1516,
+    "end_line": 1542,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-35033b38d505",
+  "content": "### Task 6: FrameEncoder Lossless Temp Mode (supports grade.rs)\n\n        // Must be decodable as a video\n        let probe_result = probe(&path);\n        assert!(probe_result.is_ok(), \"ffprobe failed: {:?}\", probe_result);\n        let info = probe_result.unwrap();\n        assert_eq!(info.width, width);\n        assert_eq!(info.height, height);\n\n        // Cleanup\n        let _ = std::fs::remove_file(&path);\n    }\n}\n```\n\nIf a `#[cfg(test)] mod tests` block already exists at the bottom of ffmpeg.rs, add the test inside it instead of creating a duplicate module.\n\n- [ ] **Step 2: Run test to verify it fails**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ncargo test -p dorea-video lossless_temp 2>&1 | tail -20\n```\n\nExpected: FAIL — `FrameEncoder::new_lossless_temp` does not exist.\n\n- [ ] **Step 3: Add `new_lossless_temp()` constructor to `FrameEncoder`**\n\nAdd this method inside `impl FrameEncoder`, after the `new()` method:\n\n```rust\n    /// Create a lossless ffv1/mkv encoder for temporary intermediate storage.\n    ///\n    /// Output is a lossless Matroska video (no audio, no NVENC attempt).\n    /// Intended for the Maxine-enhanced frame temp file between Pass 1 and Pass 2.\n    pub fn new_lossless_temp(\n        output: &Path,\n        width: usize,",
+  "source_version": "plans/2026-04-04-maxine-enhancement-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836824428Z",
+  "valid_from": "2026-04-11T00:10:08.836824428Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-maxine-enhancement-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1017,
+    "end_line": 1052,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-1e777eeec731",
+  "content": "\n        // Leak the string to get a 'static lifetime. This is fine because\n        // LutBased instances live for the duration of the pipeline.\n        // A single allocation per pipeline run.\n        Box::leak(self.name.clone().into_boxed_str())\n    }\n}\n\n/// Linearly interpolate a 1D LUT. Input clamped to [0, 1].\nfn lerp_lut(lut: &[f32], x: f32) -> f32 {\n    let n = lut.len();\n    if n == 0 { return x; }\n    let x = x.clamp(0.0, 1.0);\n    let pos = x * (n - 1) as f32;\n    let lo = (pos as usize).min(n - 2);\n    let hi = lo + 1;\n    let frac = pos - lo as f32;\n    lut[lo] * (1.0 - frac) + lut[hi] * frac\n}\n\n/// Invert a monotonic 1D LUT by building a reverse table.\n/// Assumes the input LUT is monotonically non-decreasing.\nfn invert_1d_lut(forward: &[f32]) -> Vec<f32> {\n    let n = forward.len();\n    let mut inverse = vec![0.0f32; n];\n\n    let out_min = forward[0];\n    let out_max = forward[n - 1];\n    let range = (out_max - out_min).max(1e-10);\n\n    for i in 0..n {\n        // Target linear value for this inverse table entry\n        let target = i as f32 / (n - 1) as f32;\n        // Scale target to output range of forward LUT\n        let target_scaled = out_min + target * range;\n\n        // Binary search for position in forward table\n        let mut lo = 0usize;\n        let mut hi = n - 1;\n        while lo < hi - 1 {\n            let mid = (lo + hi) / 2;\n            if forward[mid] <= target_scaled {\n                lo = mid;\n            } else {\n                hi = mid;\n            }\n        }\n\n        // Interpolate\n        let denom = (forward[hi] - forward[lo]).max(1e-10);\n        let frac = (target_scaled - forward[lo]) / denom;\n        inverse[i] = (lo as f32 + frac) / (n - 1) as f32;\n    }\n\n    inverse\n}\n\n#[cfg(test)]\nmod tests {\n    use super::*;\n\n    fn identity_lut(n: usize) -> Vec<f32> {\n        (0..n).map(|i| i as f32 / (n - 1) as f32).collect()\n    }\n\n    #[test]\n    fn test_identity_round_trip() {\n        let lut = LutBased::new(identity_lut(256), 0.90, \"identity\".to_string());\n        for i in 0..=10 {\n            let x = i as f32 / 10.0;\n            let linear = lut.to_linear(x);\n            let encoded = lut.from_linear(linear);",
+  "source_version": "plans/2026-04-02-10bit-pipeline-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836492488Z",
+  "valid_from": "2026-04-11T00:10:08.836492488Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-10bit-pipeline-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 406,
+    "end_line": 469,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

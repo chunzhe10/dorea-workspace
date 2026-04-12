@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-392bf14b2145",
+  "content": "li/Cargo.toml\ngit commit -m \"feat(change-detect): per-keyframe zone boundaries + smoothing\n\ncompute_per_kf_zones() wraps adaptive_zone_boundaries per keyframe.\nsmooth_zone_boundaries() applies 3-KF weighted average respecting\nsegment boundaries.\"\n```\n\n---\n\n### Task 4: build_combined_lut.cu — separate base/runtime zone params\n\n**Files:**\n- Modify: `crates/dorea-gpu/src/cuda/kernels/build_combined_lut.cu`\n\nThe kernel currently uses the same `zone_boundaries` and `n_zones` for both its output zone loop AND the `grade_pixel_device` call inside. We need to separate them:\n- **Runtime zones** (8): determine the output texture indexing and the depth at which each texture is evaluated\n- **Base zones** (32): passed to `grade_pixel_device` for the per-zone LUT lookup inside the grading pipeline\n\nThe `grade_pixel_device` function in `grade_pixel.cuh` is **unchanged** — it still takes `luts`, `zone_boundaries`, `lut_size`, `n_zones` as before. The change is purely in what the build kernel passes to it.\n\n- [ ] **Step 1: Modify build_combined_lut_kernel signature**\n\nReplace the kernel signature in `build_combined_lut.cu`:\n\n```c\nextern \"C\"\n__global__ void build_combined_lut_kernel(\n    float4* __restrict__ output,\n    // Base LUT data (32 fine zones — fed to grade_pixel_device)\n    const float* __restrict__ base_luts,\n    const float* __restrict__ base_zone_boundaries,\n    int base_n_zones,\n    // Runtime zone boundaries (8 adaptive zones — determines output indexing)\n    const float* __restrict__ runtime_zone_boundaries,",
+  "source_version": "plans/2026-04-04-per-keyframe-adaptive-depth-zones-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836889971Z",
+  "valid_from": "2026-04-11T00:10:08.836889971Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-per-keyframe-adaptive-depth-zones-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 540,
+    "end_line": 564,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

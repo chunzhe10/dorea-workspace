@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-bedf47ccb632",
+  "content": "dtoh enhanced frames for output\n                    enhanced_np = (\n                        enhanced_batch.permute(0, 2, 3, 1).cpu().numpy() * 255\n                    ).astype(\"uint8\")  # (N, H, W, 3)\n                    all_enhanced_np.append(enhanced_np)\n\n                    # Free GPU memory before next iteration\n                    del enhanced_batch\n                    torch.cuda.empty_cache()\n\n                # Concatenate all sub-batches\n                enhanced_np = np.concatenate(all_enhanced_np, axis=0)\n\n                results = []\n                for i, (item, depth) in enumerate(zip(items, all_depths)):\n                    depth_result = DepthResult.from_array(item.get(\"id\"), depth)\n                    results.append({\n                        \"id\": item.get(\"id\"),\n                        \"image_b64\": encode_png(enhanced_np[i]),\n                        \"enhanced_width\": int(enh_w),\n                        \"enhanced_height\": int(enh_h),\n                        \"depth_f32_b64\": depth_result.depth_f32_b64,\n                        \"depth_width\": depth_result.width,\n                        \"depth_height\": depth_result.height,\n                    })\n                resp = RauneDepthBatchResult(results=results)\n            elif req_type == \"enhance\":\n                fmt = req.get(\"format\", \"raw_rgb\")",
+  "source_version": "python/dorea_inference/server.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230225105Z",
+  "valid_from": "2026-04-11T00:04:13.230225105Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/server.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 281,
+    "end_line": 303,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

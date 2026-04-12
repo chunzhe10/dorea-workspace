@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d2ced50abc85",
+  "content": "            .flat_map(|lut| lut.data.iter().copied())\n            .collect();\n        let base_bounds = &seg0.depth_luts.zone_boundaries;\n        let hsl = &seg0.hsl_corrections;\n        let h_offsets: Vec<f32> = hsl.0.iter().map(|q| q.h_offset).collect();\n        let s_ratios:  Vec<f32> = hsl.0.iter().map(|q| q.s_ratio).collect();\n        let v_offsets: Vec<f32> = hsl.0.iter().map(|q| q.v_offset).collect();\n        let weights:   Vec<f32> = hsl.0.iter().map(|q| q.weight).collect();\n        let lut_size = seg0.depth_luts.luts[0].size;\n\n        AdaptiveGrader::new(\n            &base_flat, base_bounds, cfg.base_lut_zones,\n            (&h_offsets, &s_ratios, &v_offsets, &weights),\n            &params, lut_size, cfg.depth_zones,\n        ).context(\"AdaptiveGrader init failed\")?\n    };\n\n    #[cfg(feature = \"cuda\")]\n    {\n        adaptive_grader.prepare_keyframe(&smoothed_kf_zones[0])\n            .context(\"prepare initial keyframe texture failed\")?;\n        adaptive_grader.swap_textures();\n        if smoothed_kf_zones.len() > 1 {\n            adaptive_grader.prepare_keyframe(&smoothed_kf_zones[1])\n                .context(\"prepare second keyframe texture failed\")?;\n        }\n        log::info!(\n            \"Adaptive CUDA grader initialized for 16-bit ({} base zones, {} runtime zones)\",\n            cfg.base_lut_zones, cfg.depth_zones,\n        );\n    }\n\n    // Create bounded channels for the 3-thread pipeline.\n    // Decoder→GPU carries Frame16 (u16 pixels). GPU→encoder carries Vec<u16>.\n    let (decoded_tx, decoded_rx) = crossbeam_channel::bounded::<Frame16>(CHANNEL_CAPACITY);\n    let (graded_tx, graded_rx) = crossbeam_channel::bounded::<Vec<u16>>(CHANNEL_CAPACITY);",
+  "source_version": "crates/dorea-cli/src/pipeline/grading.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229449878Z",
+  "valid_from": "2026-04-11T00:04:13.229449878Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/pipeline/grading.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 424,
+    "end_line": 454,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

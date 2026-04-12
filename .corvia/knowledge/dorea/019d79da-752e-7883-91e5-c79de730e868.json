@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c79de730e868",
+  "content": " -1)\n            mask[:, :, :, :overlap] *= ramp\n        if left + tile_w < fw:\n            ramp = torch.linspace(1, 0, overlap, device=frame_4k.device, dtype=torch.float32).view(1, 1, 1, -1)\n            mask[:, :, :, -overlap:] *= ramp\n        return mask\ndef compute_gold(\n    frame_4k: torch.Tensor,\n    raune_model: torch.nn.Module,\n    *,\n    force_path: Optional[Literal[\"native_4k\", \"tiled_2x2_1984x1144_o128\"]] = None,\n) -> GoldResult:\n    \"\"\"Run RAUNE at 4K, native-first with tiled fallback on OOM.\"\"\"\n    assert frame_4k.shape == (1, 3, 2160, 3840), f\"unexpected shape {frame_4k.shape}\"\n\n    if force_path == \"native_4k\":\n        raune_4k = _raune_forward(raune_model, frame_4k)\n        path_used = \"native_4k\"\n    elif force_path == \"tiled_2x2_1984x1144_o128\":\n        raune_4k = _tiled_4k_raune(raune_model, frame_4k)\n        path_used = \"tiled_2x2_1984x1144_o128\"\n    else:\n        try:\n            raune_4k = _raune_forward(raune_model, frame_4k)\n            path_used = \"native_4k\"\n        except torch.cuda.OutOfMemoryError:\n            torch.cuda.empty_cache()\n            raune_4k = _tiled_4k_raune(raune_model, frame_4k)\n            path_used = \"tiled_2x2_1984x1144_o128\"\n\n    delta_4k = rgb_to_oklab(raune_4k) - rgb_to_oklab(frame_4k)\n    return GoldResult(raune_4k=raune_4k, delta_4k=delta_4k, path_used=path_used)",
+  "source_version": "benchmarks/upscale_bench/gold.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230344108Z",
+  "valid_from": "2026-04-11T00:04:13.230344108Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/gold.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 120,
+    "end_line": 145,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-1dc0249dae9c",
+  "content": "# 10-Bit Pipeline Implementation Plan\n\n> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.\n\n**Goal:** Upgrade Dorea from 8-bit to 10-bit I/O supporting DJI D-Log M and Insta360 X5 I-Log, with f32 internal processing, 3-stage pipelined grading, and 10-bit output to DaVinci Resolve.\n\n**Architecture:** Trait-based transfer functions abstract camera log curves. 16-bit PNG replaces JPEG for keyframe extraction. Internal f32 math is unchanged. CUDA kernels move from u8 to f32. A 3-stage bounded-channel pipeline (decode → depth → grade+encode) replaces the serial frame loop. Tiny planet clips skip depth estimation.\n\n**Tech Stack:** Rust (dorea crates), CUDA 12.4, ffmpeg (NVDEC/ProRes), Python (inference server), clap (CLI), rayon (CPU parallelism)\n\n**Spec:** `docs/decisions/2026-04-02-10bit-pipeline-design.md`\n\n---\n",
+  "source_version": "plans/2026-04-02-10bit-pipeline-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836484130Z",
+  "valid_from": "2026-04-11T00:10:08.836484130Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-10bit-pipeline-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1,
+    "end_line": 14,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

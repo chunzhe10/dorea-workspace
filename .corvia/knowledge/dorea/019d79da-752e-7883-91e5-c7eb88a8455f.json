@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c7eb88a8455f",
+  "content": "().item(),\n        \"delta_l1_b\": diff[:, 2].mean().item(),\n        \"delta_l1\": diff.mean().item(),\n        \"delta_l2\": (diff.pow(2).mean().sqrt()).item(),\n        \"delta_max\": diff.max().item(),\n        \"delta_p95\": torch.quantile(flat, 0.95).item(),\n    }\ndef _srgb_to_xyz_d65(rgb: torch.Tensor) -> torch.Tensor:\n    \"\"\"(1,3,H,W) sRGB [0,1] → XYZ (D65).\"\"\"\n    lin = torch.where(rgb <= 0.04045, rgb / 12.92, ((rgb + 0.055) / 1.055).pow(2.4))\n    r, g, b = lin[:, 0:1], lin[:, 1:2], lin[:, 2:3]\n    X = 0.4124564 * r + 0.3575761 * g + 0.1804375 * b\n    Y = 0.2126729 * r + 0.7151522 * g + 0.0721750 * b\n    Z = 0.0193339 * r + 0.1191920 * g + 0.9503041 * b\n    return torch.cat([X, Y, Z], dim=1)",
+  "source_version": "benchmarks/upscale_bench/metrics.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230348143Z",
+  "valid_from": "2026-04-11T00:04:13.230348143Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/metrics.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 73,
+    "end_line": 80,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

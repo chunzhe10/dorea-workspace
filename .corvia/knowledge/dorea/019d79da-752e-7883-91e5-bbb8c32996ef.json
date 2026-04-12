@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-bbb8c32996ef",
+  "content": "53*l_ + 0.7936177850*m_ - 0.0040720468*s_\n        ok_a = 1.9779984951*l_ - 2.4285922050*m_ + 0.4505937099*s_\n        ok_b = 0.0259040371*l_ + 0.7827717662*m_ - 0.8086757660*s_\n\n        dL = tl.load(delta_ptr + 0 * n_pixels + offs, mask=mask).to(tl.float32)\n        da = tl.load(delta_ptr + 1 * n_pixels + offs, mask=mask).to(tl.float32)\n        db = tl.load(delta_ptr + 2 * n_pixels + offs, mask=mask).to(tl.float32)\n\n        # Delta is in rescaled OKLab — unscale before adding\n        ok_L = ok_L + dL / 100.0\n        ok_a = ok_a + da / 300.0\n        ok_b = ok_b + db / 300.0\n\n        l2_ = ok_L + 0.3963377774*ok_a + 0.2158037573*ok_b\n        m2_ = ok_L - 0.1055613458*ok_a - 0.0638541728*ok_b\n        s2_ = ok_L - 0.0894841775*ok_a - 1.2914855480*ok_b\n\n        l2 = l2_ * l2_ * l2_\n        m2 = m2_ * m2_ * m2_\n        s2 = s2_ * s2_ * s2_\n\n        or_ =  4.0767416613*l2 - 3.3077115904*m2 + 0.2309699287*s2\n        og  = -1.2684380041*l2 + 2.6097574007*m2 - 0.3413193965*s2\n        ob  = -0.0041960863*l2 - 0.7034186145*m2 + 1.7076147010*s2\n\n        or_ = tl.maximum(or_, 0.0)\n        og  = tl.maximum(og, 0.0)\n        ob  = tl.maximum(ob, 0.0)\n\n        threshold2 = 0.0031308\n        fr = tl.where(or_ <= threshold2, or_ * 12.92,\n                      1.055 * tl.extra.cuda.libdevice.pow(or_, 1.0/2.4) - 0.055)\n        fg = tl.where(og <= threshold2, og * 12.92,\n                      1.055 * tl.extra.cuda.libdevice.pow(og, 1.0/2.4) - 0.055)\n        fb = tl.where(ob <= threshold2, ob * 12.92,\n                      1.055 * tl.extra.cuda.libdevice.pow(ob, 1.0/2.4) - 0.055)\n\n        fr = tl.minimum(tl.maximum(fr, 0.0), 1.0)\n        fg = tl.minimum(tl.maximum(fg, 0.0), 1.0)\n        fb = tl.minimum(tl.maximum(fb, 0.0), 1.0)\n\n        tl.store(out_ptr + 0 * n_pixels + offs, fr.to(tl.float16), mask=mask)\n        tl.store(out_ptr + 1 * n_pixels + offs, fg.to(tl.float16), mask=mask)\n        tl.store(out_ptr + 2 * n_pixels + offs, fb.to(tl.float16), mask=mask)",
+  "source_version": "python/dorea_inference/raune_filter.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230054145Z",
+  "valid_from": "2026-04-11T00:04:13.230054145Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/raune_filter.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 132,
+    "end_line": 170,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

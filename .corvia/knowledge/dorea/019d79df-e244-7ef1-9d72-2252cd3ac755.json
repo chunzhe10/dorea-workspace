@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-2252cd3ac755",
+  "content": "## Task 4: End-to-end test on the real video\n\n## Self-Review\n\n**Spec coverage:**\n- [x] GPU clarity kernel at proxy resolution → Tasks 2+3\n- [x] 3-pass separable box blur on GPU → Task 2 (`clarity_box_blur_rows` + `clarity_box_blur_cols`, 3 passes in launcher)\n- [x] Bilinear downsample full-res → proxy L → Task 2 (`clarity_extract_L_proxy`)\n- [x] Upsample blur to full res + apply detail → Task 2 (`clarity_apply_kernel`)\n- [x] CPU clarity path disabled when GPU runs → Task 1 (`skip_clarity`) + Task 3 (`true`)\n- [x] CPU fallback still works (CPU-only mode, CUDA failure) → Task 1 sets `skip_clarity=false` for CPU path; Task 3 logs + falls back to hsl result on clarity GPU error\n- [x] End-to-end verification → Task 4\n\n**Placeholder scan:** No TBDs. All code blocks are complete.\n\n**Type consistency:**\n- `finish_grade(..., skip_clarity: bool)` — added in Task 1, used as `false` in cpu.rs, updated to `true` in lib.rs in Task 3\n- `dorea_clarity_gpu` C signature matches `extern \"C\"` Rust declaration exactly (all `i32` / `f32` / `*const f32`)\n- `proxy_dims` in `cuda/mod.rs` is a private helper with the same signature as in `dorea-video/src/resize.rs` — consistent results\n- `BLUR_RADIUS = 30` matches the original Phase 2+3 spec (σ=30 at proxy)\n- `clarity_amount = (0.2 + 0.25 * mean_d) * params.contrast` matches `apply_cpu_clarity` exactly",
+  "source_version": "plans/2026-04-02-clarity-cuda-kernel.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836548681Z",
+  "valid_from": "2026-04-11T00:10:08.836548681Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-clarity-cuda-kernel.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 902,
+    "end_line": 920,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

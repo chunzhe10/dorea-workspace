@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-3f6f64019e2e",
+  "content": "d CUDA/CPU branching)\n\nuse anyhow::{Context, Result};\nuse std::collections::HashMap;\nuse crate::pipeline::{Node, Stage, CalibrationStageOutput};\nuse crate::pipeline::calibration::SegmentCalibration;\nuse dorea_video::ffmpeg::{self, FrameEncoder, VideoInfo};\nuse dorea_video::inference::InferenceServer;\nuse dorea_gpu::GradeParams;\n#[cfg(feature = \"cuda\")]\nuse dorea_gpu::AdaptiveGrader;\n\n// ── Utility ───────────────────────────────────────────────────────────────────\n\n/// Linear interpolation between two depth maps.\npub fn lerp_depth(a: &[f32], b: &[f32], t: f32) -> Vec<f32> {\n    let t = t.clamp(0.0, 1.0);\n    a.iter().zip(b.iter()).map(|(&va, &vb)| va + (vb - va) * t).collect()\n}\n\n// ── Stage input ───────────────────────────────────────────────────────────────\n\npub struct GradingStageInput {\n    pub calibration_output: CalibrationStageOutput,\n    pub video_path: std::path::PathBuf,\n    pub video_info: VideoInfo,\n    pub encoder: FrameEncoder,\n    pub grade_params: GradeParams,\n    pub depth_zones: usize,\n    pub base_lut_zones: usize,\n}\n\n// ── Node: DepthInterpolateNode ────────────────────────────────────────────────\n\n/// Lerps depth between adjacent keyframe depth maps.",
+  "source_version": "plans/2026-04-05-pipeline-dag-refactor.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836989148Z",
+  "valid_from": "2026-04-11T00:10:08.836989148Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-05-pipeline-dag-refactor.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1422,
+    "end_line": 1449,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

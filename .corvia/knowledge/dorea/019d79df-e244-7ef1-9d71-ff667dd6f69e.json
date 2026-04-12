@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d71-ff667dd6f69e",
+  "content": "### Calibration pipeline (keyframes only, runs once per dive)\n### Grading pipeline (per frame, hot path)\n\n### GPU tensor bridge (inference to grading, zero-copy path)\n\nWhen Depth Anything inference feeds directly into grading:\n\n```rust\nPython::with_gil(|py| {\n    let guard: &PyAny = call_depth_inference(py, frame)?;\n    let data_ptr: usize = guard.getattr(\"data_ptr\")?.extract()?;\n    let numel: usize = guard.getattr(\"numel\")?.extract()?;\n\n    // Lifetime-bound to 'py — cannot escape this closure\n    let borrowed = unsafe {\n        BorrowedDeviceSlice::from_raw(py, data_ptr as *mut f32, numel)\n    };\n\n    // Grading uses borrowed depth — completes within GIL scope\n    let graded = grade_with_device_depth(device, &d_rgb, &borrowed, cal, params)?;\n\n    // Explicitly release the Python tensor\n    guard.call_method0(\"release\")?;\n\n    // borrowed drops here — no cudaFree (not owned)\n    // guard drops here — Python GC reclaims TensorGuard\n    Ok(graded)\n})\n```\n\nThe `'py` lifetime on `BorrowedDeviceSlice` prevents it from escaping the GIL\nscope at compile time. See \"Borrowed device pointer safety\" below for the type\ndesign.\n",
+  "source_version": "decisions/2026-04-03-gpu-space-ipc-adaptive-batching-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836123225Z",
+  "valid_from": "2026-04-11T00:10:08.836123225Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-03-gpu-space-ipc-adaptive-batching-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 261,
+    "end_line": 291,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

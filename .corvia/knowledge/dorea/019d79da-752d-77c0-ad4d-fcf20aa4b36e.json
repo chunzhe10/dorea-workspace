@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-fcf20aa4b36e",
+  "content": " gi * LUT_SIZE + bi;\n                wsum[cell * 3]     += tgt[0] as f64 * w;\n                wsum[cell * 3 + 1] += tgt[1] as f64 * w;\n                wsum[cell * 3 + 2] += tgt[2] as f64 * w;\n                wcount[cell] += w;\n            }\n        }\n    }\npub fn finish(self) -> DepthLuts {\n        let mut luts = Vec::with_capacity(self.n_zones);\n\n        for z in 0..self.n_zones {\n            let wsum = &self.lut_wsums[z];\n            let wcount = &self.lut_wcounts[z];\n\n            let mut lut = LutGrid::new(LUT_SIZE);\n            let mut populated: Vec<[usize; 3]> = Vec::new();\n            let mut empty: Vec<[usize; 3]> = Vec::new();\n\n            for ri in 0..LUT_SIZE {\n                for gi in 0..LUT_SIZE {\n                    for bi in 0..LUT_SIZE {\n                        let cell = ri * LUT_SIZE * LUT_SIZE + gi * LUT_SIZE + bi;\n                        let wc = wcount[cell];\n                        if wc > 0.0 {\n                            lut.set(ri, gi, bi, [\n                                (wsum[cell * 3]     / wc) as f32,\n                                (wsum[cell * 3 + 1] / wc) as f32,\n                                (wsum[cell * 3 + 2] / wc) as f32,\n                            ]);\n                            populated.push([ri, gi, bi]);\n                        } else {\n                            empty.push([ri, gi, bi]);\n                        }\n                    }\n                }",
+  "source_version": "crates/dorea-lut/src/build.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229983530Z",
+  "valid_from": "2026-04-11T00:04:13.229983530Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-lut/src/build.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 296,
+    "end_line": 323,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

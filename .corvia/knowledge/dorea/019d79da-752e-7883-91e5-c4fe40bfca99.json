@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c4fe40bfca99",
+  "content": " not in _INJECTED_MODEL:\n        raise RuntimeError(\n            \"higher_proxy called without an injected RAUNE model. \"\n            \"The driver must call set_injected_raune_model() before running this method.\"\n        )\n    return _INJECTED_MODEL[\"raune\"]\ndef higher_proxy(\n    delta_proxy: torch.Tensor,\n    orig_full: torch.Tensor,\n    full_size: Tuple[int, int],\n) -> torch.Tensor:\n    \"\"\"Control method: run RAUNE at full 4K on orig_full and compute the\n    delta directly. Requires the RAUNE model — the driver injects it via\n    set_injected_raune_model() before calling this method. The injection\n    is a module-level dict (single-threaded bench, no thread-local needed).\n    delta_proxy is unused and discarded — the full-res pipeline recomputes\n    the delta from orig_full directly.\"\"\"\n    model = _get_injected_raune_model()\n    gold = _compute_gold(orig_full, model)\n    return gold.delta_4k",
+  "source_version": "benchmarks/upscale_bench/methods.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230309168Z",
+  "valid_from": "2026-04-11T00:04:13.230309168Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/methods.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 433,
+    "end_line": 446,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

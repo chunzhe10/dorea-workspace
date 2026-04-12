@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-2c46158f5c1c",
+  "content": "### New files\n### Modified files\n\n## Task 1: Python Bridge Module\n\n**Files:**\n- Create: `python/dorea_inference/bridge.py`\n- Modify: `python/dorea_inference/depth_anything.py`\n- Modify: `python/dorea_inference/raune_net.py`\n- Test: `python -m pytest python/dorea_inference/test_bridge.py` (created inline)\n\nThis task is standalone Python — no Rust changes needed.\n\n- [ ] **Step 1: Create `bridge.py` with TensorGuard and entry points**\n\n```python",
+  "source_version": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836694512Z",
+  "valid_from": "2026-04-11T00:10:08.836694512Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 47,
+    "end_line": 59,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

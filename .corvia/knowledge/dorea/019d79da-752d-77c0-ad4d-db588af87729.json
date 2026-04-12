@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-db588af87729",
+  "content": "pub enum CalError {\n    #[error(\"IO error: {0}\")]\n    Io(#[from] std::io::Error),\n    #[error(\"Serialization error: {0}\")]\n    Serialization(String),\n    #[error(\"Format version {0} not supported (expected {FORMAT_VERSION})\")]\n    UnsupportedVersion(u8),\n}\nmod tests {\n    use super::*;\n    use dorea_hsl::derive::{HslCorrections, QualifierCorrection};\n    use dorea_lut::types::{DepthLuts, LutGrid};\n\n    fn dummy_lut() -> LutGrid {\n        let mut lut = LutGrid::new(3);\n        for ri in 0..3 {\n            for gi in 0..3 {\n                for bi in 0..3 {\n                    lut.set(ri, gi, bi, [ri as f32 / 2.0, gi as f32 / 2.0, bi as f32 / 2.0]);\n                }\n            }\n        }\n        lut\n    }\n\n    fn dummy_calibration() -> Calibration {\n        let luts = vec![dummy_lut(); 5];\n        let boundaries = vec![0.0, 0.2, 0.4, 0.6, 0.8, 1.0];\n        let depth_luts = DepthLuts::new(luts, boundaries);\n\n        let corrections = HslCorrections(vec![\n            QualifierCorrection {\n                h_center: 0.0,\n                h_width: 40.0,\n                h_offset: 5.0,\n                s_ratio: 1.1,\n                v_offset: 0.05,\n                weight: 200.0,\n            },\n        ]);\n\n        Calibration::new(depth_luts, corrections, 3)\n    }\n\n    #[test]\n    fn test_round_trip() {\n        let cal = dummy_calibration();\n\n        // Save to a temp file\n        let tmp = std::env::temp_dir().join(\"dorea_cal_test.dorea-cal\");\n        cal.save(&tmp).expect(\"save failed\");\n\n        // Load back\n        let loaded = Calibration::load(&tmp).expect(\"load failed\");\n        assert_eq!(loaded.version, FORMAT_VERSION);\n        assert_eq!(loaded.keyframe_count, cal.keyframe_count);\n        assert_eq!(loaded.depth_luts.n_zones(), cal.depth_luts.n_zones());\n        assert_eq!(loaded.hsl_corrections.0.len(), cal.hsl_corrections.0.len());\n\n        // Verify LUT data integrity\n        let orig_cell = cal.depth_luts.luts[0].get(1, 1, 1);\n        let load_cell = loaded.depth_luts.luts[0].get(1, 1, 1);\n        assert_eq!(orig_cell, load_cell);\n\n        // Cleanup\n        let _ = std::fs::remove_file(&tmp);\n    }\n}",
+  "source_version": "crates/dorea-cal/src/format.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229551840Z",
+  "valid_from": "2026-04-11T00:04:13.229551840Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cal/src/format.rs",
+    "language": "rs",
+    "chunk_type": "mod_item",
+    "start_line": 93,
+    "end_line": 152,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

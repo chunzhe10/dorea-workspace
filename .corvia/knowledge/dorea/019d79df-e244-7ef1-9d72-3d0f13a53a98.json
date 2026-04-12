@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-3d0f13a53a98",
+  "content": "# Pipeline DAG Refactor Implementation Plan\n\n## File Structure\n\n| File | Responsibility |\n|------|----------------|\n| `crates/dorea-cli/src/pipeline/mod.rs` | `Node` + `Stage` traits; shared I/O structs used across stage boundaries |\n| `crates/dorea-cli/src/pipeline/keyframe.rs` | `KeyframeStage` + `ProxyDecodeNode` (streaming), `ChangeDetectNode`, `KeyframeSelectNode` |\n| `crates/dorea-cli/src/pipeline/feature.rs` | `FeatureStage` + `FusedInferenceNode` (fully implemented), `EnhancedDownscaleNode`; owns `PagedCalibrationStore` |\n| `crates/dorea-cli/src/pipeline/calibration.rs` | `CalibrationStage` + `ZoneComputeNode`, `SegmentDetectNode`, `ZoneSmoothNode`, `build_segment_lut` (free fn), `HslAverageNode` (streaming accumulator), `GraderInitNode` |\n| `crates/dorea-cli/src/pipeline/grading.rs` | `GradingStage` + `DepthInterpolateNode` (plain `lerp` method), `BlendTNode` |\n| `crates/dorea-cli/src/grade.rs` | Thin orchestrator: parse config, construct stages, chain `.run()` calls |\n\n`PagedCalibrationStore` moves from `grade.rs` into `feature.rs` (it is an implementation detail of the feature stage, not shared across stages). `KeyframeEntry` moves to `keyframe.rs`. `lerp_depth` moves to `grading.rs`.\n\n---\n",
+  "source_version": "plans/2026-04-05-pipeline-dag-refactor.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836954021Z",
+  "valid_from": "2026-04-11T00:10:08.836954021Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-05-pipeline-dag-refactor.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 13,
+    "end_line": 27,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

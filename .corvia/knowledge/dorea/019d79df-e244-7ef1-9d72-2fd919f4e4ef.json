@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-2fd919f4e4ef",
+  "content": "# GPU Inference Saturation — Fused RAUNE+Depth Batch\n\n## Data flow: before vs. after\n\n**Before (two separate batch calls, depth on original):**\n```\nRust ──original_px──► IPC ──► RAUNE ──► IPC ──► Rust (enhanced_px stored)\nRust ──original_px──► IPC ──► Depth ──► IPC ──► Rust (depths stored)\n         ^── 4 IPC data crossings, enhanced_px goes GPU→CPU→pipe→CPU→GPU for nothing\n```\n\n**After (fused call, depth on RAUNE output):**\n```\nRust ──original_px──► IPC ──► RAUNE ──resize+renorm(GPU)──► Depth ──► IPC ──► Rust\n         ^── 2 IPC data crossings, enhanced tensor stays on GPU the whole time\n```\n\nSaved per 8-frame chunk: one IPC round-trip (~30–50 ms), one dtoh of enhanced frames, one htod of enhanced frames. Better depth maps as a bonus.\n\n---\n\n\n## Resize and renormalise between models\n\nRAUNE outputs at `max_size=1024` (no patch constraint). Depth Anything V2 requires dimensions ≤ 518 that are **multiples of 14** (ViT patch size). Between the two models, on GPU:\n\n```python\nimport torch.nn.functional as F\n",
+  "source_version": "plans/2026-04-03-inference-gpu-saturation.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836746456Z",
+  "valid_from": "2026-04-11T00:10:08.836746456Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-inference-gpu-saturation.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 15,
+    "end_line": 40,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

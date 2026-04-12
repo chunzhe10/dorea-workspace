@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-2d1c790eb8b4",
+  "content": "et initial = b.batch_size();\n        assert!(!b.report_oom());\n        assert_eq!(b.batch_size(), initial / 2);\n    }\n\n    #[test]\n    fn report_oom_at_minimum_returns_true() {\n        let mut b = AdaptiveBatcher::fixed(1);\n        assert!(b.report_oom());\n        assert_eq!(b.batch_size(), 1);\n    }\n\n    #[test]\n    fn report_oom_resets_success_counter() {\n        let mut b = AdaptiveBatcher::new(1_000_000_000, 56_000_000, 0.15);\n        for _ in 0..9 {\n            b.report_success();\n        }\n        b.report_oom(); // resets counter\n        let size_after_oom = b.batch_size();\n        // 9 more successes should NOT trigger growth (counter was reset)\n        for _ in 0..9 {\n            b.report_success();\n        }\n        assert_eq!(b.batch_size(), size_after_oom);\n    }\n\n    #[test]\n    fn growth_after_threshold_successes() {\n        let mut b = AdaptiveBatcher::new(1_000_000_000, 56_000_000, 0.15);\n        // Halve first so there's room to grow\n        b.report_oom();\n        let halved = b.batch_size();\n        // 10 successes should trigger 50% growth\n        for _ in 0..10 {\n            b.report_success();\n        }\n        let expected = ((halved as f64 * 1.5).ceil() as usize).min(b.max_batch);\n        assert_eq!(b.batch_size(), expected);\n    }\n\n    #[test]\n    fn growth_capped_at_max() {\n        let mut b = AdaptiveBatcher::new(1_000_000_000, 56_000_000, 0.15);\n        let max = b.max_batch;\n        // Already at max — 10 successes should not increase\n        for _ in 0..20 {\n            b.report_success();\n        }\n        assert_eq!(b.batch_size(), max);\n    }\n\n    #[test]\n    fn fixed_batcher_does_not_grow() {\n        let mut b = AdaptiveBatcher::fixed(4);\n        for _ in 0..100 {\n            b.report_success();\n        }\n        assert_eq!(b.batch_size(), 4);\n    }\n}\n```\n\n- [ ] **Step 2: Update GpuError in `lib.rs`**\n\nReplace the existing `GpuError` enum in `crates/dorea-gpu/src/lib.rs`:\n\n```rust\n#[derive(Debug, Error)]\npub enum GpuError {",
+  "source_version": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836706547Z",
+  "valid_from": "2026-04-11T00:10:08.836706547Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-gpu-space-ipc-adaptive-batching.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 409,
+    "end_line": 469,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

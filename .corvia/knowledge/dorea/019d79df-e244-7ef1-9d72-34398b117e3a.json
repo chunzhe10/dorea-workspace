@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-34398b117e3a",
+  "content": "    # First response is the enhance_result; second is ok (shutdown)\n\n\n- [ ] **Step 3: Update imports in server.py**\n\nIn `python/dorea_inference/server.py`, replace the protocol import block (lines 27-38) with:\n\n```python\nfrom .protocol import (\n    PongResponse,\n    RauneResult,\n    DepthResult,\n    DepthBatchResult,\n    RauneDepthBatchResult,\n    EnhanceResult,\n    ErrorResponse,\n    OkResponse,\n    decode_png,\n    decode_raw_rgb,\n    encode_raw_rgb,\n    encode_png,\n)\n```\n\n- [ ] **Step 4: Add `--maxine` args to `_parse_args()`**\n\nIn `_parse_args()`, after the `--no-depth` argument (after line 51), add:\n\n```python\n    p.add_argument(\"--maxine\", action=\"store_true\",\n                   help=\"Enable Maxine enhancement (requires nvvfx SDK or DOREA_MAXINE_MOCK=1)\")\n    p.add_argument(\"--maxine-upscale-factor\", type=int, default=2,\n                   help=\"Maxine super-resolution upscale factor (default: 2)\")\n    p.add_argument(\"--no-maxine-artifact-reduction\", action=\"store_true\",\n                   help=\"Disable artifact reduction before upscale\")\n```\n\n- [ ] **Step 5: Add Maxine model loading in `main()`**",
+  "source_version": "plans/2026-04-04-maxine-enhancement-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836812742Z",
+  "valid_from": "2026-04-11T00:10:08.836812742Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-maxine-enhancement-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 468,
+    "end_line": 503,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

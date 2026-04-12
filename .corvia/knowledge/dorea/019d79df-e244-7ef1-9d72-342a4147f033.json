@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-342a4147f033",
+  "content": "# Force mock mode before any imports\n\n    # First response is the enhance_result; second is ok (shutdown)\n    enhance_resp = responses[0]\n    assert enhance_resp[\"type\"] == \"enhance_result\"\n    assert enhance_resp[\"id\"] == \"f001\"\n    assert enhance_resp[\"width\"] == 4\n    assert enhance_resp[\"height\"] == 6\n    raw = base64.b64decode(enhance_resp[\"image_b64\"])\n    assert len(raw) == 4 * 6 * 3\n\n\ndef test_enhance_handler_without_maxine_flag_errors():\n    \"\"\"enhance request without --maxine should return error (no enhancer loaded).\"\"\"\n    req = _make_enhance_req(4, 6)\n    responses = _run_server_with_reqs([req])  # no --maxine\n    assert responses[0][\"type\"] == \"error\"\n    assert \"not loaded\" in responses[0][\"message\"].lower() or \"maxine\" in responses[0][\"message\"].lower()\n\n\ndef test_enhance_handler_passthrough_preserves_dimensions():\n    \"\"\"Mock mode returns same dimensions as input.\"\"\"\n    req = _make_enhance_req(16, 9)\n    responses = _run_server_with_reqs([req], extra_argv=[\"--maxine\"])\n    r = responses[0]\n    assert r[\"width\"] == 16\n    assert r[\"height\"] == 9\n```\n\n- [ ] **Step 2: Run tests to verify they fail**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\nDOREA_MAXINE_MOCK=1 python -m pytest python/tests/test_maxine_server.py -v 2>&1 | tail -20\n```\n\nExpected: FAIL — `--maxine` arg not recognized, `enhance` handler not found.",
+  "source_version": "plans/2026-04-04-maxine-enhancement-impl.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836811257Z",
+  "valid_from": "2026-04-11T00:10:08.836811257Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-maxine-enhancement-impl.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 433,
+    "end_line": 467,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

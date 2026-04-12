@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-21ae8f515346",
+  "content": "fy) * D65_YN;\n    float z = lab_f_inv_d(fz) * D65_ZN;\n\n    float rl =  3.2404542f * x - 1.5371385f * y - 0.4985314f * z;\n    float gl = -0.9692660f * x + 1.8760108f * y + 0.0415560f * z;\n    float bl_out =  0.0556434f * x - 0.2040259f * y + 1.0572252f * z;\n\n    *r = linear_to_srgb_d(rl);\n    *g = linear_to_srgb_d(gl);\n    *b = linear_to_srgb_d(bl_out);\n}\n\n// ---------------------------------------------------------------------------\n// Kernel A: downsample full-res f32 RGB → proxy-res L channel (bilinear)\n// ---------------------------------------------------------------------------\nextern \"C\"\n__global__ void clarity_extract_L_proxy(\n    const float* __restrict__ rgb_full,   // [full_w * full_h * 3]\n    float* __restrict__       l_proxy,    // [proxy_w * proxy_h]\n    int full_w, int full_h,\n    int proxy_w, int proxy_h\n) {\n    int px = blockIdx.x * blockDim.x + threadIdx.x;\n    int py = blockIdx.y * blockDim.y + threadIdx.y;\n    if (px >= proxy_w || py >= proxy_h) return;\n\n    // Map proxy pixel → full-res bilinear coordinates\n    float sx = (proxy_w > 1)\n        ? ((float)px / (float)(proxy_w - 1) * (float)(full_w - 1))\n        : 0.0f;\n    float sy = (proxy_h > 1)\n        ? ((float)py / (float)(proxy_h - 1) * (float)(full_h - 1))\n        : 0.0f;\n\n    int x0 = (int)sx;  int x1 = min(x0 + 1, full_w - 1);\n    int y0 = (int)sy;  int y1 = min(y0 + 1, full_h - 1);\n    float fx = sx - (float)x0;\n    float fy = sy - (float)y0;\n\n    // Extract L from each corner via sRGB→LAB\n    float L00, L10, L01, L11, A_unused, B_unused;\n    int i00 = (y0 * full_w + x0) * 3;\n    int i10 = (y0 * full_w + x1) * 3;\n    int i01 = (y1 * full_w + x0) * 3;\n    int i11 = (y1 * full_w + x1) * 3;\n    srgb_to_lab_d(rgb_full[i00], rgb_full[i00+1], rgb_full[i00+2], &L00, &A_unused, &B_unused);\n    srgb_to_lab_d(rgb_full[i10], rgb_full[i10+1], rgb_full[i10+2], &L10, &A_unused, &B_unused);\n    srgb_to_lab_d(rgb_full[i01], rgb_full[i01+1], rgb_full[i01+2], &L01, &A_unused, &B_unused);\n    srgb_to_lab_d(rgb_full[i11], rgb_full[i11+1], rgb_full[i11+2], &L11, &A_unused, &B_unused);\n\n    float L = L00*(1-fx)*(1-fy) + L10*fx*(1-fy)",
+  "source_version": "plans/2026-04-02-clarity-cuda-kernel.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836536887Z",
+  "valid_from": "2026-04-11T00:10:08.836536887Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-02-clarity-cuda-kernel.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 336,
+    "end_line": 380,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

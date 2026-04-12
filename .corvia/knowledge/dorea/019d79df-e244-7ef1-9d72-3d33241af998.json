@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-3d33241af998",
+  "content": "put>;\n}\n\n/// A named pipeline stage composed of one or more nodes.\n///\n/// A stage owns its nodes and defines the aggregate input/output types\n/// that cross stage boundaries. Stages are chained by the orchestrator\n/// in `grade.rs::run`.\npub trait Stage {\n    type Input;\n    type Output;\n\n    /// Human-readable name for logging.\n    fn name(&self) -> &'static str;\n\n    /// Run all nodes in this stage, consuming `input` and producing `output`.\n    fn run(&mut self, input: Self::Input) -> anyhow::Result<Self::Output>;\n}\n\n// ── Shared I/O structs used at stage boundaries ──────────────────────────────\n\n/// Output of the Keyframe stage / input of the Feature stage.\n#[derive(Debug)]\npub struct KeyframeStageOutput {\n    /// Keyframes selected by change detection.\n    pub keyframes: Vec<keyframe::KeyframeEntry>,\n    /// Proxy frame dimensions (width, height).\n    pub proxy_dims: (usize, usize),\n}\n\n/// Output of the Feature stage / input of the LUT Calibration stage.\npub struct FeatureStageOutput {\n    /// Calibration store: mmap'd (pixels, RAUNE-enhanced-proxy, depth) per keyframe.\n    pub store: feature::PagedCalibrationStore,\n    /// Native-resolution depth per keyframe frame index: (depth_f32, width, height).\n    pub keyframe_depths: std::collections::HashMap<u64, (Vec<f32>, usize, usize)>,\n    /// Keyframe metadata list preserved from the Keyframe stage.\n    pub keyframes: Vec<keyframe::KeyframeEntry>,\n}\n\n/// Output of the LUT Calibration stage / input of the Grading Render stage.\npub struct CalibrationStageOutput {\n    /// Per-segment base LUT + HSL corrections.\n    pub segment_calibrations: Vec<calibration::SegmentCalibration>,\n    /// Per-keyframe smoothed zone boundaries (runtime zones, `depth_zones + 1` values each).\n    pub smoothed_kf_zones: Vec<Vec<f32>>,\n    /// Maps keyframe index → segment index.\n    pub kf_to_segment: Vec<usize>,\n    /// Segments from scene detection.",
+  "source_version": "plans/2026-04-05-pipeline-dag-refactor.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836956564Z",
+  "valid_from": "2026-04-11T00:10:08.836956564Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-05-pipeline-dag-refactor.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 107,
+    "end_line": 146,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

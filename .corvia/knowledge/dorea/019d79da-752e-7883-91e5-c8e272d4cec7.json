@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c8e272d4cec7",
+  "content": "oad_raune_model(weights_path, models_dir)\n    set_injected_raune_model(raune_model)\n\n    # Collect results\n    all_results: list[MethodResult] = []\n    frames_data: list[FrameCellData] = []\n    gold_paths: dict[int, str] = {}\n    oom_events: list[str] = []\n\n    try:\n        for frame_idx in frame_indices:\n            print(f\"\\n─── frame {frame_idx} ───\")\n            frame_4k = decode_frame(clip_path, frame_idx)\n            gold = load_or_compute_gold(\n                frame_4k, frame_idx, raune_model, weights_path, gold_dir,\n                regen=args.regen_gold, force_path=None,\n            )\n            gold_paths[frame_idx] = gold.path_used\n            print(f\"  gold: {gold.path_used}\")\n\n            # Optional sanity check: run both paths, report disagreement\n            if args.gold_sanity_check:\n                other_path = \"tiled_2x2_1984x1144_o128\" if gold.path_used == \"native_4k\" else \"native_4k\"\n                try:\n                    alt = load_or_compute_gold(\n                        frame_4k, frame_idx, raune_model, weights_path, gold_dir,\n                        regen=True, force_path=other_path,\n                    )\n                    diff = (alt.delta_4k - gold.delta_4k).abs().max().item()\n                    print(f\"  gold-sanity: {other_path} vs {gold.path_used} delta_max={diff:.5f}\")\n                except Exception as e:\n                    print(f\"  gold-sanity: failed to run alt path: {e}\")\n\n            # Proxy delta from the standard pipeline\n            ph = 1080 if args.proxy_size == 1080 else args.proxy_size\n            pw = int(round(ph * 3840 / 2160))\n            orig_proxy = F.interpolate(frame_4k, size=(ph, pw), mode=\"bilinear\", align_corners=False)\n            # Run RAUNE at proxy\n            x = (orig_proxy * 2 - 1).half()\n            with torch.no_grad():\n                y = raune_model(x).float()",
+  "source_version": "benchmarks/upscale_bench/run.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230359842Z",
+  "valid_from": "2026-04-11T00:04:13.230359842Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/run.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 188,
+    "end_line": 220,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

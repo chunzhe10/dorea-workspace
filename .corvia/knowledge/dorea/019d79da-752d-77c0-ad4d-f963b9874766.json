@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-f963b9874766",
+  "content": "145 * m + 1.7076147010 * s;\n\n    // Linear → sRGB, clamped\n    let r = linear_to_srgb(rl.max(0.0));\n    let g = linear_to_srgb(gl.max(0.0));\n    let b_out = linear_to_srgb(bl.max(0.0));\n\n    (r.clamp(0.0, 1.0), g.clamp(0.0, 1.0), b_out.clamp(0.0, 1.0))\n}\nmod tests {\n    use super::*;\n\n    fn round_trip(r: f32, g: f32, b: f32) {\n        let (l, a, lab_b) = srgb_to_lab(r, g, b);\n        let (r2, g2, b2) = lab_to_srgb(l, a, lab_b);\n        assert!(\n            (r2 - r).abs() < 1e-3 && (g2 - g).abs() < 1e-3 && (b2 - b).abs() < 1e-3,\n            \"Round-trip ({r},{g},{b}) -> Lab({l:.2},{a:.2},{lab_b:.2}) -> ({r2:.5},{g2:.5},{b2:.5})\"\n        );\n    }\n\n    #[test]\n    fn test_lab_round_trip() {\n        round_trip(1.0, 1.0, 1.0); // white\n        round_trip(0.0, 0.0, 0.0); // black\n        round_trip(0.5, 0.5, 0.5); // mid grey\n        round_trip(1.0, 0.0, 0.0); // red\n        round_trip(0.0, 1.0, 0.0); // green\n        round_trip(0.0, 0.0, 1.0); // blue\n    }\n\n    #[test]\n    fn test_white_point() {\n        let (l, a, b) = srgb_to_lab(1.0, 1.0, 1.0);\n        // OKLab white = (1,0,0), rescaled L = 100, a = 0, b = 0\n        assert!((l - 100.0).abs() < 1e-2, \"White L: expected 100, got {l}\");\n        assert!(a.abs() < 1e-2, \"White a: expected 0, got {a}\");\n        assert!(b.abs() < 1e-2, \"White b: expected 0, got {b}\");\n    }\n\n    #[test]\n    fn test_black_point() {\n        let (l, a, b) = srgb_to_lab(0.0, 0.0, 0.0);\n        assert!(l.abs() < 1e-3, \"Black L: expected 0, got {l}\");\n        assert!(a.abs() < 1e-3, \"Black a: expected 0, got {a}\");\n        assert!(b.abs() < 1e-3, \"Black b: expected 0, got {b}\");\n    }\n\n    #[test]\n    fn test_l_range() {\n        // L should span [0, 100] for sRGB gamut\n        let (l_black, _, _) = srgb_to_lab(0.0, 0.0, 0.0);\n        let (l_white, _, _) = srgb_to_lab(1.0, 1.0, 1.0);\n        assert!(l_black < 1.0, \"Black L should be near 0, got {l_black}\");\n        assert!(l_white > 99.0, \"White L should be near 100, got {l_white}\");\n    }\n}",
+  "source_version": "crates/dorea-color/src/lab.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229939603Z",
+  "valid_from": "2026-04-11T00:04:13.229939603Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-color/src/lab.rs",
+    "language": "rs",
+    "chunk_type": "mod_item",
+    "start_line": 95,
+    "end_line": 142,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

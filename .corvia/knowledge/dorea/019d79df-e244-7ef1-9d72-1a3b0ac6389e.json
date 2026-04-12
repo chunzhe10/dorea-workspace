@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-1a3b0ac6389e",
+  "content": "    # 4. Pinpoint exact first-appearance frame per subject\n    #\n\n    # 5. Write scene_analysis JSON per clip\n\n    print(f\"Scene analysis not yet implemented\", file=sys.stderr)\n    sys.exit(1)\n\n\nif __name__ == \"__main__\":\n    main()\n```\n\n- [ ] **Step 4: Create 03_run_sam2.py**\n\n```python\n\"\"\"Phase 3: SAM2 Subject Tracking (~1-3 min per clip, local GPU)\n\nGenerates per-frame mask sequences for each tracked subject using SAM2.\nInitialised at the exact first-appearance frame from Phase 2 scene analysis,\nusing the bounding box as the starting prompt.\n\nUsage:\n    python 03_run_sam2.py --date 2026-03-17\n\nInputs:\n    - working/scene_analysis/{clip_id}.json — from Phase 2\n    - Raw footage files (for full-resolution frame access)\n\nOutputs:\n    - working/masks/{clip_id}/{subject_label}/frame_NNNNNN.png\n      (binary alpha mask, 0 or 255 per pixel)\n\nDependencies:\n    - SAM2 (facebookresearch/sam2)\n    - PyTorch with CUDA\n    - VRAM: ~3GB (SAM2-small). Only one model loaded at a time.\n    - Preferred: UWSAM variant if available (better underwater performance)\n\nArchitecture doc: Section 4.3\n\"\"\"\n\nimport argparse\nimport sys\n\n\ndef main():\n    parser = argparse.ArgumentParser(description=\"Run SAM2 subject tracking from scene analysis\")\n    parser.add_argument(\"--date\", required=True, help=\"Dive date YYYY-MM-DD\")\n    args = parser.parse_args()\n\n\n    # TODO: Implement SAM2 tracking",
+  "source_version": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836443540Z",
+  "valid_from": "2026-04-11T00:10:08.836443540Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-03-17-dorea-workspace-impl-plan.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1239,
+    "end_line": 1287,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

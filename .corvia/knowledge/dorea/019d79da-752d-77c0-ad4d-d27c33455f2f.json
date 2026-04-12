@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d27c33455f2f",
+  "content": "            ).map_err(|e| anyhow::anyhow!(\"Grading failed for frame {fi}: {e}\"))?;\n\n                #[cfg(not(feature = \"cuda\"))]\n                let graded = {\n                    use dorea_cal::Calibration;\n                    use dorea_gpu::grade_frame;\n                    let seg_idx = kf_to_segment.get(kf_cursor).copied().unwrap_or(0);\n                    let cal = &segment_calibrations[seg_idx];\n                    let calibration = Calibration::new(\n                        cal.depth_luts.clone(), cal.hsl_corrections.clone(), 0,\n                    );\n                    grade_frame(&frame.pixels, &depth, frame.width, frame.height, &calibration, &params)\n                        .map_err(|e| anyhow::anyhow!(\"Grading failed for frame {fi}: {e}\"))?\n                };\n\n                if graded_tx.send(graded).is_err() {\n                    // Encoder thread dropped — likely hit an error\n                    break;\n                }\n            }\n            Ok(())\n        })();\n\n        // Signal encoder that no more frames are coming\n        drop(graded_tx);\n\n        // Always join threads — even when GPU errored — to collect all errors.\n        let decoder_result = decoder_handle.join()\n            .map_err(|_| anyhow::anyhow!(\"decoder thread panicked\"))?;\n        let encoder_result = encoder_handle.join()\n            .map_err(|_| anyhow::anyhow!(\"encoder thread panicked\"))?;\n\n        // Propagate GPU error first (root cause), then thread errors.\n        gpu_result.context(\"GPU grading failed\")?;\n        decoder_result.context(\"decoder thread failed\")?;\n        encoder_result\n    })\n}",
+  "source_version": "crates/dorea-cli/src/pipeline/grading.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229445805Z",
+  "valid_from": "2026-04-11T00:04:13.229445805Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/pipeline/grading.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 275,
+    "end_line": 306,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

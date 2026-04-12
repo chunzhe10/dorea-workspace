@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-f812dcd28e06",
+  "content": "et mut prev = ilog_to_linear(0.0);\n        for i in 1..=100 {\n            let x = i as f32 / 100.0;\n            let lin = ilog_to_linear(x);\n            assert!(lin >= prev, \"Non-monotonic at x={x}: {lin} < {prev}\");\n            prev = lin;\n        }\n    }\nfn test_ilog_trait() {\n        let tf: Box<dyn crate::TransferFunction> = Box::new(ILog);\n        assert_eq!(tf.shoulder(), 0.88);\n        assert_eq!(tf.name(), \"I-Log\");\n    }",
+  "source_version": "crates/dorea-color/src/ilog.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229922432Z",
+  "valid_from": "2026-04-11T00:04:13.229922432Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-color/src/ilog.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 107,
+    "end_line": 111,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

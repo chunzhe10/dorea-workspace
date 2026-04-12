@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-f8a94c6fab85",
+  "content": "fn shoulder(&self) -> f32 {\n        self.shoulder\n    }\nfn name(&self) -> &str {\n        &self.name\n    }\nfn lerp_lut(lut: &[f32], x: f32) -> f32 {\n    let n = lut.len();\n    if n == 0 { return x; }\n    let x = x.clamp(0.0, 1.0);\n    let pos = x * (n - 1) as f32;\n    let lo = (pos as usize).min(n - 2);\n    let hi = lo + 1;\n    let frac = pos - lo as f32;\n    lut[lo] * (1.0 - frac) + lut[hi] * frac\n}",
+  "source_version": "crates/dorea-color/src/lut_transfer.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229930009Z",
+  "valid_from": "2026-04-11T00:04:13.229930009Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-color/src/lut_transfer.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 93,
+    "end_line": 102,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

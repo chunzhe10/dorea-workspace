@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-bc53e7fbcfc5",
+  "content": "            error_to_raise = flush_err\n\n    # Always close containers, but do not let a secondary close() failure\n    # (e.g. disk-full on trailer write) mask the original error.\n    try:\n        out_container.close()\n    except BaseException as close_err:\n        if error_to_raise is None:\n            error_to_raise = close_err\n    try:\n        in_container.close()\n    except BaseException:\n        pass  # input close errors are not interesting\n\n    # If anything went wrong, delete the partial/corrupt output file so\n    # callers do not see a broken ProRes left on disk.\n    if error_to_raise is not None:\n        try:\n            import os\n            if os.path.exists(args.output):\n                os.remove(args.output)\n                print(f\"[raune-filter] removed partial output: {args.output}\",\n                      file=sys.stderr, flush=True)\n        except OSError:\n            pass\n        raise error_to_raise\n\n    elapsed = time.time() - t_start\n    fps_actual = encoded_count / elapsed if elapsed > 0 else 0\n    n = max(encoded_count, 1)\n    print(f\"[raune-filter] done: {encoded_count} frames in {elapsed:.1f}s \"\n          f\"({fps_actual:.2f} fps)\",\n          file=sys.stderr, flush=True)\n    print(f\"[raune-filter] stage timing (busy ms/frame): \"\n          f\"decode={decode_busy*1000/n:.1f} \"\n          f\"gpu={gpu_busy*1000/n:.1f} \"\n          f\"encode={encode_busy*1000/n:.1f} \"\n          f\"wall={elapsed*1000/n:.1f}\",\n          file=sys.stderr, flush=True)\n    return encoded_count",
+  "source_version": "python/dorea_inference/raune_filter.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230186850Z",
+  "valid_from": "2026-04-11T00:04:13.230186850Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/raune_filter.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 432,
+    "end_line": 464,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

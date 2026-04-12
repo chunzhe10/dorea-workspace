@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-0336b5de3d97",
+  "content": "# Replace CIELab with OKLab in CUDA Grade Pipeline\n\n## Problem\n\nThe per-pixel grading pipeline uses CIELab D65 for the ambiance, warmth, and vibrance\nstages. CIELab has known perceptual non-uniformity — equal-magnitude shifts in a*/b*\nproduce visually unequal color changes depending on hue region. This affects warmth and\nvibrance adjustments, which push a*/b* channels proportional to depth.\n\nOKLab (Björn Ottosson, 2020) is designed for perceptual uniformity in color manipulation\ntasks. It has the same L/a/b channel structure as CIELab but with better uniformity,\nsimpler math (no XYZ intermediate, no conditional piecewise functions), and fewer\noperations per pixel.\n\n\n## Decision\n\nReplace CIELab conversion functions with OKLab in the CUDA grade pipeline. Rescale OKLab\noutput to match CIELab numeric ranges so all tuned manipulation constants (shadow lift,\nwarmth push, vibrance thresholds) remain unchanged.\n",
+  "source_version": "decisions/2026-04-09-oklab-grade-pipeline.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836170200Z",
+  "valid_from": "2026-04-11T00:10:08.836170200Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-09-oklab-grade-pipeline.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 3,
+    "end_line": 20,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

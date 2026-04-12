@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-c917810727cb",
+  "content": "                    all_results.append(MethodResult(\n                        frame_idx=frame_idx, method=name,\n                        delta_l1_L=float(\"nan\"), delta_l1_a=float(\"nan\"),\n                        delta_l1_b=float(\"nan\"), delta_l1=float(\"nan\"),\n                        delta_l2=float(\"nan\"), delta_max=float(\"nan\"),\n                        delta_p95=float(\"nan\"),\n                        final_delta_e=float(\"nan\"), final_delta_e_p95=float(\"nan\"),\n                        ssim=float(\"nan\"),\n                        wall_time_ms_upscale=float(\"nan\"),\n                        wall_time_ms_end_to_end=float(\"nan\"),\n                        status=\"oom\",\n                    ))\n\n            # Heatmaps for this frame\n            if method_deltas:\n                # Frame p95 = max over methods of the p95 of |delta_method - delta_gold|\n                frame_p95 = max(\n                    torch.quantile((d - gold.delta_4k).abs().mean(dim=1).flatten(), 0.95).item()\n                    for d in method_deltas.values()\n                )\n                for name, d in method_deltas.items():\n                    heatmap_path = heatmap_dir / f\"frame{frame_idx}_{name}.png\"\n                    generate_heatmap(d, gold.delta_4k, frame_p95, heatmap_path, name)\n\n            # Per-frame sheet\n            per_frame_path = per_frame_dir / f\"frame{frame_idx}_sheet.png\"\n            generate_per_frame_sheet(\n                frame_idx=frame_idx,\n                orig_proxy_final=F.interpolate(orig_proxy_final, size=(2160, 3840), mode=\"bilinear\", align_corners=False),\n                gold_final=gold_final,\n                method_finals=method_finals,\n                method_deltas=method_deltas,\n                method_metrics=method_metrics,\n                method_order=method_names,\n                out_path=per_frame_path,\n            )\n",
+  "source_version": "benchmarks/upscale_bench/run.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230365404Z",
+  "valid_from": "2026-04-11T00:04:13.230365404Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "benchmarks/upscale_bench/run.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 287,
+    "end_line": 319,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-be5fe819fb8b",
+  "content": "act reduction before upscale\")\n    p.add_argument(\"--yolo-seg\", action=\"store_true\", help=\"Enable YOLO-seg diver detection\")\n    p.add_argument(\"--yolo-seg-model\", type=str, default=None, help=\"Path to YOLO-seg model weights\")\n    return p.parse_args(argv)\ndef _choose_device(requested: Optional[str]) -> str:\n    if requested:\n        return requested\n    try:\n        import torch\n        return \"cuda\" if torch.cuda.is_available() else \"cpu\"\n    except ImportError:\n        return \"cpu\"",
+  "source_version": "python/dorea_inference/server.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230217424Z",
+  "valid_from": "2026-04-11T00:04:13.230217424Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/server.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 67,
+    "end_line": 74,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d0724604ba4d",
+  "content": "}\", \"pipe:1\"\n    ]\n    result = subprocess.run(cmd, capture_output=True)\n    if result.returncode != 0:\n        raise RuntimeError(f\"ffmpeg failed: {result.stderr.decode()}\")\n    return np.frombuffer(result.stdout, dtype=np.uint8).reshape(height, width, 3)\ndef main():\n    video_path = sys.argv[1] if len(sys.argv) > 1 else \"/workspaces/dorea-workspace/footage/raw/2025-11-01/DJI_20251101111428_0055_D_3s.MP4\"\n\n    # Probe video\n    probe = subprocess.run(\n        [\"ffprobe\", \"-v\", \"quiet\", \"-print_format\", \"json\", \"-show_streams\", video_path],\n        capture_output=True, text=True\n    )\n    import json\n    streams = json.loads(probe.stdout)[\"streams\"]\n    vs = [s for s in streams if s[\"codec_type\"] == \"video\"][0]\n    width, height = int(vs[\"width\"]), int(vs[\"height\"])\n    print(f\"Video: {width}x{height}\")\n\n    # Extract frame 0 at full resolution\n    frame = extract_frame(video_path, 0.0, width, height)\n    print(f\"Extracted frame: {frame.shape}\")\n\n    # Load depth model\n    sys.path.insert(0, \"/workspaces/dorea-workspace/repos/dorea/python\")\n    from dorea_inference.depth_anything import DepthAnythingInference\n\n    print(\"Loading Depth Anything V2...\")\n    model = DepthAnythingInference(device=\"cuda\")\n",
+  "source_version": "dump_depth.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229417937Z",
+  "valid_from": "2026-04-11T00:04:13.229417937Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "dump_depth.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 23,
+    "end_line": 47,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

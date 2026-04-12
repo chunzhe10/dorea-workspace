@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-d3ef952fd89e",
+  "content": "pub struct KeyframeEntry {\n    pub frame_index: u64,\n    pub proxy_pixels: Vec<u8>,\n    /// True if this keyframe follows a scene cut (suppresses lerp across cuts).\n    pub scene_cut_before: bool,\n}",
+  "source_version": "crates/dorea-cli/src/pipeline/keyframe.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229464605Z",
+  "valid_from": "2026-04-11T00:04:13.229464605Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-cli/src/pipeline/keyframe.rs",
+    "language": "rs",
+    "chunk_type": "struct_item",
+    "start_line": 10,
+    "end_line": 15,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

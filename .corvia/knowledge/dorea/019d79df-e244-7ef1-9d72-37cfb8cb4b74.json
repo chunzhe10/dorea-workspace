@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-37cfb8cb4b74",
+  "content": "n!(\"enhance() failed for frame {} — using original: {e}\", frame.index);\n                frame.pixels.clone()\n            });\n\n            temp_enc.write_frame(&maxine_full)\n                .context(\"failed to write Maxine-enhanced frame to temp file\")?;\n\n            let maxine_proxy = if proxy_w == frame.width && proxy_h == frame.height {\n                maxine_full.clone()\n            } else {\n                resize_rgb_bilinear(&maxine_full, frame.width, frame.height, proxy_w, proxy_h)\n            };\n\n            let change = detector.score(&maxine_proxy);\n            let scene_cut = change < f32::MAX && change > scene_cut_threshold;\n            let is_keyframe = !interp_enabled\n                || keyframes.is_empty()\n                || scene_cut\n                || frames_since_kf >= args.depth_max_interval\n                || (change < f32::MAX && change > args.depth_skip_threshold);\n\n            if is_keyframe {\n                if scene_cut {\n                    log::info!(\"Scene cut at frame {} (change={:.6})\", frame.index, change);\n                    detector.reset();\n                }\n                keyframes.push(KeyframeEntry {\n                    frame_index: frame.index,\n                    proxy_pixels: maxine_proxy.clone(),\n                    scene_cut_before: scene_cut,\n                });\n                detector.set_reference(&maxine_proxy);\n                frames_since_kf = 0;\n            } else {\n                frames_since_kf += 1;\n            }\n        }",
+  "source_version": "plans/2026-04-04-maxine-pipeline-architecture.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836865893Z",
+  "valid_from": "2026-04-11T00:10:08.836865893Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-04-maxine-pipeline-architecture.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 1039,
+    "end_line": 1068,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

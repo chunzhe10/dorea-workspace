@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-068a450ca179",
+  "content": "## CLI\n\n## Error handling\n\nFollows the project's `feedback_fail_fast` memory — no silent fallbacks except where explicitly sensible.\n\n| Condition | Behavior |\n|---|---|\n| RAUNE weights missing | Hard error with \"run `scripts/download_raune_weights.sh`\" hint |\n| CUDA unavailable | Hard error — this is a GPU benchmark, CPU has no meaning |\n| `nvvfx` import fails | **Hard error** with \"run `scripts/setup_bench.sh` or `pip install nvidia-vfx`\" hint |\n| `realesrgan` import fails | **Soft skip** — warning logged, method dropped, other methods continue (only soft-skip in the bench) |\n| OOM during native-4K gold pass | Auto-fallback to tiled path, log which was used |\n| OOM during tiled gold pass | Hard error — VRAM is fundamentally insufficient |\n| OOM during `higher_proxy` | Same fallback as gold (shared code path), log, continue |\n| OOM during any other method | Mark row `failed` in `metrics.csv`, render an \"OOM\" placeholder cell in contact sheets, continue with other methods |\n| Corrupt gold cache | Warn, regenerate, continue |\n| Unknown method in `--methods` list | Hard error with list of registered methods |\n| Unknown frame index in `--frames` | Hard error — no guessing |\n\nThe `realesrgan` soft-skip is the sole exception to fail-fast. Maxine is hard-required per explicit user instruction.\n",
+  "source_version": "decisions/2026-04-10-delta-upscale-bench-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836208557Z",
+  "valid_from": "2026-04-11T00:10:08.836208557Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-10-delta-upscale-bench-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 527,
+    "end_line": 546,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

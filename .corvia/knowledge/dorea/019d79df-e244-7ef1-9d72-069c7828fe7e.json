@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-069c7828fe7e",
+  "content": "## Error handling\n\n## Reproducibility\n\nAt startup, `run.py` logs and writes into `run_report.md`:\n\n- Python version, `torch.__version__`, `torch.version.cuda`, driver version from `nvidia-smi`\n- GPU name, VRAM total/free\n- `nvvfx.get_sdk_version()`\n- `realesrgan.__version__` if present\n- Workspace git SHA + dirty-tree flag\n- `repos/dorea` git SHA + dirty-tree flag\n- RAUNE weights SHA1 (first 16 chars)\n- Clip path + SHA1 (first 16 chars)\n- Random seed (fixed at 0)\n\nDeterminism settings:\n```python\ntorch.backends.cudnn.benchmark = False\ntorch.backends.cudnn.deterministic = True\ntorch.use_deterministic_algorithms(True, warn_only=True)\n```\n\nTiming methodology:\n- N warm-up runs (default 3) — discarded. Absorbs first-call JIT cost (Triton kernels, torch.compile, cuDNN algorithm autotuning).\n- N timed runs (default 10), each bracketed by `torch.cuda.synchronize()` before `time.perf_counter()` and after.\n- Report **median**, not mean. Median is more robust against GC pauses and algorithm autotuning noise.\n\n\n## Testing\n",
+  "source_version": "decisions/2026-04-10-delta-upscale-bench-design.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836209144Z",
+  "valid_from": "2026-04-11T00:10:08.836209144Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-10-delta-upscale-bench-design.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 547,
+    "end_line": 574,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-d20c63e97c60",
+  "content": "# dorea.toml — local config for dorea pipeline\n# CLI flags always override values here.\n# Copy to ~/.config/dorea/config.toml for a user-level default.\n",
+  "source_version": "dorea.toml",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230520781Z",
+  "valid_from": "2026-04-11T00:04:13.230520781Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "dorea.toml",
+    "language": "toml",
+    "chunk_type": "section",
+    "start_line": 1,
+    "end_line": 4,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

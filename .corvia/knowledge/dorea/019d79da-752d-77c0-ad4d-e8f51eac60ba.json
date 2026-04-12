@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752d-77c0-ad4d-e8f51eac60ba",
+  "content": "        .map_err(|e| InferenceError::Ipc(format!(\"vram_free_bytes: {e}\")))?;\n            let bytes: usize = result.extract()\n                .map_err(|e| InferenceError::Ipc(format!(\"extract vram_free_bytes: {e}\")))?;\n            Ok(bytes)\n        })\n    }\npub fn enhance(\n        &self,\n        _id: &str,\n        image_rgb: &[u8],\n        width: usize,\n        height: usize,\n        artifact_reduce: bool,\n    ) -> Result<Vec<u8>, InferenceError> {\n        Python::with_gil(|py| {\n            let bridge = self.bridge.bind(py);\n            let np_flat = numpy::PyArray1::from_slice_bound(py, image_rgb);\n            let np_reshaped = np_flat\n                .call_method1(\"reshape\", ((height, width, 3),))\n                .map_err(|e| InferenceError::Ipc(format!(\"reshape: {e}\")))?;\n            let result = bridge\n                .call_method1(\"run_maxine\", (np_reshaped, artifact_reduce))\n                .map_err(|e| Self::map_python_error(py, e))?;\n            let flat = result\n                .call_method1(\"reshape\", ((-1_i32,),))\n                .map_err(|e| InferenceError::Ipc(format!(\"flatten result: {e}\")))?;\n            let rgb_data: Vec<u8> = flat\n                .call_method0(\"tolist\")\n                .map_err(|e| InferenceError::Ipc(format!(\"tolist: {e}\")))?\n                .extract()\n                .map_err(|e| InferenceError::Ipc(format!(\"extract rgb: {e}\")))?;\n            let expected = width * height * 3;\n            if rgb_data.len() != expected {\n                return Err(InferenceError::ServerError(format!(\n                    \"enhance: expected {} bytes ({}x{}x3), got {}\",\n                    expected, width, height, rgb_data.len()\n                )));\n            }\n            Ok(rgb_data)\n        })\n    }",
+  "source_version": "crates/dorea-video/src/inference/pyo3_backend.rs",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.229722647Z",
+  "valid_from": "2026-04-11T00:04:13.229722647Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "crates/dorea-video/src/inference/pyo3_backend.rs",
+    "language": "rs",
+    "chunk_type": "function_item",
+    "start_line": 634,
+    "end_line": 668,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

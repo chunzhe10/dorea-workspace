@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-2a9475e9a6ea",
+  "content": " and apply\n\n65x65x65 per-depth-band 3D LUT capturing the full per-pixel grading\npipeline (LUT apply + HSL + ambiance + warmth + blend, minus clarity).\nZone-aligned depth sampling from calibration.zone_centers.\nRayon-parallelized build and apply.\"\n```\n\n---\n\n### Task 3: Unit tests — trilinear accuracy\n\n**Files:**\n- Modify: `crates/dorea-gpu/src/lut3d.rs` (add `#[cfg(test)] mod tests`)\n\n- [ ] **Step 1: Write trilinear accuracy test**\n\nAdd at the bottom of `lut3d.rs`:\n\n```rust\n#[cfg(test)]\nmod tests {\n    use super::*;\n    use dorea_cal::Calibration;\n    use dorea_lut::types::{DepthLuts, LutGrid as CalLutGrid};\n    use dorea_hsl::derive::HslCorrections;\n\n    /// Create a minimal but realistic calibration for testing.\n    /// Uses identity LUTs (no color change from LUT stage) so that\n    /// the pipeline exercises HSL + ambiance + warmth + blend.\n    fn test_calibration() -> Calibration {\n        let n_zones = 5;\n        let size = 33;\n        let luts: Vec<CalLutGrid> = (0..n_zones).map(|_| {\n            let mut lut = CalLutGrid::new(size);\n            for ri in 0..size {\n                for gi in 0..size {\n                    for bi in 0..size {\n                        let r = ri as f32 / (size - 1) as f32;\n                        let g = gi as f32 / (size - 1) as f32;\n                        let b = bi as f32 / (size - 1) as f32;",
+  "source_version": "plans/2026-04-03-3d-lut-temporal-interpolation.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836670166Z",
+  "valid_from": "2026-04-11T00:10:08.836670166Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-3d-lut-temporal-interpolation.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 396,
+    "end_line": 426,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

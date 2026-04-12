@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-02150acbb987",
+  "content": "### `dorea.toml` fields under `[grade]`\n### CLI flags on `dorea grade`\n\n## Files Changed\n\n| File | Change |\n|------|--------|\n| `crates/dorea-lut/src/build.rs` | `StreamingLutBuilder` accepts `base_zones` separately from runtime zones. New `depth_distribution_distance()` function. |\n| `crates/dorea-cli/src/grade.rs` | Pre-compute depth timeline (per-KF zones, segments). Pipelined double-buffer texture build. Dual-stream grading pass. Remove global reservoir sampling. |\n| `crates/dorea-cli/src/change_detect.rs` | Add `depth_distribution_distance()` for scene segment detection. |\n| `crates/dorea-gpu/src/cuda/kernels/build_combined_lut.cu` | Build 8 runtime zones reading from 32-zone base LUT (different zone counts for input vs output). |\n| `crates/dorea-gpu/src/cuda/kernels/combined_lut.cu` | Dual-texture sampling with blend factor `t`. Two zone boundary arrays. Skip texture B when `t = 0.0`. |\n| `crates/dorea-gpu/src/combined_lut.rs` | Double-buffer texture management. Async build on stream B. Swap API. |\n| `crates/dorea-cli/src/config.rs` | New fields: `base_lut_zones`, `scene_threshold`, `min_segment_keyframes`, `zone_smoothing_window`. |\n| `dorea.toml` | New defaults under `[grade]`. |\n\n\n## Performance Impact\n\n| Metric | Before | After |\n|--------|--------|-------|\n| Pre-compute phase | N/A | +~500ms one-time |\n| Per-frame grading (non-KF) | ~20ms @ 1080p | ~35ms @ 1080p (2× texture sampling) |\n| Per-frame grading (KF, t=0) | ~20ms @ 1080p | ~20ms @ 1080p (unchanged) |\n| Combined texture rebuild | Once at startup | Per-keyframe, pipelined (hidden) |\n| Segment LUT rebuild | N/A | ~100ms per boundary (hidden in pre-compute) |\n| **Net grading pass impact** | Baseline | **~50–70% slower per non-KF frame** |\n\nThe throughput cost comes from dual-texture sampling — every non-keyframe pixel reads from two texture sets instead of one. This is the price of accurate depth-adaptive grading.\n",
+  "source_version": "decisions/2026-04-04-per-keyframe-adaptive-depth-zones.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836156595Z",
+  "valid_from": "2026-04-11T00:10:08.836156595Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "decisions/2026-04-04-per-keyframe-adaptive-depth-zones.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 206,
+    "end_line": 231,
+    "content_role": "decision",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

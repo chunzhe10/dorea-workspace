@@ -1,0 +1,31 @@
+{
+  "id": "019d79df-e244-7ef1-9d72-2b0f592bb311",
+  "content": "### Task 6: Wire GradeLut into the grading loop\n\n```\n\n- [ ] **Step 3: Update all call sites of `flush_buffer_with_depth`**\n\nThere are 3 call sites in `run()`. Update each to pass `grade_lut.as_ref()`:\n\nScene cut flush:\n```rust\n                flush_buffer_with_depth(\n                    &mut frame_buffer, &last_keyframe_depth, None,\n                    &calibration, &params, grade_lut.as_ref(),\n                    &mut encoder, &mut frame_count, &info,\n                )?;\n```\n\nKeyframe flush:\n```rust\n                flush_buffer_with_depth(\n                    &mut frame_buffer, &last_keyframe_depth, Some(&depth),\n                    &calibration, &params, grade_lut.as_ref(),\n                    &mut encoder, &mut frame_count, &info,\n                )?;\n```\n\nEnd-of-video flush:\n```rust\n        flush_buffer_with_depth(\n            &mut frame_buffer, &last_keyframe_depth, None,\n            &calibration, &params, grade_lut.as_ref(),\n            &mut encoder, &mut frame_count, &info,\n        )?;\n```\n\n- [ ] **Step 4: Build and run existing tests**\n\n```bash\ncd /workspaces/dorea-workspace/repos/dorea\ncargo build --release 2>&1 | tail -5\ncargo test -p dorea-cli -- grade 2>&1 | tail -10\n```\n\nExpected: build succeeds, all existing tests pass.\n\n- [ ] **Step 5: Commit**\n\n```bash\ngit add crates/dorea-cli/src/grade.rs\ngit commit -m \"feat(dorea-cli): wire GradeLut into non-keyframe grading path\n\nBuilds 3D LUT after calibration. Non-keyframe frames use LUT lookup\ninstead of grade_frame. Disabled with --no-grade-lut or --no-depth-interp.\"\n```\n\n---\n",
+  "source_version": "plans/2026-04-03-3d-lut-temporal-interpolation.md",
+  "scope_id": "dorea",
+  "workstream": "docs",
+  "recorded_at": "2026-04-11T00:10:08.836676525Z",
+  "valid_from": "2026-04-11T00:10:08.836676525Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "plans/2026-04-03-3d-lut-temporal-interpolation.md",
+    "language": null,
+    "chunk_type": "heading_section",
+    "start_line": 714,
+    "end_line": 768,
+    "content_role": "plan",
+    "source_origin": "workspace"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

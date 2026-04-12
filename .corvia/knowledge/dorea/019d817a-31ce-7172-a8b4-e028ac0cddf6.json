@@ -1,0 +1,31 @@
+{
+  "id": "019d817a-31ce-7172-a8b4-e028ac0cddf6",
+  "content": "10-bit direct pipeline merged (PR #71, 2026-04-12). raune_filter.py now decodes as rgb48le (uint16), caches frames on GPU as int32 (PyTorch lacks uint16), processes in fp32, downloads as uint16, encodes as rgb48le. Triton wrapper passes fp32 input to kernel (was unnecessarily casting to fp16). Legacy pipe mode deleted. Output verified as real 10-bit: 98.4% of pixels have non-zero lower 6 bits. 2.16 fps on RTX 3060 6GB, no OOM. Spec: docs/decisions/2026-04-12-10bit-direct-pipeline.md in dorea-workspace.",
+  "source_version": "559e0d9",
+  "scope_id": "dorea",
+  "workstream": "main",
+  "recorded_at": "2026-04-12T11:36:02.254479754Z",
+  "valid_from": "2026-04-12T11:36:02.254479754Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": null,
+    "language": null,
+    "chunk_type": null,
+    "start_line": null,
+    "end_line": null,
+    "content_role": "decision",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": "claude-code",
+  "session_id": "claude-code/sess-e1aa836c",
+  "entry_status": "Pending",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "019d79da-752e-7883-91e5-bb0db960a80f",
+  "content": "Returns RGB u8 at original resolution.\n\n        Raises on failure — callers must not swallow errors.\n        \"\"\"\n        if self._mock:\n            self._total_count += 1\n            return rgb_u8\n\n        return self._enhance_impl(rgb_u8, width, height)\ndef _enhance_impl(\n        self,\n        rgb_u8: np.ndarray,\n        width: int,\n        height: int,\n    ) -> np.ndarray:\n        \"\"\"Internal enhancement via VideoSuperRes — exceptions propagate.\"\"\"\n        import torch\n\n        if self._sr_effect is None:\n            self._init_effects(width, height)\n\n        # nvvfx SDK expects: (3, H, W) RGB float32 in [0, 1] on CUDA\n        rgb_hwc = rgb_u8.reshape(height, width, 3).astype(np.float32) / 255.0\n        rgb_chw = np.ascontiguousarray(np.transpose(rgb_hwc, (2, 0, 1)))  # (3, H, W)\n        tensor = torch.from_numpy(rgb_chw).cuda()\n\n        # Super-resolution → returns VideoSuperResOutput with DLPack capsule\n        output = self._sr_effect.run(tensor)\n\n        # DLPack capsule → torch tensor, clone before next call invalidates it\n        upscaled = torch.from_dlpack(output.image).clone()  # (3, H', W') float32 [0, 1]\n\n        # Convert to uint8 RGB (H', W', 3)\n        upscaled_hwc = upscaled.permute(1, 2, 0).cpu().numpy()\n        upscaled_rgb = (np.clip(upscaled_hwc, 0.0, 1.0) * 255).astype(np.uint8)\n\n        # Downsample back to original resolution\n        result = cv2.resize(\n            upscaled_rgb, (width, height), interpolation=cv2.INTER_AREA,\n        )\n\n        self._total_count += 1\n        return result",
+  "source_version": "python/dorea_inference/maxine_enhancer.py",
+  "scope_id": "dorea",
+  "workstream": "pipeline",
+  "recorded_at": "2026-04-11T00:04:13.230042902Z",
+  "valid_from": "2026-04-11T00:04:13.230042902Z",
+  "valid_to": null,
+  "superseded_by": null,
+  "metadata": {
+    "source_file": "python/dorea_inference/maxine_enhancer.py",
+    "language": "py",
+    "chunk_type": "function_definition",
+    "start_line": 84,
+    "end_line": 117,
+    "content_role": "code",
+    "source_origin": "repo:dorea"
+  },
+  "agent_id": null,
+  "session_id": null,
+  "entry_status": "Merged",
+  "memory_type": "episodic",
+  "confidence": null,
+  "last_accessed": null,
+  "access_count": 0,
+  "tier": "hot",
+  "tier_changed_at": null,
+  "retention_score": null,
+  "pin": null
+}
