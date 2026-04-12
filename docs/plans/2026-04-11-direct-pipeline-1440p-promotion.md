@@ -1,5 +1,9 @@
 # Direct Pipeline 1440p Promotion — Implementation Plan
 
+> **SUPERSEDED by `2026-04-11-minimum-direct-rewrite.md`.** Mid-execution the
+> user pivoted to deleting legacy entirely. Do not execute this plan. Kept
+> for history.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Flip dorea grade's default mode from `lut` to `direct`, bump direct mode's RAUNE proxy default from 1080p to 1440p and batch size from 4 to 8, soft-deprecate the LUT pipeline.

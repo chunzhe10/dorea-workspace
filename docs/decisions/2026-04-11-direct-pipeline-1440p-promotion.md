@@ -1,7 +1,15 @@
 # Direct Pipeline: 1440p Promotion + Default-Mode Flip
 
+> **SUPERSEDED by `2026-04-11-minimum-direct-rewrite.md`.** Mid-brainstorm the user
+> pivoted from "flip default + soft-deprecate LUT" to "delete legacy entirely,
+> keep only minimum direct." This doc is kept for history — do not execute the
+> plan below. The new scope also incidentally fixes main's broken `stages` /
+> `stage_mask` references by deleting the code that held them.
+
+# Direct Pipeline: 1440p Promotion + Default-Mode Flip
+
 **Date:** 2026-04-11
-**Status:** Draft — awaiting user approval before implementation plan
+**Status:** SUPERSEDED — see note above.
 **Scope:** `repos/dorea` (Rust CLI + docs). Separate decision record in `dorea-workspace`.
 **Related corvia entries:**
 - `019d7a7b-458c-7033-ad34-56d84fdfb0a6` — Delta upscale bench, first real run (1080p, 9 methods)
