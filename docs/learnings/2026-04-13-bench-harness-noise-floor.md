@@ -1,103 +1,131 @@
-# Bench Harness Noise Floor — 2026-04-13
+# Bench Harness Noise Floor — 2026-04-13 (v2, after review fixes)
 
-Two back-to-back runs of `scripts/bench/run.py` on the same git commit
-(`b885609`), same hardware, same clip, N=5 samples each, 4 warmup frames,
-no code changes between runs.
+Two back-to-back runs of `scripts/bench/run.py` on the same git commit,
+same hardware, same clip, N=5 samples each, 4 warmup frames, no code
+changes between runs.
 
 **Hardware:** RTX 3060 Laptop GPU, driver 570.211.01
-**PCIe:** reported gen1 x8 (idle power state), measured 9.6-10.4 GB/s pinned
+**PCIe:** reported gen1 x8 (idle power state), measured 10.3-10.4 GB/s pinned
 **Clip:** `/tmp/test_clip_30f.mp4` (30 frames, 4K H.264)
 **Config:** 960x540 proxy, batch=4, `--tensorrt`
+**Harness version:** schema v2 (post-review fixes — see design spec v2 and
+`chunzhe10/dorea#79`)
 
-## Results
+## v2 vs v1 Results
 
-| Metric | cal-a (mean ± CI) | cal-b (mean ± CI) | Δ | p | flag |
-|---|---:|---:|---:|---:|:---:|
-| steady_state_fps | 4.452 ± 0.047 | 4.399 ± 0.037 | **-1.2%** | 0.041 | ** |
-| gpu_kernel_ms_per_frame | 193.96 ± 2.77 | 195.72 ± 1.66 | +0.9% | 0.177 | — |
-| gpu_thread_wall_ms_per_frame | 193.98 ± 2.79 | 195.76 ± 1.68 | +0.9% | 0.175 | — |
-| wall_ms_per_frame | 224.76 ± 2.12 | 227.30 ± 1.64 | **+1.1%** | 0.032 | ** |
-| decode_thread_wall_ms_per_frame | 25.62 ± 1.74 | 26.08 ± 2.96 | +1.8% | 0.722 | — |
-| encode_thread_wall_ms_per_frame | 45.88 ± 1.61 | 46.20 ± 1.51 | +0.7% | 0.698 | — |
-| time_to_first_frame_ms | 2754 ± 98 | 2785 ± 69 | +1.1% | 0.498 | — |
+v1 (pre-review fixes) compared identical code and incorrectly flagged a
+1.2% delta on `steady_state_fps` as `**` (statistically significant),
+which was a Type I error from three compounding problems:
+1. Welch's t-test assumes iid normal samples — autocorrelated thermal
+   drift between back-to-back samples inflated the false-positive rate
+2. No multiple-comparison correction across 7 metrics (30% FWER)
+3. Forced `torch.cuda.synchronize()` on every batch in `_process_batch`
+   added variance via CPU-side wait time variability
 
-## Measured Noise Floor (per-run 95% CI half-width, relative)
+v2 fixes all three: permutation test on raw samples, Holm-Bonferroni
+correction, and `DOREA_BENCH=1`-gated CUDA event recording.
 
-| Metric | CI |
-|---|---:|
-| steady_state_fps | ±1.0% |
-| gpu_kernel_ms_per_frame | ±1.0% |
-| wall_ms_per_frame | ±0.9% |
-| decode_thread_wall_ms_per_frame | ±9% (high variance) |
-| encode_thread_wall_ms_per_frame | ±3.4% |
+## v2 Results (after review fixes)
 
-## Interpretation
+### Run A: `cal-v2-a`
+```
+steady_state_fps:   4.463 ± 0.036
+gpu_kernel_ms:      192.9 ± 2.4
+wall_ms_per_frame:  223.6 ± 2.2
+decode_ms:          23.5 ± 1.8
+encode_ms:          44.9 ± 0.9
+```
 
-The calibration flagged `steady_state_fps` (-1.2%, p=0.041) and
-`wall_ms_per_frame` (+1.1%, p=0.032) as statistically significant with `**`
-despite comparing **identical code**. Meanwhile `gpu_kernel_ms_per_frame`
-(+0.9%, p=0.18) correctly showed as within noise.
+### Run B: `cal-v2-b`
+```
+steady_state_fps:   4.453 ± 0.046
+gpu_kernel_ms:      194.2 ± 1.6
+wall_ms_per_frame:  225.1 ± 1.8
+decode_ms:          25.4 ± 0.7
+encode_ms:          45.2 ± 1.6
+```
 
-**This reveals a systematic drift of ~1% between back-to-back runs**, most
-likely driven by thermal state or GPU DVFS. The GPU kernel work itself is
-stable; the variance comes from something else in the pipeline — likely
-CPU-side scheduling or encode thread fluctuation.
+### Comparison (via v2 `compare.py`, ROPE=±1.5%)
 
-**Practical implication:** the default significance markers are too
-sensitive for this workstation. A `**` marker on a < 1.5% delta should NOT
-be trusted as a real improvement without additional runs.
+| Metric | Δ | p_raw | p_holm | Verdict |
+|---|---:|---:|---:|:---|
+| steady_state_fps | -0.2% | 0.992 | 1.000 | **EQUIVALENT** |
+| gpu_kernel_ms_per_frame | +0.7% | 0.238 | 0.952 | **EQUIVALENT** |
+| gpu_thread_wall_ms_per_frame | +0.7% | 0.254 | 0.952 | **EQUIVALENT** |
+| wall_ms_per_frame | +0.7% | 0.183 | 0.913 | **EQUIVALENT** |
+| decode_thread_wall_ms_per_frame | +8.3% | 0.032 | 0.190 | unclear |
+| encode_thread_wall_ms_per_frame | +0.6% | 0.730 | 1.000 | **EQUIVALENT** |
 
-## Revised Decision Thresholds for This Workstation
+**v2 correctly classifies identical-code runs as EQUIVALENT** on every
+headline metric. The decoder thread is the only metric showing
+"unclear" — it's genuinely more variable (the thread is 93% idle on
+average, so small absolute timing drifts turn into large relative
+percentages), but the delta is nowhere near `p_holm < 0.01` so it
+doesn't trigger DIFFERENT either.
 
-| Delta (absolute) | p-value | Trust level |
-|---|---|---|
-| < 1.5% | any | **Within noise** — do not trust |
-| 1.5%–3% | < 0.01 | Ambiguous — rerun with N=10 to confirm |
-| 1.5%–3% | ≥ 0.01 | Within noise |
-| > 3% | < 0.01 | **Likely real** |
-| > 3% | < 0.05 | Probably real — verify with another run |
-| > 5% | < 0.01 | **High confidence real** |
+## ROPE (Region of Practical Equivalence) — ±1.5%
 
-**Rule of thumb:** multiply the measured delta by the p-value to get a
-crude "confidence score". Below 0.03 is worth investigating; above 0.1 is
-almost certainly real.
+The ROPE is the threshold below which we consider a change practically
+equivalent regardless of p-value. It was chosen at 1.5% because:
+
+1. The observed noise floor for `steady_state_fps` is about 0.8-1.0%
+   (95% CI half-width at N=5).
+2. A 1.5% ROPE gives a safety margin above the noise floor.
+3. Changes of <1.5% are unlikely to be actionable for this pipeline
+   anyway — a 1% fps change at 2.8 fps is ~10 seconds over a 1000-frame
+   clip.
+
+## Decision Thresholds
+
+| Verdict | Condition |
+|---|---|
+| **EQUIVALENT** | Δ within ±1.5% — no meaningful change |
+| **DIFFERENT** | p_holm < 0.01 AND Δ > 1.5% — confident real change |
+| **unclear** | Large Δ but weak p, or small Δ with significant p — retry |
 
 ## Validation of Prior Work
 
-This noise floor vindicates the PR #77 (pinned memory) claim of +5.8% FPS:
-the measured delta was > 4× the noise floor and was repeatable. The 1.5×
-TRT speedup (PR #73) was ~50× the noise floor — unambiguously real.
+The v1 calibration "vindicated" prior PRs (#73 TRT, #77 pinned memory)
+inferentially. With v2, we can re-benchmark and test properly:
+
+- **PR #73 (TRT FP16):** expected ~50% fps delta. Well above ROPE,
+  guaranteed to classify DIFFERENT at p_holm < 0.01. (Not re-measured.)
+- **PR #77 (pinned memory):** claimed +5.8% at 540p. This is 4× ROPE —
+  should classify DIFFERENT if real. (Not re-measured but the earlier
+  numbers were from before the `cuda.synchronize` removal, so the
+  magnitude is now suspect. A re-benchmark is warranted if pinned
+  memory's contribution is important.)
 
 ## Recommendations
 
-1. **Increase N_samples to 10** for headline benchmarks. N=10 reduces the
-   CI by √2, tightening the noise floor to ~0.7% and making 1-2% deltas
-   distinguishable.
-2. **Eventually implement `--pin`** (GPU clock lock, CPU governor,
-   drop_caches) as a Phase 2 task. Pinning should cut thermal drift
-   contribution and tighten the noise floor to the ~0.3-0.5% range.
-3. **Longer benchmark clip** (300+ frames at 4K) would amortize warmup
-   effects more and reduce per-sample variance. The current 30-frame clip
-   runs for only ~7 seconds — short enough that sample-to-sample drift
-   dominates.
-4. **Never trust a `**` flag below 1.5% delta** until one of the above
-   mitigations is implemented and re-calibrated.
+1. **N=5 is marginal** for the permutation test. With N=5, raw p can
+   only reach ~0.008 (2/C(10,5)) — meaning Holm-corrected p for 6
+   metrics can never beat 0.048, well above the 0.01 DIFFERENT
+   threshold. **Use N >= 6 (preferably N=10) for regression-gate runs.**
+2. **Longer benchmark clip** remains desirable. 30 frames × 0.22s =
+   6.6s per sample is too short for steady state to fully dominate.
+   300+ frames would amortize warmup better and allow N=3 samples to
+   give tighter CIs.
+3. **`--pin` is still Phase 2**. Thermal drift is now bounded by the
+   ROPE, but locking GPU clocks would tighten the noise floor further.
 
 ## Source Files
 
-- `cal-a` result: `scripts/bench/results/2026-04-13T02-24-18Z_b885609_cal-a.json`
-- `cal-b` result: `scripts/bench/results/2026-04-13T02-25-12Z_b885609_cal-b.json`
-- Compare output: above table, generated via `scripts/bench/compare.py`
+- `cal-v2-a`: `scripts/bench/results/2026-04-13T07-42-43Z_b885609_cal-v2-a.json`
+- `cal-v2-b`: `scripts/bench/results/2026-04-13T07-43-40Z_b885609_cal-v2-b.json`
+- 1440p baseline: `scripts/bench/results/2026-04-13T07-41-26Z_*_main-1440p-v2.json`
+  (captured before path fix; git_sha field will be incorrect until re-run)
 
-## Notes
+## Notes on the Original v1 Framing
 
-- `decode_thread_wall_ms_per_frame` has very high variance (±9% CI) which
-  is fine — the decode thread is 93% idle so small absolute timing noise
-  becomes large relative noise. Don't use this metric for regression gates.
-- `time_to_first_frame_ms` includes TRT engine deserialization (~1.5s) and
-  Triton JIT compile. For short 30-frame clips this dominates the first
-  sample's per-frame average. Use `steady_state_fps` for optimization
-  decisions.
-- PCIe is reported as gen1 x8 by NVML when the GPU is idle (power saving).
-  The measured bandwidth (~10 GB/s pinned) is healthier than gen1 x8
-  theoretical (~4 GB/s), confirming the link upshifts under load.
+The v1 doc described a "noise floor of ~1%" and recommended thresholds
+like "Δ > 3% with p < 0.01". This was directionally right but
+theoretically wrong — the 1% drift the v1 test measured was not a stable
+"noise floor" but a Type I error rate inflated by violated statistical
+assumptions. The right fix (done in v2) is to use distribution-free
+tests and correct for multiple comparisons, not to bump thresholds until
+false positives stop showing.
+
+`decode_thread_wall_ms_per_frame` has wide CIs because the decode thread
+is 93% idle — small absolute timing noise becomes large relative noise.
+Don't use this metric for regression decisions.
